@@ -14,3 +14,6 @@ A CI job captures a trace, exports it with `tracy-csvexport`, publishes the
 per-zone table in the job summary and uploads the trace, CSV and report.
 `tools/tracy_report.py` renders the table and fails when an expected zone is
 missing.
+
+
+vss_perf --tracy waits for the profiler handshake before the first measurement, so a capture starts at the first benchmark instead of part way through.

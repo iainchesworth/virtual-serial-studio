@@ -456,6 +456,18 @@ int main(int argc, char** argv)
 
     vss::hub_options options;
     options.io_threads = 2;
+
+#if defined(VSS_TRACY)
+    if (tracy)
+    {
+        // On-demand profiling records nothing until the profiler connects, and
+        // that handshake is asynchronous. Wait for it so the trace starts at
+        // the first benchmark instead of part way through.
+        for (int attempt = 0; attempt < 300 && !TracyIsConnected; ++attempt)
+            std::this_thread::sleep_for(10ms);
+    }
+#endif
+
     auto hub = std::make_shared<vss::hub>(options);
     hub->start();
 
