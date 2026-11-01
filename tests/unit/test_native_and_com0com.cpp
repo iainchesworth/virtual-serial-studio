@@ -76,15 +76,21 @@ TEST_CASE("native lines: invalid handles report errors")
     REQUIRE(!native::set_break(static_cast<std::intptr_t>(1234), true));
 }
 
-TEST_CASE("native lines: peer driven inputs cannot be written")
+TEST_CASE("native lines: peer driven inputs follow the platform")
 {
-    // CTS, DSR, DCD and RI belong to the device; the call must refuse before
-    // reaching the platform.
+    // Windows refuses to drive CTS/DSR/DCD/RI: they belong to the device.
+    // POSIX can drive them on a PTY, so an invalid handle reports the OS
+    // error instead of an unsupported-feature error.
     for (const auto line : {control_line::cts, control_line::dsr,
                             control_line::dcd, control_line::ri})
     {
-        REQUIRE_EQ(native::write_line(static_cast<std::intptr_t>(1234), line, true),
-                   make_error_code(errc::unsupported));
+        const auto result =
+            native::write_line(static_cast<std::intptr_t>(1234), line, true);
+#if defined(_WIN32)
+        REQUIRE_EQ(result, make_error_code(errc::unsupported));
+#else
+        REQUIRE(!result);
+#endif
     }
 }
 
@@ -114,6 +120,7 @@ TEST_CASE("com0com: pair management validates its arguments")
     fake.found = true;
     fake.setupc_path = "does-not-exist";
 
+#if defined(_WIN32)
     REQUIRE_EQ(create_com0com_pair(fake, "", "COM11", false),
                make_error_code(errc::invalid_argument));
     REQUIRE_EQ(create_com0com_pair(fake, "COM10", "COM10", false),
@@ -121,6 +128,15 @@ TEST_CASE("com0com: pair management validates its arguments")
     REQUIRE(!create_com0com_pair(fake, "COM10", "COM11", false));
     REQUIRE_EQ(remove_com0com_pair(fake, -1, false),
                make_error_code(errc::invalid_argument));
+#else
+    // com0com is a Windows driver; elsewhere every operation is unsupported.
+    REQUIRE_EQ(create_com0com_pair(fake, "", "COM11", false),
+               make_error_code(errc::unsupported));
+    REQUIRE_EQ(create_com0com_pair(fake, "COM10", "COM11", false),
+               make_error_code(errc::unsupported));
+    REQUIRE_EQ(remove_com0com_pair(fake, 0, false),
+               make_error_code(errc::unsupported));
+#endif
 }
 
 TEST_CASE("serial transport: mock handles have no native handle")

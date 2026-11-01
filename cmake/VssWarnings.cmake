@@ -30,8 +30,9 @@ else()
     -Wnon-virtual-dtor
     -Woverloaded-virtual
     -Wcast-align
-    -Wunused
-    -Wnull-dereference)
+    -Wunused)
+  # Deliberately not -Wnull-dereference: GCC 13 reports false positives inside
+  # Boost.Asio and libstdc++ when the build is optimised.
   if(VSS_WARNINGS_AS_ERRORS)
     list(APPEND VSS_WARNING_OPTIONS -Werror)
   endif()
