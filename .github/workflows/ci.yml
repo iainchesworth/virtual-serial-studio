@@ -38,7 +38,16 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             RANGE="origin/${{ github.base_ref }}..HEAD"
           elif [ "${{ github.event_name }}" = "push" ]; then
-            RANGE="${{ github.event.before }}..${{ github.sha }}"
+            # A force-push rewrites history, so the recorded "before" commit
+            # may no longer exist in the repository. Check the pushed tip
+            # instead of failing to resolve an impossible range.
+            if git rev-parse --quiet --verify \
+                "${{ github.event.before }}^{commit}" >/dev/null 2>&1; then
+              RANGE="${{ github.event.before }}..${{ github.sha }}"
+            else
+              echo "history was rewritten; checking the pushed tip only" >&2
+              RANGE="${{ github.sha }}"
+            fi
           else
             RANGE="HEAD"
           fi
