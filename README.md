@@ -7,7 +7,7 @@ as you like. It splits a device across several virtual ports, merges several
 publishers into one, redirects traffic, bridges a COM port to TCP, RFC 2217 or
 UDP, drives the modem control lines, and records everything it sees. It is
 built on [Boost.Asio](https://boost.org/libs/asio) and on
-[Boost.VirtualSerial](../boostasio-virtualserial), the drop-in serial stream
+[Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial), the drop-in serial stream
 abstraction that puts the transport behind a seam.
 
 ![Virtual Serial Studio](docs/images/studio.png)
@@ -30,8 +30,14 @@ abstraction that puts the transport behind a seam.
 ## Building
 
 Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers, and a
-checkout of [Boost.VirtualSerial](../boostasio-virtualserial). Qt 6 is optional
+checkout of [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial). Qt 6 is optional
 and only needed for the GUI.
+
+> **Dependency status.** Boost.VirtualSerial is still developed in a private
+> repository, so this one currently builds only where that checkout is
+> available. CI reaches it through a read-only deploy key. Everything here is
+> laid out as a normal dependency, so once the library is published the
+> application builds with no changes.
 
 ```bash
 # Boost headers, if you do not already have them
@@ -349,7 +355,7 @@ GPL-3.0-or-later` tag.
 
 The dependencies keep their own terms, all compatible with the GPL:
 
-* [Boost.VirtualSerial](../boostasio-virtualserial) and Boost itself are
+* [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial) and Boost itself are
   **BSL-1.0**; BSL-1.0 is a permissive licence that can be combined with GPLv3.
 * Qt 6 is **LGPL-3.0 / GPL-3.0 / commercial**; the GUI links it dynamically.
 * `com0com` is an optional, separately installed Windows driver, invoked rather
