@@ -74,7 +74,7 @@ TEST_CASE("endpoint: data events carry payload in both directions")
     auto mock = add_mock(*hub, "device");
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     mock.transport->mock()->inject_read("in");
     mock.endpoint->write(as_bytes("out"));
@@ -103,7 +103,7 @@ TEST_CASE("endpoint: capture can be disabled")
     REQUIRE(added);
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     transport->mock()->inject_read("data");
     REQUIRE(wait_for_rx(**added, 4, 2000ms));
@@ -234,7 +234,7 @@ TEST_CASE("endpoint: peer close is graceful")
     REQUIRE(added);
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     REQUIRE(wait_until(
         [&] { return (*added)->state() == endpoint_state::closed; }, 2000ms));
@@ -248,7 +248,7 @@ TEST_CASE("endpoint: stop closes the transport and publishes stopped")
     auto mock = add_mock(*hub, "device");
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     mock.endpoint->stop();
     REQUIRE(wait_until(
@@ -277,7 +277,7 @@ TEST_CASE("endpoint: loopback control lines publish events")
     event_recorder recorder;
     event_filter filter;
     filter.endpoint = port->id();
-    hub->subscribe(filter, [&](const endpoint_event& event) {
+    hub->subscribe(filter, [recorder](const endpoint_event& event) {
         recorder.record(event);
     });
 
@@ -383,7 +383,7 @@ TEST_CASE("endpoint: a reset connection is graceful")
     REQUIRE(added);
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     REQUIRE(wait_until(
         [&] { return (*added)->state() == endpoint_state::closed; }, 2000ms));

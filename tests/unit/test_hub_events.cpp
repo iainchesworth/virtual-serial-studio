@@ -25,7 +25,7 @@ TEST_CASE("events: filter by endpoint")
     event_recorder recorder;
     event_filter filter;
     filter.endpoint = first.endpoint->id();
-    hub->subscribe(filter, [&](const endpoint_event& event) {
+    hub->subscribe(filter, [recorder](const endpoint_event& event) {
         recorder.record(event);
     });
 
@@ -49,7 +49,7 @@ TEST_CASE("events: filter by kind")
     event_recorder data_only;
     event_filter filter;
     filter.kind = event_kind::data;
-    hub->subscribe(filter, [&](const endpoint_event& event) {
+    hub->subscribe(filter, [data_only](const endpoint_event& event) {
         data_only.record(event);
     });
 
@@ -68,7 +68,7 @@ TEST_CASE("events: unsubscribe stops delivery")
 
     event_recorder recorder;
     const subscriber_id id =
-        hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+        hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     mock.transport->mock()->inject_read("first");
     REQUIRE(wait_until(
@@ -92,7 +92,7 @@ TEST_CASE("events: a throwing subscriber does not break the hub")
     });
 
     event_recorder recorder;
-    hub->subscribe({}, [&](const endpoint_event& event) { recorder.record(event); });
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     mock.transport->mock()->inject_read("survives");
     REQUIRE(wait_until(
@@ -138,7 +138,7 @@ TEST_CASE("events: explicit log messages are dispatched")
     event_recorder recorder;
     event_filter filter;
     filter.kind = event_kind::log_message;
-    hub->subscribe(filter, [&](const endpoint_event& event) {
+    hub->subscribe(filter, [recorder](const endpoint_event& event) {
         recorder.record(event);
     });
 

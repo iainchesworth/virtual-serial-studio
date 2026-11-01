@@ -213,26 +213,32 @@ private:
 };
 
 /// Thread safe recorder for hub events.
+///
+/// Copies share one buffer, so a sink can (and must) capture the recorder by
+/// value: the hub may dispatch after the test's local goes out of scope, and
+/// a sink holding a dangling reference corrupts the heap.
 class event_recorder
 {
 public:
-    void record(const vss::endpoint_event& event)
+    // const: a by-value capture inside a non-mutable lambda is const, and the
+    // buffer is reached through the shared pointer anyway.
+    void record(const vss::endpoint_event& event) const
     {
-        std::lock_guard lock(mutex_);
-        events_.push_back(event);
+        std::lock_guard lock(state_->mutex);
+        state_->events.push_back(event);
     }
 
     std::vector<vss::endpoint_event> snapshot() const
     {
-        std::lock_guard lock(mutex_);
-        return events_;
+        std::lock_guard lock(state_->mutex);
+        return state_->events;
     }
 
     std::size_t count(vss::event_kind kind) const
     {
-        std::lock_guard lock(mutex_);
+        std::lock_guard lock(state_->mutex);
         std::size_t total = 0;
-        for (const auto& event : events_)
+        for (const auto& event : state_->events)
         {
             if (event.kind == kind)
                 ++total;
@@ -242,9 +248,9 @@ public:
 
     std::string data_ascii(vss::data_direction direction) const
     {
-        std::lock_guard lock(mutex_);
+        std::lock_guard lock(state_->mutex);
         std::string out;
-        for (const auto& event : events_)
+        for (const auto& event : state_->events)
         {
             if (event.kind == vss::event_kind::data
                 && event.direction == direction && event.data)
@@ -255,13 +261,18 @@ public:
 
     void clear()
     {
-        std::lock_guard lock(mutex_);
-        events_.clear();
+        std::lock_guard lock(state_->mutex);
+        state_->events.clear();
     }
 
 private:
-    mutable std::mutex mutex_;
-    std::vector<vss::endpoint_event> events_;
+    struct shared_state
+    {
+        mutable std::mutex mutex;
+        std::vector<vss::endpoint_event> events;
+    };
+
+    std::shared_ptr<shared_state> state_ = std::make_shared<shared_state>();
 };
 
 } // namespace vss_test_support
