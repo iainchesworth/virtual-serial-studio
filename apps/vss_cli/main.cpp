@@ -462,8 +462,11 @@ int command_bench(const arguments& args)
     const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - started);
 
-    std::printf("sent      : %s in %zu byte chunks\n",
-                vss::format_byte_size(payload.size()).c_str(), *chunk);
+    // Print sizes through the formatter: uint64_t is `unsigned long long` on
+    // macOS and `unsigned long` on Linux, so %zu would not match both.
+    std::printf("sent      : %s in %s byte chunks\n",
+                vss::format_byte_size(payload.size()).c_str(),
+                vss::format_byte_size(*chunk).c_str());
     std::printf("received  : %s\n",
                 vss::format_byte_size((*receiver)->stats().bytes_rx).c_str());
     std::printf("elapsed   : %lld ms\n", static_cast<long long>(elapsed.count()));
