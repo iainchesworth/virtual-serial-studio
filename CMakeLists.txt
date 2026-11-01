@@ -53,8 +53,18 @@ option(VSS_COVERAGE
   "Instrument the libraries for statement and branch coverage" OFF)
 option(VSS_SANITIZE
   "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
+# Tracy is part of a normal Debug build: the client is compiled in and waits
+# for a profiler, so it can be attached at any point. Release keeps it out by
+# default, but -DVSS_TRACY=ON builds a release binary that can still be
+# profiled when something needs triage. Without the vcpkg toolchain there is
+# no package to find, so the Debug default only applies when it is present.
+set(_vss_tracy_default OFF)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND DEFINED VCPKG_TARGET_TRIPLET)
+  set(_vss_tracy_default ON)
+endif()
 option(VSS_TRACY
-  "Instrument the libraries with Tracy (needs the vcpkg tracy package)" OFF)
+  "Instrument with Tracy: on by default in vcpkg Debug builds" ${_vss_tracy_default})
+unset(_vss_tracy_default)
 option(VSS_INSTALL
   "Generate install and package configuration rules" ${VSS_IS_TOP_LEVEL})
 

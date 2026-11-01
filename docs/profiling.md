@@ -2,9 +2,26 @@
 
 The data path is profiled with [Tracy](https://github.com/wolfpld/tracy),
 pulled from [vcpkg](https://vcpkg.io). Instrumentation is compiled in only when
-`VSS_TRACY=ON`; without it every macro in
-[`profile.hpp`](../libs/vss_core/include/vss/core/profile.hpp) is a no-op and
-the shipped binaries carry no cost.
+`VSS_TRACY` is on; without it every macro in
+[`profile.hpp`](../libs/vss_core/include/vss/core/profile.hpp) is a no-op.
+
+## When it is on
+
+| Configuration | Default |
+|---|---|
+| Debug, vcpkg toolchain | **on** |
+| Debug, no vcpkg toolchain | off (the package cannot be found) |
+| Release, any toolchain | **off** |
+| Release with `-DVSS_TRACY=ON` | on |
+
+Debug is the everyday case: the client is in the binary and a profiler can
+attach at any time. Release stays lean, but a release binary can be rebuilt
+with the option on when a field problem needs triage.
+
+The client runs in **on-demand** mode (the manifest asks vcpkg for the
+`on-demand` feature). Nothing is recorded until a profiler connects, and a
+profiler can connect to a process that has already been running for hours.
+That is what makes "attach when something looks wrong" work.
 
 ## What is instrumented
 
@@ -25,16 +42,29 @@ chunk cadence as well as the totals.
 
 ## Building it
 
+Debug, with the toolchain that supplies the package:
+
 ```bash
 export VCPKG_ROOT=/path/to/vcpkg
-cmake --preset tracy \
+cmake --preset debug -DVSS_BUILD_PERF=ON \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build --preset tracy --target vss_perf
+cmake --build --preset debug
+```
+
+Release, opting in for a triage build:
+
+```bash
+cmake -S . -B build-tracy -DCMAKE_BUILD_TYPE=Release -DVSS_TRACY=ON \
+  -DVSS_BUILD_PERF=ON \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build build-tracy
 ```
 
 The manifest ([`vcpkg.json`](../vcpkg.json)) pins `tracy` and the vcpkg
 baseline. `vcpkg` installs the client; CMake finds it and defines `VSS_TRACY`
-and `TRACY_ENABLE` for the whole tree.
+and `TRACY_ENABLE` for the whole tree. A Release tree without vcpkg simply has
+the option off; asking for it there is a configuration error with a message
+that names the missing toolchain.
 
 ## Capturing a trace
 
@@ -45,7 +75,7 @@ the pinned source tag to keep the Linux job light.
 
 ```bash
 tracy-capture -o trace.tracy &          # waits for a client, saves on disconnect
-./build/tracy/bin/vss_perf --tracy
+./build-tracy/bin/vss_perf --tracy   # `vss_perf` needs -DVSS_BUILD_PERF=ON
 wait                                    # the client exiting ends the capture
 tracy-csvexport trace.tracy > trace.csv
 python tools/tracy_report.py trace.csv

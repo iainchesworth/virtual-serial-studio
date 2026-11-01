@@ -7,6 +7,11 @@
   "license": "GPL-3.0-or-later",
   "builtin-baseline": "7712087e65bac8d126e3700ba15b7a84cd1f5a7c",
   "dependencies": [
-    "tracy"
+    {
+      "name": "tracy",
+      "features": [
+        "on-demand"
+      ]
+    }
   ]
 }

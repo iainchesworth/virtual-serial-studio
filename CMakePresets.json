@@ -16,7 +16,6 @@
         "VSS_BUILD_TESTS": "ON",
         "VSS_BUILD_TOOLS": "ON",
         "VSS_BUILD_GUI": "ON",
-        "VSS_TRACY": "OFF",
         "CMAKE_PREFIX_PATH": "$env{QT_ROOT}"
       }
     },
@@ -44,6 +43,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "VSS_COVERAGE": "ON",
+        "VSS_TRACY": "OFF",
         "VSS_BUILD_GUI": "OFF",
         "CMAKE_CXX_COMPILER": "clang-cl"
       },

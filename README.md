@@ -63,6 +63,11 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_BUILD_TOOLS`,
 `VSS_INSTALL`. `CMakePresets.json` provides `debug`, `release`, `coverage`,
 `perf` and `tracy`.
 
+`VSS_TRACY` is on by default in Debug builds configured through the vcpkg
+toolchain and off in Release. Pass `-DVSS_TRACY=ON` to a Release build when a
+release binary needs to be profiled; the client idles until a profiler
+attaches.
+
 ### Language standard
 
 The application targets **C++23** (`std::span`, `std::string_view`, defaulted
@@ -282,16 +287,24 @@ Indicative results (Windows 11, MSVC 19.51, x64, Release, `vss_perf`):
 
 ### Profiling
 
-Tracy comes from vcpkg, so a full end-to-end profile needs the vcpkg
-toolchain:
+Tracy is compiled into Debug builds by default, and can be turned on in a
+Release build when a field problem needs triage. It runs in on-demand mode, so
+no data is recorded until a profiler connects — attaching to an already
+running process is the normal workflow.
 
 ```bash
-cmake --preset tracy \
+# Debug: Tracy is on when configured with the vcpkg toolchain
+cmake --preset debug \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build --preset tracy --target vss_perf
 
+# Release: opt in explicitly when something needs profiling
+cmake -S . -B build-rel-tracy -DCMAKE_BUILD_TYPE=Release -DVSS_TRACY=ON \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build build-rel-tracy
+
+# Attach at any point, then export
 tracy-capture -o trace.tracy &
-./build/tracy/bin/vss_perf --tracy
+./build-rel-tracy/bin/vss_perf --tracy
 wait
 tracy-csvexport trace.tracy > trace.csv
 python tools/tracy_report.py trace.csv
