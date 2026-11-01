@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Build and test
+description: >
+  Configure, build and run the full suite. Shared by the matrix job and the
+  opt-in macOS job so the two cannot drift.
+
+runs:
+  using: composite
+  steps:
+    - name: Set up MSVC
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure
+      shell: bash
+      run: |
+        cmake -S . -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+          -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
+          -DVSS_BUILD_GUI=OFF \
+          -DVSS_BUILD_TOOLS=ON \
+          -DVSS_BUILD_TESTS=ON \
+          -DVSS_WARNINGS_AS_ERRORS=ON
+
+    - name: Build
+      shell: bash
+      run: cmake --build build --config Release
+
+    - name: Create a serial pair for the system tests
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        python3 tools/pty_loopback.py > pty.txt &
+        for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25; do
+          [ -s pty.txt ] && break
+          sleep 0.2
+        done
+        A=$(sed -n 1p pty.txt)
+        B=$(sed -n 2p pty.txt)
+        [ -n "$A" ] && [ -n "$B" ] || { echo "no pty pair" >&2; exit 1; }
+        echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
+        echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
+        echo "VSS_REQUIRE_LOOPBACK=1" >> "$GITHUB_ENV"
+
+    - name: Test
+      shell: bash
+      run: ctest --test-dir build -C Release --output-on-failure --timeout 180

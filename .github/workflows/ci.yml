@@ -64,62 +64,31 @@ jobs:
             name: linux-gcc
           - os: ubuntu-24.04
             name: linux-clang
-          - os: macos-14
-            name: macos-appleclang
-            optional: true
           - os: windows-2022
             name: windows-msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
-    # macOS runners need paid minutes on a private repository; set the
-    # ENABLE_MACOS repository variable once billing is configured.
-    if: ${{ !matrix.optional || vars.ENABLE_MACOS == 'true' }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up MSVC
-        if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
-
       - uses: ./.github/actions/prepare-deps
         with:
           library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
           library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+      - uses: ./.github/actions/build-and-test
 
-      - name: Configure
-        shell: bash
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
-            -DVSS_BUILD_GUI=OFF \
-            -DVSS_BUILD_TOOLS=ON \
-            -DVSS_BUILD_TESTS=ON \
-            -DVSS_WARNINGS_AS_ERRORS=ON
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Create a serial pair for the system tests
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          python3 tools/pty_loopback.py > pty.txt &
-          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25; do
-            [ -s pty.txt ] && break
-            sleep 0.2
-          done
-          A=$(sed -n 1p pty.txt)
-          B=$(sed -n 2p pty.txt)
-          [ -n "$A" ] && [ -n "$B" ] || { echo "no pty pair" >&2; exit 1; }
-          echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
-          echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
-          echo "VSS_REQUIRE_LOOPBACK=1" >> "$GITHUB_ENV"
-
-      - name: Test
-        run: ctest --test-dir build -C Release --output-on-failure --timeout 180
-
+  # macOS runners consume paid minutes on a private repository. Enable them
+  # with the ENABLE_MACOS repository variable once billing is configured.
+  macos:
+    runs-on: macos-14
+    name: Build and test (macos-appleclang)
+    if: ${{ vars.ENABLE_MACOS == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+      - uses: ./.github/actions/build-and-test
   gui:
     runs-on: ubuntu-24.04
     name: Qt GUI (offscreen self-test)
