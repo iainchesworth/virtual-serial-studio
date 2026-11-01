@@ -66,10 +66,14 @@ jobs:
             name: linux-clang
           - os: macos-14
             name: macos-appleclang
+            optional: true
           - os: windows-2022
             name: windows-msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
+    # macOS runners need paid minutes on a private repository; set the
+    # ENABLE_MACOS repository variable once billing is configured.
+    if: ${{ !matrix.optional || vars.ENABLE_MACOS == 'true' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -114,7 +118,7 @@ jobs:
           echo "VSS_REQUIRE_LOOPBACK=1" >> "$GITHUB_ENV"
 
       - name: Test
-        run: ctest --test-dir build -C Release --output-on-failure
+        run: ctest --test-dir build -C Release --output-on-failure --timeout 180
 
   gui:
     runs-on: ubuntu-24.04

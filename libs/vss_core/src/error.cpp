@@ -11,6 +11,13 @@
 namespace vss {
 namespace {
 
+// boost::system::error_category deliberately has a non-virtual destructor and
+// is meant to be derived from; GCC and Clang warn about the base anyway.
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#endif
+
 class error_category_impl final : public boost::system::error_category
 {
 public:
@@ -42,6 +49,10 @@ public:
         return "unknown vss error";
     }
 };
+
+#if defined(__GNUC__) || defined(__clang__)
+#  pragma GCC diagnostic pop
+#endif
 
 } // namespace
 

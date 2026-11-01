@@ -29,7 +29,7 @@ vss_set_warnings(vss_unit_tests)
 vss_enable_coverage(vss_unit_tests)
 
 add_test(NAME unit COMMAND vss_unit_tests
-  --junit=${CMAKE_BINARY_DIR}/unit-tests.xml)
+  --verbose --junit=${CMAKE_BINARY_DIR}/unit-tests.xml)
 set_tests_properties(unit PROPERTIES TIMEOUT 300)
 
 set(VSS_SYSTEM_TEST_SOURCES
@@ -48,7 +48,7 @@ vss_set_warnings(vss_system_tests)
 vss_enable_coverage(vss_system_tests)
 
 add_test(NAME system COMMAND vss_system_tests
-  --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
+  --verbose --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
 set_tests_properties(system PROPERTIES TIMEOUT 600)
 
 # A packaging smoke test: the public headers compile on their own.

@@ -216,8 +216,12 @@ TEST_CASE("system: the native control line layer drives a real device")
     const auto handle = transport.native_handle();
     REQUIRE(handle != 0);
 
+    // A PTY slave on Linux does not implement TIOCMGET, and some virtual
+    // drivers do not report modem status either. Skip rather than assert a
+    // capability the device does not claim.
     const auto status = native::read_modem_status(handle);
-    REQUIRE(status);
+    if (!status)
+        VSS_SKIP("this device does not report modem status");
 
     // Some virtual drivers refuse DTR/RTS requests; either outcome is a
     // reported error rather than a crash, and the success path is asserted
