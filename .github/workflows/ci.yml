@@ -68,6 +68,9 @@ jobs:
             name: windows-msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
+    # A fork pull request cannot see the deploy key for the private library;
+    # run builds for branches in this repository only.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare-deps
@@ -76,12 +79,12 @@ jobs:
           library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
       - uses: ./.github/actions/build-and-test
 
-  # macOS runners consume paid minutes on a private repository. Enable them
-  # with the ENABLE_MACOS repository variable once billing is configured.
+  # macOS runners are free for public repositories and cost paid minutes on a
+  # private one; the ENABLE_MACOS repository variable controls the job.
   macos:
     runs-on: macos-14
     name: Build and test (macos-appleclang)
-    if: ${{ vars.ENABLE_MACOS == 'true' }}
+    if: ${{ vars.ENABLE_MACOS == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare-deps
@@ -92,6 +95,7 @@ jobs:
   gui:
     runs-on: ubuntu-24.04
     name: Qt GUI (offscreen self-test)
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
@@ -127,6 +131,7 @@ jobs:
   coverage:
     runs-on: ubuntu-24.04
     name: Coverage (90% statements, 80% branches)
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
@@ -187,6 +192,7 @@ jobs:
   performance:
     runs-on: ubuntu-24.04
     name: Performance floors
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 

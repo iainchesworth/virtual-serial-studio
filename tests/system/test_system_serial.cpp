@@ -19,6 +19,7 @@
 #include <chrono>
 #include <mutex>
 #include <string>
+#include <vector>
 
 using namespace vss;
 using namespace vss::testkit;
@@ -186,19 +187,32 @@ TEST_CASE("system: sharing a real port with several listeners")
     REQUIRE(shared);
     REQUIRE_EQ(shared->listeners.size(), std::size_t{2});
 
-    const auto listener = app.engine().find_endpoint(shared->listeners.front());
-    REQUIRE(listener);
-    REQUIRE(listener->is_open());
-
-    const auto written = listener->write_sync(as_bytes("from-listener"), 3000ms);
-    REQUIRE(written);
-    REQUIRE(wait_for_rx(**observer, 13, 5000ms));
-
-    // Both listeners received their own advertised virtual port.
+    std::vector<std::string> advertised;
     for (const endpoint_id id : shared->listeners)
     {
+        const auto listener = app.engine().find_endpoint(id);
+        REQUIRE(listener);
+        REQUIRE(listener->is_open());
+
         const std::string path = app.advertised_path(id);
         REQUIRE(!path.empty());
+        REQUIRE(std::find(advertised.begin(), advertised.end(), path)
+                == advertised.end());
+        advertised.push_back(path);
+    }
+
+    // Data arriving on the shared port is fanned out to every listener. The
+    // observer writes into the far end of the cable, so this exercises the
+    // split without depending on loopback echo semantics.
+    const auto written = (*observer)->write_sync(as_bytes("fanout"), 3000ms);
+    REQUIRE(written);
+
+    for (const endpoint_id id : shared->listeners)
+    {
+        const auto listener = app.engine().find_endpoint(id);
+        REQUIRE(listener);
+        REQUIRE(wait_until(
+            [&] { return listener->stats().bytes_tx >= 6; }, 5000ms));
     }
 }
 

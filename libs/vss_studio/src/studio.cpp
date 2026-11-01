@@ -234,7 +234,21 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
     }
 #endif
 
-    return create_virtual_port(final_name, virtual_port_kind::loopback, options);
+    // Beyond Windows the best virtual port is a pseudo terminal, which is a
+    // real tty an application can open; loopback is only the last resort.
+    auto created = create_best_virtual_port(hub_->executor(), final_name);
+    if (!created)
+        return created.error();
+
+    port_record record;
+    record.name = final_name;
+    record.kind = "virtual";
+    record.virtual_kind = to_string(created->kind);
+    record.target = created->path;
+    record.advertised = created->path;
+    record.capture = options.capture_traffic;
+
+    return register_port(std::move(record), std::move(created->port), options);
 }
 
 result<std::shared_ptr<endpoint>> studio::attach_serial(
