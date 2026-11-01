@@ -122,6 +122,14 @@ result<void> run_setupc(const com0com_installation& installation,
     if (!installation.found)
         return make_error_code(errc::unsupported);
 
+    // Never hand a missing binary to the shell: ShellExecuteEx blocks with an
+    // error dialog when the target cannot be found, which is fatal in a
+    // service or CI context.
+    const DWORD attributes = ::GetFileAttributesA(installation.setupc_path.c_str());
+    if (attributes == INVALID_FILE_ATTRIBUTES
+        || (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+        return make_error_code(errc::not_found);
+
     if (!request_elevation && !is_elevated())
         return make_error_code(errc::permission_denied);
 
