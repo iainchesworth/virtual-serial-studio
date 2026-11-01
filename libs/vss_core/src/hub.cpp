@@ -5,6 +5,7 @@
 //
 
 #include <vss/core/hub.hpp>
+#include <vss/core/profile.hpp>
 
 #include <boost/asio/bind_executor.hpp>
 #include <boost/asio/post.hpp>
@@ -423,6 +424,8 @@ result<void> hub::release_owner(link_id id)
 
 void hub::route_data(endpoint_id from, bytes_view data)
 {
+    VSS_PROFILE_ZONE("hub.route");
+
     if (data.empty())
         return;
 
@@ -513,6 +516,8 @@ void hub::publish(endpoint_event event)
 
 void hub::dispatch(endpoint_event event)
 {
+    VSS_PROFILE_ZONE("hub.dispatch");
+
     // Once stop() has been called the subscribers may already be tearing down
     // their own state; delivering a late completion would run a sink over
     // dangling captures.  Shutdown traffic is dropped deliberately.

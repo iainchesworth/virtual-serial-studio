@@ -20,6 +20,12 @@ target_include_directories(vss_core PUBLIC
 target_compile_features(vss_core PUBLIC cxx_std_23)
 target_link_libraries(vss_core PUBLIC Vss::Boost)
 
+if(VSS_TRACY)
+  # Public for in-tree consumers (they include profile.hpp), but not exported:
+  # the installed headers do not require Tracy.
+  target_link_libraries(vss_core PUBLIC $<BUILD_INTERFACE:Vss::Tracy>)
+endif()
+
 find_package(Threads REQUIRED)
 target_link_libraries(vss_core PUBLIC Threads::Threads)
 

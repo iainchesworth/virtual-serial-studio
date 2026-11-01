@@ -5,6 +5,7 @@
 //
 
 #include <vss/core/endpoint.hpp>
+#include <vss/core/profile.hpp>
 #include <vss/core/hub.hpp>
 
 #include <boost/asio/bind_executor.hpp>
@@ -151,6 +152,8 @@ void endpoint::do_read()
 
 void endpoint::on_read(boost::system::error_code ec, std::size_t count)
 {
+    VSS_PROFILE_ZONE("endpoint.read");
+
     if (!running_.load())
         return;
 
@@ -273,6 +276,8 @@ void endpoint::start_next_write()
 void endpoint::on_write(std::shared_ptr<pending_write> write,
                         boost::system::error_code ec, std::size_t count)
 {
+    VSS_PROFILE_ZONE("endpoint.write");
+
     if (ec)
     {
         std::lock_guard lock(write_mutex_);

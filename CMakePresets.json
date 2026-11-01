@@ -16,6 +16,7 @@
         "VSS_BUILD_TESTS": "ON",
         "VSS_BUILD_TOOLS": "ON",
         "VSS_BUILD_GUI": "ON",
+        "VSS_TRACY": "OFF",
         "CMAKE_PREFIX_PATH": "$env{QT_ROOT}"
       }
     },
@@ -77,6 +78,14 @@
         "VSS_BUILD_PERF": "ON",
         "VSS_BUILD_GUI": "OFF"
       }
+    },
+    {
+      "name": "tracy",
+      "inherits": "perf",
+      "displayName": "Profiling (Release + Tracy, needs vcpkg)",
+      "cacheVariables": {
+        "VSS_TRACY": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -84,7 +93,8 @@
     { "name": "release", "configurePreset": "release" },
     { "name": "coverage", "configurePreset": "coverage" },
     { "name": "coverage-unix", "configurePreset": "coverage-unix" },
-    { "name": "perf", "configurePreset": "perf" }
+    { "name": "perf", "configurePreset": "perf" },
+    { "name": "tracy", "configurePreset": "tracy" }
   ],
   "testPresets": [
     {

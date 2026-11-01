@@ -53,6 +53,8 @@ option(VSS_COVERAGE
   "Instrument the libraries for statement and branch coverage" OFF)
 option(VSS_SANITIZE
   "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
+option(VSS_TRACY
+  "Instrument the libraries with Tracy (needs the vcpkg tracy package)" OFF)
 option(VSS_INSTALL
   "Generate install and package configuration rules" ${VSS_IS_TOP_LEVEL})
 
@@ -86,6 +88,7 @@ include(VssWarnings)
 include(VssVirtualSerial)
 include(VssCoverage)
 include(VssSanitizers)
+include(VssTracy)
 
 # ---------------------------------------------------------------------------
 # Subprojects

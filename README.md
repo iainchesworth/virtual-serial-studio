@@ -59,8 +59,9 @@ automatically when it is named `boostasio-virtualserial` next to this
 repository, and its `.cache/boost-root` is used for Boost.
 
 Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_BUILD_TOOLS`,
-`VSS_BUILD_PERF`, `VSS_COVERAGE`, `VSS_WARNINGS_AS_ERRORS`, `VSS_INSTALL`.
-`CMakePresets.json` provides `debug`, `release`, `coverage` and `perf`.
+`VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`, `VSS_WARNINGS_AS_ERRORS`,
+`VSS_INSTALL`. `CMakePresets.json` provides `debug`, `release`, `coverage`,
+`perf` and `tracy`.
 
 ### Language standard
 
@@ -233,6 +234,10 @@ ctest --test-dir build --output-on-failure
   backend runs on every platform.
 * **Performance** — routing, event dispatch, JSON round-trips and mock writes,
   gated against `perf/floors.json`.
+* **Profiling** — `VSS_TRACY=ON` instruments the pipeline with Tracy from
+  vcpkg; CI captures a trace of a real socket and pseudo-terminal round trip,
+  exports it with `tracy-csvexport` and publishes the per-zone table. See
+  [docs/profiling.md](docs/profiling.md).
 
 ### Coverage
 
@@ -275,11 +280,33 @@ Indicative results (Windows 11, MSVC 19.51, x64, Release, `vss_perf`):
 | `config_roundtrip` | ~2,850 documents/s (23 KB each) |
 | `mock_write` | ~359 MB/s |
 
+### Profiling
+
+Tracy comes from vcpkg, so a full end-to-end profile needs the vcpkg
+toolchain:
+
+```bash
+cmake --preset tracy \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build --preset tracy --target vss_perf
+
+tracy-capture -o trace.tracy &
+./build/tracy/bin/vss_perf --tracy
+wait
+tracy-csvexport trace.tracy > trace.csv
+python tools/tracy_report.py trace.csv
+```
+
+The report covers the hub, endpoint, JSON and transport paths plus a real
+socket echo and a pseudo-terminal round trip. CI publishes it for every push;
+see [docs/profiling.md](docs/profiling.md) for the zone list and caveats.
+
 ## Continuous integration
 
 `.github/workflows/ci.yml` builds with GCC, Clang, AppleClang and MSVC, runs
 the GUI self-test on Linux with Qt, enforces the coverage gates, runs the
-performance floors, and validates every changelog fragment. Boost is fetched by
+performance floors, captures a Tracy profile of the end-to-end path, and
+validates every changelog fragment. Boost is fetched by
 `tools/fetch_boost.py`, so no job depends on a system Boost.
 
 Set the `VIRTUAL_SERIAL_REPO` repository variable once Boost.VirtualSerial is

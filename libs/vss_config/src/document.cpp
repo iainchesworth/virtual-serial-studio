@@ -5,6 +5,7 @@
 //
 
 #include <vss/config/document.hpp>
+#include <vss/core/profile.hpp>
 
 #include <boost/json.hpp>
 
@@ -316,6 +317,8 @@ error_code validate(const document& value)
 
 result<std::string> to_json(const document& value, bool pretty)
 {
+    VSS_PROFILE_ZONE("config.to_json");
+
     if (const error_code invalid = validate(value))
         return invalid;
 
@@ -374,6 +377,8 @@ result<std::string> to_json(const document& value, bool pretty)
 
 result<document> from_json(std::string_view text)
 {
+    VSS_PROFILE_ZONE("config.from_json");
+
     boost::system::error_code ec;
     const json::value root = json::parse(text, ec);
     if (ec)

@@ -12,15 +12,21 @@
 
 #include <vss/config/document.hpp>
 #include <vss/core/hub.hpp>
+#include <vss/core/profile.hpp>
 #include <vss/ports/serial_transport.hpp>
+#include <vss/studio/studio.hpp>
 
+#include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/post.hpp>
 #include <boost/asio/executor_work_guard.hpp>
+#include <boost/asio/write.hpp>
 
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <chrono>
 #include <cstdio>
+#include <cstdlib>
 #include <functional>
 #include <future>
 #include <fstream>
@@ -101,6 +107,89 @@ double seconds_since(std::chrono::steady_clock::time_point start)
         .count();
 }
 
+std::string environment(const char* name)
+{
+#if defined(_MSC_VER)
+    char* buffer = nullptr;
+    std::size_t length = 0;
+    if (_dupenv_s(&buffer, &length, name) == 0 && buffer != nullptr)
+    {
+        std::string value(buffer);
+        std::free(buffer);
+        return value;
+    }
+    return {};
+#else
+    const char* value = std::getenv(name);
+    return value != nullptr ? std::string(value) : std::string();
+#endif
+}
+
+/// A one-connection echo server, so the benchmark can cross a real socket
+/// boundary instead of a mock.
+class echo_server
+{
+public:
+    echo_server() : acceptor_(io_)
+    {
+        boost::system::error_code error;
+        const boost::asio::ip::tcp::endpoint endpoint(
+            boost::asio::ip::tcp::v4(), 0);
+        acceptor_.open(endpoint.protocol(), error);
+        if (!error)
+            acceptor_.bind(endpoint, error);
+        if (!error)
+            acceptor_.listen(8, error);
+        if (error)
+            return;
+
+        port_ = acceptor_.local_endpoint().port();
+        accept();
+        thread_ = std::thread([this] { io_.run(); });
+    }
+
+    ~echo_server()
+    {
+        io_.stop();
+        if (thread_.joinable())
+            thread_.join();
+    }
+
+    std::uint16_t port() const { return port_; }
+
+private:
+    void accept()
+    {
+        acceptor_.async_accept(socket_, [this](boost::system::error_code error) {
+            if (!error)
+                read();
+        });
+    }
+
+    void read()
+    {
+        socket_.async_read_some(
+            boost::asio::buffer(buffer_),
+            [this](boost::system::error_code error, std::size_t count) {
+                if (error)
+                    return;
+                boost::asio::async_write(
+                    socket_, boost::asio::buffer(buffer_, count),
+                    [this](boost::system::error_code written, std::size_t) {
+                        if (!written)
+                            read();
+                    });
+            });
+    }
+
+    boost::asio::io_context io_;
+    boost::asio::ip::tcp::acceptor acceptor_;
+    boost::asio::ip::tcp::socket socket_{io_};
+    std::array<char, 4096> buffer_{};
+    std::uint16_t port_ = 0;
+    std::thread thread_;
+};
+
 bool wait_until(const std::function<bool()>& predicate,
                 std::chrono::seconds timeout = 60s)
 {
@@ -118,13 +207,20 @@ bool wait_until(const std::function<bool()>& predicate,
 
 measurement bench_route_throughput(vss::hub& hub, vss::endpoint_id source)
 {
+    VSS_PROFILE_ZONE("perf.route");
+
     const std::size_t total = 32u * 1024 * 1024;
     const std::size_t chunk = 4096;
     const byte_buffer payload(chunk, 0x5a);
 
     const auto start = std::chrono::steady_clock::now();
+    std::size_t chunk_index = 0;
     for (std::size_t offset = 0; offset < total; offset += chunk)
+    {
+        if ((chunk_index++ % 16) == 0)
+            VSS_PROFILE_FRAME();
         hub.route_data(source, bytes_view(payload));
+    }
 
     const double elapsed = seconds_since(start);
     return {"hub_route", static_cast<double>(total) / elapsed / (1024.0 * 1024.0),
@@ -133,6 +229,8 @@ measurement bench_route_throughput(vss::hub& hub, vss::endpoint_id source)
 
 measurement bench_event_dispatch(vss::hub& hub)
 {
+    VSS_PROFILE_ZONE("perf.events");
+
     constexpr std::size_t count = 20'000;
     std::atomic<std::size_t> received{0};
 
@@ -160,6 +258,8 @@ measurement bench_event_dispatch(vss::hub& hub)
 
 measurement bench_config_roundtrip()
 {
+    VSS_PROFILE_ZONE("perf.config");
+
     vss::config::document document;
     document.name = "benchmark";
     for (int index = 0; index < 100; ++index)
@@ -192,6 +292,8 @@ measurement bench_config_roundtrip()
 
 measurement bench_mock_write()
 {
+    VSS_PROFILE_ZONE("perf.mock_write");
+
     boost::asio::io_context io;
     boost::system::error_code error;
     auto transport = vss::serial_transport::make_mock(
@@ -241,17 +343,111 @@ measurement bench_mock_write()
             "MB/s", "scriptable fixture"};
 }
 
+// -- end to end -------------------------------------------------------------
+//
+// These two cross a real boundary (a socket, or a pair of pseudo terminals),
+// so the Tracy capture shows the whole pipeline: transport completion, hub
+// routing, endpoint queueing and the application write path.
+
+measurement bench_e2e_tcp()
+{
+    VSS_PROFILE_ZONE("perf.e2e.tcp");
+
+    echo_server server;
+    if (server.port() == 0)
+        return {"e2e_tcp", 0.0, "MB/s", "echo server did not start"};
+
+    vss::studio app;
+    const auto port = app.attach_serial(
+        "echo", "tcp://127.0.0.1:" + std::to_string(server.port()));
+    if (!port)
+        return {"e2e_tcp", 0.0, "MB/s", "cannot open the tcp endpoint"};
+
+    const std::size_t chunk = 4096;
+    const std::size_t total = 1024u * 1024;
+    const byte_buffer payload(chunk, 0x5a);
+
+    const auto start = std::chrono::steady_clock::now();
+    std::size_t sent = 0;
+    for (std::size_t offset = 0; offset < total; offset += chunk)
+    {
+        VSS_PROFILE_FRAME();
+        VSS_PROFILE_ZONE("perf.e2e.tcp.chunk");
+        if (!(*port)->write_sync(bytes_view(payload), 5000ms))
+            break;
+        sent += chunk;
+    }
+
+    // Wait for the echo to come back through the hub before stopping the
+    // clock; the writes themselves only prove they reached the socket.
+    const bool drained = sent != 0
+        && wait_until([&] { return (*port)->stats().bytes_rx >= sent; }, 15s);
+
+    const double elapsed = seconds_since(start);
+    return {"e2e_tcp",
+            drained
+                ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
+                : 0.0,
+            "MB/s", "socket echo through the hub"};
+}
+
+measurement bench_e2e_pty()
+{
+    VSS_PROFILE_ZONE("perf.e2e.pty");
+
+    const std::string left_path = environment("VSS_LOOPBACK_A");
+    const std::string right_path = environment("VSS_LOOPBACK_B");
+    if (left_path.empty() || right_path.empty())
+        return {"e2e_pty", 0.0, "MB/s", "no loopback pair in the environment"};
+
+    vss::studio app;
+    const auto left = app.attach_serial(
+        "left", "serial://" + left_path + "?baud=115200");
+    const auto right = app.attach_serial(
+        "right", "serial://" + right_path + "?baud=115200");
+    if (!left || !right)
+        return {"e2e_pty", 0.0, "MB/s", "cannot open the loopback pair"};
+
+    const std::size_t chunk = 4096;
+    const std::size_t total = 512u * 1024;
+    const byte_buffer payload(chunk, 0x33);
+
+    const auto start = std::chrono::steady_clock::now();
+    std::size_t sent = 0;
+    for (std::size_t offset = 0; offset < total; offset += chunk)
+    {
+        VSS_PROFILE_FRAME();
+        VSS_PROFILE_ZONE("perf.e2e.pty.chunk");
+        if (!(*left)->write_sync(bytes_view(payload), 5000ms))
+            break;
+        sent += chunk;
+    }
+
+    const bool drained = sent != 0
+        && wait_until([&] { return (*right)->stats().bytes_rx >= sent; }, 20s);
+
+    const double elapsed = seconds_since(start);
+    return {"e2e_pty",
+            drained
+                ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
+                : 0.0,
+            "MB/s", "pseudo terminal pair"};
+}
+
 } // namespace
 
 int main(int argc, char** argv)
 {
     bool quick = false;
+    bool tracy = false;
     std::string output;
     for (int index = 1; index < argc; ++index)
     {
         const std::string argument = argv[index];
         if (argument == "--quick")
             quick = true;
+        else if (argument == "--tracy")
+            tracy = true;
         else if (argument.rfind("--output=", 0) == 0)
             output = argument.substr(9);
         else if (argument.rfind("--output", 0) == 0 && index + 1 < argc)
@@ -292,6 +488,13 @@ int main(int argc, char** argv)
     if (!quick)
         results.push_back(bench_mock_write());
 
+    if (tracy)
+    {
+        // Cross a real socket and, when CI provides one, a real tty pair.
+        results.push_back(bench_e2e_tcp());
+        results.push_back(bench_e2e_pty());
+    }
+
     hub->stop();
     hub->join();
 
@@ -323,6 +526,11 @@ int main(int argc, char** argv)
         stream << "]\n";
         stream.close();
     }
+
+    // Give the Tracy client a moment to flush the closing zones before the
+    // process exits and the capture tool saves the trace.
+    if (tracy)
+        std::this_thread::sleep_for(300ms);
 
     return 0;
 }

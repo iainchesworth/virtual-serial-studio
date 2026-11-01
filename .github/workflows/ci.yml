@@ -226,3 +226,87 @@ jobs:
           path: |
             perf-results.json
             perf.md
+
+  profiling:
+    runs-on: ubuntu-24.04
+    name: End-to-end profiling (Tracy)
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+
+      - name: Set up vcpkg
+        run: |
+          git clone --filter=blob:none https://github.com/microsoft/vcpkg.git "$RUNNER_TEMP/vcpkg"
+          git -C "$RUNNER_TEMP/vcpkg" checkout 7712087e65bac8d126e3700ba15b7a84cd1f5a7c
+          "$RUNNER_TEMP/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$RUNNER_TEMP/vcpkg" >> "$GITHUB_ENV"
+
+      - name: Install the Tracy client
+        run: "$VCPKG_ROOT/vcpkg install --triplet x64-linux --clean-after-build"
+
+      - name: Build the Tracy command line tools
+        run: |
+          curl -fsSL https://github.com/wolfpld/tracy/archive/refs/tags/v0.14.1.tar.gz -o tracy-src.tar.gz
+          tar xzf tracy-src.tar.gz
+          cmake -S tracy-0.14.1/capture -B tracy-tools/capture -DCMAKE_BUILD_TYPE=Release
+          cmake --build tracy-tools/capture --parallel
+          cmake -S tracy-0.14.1/csvexport -B tracy-tools/csvexport -DCMAKE_BUILD_TYPE=Release
+          cmake --build tracy-tools/csvexport --parallel
+
+      - name: Configure with instrumentation
+        run: |
+          cmake -S . -B build-tracy -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+            -DVCPKG_TARGET_TRIPLET=x64-linux \
+            -DVSS_TRACY=ON \
+            -DVSS_BUILD_PERF=ON \
+            -DVSS_BUILD_GUI=OFF \
+            -DVSS_BUILD_TESTS=OFF \
+            -DVSS_BUILD_TOOLS=OFF \
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+
+      - name: Build
+        run: cmake --build build-tracy --target vss_perf --parallel
+
+      - name: Create a serial pair for the terminal path
+        run: |
+          python3 tools/pty_loopback.py > pty.txt &
+          for i in $(seq 1 25); do
+            [ -s pty.txt ] && break
+            sleep 0.2
+          done
+          A=$(sed -n 1p pty.txt)
+          B=$(sed -n 2p pty.txt)
+          [ -n "$A" ] && [ -n "$B" ] || { echo "no pty pair" >&2; exit 1; }
+          echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
+          echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
+
+      - name: Capture and report
+        run: |
+          ./tracy-tools/capture/tracy-capture -o tracy.trace -s 120 &
+          CAP=$!
+          sleep 2
+          ./build-tracy/bin/vss_perf --tracy | tee perf-tracy.txt
+          wait $CAP
+          ./tracy-tools/csvexport/tracy-csvexport tracy.trace > tracy.csv
+          echo "### Tracy zones" >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/tracy_report.py tracy.csv \
+            --require perf.e2e.tcp,perf.e2e.pty,perf.e2e.pty.chunk,hub.route,config.to_json \
+            --markdown tracy-report.md --json tracy-zones.json | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tracy-profile
+          path: |
+            tracy.trace
+            tracy.csv
+            tracy-report.md
+            tracy-zones.json
+            perf-tracy.txt
