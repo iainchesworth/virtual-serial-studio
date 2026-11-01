@@ -1,0 +1,44 @@
+# Build output
+/build/
+/build-*/
+/out/
+/.build/
+/cmake-build-*/
+*.user
+*.suo
+*.sln
+*.vcxproj*
+CMakeUserPresets.json
+
+# Local configuration and scratch space
+/.probe/
+/.cache/
+/vcpkg_installed/
+/vcpkg/
+local/
+.qt/
+
+# Test and coverage artefacts
+/TestResults/
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+coverage/
+coverage.md
+perf-results.json
+*.log
+
+# Editors
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# OS noise
+Thumbs.db
+.DS_Store

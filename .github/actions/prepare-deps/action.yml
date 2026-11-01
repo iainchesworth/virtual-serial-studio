@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Prepare dependencies
+description: >
+  Fetch Boost headers and clone the Boost.VirtualSerial library. The library
+  is private, so an SSH deploy key is supplied by the caller and registered
+  with the agent; without one the clone uses the URL as given.
+
+inputs:
+  library-key:
+    description: SSH deploy key with read access to the library repository
+    required: false
+    default: ''
+  library-repo:
+    description: Repository URL to clone
+    required: false
+    default: git@github.com:iainchesworth/virtual_serial.git
+
+runs:
+  using: composite
+  steps:
+    - name: Register the library deploy key
+      if: inputs.library-key != ''
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ inputs.library-key }}
+
+    - name: Fetch Boost and the library
+      shell: bash
+      env:
+        LIBRARY_REPO: ${{ inputs.library-repo }}
+      run: |
+        set -euo pipefail
+        PY=python
+        command -v python3 >/dev/null 2>&1 && PY=python3
+        "$PY" tools/fetch_boost.py --dest .cache/boost-root
+
+        if [ ! -d .cache/virtual_serial ]; then
+          if ! git clone --depth 1 "$LIBRARY_REPO" .cache/virtual_serial; then
+            echo "::error::cannot clone $LIBRARY_REPO; check the VIRTUAL_SERIAL_DEPLOY_KEY secret"
+            exit 1
+          fi
+        fi

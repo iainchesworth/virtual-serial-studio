@@ -1,0 +1,9 @@
+{
+  "comment": "Conservative CI floors. Shared runners are noisy; the JSON artefacts are the source of truth for comparisons.",
+  "floors": [
+    { "name": "hub_route", "min": 20.0, "unit": "MB/s" },
+    { "name": "event_dispatch", "min": 20000.0, "unit": "events/s" },
+    { "name": "config_roundtrip", "min": 50.0, "unit": "ops/s" },
+    { "name": "mock_write", "min": 20.0, "unit": "MB/s" }
+  ]
+}

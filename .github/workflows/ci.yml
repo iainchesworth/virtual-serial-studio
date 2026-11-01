@@ -1,0 +1,249 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # The library is private; CI reaches it through a read-only deploy key
+  # stored as VIRTUAL_SERIAL_DEPLOY_KEY. Override the URL with a repository
+  # variable if the library ever moves or goes public.
+  VIRTUAL_SERIAL_REPO: ${{ vars.VIRTUAL_SERIAL_REPO || 'git@github.com:iainchesworth/virtual_serial.git' }}
+
+jobs:
+  commits:
+    name: Commit authorship
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check authors and messages
+        env:
+          MAINTAINER_EMAIL: iain.chesworth@gmail.com
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            RANGE="origin/${{ github.base_ref }}..HEAD"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            RANGE="${{ github.event.before }}..${{ github.sha }}"
+          else
+            RANGE="HEAD"
+          fi
+          python tools/check_commit_message.py --range "$RANGE" \
+            --author-email "$MAINTAINER_EMAIL"
+
+  changelog:
+    runs-on: ubuntu-latest
+    name: Changelog fragments
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate the changelog
+        run: |
+          python3 tools/changelog.py --check
+          python3 -m unittest discover -s tools -p "test_*.py" -v
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: linux-gcc
+          - os: ubuntu-24.04
+            name: linux-clang
+          - os: macos-14
+            name: macos-appleclang
+          - os: windows-2022
+            name: windows-msvc
+    runs-on: ${{ matrix.os }}
+    name: Build and test (${{ matrix.name }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MSVC
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+
+      - name: Configure
+        shell: bash
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
+            -DVSS_BUILD_GUI=OFF \
+            -DVSS_BUILD_TOOLS=ON \
+            -DVSS_BUILD_TESTS=ON \
+            -DVSS_WARNINGS_AS_ERRORS=ON
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Create a serial pair for the system tests
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          python3 tools/pty_loopback.py > pty.txt &
+          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25; do
+            [ -s pty.txt ] && break
+            sleep 0.2
+          done
+          A=$(sed -n 1p pty.txt)
+          B=$(sed -n 2p pty.txt)
+          [ -n "$A" ] && [ -n "$B" ] || { echo "no pty pair" >&2; exit 1; }
+          echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
+          echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
+          echo "VSS_REQUIRE_LOOPBACK=1" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  gui:
+    runs-on: ubuntu-24.04
+    name: Qt GUI (offscreen self-test)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          modules: ''
+
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
+            -DVSS_BUILD_GUI=ON \
+            -DVSS_WARNINGS_AS_ERRORS=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: GUI self-test
+        run: QT_QPA_PLATFORM=offscreen ./build/bin/vss_gui --selftest
+
+  coverage:
+    runs-on: ubuntu-24.04
+    name: Coverage (90% statements, 80% branches)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+
+      - name: Install LLVM
+        run: |
+          sudo apt-get update && sudo apt-get install -y llvm
+          echo "/usr/lib/llvm-18/bin" >> "$GITHUB_PATH"
+
+      - name: Configure
+        run: |
+          cmake -S . -B build-cov \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DVSS_COVERAGE=ON \
+            -DVSS_BUILD_GUI=OFF \
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+
+      - name: Build
+        run: cmake --build build-cov
+
+      - name: Create a serial pair for the system tests
+        shell: bash
+        run: |
+          python3 tools/pty_loopback.py > pty.txt &
+          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25; do
+            [ -s pty.txt ] && break
+            sleep 0.2
+          done
+          A=$(sed -n 1p pty.txt)
+          B=$(sed -n 2p pty.txt)
+          [ -n "$A" ] && [ -n "$B" ] || { echo "no pty pair" >&2; exit 1; }
+          echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
+          echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
+          echo "VSS_REQUIRE_LOOPBACK=1" >> "$GITHUB_ENV"
+
+      - name: Run the suites with profiling
+        run: |
+          mkdir -p build-cov/profiles
+          export LLVM_PROFILE_FILE="$PWD/build-cov/profiles/%p-%m.profraw"
+          ./build-cov/bin/vss_unit_tests --junit=unit.xml
+          ./build-cov/bin/vss_system_tests --junit=system.xml
+
+      - name: Enforce the gates
+        run: |
+          python3 tools/coverage_report.py --build build-cov \
+            --exclude libs/vss_testkit \
+            --gate-exclude libs/vss_ports/src/vcom_driver.cpp \
+            --min-lines 90 --min-branches 80 \
+            --markdown coverage.md
+          cat coverage.md >> "$GITHUB_STEP_SUMMARY"
+
+  performance:
+    runs-on: ubuntu-24.04
+    name: Performance floors
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/prepare-deps
+        with:
+          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
+          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DVSS_BUILD_PERF=ON \
+            -DVSS_BUILD_GUI=OFF \
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
+            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Measure and gate
+        run: |
+          ./build/bin/vss_perf --output=perf-results.json
+          python3 tools/perf_report.py perf-results.json --floors perf/floors.json \
+            --markdown | tee perf.md
+          cat perf.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perf-results
+          path: |
+            perf-results.json
+            perf.md

@@ -1,0 +1,103 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "VSS_BUILD_TESTS": "ON",
+        "VSS_BUILD_TOOLS": "ON",
+        "VSS_BUILD_GUI": "ON",
+        "CMAKE_PREFIX_PATH": "$env{QT_ROOT}"
+      }
+    },
+    {
+      "name": "debug",
+      "inherits": "base",
+      "displayName": "Debug (tests, tools, GUI)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "inherits": "base",
+      "displayName": "Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VSS_BUILD_PERF": "ON"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": "base",
+      "displayName": "Coverage (Clang, LLVM profile instrumentation)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VSS_COVERAGE": "ON",
+        "VSS_BUILD_GUI": "OFF",
+        "CMAKE_CXX_COMPILER": "clang-cl"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "coverage-unix",
+      "inherits": "base",
+      "displayName": "Coverage (Clang on Linux and macOS)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VSS_COVERAGE": "ON",
+        "VSS_BUILD_GUI": "OFF",
+        "CMAKE_CXX_COMPILER": "clang++"
+      },
+      "condition": {
+        "type": "notEquals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "perf",
+      "inherits": "base",
+      "displayName": "Performance (Release, no GUI)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VSS_BUILD_PERF": "ON",
+        "VSS_BUILD_GUI": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "debug", "configurePreset": "debug" },
+    { "name": "release", "configurePreset": "release" },
+    { "name": "coverage", "configurePreset": "coverage" },
+    { "name": "coverage-unix", "configurePreset": "coverage-unix" },
+    { "name": "perf", "configurePreset": "perf" }
+  ],
+  "testPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "output": { "outputOnFailure": true },
+      "execution": { "timeout": 600 }
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "output": { "outputOnFailure": true },
+      "execution": { "timeout": 600 }
+    }
+  ]
+}

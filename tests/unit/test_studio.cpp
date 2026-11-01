@@ -1,0 +1,469 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include <vss/ports/loopback_transport.hpp>
+#include <vss/ports/vcom_driver.hpp>
+#include <vss/studio/studio.hpp>
+
+#include "test_framework.hpp"
+
+using namespace vss;
+
+TEST_CASE("studio: loopback virtual ports advertise their path")
+{
+    studio app;
+
+    const auto created =
+        app.create_virtual_port("v1", virtual_port_kind::loopback);
+    REQUIRE(created);
+    REQUIRE_EQ((*created)->name(), std::string("v1"));
+    REQUIRE_EQ(app.advertised_path((*created)->id()),
+               std::string("loopback:v1"));
+    REQUIRE_EQ(app.find("v1")->id(), (*created)->id());
+
+    const auto infos = app.endpoint_infos();
+    REQUIRE_EQ(infos.size(), std::size_t{1});
+    REQUIRE_EQ(infos[0].path, std::string("loopback:v1"));
+    REQUIRE_EQ(infos[0].kind, endpoint_kind::virtual_port);
+}
+
+TEST_CASE("studio: duplicate names are made unique")
+{
+    studio app;
+    const auto first = app.create_virtual_port("port", virtual_port_kind::loopback);
+    const auto second = app.create_virtual_port("port", virtual_port_kind::loopback);
+    REQUIRE(first);
+    REQUIRE(second);
+    REQUIRE_EQ((*first)->name(), std::string("port"));
+    REQUIRE_EQ((*second)->name(), std::string("port-2"));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{2});
+}
+
+TEST_CASE("studio: mock ports are scriptable")
+{
+    studio app;
+    const auto created = app.create_mock_port("device");
+    REQUIRE(created);
+    REQUIRE_EQ((*created)->kind(), endpoint_kind::mock);
+    REQUIRE_EQ((*created)->stats().bytes_rx, std::uint64_t{0});
+}
+
+TEST_CASE("studio: removal by id and by name")
+{
+    studio app;
+    const auto created = app.create_virtual_port("v", virtual_port_kind::loopback);
+    REQUIRE(created);
+
+    REQUIRE(app.remove_port("v"));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+    REQUIRE_EQ(app.remove_port("v"), make_error_code(errc::not_found));
+
+    const auto again = app.create_virtual_port("v", virtual_port_kind::loopback);
+    REQUIRE(again);
+    REQUIRE(app.remove_port((*again)->id()));
+    REQUIRE_EQ(app.remove_port(endpoint_id{4242}),
+               make_error_code(errc::not_found));
+}
+
+TEST_CASE("studio: topology helpers resolve names")
+{
+    studio app;
+    REQUIRE(app.create_virtual_port("a", virtual_port_kind::loopback));
+    REQUIRE(app.create_virtual_port("b", virtual_port_kind::loopback));
+    REQUIRE(app.create_virtual_port("c", virtual_port_kind::loopback));
+
+    const auto duplex = app.connect("a", "b");
+    REQUIRE(duplex);
+
+    const auto split = app.split("a", {"b", "c"});
+    REQUIRE(!split);
+    REQUIRE_EQ(split.error(), make_error_code(errc::cycle_detected));
+
+    const auto one_way = app.redirect("b", "c");
+    REQUIRE(one_way);
+
+    const auto monitor = app.monitor("c", "a");
+    REQUIRE(!monitor);
+
+    REQUIRE_EQ(app.connect("a", "ghost"), make_error_code(errc::not_found));
+    REQUIRE_EQ(app.split("ghost", {"a"}), make_error_code(errc::not_found));
+    REQUIRE_EQ(app.join({"ghost"}, "a"), make_error_code(errc::not_found));
+    REQUIRE_EQ(app.redirect("ghost", "a"), make_error_code(errc::not_found));
+    REQUIRE_EQ(app.monitor("a", "ghost"), make_error_code(errc::not_found));
+
+    REQUIRE(app.disconnect(*duplex));
+    REQUIRE_EQ(app.disconnect(*duplex), make_error_code(errc::not_found));
+
+    REQUIRE_EQ(app.link_infos().size(), std::size_t{1});
+}
+
+TEST_CASE("studio: documents apply and snapshot")
+{
+    config::document document;
+    document.name = "unit";
+
+    config::port_entry first;
+    first.name = "left";
+    first.kind = "virtual";
+    first.virtual_kind = "loopback";
+    document.ports.push_back(first);
+
+    config::port_entry second;
+    second.name = "right";
+    second.kind = "virtual";
+    second.virtual_kind = "loopback";
+    document.ports.push_back(second);
+
+    config::link_entry link;
+    link.mode = "redirect";
+    link.sources = {"left"};
+    link.targets = {"right"};
+    document.links.push_back(link);
+
+    studio app;
+    REQUIRE(app.apply(document));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{2});
+    REQUIRE_EQ(app.link_infos().size(), std::size_t{1});
+
+    const auto snapshot = app.snapshot();
+    REQUIRE_EQ(snapshot.ports.size(), std::size_t{2});
+    REQUIRE_EQ(snapshot.links.size(), std::size_t{1});
+    REQUIRE_EQ(snapshot.links[0].mode, std::string("redirect"));
+    REQUIRE_EQ(snapshot.links[0].sources[0], std::string("left"));
+    REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("loopback"));
+}
+
+TEST_CASE("studio: a failed apply rolls back")
+{
+    config::document document;
+    document.name = "broken";
+
+    config::port_entry good;
+    good.name = "good";
+    good.kind = "virtual";
+    good.virtual_kind = "loopback";
+    document.ports.push_back(good);
+
+    config::port_entry bad;
+    bad.name = "bad";
+    bad.kind = "physical";
+    bad.uri = "serial://no-such-device-for-tests";
+    document.ports.push_back(bad);
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(!applied);
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+
+    // Without rollback the good port stays.
+    const auto retained = app.apply(document, false);
+    REQUIRE(!retained);
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{1});
+}
+
+TEST_CASE("studio: invalid documents are rejected before any work")
+{
+    studio app;
+    config::document document;
+    document.name = "invalid";
+    config::port_entry port;
+    port.name = "x";
+    port.kind = "nonsense";
+    document.ports.push_back(port);
+
+    REQUIRE_EQ(app.apply(document), make_error_code(errc::config_error));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: bridge reports bad URIs")
+{
+    studio app;
+    const auto bridged = app.bridge("serial://", "tcp://127.0.0.1:1");
+    REQUIRE(!bridged);
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: share_serial validates its listener count")
+{
+    studio app;
+    REQUIRE_EQ(app.share_serial("serial://COM99", 0),
+               make_error_code(errc::invalid_argument));
+    REQUIRE_EQ(app.share_serial("serial://COM99", 65),
+               make_error_code(errc::invalid_argument));
+}
+
+TEST_CASE("studio: environment queries are safe")
+{
+    studio app;
+    const auto devices = app.serial_devices();
+    for (const auto& device : devices)
+        REQUIRE(!device.path.empty());
+
+    const auto installation = app.detect_com0com();
+    if (installation.found)
+        REQUIRE(!installation.setupc_path.empty());
+}
+
+TEST_CASE("studio: join_ports reports a bad source")
+{
+    studio app;
+    REQUIRE(!app.join_ports({"serial://no-such-source"}, "serial://no-such-target"));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+
+    REQUIRE(!app.join_ports({}, "serial://no-such-target"));
+}
+
+TEST_CASE("studio: unknown identifiers are handled")
+{
+    studio app;
+    REQUIRE_EQ(app.advertised_path(4242), std::string());
+    REQUIRE(app.find("nothing") == nullptr);
+    REQUIRE_EQ(app.remove_port(4242), make_error_code(errc::not_found));
+
+    const auto options = app.default_options();
+    REQUIRE(options.capture_traffic);
+    REQUIRE(app.options().start_hub);
+}
+
+TEST_CASE("studio: applying a mock and an automatic virtual port")
+{
+    config::document document;
+    document.name = "mixed";
+
+    config::port_entry mock;
+    mock.name = "fake";
+    mock.kind = "mock";
+    mock.mock_target = "modem";
+    document.ports.push_back(mock);
+
+    config::port_entry automatic;
+    automatic.name = "auto";
+    automatic.kind = "virtual";
+    automatic.virtual_kind = "auto";
+    document.ports.push_back(automatic);
+
+    config::link_entry link;
+    link.mode = "duplex";
+    link.sources = {"fake"};
+    link.targets = {"auto"};
+    link.emulate_modem_lines = false;
+    document.links.push_back(link);
+
+    studio app;
+    REQUIRE(app.apply(document));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{2});
+    REQUIRE_EQ(app.link_infos().size(), std::size_t{1});
+
+    const auto snapshot = app.snapshot();
+    REQUIRE_EQ(snapshot.links[0].mode, std::string("duplex"));
+    REQUIRE(!snapshot.links[0].emulate_modem_lines);
+}
+
+TEST_CASE("studio: apply understands every link shape")
+{
+    const auto make_port = [](const std::string& name) {
+        config::port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        return port;
+    };
+
+    {
+        config::document document;
+        document.name = "split";
+        document.ports = {make_port("a"), make_port("b"), make_port("c")};
+        config::link_entry link;
+        link.mode = "split";
+        link.sources = {"a"};
+        link.targets = {"b", "c"};
+        document.links.push_back(link);
+
+        studio app;
+        REQUIRE(app.apply(document));
+        const auto snapshot = app.snapshot();
+        REQUIRE_EQ(snapshot.links.size(), std::size_t{1});
+        REQUIRE_EQ(snapshot.links[0].mode, std::string("split"));
+    }
+
+    {
+        config::document document;
+        document.name = "join";
+        document.ports = {make_port("a"), make_port("b"), make_port("c")};
+        config::link_entry link;
+        link.mode = "join";
+        link.sources = {"a", "b"};
+        link.targets = {"c"};
+        document.links.push_back(link);
+
+        studio app;
+        REQUIRE(app.apply(document));
+        REQUIRE_EQ(app.snapshot().links[0].mode, std::string("join"));
+    }
+
+    {
+        config::document document;
+        document.name = "monitor";
+        document.ports = {make_port("a"), make_port("b")};
+        config::link_entry link;
+        link.mode = "monitor";
+        link.sources = {"a"};
+        link.targets = {"b"};
+        document.links.push_back(link);
+
+        studio app;
+        REQUIRE(app.apply(document));
+        const auto snapshot = app.snapshot();
+        REQUIRE_EQ(snapshot.links[0].mode, std::string("monitor"));
+        REQUIRE(!snapshot.links[0].emulate_modem_lines);
+    }
+}
+
+TEST_CASE("studio: apply reports unsupported port kinds")
+{
+    config::document document;
+    document.name = "named-pipe";
+    config::port_entry port;
+    port.name = "pipe";
+    port.kind = "virtual";
+    port.virtual_kind = "named-pipe";
+    document.ports.push_back(port);
+
+    studio app;
+    const auto applied = app.apply(document);
+#if defined(_WIN32)
+    REQUIRE(!applied);
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+#else
+    // Named pipes are not implemented on any platform yet.
+    REQUIRE(!applied);
+#endif
+}
+
+TEST_CASE("studio: a driver topology fails cleanly without the driver")
+{
+    if (vss::driver_available())
+        VSS_SKIP("the COM port driver is installed on this machine");
+
+    config::document document;
+    document.name = "driver-port";
+    config::port_entry port;
+    port.name = "com";
+    port.kind = "virtual";
+    port.virtual_kind = "windows-driver";
+    document.ports.push_back(port);
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(!applied);
+    REQUIRE_EQ(applied.error(), make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: virtual port kinds round trip through the snapshot")
+{
+    studio app;
+    const auto created =
+        app.create_virtual_port("best", virtual_port_kind::pty);
+    REQUIRE(created);
+
+    const auto snapshot = app.snapshot();
+    REQUIRE_EQ(snapshot.ports.size(), std::size_t{1});
+#if defined(_WIN32)
+    // No pseudo terminals on Windows: the request falls back to auto.
+    if (snapshot.ports[0].virtual_kind == "auto")
+        REQUIRE_EQ(app.advertised_path((*created)->id()).find("loopback"),
+                   std::string::npos);
+#else
+    REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("pty"));
+#endif
+}
+
+TEST_CASE("studio: removing a port releases its advertised path")
+{
+    studio app;
+    REQUIRE(app.create_virtual_port("first", virtual_port_kind::loopback));
+    REQUIRE(app.remove_port("first"));
+
+    const auto second =
+        app.create_virtual_port("second", virtual_port_kind::loopback);
+    REQUIRE(second);
+    REQUIRE_EQ(app.advertised_path((*second)->id()),
+               std::string("loopback:second"));
+}
+
+TEST_CASE("studio: a cyclic document rolls back every port it created")
+{
+    config::document document;
+    document.name = "cycle";
+
+    for (const char* name : {"a", "b"})
+    {
+        config::port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        document.ports.push_back(port);
+    }
+
+    config::link_entry forward;
+    forward.mode = "duplex";
+    forward.sources = {"a"};
+    forward.targets = {"b"};
+    document.links.push_back(forward);
+
+    config::link_entry backward = forward;
+    backward.sources = {"b"};
+    backward.targets = {"a"};
+    document.links.push_back(backward);
+
+    // The document validates (each link is well formed) but the second link
+    // closes a cycle, so the hub refuses it and the ports must be removed.
+    REQUIRE(!validate(document));
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(!applied);
+    REQUIRE_EQ(applied.error(), make_error_code(errc::cycle_detected));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+    REQUIRE_EQ(app.link_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: share_serial reports an unattachable port")
+{
+    studio app;
+    const auto shared = app.share_serial("serial://no-such-port-for-tests", 2);
+    REQUIRE(!shared);
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: endpoints added directly are still described")
+{
+    studio app;
+    const auto added = app.engine().add_endpoint(
+        "direct", endpoint_kind::virtual_port,
+        loopback_transport::create(app.engine().executor(), "direct"));
+    REQUIRE(added);
+
+    const auto infos = app.endpoint_infos();
+    REQUIRE_EQ(infos.size(), std::size_t{1});
+    REQUIRE_EQ(infos[0].name, std::string("direct"));
+    REQUIRE_EQ(infos[0].path, std::string("loopback:direct"));
+    REQUIRE(app.snapshot().ports.empty());
+}
+
+TEST_CASE("studio: start and stop")
+{
+    studio_options options;
+    options.start_hub = false;
+    studio app(options);
+
+    REQUIRE(!app.engine().running());
+    app.start();
+    REQUIRE(app.engine().running());
+    app.stop();
+    REQUIRE(!app.engine().running());
+}

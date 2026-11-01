@@ -1,0 +1,97 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include <vss/testkit/harness.hpp>
+
+#include <vss/ports/com0com.hpp>
+#include <vss/ports/serial_enumeration.hpp>
+
+#include <cstdlib>
+#include <thread>
+
+namespace vss::testkit {
+
+std::string environment(const char* name)
+{
+#if defined(_MSC_VER)
+    char* buffer = nullptr;
+    std::size_t size = 0;
+    if (_dupenv_s(&buffer, &size, name) != 0 || buffer == nullptr)
+        return {};
+    std::string value(buffer);
+    std::free(buffer);
+    return value;
+#else
+    const char* value = std::getenv(name);
+    return value ? std::string(value) : std::string();
+#endif
+}
+
+std::optional<serial_pair> find_loopback_pair()
+{
+    serial_pair pair;
+    pair.a = environment("VSS_LOOPBACK_A");
+    pair.b = environment("VSS_LOOPBACK_B");
+    if (!pair.a.empty() && !pair.b.empty())
+        return pair;
+
+    const auto devices = enumerate_serial_devices();
+    const auto pairs = group_com0com_pairs(devices);
+    if (!pairs.empty())
+    {
+        pair.a = pairs.front().a;
+        pair.b = pairs.front().b;
+        pair.com0com = true;
+        return pair;
+    }
+
+    return std::nullopt;
+}
+
+bool wait_until(const std::function<bool()>& predicate,
+                std::chrono::milliseconds timeout)
+{
+    const auto deadline = std::chrono::steady_clock::now() + timeout;
+    while (std::chrono::steady_clock::now() < deadline)
+    {
+        if (predicate())
+            return true;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+    return predicate();
+}
+
+bool wait_for_rx(const endpoint& endpoint, std::size_t bytes,
+                 std::chrono::milliseconds timeout)
+{
+    return wait_until(
+        [&endpoint, bytes] { return endpoint.stats().bytes_rx >= bytes; },
+        timeout);
+}
+
+byte_buffer make_pattern(std::size_t size, unsigned seed)
+{
+    byte_buffer data;
+    data.reserve(size);
+    unsigned state = seed == 0 ? 1u : seed;
+    for (std::size_t index = 0; index < size; ++index)
+    {
+        state = state * 1664525u + 1013904223u;
+        data.push_back(static_cast<byte>((state >> 16) & 0xff));
+    }
+    return data;
+}
+
+byte_buffer make_binary_payload(std::size_t size)
+{
+    byte_buffer data;
+    data.reserve(size);
+    for (std::size_t index = 0; index < size; ++index)
+        data.push_back(static_cast<byte>(index & 0xff));
+    return data;
+}
+
+} // namespace vss::testkit
