@@ -170,6 +170,8 @@ int main(int argc, char** argv)
         selected.push_back(&test);
     }
 
+    std::cout << std::unitbuf; // CI captures the stream; never lose a line
+
     if (configuration.list)
     {
         for (const auto* test : selected)
@@ -188,6 +190,11 @@ int main(int argc, char** argv)
         {
             outcome entry;
             entry.test = test;
+
+            // Announce the case before it runs: if it hangs, the last line in
+            // the log names it.
+            if (configuration.verbose)
+                std::cout << "[RUN ] " << test->name << '\n';
 
             const auto case_started = std::chrono::steady_clock::now();
             try
