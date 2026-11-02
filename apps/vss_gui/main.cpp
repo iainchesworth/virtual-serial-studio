@@ -11,10 +11,12 @@
 
 #include <vss/studio/studio.hpp>
 
+#include <QAction>
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QSettings>
 
 #include <chrono>
 #include <cstdio>
@@ -81,6 +83,14 @@ int main(int argc, char* argv[])
         vss::studio_options options;
         auto studio = std::make_unique<vss::studio>(options);
         vss::gui::EngineStudioBackend backend(*studio);
+        if (parser.isSet(screenshot_option))
+        {
+            // Review images must be repeatable regardless of the user's saved
+            // mode; this path never runs on normal startup.
+            QSettings().setValue(
+                QStringLiteral("ui/advanced"),
+                qEnvironmentVariableIsSet("VSS_SCREENSHOT_ADVANCED"));
+        }
         vss::gui::ShellWindow window(backend);
 
         if (parser.isSet(selftest_option))
@@ -132,7 +142,10 @@ int main(int argc, char* argv[])
                 }
             }
 
-            window.resize(1280, 800);
+            if (qEnvironmentVariableIsSet("VSS_SCREENSHOT_COMPACT"))
+                window.resize(960, 640);
+            else
+                window.resize(1280, 800);
             window.show();
             for (int frame = 0; frame < 8; ++frame)
             {

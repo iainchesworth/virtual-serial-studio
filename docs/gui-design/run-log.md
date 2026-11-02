@@ -9,7 +9,7 @@ gates pass.
 | WP0 | `gui/wp0-recon` | implemented, self-review complete | Debug `ctest` 5/5, Release 6/6, 10 backend tests x40, `vss_gui --selftest` ok, changelog ok, clang-format clean | self-review + human G0; reviewer sessions timed out | bundle installed; implementation plan written; backend + event bridge + 10 tests |
 | WP1 | `gui/wp1-theme-widgets` | implemented, self-review complete | Debug `ctest` 6/6, 13 theme/widget tests, gallery PNGs light and dark, contrast/QSS/changelog/format clean | self-review + human G1 | theme, icons, focus ring, widget library, gallery, token tools, CI job |
 | WP2 | `gui/wp2-shell` | implemented, self-review complete | Debug `ctest` 7/7, Release `ctest` 8/8, 6/6 shell tests, `vss_gui --selftest` ok, six review PNGs, contrast/QSS/changelog/format clean | self-review; human G1 | action registry, level, launcher, command palette, status bar, dock frame; old shell retained until WP9 |
-| WP3 | `gui/wp3-data-panes` | not started | - | - | blocked on G1 |
+| WP3 | `gui/wp3-data-panes` | implemented, self-review complete | Debug `ctest` 8/8, Release 9/9, 7/7 pane tests, simple/advanced/dark/compact PNGs, `vss_gui --selftest` ok, changelog/format clean | self-review; pending G2 | ports, inspector, send, monitor, status data, selection; legacy sources leave the executable |
 | WP4 | `gui/wp4-topology` | not started | - | - | blocked on G1 |
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
 | WP6 | `gui/wp6-connect-share` | not started | - | - | blocked on G1 |
@@ -119,3 +119,38 @@ gates pass.
   Share toolbar entry deferred to WP6; Review-only screenshot env switches.
   All are recorded in `design-deviations.md` and section 11 of
   `implementation-plan.md`.
+
+## WP3 detail
+
+- Added `apps/vss_gui/src/panes/`: `PortModel` + `PortDelegate` +
+  `PortsPanel`, `InspectorPanel`, `SendPanel`, `MonitorModel` +
+  `DirectionDelegate` + `MonitorPanel`, the shared `SelectionService`, and the
+  panes formatter. Simple rows are three-line painted rows with a real 24 px
+  copy hit area; Advanced is the RX/TX/Dropped table with filtering. No
+  per-row widgets.
+- Ports, Inspector, Send and Monitor replace the WP2 placeholder dock pages.
+  Selection flows through one service: a Ports row, a Monitor row and the
+  Inspector/Send tabs follow the same endpoint. The Inspector reads real
+  control lines, drives DTR/RTS and Break where the port supports them, and
+  shows the exact waiting sentence only when the adapter reports NotOpen.
+- Send validates hex live, adds CRLF by default, supports Advanced Repeat and
+  saved sends in QSettings, and reports "queued" because the adapter has no
+  per-write callback.
+- Monitor consumes the coalesced `event_batch`, caps its ring at 10,000 rows,
+  renders ASCII escapes and hex, filters by port/direction/search, pauses
+  without stopping traffic, follows, exports visible rows and adds real DROP
+  rows from link dropped-counter deltas. Log is a bounded read-only text view;
+  Topology JSON remains a labelled WP7 tab.
+- ShellWindow gained a structural document signature so traffic counters no
+  longer mark the document dirty, real copy/remove handlers and confirmation,
+  dock title counts/selected name, default 360/340/196 sizes, compact tabbing
+  and panel mode updates. The legacy flat sources left the executable because
+  the new pane class names collide with the old ones.
+- Tests: `vss_gui_panes_tests` 7/7 (state/role/filter, 10k burst timing and cap,
+  ASCII/hex/filters/pause/drop, Send hex/CRLF/error, Ports selection sync,
+  Monitor empty state/no row widgets, Inspector waiting/control chips).
+- Review PNGs: `wp3-light.png`, `wp3-advanced.png`, `wp3-dark.png`,
+  `wp3-compact.png` under `build/debug-gui/gui-shots/` (never committed).
+- Checks: Debug `ctest` 8/8 (`gui_panes` added), `vss_gui --selftest` ok,
+  changelog/format pending final WP3 commit; Release build and ctest recorded
+  in the gate report.

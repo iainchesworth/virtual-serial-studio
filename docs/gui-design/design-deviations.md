@@ -146,7 +146,80 @@ so the mode difference is already visible.
 ### Review-only screenshot switches
 
 `VSS_SCREENSHOT_EMPTY=1` renders the launcher instead of the sample topology,
-and `VSS_SCREENSHOT_THEME=light|dark` selects the theme. They exist only on
-the documentation `--screenshot` path; normal startup ignores them and they do
-not write `QSettings`. The default screenshots use two loopback ports, one
-link, one mock port and a short write so the frame shows real data shapes.
+`VSS_SCREENSHOT_THEME=light|dark` selects the theme, `VSS_SCREENSHOT_ADVANCED=1`
+selects the mode and `VSS_SCREENSHOT_COMPACT=1` renders 960 by 640. They exist
+only on the documentation `--screenshot` path; normal startup ignores them. The
+advanced switch writes `ui/advanced` only on this review path so the image is
+repeatable regardless of the user's saved mode. The default screenshots use two
+loopback ports, one link, one mock port and a short write so the frame shows
+real data shapes.
+
+## WP3
+
+### Legacy flat sources leave the executable now
+
+WP2 kept the old `main_window`, panels, dialogs and legacy `theme.cpp` in the
+`vss_gui` executable so the first shell build could land without a 24-file
+deletion. WP3's new panes reuse the old class names (`PortModel`,
+`MonitorModel`, `InspectorPanel`, `SendPanel`), so compiling both sets produced
+duplicate symbols. The executable now builds only `main.cpp`; the legacy files
+remain on disk but are not compiled. WP9 owns deleting them and broadening the
+no-hex scan to the tree. This is an earlier build-list cleanup than the WP2
+plan, forced by the name collision.
+
+### SelectionService lives in panes
+
+The one selected port/link moved from `src/shell/selection_service.hpp` to
+`src/panes/selection_service.hpp`. Ports and Monitor need its metaobject, and a
+header-only Q_OBJECT in the shell library would have forced the pane tests to
+link the whole shell. The shell links panes, so both the frame and the data
+panes share the one service without a circular target.
+
+### Default dock minimums are the reviewed defaults during WP3
+
+The frame sets Ports to 360, Inspector to 340 and Monitor to 196 at normal
+width, with the compact minima 240/260/156. Qt's placeholder size hints kept
+settling near the minima, so WP3 uses the reviewed defaults as the current
+minimums to make the real panes and screenshots match the spec. This is a
+temporary layout constraint; WP9 can relax it once the panes own their content
+sizes and the splitter is re-checked at 200 percent text.
+
+### Monitor tabs and the Log view
+
+The Monitor dock title already names the dock, so Simple hides the one-tab tab
+bar instead of drawing "Monitor" twice. Advanced restores the bar and adds Log
+and Topology JSON. Log is a read-only `QPlainTextEdit` capped at 10,000 blocks,
+fed from the coalesced event batch. It is not a model/view pair because it has
+no per-row actions; this keeps it outside the no-per-row-widget rule and
+preserves the text selection users expect in a log.
+
+### DROP rows aggregate the real link counter
+
+The engine increments `link_stats.dropped` but does not publish a per-drop
+event with a payload or direction. Monitor therefore adds a DROP row when a
+link's dropped counter grows, labelled "not the owner, not forwarded", with the
+source/target name and the delta. It never invents a payload. The row is
+filtered like any dropped direction.
+
+### Advanced Send and Monitor heights
+
+The spec gives Send 162 and Monitor 196. WP3 keeps those defaults in Simple.
+Advanced Send adds the saved-sends row and Repeat, and Advanced Monitor adds the
+tab bar and filters, so both grow by their content height (about 230) rather
+than clipping controls. Compact still uses the spec's 156 Monitor. WP9 owns the
+final compact/200 percent pass.
+
+### Peer-open honesty
+
+`EngineStudioBackend` reports `peer_state::unknown` because the engine cannot
+observe an external opener. Ports therefore show "Open" and Inspector omits the
+"No program has opened ..." sentence. "Waiting for program" and "Program
+connected" are exercised by the fake in tests and will appear if a later engine
+capability reports the state. No waiting text is shown for Unknown.
+
+### No F2 rename
+
+`capabilities::rename_port` is false, so the Ports keyboard map implements Up,
+Down, Enter, Delete and Ctrl+Shift+C but not F2. Rename stays hidden rather than
+corrupting the studio's records and saved JSON. The existing placeholder
+`edit.rename` is not registered in WP3.

@@ -1,0 +1,98 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#ifndef VSS_GUI_PANES_MONITOR_PANEL_HPP
+#define VSS_GUI_PANES_MONITOR_PANEL_HPP
+
+#include "backend/studio_backend.hpp"
+
+#include <QHash>
+#include <QStringList>
+#include <QWidget>
+
+#include <cstdint>
+#include <optional>
+
+class QCheckBox;
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QPlainTextEdit;
+class QPushButton;
+class QStackedWidget;
+class QTabWidget;
+class QTableView;
+
+namespace vss::gui
+{
+
+class MonitorModel;
+class SegmentedControl;
+
+/// Monitor dock: bounded traffic table, Advanced filters and Log/JSON tabs.
+class MonitorPanel final : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit MonitorPanel(StudioBackend& backend, QWidget* parent = nullptr);
+
+    void set_advanced(bool advanced);
+    void set_compact(bool compact);
+    void set_selected_port(vss::endpoint_id id);
+    void refresh_ports();
+    void handle_events(const event_batch& events);
+
+Q_SIGNALS:
+    void port_selected(vss::endpoint_id id);
+    void status_message(const QString& message);
+    void error_message(const QString& message);
+
+private:
+    void build();
+    void update_actions();
+    void update_empty();
+    void update_filters();
+    void update_drop_rows();
+    void append_log(const gui_event& event);
+    void toggle_pause();
+    void export_visible();
+    void follow_if_enabled();
+
+    StudioBackend& backend_;
+    MonitorModel* model_ = nullptr;
+    QTabWidget* tabs_ = nullptr;
+    QWidget* monitor_page_ = nullptr;
+    QStackedWidget* content_ = nullptr;
+    QTableView* table_ = nullptr;
+    QLabel* empty_ = nullptr;
+    QWidget* simple_bar_ = nullptr;
+    QWidget* advanced_bar_ = nullptr;
+    QComboBox* port_filter_ = nullptr;
+    QLineEdit* search_ = nullptr;
+    QCheckBox* rx_ = nullptr;
+    QCheckBox* tx_ = nullptr;
+    QCheckBox* drop_ = nullptr;
+    QCheckBox* hex_ = nullptr;
+    QCheckBox* follow_ = nullptr;
+    SegmentedControl* mode_ = nullptr;
+    QPushButton* pause_ = nullptr;
+    QPushButton* simple_pause_ = nullptr;
+    QPushButton* clear_ = nullptr;
+    QPushButton* export_ = nullptr;
+    QPlainTextEdit* log_ = nullptr;
+    QLabel* json_ = nullptr;
+    QLabel* all_ports_ = nullptr;
+    QHash<vss::link_id, std::uint64_t> previous_drops_;
+    bool advanced_ = false;
+    bool follow_enabled_ = true;
+    bool refreshing_ports_ = false;
+    QStringList port_signature_;
+};
+
+} // namespace vss::gui
+
+#endif // VSS_GUI_PANES_MONITOR_PANEL_HPP

@@ -25,7 +25,9 @@ inline QString format_count(std::uint64_t value)
 
 inline QString format_bytes(std::uint64_t value)
 {
-    return QString::fromStdString(vss::format_byte_size(value));
+    QString text = QString::fromStdString(vss::format_byte_size(value));
+    text.replace(QStringLiteral(" KB"), QStringLiteral(" kB"));
+    return text;
 }
 
 /// `"1.5 MB/s"`; rates below one kilobyte stay in bytes and use rounding.

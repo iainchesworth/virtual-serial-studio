@@ -370,10 +370,13 @@ and it coalesces by construction.
    breakpoint is intentionally just above it so a 960-wide window is already
    in the compact form. Qt's toolbar extension button handles overflow rather
    than a hand-built More menu.
-6. **Review-only screenshot switches.** `VSS_SCREENSHOT_EMPTY=1` and
-   `VSS_SCREENSHOT_THEME=light|dark` exist only on the existing
-   `--screenshot` path so the human gate can see the launcher and both
-   themes. They are not product settings and do not write `QSettings`.
+6. **Review-only screenshot switches.** `VSS_SCREENSHOT_EMPTY=1`,
+   `VSS_SCREENSHOT_THEME=light|dark`, `VSS_SCREENSHOT_ADVANCED=1` and
+   `VSS_SCREENSHOT_COMPACT=1` exist only on the existing `--screenshot` path
+   so the human gate can see the launcher, both themes, both modes and the
+   compact minimum. On this path only, the advanced switch writes
+   `ui/advanced` so the image is repeatable; no other product startup path is
+   affected.
 7. **Hub display fact.** `StudioBackend::hub_running()` was added so the
    status bar can report the engine state. It is a display-only fact, not a
    new feature capability, and both adapters implement it (`true` for the
@@ -390,3 +393,38 @@ and it coalesces by construction.
 10. **Icon refresh.** Action icons are rebuilt from `IconProvider` when
     `Theme::themeChanged` fires. Without that, toolbars and menus kept the
     light-mode ink in the dark theme.
+
+## 12. WP3 decisions
+
+1. **Legacy files leave the build in WP3.** The flat shell, panels, dialogs
+   and legacy `theme.cpp` are no longer compiled into `vss_gui`; `main.cpp`
+   links the new shell and pane libraries. The files stay on disk until WP9.
+   This moved the WP2 build-list cleanup one package earlier because the new
+   pane class names (`PortModel`, `MonitorModel`, `InspectorPanel`,
+   `SendPanel`) collide with the old flat classes at link time.
+2. **Selection service location.** `SelectionService` moved to
+   `src/panes/`, where its metaobject can be built and linked by the pane
+   tests. The shell links panes and shares the same instance.
+3. **Default dock floors.** Ports 360, Inspector 340 and Monitor 196 are the
+   minimums at normal width during WP3, with 240/260/156 in compact. The
+   placeholder size hints otherwise settle the splitter near the minima. WP9
+   re-checks the splitter after the panes own their content sizes and at 200
+   percent text.
+4. **Advanced heights.** Advanced Send and Monitor grow to fit the saved-sends
+   row, filters and tab bar (about 230) instead of clipping them. Simple keeps
+   the spec's 162/196; compact keeps Monitor at 156.
+5. **Monitor Log is a bounded text view.** It is a read-only
+   `QPlainTextEdit` capped at 10,000 blocks fed from the same event batch.
+   There are no per-row widgets and users keep text selection. A separate
+   `EventLog` model is not needed for the feature set.
+6. **DROP rows aggregate counters.** The engine publishes dropped *bytes* on
+   the link counter, not a per-drop event with payload. Monitor adds a DROP
+   row when the counter grows, with the real name and byte delta and the copy
+   "not the owner, not forwarded". No payload is invented.
+7. **Simple hides the one-tab bar.** The dock title already says Monitor; the
+   Advanced tabs restore the bar for Log and Topology JSON. The tab bar is not
+   duplicated in Simple.
+8. **No rename/undo.** `rename_port` and any exact undo service are not
+   capabilities today, so F2, Undo and Redo remain placeholders and Rename is
+   not registered. Ports deletion is confirmed and final; no Undo toast is
+   shown.

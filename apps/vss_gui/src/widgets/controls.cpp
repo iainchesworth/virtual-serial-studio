@@ -130,7 +130,7 @@ int SegmentedControl::add_item(const QString& text, int id)
 
 void SegmentedControl::set_current(int id)
 {
-    if (id == current_id_)
+    if (id == current_id_ && group_->checkedId() == id)
         return;
     if (QAbstractButton* button = group_->button(id))
     {
