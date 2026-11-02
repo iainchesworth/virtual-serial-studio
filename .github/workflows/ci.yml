@@ -130,7 +130,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
-          modules: ''
+          modules: 'qtsvg'
 
       - name: Install GUI system libraries
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
