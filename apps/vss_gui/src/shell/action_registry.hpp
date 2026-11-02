@@ -39,6 +39,9 @@ struct action_spec
     std::function<void()> handler;
     /// Optional enabled predicate, evaluated by refresh().
     std::function<bool()> enabled;
+    /// False for a placement-only action (for example a toolbar duplicate of
+    /// a menu command) that must not appear twice in the command palette.
+    bool palette = true;
 };
 
 /// One registry for every menu, toolbar and command-palette action.

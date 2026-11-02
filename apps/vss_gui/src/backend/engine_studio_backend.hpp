@@ -91,6 +91,7 @@ public:
                                          int listeners) override;
     vss::result<vss::link_id> bridge(const QString& from_uri,
                                      const QString& to_uri) override;
+    vss::result<void> create_com0com_pair() override;
 
     bool hub_running() const override;
     void refresh() override;

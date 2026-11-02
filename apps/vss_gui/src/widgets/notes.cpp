@@ -252,6 +252,14 @@ void NoteBanner::set_kind(kind value)
 
 void NoteBanner::set_text(const QString& text)
 {
+    accessible_text_.clear();
+    text_->setText(text);
+    refresh_accessible_name();
+}
+
+void NoteBanner::set_text(const QString& text, const QString& accessible_text)
+{
+    accessible_text_ = accessible_text;
     text_->setText(text);
     refresh_accessible_name();
 }
@@ -298,7 +306,9 @@ void NoteBanner::refresh_accessible_name()
         prefix = QStringLiteral("Warning: ");
     else if (kind_ == kind::danger)
         prefix = QStringLiteral("Error: ");
-    setAccessibleName(prefix + text_->text());
+    const QString plain =
+        accessible_text_.isEmpty() ? text_->text() : accessible_text_;
+    setAccessibleName(prefix + plain);
     announce_name_change(this);
 }
 
@@ -320,6 +330,13 @@ ResultSentence::ResultSentence(QWidget* parent)
 void ResultSentence::set_result_text(const QString& text)
 {
     set_text(text);
+    announce_name_change(this);
+}
+
+void ResultSentence::set_result_text(const QString& text,
+                                     const QString& accessible_text)
+{
+    set_text(text, accessible_text);
     announce_name_change(this);
 }
 

@@ -49,6 +49,9 @@ add_subdirectory(src/theme)
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
 
+# Connect, share, network and template dialogs (WP6).
+add_subdirectory(src/dialogs)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 

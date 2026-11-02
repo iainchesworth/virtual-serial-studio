@@ -6,6 +6,11 @@
 
 #include "shell/shell_window.hpp"
 
+#include "dialogs/connect_ports.hpp"
+#include "dialogs/network_endpoint.hpp"
+#include "dialogs/recent_files.hpp"
+#include "dialogs/share_wizard.hpp"
+#include "dialogs/templates_dialog.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
@@ -55,7 +60,6 @@ namespace
 {
 
 constexpr const char* kRecentFiles = "ui/recentFiles";
-constexpr const char* kRecentSummary = "ui/recentSummary";
 
 QString document_name(const QString& path)
 {
@@ -133,10 +137,11 @@ void ShellWindow::build_actions()
         [this](const QString& id, const QString& text, const QString& keywords,
                const QString& icon, const QKeySequence& shortcut,
                action_level level, std::function<void()> handler,
-               bool checkable = false, std::function<bool()> enabled = {})
+               bool checkable = false, std::function<bool()> enabled = {},
+               bool palette = true)
     {
         registry_.add({id, text, keywords, icon, shortcut, level, checkable,
-                       std::move(handler), std::move(enabled)});
+                       std::move(handler), std::move(enabled), palette});
     };
     const auto later = [this](const QString& what)
     { return [this, what] { placeholder(what); }; };
@@ -160,7 +165,7 @@ void ShellWindow::build_actions()
     add(QStringLiteral("file.templates"),
         QStringLiteral("Setups and templates"),
         QStringLiteral("template setup"), {}, {}, action_level::simple,
-        later(QStringLiteral("Setups and templates")));
+        [this] { open_templates(); });
     add(QStringLiteral("file.save"), QStringLiteral("Save"),
         QStringLiteral("save file setup"), QStringLiteral("save"),
         QKeySequence::Save, action_level::simple, [this] { save_document(); });
@@ -205,9 +210,11 @@ void ShellWindow::build_actions()
     add(QStringLiteral("ports.attach"), QStringLiteral("Attach real device"),
         QStringLiteral("serial device"), QStringLiteral("device"), {},
         action_level::simple, [this] { run_job(QStringLiteral("attach")); });
-    add(QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
+    add(
+        QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
         QStringLiteral("tcp udp rfc2217"), {}, {}, action_level::advanced,
-        [this] { run_job(QStringLiteral("network")); });
+        [this] { open_network_endpoint(); }, false,
+        [this] { return backend_.caps().bridge; });
     add(QStringLiteral("ports.mock"), QStringLiteral("Mock fixture"),
         QStringLiteral("fixture mock script"), QStringLiteral("fixture"), {},
         action_level::advanced, [this] { run_job(QStringLiteral("mock")); });
@@ -226,12 +233,20 @@ void ShellWindow::build_actions()
         QStringLiteral("topology.connect"), QStringLiteral("Connect ports"),
         QStringLiteral("link split join redirect monitor"),
         QStringLiteral("connect"), QKeySequence(QStringLiteral("Ctrl+L")),
-        action_level::simple, [this] { run_job(QStringLiteral("connect")); },
-        false, [this] { return backend_.ports().size() >= 2; });
-    add(QStringLiteral("topology.share"), QStringLiteral("Share a device"),
+        action_level::simple, [this] { open_connect_ports(); }, false,
+        [this] { return backend_.ports().size() >= 2; });
+    add(
+        QStringLiteral("topology.share"), QStringLiteral("Share a device"),
         QStringLiteral("split listeners"), QStringLiteral("share"), {},
-        action_level::simple,
-        [this] { placeholder(QStringLiteral("Share a device")); });
+        action_level::simple, [this] { open_share_wizard(); }, false,
+        [this] { return backend_.caps().share; });
+    // The design's Advanced toolbar adds Share.  It is a placement-only
+    // duplicate of the Simple Topology action, so it stays out of the palette.
+    add(
+        QStringLiteral("topology.shareToolbar"),
+        QStringLiteral("Share a device"), QStringLiteral("split listeners"),
+        QStringLiteral("share"), {}, action_level::advanced,
+        [this] { open_share_wizard(); }, false, {}, false);
     add(QStringLiteral("topology.watch"), QStringLiteral("Watch traffic"),
         QStringLiteral("monitor copy"), QStringLiteral("watch"), {},
         action_level::simple,
@@ -369,6 +384,16 @@ void ShellWindow::build_actions()
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
+    if (QAction* network = registry_.action(QStringLiteral("ports.network"));
+        network != nullptr && !backend_.caps().bridge)
+    {
+        network->setToolTip(QStringLiteral("Not available in this build"));
+    }
+    if (QAction* share = registry_.action(QStringLiteral("topology.share"));
+        share != nullptr && !backend_.caps().share)
+    {
+        share->setToolTip(QStringLiteral("Not available in this build"));
+    }
     connect(advanced_action_, &QAction::toggled, this,
             [this](bool on) { level_.set_advanced(on); });
 
@@ -500,6 +525,7 @@ void ShellWindow::build_toolbar()
     add(QStringLiteral("ports.remove"));
     toolbar_->addSeparator();
     add(QStringLiteral("ports.mock"));
+    add(QStringLiteral("topology.shareToolbar"));
     add(QStringLiteral("topology.fit"));
 
     auto* spacer = new QWidget(toolbar_);
@@ -736,7 +762,8 @@ void ShellWindow::update_content()
 
 void ShellWindow::update_title()
 {
-    QString name = document_name(document_path_);
+    QString name = title_override_.isEmpty() ? document_name(document_path_)
+                                             : title_override_;
     if (dirty_)
         name += QLatin1Char('*');
     setWindowTitle(QStringLiteral("%1 - Virtual Serial Studio").arg(name));
@@ -796,6 +823,146 @@ void ShellWindow::open_palette()
     status_->refresh();
 }
 
+void ShellWindow::open_connect_ports()
+{
+    ConnectPortsDialog dialog(backend_, selection_.port(), level_.advanced(),
+                              this);
+    connect(&dialog, &ConnectPortsDialog::advanced_requested, this,
+            [this, &dialog]
+            {
+                level_.set_advanced(true);
+                dialog.set_advanced(true);
+            });
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    status_->refresh();
+    if (!dialog.result_summary().isEmpty())
+        ToastManager::instance().show(this, dialog.result_summary());
+}
+
+void ShellWindow::open_share_wizard()
+{
+    if (!backend_.caps().share)
+    {
+        status_->showMessage(
+            QStringLiteral("Sharing is not available in this build."), 4000);
+        return;
+    }
+    ShareWizard wizard(backend_, level_.advanced(), this);
+    connect(&wizard, &ShareWizard::advanced_requested, this,
+            [this, &wizard]
+            {
+                level_.set_advanced(true);
+                wizard.set_advanced(true);
+            });
+    connect(&wizard, &ShareWizard::open_monitor_requested, this,
+            [this] { show_monitor(); });
+    // A failed share is rolled back by the engine, but its transient
+    // endpoint signals must not mark the setup dirty.
+    loading_ = true;
+    wizard.exec();
+    loading_ = false;
+    if (wizard.listener_count() > 0)
+        set_dirty(true);
+    status_->refresh();
+}
+
+void ShellWindow::open_network_endpoint()
+{
+    if (!backend_.caps().bridge)
+    {
+        status_->showMessage(
+            QStringLiteral("Networking is not available in this build."), 4000);
+        return;
+    }
+    NetworkEndpointDialog dialog(backend_, level_.advanced(), selection_.port(),
+                                 this);
+    connect(&dialog, &NetworkEndpointDialog::advanced_requested, this,
+            [this, &dialog]
+            {
+                level_.set_advanced(true);
+                dialog.set_advanced(true);
+            });
+    // A failed bridge is rolled back by the engine; do not dirty the setup
+    // from the transient endpoint signals.
+    loading_ = true;
+    const int accepted = dialog.exec();
+    loading_ = false;
+    if (accepted != QDialog::Accepted)
+        return;
+    set_dirty(true);
+    status_->refresh();
+    ToastManager::instance().show(
+        this,
+        QStringLiteral("Bridge is running on port %1.")
+            .arg(dialog.result_port()),
+        QStringLiteral("Open monitor"), [this] { show_monitor(); });
+}
+
+void ShellWindow::open_templates()
+{
+    if (!confirm_discard())
+        return;
+
+    TemplatesDialog dialog(backend_, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    const auto document = dialog.result_document();
+    if (!document)
+        return;
+
+    loading_ = true;
+    const auto applied = backend_.apply(*document, true);
+    loading_ = false;
+    if (!applied)
+    {
+        ErrorDialog error(
+            QStringLiteral("Could not open %1").arg(dialog.result_title()),
+            QStringLiteral("The setup needs a device or network endpoint that "
+                           "is not available on this PC. Nothing was changed. "
+                           "Check the device, then try again."),
+            error_text(applied.error()), this);
+        error.exec();
+        status_->refresh();
+        return;
+    }
+
+    if (dialog.result_is_template())
+    {
+        document_path_.clear();
+        title_override_ = dialog.result_title();
+        set_dirty(true);
+    }
+    else
+    {
+        document_path_ = dialog.result_path();
+        title_override_.clear();
+        set_dirty(false);
+        const auto ports = backend_.ports();
+        const auto links = backend_.links();
+        add_recent(document_path_,
+                   QStringLiteral("%1 ports, %2 links")
+                       .arg(static_cast<qulonglong>(ports.size()))
+                       .arg(static_cast<qulonglong>(links.size())));
+    }
+    show_workspace();
+    update_title();
+    status_->refresh();
+}
+
+void ShellWindow::show_monitor()
+{
+    if (monitor_dock_ == nullptr)
+        return;
+    monitor_dock_->show();
+    monitor_dock_->raise();
+    if (monitor_action_ != nullptr)
+    {
+        const QSignalBlocker blocker(monitor_action_);
+        monitor_action_->setChecked(true);
+    }
+}
+
 void ShellWindow::run_job(const QString& job)
 {
     if (job == QLatin1String("add"))
@@ -813,12 +980,17 @@ void ShellWindow::run_job(const QString& job)
     }
     else if (job == QLatin1String("connect"))
     {
-        placeholder(QStringLiteral("Connect ports"));
+        open_connect_ports();
         return;
     }
     else if (job == QLatin1String("network"))
     {
-        placeholder(QStringLiteral("Network endpoint"));
+        open_network_endpoint();
+        return;
+    }
+    else if (job == QLatin1String("templates"))
+    {
+        open_templates();
         return;
     }
     else if (job == QLatin1String("mock"))
@@ -831,8 +1003,6 @@ void ShellWindow::run_job(const QString& job)
         placeholder(job);
         return;
     }
-    // The actions above currently show their own placeholder; this path is
-    // here so the launcher wiring stays one call.
 }
 
 void ShellWindow::placeholder(const QString& what)
@@ -852,6 +1022,7 @@ void ShellWindow::new_document()
     backend_.refresh();
     loading_ = false;
     document_path_.clear();
+    title_override_.clear();
     set_dirty(false);
     selection_.clear();
     show_launcher();
@@ -896,6 +1067,7 @@ void ShellWindow::open_path(const QString& path)
         return;
     }
     document_path_ = path;
+    title_override_.clear();
     set_dirty(false);
     const auto ports = backend_.ports();
     const auto links = backend_.links();
@@ -944,6 +1116,7 @@ void ShellWindow::save_document_as()
     if (!path.endsWith(QLatin1String(".json"), Qt::CaseInsensitive))
         path += QStringLiteral(".json");
     document_path_ = path;
+    title_override_.clear();
     save_document();
 }
 
@@ -978,15 +1151,7 @@ bool ShellWindow::confirm_discard()
 
 void ShellWindow::add_recent(const QString& path, const QString& summary)
 {
-    QSettings settings;
-    QStringList recent =
-        settings.value(QLatin1String(kRecentFiles)).toStringList();
-    recent.removeAll(path);
-    recent.prepend(path);
-    while (recent.size() > 10)
-        recent.removeLast();
-    settings.setValue(QLatin1String(kRecentFiles), recent);
-    settings.setValue(QLatin1String(kRecentSummary), summary);
+    record_recent(path, summary);
     launcher_->refresh();
 }
 

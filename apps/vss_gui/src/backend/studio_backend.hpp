@@ -118,6 +118,9 @@ public:
                                                  int listeners) = 0;
     virtual vss::result<vss::link_id> bridge(const QString& from_uri,
                                              const QString& to_uri) = 0;
+    /// Creates one more com0com null-modem pair, prompting for elevation on
+    /// Windows.  Returns `errc::unsupported` where the platform has no driver.
+    virtual vss::result<void> create_com0com_pair() = 0;
 
     // -- lifecycle ---------------------------------------------------------
 

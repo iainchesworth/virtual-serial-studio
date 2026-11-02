@@ -92,6 +92,8 @@ QVector<QAction*> ActionRegistry::search(const QString& query) const
     for (QAction* action : order_)
     {
         const action_spec spec = specs_.value(action);
+        if (!spec.palette)
+            continue;
         const bool match = needle.isEmpty() ||
                            spec.text.contains(needle, Qt::CaseInsensitive) ||
                            spec.keywords.contains(needle, Qt::CaseInsensitive);

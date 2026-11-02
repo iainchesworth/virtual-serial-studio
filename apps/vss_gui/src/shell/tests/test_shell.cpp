@@ -7,6 +7,10 @@
 #include "test_framework.hpp"
 
 #include "backend/fake_studio_backend.hpp"
+#include "dialogs/connect_ports.hpp"
+#include "dialogs/network_endpoint.hpp"
+#include "dialogs/share_wizard.hpp"
+#include "dialogs/templates_dialog.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/launcher.hpp"
@@ -21,6 +25,7 @@
 #include <QDir>
 #include <QDockWidget>
 #include <QSettings>
+#include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
 
@@ -308,4 +313,111 @@ TEST_CASE("shell: every toolbar action has a name and a unique shortcut")
         shortcuts << key;
     }
     REQUIRE(shortcuts.size() > 8);
+}
+
+namespace
+{
+
+template <class Dialog>
+bool trigger_and_close(vss::gui::ShellWindow& window, const QString& action_id)
+{
+    auto* action = window.findChild<QAction*>(action_id);
+    REQUIRE(action != nullptr);
+    REQUIRE(action->isEnabled());
+    bool found = false;
+    QTimer::singleShot(0, &window,
+                       [&found]
+                       {
+                           for (QWidget* widget :
+                                QApplication::topLevelWidgets())
+                           {
+                               if (auto* dialog = qobject_cast<Dialog*>(widget))
+                               {
+                                   found = true;
+                                   dialog->reject();
+                               }
+                           }
+                       });
+    action->trigger();
+    return found;
+}
+
+} // namespace
+
+TEST_CASE("shell: WP6 actions open the real dialogs")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    backend.set_facts(facts);
+    vss::gui::device_view device;
+    device.path = QStringLiteral("COM3");
+    device.description = QStringLiteral("Serial device");
+    backend.set_devices({device});
+    for (const char* name : {"alpha", "beta", "gamma"})
+    {
+        const auto created = backend.create_virtual_port(
+            QString::fromLatin1(name), vss::virtual_port_kind::pty, true);
+        REQUIRE(created.has_value());
+    }
+    backend.refresh();
+
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    REQUIRE(trigger_and_close<vss::gui::ConnectPortsDialog>(
+        window, QStringLiteral("topology.connect")));
+    REQUIRE(trigger_and_close<vss::gui::ShareWizard>(
+        window, QStringLiteral("topology.share")));
+    REQUIRE(trigger_and_close<vss::gui::TemplatesDialog>(
+        window, QStringLiteral("file.templates")));
+
+    auto* advanced =
+        window.findChild<QAction*>(QStringLiteral("view.advanced"));
+    auto* share_toolbar =
+        window.findChild<QAction*>(QStringLiteral("topology.shareToolbar"));
+    auto* network = window.findChild<QAction*>(QStringLiteral("ports.network"));
+    REQUIRE(advanced != nullptr);
+    REQUIRE(share_toolbar != nullptr);
+    REQUIRE(network != nullptr);
+    REQUIRE(!share_toolbar->isVisible());
+    advanced->trigger();
+    QApplication::processEvents();
+    REQUIRE(share_toolbar->isVisible());
+    REQUIRE(trigger_and_close<vss::gui::NetworkEndpointDialog>(
+        window, QStringLiteral("ports.network")));
+
+    // The toolbar-only duplicate must not double an entry in the palette.
+    vss::gui::ActionRegistry registry;
+    registry.add({QStringLiteral("menu.share"),
+                  QStringLiteral("Share a device"),
+                  QStringLiteral("share"),
+                  {},
+                  {},
+                  vss::gui::action_level::simple,
+                  false,
+                  [] {},
+                  {},
+                  true});
+    registry.add({QStringLiteral("toolbar.share"),
+                  QStringLiteral("Share a device"),
+                  QStringLiteral("share"),
+                  {},
+                  {},
+                  vss::gui::action_level::advanced,
+                  false,
+                  [] {},
+                  {},
+                  false});
+    REQUIRE_EQ(registry.search(QStringLiteral("share")).size(), 1);
+    REQUIRE_EQ(
+        registry.search(QStringLiteral("share")).front()->data().toString(),
+        QStringLiteral("menu.share"));
+    REQUIRE(registry.action(QStringLiteral("toolbar.share")) != nullptr);
+
+    window.close();
+    QApplication::processEvents();
 }

@@ -57,6 +57,13 @@ struct capabilities
     bool share = true;
     /// TCP, UDP and RFC 2217 endpoints built from a URI.
     bool bridge = true;
+    /// Wait for other computers to connect (a listening TCP/UDP endpoint).
+    /// False: Boost.VirtualSerial's TCP and UDP backends only resolve and
+    /// connect, and `vss::studio::bridge` attaches both URIs as clients.
+    bool network_server = false;
+    /// Create another com0com null-modem pair (Windows, needs elevation).
+    /// The share wizard's warn note calls the adapter method this gates.
+    bool com0com_pair_creation = true;
 };
 
 } // namespace vss::gui

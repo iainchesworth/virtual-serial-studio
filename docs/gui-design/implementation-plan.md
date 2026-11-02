@@ -390,3 +390,40 @@ and it coalesces by construction.
 10. **Icon refresh.** Action icons are rebuilt from `IconProvider` when
     `Theme::themeChanged` fires. Without that, toolbars and menus kept the
     light-mode ink in the dark theme.
+
+## 12. WP6 decisions and integration points
+
+1. **Dialog library.** `vss_gui_dialogs` (section 4's planned `dialogs/`
+   area) holds `ConnectPortsDialog`, `ShareWizard`,
+   `NetworkEndpointDialog`, `TemplatesDialog`, the `network_uri` and
+   `share_plan` helpers, `recent_files` and the template resource. The shell
+   links it; the tests link it without the old flat sources.
+2. **Action IDs.** Existing handlers now open real dialogs:
+   `topology.connect`, `topology.share`, `ports.network`,
+   `file.templates`. The only new ID is `topology.shareToolbar`, an
+   Advanced-only toolbar placement with `action_spec::palette = false`. The
+   launcher jobs `connect`, `share`, `network` and `templates` route through
+   `ShellWindow::run_job`. No existing action moved or changed level.
+3. **Adapter additions.** `capabilities::network_server` is false;
+   `capabilities::com0com_pair_creation` is false off Windows;
+   `StudioBackend::create_com0com_pair()` is implemented by
+   `EngineStudioBackend` (`vss::create_com0com_pair`, elevation, next free COM
+   numbers) and `FakeStudioBackend`. No `libs/` change.
+4. **Network server.** The engine has no listening TCP/UDP backend. The
+   dialog defaults to the client role and disables the server role with
+   "Not available in this build"; the gap is in `08-engine-gaps.md`.
+5. **Templates.** Four documents are Qt resources validated by
+   `vss_config`; there is no schema change. Real-device templates require the
+   WP5 Attach flow and are visibly disabled until it lands. The Recent table
+   keeps `ui/recentFiles` for ordering and adds per-path summary/date keys.
+6. **Share semantics.** The wizard calls `share_serial` as one operation; a
+   failure leaves the studio unchanged (the fake's mid-share failure test
+   covers the rollback). Add another program re-runs the operation after
+   removing the previous share, because the engine cannot add one listener.
+7. **Peer states.** The real backend reports `unknown`; step 3 shows "Open"
+   and omits the waiting sentence. Definite `not_open`/`open` values map to
+   "Waiting for program"/"Program connected" in the fake tests.
+8. **Widgets.** `PickCard` gained a trailing glyph and fixed vertical policy;
+   `NoteBanner`/`ResultSentence` gained a plain accessible text overload;
+   `ActionRegistry` gained the palette flag. The new QSS selectors use
+   existing tokens.

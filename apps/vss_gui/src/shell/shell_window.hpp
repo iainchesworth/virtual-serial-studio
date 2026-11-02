@@ -68,6 +68,11 @@ private:
     void show_launcher();
     void show_workspace();
     void open_palette();
+    void open_connect_ports();
+    void open_share_wizard();
+    void open_network_endpoint();
+    void open_templates();
+    void show_monitor();
     void run_job(const QString& job);
     void placeholder(const QString& what);
 
@@ -107,6 +112,7 @@ private:
     QAction* monitor_action_ = nullptr;
 
     QString document_path_;
+    QString title_override_;
     bool dirty_ = false;
     bool loading_ = false;
     bool launcher_forced_ = false;

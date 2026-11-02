@@ -17,6 +17,7 @@ QDialog[surface="panel"] { background: %panel%; }
 QWidget:disabled { color: %disabledText%; }
 QToolTip { background: %toastBg%; color: %toastText%; border: 0; padding: 5px 9px; }
 QLabel[muted="true"] { color: %ink3%; }
+QLabel[secondary="true"] { color: %ink2%; }
 
 /* menu and toolbar */
 QMenuBar { background: %panel%; color: %ink%; border-bottom: 1px solid %line%; }
@@ -83,6 +84,13 @@ QSplitter::handle { background: transparent; }
 QFrame[card="true"] { background: %panel%; border: 1px solid %line%; border-radius: 8px; }
 QFrame[pick="true"] { background: %panel%; border: 1px solid %control%; border-radius: 8px; }
 QFrame[pick="true"][selected="true"] { background: %accentSoft%; border: 1px solid %accent%; }
+QFrame[dashed="true"] { background: transparent; border: 1px dashed %control%; border-radius: 8px; }
+QFrame[dashed="true"]:hover { background: %sunken%; }
+QFrame[spin="true"] { background: %panel%; border: 1px solid %control%; border-radius: 4px; }
+QFrame[spin="true"] QToolButton { min-height: 32px; padding: 0; border: 0; background: transparent; }
+QFrame[spin="true"] QToolButton:hover { background: %sunken%; }
+QFrame[spin="true"] QLabel#shareProgramCount { border-left: 1px solid %line%; border-right: 1px solid %line%; background: %panel%; }
+QFrame#dialogFooter { background: %sunken%; border-top: 1px solid %line%; }
 QFrame[note="info"] { background: %accentSoft%; border: 1px solid %accentLine%; border-radius: 6px; }
 QFrame[note="info"] QLabel { color: %noteInfoText%; }
 QFrame[note="ok"] { background: %okSoft%; border: 1px solid %okLine%; border-radius: 6px; }

@@ -186,7 +186,7 @@ PickCard::PickCard(QWidget* parent) : QFrame(parent)
 {
     setProperty("pick", true);
     setFrameShape(QFrame::NoFrame);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setCursor(Qt::PointingHandCursor);
 
     auto* layout = new QHBoxLayout(this);
@@ -214,7 +214,16 @@ PickCard::PickCard(QWidget* parent) : QFrame(parent)
     column->addWidget(title_);
     column->addWidget(description_);
     column->addWidget(meta_);
+    column->addStretch(1);
     layout->addLayout(column, 1);
+
+    trailing_ = new QLabel(this);
+    trailing_->setFont(Theme::instance().font(text_style::data));
+    trailing_->setProperty("muted", true);
+    trailing_->setAttribute(Qt::WA_TransparentForMouseEvents);
+    trailing_->setAlignment(Qt::AlignRight | Qt::AlignTop);
+    trailing_->hide();
+    layout->addWidget(trailing_, 0, Qt::AlignTop);
 
     connect(radio_, &QRadioButton::toggled, this,
             [this](bool checked)
@@ -257,6 +266,13 @@ void PickCard::set_meta(const QString& meta)
 {
     meta_->setText(meta);
     meta_->setVisible(!meta.isEmpty());
+}
+
+void PickCard::set_trailing(const QString& trailing)
+{
+    trailing_->setText(trailing);
+    trailing_->setVisible(!trailing.isEmpty());
+    updateGeometry();
 }
 
 void PickCard::set_selected(bool selected)
