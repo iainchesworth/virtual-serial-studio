@@ -42,6 +42,8 @@ public:
 
     void set_advanced(bool advanced);
     void set_compact(bool compact);
+    /// The shell's WP7 Log/JSON docks can replace the in-panel tabs.
+    void set_show_advanced_tabs(bool show);
     void set_selected_port(vss::endpoint_id id);
     void refresh_ports();
     void handle_events(const event_batch& events);
@@ -90,6 +92,7 @@ private:
     bool advanced_ = false;
     bool follow_enabled_ = true;
     bool refreshing_ports_ = false;
+    bool show_advanced_tabs_ = true;
     QStringList port_signature_;
 };
 

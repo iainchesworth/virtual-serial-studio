@@ -217,6 +217,14 @@ vss::result<void> FakeStudioBackend::remove_port(vss::endpoint_id id)
         return vss::make_error_code(vss::errc::not_found);
     ports_.erase(it);
 
+    std::vector<vss::link_id> removed_links;
+    for (const auto& view : links_)
+    {
+        if (view.sources.contains(id) || view.targets.contains(id))
+            removed_links.push_back(view.id);
+    }
+    for (const vss::link_id link_id : removed_links)
+        wiring_.remove(link_id);
     std::erase_if(
         links_, [id](const link_view& view)
         { return view.sources.contains(id) || view.targets.contains(id); });
@@ -345,6 +353,7 @@ vss::result<void> FakeStudioBackend::disconnect(vss::link_id id)
                      [id](const link_view& view) { return view.id == id; });
     if (it == links_.end())
         return vss::make_error_code(vss::errc::not_found);
+    wiring_.remove(id);
     links_.erase(it);
     refresh();
     return {};
@@ -373,6 +382,28 @@ vss::result<void> FakeStudioBackend::release_owner(vss::link_id id)
     if (view == nullptr)
         return vss::make_error_code(vss::errc::not_found);
     view->owner = 0;
+    refresh();
+    return {};
+}
+
+std::optional<line_wiring> FakeStudioBackend::link_wiring(vss::link_id id) const
+{
+    const auto it = wiring_.constFind(id);
+    if (it == wiring_.constEnd())
+        return std::nullopt;
+    return it.value();
+}
+
+vss::result<void> FakeStudioBackend::set_link_wiring(vss::link_id id,
+                                                     const line_wiring& wiring)
+{
+    if (const auto error = take_error())
+        return *error;
+    if (find_link(id) == nullptr)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!caps_.line_matrix)
+        return vss::make_error_code(vss::errc::unsupported);
+    wiring_.insert(id, wiring);
     refresh();
     return {};
 }
@@ -603,6 +634,7 @@ FakeStudioBackend::apply(const vss::config::document& document, bool)
 
     ports_ = std::move(next_ports);
     links_ = std::move(next_links);
+    wiring_.clear();
     next_port_ = next_port;
     next_link_ = next_link;
     refresh();

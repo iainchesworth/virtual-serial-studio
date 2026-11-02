@@ -6,6 +6,13 @@
 
 #include "shell/shell_window.hpp"
 
+#include "advanced/add_fixture_dialog.hpp"
+#include "advanced/benchmark_dialog.hpp"
+#include "advanced/event_log.hpp"
+#include "advanced/export_command_dialog.hpp"
+#include "advanced/json_editor.hpp"
+#include "advanced/owner_bar.hpp"
+#include "advanced/wiring_dialog.hpp"
 #include "panes/inspector_panel.hpp"
 #include "panes/monitor_panel.hpp"
 #include "panes/ports_panel.hpp"
@@ -45,6 +52,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QResizeEvent>
 #include <QSettings>
 #include <QSignalBlocker>
@@ -59,6 +67,7 @@
 
 #include <cstdio>
 #include <functional>
+#include <optional>
 
 namespace vss::gui
 {
@@ -109,6 +118,7 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
     apply_compact();
     update_content();
     update_actions();
+    update_owner_bar();
     update_title();
     last_signature_ = document_signature();
 
@@ -119,12 +129,14 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
             {
                 sync_selection();
                 update_actions();
+                update_owner_bar();
             });
     connect(&selection_, &SelectionService::link_changed, this,
             [this](vss::link_id)
             {
                 sync_selection();
                 update_actions();
+                update_owner_bar();
             });
     connect(&Theme::instance(), &Theme::themeChanged, this,
             [this]
@@ -190,7 +202,7 @@ void ShellWindow::build_actions()
         action_level::simple, [this] { save_document_as(); });
     add(QStringLiteral("file.exportCommand"),
         QStringLiteral("Export as command"), QStringLiteral("cli command"), {},
-        {}, action_level::advanced, later(QStringLiteral("Export as command")));
+        {}, action_level::advanced, [this] { open_export_command(); });
     add(QStringLiteral("file.bundle"), QStringLiteral("Diagnostic bundle"),
         QStringLiteral("support zip"), {}, {}, action_level::simple,
         later(QStringLiteral("The diagnostic bundle")));
@@ -232,9 +244,8 @@ void ShellWindow::build_actions()
         [this] { run_job(QStringLiteral("network")); });
     add(QStringLiteral("ports.mock"), QStringLiteral("Mock fixture"),
         QStringLiteral("fixture mock script"), QStringLiteral("fixture"), {},
-        action_level::advanced, [this] { run_job(QStringLiteral("mock")); });
-    add(
-        QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
+        action_level::advanced, [this] { open_add_fixture(); });
+    add(QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
         QStringLiteral("clipboard path"), {},
         QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
         [this] { copy_selected_port(); }, false,
@@ -275,18 +286,10 @@ void ShellWindow::build_actions()
         [this] { return selection_.link() != 0; });
     add(QStringLiteral("topology.wiring"), QStringLiteral("Link wiring"),
         QStringLiteral("line matrix faults"), {}, {}, action_level::advanced,
-        [this]
-        {
-            later_package(QStringLiteral("Link wiring"),
-                          QStringLiteral("WP7, Advanced tools"));
-        });
+        [this] { open_wiring(); });
     add(QStringLiteral("topology.owner"), QStringLiteral("Owner"),
         QStringLiteral("policy arbitration"), {}, {}, action_level::advanced,
-        [this]
-        {
-            later_package(QStringLiteral("Owner control"),
-                          QStringLiteral("WP7, Advanced tools"));
-        });
+        [this] { show_owner_controls(); });
     add(QStringLiteral("topology.fit"), QStringLiteral("Fit"),
         QStringLiteral("zoom"), QStringLiteral("fit"),
         QKeySequence(QStringLiteral("Ctrl+0")), action_level::advanced,
@@ -306,7 +309,7 @@ void ShellWindow::build_actions()
         later(QStringLiteral("Setup check")));
     add(QStringLiteral("tools.benchmark"), QStringLiteral("Benchmark"),
         QStringLiteral("throughput speed"), {}, {}, action_level::advanced,
-        later(QStringLiteral("Benchmark")));
+        [this] { open_benchmark(); });
     add(QStringLiteral("tools.refresh"), QStringLiteral("Refresh now"),
         QStringLiteral("reload"), QStringLiteral("refresh"),
         QKeySequence(Qt::Key_F5), action_level::simple,
@@ -335,11 +338,10 @@ void ShellWindow::build_actions()
         QStringLiteral("links topology list accessible"), {}, {},
         action_level::simple, [] {}, true);
     add(QStringLiteral("view.log"), QStringLiteral("Log"),
-        QStringLiteral("events"), {}, {}, action_level::advanced,
-        later(QStringLiteral("The event log")));
+        QStringLiteral("events"), {}, {}, action_level::advanced, [] {}, true);
     add(QStringLiteral("view.json"), QStringLiteral("Topology JSON"),
-        QStringLiteral("editor schema"), {}, {}, action_level::advanced,
-        later(QStringLiteral("The topology JSON editor")));
+        QStringLiteral("editor schema"), {}, {}, action_level::advanced, [] {},
+        true);
     add(
         QStringLiteral("view.theme.system"),
         QStringLiteral("Follow the system"),
@@ -419,6 +421,8 @@ void ShellWindow::build_actions()
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
     links_action_ = registry_.action(QStringLiteral("view.links"));
+    log_action_ = registry_.action(QStringLiteral("view.log"));
+    json_action_ = registry_.action(QStringLiteral("view.json"));
     connect(advanced_action_, &QAction::toggled, this,
             [this](bool on) { level_.set_advanced(on); });
 
@@ -589,7 +593,6 @@ void ShellWindow::build_central()
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
     layout->setContentsMargins(8, 8, 8, 8);
-
     auto* card = new QFrame(workspace_);
     card->setProperty("card", true);
     polish(card);
@@ -599,7 +602,19 @@ void ShellWindow::build_central()
     topology_ = new topology::TopologyView(card);
     topology_->set_capabilities(backend_.caps());
     card_layout->addWidget(topology_);
-    layout->addWidget(card);
+    layout->addWidget(card, 1);
+
+    // The link bar under the diagram.  WP4 owns the diagram; the bar and its
+    // owner arbitration belong to this package and can move with the dock
+    // without changing its API.
+    owner_bar_ = new OwnerBar(backend_, workspace_);
+    connect(owner_bar_, &OwnerBar::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    layout->addWidget(owner_bar_);
     central_->addWidget(workspace_);
 
     connect(topology_, &topology::TopologyView::port_selected, this,
@@ -789,6 +804,7 @@ void ShellWindow::build_docks()
     ports_panel_->set_advanced(level_.advanced());
     inspector_panel_->set_advanced(level_.advanced());
     send_panel_->set_advanced(level_.advanced());
+    monitor_panel_->set_show_advanced_tabs(false);
     monitor_panel_->set_advanced(level_.advanced());
     update_dock_titles();
 
@@ -828,6 +844,66 @@ void ShellWindow::build_docks()
                 const QSignalBlocker blocker(links_action_);
                 links_action_->setChecked(visible);
             });
+
+    // Advanced bottom tabs.  Log and Topology JSON are tabified with the
+    // Monitor dock; WP3 owns the Monitor pane, this package owns these two.
+    event_log_ = new EventLogPanel(this);
+    log_dock_ = new QDockWidget(QStringLiteral("Log"), this);
+    log_dock_->setObjectName(QStringLiteral("logDock"));
+    log_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
+    log_dock_->setWidget(event_log_);
+    log_dock_->setMinimumHeight(
+        Theme::instance().metric(QStringLiteral("layout.monitor.min")));
+
+    json_editor_ = new TopologyJsonEditor(backend_, this);
+    connect(json_editor_, &TopologyJsonEditor::message, this,
+            [this](const QString& text)
+            {
+                if (status_ != nullptr)
+                    status_->showMessage(text, 6000);
+            });
+    connect(json_editor_, &TopologyJsonEditor::applied, this, [this]
+            { log_local(QStringLiteral("Applied the topology JSON.")); });
+    json_dock_ = new QDockWidget(QStringLiteral("Topology JSON"), this);
+    json_dock_->setObjectName(QStringLiteral("jsonDock"));
+    json_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
+    json_dock_->setWidget(json_editor_);
+    json_dock_->setMinimumHeight(
+        Theme::instance().metric(QStringLiteral("layout.monitor.min")));
+
+    addDockWidget(Qt::BottomDockWidgetArea, log_dock_);
+    addDockWidget(Qt::BottomDockWidgetArea, json_dock_);
+    tabifyDockWidget(monitor_dock_, log_dock_);
+    tabifyDockWidget(log_dock_, json_dock_);
+    monitor_dock_->raise();
+
+    const auto wire_tab = [this](QAction* action, QDockWidget* dock)
+    {
+        if (action == nullptr || dock == nullptr)
+            return;
+        {
+            const QSignalBlocker blocker(action);
+            action->setChecked(true);
+        }
+        connect(action, &QAction::toggled, this,
+                [this, dock](bool shown)
+                {
+                    if (dock != nullptr)
+                        dock->setVisible(shown && level_.advanced());
+                });
+        connect(dock, &QDockWidget::visibilityChanged, this,
+                [this, action](bool visible)
+                {
+                    // Hiding every advanced dock in Simple mode is the shell's
+                    // own action; keep the user's tab choice for later.
+                    if (!level_.advanced())
+                        return;
+                    const QSignalBlocker blocker(action);
+                    action->setChecked(visible);
+                });
+    };
+    wire_tab(log_action_, log_dock_);
+    wire_tab(json_action_, json_dock_);
 
     resizeDocks(
         {ports_dock_},
@@ -877,6 +953,12 @@ void ShellWindow::connect_backend()
                 status_->refresh();
                 backend_.refresh();
             });
+    connect(&backend_, &StudioBackend::batch_ready, this,
+            [this](const event_batch& events)
+            {
+                if (event_log_ != nullptr)
+                    event_log_->append(events);
+            });
 }
 
 void ShellWindow::on_backend_changed()
@@ -888,8 +970,11 @@ void ShellWindow::on_backend_changed()
         set_dirty(true);
     last_signature_ = signature;
     status_->refresh();
-    validate_selection();
     update_content();
+    update_owner_bar();
+    if (json_editor_ != nullptr)
+        json_editor_->reload_if_clean();
+    validate_selection();
     update_dock_titles();
     update_actions();
 }
@@ -924,6 +1009,8 @@ void ShellWindow::on_level_changed(bool advanced)
         monitor_dock_->setMinimumHeight(advanced ? base + 34 : base);
     }
     update_dock_titles();
+    update_content();
+    update_owner_bar();
     update_actions();
 }
 
@@ -940,8 +1027,9 @@ void ShellWindow::update_content()
     {
         central_->setCurrentWidget(launcher_);
         launcher_->refresh();
-        for (QDockWidget* dock : {ports_dock_, inspector_dock_, send_dock_,
-                                  monitor_dock_, links_dock_})
+        for (QDockWidget* dock :
+             {ports_dock_, inspector_dock_, send_dock_, monitor_dock_,
+              links_dock_, log_dock_, json_dock_})
         {
             if (dock != nullptr)
                 dock->hide();
@@ -961,6 +1049,7 @@ void ShellWindow::update_content()
             links_action_ != nullptr && links_action_->isChecked();
         if (links_dock_ != nullptr)
             links_dock_->setVisible(links_shown);
+        sync_advanced_docks();
         if (monitor_action_ != nullptr)
         {
             const QSignalBlocker blocker(monitor_action_);
@@ -977,6 +1066,8 @@ void ShellWindow::update_title()
     if (dirty_)
         name += QLatin1Char('*');
     setWindowTitle(QStringLiteral("%1 - Virtual Serial Studio").arg(name));
+    if (json_editor_ != nullptr)
+        json_editor_->set_document_path(document_path_);
 }
 
 void ShellWindow::update_actions()
@@ -1169,7 +1260,7 @@ void ShellWindow::run_job(const QString& job)
     }
     else if (job == QLatin1String("mock"))
     {
-        placeholder(QStringLiteral("Mock fixture"));
+        registry_.action(QStringLiteral("ports.mock"))->trigger();
         return;
     }
     else
@@ -1349,6 +1440,150 @@ void ShellWindow::show_links_dock(bool shown)
     }
 }
 
+void ShellWindow::open_add_fixture()
+{
+    AddFixtureDialog dialog(backend_, selection_.port(), this);
+    connect(&dialog, &AddFixtureDialog::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    dialog.exec();
+    update_owner_bar();
+    if (json_editor_ != nullptr)
+        json_editor_->reload_if_clean();
+}
+
+void ShellWindow::open_wiring()
+{
+    vss::endpoint_id target = selection_.port();
+    if (target == 0)
+    {
+        for (const auto& port : backend_.ports())
+        {
+            if (port.kind == vss::endpoint_kind::mock)
+            {
+                target = port.id;
+                break;
+            }
+        }
+    }
+    if (target == 0)
+    {
+        const auto ports = backend_.ports();
+        if (!ports.empty())
+            target = ports.front().id;
+    }
+    if (target == 0)
+    {
+        status_->showMessage(
+            QStringLiteral("Add a port before opening the line matrix."), 6000);
+        return;
+    }
+    WiringDialog dialog(backend_, target, this);
+    dialog.exec();
+    update_owner_bar();
+}
+
+void ShellWindow::open_benchmark()
+{
+    BenchmarkDialog dialog(backend_, this);
+    connect(&dialog, &BenchmarkDialog::message, this,
+            [this](const QString& text) { status_->showMessage(text, 6000); });
+    dialog.exec();
+}
+
+void ShellWindow::open_export_command()
+{
+    ExportCommandDialog dialog(backend_, document_path_, this);
+    connect(&dialog, &ExportCommandDialog::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    dialog.exec();
+}
+
+void ShellWindow::show_owner_controls()
+{
+    update_owner_bar();
+    if (owner_bar_ == nullptr || !owner_bar_->has_link())
+    {
+        status_->showMessage(
+            QStringLiteral("Select the target of a join with the owner policy "
+                           "to control who writes."),
+            6000);
+        return;
+    }
+    show_workspace();
+    if (owner_bar_->give_button()->isEnabled())
+    {
+        owner_bar_->give_button()->setFocus(Qt::OtherFocusReason);
+    }
+    else if (owner_bar_->release_button()->isEnabled())
+    {
+        owner_bar_->release_button()->setFocus(Qt::OtherFocusReason);
+    }
+}
+
+void ShellWindow::update_owner_bar()
+{
+    if (owner_bar_ == nullptr)
+        return;
+    if (!level_.advanced())
+    {
+        owner_bar_->clear();
+        return;
+    }
+    std::optional<link_view> candidate;
+    const auto consider = [&candidate](const link_view& link)
+    {
+        if (!candidate && OwnerBar::supports_owner(link))
+            candidate = link;
+    };
+    if (selection_.link() != 0)
+    {
+        if (const auto link = backend_.link(selection_.link()))
+            consider(*link);
+    }
+    if (!candidate && selection_.port() != 0)
+    {
+        for (const auto& link : backend_.links())
+        {
+            if (link.targets.contains(selection_.port()))
+                consider(link);
+        }
+    }
+    if (!candidate)
+    {
+        for (const auto& link : backend_.links())
+            consider(link);
+    }
+    owner_bar_->set_link(candidate);
+}
+
+void ShellWindow::sync_advanced_docks()
+{
+    if (log_dock_ != nullptr)
+    {
+        log_dock_->setVisible(level_.advanced() && log_action_ != nullptr &&
+                              log_action_->isChecked());
+    }
+    if (json_dock_ != nullptr)
+    {
+        json_dock_->setVisible(level_.advanced() && json_action_ != nullptr &&
+                               json_action_->isChecked());
+    }
+}
+
+void ShellWindow::log_local(const QString& text)
+{
+    if (event_log_ != nullptr)
+        event_log_->add_local(text);
+}
+
 void ShellWindow::new_document()
 {
     if (!confirm_discard())
@@ -1362,7 +1597,9 @@ void ShellWindow::new_document()
     document_path_.clear();
     last_signature_ = document_signature();
     set_dirty(false);
+    update_title();
     selection_.clear();
+    log_local(QStringLiteral("Started a new setup."));
     show_launcher();
     status_->refresh();
 }
@@ -1407,11 +1644,13 @@ void ShellWindow::open_path(const QString& path)
     document_path_ = path;
     last_signature_ = document_signature();
     set_dirty(false);
+    update_title();
     const auto ports = backend_.ports();
     const auto links = backend_.links();
     add_recent(path, QStringLiteral("%1 ports, %2 links")
                          .arg(static_cast<qulonglong>(ports.size()))
                          .arg(static_cast<qulonglong>(links.size())));
+    log_local(QStringLiteral("Opened %1.").arg(QFileInfo(path).fileName()));
     show_workspace();
     status_->refresh();
 }
@@ -1433,14 +1672,15 @@ void ShellWindow::save_document()
         return;
     }
     set_dirty(false);
+    update_title();
     const auto ports = backend_.ports();
     const auto links = backend_.links();
     add_recent(document_path_, QStringLiteral("%1 ports, %2 links")
                                    .arg(static_cast<qulonglong>(ports.size()))
                                    .arg(static_cast<qulonglong>(links.size())));
-    status_->showMessage(
-        QStringLiteral("Saved %1.").arg(QFileInfo(document_path_).fileName()),
-        3000);
+    const QString saved_name = QFileInfo(document_path_).fileName();
+    status_->showMessage(QStringLiteral("Saved %1.").arg(saved_name), 3000);
+    log_local(QStringLiteral("Saved %1.").arg(saved_name));
 }
 
 void ShellWindow::save_document_as()

@@ -106,6 +106,24 @@ public:
                                        vss::control_line line, bool state) = 0;
     virtual void refresh_lines(vss::endpoint_id id) = 0;
 
+    // -- per-link line wiring (capability: line_matrix) --------------------
+
+    /// The wiring the engine holds for a link.  Empty when the adapter cannot
+    /// report one, which is every real build today.
+    virtual std::optional<line_wiring> link_wiring(vss::link_id /*id*/) const
+    {
+        return std::nullopt;
+    }
+
+    /// Applies a wiring change to an existing link.  The default is
+    /// `unsupported`: the engine only has the boolean null-modem crossing, and
+    /// a build without `Capabilities::line_matrix` must never simulate it.
+    virtual vss::result<void> set_link_wiring(vss::link_id /*id*/,
+                                              const line_wiring& /*wiring*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     // -- documents ---------------------------------------------------------
 
     virtual vss::config::document snapshot() const = 0;

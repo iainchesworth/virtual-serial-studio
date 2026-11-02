@@ -13,7 +13,7 @@ gates pass.
 | WP4 | `gui/wp4-topology` | implemented, self-review complete | Debug `ctest` 8/8 on its branch, 18 topology tests, light and dark review PNGs, changelog/contrast/QSS/format clean | self-review; pending G2 | topology view, layout, keyboard, a11y summary, links list, shell wiring; WP6/WP7 actions stay placeholders |
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
 | WP6 | `gui/wp6-connect-share` | not started | - | - | blocked on G1 |
-| WP7 | `gui/wp7-advanced` | not started | - | - | blocked on G1 |
+| WP7 | `gui/wp7-advanced` | implemented, self-review complete | Debug `ctest` 8/8, 15 advanced tests, 16 review PNGs, changelog/format/contrast/QSS clean | self-review | owner bar, wiring and faults, mock fixtures, topology JSON, event log, benchmark, export command |
 | WP8 | `gui/wp8-support-system` | not started | - | - | blocked on G1 |
 | WP9 | `gui/wp9-qa` | not started | - | - | blocked on G2 |
 
@@ -204,3 +204,51 @@ gates pass.
   until WP6; no per-item QAccessibleInterface (summary plus Links list); links
   dock placement; auto-fit until the user zooms; single selection. All are
   recorded in `design-deviations.md`.
+
+## WP7 detail
+
+- Added `apps/vss_gui/src/advanced/`: `OwnerBar` (policy, owner chip, Release
+  owner and Give to through `set_owner`/`release_owner`), `LineMatrixPanel` and
+  `WiringDialog` (Standard null-modem matrix, read-only line state card,
+  control-line switches and Break, gated fault tiles and history),
+  `AddFixtureDialog` (real `create_mock_port` plus an optional two-way link,
+  with rollback), `json_validation` (syntax offsets, explicit schema errors,
+  loops and a fix suggestion), `TopologyJsonEditor` (line gutter, live
+  validation, Format/Revert/Apply, command block, export), `CommandPanel`,
+  `ExportCommandDialog`, `EventLogPanel`, `BenchmarkDialog`, the shared
+  `chrome` footer/header helpers and `line_presets`.
+- Backend seam: `line_wiring` in `view_types.hpp`; `link_wiring()` and
+  `set_link_wiring()` on `StudioBackend` default to unsupported, the real
+  adapter keeps `Capabilities::line_matrix` false, and the fake stores one for
+  the editable-path test. No `libs/vss_core` or JSON schema change.
+- `ShellWindow` now opens the real dialogs for Mock fixture, Link wiring,
+  Owner, Benchmark and Export as command; Log and Topology JSON are advanced
+  docks tabified with Monitor; the owner bar sits under the topology
+  placeholder and follows the selected link/port; the status bar reads
+  "N dropped, not owner" when the drops came from an owner-policy link; the
+  event log records engine errors/state changes and GUI actions.
+- Added `vss_gui_advanced_tests` (offline `QApplication`, in-tree framework),
+  registered as CTest `gui_advanced` in `tests/CMakeLists.txt`. 15 tests:
+  owner give/release and capability gating, fixture creation and gating, both
+  matrix modes, the wiring dialog header, syntax/mode/duplicate/loop
+  validation, the editor's apply gate and fix action, event-log filtering,
+  benchmark capability and link refusal, export command naming, accessible
+  names and 24 px targets across every advanced control, the shell's advanced
+  dock/owner-bar mode behaviour, and the review PNG pass.
+- Review PNGs (never committed), light and dark for each:
+  `build/debug-gui/gui-shots/` `wiring-*`, `add-fixture-*`, `benchmark-*`,
+  `topology-json-*`, `export-command-*`, `owner-bar-*`, `event-log-*`,
+  `shell-advanced-*`.
+- Checks: `cmake --preset debug-gui`, `cmake --build --preset debug-gui`,
+  `ctest --preset debug-gui` 8/8; the advanced suite passed 3 consecutive
+  runs; `vss_gui --selftest` ok; `python tools/changelog.py --check` ok;
+  clang-format clean; `check_contrast.py` and `gen_qss.py` unchanged and
+  passing (no token edits).
+- Deviations: faults stay gated with no `vss_studio` forwarding method;
+  wiring, the policy combo and "Emulate modem lines" are read-only; owner
+  node chips, the Ports Dropped column and DROP monitor rows belong to
+  WP3/WP4, and the hub publishes no drop event; Log and Topology JSON are
+  docks until WP3 owns the tab set; benchmark is UI-only with no CLI
+  extraction; the AddFixture sentence is truthful about the unavailable
+  capabilities; the JSON GUI adds line-aware schema checks on top of the
+  engine's positionless errors. All are recorded in `design-deviations.md`.

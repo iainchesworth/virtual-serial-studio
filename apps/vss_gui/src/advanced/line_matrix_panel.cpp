@@ -1,0 +1,693 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "advanced/line_matrix_panel.hpp"
+
+#include "advanced/chrome.hpp"
+#include "widgets/chips.hpp"
+#include "widgets/common.hpp"
+#include "widgets/controls.hpp"
+#include "widgets/notes.hpp"
+
+#include <QAbstractButton>
+#include <QCheckBox>
+#include <QCoreApplication>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPalette>
+#include <QPushButton>
+#include <QSignalBlocker>
+#include <QTableWidget>
+#include <QTimer>
+#include <QVBoxLayout>
+
+namespace vss::gui
+{
+namespace
+{
+
+QString tr(const char* text)
+{
+    return QCoreApplication::translate("LineMatrix", text);
+}
+
+constexpr int kRows = 2;
+constexpr int kColumns = 4;
+
+const char* input_name(int column)
+{
+    switch (column)
+    {
+    case 0:
+        return "DSR";
+    case 1:
+        return "CTS";
+    case 2:
+        return "DCD";
+    case 3:
+        return "RI";
+    default:
+        return "";
+    }
+}
+
+struct fault_tile
+{
+    const char* title;
+    const char* description;
+};
+
+const std::array<fault_tile, 6>& fault_tiles()
+{
+    static const std::array<fault_tile, 6> tiles = {{
+        {"Parity error", "Byte arrives with bad parity"},
+        {"Framing error", "Byte arrives with no valid stop bit"},
+        {"Overrun", "Incoming data lost, too fast"},
+        {"Break", "A break is received on the line"},
+        {"Hang-up", "Carrier drops, as a modem does"},
+        {"Disconnect", "Device vanishes, as if unplugged"},
+    }};
+    return tiles;
+}
+
+} // namespace
+
+LineMatrixPanel::LineMatrixPanel(StudioBackend& backend,
+                                 vss::endpoint_id endpoint, QWidget* parent)
+    : QWidget(parent), backend_(backend), endpoint_(endpoint)
+{
+    build();
+    refresh();
+    connect(&Theme::instance(), &Theme::themeChanged, this,
+            [this] { refresh(); });
+}
+
+void LineMatrixPanel::build()
+{
+    auto* layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(Theme::instance().space(4));
+    layout->addWidget(build_wiring_column(), 1);
+    layout->addWidget(build_fault_column(), 1);
+}
+
+QWidget* LineMatrixPanel::build_wiring_column()
+{
+    auto* column = new QWidget(this);
+    auto* layout = new QVBoxLayout(column);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(14);
+
+    layout->addWidget(
+        make_heading(tr("Line wiring"), text_style::subtitle, column));
+    auto* intro = new QLabel(
+        tr("Choose which signals this port drives on the other port."), column);
+    intro->setFont(Theme::instance().font(text_style::body));
+    intro->setWordWrap(true);
+    set_ink2(intro);
+    layout->addWidget(intro);
+
+    auto* controls = new QHBoxLayout();
+    controls->setContentsMargins(0, 0, 0, 0);
+    controls->setSpacing(16);
+    preset_ = new SegmentedControl(column);
+    preset_->setAccessibleName(tr("Line wiring preset"));
+    for (const auto& entry : wiring_presets())
+        preset_->add_item(preset_name(entry.id));
+    connect(preset_, &SegmentedControl::current_changed, this,
+            &LineMatrixPanel::on_preset_changed);
+    controls->addWidget(preset_, 0);
+    emulate_ = new Switch(tr("Emulate modem lines"), column);
+    emulate_->setAccessibleName(tr("Emulate modem lines"));
+    controls->addWidget(emulate_, 0, Qt::AlignVCenter);
+    controls->addStretch(1);
+    layout->addLayout(controls);
+
+    auto* matrix = new QFrame(column);
+    matrix->setProperty("card", true);
+    polish(matrix);
+    auto* matrix_layout = new QVBoxLayout(matrix);
+    matrix_layout->setContentsMargins(0, 0, 0, 0);
+    matrix_layout->setSpacing(0);
+    auto* grid_holder = new QWidget(matrix);
+    auto* grid = new QGridLayout(grid_holder);
+    grid->setContentsMargins(12, 10, 12, 8);
+    grid->setHorizontalSpacing(8);
+    grid->setVerticalSpacing(6);
+
+    auto* corner = new QLabel(tr("This port drives"), grid_holder);
+    corner->setFont(Theme::instance().font(text_style::caption));
+    corner->setProperty("muted", true);
+    grid->addWidget(corner, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    for (int column_index = 0; column_index < kColumns; ++column_index)
+    {
+        auto* heading = new QLabel(
+            QString::fromLatin1(input_name(column_index)), grid_holder);
+        heading->setFont(Theme::instance().font(text_style::caption));
+        heading->setProperty("muted", true);
+        heading->setAlignment(Qt::AlignCenter);
+        grid->addWidget(heading, 0, column_index + 1);
+    }
+
+    for (int row = 0; row < kRows; ++row)
+    {
+        const QString output =
+            row == 0 ? QStringLiteral("DTR") : QStringLiteral("RTS");
+        auto* label = new QLabel(output, grid_holder);
+        QFont label_font = Theme::instance().font(text_style::body);
+        label_font.setWeight(QFont::DemiBold);
+        label->setFont(label_font);
+        grid->addWidget(label, row + 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
+        for (int column_index = 0; column_index < kColumns; ++column_index)
+        {
+            auto* box = new QCheckBox(grid_holder);
+            const QString name =
+                tr("%1 to %2")
+                    .arg(output, QString::fromLatin1(input_name(column_index)));
+            box->setAccessibleName(name);
+            box->setToolTip(name);
+            box->setLayoutDirection(Qt::LeftToRight);
+            boxes_[row][column_index] = box;
+            grid->addWidget(box, row + 1, column_index + 1, Qt::AlignCenter);
+            connect(box, &QCheckBox::toggled, this,
+                    [this] { on_box_toggled(); });
+        }
+    }
+    matrix_layout->addWidget(grid_holder);
+
+    caption_ = new QLabel(matrix);
+    caption_->setFont(Theme::instance().font(text_style::caption));
+    caption_->setProperty("muted", true);
+    caption_->setWordWrap(true);
+    caption_->setContentsMargins(12, 8, 12, 8);
+    caption_->setAutoFillBackground(true);
+    QPalette caption_palette = caption_->palette();
+    caption_palette.setColor(QPalette::Window,
+                             Theme::instance().colour(colour_role::sunken));
+    caption_->setPalette(caption_palette);
+    matrix_layout->addWidget(caption_);
+    layout->addWidget(matrix);
+
+    sentence_ = new NoteBanner(NoteBanner::kind::info, {}, column);
+    layout->addWidget(sentence_);
+
+    auto* state_card = new QFrame(column);
+    state_card->setProperty("card", true);
+    polish(state_card);
+    auto* state_layout = new QVBoxLayout(state_card);
+    state_layout->setContentsMargins(14, 12, 14, 12);
+    state_layout->setSpacing(8);
+    auto* state_title = new QLabel(tr("Line state now"), state_card);
+    state_title->setFont(Theme::instance().font(text_style::caption));
+    state_title->setProperty("muted", true);
+    state_layout->addWidget(state_title);
+
+    auto* state_row = new QHBoxLayout();
+    state_row->setContentsMargins(0, 0, 0, 0);
+    state_row->setSpacing(14);
+    dtr_ = new Switch(tr("DTR"), state_card);
+    dtr_->setAccessibleName(tr("DTR"));
+    connect(dtr_, &QAbstractButton::toggled, this,
+            [this](bool on)
+            {
+                if (!updating_)
+                    set_line(vss::control_line::dtr, on);
+            });
+    state_row->addWidget(dtr_);
+    rts_ = new Switch(tr("RTS"), state_card);
+    rts_->setAccessibleName(tr("RTS"));
+    connect(rts_, &QAbstractButton::toggled, this,
+            [this](bool on)
+            {
+                if (!updating_)
+                    set_line(vss::control_line::rts, on);
+            });
+    state_row->addWidget(rts_);
+    break_ = make_button(tr("Break"), nullptr, state_card);
+    break_->setProperty("size", QStringLiteral("small"));
+    polish(break_);
+    break_->setAccessibleName(tr("Send a break"));
+    connect(break_, &QPushButton::clicked, this,
+            [this]
+            {
+                set_line(vss::control_line::break_signal, true);
+                QTimer::singleShot(
+                    100, this, [this]
+                    { set_line(vss::control_line::break_signal, false); });
+            });
+    state_row->addWidget(break_);
+    state_row->addStretch(1);
+    state_layout->addLayout(state_row);
+
+    auto* chip_grid = new QGridLayout();
+    chip_grid->setContentsMargins(0, 0, 0, 0);
+    chip_grid->setHorizontalSpacing(6);
+    for (int index = 0; index < 4; ++index)
+    {
+        auto* chip = new StatusChip(QStringLiteral("--"),
+                                    StatusChip::kind::closed, state_card);
+        inputs_[index] = chip;
+        chip_grid->addWidget(chip, 0, index);
+    }
+    state_layout->addLayout(chip_grid);
+    layout->addWidget(state_card);
+    layout->addStretch(1);
+    return column;
+}
+
+QWidget* LineMatrixPanel::build_fault_column()
+{
+    auto* column = new QWidget(this);
+    auto* layout = new QVBoxLayout(column);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(14);
+
+    layout->addWidget(
+        make_heading(tr("Inject a fault"), text_style::subtitle, column));
+    auto* intro = new QLabel(
+        tr("Simulate a bad cable or device. Each fault is reported as an "
+           "error event on the port."),
+        column);
+    intro->setFont(Theme::instance().font(text_style::body));
+    intro->setWordWrap(true);
+    set_ink2(intro);
+    layout->addWidget(intro);
+
+    auto* grid = new QGridLayout();
+    grid->setContentsMargins(0, 0, 0, 0);
+    grid->setHorizontalSpacing(10);
+    grid->setVerticalSpacing(10);
+    const auto& tiles = fault_tiles();
+    for (std::size_t index = 0; index < tiles.size(); ++index)
+    {
+        const auto& tile = tiles[index];
+        auto* card = new QFrame(column);
+        card->setProperty("card", true);
+        polish(card);
+        card->setMinimumHeight(72);
+        auto* card_layout = new QHBoxLayout(card);
+        card_layout->setContentsMargins(12, 10, 12, 10);
+        card_layout->setSpacing(8);
+        auto* text_column = new QVBoxLayout();
+        text_column->setContentsMargins(0, 0, 0, 0);
+        text_column->setSpacing(2);
+        const QString tile_title =
+            QCoreApplication::translate("LineMatrix", tile.title);
+        auto* title = new QLabel(tile_title, card);
+        QFont title_font = Theme::instance().font(text_style::body);
+        title_font.setWeight(QFont::DemiBold);
+        title->setFont(title_font);
+        title->setWordWrap(true);
+        text_column->addWidget(title);
+        auto* description = new QLabel(
+            QCoreApplication::translate("LineMatrix", tile.description), card);
+        description->setFont(Theme::instance().font(text_style::caption));
+        description->setProperty("muted", true);
+        description->setWordWrap(true);
+        text_column->addWidget(description);
+        card_layout->addLayout(text_column, 1);
+        auto* inject = make_button(tr("Inject"), nullptr, card);
+        inject->setProperty("size", QStringLiteral("small"));
+        polish(inject);
+        inject->setAccessibleName(
+            QCoreApplication::translate("LineMatrix", "Inject %1")
+                .arg(tile_title));
+        // There is no injection API on the adapter and the real engine cannot
+        // be reached through it, so every tile stays disabled rather than
+        // pretending to inject.
+        degrade(inject);
+        inject_.push_back(inject);
+        card_layout->addWidget(inject, 0, Qt::AlignVCenter);
+        grid->addWidget(card, static_cast<int>(index / 2),
+                        static_cast<int>(index % 2));
+    }
+    layout->addLayout(grid);
+
+    auto* history_title = new QLabel(tr("Injected so far"), column);
+    history_title->setFont(Theme::instance().font(text_style::caption));
+    history_title->setProperty("muted", true);
+    layout->addWidget(history_title);
+
+    auto* history_card = new QFrame(column);
+    history_card->setProperty("card", true);
+    polish(history_card);
+    auto* history_layout = new QVBoxLayout(history_card);
+    history_layout->setContentsMargins(0, 0, 0, 0);
+    history_ = new QTableWidget(0, 3, history_card);
+    history_->setHorizontalHeaderLabels(
+        {tr("Time"), tr("Fault"), tr("Result")});
+    history_->setAccessibleName(tr("Injected faults"));
+    history_->verticalHeader()->hide();
+    history_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    history_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    history_->horizontalHeader()->setStretchLastSection(true);
+    history_->setMinimumHeight(110);
+    history_layout->addWidget(history_);
+    layout->addWidget(history_card);
+
+    auto* code_title = new QLabel(tr("Create this fixture in code"), column);
+    code_title->setFont(Theme::instance().font(text_style::caption));
+    code_title->setProperty("muted", true);
+    layout->addWidget(code_title);
+    code_ = new CodeBlock(column);
+    code_->set_text(QString(), tr("Create this fixture in code"));
+    layout->addWidget(code_);
+    layout->addStretch(1);
+    return column;
+}
+
+void LineMatrixPanel::set_endpoint(vss::endpoint_id endpoint)
+{
+    endpoint_ = endpoint;
+    refresh();
+}
+
+void LineMatrixPanel::refresh()
+{
+    const capabilities caps = backend_.caps();
+    const auto port = backend_.port(endpoint_);
+
+    link_.reset();
+    other_name_.clear();
+    if (port)
+    {
+        for (const auto& candidate : backend_.links())
+        {
+            if (candidate.shape != link_shape::two_way)
+                continue;
+            const bool in_sources = candidate.sources.contains(endpoint_);
+            const bool in_targets = candidate.targets.contains(endpoint_);
+            if (!in_sources && !in_targets)
+                continue;
+            link_ = candidate;
+            const auto other_ids =
+                in_sources ? candidate.targets : candidate.sources;
+            if (!other_ids.isEmpty())
+                other_name_ = port_name(other_ids.first());
+            break;
+        }
+    }
+
+    if (!port)
+    {
+        for (int row = 0; row < kRows; ++row)
+        {
+            for (int column = 0; column < kColumns; ++column)
+                degrade(boxes_[row][column]);
+        }
+        degrade(preset_);
+        degrade(emulate_);
+        return;
+    }
+
+    line_wiring wiring;
+    if (link_ && caps.line_matrix)
+    {
+        const auto stored = backend_.link_wiring(link_->id);
+        if (stored)
+            wiring = *stored;
+        else
+            wiring = preset_for(wiring_preset::standard_null_modem).wiring;
+    }
+    else
+    {
+        wiring = preset_for(wiring_preset::standard_null_modem).wiring;
+    }
+    write_boxes(wiring);
+
+    const wiring_preset matched = preset_for_wiring(current_wiring());
+    {
+        const QSignalBlocker blocker(preset_);
+        preset_->set_current(static_cast<int>(matched));
+    }
+
+    for (int row = 0; row < kRows; ++row)
+    {
+        for (int column = 0; column < kColumns; ++column)
+        {
+            const bool editable = caps.line_matrix && link_.has_value();
+            boxes_[row][column]->setEnabled(editable);
+            if (!editable)
+            {
+                boxes_[row][column]->setToolTip(
+                    caps.line_matrix
+                        ? tr("Link this fixture to another port first.")
+                        : not_available_text());
+                boxes_[row][column]->setAccessibleDescription(
+                    boxes_[row][column]->toolTip());
+            }
+            else
+            {
+                boxes_[row][column]->setToolTip({});
+                boxes_[row][column]->setAccessibleDescription({});
+            }
+        }
+    }
+
+    if (caps.line_matrix && link_.has_value())
+    {
+        preset_->setEnabled(true);
+        preset_->setToolTip({});
+        preset_->setAccessibleDescription({});
+    }
+    else
+    {
+        degrade(preset_, caps.line_matrix
+                             ? tr("Link this fixture to another port first.")
+                             : not_available_text());
+    }
+
+    emulate_->setChecked(link_ ? link_->options.emulate_modem_lines : true);
+    degrade(emulate_, not_available_text());
+    emulate_->setAccessibleDescription(
+        tr("The line crossing is fixed when the link is created."));
+
+    const bool supports_lines = port->supports_control_lines;
+    for (Switch* toggle : {dtr_, rts_})
+    {
+        toggle->setEnabled(supports_lines);
+        if (supports_lines)
+        {
+            toggle->setToolTip({});
+            toggle->setAccessibleDescription({});
+        }
+        else
+        {
+            degrade(toggle);
+        }
+    }
+    break_->setEnabled(supports_lines);
+    if (supports_lines)
+    {
+        break_->setToolTip({});
+        break_->setAccessibleDescription({});
+    }
+    else
+    {
+        degrade(break_);
+    }
+
+    code_->set_text(QStringLiteral("studio app;\nconst auto device = "
+                                   "app.create_mock_port(\"%1\");")
+                        .arg(port->name),
+                    tr("Create this fixture in code"));
+
+    update_caption();
+    update_line_state();
+}
+
+QCheckBox* LineMatrixPanel::matrix_box(int row, int column) const
+{
+    if (row < 0 || row >= kRows || column < 0 || column >= kColumns)
+        return nullptr;
+    return boxes_[row][column];
+}
+
+QCheckBox* LineMatrixPanel::box_named(const QString& name) const
+{
+    for (int row = 0; row < kRows; ++row)
+    {
+        for (int column = 0; column < kColumns; ++column)
+        {
+            if (boxes_[row][column]->accessibleName() == name)
+                return boxes_[row][column];
+        }
+    }
+    return nullptr;
+}
+
+QPushButton* LineMatrixPanel::inject_button(int index) const
+{
+    if (index < 0 || index >= inject_.size())
+        return nullptr;
+    return inject_.at(index);
+}
+
+int LineMatrixPanel::inject_count() const noexcept
+{
+    return static_cast<int>(inject_.size());
+}
+
+QString LineMatrixPanel::wiring_text() const
+{
+    return sentence_->text();
+}
+
+QString LineMatrixPanel::caption_text() const
+{
+    return caption_->text();
+}
+
+QString LineMatrixPanel::port_name(vss::endpoint_id id) const
+{
+    if (const auto port = backend_.port(id))
+        return port->name;
+    return tr("Port %1").arg(static_cast<qulonglong>(id));
+}
+
+void LineMatrixPanel::update_caption()
+{
+    const QString other =
+        other_name_.isEmpty() ? tr("the other port") : other_name_;
+    caption_->setText(tr("Column headings are the inputs on %1. The same "
+                         "wiring applies in the other direction.")
+                          .arg(other));
+    caption_->setAccessibleName(caption_->text());
+    QPalette caption_palette = caption_->palette();
+    caption_palette.setColor(QPalette::Window,
+                             Theme::instance().colour(colour_role::sunken));
+    caption_->setPalette(caption_palette);
+    const QString this_name =
+        backend_.port(endpoint_) ? backend_.port(endpoint_)->name : QString();
+    sentence_->set_text(wiring_sentence(current_wiring(), this_name, other));
+}
+
+void LineMatrixPanel::write_boxes(const line_wiring& wiring)
+{
+    updating_ = true;
+    const bool states[kRows][kColumns] = {{wiring.dtr_to_dsr, wiring.dtr_to_cts,
+                                           wiring.dtr_to_dcd, wiring.dtr_to_ri},
+                                          {wiring.rts_to_dsr, wiring.rts_to_cts,
+                                           wiring.rts_to_dcd,
+                                           wiring.rts_to_ri}};
+    for (int row = 0; row < kRows; ++row)
+    {
+        for (int column = 0; column < kColumns; ++column)
+        {
+            const QSignalBlocker blocker(boxes_[row][column]);
+            boxes_[row][column]->setChecked(states[row][column]);
+        }
+    }
+    updating_ = false;
+}
+
+line_wiring LineMatrixPanel::current_wiring() const
+{
+    line_wiring wiring;
+    wiring.dtr_to_dsr = boxes_[0][0]->isChecked();
+    wiring.dtr_to_cts = boxes_[0][1]->isChecked();
+    wiring.dtr_to_dcd = boxes_[0][2]->isChecked();
+    wiring.dtr_to_ri = boxes_[0][3]->isChecked();
+    wiring.rts_to_dsr = boxes_[1][0]->isChecked();
+    wiring.rts_to_cts = boxes_[1][1]->isChecked();
+    wiring.rts_to_dcd = boxes_[1][2]->isChecked();
+    wiring.rts_to_ri = boxes_[1][3]->isChecked();
+    return wiring;
+}
+
+void LineMatrixPanel::apply_preset(wiring_preset preset)
+{
+    if (preset == wiring_preset::custom)
+        return;
+    write_boxes(preset_for(preset).wiring);
+    apply_wiring(current_wiring());
+}
+
+void LineMatrixPanel::on_box_toggled()
+{
+    if (updating_ || !backend_.caps().line_matrix)
+        return;
+    const wiring_preset matched = preset_for_wiring(current_wiring());
+    {
+        const QSignalBlocker blocker(preset_);
+        preset_->set_current(static_cast<int>(matched));
+    }
+    apply_wiring(current_wiring());
+}
+
+void LineMatrixPanel::on_preset_changed(int id)
+{
+    if (updating_ || !backend_.caps().line_matrix)
+        return;
+    apply_preset(static_cast<wiring_preset>(id));
+}
+
+void LineMatrixPanel::apply_wiring(const line_wiring& wiring)
+{
+    if (!link_)
+    {
+        Q_EMIT message(tr("Link this fixture to another port first."));
+        return;
+    }
+    const auto applied = backend_.set_link_wiring(link_->id, wiring);
+    if (!applied)
+    {
+        Q_EMIT message(tr("Could not change the wiring: %1")
+                           .arg(error_text(applied.error())));
+        refresh();
+        return;
+    }
+    refresh();
+    Q_EMIT message(tr("Line wiring updated."));
+}
+
+void LineMatrixPanel::update_line_state()
+{
+    const auto port = backend_.port(endpoint_);
+    const bool available = port.has_value();
+    const bool supports = available && port->supports_control_lines;
+    dtr_->setEnabled(supports);
+    rts_->setEnabled(supports);
+    break_->setEnabled(supports);
+    if (!available)
+        return;
+
+    updating_ = true;
+    dtr_->setChecked(port->lines.dtr());
+    rts_->setChecked(port->lines.rts());
+    updating_ = false;
+
+    const bool states[4] = {port->lines.dsr(), port->lines.cts(),
+                            port->lines.dcd(), port->lines.ri()};
+    for (int index = 0; index < 4; ++index)
+    {
+        const QString name = QString::fromLatin1(input_name(index));
+        const QString text =
+            states[index] ? tr("%1 on").arg(name) : tr("%1 off").arg(name);
+        inputs_[index]->set_text(text);
+        inputs_[index]->set_kind(states[index] ? StatusChip::kind::healthy
+                                               : StatusChip::kind::closed);
+        inputs_[index]->setAccessibleName(text);
+    }
+}
+
+void LineMatrixPanel::set_line(vss::control_line line, bool state)
+{
+    const auto changed = backend_.set_line(endpoint_, line, state);
+    if (!changed)
+    {
+        Q_EMIT message(tr("Could not change a control line: %1")
+                           .arg(error_text(changed.error())));
+        update_line_state();
+        return;
+    }
+    update_line_state();
+}
+
+} // namespace vss::gui

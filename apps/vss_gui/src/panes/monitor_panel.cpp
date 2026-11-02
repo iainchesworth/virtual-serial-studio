@@ -385,9 +385,9 @@ void MonitorPanel::set_advanced(bool advanced)
     advanced_ = advanced;
     simple_bar_->setVisible(!advanced);
     advanced_bar_->setVisible(advanced);
-    tabs_->setTabVisible(1, advanced);
-    tabs_->setTabVisible(2, advanced);
-    tabs_->tabBar()->setVisible(advanced);
+    tabs_->setTabVisible(1, advanced && show_advanced_tabs_);
+    tabs_->setTabVisible(2, advanced && show_advanced_tabs_);
+    tabs_->tabBar()->setVisible(advanced && show_advanced_tabs_);
     if (!advanced)
         tabs_->setCurrentIndex(0);
     update_filters();
@@ -397,6 +397,16 @@ void MonitorPanel::set_advanced(bool advanced)
 void MonitorPanel::set_compact(bool compact)
 {
     table_->verticalHeader()->setDefaultSectionSize(compact ? 24 : 28);
+}
+
+void MonitorPanel::set_show_advanced_tabs(bool show)
+{
+    if (show_advanced_tabs_ == show)
+        return;
+    show_advanced_tabs_ = show;
+    const bool advanced = advanced_;
+    advanced_ = !advanced;
+    set_advanced(advanced);
 }
 
 void MonitorPanel::set_selected_port(vss::endpoint_id id)

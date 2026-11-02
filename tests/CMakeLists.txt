@@ -101,3 +101,11 @@ if(TARGET vss_gui_topology_tests)
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
+
+# Advanced tools need a QApplication; every case runs offscreen.
+if(TARGET vss_gui_advanced_tests)
+  add_test(NAME gui_advanced COMMAND vss_gui_advanced_tests --verbose)
+  set_tests_properties(gui_advanced PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()

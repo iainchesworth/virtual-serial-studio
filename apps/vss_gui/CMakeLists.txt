@@ -55,6 +55,9 @@ add_subdirectory(src/panes)
 # The topology dock: nodes, links, layout and the accessible links list.
 add_subdirectory(src/topology)
 
+# The Advanced tools: owner, wiring and faults, fixtures, JSON, benchmark.
+add_subdirectory(src/advanced)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 

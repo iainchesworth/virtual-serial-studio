@@ -961,12 +961,10 @@ TEST_CASE("shell: topology actions name the next work package")
     watch->trigger();
     REQUIRE(
         window.statusBar()->currentMessage().contains(QStringLiteral("WP6")));
-    wiring->trigger();
-    REQUIRE(
-        window.statusBar()->currentMessage().contains(QStringLiteral("WP7")));
-    owner->trigger();
-    REQUIRE(
-        window.statusBar()->currentMessage().contains(QStringLiteral("WP7")));
+    // WP7 has replaced the Wiring and Owner placeholders with modal tools;
+    // they are covered by the advanced suite.  Do not open a modal here.
+    REQUIRE(wiring != nullptr);
+    REQUIRE(owner != nullptr);
 
     const qreal before = view->zoom();
     fit->trigger();
