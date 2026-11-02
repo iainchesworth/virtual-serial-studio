@@ -21,6 +21,7 @@ add_library(vss_gui_shell STATIC
   status_bar.hpp)
 
 target_link_libraries(vss_gui_shell PUBLIC
+  vss_gui_topology
   vss_gui_widgets
   vss_gui_backend
   vss_gui_theme

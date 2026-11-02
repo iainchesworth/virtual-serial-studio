@@ -28,6 +28,12 @@ namespace vss::gui
 class Launcher;
 class StatusBar;
 
+namespace topology
+{
+class LinksList;
+class TopologyView;
+} // namespace topology
+
 /// The redesigned frame: menu, toolbar, launcher, docks and status bar.
 ///
 /// The panes are placeholders until WP3 to WP8.  Every action is registered
@@ -70,6 +76,19 @@ private:
     void open_palette();
     void run_job(const QString& job);
     void placeholder(const QString& what);
+    void later_package(const QString& what, const QString& package);
+
+    void refresh_topology();
+    void sync_selection();
+    void validate_selection();
+    void focus_inspector();
+    void copy_port_name(vss::endpoint_id id);
+    void remove_selection();
+    void remove_selected_link();
+    void remove_link(vss::link_id id);
+    void remove_port(vss::endpoint_id id);
+    void show_links_dock(bool shown);
+    void connect_from_port(vss::endpoint_id id);
 
     void new_document();
     void open_document();
@@ -96,15 +115,19 @@ private:
     QStackedWidget* central_ = nullptr;
     Launcher* launcher_ = nullptr;
     QWidget* workspace_ = nullptr;
+    topology::TopologyView* topology_ = nullptr;
+    topology::LinksList* links_ = nullptr;
     QDockWidget* ports_dock_ = nullptr;
     QDockWidget* inspector_dock_ = nullptr;
     QDockWidget* send_dock_ = nullptr;
     QDockWidget* monitor_dock_ = nullptr;
+    QDockWidget* links_dock_ = nullptr;
     QToolBar* toolbar_ = nullptr;
     QLineEdit* search_ = nullptr;
     StatusBar* status_ = nullptr;
     QAction* advanced_action_ = nullptr;
     QAction* monitor_action_ = nullptr;
+    QAction* links_action_ = nullptr;
 
     QString document_path_;
     bool dirty_ = false;

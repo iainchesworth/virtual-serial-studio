@@ -52,6 +52,9 @@ add_subdirectory(src/widgets)
 # The redesigned window frame.
 add_subdirectory(src/shell)
 
+# The topology dock: nodes, links, layout and the accessible links list.
+add_subdirectory(src/topology)
+
 add_executable(vss_gui
   main.cpp
   main_window.cpp

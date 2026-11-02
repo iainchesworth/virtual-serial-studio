@@ -12,6 +12,9 @@
 #include "shell/status_bar.hpp"
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
+#include "topology/links_list.hpp"
+#include "topology/topology_text.hpp"
+#include "topology/topology_view.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
@@ -23,6 +26,7 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
+#include <QClipboard>
 #include <QCloseEvent>
 #include <QDir>
 #include <QDockWidget>
@@ -30,6 +34,7 @@
 #include <QFileInfo>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QHash>
 #include <QKeySequence>
 #include <QLabel>
 #include <QLineEdit>
@@ -102,9 +107,17 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
     connect(&level_, &LevelService::changed, this,
             &ShellWindow::on_level_changed);
     connect(&selection_, &SelectionService::port_changed, this,
-            [this](vss::endpoint_id) { update_actions(); });
+            [this](vss::endpoint_id)
+            {
+                sync_selection();
+                update_actions();
+            });
     connect(&selection_, &SelectionService::link_changed, this,
-            [this](vss::link_id) { update_actions(); });
+            [this](vss::link_id)
+            {
+                sync_selection();
+                update_actions();
+            });
     connect(&Theme::instance(), &Theme::themeChanged, this,
             [this]
             {
@@ -184,10 +197,11 @@ void ShellWindow::build_actions()
     add(QStringLiteral("edit.redo"), QStringLiteral("Redo"),
         QStringLiteral("undo"), {}, QKeySequence::Redo, action_level::simple,
         later(QStringLiteral("Redo")));
-    add(QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
+    add(
+        QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
         QStringLiteral("delete remove"), QStringLiteral("remove"),
         QKeySequence(Qt::Key_Delete), action_level::simple,
-        later(QStringLiteral("Remove")), false,
+        [this] { remove_selection(); }, false,
         [this] { return selection_.port() != 0 || selection_.link() != 0; });
 
     // Ports
@@ -231,25 +245,46 @@ void ShellWindow::build_actions()
     add(QStringLiteral("topology.share"), QStringLiteral("Share a device"),
         QStringLiteral("split listeners"), QStringLiteral("share"), {},
         action_level::simple,
-        [this] { placeholder(QStringLiteral("Share a device")); });
+        [this]
+        {
+            later_package(QStringLiteral("Share a device"),
+                          QStringLiteral("WP6, connect and share"));
+        });
     add(QStringLiteral("topology.watch"), QStringLiteral("Watch traffic"),
         QStringLiteral("monitor copy"), QStringLiteral("watch"), {},
         action_level::simple,
-        [this] { placeholder(QStringLiteral("Watch traffic")); });
-    add(QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
+        [this]
+        {
+            later_package(QStringLiteral("Watch traffic"),
+                          QStringLiteral("WP6, connect and share"));
+        });
+    add(
+        QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
         QStringLiteral("delete disconnect"), {}, {}, action_level::simple,
-        later(QStringLiteral("Remove link")), false,
+        [this] { remove_selected_link(); }, false,
         [this] { return selection_.link() != 0; });
     add(QStringLiteral("topology.wiring"), QStringLiteral("Link wiring"),
         QStringLiteral("line matrix faults"), {}, {}, action_level::advanced,
-        later(QStringLiteral("Link wiring")));
+        [this]
+        {
+            later_package(QStringLiteral("Link wiring"),
+                          QStringLiteral("WP7, Advanced tools"));
+        });
     add(QStringLiteral("topology.owner"), QStringLiteral("Owner"),
         QStringLiteral("policy arbitration"), {}, {}, action_level::advanced,
-        later(QStringLiteral("Owner control")));
+        [this]
+        {
+            later_package(QStringLiteral("Owner control"),
+                          QStringLiteral("WP7, Advanced tools"));
+        });
     add(QStringLiteral("topology.fit"), QStringLiteral("Fit"),
         QStringLiteral("zoom"), QStringLiteral("fit"),
         QKeySequence(QStringLiteral("Ctrl+0")), action_level::advanced,
-        later(QStringLiteral("Fit")));
+        [this]
+        {
+            if (topology_ != nullptr)
+                topology_->fit_content();
+        });
 
     // Tools
     add(QStringLiteral("tools.search"), QStringLiteral("Search actions"),
@@ -285,6 +320,10 @@ void ShellWindow::build_actions()
     add(
         QStringLiteral("view.monitor"), QStringLiteral("Monitor"),
         QStringLiteral("traffic"), {}, {}, action_level::simple, [] {}, true);
+    add(
+        QStringLiteral("view.links"), QStringLiteral("Show links as a list"),
+        QStringLiteral("links topology list accessible"), {}, {},
+        action_level::simple, [] {}, true);
     add(QStringLiteral("view.log"), QStringLiteral("Log"),
         QStringLiteral("events"), {}, {}, action_level::advanced,
         later(QStringLiteral("The event log")));
@@ -369,6 +408,7 @@ void ShellWindow::build_actions()
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
+    links_action_ = registry_.action(QStringLiteral("view.links"));
     connect(advanced_action_, &QAction::toggled, this,
             [this](bool on) { level_.set_advanced(on); });
 
@@ -453,6 +493,7 @@ void ShellWindow::build_menus()
     add(view, QStringLiteral("view.advanced"));
     view->addSeparator();
     add(view, QStringLiteral("view.monitor"));
+    add(view, QStringLiteral("view.links"));
     add(view, QStringLiteral("view.log"));
     add(view, QStringLiteral("view.json"));
     view->addSeparator();
@@ -538,22 +579,63 @@ void ShellWindow::build_central()
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
     layout->setContentsMargins(8, 8, 8, 8);
-    auto* placeholder = new QFrame(workspace_);
-    placeholder->setProperty("card", true);
-    polish(placeholder);
-    auto* placeholder_layout = new QVBoxLayout(placeholder);
-    placeholder_layout->setContentsMargins(24, 24, 24, 24);
-    auto* title = new QLabel(QStringLiteral("Topology"), placeholder);
-    title->setFont(Theme::instance().font(text_style::title));
-    auto* body = new QLabel(
-        QStringLiteral("The topology view arrives with WP4."), placeholder);
-    body->setFont(Theme::instance().font(text_style::body));
-    body->setProperty("muted", true);
-    placeholder_layout->addWidget(title);
-    placeholder_layout->addWidget(body);
-    placeholder_layout->addStretch(1);
-    layout->addWidget(placeholder);
+
+    auto* card = new QFrame(workspace_);
+    card->setProperty("card", true);
+    polish(card);
+    auto* card_layout = new QVBoxLayout(card);
+    card_layout->setContentsMargins(0, 0, 0, 0);
+
+    topology_ = new topology::TopologyView(card);
+    topology_->set_capabilities(backend_.caps());
+    card_layout->addWidget(topology_);
+    layout->addWidget(card);
     central_->addWidget(workspace_);
+
+    connect(topology_, &topology::TopologyView::port_selected, this,
+            [this](vss::endpoint_id id)
+            {
+                if (id != 0)
+                {
+                    selection_.select_link(0);
+                    selection_.select_port(id);
+                }
+                else
+                {
+                    selection_.select_port(0);
+                }
+            });
+    connect(topology_, &topology::TopologyView::link_selected, this,
+            [this](vss::link_id id)
+            {
+                if (id != 0)
+                {
+                    selection_.select_port(0);
+                    selection_.select_link(id);
+                }
+                else
+                {
+                    selection_.select_link(0);
+                }
+            });
+    connect(topology_, &topology::TopologyView::inspect_requested, this,
+            [this](vss::endpoint_id) { focus_inspector(); });
+    connect(topology_, &topology::TopologyView::copy_name_requested, this,
+            [this](vss::endpoint_id id) { copy_port_name(id); });
+    connect(topology_, &topology::TopologyView::connect_requested, this,
+            [this](vss::endpoint_id id) { connect_from_port(id); });
+    connect(topology_, &topology::TopologyView::remove_port_requested, this,
+            [this](vss::endpoint_id id) { remove_port(id); });
+    connect(topology_, &topology::TopologyView::remove_link_requested, this,
+            [this](vss::link_id id) { remove_link(id); });
+    connect(topology_, &topology::TopologyView::rename_requested, this,
+            [this](vss::endpoint_id)
+            {
+                status_->showMessage(
+                    QStringLiteral("Not available in this build."), 5000);
+            });
+    connect(topology_, &topology::TopologyView::status_message, this,
+            [this](const QString& text) { status_->showMessage(text, 4000); });
 }
 
 void ShellWindow::build_docks()
@@ -623,6 +705,43 @@ void ShellWindow::build_docks()
                 monitor_action_->setChecked(visible);
             });
 
+    links_dock_ = new QDockWidget(QStringLiteral("Links"), this);
+    links_dock_->setObjectName(QStringLiteral("linksDock"));
+    links_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
+    links_ = new topology::LinksList(links_dock_);
+    links_dock_->setWidget(links_);
+    addDockWidget(Qt::BottomDockWidgetArea, links_dock_);
+    tabifyDockWidget(monitor_dock_, links_dock_);
+    links_dock_->hide();
+
+    connect(links_, &topology::LinksList::link_selected, this,
+            [this](vss::link_id id)
+            {
+                if (id != 0)
+                {
+                    selection_.select_port(0);
+                    selection_.select_link(id);
+                }
+                else
+                {
+                    selection_.select_link(0);
+                }
+            });
+    if (links_action_ != nullptr)
+    {
+        links_action_->setChecked(false);
+        connect(links_action_, &QAction::toggled, this,
+                [this](bool shown) { show_links_dock(shown); });
+    }
+    connect(links_dock_, &QDockWidget::visibilityChanged, this,
+            [this](bool visible)
+            {
+                if (links_action_ == nullptr)
+                    return;
+                const QSignalBlocker blocker(links_action_);
+                links_action_->setChecked(visible);
+            });
+
     resizeDocks(
         {ports_dock_},
         {Theme::instance().metric(QStringLiteral("layout.ports.default"))},
@@ -678,6 +797,7 @@ void ShellWindow::on_backend_changed()
     if (!backend_.ports().empty())
         launcher_forced_ = false;
     status_->refresh();
+    validate_selection();
     update_content();
     if (!loading_)
         set_dirty(true);
@@ -709,8 +829,8 @@ void ShellWindow::update_content()
     {
         central_->setCurrentWidget(launcher_);
         launcher_->refresh();
-        for (QDockWidget* dock :
-             {ports_dock_, inspector_dock_, send_dock_, monitor_dock_})
+        for (QDockWidget* dock : {ports_dock_, inspector_dock_, send_dock_,
+                                  monitor_dock_, links_dock_})
         {
             if (dock != nullptr)
                 dock->hide();
@@ -719,18 +839,24 @@ void ShellWindow::update_content()
     else
     {
         central_->setCurrentWidget(workspace_);
+        refresh_topology();
         for (QDockWidget* dock :
              {ports_dock_, inspector_dock_, send_dock_, monitor_dock_})
         {
             if (dock != nullptr)
                 dock->show();
         }
+        const bool links_shown =
+            links_action_ != nullptr && links_action_->isChecked();
+        if (links_dock_ != nullptr)
+            links_dock_->setVisible(links_shown);
         if (monitor_action_ != nullptr)
         {
             const QSignalBlocker blocker(monitor_action_);
             monitor_action_->setChecked(monitor_dock_->isVisible());
         }
     }
+    sync_selection();
     status_->refresh();
 }
 
@@ -813,7 +939,8 @@ void ShellWindow::run_job(const QString& job)
     }
     else if (job == QLatin1String("connect"))
     {
-        placeholder(QStringLiteral("Connect ports"));
+        later_package(QStringLiteral("Connect ports"),
+                      QStringLiteral("WP6, connect and share"));
         return;
     }
     else if (job == QLatin1String("network"))
@@ -839,6 +966,177 @@ void ShellWindow::placeholder(const QString& what)
 {
     status_->showMessage(
         QStringLiteral("%1 is part of a later work package.").arg(what), 5000);
+}
+
+void ShellWindow::later_package(const QString& what, const QString& package)
+{
+    status_->showMessage(
+        QStringLiteral("%1 arrives with %2.").arg(what, package), 6000);
+}
+
+void ShellWindow::refresh_topology()
+{
+    if (topology_ != nullptr)
+        topology_->set_topology(backend_.ports(), backend_.links());
+    if (links_ != nullptr)
+        links_->set_links(backend_.links(), backend_.ports());
+}
+
+void ShellWindow::sync_selection()
+{
+    if (topology_ != nullptr)
+        topology_->set_selection(selection_.port(), selection_.link());
+    if (links_ != nullptr)
+        links_->set_selected(selection_.link());
+}
+
+void ShellWindow::validate_selection()
+{
+    bool port_exists = false;
+    for (const auto& port : backend_.ports())
+        port_exists = port_exists || port.id == selection_.port();
+    if (!port_exists && selection_.port() != 0)
+        selection_.select_port(0);
+
+    bool link_exists = false;
+    for (const auto& link : backend_.links())
+        link_exists = link_exists || link.id == selection_.link();
+    if (!link_exists && selection_.link() != 0)
+        selection_.select_link(0);
+}
+
+void ShellWindow::focus_inspector()
+{
+    if (inspector_dock_ == nullptr)
+        return;
+    inspector_dock_->show();
+    inspector_dock_->raise();
+    inspector_dock_->setFocus(Qt::ShortcutFocusReason);
+}
+
+void ShellWindow::copy_port_name(vss::endpoint_id id)
+{
+    for (const auto& port : backend_.ports())
+    {
+        if (port.id != id)
+            continue;
+        QApplication::clipboard()->setText(port.name);
+        status_->showMessage(topology_text::copied(port.name), 3000);
+        return;
+    }
+}
+
+void ShellWindow::connect_from_port(vss::endpoint_id id)
+{
+    selection_.select_link(0);
+    selection_.select_port(id);
+    if (QAction* action = registry_.action(QStringLiteral("topology.connect")))
+        action->trigger();
+}
+
+void ShellWindow::remove_selection()
+{
+    if (selection_.link() != 0)
+    {
+        remove_link(selection_.link());
+        return;
+    }
+    if (selection_.port() != 0)
+        remove_port(selection_.port());
+}
+
+void ShellWindow::remove_selected_link()
+{
+    remove_link(selection_.link());
+}
+
+void ShellWindow::remove_link(vss::link_id id)
+{
+    if (id == 0)
+        return;
+    const auto link = backend_.link(id);
+    if (!link)
+        return;
+
+    QHash<vss::endpoint_id, QString> names;
+    for (const auto& port : backend_.ports())
+        names.insert(port.id, port.name);
+    const QString description = topology_text::link_name(*link, names);
+
+    if (!ConfirmDialog::ask(
+            QStringLiteral("Remove link"),
+            QStringLiteral("Remove this link? %1. Nothing is saved until you "
+                           "save the setup.")
+                .arg(description),
+            QStringLiteral("Remove link"), QStringLiteral("Cancel"), true,
+            this))
+    {
+        return;
+    }
+
+    const auto removed = backend_.disconnect(id);
+    if (!removed)
+    {
+        ErrorDialog dialog(QStringLiteral("Could not remove the link"),
+                           error_text(removed.error()), {}, this);
+        dialog.exec();
+        return;
+    }
+
+    selection_.select_link(0);
+    backend_.refresh();
+    status_->showMessage(QStringLiteral("Removed the link."), 3000);
+}
+
+void ShellWindow::remove_port(vss::endpoint_id id)
+{
+    if (id == 0)
+        return;
+    const auto port = backend_.port(id);
+    if (!port)
+        return;
+
+    if (!ConfirmDialog::ask(
+            QStringLiteral("Remove port"),
+            QStringLiteral("Remove %1 and its links? Nothing is saved until "
+                           "you save the setup.")
+                .arg(port->name),
+            QStringLiteral("Remove port"), QStringLiteral("Cancel"), true,
+            this))
+    {
+        return;
+    }
+
+    const auto removed = backend_.remove_port(id);
+    if (!removed)
+    {
+        ErrorDialog dialog(
+            QStringLiteral("Could not remove %1").arg(port->name),
+            error_text(removed.error()), {}, this);
+        dialog.exec();
+        return;
+    }
+
+    selection_.clear();
+    backend_.refresh();
+    status_->showMessage(QStringLiteral("Removed %1.").arg(port->name), 3000);
+}
+
+void ShellWindow::show_links_dock(bool shown)
+{
+    if (links_dock_ == nullptr)
+        return;
+    if (shown && backend_.ports().empty())
+        return;
+    if (shown)
+    {
+        links_dock_->show();
+        links_dock_->raise();
+    }
+    else
+    {
+        links_dock_->hide();
+    }
 }
 
 void ShellWindow::new_document()
@@ -1196,6 +1494,16 @@ bool ShellWindow::run_selftest()
         fail(QStringLiteral("File, New is not registered"));
     if (registry_.action(QStringLiteral("tools.search")) == nullptr)
         fail(QStringLiteral("the command palette action is not registered"));
+    if (topology_ == nullptr ||
+        topology_->accessibleName() != topology_text::view_name())
+    {
+        fail(QStringLiteral("the topology view is missing its name"));
+    }
+    if (links_action_ == nullptr ||
+        registry_.action(QStringLiteral("view.links")) == nullptr)
+    {
+        fail(QStringLiteral("the links list action is not registered"));
+    }
 
     const auto created = backend_.create_virtual_port(
         QStringLiteral("selftest"), vss::virtual_port_kind::loopback, true);
@@ -1212,6 +1520,12 @@ bool ShellWindow::run_selftest()
             fail(QStringLiteral("the workspace did not replace the launcher"));
         if (!ports_dock_->isVisible())
             fail(QStringLiteral("the Ports dock is not visible"));
+        if (topology_->node_count() != 1)
+        {
+            fail(QStringLiteral("the topology did not draw the created port"));
+        }
+        if (!topology_->summary().contains(QStringLiteral("1 port")))
+            fail(QStringLiteral("the topology summary did not update"));
         const auto removed = backend_.remove_port(*created);
         if (!removed)
             fail(QStringLiteral("remove_port: %1")
