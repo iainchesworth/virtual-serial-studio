@@ -479,3 +479,135 @@ dialog in one theme and grab it in both.
 `studio_backend.hpp`, not in `vss_core`. No topology schema field was added,
 no node position was written to the document, and no new dependency was
 introduced.
+
+## WP8
+
+### Undo and Redo stay disabled
+
+The design's "Remove, with undo" pattern and the `Ctrl+Z`/`Ctrl+Y` menu items
+need an undo stack that restores the previous topology exactly. The engine's
+`snapshot()` document records port names, kinds and settings, but not the
+endpoint identifiers or the advertised path an auto/pty/com0com port received.
+`apply()` therefore creates new endpoints and, for an auto port, a new COM
+number or pseudo terminal; a program that had the old path open loses it. That
+is not an exact restore, so `edit.undo` and `edit.redo` remain registered,
+visible and capability-gated disabled (`capabilities::undo == false`) with the
+tooltip "Not available in this build". The reason is repeated in
+`shell_window.cpp` where they are registered. Confirmations stay; no
+`QUndoStack` was added and no toast promises an undo that does not exist. If
+the engine later gains stable port identity and a path-preserving restore, the
+capability can be turned on and the two actions wired without changing the
+menus or shortcuts.
+
+### Support code uses the `vss::gui::support` namespace
+
+WP2 kept the old flat `apps/vss_gui` translation units compiling until WP9.
+Those files already define `vss::gui::ui_settings`, `load_ui_settings`,
+`save_ui_settings`, `SettingsDialog` and `AboutDialog`, so the redesigned
+surfaces could not reuse those names in the same namespace and link. The new
+`apps/vss_gui/src/support/` library therefore lives in
+`vss::gui::support`; the shell brings the names in with one using-directive in
+each translation unit that needs them. WP9 can delete the legacy files and, if
+desired, flatten the namespace then. This is a build-integration decision, not
+a design one: the classes, copy and behaviour are the ones specified.
+
+### Keyboard shortcuts are one generated table
+
+`Shortcuts.html` shows an "Available today" table and a "Proposed" table with
+a New tag. The dialog is generated from `ActionRegistry`, and the registry has
+no way to know which shortcuts the mockup considered proposed, so a static
+split would have to be hand-typed and would drift. `ShortcutsDialog` renders
+one table of every registered action with a non-empty shortcut, in registry
+order, and filters it. The registry is the single source of truth the design
+asks for; the two-column split is a design-time illustration.
+
+### Help contents is a small index
+
+`03-information-architecture.md` adds Help, Help contents (F1), but no screen
+spec describes a help browser, no documentation is bundled with the GUI, and
+the GUI has no network access. WP8 therefore ships a compact "Help contents"
+dialog that indexes the four specified support surfaces: Setup check, Why is
+nothing arriving?, Keyboard shortcuts and About. It chooses a topic and the
+shell opens that dialog after the index closes, so no modal loops are nested.
+The alternative, opening the shortcuts dialog from Help contents, would have
+made two different menu items do the same thing.
+
+### Setup check details not specified by the mockup
+
+The mockup covers the Windows, driver-missing state. The following choices fill
+the gaps and are visible in the dialog:
+
+- The driver-instructions dialog copy and the "Why is a driver needed?" text
+  are new. The dialog never downloads or installs; it opens the official
+  com0com project page with `QDesktopServices`, and it also shows the URL in a
+  copyable block for a machine with no browser. The URL lives in one constant
+  (`com0com_project_url()`), per `08-engine-gaps.md`.
+- "Continue in test mode" closes the dialog and shows the toast "Test mode.
+  New ports only work inside Virtual Serial Studio." The setup is untouched.
+- The carry-on row is Windows-only. On Linux and macOS the spec lists pseudo
+  terminals, group membership and real devices, so no carry-on row is added.
+- The dialout row is answered by `getgroups()` on Linux. On macOS there is no
+  dialout check, so that row says "Not checked yet" and explains that the
+  /dev permissions are the place to look. Elevation is answered by the Windows
+  token elevation API, or by `geteuid()` on POSIX, where the row is not shown.
+- "Why is a driver needed?" appears only on Windows, where a driver is needed.
+- The top note's bold "inside" is rendered as plain text in `NoteBanner`,
+  because that shared widget takes plain text. The sentence is verbatim and
+  the accessible name reads the same.
+
+### Readiness copy for the states the spec did not cover
+
+The launcher strip's warning sentence is Windows/driver specific ("until a
+driver is installed"). On Linux and macOS a missing pseudo terminal now shows
+"Setup needs attention. New ports may not be usable by other programs.", and a
+build that cannot run the check shows "Setup was not checked. Open the setup
+check to see what this PC needs.". The status bar chip gets a third state,
+"Setup not checked", for the same case; the design only specified "Setup
+ready" and "Setup needs attention". Both surfaces, and the dialog, read the
+same `query_setup_report()` provider, so they cannot disagree.
+
+The readiness strip and status chip consider only whether new virtual ports
+can be opened by other programs (com0com on Windows, a pseudo terminal
+elsewhere). A Linux dialout problem is still shown in the setup check as
+"Needs attention", but it does not turn the launcher / status bar warning on,
+because it does not stop port creation.
+
+### About and licence copy
+
+The Environment tab and `environment.txt` add a "Boost" row, because the task
+asks for the Boost version as well as Qt, and the mockup's row list does not
+forbid it. The Licences tab summarises each licence (component, licence name,
+one line of context) instead of embedding the full licence texts; the
+product's own GPLv3 notice and warranty disclaimer are in the About tab, and
+no font is bundled. The standard GPLv3 "This program is free software..."
+paragraphs are the one place new copy is used, because the About tab has to
+carry the licence notice.
+
+### Diagnostic bundle traffic and archive
+
+The engine's bounded traffic ring is reachable through `hub::traffic()`, so the
+bundle's "Traffic contents" option is real: the adapter gained
+`StudioBackend::traffic(limit)`, both backends implement it, and the option
+writes `traffic.txt` with hex and an ASCII preview. It stays unticked by
+default and is the only option that can contain payload bytes. Every text file
+passes through `redact_secrets()`: URL credentials, `password=`, `token:`,
+`api_key=`, bearer tokens and the home directory are removed, and the
+replacement keeps JSON valid. The ZIP is stored (uncompressed), written with
+`QSaveFile` and no third-party library; the test validates the headers and CRC
+and opens the archive with Python's `zipfile`.
+
+If `capabilities::diagnostics` is false (a build without this layer), the
+dialog says so, disables the include list and Save bundle, and keeps "Copy
+environment only" available. Nothing is ever sent anywhere and the GUI makes no
+network request; opening the com0com page delegates to the user's browser and
+only when the user presses the button.
+
+### Bundle and About need the build identity in a library
+
+The About window and `environment.txt` need the commit, branch, date, build
+type, compiler and version. CMake used to compute these only for the `vss_gui`
+executable. WP8 moves the Git detection above the new support target and passes
+the values as public compile definitions on `vss_gui_support`, so the About
+dialog and its tests see the same values as the executable. The definitions
+fall back to "unknown" if the values are missing, and no secret or machine name
+is included.

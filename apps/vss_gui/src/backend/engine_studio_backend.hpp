@@ -54,6 +54,7 @@ public:
     std::vector<port_view> ports() const override { return ports_; }
     std::vector<link_view> links() const override { return links_; }
     std::vector<device_view> devices() const override;
+    std::vector<traffic_view> traffic(int limit) const override;
     setup_facts facts() const override;
     std::optional<port_view> port(vss::endpoint_id id) const override;
     std::optional<link_view> link(vss::link_id id) const override;

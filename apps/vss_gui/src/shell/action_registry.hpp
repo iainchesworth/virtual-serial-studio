@@ -14,6 +14,8 @@
 #include <QString>
 #include <QVector>
 
+#include "support/shortcuts_dialog.hpp"
+
 #include <functional>
 
 namespace vss::gui
@@ -54,7 +56,6 @@ public:
     QVector<QAction*> actions() const { return order_; }
     QVector<QAction*> visible(action_level level) const;
     QVector<QAction*> search(const QString& query) const;
-
     void set_level(action_level level);
     action_level level() const noexcept { return level_; }
 
@@ -73,6 +74,11 @@ private:
     QVector<QAction*> order_;
     action_level level_ = action_level::simple;
 };
+
+/// The shortcuts dialog's rows, generated from the registry (empty shortcuts
+/// are skipped).  Lives here so the dialog never hand-types a key list.
+QVector<support::shortcut_entry>
+shortcut_entries(const ActionRegistry& registry);
 
 } // namespace vss::gui
 

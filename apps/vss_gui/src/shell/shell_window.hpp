@@ -11,6 +11,7 @@
 #include "panes/selection_service.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/level_service.hpp"
+#include "support/event_log.hpp"
 
 #include <QMainWindow>
 #include <QString>
@@ -112,6 +113,16 @@ private:
     void sync_advanced_docks();
     void log_local(const QString& text);
 
+    void open_setup_check();
+    void open_settings();
+    void open_troubleshoot();
+    void open_shortcuts();
+    void open_about();
+    void open_help_contents();
+    void open_bundle();
+    void copy_environment();
+    void restart_elevated();
+
     void new_document();
     void open_document();
     void open_path(const QString& path);
@@ -133,6 +144,7 @@ private:
     ActionRegistry registry_{this};
     LevelService level_{this};
     SelectionService selection_{this};
+    support::EventLog support_log_{this};
 
     QStackedWidget* central_ = nullptr;
     Launcher* launcher_ = nullptr;
@@ -170,6 +182,7 @@ private:
     bool compact_ = false;
     bool layout_sized_ = false;
     bool restored_state_ = false;
+    bool restarting_ = false;
 };
 
 } // namespace vss::gui

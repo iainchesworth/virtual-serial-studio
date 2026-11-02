@@ -7,6 +7,7 @@
 #include "shell/status_bar.hpp"
 
 #include "shell/format.hpp"
+#include "support/setup_facts.hpp"
 
 #include <QSignalBlocker>
 
@@ -14,21 +15,7 @@
 
 namespace vss::gui
 {
-namespace
-{
-
-QString platform_name()
-{
-#if defined(Q_OS_WIN)
-    return QStringLiteral("windows");
-#elif defined(Q_OS_MACOS)
-    return QStringLiteral("macos");
-#else
-    return QStringLiteral("linux");
-#endif
-}
-
-} // namespace
+using namespace support;
 
 StatusBar::StatusBar(StudioBackend& backend, QWidget* parent)
     : QStatusBar(parent), backend_(backend)
@@ -162,18 +149,23 @@ void StatusBar::refresh()
 
 void StatusBar::update_readiness()
 {
-    const setup_facts facts = backend_.facts();
-    const bool windows = platform_name() == QLatin1String("windows");
-    if (!windows || facts.com0com_found)
+    const setup_report report = query_setup_report(backend_);
+    switch (report.state)
     {
+    case setup_report::readiness::ready:
         readiness_->set_kind(StatusChip::kind::healthy);
         readiness_->set_text(QStringLiteral("Setup ready"));
-    }
-    else
-    {
+        break;
+    case setup_report::readiness::needs_attention:
         readiness_->set_kind(StatusChip::kind::waiting);
         readiness_->set_text(QStringLiteral("Setup needs attention"));
+        break;
+    case setup_report::readiness::not_checked:
+        readiness_->set_kind(StatusChip::kind::closed);
+        readiness_->set_text(QStringLiteral("Setup not checked"));
+        break;
     }
+    readiness_->setAccessibleName(readiness_->text());
     readiness_->setToolTip(
         QStringLiteral("Open Tools, Setup check for the details."));
 }

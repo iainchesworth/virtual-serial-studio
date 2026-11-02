@@ -39,6 +39,7 @@ public:
     void fail_next(vss::error_code error) { next_error_ = error; }
 
     const std::vector<QByteArray>& sent() const noexcept { return sent_; }
+    int refresh_interval_ms() const noexcept { return refresh_interval_ms_; }
 
     capabilities caps() const override { return caps_; }
 
@@ -58,6 +59,7 @@ public:
     std::vector<port_view> ports() const override { return ports_; }
     std::vector<link_view> links() const override { return links_; }
     std::vector<device_view> devices() const override { return devices_; }
+    std::vector<traffic_view> traffic(int limit) const override;
     setup_facts facts() const override { return facts_; }
     std::optional<port_view> port(vss::endpoint_id id) const override;
     std::optional<link_view> link(vss::link_id id) const override;
@@ -118,6 +120,7 @@ private:
     std::vector<port_view> ports_;
     std::vector<link_view> links_;
     std::vector<device_view> devices_;
+    std::vector<traffic_view> traffic_;
     setup_facts facts_;
     std::vector<QByteArray> sent_;
     QHash<vss::link_id, line_wiring> wiring_;

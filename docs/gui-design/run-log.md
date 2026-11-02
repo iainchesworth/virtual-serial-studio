@@ -14,7 +14,7 @@ gates pass.
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
 | WP6 | `gui/wp6-connect-share` | not started | - | - | blocked on G1 |
 | WP7 | `gui/wp7-advanced` | implemented, self-review complete | Debug `ctest` 8/8, 15 advanced tests, 16 review PNGs, changelog/format/contrast/QSS clean | self-review | owner bar, wiring and faults, mock fixtures, topology JSON, event log, benchmark, export command |
-| WP8 | `gui/wp8-support-system` | not started | - | - | blocked on G1 |
+| WP8 | `gui/wp8-support` | implemented, self-review complete | Debug `ctest` 8/8, 15 support tests, 10 shell tests, `vss_gui --selftest` ok, Python `zipfile` round trip, contrast/QSS/changelog/format clean | self-review; human G2 pending | setup check, troubleshooting, bundle, settings, About, shortcuts, help index, confirm dialog; undo/redo disabled with a recorded reason |
 | WP9 | `gui/wp9-qa` | not started | - | - | blocked on G2 |
 
 ## WP0 detail
@@ -252,3 +252,64 @@ gates pass.
   extraction; the AddFixture sentence is truthful about the unavailable
   capabilities; the JSON GUI adds line-aware schema checks on top of the
   engine's positionless errors. All are recorded in `design-deviations.md`.
+
+## WP8 detail
+
+- Added `apps/vss_gui/src/support/` (`vss_gui_support`, namespace
+  `vss::gui::support`): `build_info`/`environment_report`, `redact_secrets`,
+  a bounded `EventLog`, `ui_settings` load/save, the stored ZIP writer, the
+  bundle model, the setup facts provider/report, the troubleshooting model,
+  and the Setup check, Troubleshoot, Diagnostic bundle, Settings, About,
+  Keyboard shortcuts and Help contents dialogs, plus `CheckRowWidget`.
+- Setup check reads `StudioBackend::facts()` and a GUI-layer platform probe
+  (Windows token elevation, POSIX `geteuid`, `/dev/ptmx`, Linux `dialout`
+  membership). Rows are real or "Not checked yet"; com0com instructions open
+  the official page, never install; "Restart as administrator" relaunches
+  elevated on Windows and asks the shell's unsaved-changes question first.
+  The launcher strip and status bar chip now use the same
+  `query_setup_report()` provider.
+- "Why is nothing arriving?" builds five rows from endpoint state, counters,
+  link shape and the tri-state peer value; checks 4 and 5 stay "Not checked
+  yet" with an explanation when the engine cannot see a program. The Try this
+  card, Copy path, Check again and bundle link are wired.
+- Diagnostic bundle: the adapter gained `StudioBackend::traffic(limit)` over
+  the engine's bounded ring (both backends), so Traffic contents is a real,
+  default-off option. The stored ZIP writer has no dependency; every text file
+  is redacted; the archive is written with `QSaveFile`. Capability-gated on
+  `capabilities::diagnostics` (now true for this build).
+- Settings: General/Appearance/Performance, live apply and QSettings
+  persistence for Advanced mode, theme, density, refresh interval (wired to
+  the backend's event bridge), default baud rate and `ui/askOnDiscard`.
+  `ShellWindow` applies `ui/refreshMs` at startup and connects
+  `advanced_changed` to `LevelService`.
+- About: four tabs, GPLv3 notice, version/build/compiler/Qt/Boost/OS/
+  architecture, copyable environment, licences and the no-bundled-fonts
+  statement. Environment text is shared with `environment.txt`.
+- Keyboard shortcuts: generated from `ActionRegistry` through
+  `shortcut_entries()`; one table, filter, KeyCaps and the Ctrl/Cmd columns.
+  Help contents indexes the four support surfaces.
+- `ConfirmDialog` gained a multi-choice variant with an explicit cancel
+  choice; the ShellWindow unsaved prompt is now the shared three-choice dialog
+  (Don't save / Cancel / Save) and honours `ui/askOnDiscard`.
+- Undo/Redo: the engine cannot restore endpoint ids and advertised paths, so
+  both stay visible, disabled and capability-gated, with the reason in
+  `design-deviations.md`; no `QUndoStack` was added.
+- Tests: new `vss_gui_support_tests` (registered as CTest `gui_support`) with
+  15 cases: setup-report degradation and the dialog, every troubleshooting
+  state, ZIP CRC/headers plus a Python `zipfile` round trip, bundle contents
+  and the traffic opt-in, redaction, settings persistence/live effect and
+  reset, confirm-dialog safety and Escape, About copy, shortcuts from a
+  registry, event log and accessible names/24 px targets for every dialog.
+  `vss_gui_shell_tests` gained undo gating, registry-to-shortcuts, the
+  `ui/askOnDiscard` close path and shared readiness checks (10 total).
+- Checks: Debug `ctest` 8/8 (unit, system, headers, `gui_selftest`,
+  `gui_backend`, `gui_theme`, `gui_shell`, `gui_support`), clang-format 22 on
+  every changed C++ file, `changelog.py --check`. No `libs/vss_core`, JSON
+  schema or third-party dependency changed.
+- A live theme switch from inside Settings also re-tokenises the dialog footer,
+  the Settings nav, the About tile and the troubleshooting separators; the
+  support test checks the Settings nav follows the dark accent tokens.
+- Deviations: support namespace; Undo/Redo disabled; one shortcuts table;
+  Help contents index; setup-check and readiness copy for states the mockup
+  did not specify; About adds a Boost row and summarised licences. All are in
+  `design-deviations.md` (WP8).

@@ -103,6 +103,16 @@ struct line_wiring
     friend bool operator==(const line_wiring&, const line_wiring&) = default;
 };
 
+/// One captured chunk of traffic from the engine's bounded ring buffer.
+struct traffic_view
+{
+    vss::endpoint_id endpoint = 0;
+    QString name;
+    vss::data_direction direction = vss::data_direction::rx;
+    QByteArray data;
+    vss::time_point when{};
+};
+
 /// One serial device, as returned by the platform enumeration.
 struct device_view
 {

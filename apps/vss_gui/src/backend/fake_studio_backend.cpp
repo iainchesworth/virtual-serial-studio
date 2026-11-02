@@ -9,6 +9,7 @@
 #include <QStringList>
 
 #include <algorithm>
+#include <cstddef>
 #include <utility>
 
 namespace vss::gui
@@ -61,6 +62,17 @@ void FakeStudioBackend::set_peer_state(vss::endpoint_id id, peer_state state)
 void FakeStudioBackend::set_devices(std::vector<device_view> devices)
 {
     devices_ = std::move(devices);
+}
+
+std::vector<traffic_view> FakeStudioBackend::traffic(int limit) const
+{
+    if (limit <= 0 || static_cast<std::size_t>(limit) >= traffic_.size())
+        return traffic_;
+    std::vector<traffic_view> out;
+    out.reserve(static_cast<std::size_t>(limit));
+    const auto first = traffic_.end() - static_cast<std::ptrdiff_t>(limit);
+    out.assign(first, traffic_.end());
+    return out;
 }
 
 std::optional<port_view> FakeStudioBackend::port(vss::endpoint_id id) const
@@ -141,6 +153,7 @@ FakeStudioBackend::create_virtual_port(const QString& name,
     view.state = vss::endpoint_state::open;
     view.open = true;
     view.supports_control_lines = true;
+    view.stats.started = vss::clock_type::now();
     view.path = path_for(kind, view.name, view.id);
     view.description = QStringLiteral("Virtual port %1").arg(view.name);
     view.studio_only = kind == vss::virtual_port_kind::loopback;
@@ -172,6 +185,7 @@ FakeStudioBackend::create_mock_port(const QString& name,
     view.open = true;
     view.supports_control_lines = true;
     view.serial = settings;
+    view.stats.started = vss::clock_type::now();
     view.path = target;
     view.description = QStringLiteral("Mock fixture %1").arg(target);
     view.studio_only = true;
@@ -196,6 +210,7 @@ FakeStudioBackend::attach_serial(const QString& name, const QString& uri,
     view.open = true;
     view.supports_control_lines = view.kind == vss::endpoint_kind::physical;
     view.serial = settings;
+    view.stats.started = vss::clock_type::now();
     view.path = uri;
     view.description = uri;
     view.studio_only = false;
@@ -420,6 +435,14 @@ vss::result<void> FakeStudioBackend::send(vss::endpoint_id id,
         return vss::make_error_code(vss::errc::not_open);
     sent_.push_back(data);
     view->stats.bytes_tx += static_cast<std::uint64_t>(data.size());
+    view->stats.last_activity = vss::clock_type::now();
+    traffic_view record;
+    record.endpoint = id;
+    record.name = view->name;
+    record.direction = vss::data_direction::tx;
+    record.data = data;
+    record.when = view->stats.last_activity;
+    traffic_.push_back(std::move(record));
     refresh();
     return {};
 }
