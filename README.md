@@ -40,8 +40,9 @@ abstraction that puts the transport behind a seam.
 ## Building
 
 Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers, and a
-checkout of [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial). Qt 6 is optional
-and only needed for the GUI.
+checkout of [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial).
+Qt 6 is optional and only needed for the GUI; the `*-gui` presets make a
+missing Qt an error instead of silently building the CLI alone.
 
 > **Dependency status.** Boost.VirtualSerial is still developed in a private
 > repository, so this one currently builds only where that checkout is
@@ -68,10 +69,39 @@ On Windows, run the configure and build from a Visual Studio developer prompt
 automatically when it is named `boostasio-virtualserial` next to this
 repository, and its `.cache/boost-root` is used for Boost.
 
-Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_BUILD_TOOLS`,
-`VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`, `VSS_WARNINGS_AS_ERRORS`,
-`VSS_INSTALL`. `CMakePresets.json` provides `debug`, `release`, `coverage`,
-`perf` and `tracy`.
+Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
+`VSS_BUILD_TOOLS`, `VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`,
+`VSS_WARNINGS_AS_ERRORS`, `VSS_INSTALL`.
+
+`CMakePresets.json` provides:
+
+| Preset | What it builds |
+|---|---|
+| `debug`, `release` | Tests and tools; GUI when Qt is found |
+| `debug-gui`, `release-gui` | The same plus the GUI; **fails** if Qt is missing |
+| `coverage`, `coverage-unix` | Instrumented libraries, no GUI |
+| `perf` | Performance suite, no GUI |
+| `tracy` | Performance suite with Tracy, no GUI |
+
+The GUI presets read the `QT_ROOT` environment variable:
+
+```bash
+# Linux example
+export QT_ROOT=$HOME/Qt/6.10.3/gcc_64
+cmake --preset release-gui
+cmake --build --preset release-gui
+ctest --preset debug-gui
+
+# Windows (from a vcvars64 prompt)
+set QT_ROOT=C:\Qt\6.10.3\msvc2022_64
+cmake --preset release-gui
+cmake --build --preset release-gui
+```
+
+`QT_ROOT` is the directory that contains `lib/cmake/Qt6`. If it is unset and
+Qt is not on `CMAKE_PREFIX_PATH`, the `*-gui` presets stop with an explanatory
+error; `-DVSS_GUI_REQUIRED=OFF` restores the old "build the CLI only"
+behaviour.
 
 `VSS_TRACY` is on by default in Debug builds configured through the vcpkg
 toolchain and off in Release. Pass `-DVSS_TRACY=ON` to a Release build when a

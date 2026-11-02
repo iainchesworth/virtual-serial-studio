@@ -43,6 +43,8 @@ option(VSS_BUILD_TESTS
   "Build the unit, system and integration test suites" ${VSS_IS_TOP_LEVEL})
 option(VSS_BUILD_GUI
   "Build the Qt 6 configuration GUI when Qt is found" ON)
+option(VSS_GUI_REQUIRED
+  "Fail configure when the GUI is requested but Qt 6 is missing" OFF)
 option(VSS_BUILD_PERF
   "Build the performance measurement suite" OFF)
 option(VSS_BUILD_TOOLS

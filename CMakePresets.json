@@ -22,7 +22,7 @@
     {
       "name": "debug",
       "inherits": "base",
-      "displayName": "Debug (tests, tools, GUI)",
+      "displayName": "Debug (tests, tools; GUI when Qt is found)",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
@@ -30,10 +30,26 @@
     {
       "name": "release",
       "inherits": "base",
-      "displayName": "Release",
+      "displayName": "Release (GUI when Qt is found)",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "VSS_BUILD_PERF": "ON"
+      }
+    },
+    {
+      "name": "debug-gui",
+      "inherits": "debug",
+      "displayName": "Debug GUI (requires QT_ROOT)",
+      "cacheVariables": {
+        "VSS_GUI_REQUIRED": "ON"
+      }
+    },
+    {
+      "name": "release-gui",
+      "inherits": "release",
+      "displayName": "Release GUI (requires QT_ROOT)",
+      "cacheVariables": {
+        "VSS_GUI_REQUIRED": "ON"
       }
     },
     {
@@ -91,6 +107,8 @@
   "buildPresets": [
     { "name": "debug", "configurePreset": "debug" },
     { "name": "release", "configurePreset": "release" },
+    { "name": "debug-gui", "configurePreset": "debug-gui" },
+    { "name": "release-gui", "configurePreset": "release-gui" },
     { "name": "coverage", "configurePreset": "coverage" },
     { "name": "coverage-unix", "configurePreset": "coverage-unix" },
     { "name": "perf", "configurePreset": "perf" },
@@ -106,6 +124,12 @@
     {
       "name": "release",
       "configurePreset": "release",
+      "output": { "outputOnFailure": true },
+      "execution": { "timeout": 600 }
+    },
+    {
+      "name": "debug-gui",
+      "configurePreset": "debug-gui",
       "output": { "outputOnFailure": true },
       "execution": { "timeout": 600 }
     }
