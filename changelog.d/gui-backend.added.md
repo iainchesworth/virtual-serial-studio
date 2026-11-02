@@ -9,5 +9,6 @@ freed memory; it batches by the refresh interval and caps the queue with a
 dropped count. The capability table in `docs/gui-design/implementation-plan.md`
 marks peer-open detection, line wiring, fault injection, rename and benchmark
 as unavailable so later screens can degrade visibly instead of simulating
-them. Nine backend tests cover the fake, link shapes, owner validation,
-snapshot round trips, coalescing, the queue cap and the shutdown race.
+them. Ten backend tests cover the fake, link shapes, owner validation,
+snapshot round trips, coalescing, the queue cap, restart and the shutdown
+race.

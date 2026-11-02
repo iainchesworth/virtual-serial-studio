@@ -103,10 +103,10 @@ private:
     std::optional<vss::error_code> take_error();
     port_view* find_port(vss::endpoint_id id);
     link_view* find_link(vss::link_id id);
-    void add_link(link_shape shape, vss::link_mode mode,
-                  const std::vector<vss::endpoint_id>& sources,
-                  const std::vector<vss::endpoint_id>& targets,
-                  const vss::link_options& options);
+    vss::link_id add_link(link_shape shape, vss::link_mode mode,
+                          const std::vector<vss::endpoint_id>& sources,
+                          const std::vector<vss::endpoint_id>& targets,
+                          const vss::link_options& options);
 
     capabilities caps_;
     std::vector<port_view> ports_;

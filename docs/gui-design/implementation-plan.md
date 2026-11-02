@@ -185,7 +185,7 @@ Two layers are added:
    `tests/framework/test_framework.hpp` macros. A small Qt-aware `main`
    iterates `vss_test::registry()`. It covers the fake backend, the event
    bridge, coalescing, the queue cap and the shutdown race. Registered as
-   CTest `gui_backend` in the GUI CMake fragment, so it only exists when Qt
+   CTest `gui_backend` in `tests/CMakeLists.txt`, so it only exists when Qt
    does. No new third-party test dependency.
 2. **`--selftest` additions** (WP1 and WP9) for things that need a real
    widget tree: gallery instantiation, light/dark, 100/200 percent,
@@ -236,8 +236,9 @@ thread:
   in-flight sink delivery after `unsubscribe` writes into live memory;
 - the bridge must be destroyed before the hub/studio that owns it. `main`
   owns the studio before the window, so the window (and bridge) is destroyed
-  first; the tests cover the reverse-order failure the architecture note warns
-  about.
+  first; the tests cover an in-flight delivery and a publisher that is still
+  running when the bridge is destroyed, which is the shutdown race the
+  architecture note warns about.
 
 The timer-drained queue is the "queued delivery" implementation: it is
 cross-thread safe without touching a `QObject` pointer from the engine thread,

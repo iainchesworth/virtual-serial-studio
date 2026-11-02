@@ -130,11 +130,9 @@ public:
 Q_SIGNALS:
     void ports_changed();
     void links_changed();
-    void devices_changed();
     void lines_changed(vss::endpoint_id id);
     /// One coalesced batch of engine events, on the GUI thread.
     void batch_ready(const vss::gui::event_batch& events);
-    void operation_failed(const QString& operation, const QString& error);
 };
 
 } // namespace vss::gui

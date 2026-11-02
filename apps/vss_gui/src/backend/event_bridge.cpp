@@ -83,7 +83,14 @@ void EventBridge::start()
     if (running_)
         return;
 
+    // A restart starts clean: do not deliver anything queued before stop().
+    state_->accepting.store(false);
+    {
+        std::lock_guard lock(state_->mutex);
+        state_->events.clear();
+    }
     state_->accepting.store(true);
+
     subscription_ = hub_.subscribe(
         {},
         [state = state_](const vss::endpoint_event& event)

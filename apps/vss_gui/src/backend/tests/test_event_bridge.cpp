@@ -165,6 +165,44 @@ TEST_CASE("event bridge: stop unsubscribes but keeps the shared queue alive")
     hub.join();
 }
 
+TEST_CASE("event bridge: restart drops events queued before stop")
+{
+    vss::hub hub{make_hub_options()};
+    hub.start();
+
+    vss::gui::EventBridge::options options;
+    options.interval_ms = 60000;
+
+    {
+        vss::gui::EventBridge bridge(hub, options);
+        int batches = 0;
+        QObject::connect(&bridge, &vss::gui::EventBridge::batch_ready, &bridge,
+                         [&batches](const vss::gui::event_batch&)
+                         { ++batches; });
+
+        bridge.start();
+        for (int index = 0; index < 3; ++index)
+            hub.publish(make_event(index));
+        for (int index = 0; index < 500 && bridge.delivered() < 3; ++index)
+            spin(2);
+        REQUIRE_EQ(bridge.delivered(), std::uint64_t{3});
+
+        bridge.stop();
+        bridge.start();
+        bridge.flush();
+        REQUIRE_EQ(batches, 0);
+
+        hub.publish(make_event(99));
+        for (int index = 0; index < 500 && bridge.delivered() < 4; ++index)
+            spin(2);
+        bridge.flush();
+        REQUIRE_EQ(batches, 1);
+    }
+
+    hub.stop();
+    hub.join();
+}
+
 TEST_CASE("event bridge: survives a publisher during shutdown")
 {
     vss::hub hub{make_hub_options()};
@@ -183,6 +221,10 @@ TEST_CASE("event bridge: survives a publisher during shutdown")
                 std::this_thread::yield();
             }
         });
+
+    for (int index = 0; index < 500 && published.load() == 0; ++index)
+        spin(1);
+    REQUIRE(published.load() > 0);
 
     vss::gui::EventBridge::options options;
     options.interval_ms = 1;

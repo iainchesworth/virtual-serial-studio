@@ -61,7 +61,6 @@ void FakeStudioBackend::set_peer_state(vss::endpoint_id id, peer_state state)
 void FakeStudioBackend::set_devices(std::vector<device_view> devices)
 {
     devices_ = std::move(devices);
-    Q_EMIT devices_changed();
 }
 
 std::optional<port_view> FakeStudioBackend::port(vss::endpoint_id id) const
@@ -145,9 +144,10 @@ FakeStudioBackend::create_virtual_port(const QString& name,
     view.path = path_for(kind, view.name, view.id);
     view.description = QStringLiteral("Virtual port %1").arg(view.name);
     view.studio_only = kind == vss::virtual_port_kind::loopback;
+    const vss::endpoint_id id = view.id;
     ports_.push_back(std::move(view));
     refresh();
-    return ports_.back().id;
+    return id;
 }
 
 vss::result<vss::endpoint_id>
@@ -175,9 +175,10 @@ FakeStudioBackend::create_mock_port(const QString& name,
     view.path = target;
     view.description = QStringLiteral("Mock fixture %1").arg(target);
     view.studio_only = true;
+    const vss::endpoint_id id = view.id;
     ports_.push_back(std::move(view));
     refresh();
-    return ports_.back().id;
+    return id;
 }
 
 vss::result<vss::endpoint_id>
@@ -198,9 +199,10 @@ FakeStudioBackend::attach_serial(const QString& name, const QString& uri,
     view.path = uri;
     view.description = uri;
     view.studio_only = false;
+    const vss::endpoint_id id = view.id;
     ports_.push_back(std::move(view));
     refresh();
-    return ports_.back().id;
+    return id;
 }
 
 vss::result<void> FakeStudioBackend::remove_port(vss::endpoint_id id)
@@ -234,9 +236,8 @@ FakeStudioBackend::connect_ports(vss::endpoint_id first,
     if (!find_port(first) || !find_port(second))
         return vss::make_error_code(vss::errc::not_found);
 
-    add_link(link_shape::two_way, vss::link_mode::duplex, {first}, {second},
-             options);
-    return links_.back().id;
+    return add_link(link_shape::two_way, vss::link_mode::duplex, {first},
+                    {second}, options);
 }
 
 vss::result<vss::link_id>
@@ -256,9 +257,8 @@ FakeStudioBackend::split(vss::endpoint_id source,
             return vss::make_error_code(vss::errc::invalid_argument);
     }
 
-    add_link(link_shape::split, vss::link_mode::duplex, {source}, targets,
-             options);
-    return links_.back().id;
+    return add_link(link_shape::split, vss::link_mode::duplex, {source},
+                    targets, options);
 }
 
 vss::result<vss::link_id>
@@ -278,9 +278,8 @@ FakeStudioBackend::join(const std::vector<vss::endpoint_id>& sources,
             return vss::make_error_code(vss::errc::invalid_argument);
     }
 
-    add_link(link_shape::join, vss::link_mode::one_way, sources, {target},
-             options);
-    return links_.back().id;
+    return add_link(link_shape::join, vss::link_mode::one_way, sources,
+                    {target}, options);
 }
 
 vss::result<vss::link_id>
@@ -294,9 +293,8 @@ FakeStudioBackend::redirect(vss::endpoint_id from, vss::endpoint_id to,
     if (!find_port(from) || !find_port(to))
         return vss::make_error_code(vss::errc::not_found);
 
-    add_link(link_shape::one_way, vss::link_mode::one_way, {from}, {to},
-             options);
-    return links_.back().id;
+    return add_link(link_shape::one_way, vss::link_mode::one_way, {from}, {to},
+                    options);
 }
 
 vss::result<vss::link_id> FakeStudioBackend::monitor(vss::endpoint_id from,
@@ -311,18 +309,19 @@ vss::result<vss::link_id> FakeStudioBackend::monitor(vss::endpoint_id from,
 
     vss::link_options options;
     options.emulate_modem_lines = false;
-    add_link(link_shape::monitor, vss::link_mode::one_way, {from}, {to},
-             options);
-    return links_.back().id;
+    return add_link(link_shape::monitor, vss::link_mode::one_way, {from}, {to},
+                    options);
 }
 
-void FakeStudioBackend::add_link(link_shape shape, vss::link_mode mode,
-                                 const std::vector<vss::endpoint_id>& sources,
-                                 const std::vector<vss::endpoint_id>& targets,
-                                 const vss::link_options& options)
+vss::link_id
+FakeStudioBackend::add_link(link_shape shape, vss::link_mode mode,
+                            const std::vector<vss::endpoint_id>& sources,
+                            const std::vector<vss::endpoint_id>& targets,
+                            const vss::link_options& options)
 {
     link_view view;
     view.id = next_link_++;
+    const vss::link_id link_id = view.id;
     view.shape = shape;
     view.mode = mode;
     view.options = options;
@@ -334,6 +333,7 @@ void FakeStudioBackend::add_link(link_shape shape, vss::link_mode mode,
         view.targets.push_back(id);
     links_.push_back(std::move(view));
     refresh();
+    return link_id;
 }
 
 vss::result<void> FakeStudioBackend::disconnect(vss::link_id id)
