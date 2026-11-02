@@ -19,8 +19,9 @@ gates pass.
 
 ## WP0 detail
 
-- Installed the bundle at `docs/gui-design/` (100 files; `agents/` and the
-  bundle ZIP excluded).
+- Installed the bundle at `docs/gui-design/` (98 files; `agents/`, the bundle
+  ZIP and the two generated QSS previews excluded, the last per the bundle
+  README's "do not commit" note).
 - Wrote `docs/gui-design/implementation-plan.md`: current GUI inventory, every
   engine symbol the specs need, the capability table re-verified against the
   source, the module layout, the CMake pattern, the self-test plan and the

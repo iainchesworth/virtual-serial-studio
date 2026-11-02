@@ -212,7 +212,7 @@ Screens hold a `StudioBackend&`, never a `vss::studio&`.
   `bool studio_only` (a loopback or mock endpoint). The real backend reports
   `Unknown` until the engine can observe a peer open; the fake can set any
   state for tests.
-- `capabilities()` is const and is the only place a screen asks whether a
+- `caps()` is const and is the only place a screen asks whether a
   control exists. `line_matrix`, `peer_open`, `faults`, `rename`, `undo` and
   `benchmark` are false in the real backend today.
 - Signals: `ports_changed`, `links_changed`, `devices_changed`,
@@ -317,4 +317,8 @@ and it coalesces by construction.
    is treated as a typo.
 6. **Bundle contents.** `agents/` and the bundle ZIP are not copied into the
    repository. `README.md` and all `docs/`, `tokens/`, `icons/`, `tools/`,
-   `prompts/` and `reference/` files are copied byte-for-byte.
+   `prompts/` and `reference/` files are copied byte-for-byte, except the two
+   generated previews `tokens/style.light.qss` and `tokens/style.dark.qss`.
+   The bundle README says not to commit those; `tokens/style.qss.in` and
+   `tokens/tokens.json` are the authoritative sources and `gen_qss.py`
+   regenerates the previews into a build directory.
