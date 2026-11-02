@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "name": "two-programs-owner",
+  "description": "Two programs joined into one device, with an owner so writes never collide.",
+  "ports": [
+    {
+      "name": "recipe-tool",
+      "kind": "virtual",
+      "virtual_kind": "auto",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "qa-runner",
+      "kind": "virtual",
+      "virtual_kind": "auto",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "device",
+      "kind": "mock",
+      "mock_target": "scripted",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    }
+  ],
+  "links": [
+    {
+      "mode": "join",
+      "sources": ["recipe-tool", "qa-runner"],
+      "targets": ["device"],
+      "emulate_modem_lines": false,
+      "policy": "owner"
+    }
+  ]
+}

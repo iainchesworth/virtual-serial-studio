@@ -80,6 +80,9 @@ public:
     void set_title(const QString& title);
     void set_description(const QString& description);
     void set_meta(const QString& meta);
+    /// A short mono glyph shown at the right of the card, for example a link
+    /// shape such as "A = B".  Decorative: it is not part of the radio's name.
+    void set_trailing(const QString& trailing);
     void set_selected(bool selected);
     bool is_selected() const;
     QRadioButton* radio() const noexcept { return radio_; }
@@ -97,6 +100,7 @@ private:
     QLabel* title_ = nullptr;
     QLabel* description_ = nullptr;
     QLabel* meta_ = nullptr;
+    QLabel* trailing_ = nullptr;
 };
 
 /// A 34 by 18 switch with a label that states its state.

@@ -97,6 +97,8 @@ public:
     void set_kind(kind value);
     kind get_kind() const noexcept { return kind_; }
     void set_text(const QString& text);
+    /// Rich text for display, with a plain sentence for assistive technology.
+    void set_text(const QString& text, const QString& accessible_text);
     QString text() const;
 
     void set_action(const QString& text, std::function<void()> callback = {});
@@ -114,6 +116,7 @@ private:
     QLabel* icon_ = nullptr;
     QLabel* text_ = nullptr;
     QPushButton* action_ = nullptr;
+    QString accessible_text_;
 };
 
 /// A live result sentence; an info note whose text follows the form.
@@ -123,6 +126,7 @@ public:
     explicit ResultSentence(QWidget* parent = nullptr);
 
     void set_result_text(const QString& text);
+    void set_result_text(const QString& text, const QString& accessible_text);
 };
 
 } // namespace vss::gui

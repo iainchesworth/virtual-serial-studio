@@ -35,6 +35,16 @@ public:
     void set_peer_state(vss::endpoint_id id, peer_state state);
     void set_devices(std::vector<device_view> devices);
     void set_facts(const setup_facts& facts) { facts_ = facts; }
+    /// Windows-style free driver pairs for `share_serial`; -1 keeps the
+    /// pseudo-terminal behaviour.  Matches the share plan's free-pair count
+    /// in tests that exercise the read-only warning and studio-only rows.
+    void set_free_pairs(int count) { free_pairs_ = count; }
+    /// Makes `share_serial` fail while creating this listener, after the
+    /// source and earlier listeners exist, so the rollback path is exercised.
+    void fail_share_listener(int index, vss::error_code error)
+    {
+        share_failure_ = {index, error};
+    }
     /// The next fallible call returns this error and consumes it.
     void fail_next(vss::error_code error) { next_error_ = error; }
 
@@ -101,6 +111,7 @@ public:
                                          int listeners) override;
     vss::result<vss::link_id> bridge(const QString& from_uri,
                                      const QString& to_uri) override;
+    vss::result<void> create_com0com_pair() override;
 
     bool hub_running() const override { return true; }
     void refresh() override;
@@ -128,6 +139,9 @@ private:
     vss::endpoint_id next_port_ = 1;
     vss::link_id next_link_ = 1;
     int refresh_interval_ms_ = 250;
+    int free_pairs_ = -1;
+    int next_com_number_ = 7;
+    std::optional<std::pair<int, vss::error_code>> share_failure_;
 };
 
 } // namespace vss::gui

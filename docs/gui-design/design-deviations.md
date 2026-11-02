@@ -611,3 +611,128 @@ the values as public compile definitions on `vss_gui_support`, so the About
 dialog and its tests see the same values as the executable. The definitions
 fall back to "unknown" if the values are missing, and no secret or machine name
 is included.
+
+## WP6
+
+### The network bridge has no server role
+
+The design's default is "Wait for other computers to connect (server)". WP6
+re-checked Boost.VirtualSerial: `tcp_bridge_port` and `udp_bridge_port` only
+resolve and connect, there is no acceptor or bind path, and
+`vss::studio::bridge` attaches both URIs as clients. The server role cannot be
+built without an engine change, which this package is not allowed to make.
+
+`capabilities::network_server` is added and is false in the real adapter. The
+network dialog defaults to the client role, disables the server option with
+the tooltip "Not available in this build", and shows a visible warning that
+this build can connect to a server but cannot wait for one. The firewall note
+is therefore not shown in this build; it appears when a backend reports the
+capability. URI preview, validation and the client bridge are real. The
+bundled "Device on the network" template uses a loopback client target
+(`tcp://127.0.0.1:4001`) for the same reason and still validates.
+
+### Create another pair is a GUI adapter method
+
+The share wizard's "Create another pair" needs `vss::create_com0com_pair`,
+which the studio facade does not expose. WP6 adds one narrow method,
+`StudioBackend::create_com0com_pair()`, implemented by the real adapter with
+the elevation prompt and by the fake backend for tests. It is gated by
+`capabilities::com0com_pair_creation` (false off Windows) and documented for
+WP5 to reuse. No library behaviour changed.
+
+### Real-device templates wait for the Attach flow
+
+`share-three-programs` and `device-on-the-network` open a real serial device.
+The design says the device is chosen through Attach, which belongs to WP5 and
+does not exist on this branch. WP6 does not guess a device: those template
+cards say "Needs a real device", the "Use template" button is disabled while
+one is selected, and an info note says to use Ports, Attach a real device
+first. The templates still load and validate in the unit tests, and the
+dialog returns their documents once WP5 supplies the device flow.
+
+### Share step 3 shows Open until the engine can see a program
+
+`Capabilities::peer_open` is false, so a real backend reports
+`peer_state::unknown`. The Ready table then shows the "Open" chip and the
+result note omits the sentence about Waiting labels changing, following
+`08-engine-gaps.md`. A backend that reports a definite `not_open` or `open`
+shows "Waiting for program" or "Program connected"; the fake backend and the
+tests cover both mappings. The engine work to detect an outside program is
+unchanged.
+
+### Add another program re-runs the one-step share
+
+The engine has no add-listener operation: `studio::share_serial` creates the
+source, every listener and the split link as one rollback unit. From step 3,
+"Add another program" therefore goes back to step 2, and the next "Share
+device" removes the previous share and creates the complete new one. A failed
+replacement reports "The previous share was removed. Check the device, then
+try again." A first share failure keeps the "The studio is unchanged"
+sentence. The alternative, silently adding a listener outside the engine's
+rollback unit, would not leave a failed share recoverable.
+
+### Error pattern is inline in these dialogs
+
+The shared error pattern in `screens/06` is a dialog. Connect, Share and the
+network endpoint render the same danger title, cause and "Copy details" as an
+inline panel so the wizard keeps its step and the entered values. A refused
+link keeps the Connect dialog open exactly as the screen says. The "Show the
+loop" button is not present because highlighting a cycle is WP4 topology
+work; the loop sentence names the pair instead.
+
+### Toolbar-only Advanced Share
+
+The IA adds Share to the Advanced toolbar while the Topology menu keeps it in
+Simple. `topology.shareToolbar` is a second, Advanced-only action placed on the
+toolbar. `action_spec` gains a `palette` flag and this action sets it false,
+so the command palette does not list the same command twice. No existing menu
+action changed level or position.
+
+### Copy added where the deck is silent
+
+The following sentences are new because the specs do not name them: the
+self-link reason ("A port cannot link to itself. Choose a different port."),
+the connect result toasts ("Connected A and B.", "Redirected A to B.",
+"Monitoring A on B.", "Split A to B and C.", "Joined A and B into C."), the
+client-role result sentence ("Studio connects to X on port N and talks to
+Y..."), the capability note, the validation sentence for a missing or invalid
+address and the hint for a port outside 1 to 65535, "Turn on Advanced mode"
+in the join More options row, "Use a device instead" in the share wizard, the
+"No serial device is available" note, and the Templates note that a setup
+needs Attach. All use the shared vocabulary and sentence case.
+
+### Free-pair prediction and device settings
+
+The share wizard predicts a port for each program before the engine runs:
+each unclaimed com0com pair contributes the end the studio advertises (the
+second end; the engine tries that order), and programs beyond the free pairs
+are predicted as `loopback:listener-N`. The Ready step always uses the real
+ports returned by `share_serial`. On platforms without com0com the planned
+cell reads "PTY". Device settings are carried in the share URI's query string,
+so no engine signature changed.
+
+### Recent setups keep the WP2 keys and add per-file metadata
+
+The launcher still reads `ui/recentFiles` and `ui/recentSummary`. WP6 adds
+`ui/recentEntries/<sha1>/summary` and `.../lastOpened` for the Recent table,
+recorded by `record_recent()`. The file list stays the ordering source, capped
+at ten, and nothing is stored outside `QSettings`.
+
+### No Qt Network module for the listen address
+
+The design allows "a specific address" on the Listen on combo. Enumerating
+local interfaces would add `Qt6::Network`, which is not an approved dependency
+for this GUI. The combo offers all interfaces, this PC only, and a specific
+address field instead; Advanced address editing accepts the full URI. This
+covers the same values without a new module.
+
+### Small widget extensions
+
+`PickCard` gained `set_trailing()` for the A-to-B mode glyphs and now keeps its
+content at the top with a fixed vertical policy, so template cards no longer
+stretch. `NoteBanner` and `ResultSentence` gained a rich-text overload that
+carries a plain accessible sentence, which keeps bold port names out of the
+screen-reader text. `ActionRegistry` gained the `palette` placement flag
+described above. The new QSS rules are `QLabel[secondary="true"]`,
+`QFrame[dashed="true"]`, `QFrame[spin="true"]` and `QFrame#dialogFooter`; all
+use existing tokens.

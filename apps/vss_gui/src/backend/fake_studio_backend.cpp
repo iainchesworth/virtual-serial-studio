@@ -680,14 +680,45 @@ vss::result<share_view> FakeStudioBackend::share_serial(const QString& uri,
     std::vector<vss::endpoint_id> created;
     for (int index = 0; index < listeners; ++index)
     {
-        const auto listener = create_auto_port(
-            QStringLiteral("listener-%1").arg(index + 1), true);
-        if (!listener)
+        if (share_failure_ && share_failure_->first == index)
         {
+            const vss::error_code error = share_failure_->second;
+            share_failure_.reset();
             for (const vss::endpoint_id id : created)
                 static_cast<void>(remove_port(id));
             static_cast<void>(remove_port(*source));
-            return listener.error();
+            return error;
+        }
+        const QString name = QStringLiteral("listener-%1").arg(index + 1);
+        std::optional<vss::endpoint_id> listener;
+        if (free_pairs_ < 0 || index < free_pairs_)
+        {
+            // Mirror a Windows auto port: open one end of a free driver pair
+            // and advertise the other.
+            port_view view;
+            view.id = next_port_++;
+            view.name = unique_name(name);
+            view.kind = vss::endpoint_kind::virtual_port;
+            view.state = vss::endpoint_state::open;
+            view.open = true;
+            view.supports_control_lines = true;
+            view.path = QStringLiteral("COM%1").arg(next_com_number_++);
+            view.description = QStringLiteral("Virtual port %1").arg(view.name);
+            listener = view.id;
+            ports_.push_back(std::move(view));
+        }
+        else
+        {
+            const auto made = create_virtual_port(
+                name, vss::virtual_port_kind::loopback, true);
+            if (!made)
+            {
+                for (const vss::endpoint_id id : created)
+                    static_cast<void>(remove_port(id));
+                static_cast<void>(remove_port(*source));
+                return made.error();
+            }
+            listener = *made;
         }
         created.push_back(*listener);
     }
@@ -735,6 +766,51 @@ vss::result<vss::link_id> FakeStudioBackend::bridge(const QString& from_uri,
         return link.error();
     }
     return *link;
+}
+
+vss::result<void> FakeStudioBackend::create_com0com_pair()
+{
+    if (const auto error = take_error())
+        return *error;
+
+    int next_pair = 0;
+    int highest_com = 0;
+    for (const auto& device : devices_)
+    {
+        if (device.com0com && device.com0com_pair >= 0)
+            next_pair = std::max(next_pair, device.com0com_pair + 1);
+        const QString path = device.path;
+        if (path.startsWith(QStringLiteral("COM"), Qt::CaseInsensitive))
+        {
+            bool ok = false;
+            const int number = path.mid(3).toInt(&ok);
+            if (ok)
+                highest_com = std::max(highest_com, number);
+        }
+    }
+    next_com_number_ = std::max(next_com_number_, highest_com + 1);
+
+    device_view first;
+    first.path = QStringLiteral("COM%1").arg(next_com_number_++);
+    first.description = QStringLiteral("com0com pair end");
+    first.virtual_device = true;
+    first.com0com = true;
+    first.com0com_pair = next_pair;
+    first.com0com_side = QStringLiteral("A");
+    devices_.push_back(first);
+
+    device_view second;
+    second.path = QStringLiteral("COM%1").arg(next_com_number_++);
+    second.description = QStringLiteral("com0com pair end");
+    second.virtual_device = true;
+    second.com0com = true;
+    second.com0com_pair = next_pair;
+    second.com0com_side = QStringLiteral("B");
+    devices_.push_back(second);
+
+    facts_.com0com_found = true;
+    facts_.com0com_pairs += 1;
+    return {};
 }
 
 void FakeStudioBackend::refresh()

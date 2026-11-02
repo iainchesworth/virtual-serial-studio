@@ -116,3 +116,11 @@ if(TARGET vss_gui_support_tests)
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
+
+# Connect, share, network and template dialogs (WP6).
+if(TARGET vss_gui_dialogs_tests)
+  add_test(NAME gui_dialogs COMMAND vss_gui_dialogs_tests --verbose)
+  set_tests_properties(gui_dialogs PROPERTIES
+    TIMEOUT 240
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()

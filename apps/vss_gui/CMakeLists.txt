@@ -84,6 +84,9 @@ add_subdirectory(src/advanced)
 # settings, About, shortcuts.
 add_subdirectory(src/support)
 
+# Connect, share, network and template dialogs (WP6).
+add_subdirectory(src/dialogs)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 
@@ -98,6 +101,7 @@ target_link_libraries(vss_gui PRIVATE
   vss_gui_theme
   vss_gui_widgets
   vss_gui_panes
+  vss_gui_dialogs
   vss_gui_support
   vss_gui_shell)
 

@@ -9,6 +9,7 @@
 #include "backend/event_bridge.hpp"
 
 #include <vss/core/hub.hpp>
+#include <vss/ports/com0com.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QMetaObject>
@@ -151,7 +152,14 @@ EngineStudioBackend::~EngineStudioBackend()
 
 capabilities EngineStudioBackend::caps() const
 {
-    return capabilities{};
+    capabilities caps = capabilities{};
+    // The engine's network backends only connect; there is no listener path
+    // in Boost.VirtualSerial or `vss::studio::bridge` today.
+    caps.network_server = false;
+#if !defined(_WIN32)
+    caps.com0com_pair_creation = false;
+#endif
+    return caps;
 }
 
 vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(
@@ -461,6 +469,33 @@ vss::result<vss::link_id> EngineStudioBackend::bridge(const QString& from_uri,
         return linked.error();
     rebuild();
     return *linked;
+}
+
+vss::result<void> EngineStudioBackend::create_com0com_pair()
+{
+#if defined(_WIN32)
+    const vss::com0com_installation installation = studio_.detect_com0com();
+    if (!installation.found)
+        return vss::make_error_code(vss::errc::unsupported);
+
+    // Pick the two COM numbers above every number the OS already reports.
+    int highest = 0;
+    for (const auto& device : studio_.serial_devices())
+    {
+        const QString path = QString::fromStdString(device.path);
+        if (!path.startsWith(QStringLiteral("COM"), Qt::CaseInsensitive))
+            continue;
+        bool ok = false;
+        const int number = path.mid(3).toInt(&ok);
+        if (ok)
+            highest = std::max(highest, number);
+    }
+    const std::string first = "COM" + std::to_string(highest + 1);
+    const std::string second = "COM" + std::to_string(highest + 2);
+    return vss::create_com0com_pair(installation, first, second, true);
+#else
+    return vss::make_error_code(vss::errc::unsupported);
+#endif
 }
 
 bool EngineStudioBackend::hub_running() const

@@ -12,7 +12,7 @@ gates pass.
 | WP3 | `gui/wp3-data-panes` | implemented, self-review complete | Debug `ctest` 8/8, Release 9/9, 7/7 pane tests, simple/advanced/dark/compact PNGs, `vss_gui --selftest` ok, changelog/format clean | self-review; pending G2 | ports, inspector, send, monitor, status data, selection; legacy sources leave the executable |
 | WP4 | `gui/wp4-topology` | implemented, self-review complete | Debug `ctest` 8/8 on its branch, 18 topology tests, light and dark review PNGs, changelog/contrast/QSS/format clean | self-review; pending G2 | topology view, layout, keyboard, a11y summary, links list, shell wiring; WP6/WP7 actions stay placeholders |
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
-| WP6 | `gui/wp6-connect-share` | not started | - | - | blocked on G1 |
+| WP6 | `gui/wp6-connect-share` | implemented, self-review complete | Debug `ctest` 8/8, 30 dialog tests, 7 shell tests, `vss_gui --selftest` ok, 12 review PNGs | self-review | connect/share/network/templates dialogs, real wiring, Advanced toolbar Share |
 | WP7 | `gui/wp7-advanced` | implemented, self-review complete | Debug `ctest` 8/8, 15 advanced tests, 16 review PNGs, changelog/format/contrast/QSS clean | self-review | owner bar, wiring and faults, mock fixtures, topology JSON, event log, benchmark, export command |
 | WP8 | `gui/wp8-support` | implemented, self-review complete | Debug `ctest` 8/8, 15 support tests, 10 shell tests, `vss_gui --selftest` ok, Python `zipfile` round trip, contrast/QSS/changelog/format clean | self-review; human G2 pending | setup check, troubleshooting, bundle, settings, About, shortcuts, help index, confirm dialog; undo/redo disabled with a recorded reason |
 | WP9 | `gui/wp9-qa` | not started | - | - | blocked on G2 |
@@ -313,3 +313,58 @@ gates pass.
   Help contents index; setup-check and readiness copy for states the mockup
   did not specify; About adds a Boost row and summarised licences. All are in
   `design-deviations.md` (WP8).
+
+## WP6 detail
+
+- Added `apps/vss_gui/src/dialogs/`: `ConnectPortsDialog` (five modes, per-mode
+  right column, live count line, per-mode result sentences, self-link and
+  two-loopback refusal, engine cycle refusal, Advanced owner policy),
+  `ShareWizard` (three custom steps, device list, device settings, free-pair
+  plan, warn note with Create another pair and Keep the third as Studio only,
+  `share_serial` rollback, live Ready table, Copy, Open monitor),
+  `NetworkEndpointDialog` (TCP, UDP and RFC 2217, client and capability-gated
+  server roles, listen/address fields, URI and command preview, Advanced
+  address override, known bind-cause copy) and `TemplatesDialog` (four bundled
+  templates, search, Recent from QSettings, Browse, Save current setup as
+  template, Use template as an unsaved setup).
+- Added the pure helpers `network_uri` and `share_plan`, the `recent_files`
+  QSettings helper and four validated template resources in `templates.qrc`.
+- Backend additions in the GUI adapter only: `capabilities::network_server`
+  (false), `capabilities::com0com_pair_creation` (false off Windows) and
+  `StudioBackend::create_com0com_pair()` implemented by both adapters. The
+  fake gained `set_free_pairs`, `fail_share_listener` and a Windows-style
+  share path for the limited-pair tests. No library or JSON schema changes.
+- Shell wiring: `topology.connect`, `topology.share`, `ports.network` and
+  `file.templates` now open the real dialogs; `run_job` routes `connect`,
+  `share`, `network` and `templates`; the new Advanced toolbar-only
+  `topology.shareToolbar` action opens the wizard without changing the Simple
+  Topology action. Failed share and bridge attempts run with the shell's
+  loading guard so transient rollback signals do not mark the setup dirty.
+  Connect success shows a toast, bridge success shows "Bridge is running on
+  port N." with Open monitor, and templates open with the unsaved `*`.
+- Extended `PickCard` (trailing glyph, fixed vertical policy), `NoteBanner`
+  and `ResultSentence` (rich text with a plain accessible sentence),
+  `ActionRegistry` (`palette` placement flag), and the QSS template
+  (`secondary`, `dashed`, `spin` and dialog footer rules).
+- Added `vss_gui_dialogs_tests` (30 cases) registered as `gui_dialogs` in
+  `tests/CMakeLists.txt`: every connect mode, all result sentences, self-link,
+  two-loopback and cycle refusals, owner policy, share plan/free pairs and
+  warning copy, share with 1, 2 and 3 programs, limited pairs, mid-share
+  rollback, definite peer states, network source, settings URI, URI building
+  and validation for all transports, bind failure, address override,
+  templates validation/round-trip, Attach-required templates, open/save/recent,
+  search, accessible names, 24 px buttons, Escape/Enter flow and review PNGs.
+- Review PNGs (never committed): `build/debug-gui/gui-shots/connect-*.png`,
+  `share-step1-*.png`, `share-step2-*.png`, `share-step3-*.png`,
+  `network-*.png`, `templates-*.png`, both themes.
+- Checks: Debug `ctest` 8/8, 30/30 dialog tests, 7/7 shell tests,
+  `vss_gui --selftest` ok, changelog ok, clang-format clean, contrast
+  `FAILURES: 0`, QSS renders both themes.
+- Deviations and incomplete items: network server role is not in the engine
+  and is disabled with a visible reason; the share wizard's Create another
+  pair uses a new GUI adapter method; real-device templates require the WP5
+  Attach flow and are disabled with an explicit note; peer-open is unknown in
+  the real backend so step 3 shows "Open" and omits the waiting sentence;
+  Add another program re-runs the one-step share; the error pattern is inline;
+  Show the loop is WP4 work. All are recorded in `design-deviations.md`, with
+  the network and pair-creation rows added to `08-engine-gaps.md`.

@@ -952,17 +952,12 @@ TEST_CASE("shell: topology actions name the next work package")
     REQUIRE(fit != nullptr);
     REQUIRE(connect->isEnabled());
 
-    connect->trigger();
-    REQUIRE(
-        window.statusBar()->currentMessage().contains(QStringLiteral("WP6")));
-    share->trigger();
-    REQUIRE(
-        window.statusBar()->currentMessage().contains(QStringLiteral("WP6")));
-    watch->trigger();
-    REQUIRE(
-        window.statusBar()->currentMessage().contains(QStringLiteral("WP6")));
-    // WP7 has replaced the Wiring and Owner placeholders with modal tools;
-    // they are covered by the advanced suite.  Do not open a modal here.
+    // WP6/WP7 have replaced these placeholders with modal dialogs.  Their
+    // behaviour is covered by the dialogs and advanced suites; this smoke test
+    // only checks that the actions exist and Connect is usable.
+    REQUIRE(connect->isEnabled());
+    REQUIRE(share != nullptr);
+    REQUIRE(watch != nullptr);
     REQUIRE(wiring != nullptr);
     REQUIRE(owner != nullptr);
 
