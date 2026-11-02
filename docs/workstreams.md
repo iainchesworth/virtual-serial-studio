@@ -46,7 +46,7 @@ Rules that apply to every sub-session:
 
 - The maintainer authors and commits every change; no trailers, attribution or
   tool markers. `.githooks/commit-msg` enforces it.
-- Rebase on `main` before pushing; the shared harness and CI live there.
+- Rebase on `develop` before pushing; the shared harness and CI live there.
 - Keep the branch's CI green before asking for a review. Feature branches do
   not run CI on push, so dispatch it explicitly:
 
@@ -54,7 +54,7 @@ Rules that apply to every sub-session:
   gh workflow run ci.yml --ref feature/windows-com-driver
   ```
 
-- Only `main` merges; nothing lands on a branch that main cannot consume.
+- Feature branches merge into `develop`; `main` only receives release merges.
 
 ## Definition of done
 
