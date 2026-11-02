@@ -1,0 +1,237 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "test_framework.hpp"
+
+#include "theme/icon_provider.hpp"
+#include "theme/theme.hpp"
+
+#include <QColor>
+#include <QDirIterator>
+#include <QFile>
+#include <QRegularExpression>
+#include <QStringList>
+
+#include <algorithm>
+#include <cmath>
+
+namespace
+{
+
+double channel(double value)
+{
+    value /= 255.0;
+    return value <= 0.03928 ? value / 12.92
+                            : std::pow((value + 0.055) / 1.055, 2.4);
+}
+
+double luminance(const QColor& colour)
+{
+    return 0.2126 * channel(colour.red()) + 0.7152 * channel(colour.green()) +
+           0.0722 * channel(colour.blue());
+}
+
+double contrast(const QColor& first, const QColor& second)
+{
+    const double a = luminance(first);
+    const double b = luminance(second);
+    return (std::max(a, b) + 0.05) / (std::min(a, b) + 0.05);
+}
+
+void require_contrast(const QString& first, const QString& second, double need)
+{
+    const vss::gui::Theme& theme = vss::gui::Theme::instance();
+    const double ratio = contrast(theme.colour(first), theme.colour(second));
+    if (ratio + 0.0001 >= need)
+        return;
+    std::printf("contrast %s on %s is %.2f, need %.1f\n",
+                first.toUtf8().constData(), second.toUtf8().constData(), ratio,
+                need);
+    REQUIRE(false);
+}
+
+} // namespace
+
+TEST_CASE("theme: resolves tokens in both themes")
+{
+    auto& theme = vss::gui::Theme::instance();
+    theme.set_mode(vss::gui::theme_mode::light);
+    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0x18, 0x21, 0x2D));
+    REQUIRE_EQ(theme.colour(QStringLiteral("panel")), QColor(0xFF, 0xFF, 0xFF));
+    REQUIRE(theme.colour_names().size() >= 30);
+
+    theme.set_mode(vss::gui::theme_mode::dark);
+    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0xE8, 0xED, 0xF3));
+    REQUIRE_EQ(theme.colour(QStringLiteral("ground")),
+               QColor(0x11, 0x16, 0x1D));
+    REQUIRE(theme.has_colour(QStringLiteral("accent")));
+    REQUIRE(!theme.has_colour(QStringLiteral("not-a-token")));
+}
+
+TEST_CASE("theme: every QSS placeholder resolves in both themes")
+{
+    auto& theme = vss::gui::Theme::instance();
+    QFile file(QStringLiteral(":/tokens/style.qss.in"));
+    REQUIRE(file.open(QIODevice::ReadOnly));
+
+    const QString source = QString::fromUtf8(file.readAll());
+    const QRegularExpression pattern(QStringLiteral("%([A-Za-z0-9_]+)%"));
+    auto matches = pattern.globalMatch(source);
+    int count = 0;
+    while (matches.hasNext())
+    {
+        const auto match = matches.next();
+        REQUIRE(theme.has_colour(match.captured(1)));
+        ++count;
+    }
+    REQUIRE(count >= 30);
+
+    for (const auto mode :
+         {vss::gui::theme_mode::light, vss::gui::theme_mode::dark})
+    {
+        theme.set_mode(mode);
+        const QString sheet = theme.styleSheet();
+        REQUIRE(!sheet.isEmpty());
+        REQUIRE(!sheet.contains(QLatin1Char('%')));
+    }
+}
+
+TEST_CASE("theme: contrast pairs meet WCAG 2.2 AA")
+{
+    auto& theme = vss::gui::Theme::instance();
+    const auto text_pairs =
+        [](const QString& first, const QString& second, double need)
+    { require_contrast(first, second, need); };
+
+    for (const auto mode :
+         {vss::gui::theme_mode::light, vss::gui::theme_mode::dark})
+    {
+        theme.set_mode(mode);
+        text_pairs(QStringLiteral("ink"), QStringLiteral("panel"), 4.5);
+        text_pairs(QStringLiteral("ink"), QStringLiteral("ground"), 4.5);
+        text_pairs(QStringLiteral("ink"), QStringLiteral("sunken"), 4.5);
+        text_pairs(QStringLiteral("ink"), QStringLiteral("accentSoft"), 4.5);
+        text_pairs(QStringLiteral("ink2"), QStringLiteral("panel"), 4.5);
+        text_pairs(QStringLiteral("ink3"), QStringLiteral("ground"), 4.5);
+        text_pairs(QStringLiteral("accentStrong"), QStringLiteral("panel"),
+                   4.5);
+        text_pairs(QStringLiteral("onAccent"), QStringLiteral("accent"), 4.5);
+        text_pairs(QStringLiteral("onDanger"), QStringLiteral("bad"), 4.5);
+        text_pairs(QStringLiteral("ok"), QStringLiteral("okSoft"), 4.5);
+        text_pairs(QStringLiteral("amber"), QStringLiteral("amberSoft"), 4.5);
+        text_pairs(QStringLiteral("bad"), QStringLiteral("badSoft"), 4.5);
+        text_pairs(QStringLiteral("toastText"), QStringLiteral("toastBg"), 4.5);
+        text_pairs(QStringLiteral("toastLink"), QStringLiteral("toastBg"), 4.5);
+        text_pairs(QStringLiteral("noteInfoText"), QStringLiteral("accentSoft"),
+                   4.5);
+        text_pairs(QStringLiteral("noteOkText"), QStringLiteral("okSoft"), 4.5);
+        text_pairs(QStringLiteral("noteWarnText"), QStringLiteral("amberSoft"),
+                   4.5);
+        text_pairs(QStringLiteral("noteDangerText"), QStringLiteral("badSoft"),
+                   4.5);
+        text_pairs(QStringLiteral("control"), QStringLiteral("panel"), 3.0);
+        text_pairs(QStringLiteral("control"), QStringLiteral("ground"), 3.0);
+        text_pairs(QStringLiteral("focus"), QStringLiteral("panel"), 3.0);
+        text_pairs(QStringLiteral("focus"), QStringLiteral("ground"), 3.0);
+        text_pairs(QStringLiteral("trackOff"), QStringLiteral("panel"), 3.0);
+    }
+}
+
+TEST_CASE("theme: no hard-coded colours or fonts outside Theme")
+{
+    const QString root = QStringLiteral(VSS_SOURCE_DIR "/apps/vss_gui/src");
+    const QRegularExpression literal(QStringLiteral("#[0-9a-fA-F]{6}"));
+    const QRegularExpression font_literal(QStringLiteral(
+        "setFontFamily|setPointSize|setPixelSize|font-family\\s*:|"
+        "QFont\\s*\\(\\s*QStringLiteral"));
+    QStringList offenders;
+    QStringList font_offenders;
+
+    QDirIterator iterator(root,
+                          {QStringLiteral("*.cpp"), QStringLiteral("*.hpp")},
+                          QDir::Files, QDirIterator::Subdirectories);
+    while (iterator.hasNext())
+    {
+        const QString path = iterator.next();
+        if (path.contains(QStringLiteral("/theme/")) ||
+            path.contains(QStringLiteral("/tests/")))
+        {
+            continue;
+        }
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly))
+            continue;
+        const QString text = QString::fromUtf8(file.readAll());
+        if (literal.match(text).hasMatch())
+            offenders << path;
+        if (font_literal.match(text).hasMatch())
+            font_offenders << path;
+    }
+
+    for (const auto& path : offenders)
+        std::printf("hex colour literal outside Theme: %s\n",
+                    path.toUtf8().constData());
+    for (const auto& path : font_offenders)
+        std::printf("font literal outside Theme: %s\n",
+                    path.toUtf8().constData());
+    REQUIRE(offenders.isEmpty());
+    REQUIRE(font_offenders.isEmpty());
+}
+
+TEST_CASE("theme: icon cache flushes on a theme change")
+{
+    auto& theme = vss::gui::Theme::instance();
+    auto& icons = vss::gui::IconProvider::instance();
+    theme.set_mode(vss::gui::theme_mode::light);
+    icons.flush();
+    const QIcon light =
+        icons.icon(QStringLiteral("add"), vss::gui::colour_role::ink, 16);
+    REQUIRE(!light.isNull());
+    REQUIRE(icons.cache_size() > 0);
+
+    theme.set_mode(vss::gui::theme_mode::dark);
+    REQUIRE_EQ(icons.cache_size(), 0);
+
+    const QIcon dark =
+        icons.icon(QStringLiteral("add"), vss::gui::colour_role::ink, 16);
+    REQUIRE(!dark.isNull());
+    REQUIRE(icons.cache_size() > 0);
+}
+
+TEST_CASE("theme: fonts, metrics, spacing and density")
+{
+    auto& theme = vss::gui::Theme::instance();
+    REQUIRE(theme.font(vss::gui::text_style::caption).pointSizeF() <
+            theme.font(vss::gui::text_style::body).pointSizeF());
+    REQUIRE(theme.font(vss::gui::text_style::title).pointSizeF() >
+            theme.font(vss::gui::text_style::body).pointSizeF());
+    REQUIRE_EQ(theme.metric(QStringLiteral("button")), 34);
+    REQUIRE_EQ(theme.metric(QStringLiteral("minTarget")), 24);
+    REQUIRE_EQ(theme.metric(QStringLiteral("layout.ports.default")), 360);
+    REQUIRE_EQ(theme.space(2), 12);
+    REQUIRE_EQ(theme.radius(QStringLiteral("control")), 4);
+    REQUIRE_EQ(theme.size(QStringLiteral("toggleTrack")), QSize(34, 18));
+    REQUIRE_EQ(theme.size(QStringLiteral("layout.windowMin")), QSize(960, 640));
+
+    theme.set_density(vss::gui::density_mode::comfortable);
+    REQUIRE_EQ(theme.row_height(), 36);
+    theme.set_density(vss::gui::density_mode::compact);
+    REQUIRE_EQ(theme.row_height(), 28);
+    theme.set_density(vss::gui::density_mode::comfortable);
+}
+
+TEST_CASE("theme: reduced motion override zeroes the durations")
+{
+    auto& theme = vss::gui::Theme::instance();
+    qputenv("VSS_REDUCE_MOTION", QByteArrayLiteral("1"));
+    REQUIRE(theme.reduced_motion());
+    REQUIRE_EQ(theme.motion_ms(vss::gui::motion_kind::hover), 0);
+    REQUIRE_EQ(theme.motion_ms(vss::gui::motion_kind::disclosure), 0);
+    REQUIRE_EQ(theme.motion_ms(vss::gui::motion_kind::dialog), 0);
+    qunsetenv("VSS_REDUCE_MOTION");
+    // The OS setting may legitimately be on; only the override is asserted.
+    REQUIRE(theme.motion_ms(vss::gui::motion_kind::hover) >= 0);
+}

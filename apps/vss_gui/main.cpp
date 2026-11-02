@@ -6,6 +6,9 @@
 
 #include "main_window.hpp"
 
+#include "theme/theme.hpp"
+#include "widgets/gallery.hpp"
+
 #include <vss/studio/studio.hpp>
 
 #include <QApplication>
@@ -68,6 +71,15 @@ int main(int argc, char* argv[])
         QStringLiteral("file"));
     parser.addOption(screenshot_option);
     parser.process(application);
+
+    if (qEnvironmentVariableIsSet("VSS_WIDGET_GALLERY"))
+    {
+        vss::gui::Theme::instance().initialise();
+        vss::gui::WidgetGallery gallery;
+        gallery.resize(1240, 900);
+        gallery.show();
+        return application.exec();
+    }
 
     try
     {

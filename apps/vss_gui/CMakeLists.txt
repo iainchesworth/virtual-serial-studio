@@ -7,14 +7,15 @@
 # snapshots the studio on a timer and never touches widgets from hub threads.
 #
 
-find_package(Qt6 6.2 QUIET COMPONENTS Widgets)
+find_package(Qt6 6.2 QUIET COMPONENTS Widgets Svg)
 if(NOT Qt6_FOUND)
   if(VSS_GUI_REQUIRED)
     message(FATAL_ERROR
-      "Vss: the GUI was requested but Qt 6 was not found. It was searched "
-      "for in CMAKE_PREFIX_PATH, QT_ROOT, C:/Qt, C:/Repos/common/qt, ~/Qt, "
-      "/opt/Qt and /usr/local/Qt. Set QT_ROOT or CMAKE_PREFIX_PATH to your "
-      "Qt 6 installation, or configure with -DVSS_GUI_REQUIRED=OFF "
+      "Vss: the GUI was requested but Qt 6 with the Widgets and Svg modules "
+      "was not found. It was searched for in CMAKE_PREFIX_PATH, QT_ROOT, "
+      "C:/Qt, C:/Repos/common/qt, ~/Qt, /opt/Qt and /usr/local/Qt. Set "
+      "QT_ROOT or CMAKE_PREFIX_PATH to a Qt 6 installation that includes "
+      "Qt6::Svg, or configure with -DVSS_GUI_REQUIRED=OFF "
       "-DVSS_BUILD_GUI=OFF for a command-line-only build.")
   endif()
   message(STATUS "Vss: Qt 6 not found in CMAKE_PREFIX_PATH, QT_ROOT or the "
@@ -41,6 +42,12 @@ set(CMAKE_AUTOUIC OFF)
 # The adapter is a separate library so the backend tests can link it without
 # Qt Widgets.
 add_subdirectory(src/backend)
+
+# Design tokens, resources, icons and the focus style.
+add_subdirectory(src/theme)
+
+# Shared widgets built from those tokens.
+add_subdirectory(src/widgets)
 
 add_executable(vss_gui
   main.cpp
@@ -69,7 +76,12 @@ add_executable(vss_gui
   theme.hpp)
 
 target_compile_features(vss_gui PRIVATE cxx_std_23)
-target_link_libraries(vss_gui PRIVATE Vss::studio Qt6::Widgets vss_gui_backend)
+target_link_libraries(vss_gui PRIVATE
+  Vss::studio
+  Qt6::Widgets
+  vss_gui_backend
+  vss_gui_theme
+  vss_gui_widgets)
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
   execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
