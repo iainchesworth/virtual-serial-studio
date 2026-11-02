@@ -17,3 +17,5 @@ compiler, Qt runtime/build versions, OS and kernel; the window is designed to
 be copied into a bug report. Licences lists Qt, Boost, Boost.VirtualSerial,
 Tracy and the optional com0com driver; Fonts states that no fonts are bundled
 and names the system font in use.
+
+Adding virtual ports can now create several at once (up to 32 per step), with numeric name suffixes, so a machine can be filled with ports without repeating the dialog.

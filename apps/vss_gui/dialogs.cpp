@@ -188,6 +188,14 @@ AddVirtualPortDialog::AddVirtualPortDialog(QWidget* parent)
                          "available and an in-process loopback otherwise."));
     form->addRow(tr("Kind"), kind_);
 
+    count_ = new QSpinBox(this);
+    count_->setRange(1, 32);
+    count_->setValue(1);
+    count_->setToolTip(
+        tr("Create several ports at once; when more than one is "
+           "requested the names get a numeric suffix."));
+    form->addRow(tr("How many"), count_);
+
     layout->addLayout(form);
 
     auto* note = new QLabel(
@@ -214,6 +222,11 @@ vss::virtual_port_kind AddVirtualPortDialog::kind() const
     return kind_->currentData().toInt() == 2
         ? vss::virtual_port_kind::loopback
         : vss::virtual_port_kind::pty;
+}
+
+int AddVirtualPortDialog::count() const
+{
+    return count_ != nullptr ? count_->value() : 1;
 }
 
 bool AddVirtualPortDialog::automatic() const

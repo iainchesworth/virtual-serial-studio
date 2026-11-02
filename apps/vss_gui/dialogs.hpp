@@ -39,6 +39,8 @@ public:
     vss::virtual_port_kind kind() const;
     /// True when the "Auto" entry is selected.
     bool automatic() const;
+    /// How many ports to create in one step.
+    int count() const;
 
 public Q_SLOTS:
     void accept() override;
@@ -46,6 +48,7 @@ public Q_SLOTS:
 private:
     QLineEdit* name_ = nullptr;
     QComboBox* kind_ = nullptr;
+    QSpinBox* count_ = nullptr;
 };
 
 /// Name, baud and fixture target for `studio::create_mock_port`.

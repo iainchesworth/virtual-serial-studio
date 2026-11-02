@@ -852,32 +852,36 @@ void MainWindow::on_add_virtual_port()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    const auto created = studio_.create_virtual_port(
-        dialog.port_name().toStdString(), dialog.kind());
-    if (!created)
+    const int copies = dialog.count();
+    const QString base = dialog.port_name().isEmpty()
+        ? QStringLiteral("virtual-port")
+        : dialog.port_name();
+    int created_count = 0;
+    vss::endpoint_id last = 0;
+
+    for (int index = 0; index < copies; ++index)
     {
-        show_error(tr("Add virtual port"), error_text(created.error()));
-        return;
+        const QString name = copies == 1
+            ? dialog.port_name()
+            : QStringLiteral("%1-%2").arg(base).arg(index + 1);
+        const auto created = studio_.create_virtual_port(
+            name.toStdString(), dialog.kind());
+        if (!created)
+        {
+            show_error(tr("Add virtual port"), error_text(created.error()));
+            break;
+        }
+        ++created_count;
+        last = (*created)->id();
     }
 
-    const auto info = (*created)->info();
-    const std::string advertised = studio_.advertised_path((*created)->id());
+    if (created_count == 0)
+        return;
+
     set_dirty();
     refresh_now();
-    set_active_endpoint((*created)->id(), true);
-
-    log_line(tr("Created %1 virtual port \"%2\" (%3).")
-                 .arg(dialog.automatic() ? tr("auto")
-                                         : QString::fromLatin1(
-                                               vss::to_string(dialog.kind())),
-                      QString::fromStdString(info.name),
-                      advertised.empty()
-                          ? tr("no advertised path")
-                          : QString::fromStdString(advertised)));
-    statusBar()->showMessage(
-        tr("Virtual port \"%1\" created.").arg(
-            QString::fromStdString(info.name)),
-        5000);
+    set_active_endpoint(last, true);
+    log_line(tr("Created %1 virtual port(s).").arg(created_count));
 }
 
 void MainWindow::on_attach_serial()
