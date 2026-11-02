@@ -49,6 +49,9 @@ add_subdirectory(src/theme)
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
 
+# The WP5 basic flows (dialogs that call the backend adapter).
+add_subdirectory(src/flows)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 

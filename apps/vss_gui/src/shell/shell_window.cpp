@@ -6,6 +6,11 @@
 
 #include "shell/shell_window.hpp"
 
+#include "flows/add_port_dialog.hpp"
+#include "flows/attach_dialog.hpp"
+#include "flows/pair_dialog.hpp"
+#include "flows/port_ready_dialog.hpp"
+#include "flows/watch_dialog.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
@@ -194,17 +199,16 @@ void ShellWindow::build_actions()
     add(QStringLiteral("ports.add"), QStringLiteral("Add port"),
         QStringLiteral("new virtual create"), QStringLiteral("add"),
         QKeySequence(QStringLiteral("Ctrl+Shift+N")), action_level::simple,
-        [this] { placeholder(QStringLiteral("Add a port")); });
+        [this] { show_add_port(); });
     add(QStringLiteral("ports.virtual"), QStringLiteral("Virtual port"),
         QStringLiteral("new virtual create"), {}, {}, action_level::simple,
-        [this] { placeholder(QStringLiteral("Add a port")); });
+        [this] { show_add_port(); });
     add(QStringLiteral("ports.pair"), QStringLiteral("Linked pair"),
         QStringLiteral("pair two null modem"), QStringLiteral("connect"), {},
-        action_level::simple,
-        [this] { placeholder(QStringLiteral("Linked pair")); });
+        action_level::simple, [this] { show_pair(); });
     add(QStringLiteral("ports.attach"), QStringLiteral("Attach real device"),
         QStringLiteral("serial device"), QStringLiteral("device"), {},
-        action_level::simple, [this] { run_job(QStringLiteral("attach")); });
+        action_level::simple, [this] { show_attach_device(); });
     add(QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
         QStringLiteral("tcp udp rfc2217"), {}, {}, action_level::advanced,
         [this] { run_job(QStringLiteral("network")); });
@@ -234,8 +238,7 @@ void ShellWindow::build_actions()
         [this] { placeholder(QStringLiteral("Share a device")); });
     add(QStringLiteral("topology.watch"), QStringLiteral("Watch traffic"),
         QStringLiteral("monitor copy"), QStringLiteral("watch"), {},
-        action_level::simple,
-        [this] { placeholder(QStringLiteral("Watch traffic")); });
+        action_level::simple, [this] { show_watch(); });
     add(QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
         QStringLiteral("delete disconnect"), {}, {}, action_level::simple,
         later(QStringLiteral("Remove link")), false,
@@ -799,40 +802,161 @@ void ShellWindow::open_palette()
 void ShellWindow::run_job(const QString& job)
 {
     if (job == QLatin1String("add"))
-        registry_.action(QStringLiteral("ports.add"))->trigger();
+        show_add_port();
     else if (job == QLatin1String("pair"))
-        registry_.action(QStringLiteral("ports.pair"))->trigger();
-    else if (job == QLatin1String("share"))
-        registry_.action(QStringLiteral("topology.share"))->trigger();
-    else if (job == QLatin1String("watch"))
-        registry_.action(QStringLiteral("topology.watch"))->trigger();
+        show_add_port(true);
     else if (job == QLatin1String("attach"))
-    {
-        placeholder(QStringLiteral("Attach a real device"));
-        return;
-    }
+        show_attach_device();
+    else if (job == QLatin1String("share"))
+        placeholder(QStringLiteral("Share a device"));
+    else if (job == QLatin1String("watch"))
+        show_watch();
     else if (job == QLatin1String("connect"))
-    {
         placeholder(QStringLiteral("Connect ports"));
-        return;
-    }
     else if (job == QLatin1String("network"))
-    {
         placeholder(QStringLiteral("Network endpoint"));
-        return;
-    }
     else if (job == QLatin1String("mock"))
-    {
         placeholder(QStringLiteral("Mock fixture"));
+    else
+        placeholder(job);
+}
+
+void ShellWindow::show_add_port(bool pair_selected)
+{
+    AddPortDialog dialog(backend_, level_.advanced(),
+                         pair_selected ? AddPortDialog::mode::linked_pair
+                                       : AddPortDialog::mode::virtual_port,
+                         host_platform(), this);
+    connect(&dialog, &AddPortDialog::advanced_requested, this,
+            [this, &dialog]
+            {
+                level_.set_advanced(true);
+                dialog.set_advanced(true);
+            });
+    connect(&dialog, &AddPortDialog::setup_check_requested, this,
+            [this] { placeholder(QStringLiteral("Setup check")); });
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    if (dialog.wants_attach())
+    {
+        show_attach_device();
         return;
     }
+    if (dialog.created_ports().isEmpty())
+        return;
+    if (!dialog.pair_result())
+    {
+        show_port_ready(dialog.created_ports().first(),
+                        dialog.created_kind_token());
+        return;
+    }
+
+    selection_.select_port(dialog.pair_result()->first);
+    update_actions();
+    status_->showMessage(
+        tr("Linked pair created. Program A opens %1; Program B opens %2.")
+            .arg(dialog.pair_result()->first_path,
+                 dialog.pair_result()->second_path),
+        8000);
+}
+
+void ShellWindow::show_pair()
+{
+    PairDialog dialog(backend_, level_.advanced(), host_platform(), this);
+    connect(&dialog, &PairDialog::advanced_requested, this,
+            [this, &dialog]
+            {
+                level_.set_advanced(true);
+                dialog.set_advanced(true);
+            });
+    connect(&dialog, &PairDialog::setup_check_requested, this,
+            [this] { placeholder(QStringLiteral("Setup check")); });
+    if (dialog.exec() != QDialog::Accepted || !dialog.outcome())
+        return;
+    selection_.select_port(dialog.outcome()->first);
+    update_actions();
+    status_->showMessage(
+        tr("Linked pair created. Program A opens %1; Program B opens %2.")
+            .arg(dialog.outcome()->first_path, dialog.outcome()->second_path),
+        8000);
+}
+
+void ShellWindow::show_attach_device()
+{
+    AttachDialog dialog(backend_, level_.advanced(), host_platform(), this);
+    if (dialog.exec() != QDialog::Accepted || dialog.logical_port() == 0)
+        return;
+    show_port_ready(dialog.logical_port(), QStringLiteral("auto"));
+}
+
+void ShellWindow::show_watch()
+{
+    WatchDialog dialog(backend_, selection_.port(), host_platform(), this);
+    if (dialog.exec() != QDialog::Accepted || dialog.link_id() == 0)
+        return;
+    const auto source = backend_.port(dialog.source_id());
+    const auto watcher = backend_.port(dialog.watcher_id());
+    if (dialog.open_monitor_requested())
+        focus_monitor(dialog.source_id());
     else
     {
-        placeholder(job);
-        return;
+        selection_.select_port(dialog.source_id());
+        update_content();
+        if (monitor_dock_ != nullptr)
+            monitor_dock_->hide();
+        if (monitor_action_ != nullptr)
+        {
+            const QSignalBlocker blocker(monitor_action_);
+            monitor_action_->setChecked(false);
+        }
     }
-    // The actions above currently show their own placeholder; this path is
-    // here so the launcher wiring stays one call.
+    status_->showMessage(tr("Watching %1. The watcher is %2.")
+                             .arg(source ? source->path : QString(),
+                                  watcher ? watcher->name : QString()),
+                         6000);
+}
+
+void ShellWindow::show_port_ready(vss::endpoint_id port,
+                                  const QString& virtual_kind)
+{
+    if (!backend_.port(port))
+        return;
+    bool create_another = false;
+    bool connect_requested = false;
+    {
+        PortReadyDialog dialog(backend_, port, virtual_kind, level_.advanced(),
+                               host_platform(), this);
+        connect(&dialog, &PortReadyDialog::create_another_requested, this,
+                [&create_another] { create_another = true; });
+        connect(&dialog, &PortReadyDialog::connect_requested, this,
+                [&connect_requested](vss::endpoint_id)
+                { connect_requested = true; });
+        connect(&dialog, &PortReadyDialog::setup_check_requested, this,
+                [this] { placeholder(QStringLiteral("Setup check")); });
+        dialog.exec();
+    }
+    if (create_another)
+        show_add_port();
+    else if (connect_requested)
+        placeholder(QStringLiteral("Connect ports"));
+}
+
+void ShellWindow::focus_monitor(vss::endpoint_id port)
+{
+    if (monitor_action_ != nullptr)
+    {
+        const QSignalBlocker blocker(monitor_action_);
+        monitor_action_->setChecked(true);
+    }
+    if (monitor_dock_ != nullptr)
+    {
+        monitor_dock_->show();
+        monitor_dock_->raise();
+        monitor_dock_->setFocus(Qt::OtherFocusReason);
+    }
+    selection_.select_port(port);
+    update_content();
 }
 
 void ShellWindow::placeholder(const QString& what)

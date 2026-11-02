@@ -150,3 +150,98 @@ and `VSS_SCREENSHOT_THEME=light|dark` selects the theme. They exist only on
 the documentation `--screenshot` path; normal startup ignores them and they do
 not write `QSettings`. The default screenshots use two loopback ports, one
 link, one mock port and a short write so the frame shows real data shapes.
+
+## WP5
+
+### Linked pair names are chosen by the adapter, not typed
+
+The design lets the user edit First port and Second port on Windows. The
+current adapter cannot advertise a chosen driver port name: `studio` creates a
+virtual port from a free com0com pair and advertises the pair's other end, and
+there is no API to select the half or override the advertised path. Honouring
+the fields would either lie about the path or require a `vss_studio` change,
+which WP5 is not allowed to make. The pair form therefore shows the real free
+COM ports the adapter found, read-only, and creates only when at least two
+complete com0com pairs are free. On Linux and macOS the fields are read-only
+placeholders because the pseudo-terminal paths do not exist until creation.
+The inline uniqueness message still exists for a stale or duplicate free-pair
+value, but a user normally cannot edit the fields to reach it; the free-pair
+filter and the disabled "There are not enough free driver pairs" state are the
+visible degradation. The pair result sentence still names the free ports, and
+the status-bar summary after creation names the paths the engine actually
+advertised.
+
+### Linked pairs use existing driver pairs and do not elevate
+
+The mockup says Windows will ask for administrator permission. This WP5 path
+never runs `setupc.exe`: it claims two free com0com pairs that are already
+installed, then links the two Studio ends. Showing the warning would be false,
+so the form shows "Windows uses free com0com pairs for this pair, so it does
+not ask for administrator permission." instead. `permission_denied` from the
+adapter is still mapped to the error pattern with copyable details and recovery
+buttons, so a future adapter that creates a new pair can reuse the dialog.
+
+### Add a port does not duplicate the Attach form
+
+WP5 builds the full Attach a real device dialog, but the Real device choice in
+Add a port shows a one-sentence continuation note and the primary "Next" opens
+that dialog. Embedding a second copy of the device list and settings would
+double the state, validation and accessibility surface for the same flow. The
+Linked pair form is embedded because it is the same dialog the launcher calls
+with Linked pair selected.
+
+### Attach opens the device and creates a separate port
+
+The spec says programs should open the port Studio creates, not the physical
+device. `studio::attach_serial` alone exposes the physical path as the
+endpoint's path, so AttachDialog composes three real adapter calls: attach the
+device under `<name>-input`, create an automatic virtual port under `<name>`,
+and split the device to it. A failure at any step removes the ports already
+created. The physical endpoint remains visible to the future Ports pane; this
+is the same shape the Share scenario uses.
+
+### Device-in-use detection is supplied by the adapter, not the engine
+
+The engine's serial enumeration cannot prove that another process holds a
+device without trying to open it. A `device_view::in_use` flag was added to the
+adapter; `EngineStudioBackend` leaves it false and tests can set it. The Attach
+dialog always disables and explains virtual/com0com rows, and shows an "In use"
+row with its reason when a backend reports it. This is the degradation the
+engine-gap table asks for instead of probing the device.
+
+### Watch focuses the Monitor but cannot filter it yet
+
+WP5 creates and links the watcher through the adapter, selects the watched
+port and opens, raises and focuses the Monitor dock. The Monitor itself belongs
+to WP3, so there is no filter API to call. The filter request is recorded here
+and must be wired when WP3's monitor model lands; the success status names the
+source and watcher so the action is not silent.
+
+### Pair success has no separate ready dialog
+
+The copy deck defines Port ready for a single port. The pair form's result
+sentence and the status-bar summary name both advertised paths and the Main
+window takes over; inventing a second ready screen would add copy that the
+bundle does not define. The pair's two ports and link are real adapter state
+and are selected in the shared selection service.
+
+### Setup check and Connect ports stay placeholders
+
+The Port ready actions "Open setup check" and "Connect COM7 to something"
+emit the shell's existing placeholder status. WP8 owns the setup check dialog
+and WP6 owns Connect ports, so WP5 does not simulate either result.
+
+### Rich result sentences and ErrorDialog recovery actions
+
+`ResultSentence` gained a two-argument `set_result_text` so the visible sentence
+can bold port names while screen readers receive the plain sentence. The rich
+HTML is never used as the accessible name. `ErrorDialog` gained `add_action` so
+Attach can offer "Try again" and "Choose another" before the existing Copy
+details and Close; the destructive action order and initial focus are
+unchanged.
+
+### Add a port Advanced types are placeholders
+
+Network endpoint and Mock fixture are other work packages. The cards appear in
+Advanced with their spec descriptions, select a clear placeholder page and
+disable the primary action; no backend call is made and no success is claimed.

@@ -22,6 +22,7 @@ add_library(vss_gui_shell STATIC
 
 target_link_libraries(vss_gui_shell PUBLIC
   vss_gui_widgets
+  vss_gui_flows
   vss_gui_backend
   vss_gui_theme
   Qt6::Widgets)

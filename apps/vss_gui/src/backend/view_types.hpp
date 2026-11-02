@@ -91,6 +91,10 @@ struct device_view
     bool com0com = false;
     int com0com_pair = -1;
     QString com0com_side;
+    /// True when another process holds the device.  The engine cannot prove
+    /// this today, so `EngineStudioBackend` always leaves it false; tests and
+    /// a future platform probe can set it.
+    bool in_use = false;
 };
 
 /// Facts the setup check, launcher strip and status chip read.

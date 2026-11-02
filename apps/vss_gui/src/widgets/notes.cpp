@@ -256,6 +256,11 @@ void NoteBanner::set_text(const QString& text)
     refresh_accessible_name();
 }
 
+void NoteBanner::set_text_format(Qt::TextFormat format)
+{
+    text_->setTextFormat(format);
+}
+
 QString NoteBanner::text() const
 {
     return text_->text();
@@ -320,6 +325,15 @@ ResultSentence::ResultSentence(QWidget* parent)
 void ResultSentence::set_result_text(const QString& text)
 {
     set_text(text);
+    announce_name_change(this);
+}
+
+void ResultSentence::set_result_text(const QString& text,
+                                     const QString& accessible_text)
+{
+    set_text_format(Qt::RichText);
+    set_text(text);
+    setAccessibleName(accessible_text);
     announce_name_change(this);
 }
 
