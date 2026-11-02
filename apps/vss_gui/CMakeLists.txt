@@ -52,6 +52,9 @@ add_subdirectory(src/widgets)
 # Ports, Inspector, Send and Monitor.
 add_subdirectory(src/panes)
 
+# The topology dock: nodes, links, layout and the accessible links list.
+add_subdirectory(src/topology)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 

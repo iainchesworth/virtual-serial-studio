@@ -10,7 +10,7 @@ gates pass.
 | WP1 | `gui/wp1-theme-widgets` | implemented, self-review complete | Debug `ctest` 6/6, 13 theme/widget tests, gallery PNGs light and dark, contrast/QSS/changelog/format clean | self-review + human G1 | theme, icons, focus ring, widget library, gallery, token tools, CI job |
 | WP2 | `gui/wp2-shell` | implemented, self-review complete | Debug `ctest` 7/7, Release `ctest` 8/8, 6/6 shell tests, `vss_gui --selftest` ok, six review PNGs, contrast/QSS/changelog/format clean | self-review; human G1 | action registry, level, launcher, command palette, status bar, dock frame; old shell retained until WP9 |
 | WP3 | `gui/wp3-data-panes` | implemented, self-review complete | Debug `ctest` 8/8, Release 9/9, 7/7 pane tests, simple/advanced/dark/compact PNGs, `vss_gui --selftest` ok, changelog/format clean | self-review; pending G2 | ports, inspector, send, monitor, status data, selection; legacy sources leave the executable |
-| WP4 | `gui/wp4-topology` | not started | - | - | blocked on G1 |
+| WP4 | `gui/wp4-topology` | implemented, self-review complete | Debug `ctest` 8/8 on its branch, 18 topology tests, light and dark review PNGs, changelog/contrast/QSS/format clean | self-review; pending G2 | topology view, layout, keyboard, a11y summary, links list, shell wiring; WP6/WP7 actions stay placeholders |
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
 | WP6 | `gui/wp6-connect-share` | not started | - | - | blocked on G1 |
 | WP7 | `gui/wp7-advanced` | not started | - | - | blocked on G1 |
@@ -151,6 +151,56 @@ gates pass.
   Monitor empty state/no row widgets, Inspector waiting/control chips).
 - Review PNGs: `wp3-light.png`, `wp3-advanced.png`, `wp3-dark.png`,
   `wp3-compact.png` under `build/debug-gui/gui-shots/` (never committed).
-- Checks: Debug `ctest` 8/8 (`gui_panes` added), `vss_gui --selftest` ok,
-  changelog/format pending final WP3 commit; Release build and ctest recorded
-  in the gate report.
+- Checks: Debug `ctest` 8/8 (`gui_panes` added), Release `ctest` 9/9,
+  `vss_gui --selftest` ok, changelog/format/contrast/QSS clean.
+
+## WP4 detail
+
+- Added `apps/vss_gui/src/topology/`: `TopologyView` (QGraphicsView and scene),
+  `NodeItem`, `LinkItem`, `compute_topology_layout` with cycle detection,
+  `LinksList` and one copy module (`topology_text`). The view is fed a
+  snapshot and never calls the studio; it reports intent with signals.
+- Nodes are 168 by 56 (168 by 64 for a real device or a join target, 120 by 48
+  in compact) with the design's radius, fills, dashed unlinked edge and the
+  accent plus halo selection; the Owner, Dropped and "not linked" badges are
+  painted from the snapshot. Links are 2 px `ink3` with round caps, 3 px
+  `accent` when selected, filled heads for one-way and monitor, dashed monitor
+  links, and Split/Join/two-way/owner labels kept 8 px clear of lines and
+  nodes.
+- Deterministic layout: one column per rank, sources left and targets right,
+  every column vertically centred, 48 px minimum vertical gaps and a 96 px
+  horizontal gap with the split/join bar in the middle. Unlinked ports get a
+  final column so they cannot pull a source off the centre line.
+- Keyboard: Tab through nodes then links, Enter inspects, Delete asks the
+  shell to remove, arrows nudge 8 px (Shift 32), Shift+F10 and the menu key
+  open Inspect/Copy name/Connect from here/Remove, Ctrl+plus/minus and
+  Ctrl+wheel zoom, Ctrl+0 fits, Escape clears. Node offsets are session only.
+- Accessibility: view name "Topology", generated description that updates on
+  change, 24 px targets, focus ring, and the optional "Show links as a list"
+  dock exposing every link with names and states through `SelectionService`.
+- Loop refusal: `show_loop_note()` computes the cycle, highlights it in `bad`
+  and shows the exact danger note with "Show the loop"; WP6's Connect dialog
+  owns the modal refusal and can call it.
+- Shell wiring: the central placeholder is replaced by the view, `edit.remove`
+  and `topology.removeLink` now confirm and call the backend, `topology.fit`
+  fits, Copy name uses the clipboard and a status sentence, and the links dock
+  is a View Simple action. Connect/Share/Watch name WP6 and Link wiring/Owner
+  name WP7.
+- Added `vss_gui_topology_tests` (`gui_topology`): 18 tests for the empty
+  state, node sizes and summary text, every link kind's layout and 48 px gaps,
+  mouse and keyboard selection, hit testing, context menu, fit/zoom limits,
+  compact sizes, 200 percent text sizing, the links list, theme repaint, loop
+  detection and highlight, session-only nudges, badges, and the shell's
+  selection and placeholder wiring.
+- Review PNGs (never committed): `build/debug-gui/gui-shots/topology-light.png`
+  and `topology-dark.png`.
+- Checks: Debug `ctest` 8/8 (new `gui_topology`), `vss_gui --selftest` ok,
+  changelog ok, clang-format clean, contrast and QSS tools unchanged.
+- Deviations: nested namespace `vss::gui::topology` because the legacy
+  `TopologyView` still links until WP9; Rename hidden (`rename_port` false)
+  and Remove without Undo (`undo` false); keyboard nudge only, no dragging;
+  node sizes grow at larger text; compact below 500 px; unlinked ports in a
+  final column; monitor links keep an arrow head; loop note lives in the view
+  until WP6; no per-item QAccessibleInterface (summary plus Links list); links
+  dock placement; auto-fit until the user zooms; single selection. All are
+  recorded in `design-deviations.md`.
