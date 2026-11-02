@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Line matrix and fault injection</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .mx td,.mx th{text-align:center} .mx td:first-child,.mx th:first-child{text-align:left} .mx input{width:18px;height:18px;margin:0;accent-color:var(--accent)} .hist td{padding:5px 10px;font-size:12px}</style>
+</helmet>
+<div class="dlg" style="width: 1100px; height: 760px">
+  <div class="dlg-h">
+    <div class="grow">
+      <div style="display: flex; align-items: center; gap: 10px"><h1>Inspector: modem</h1><span class="chip info">Fixture (mock)</span><span class="chip ok"><i></i>Open</span></div>
+      <p style="color: var(--ink2)">Linked two-way to <b>terminal</b>. Wiring changes apply to that link only.</p>
+    </div>
+    <span class="badge adv">Advanced</span>
+  </div>
+
+  <div class="dlg-b" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start">
+
+    <section style="display: flex; flex-direction: column; gap: 14px">
+      <div>
+        <h2 style="font-size: 15px; line-height: 22px; font-weight: 600">Line wiring</h2>
+        <p style="color: var(--ink2)">Choose which signals this port drives on the other port.</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px">
+        <span class="seg"><button class="on">Standard null-modem</button><button>Loopback</button><button>Custom</button></span>
+        <button class="sw on" role="switch" aria-checked="true"><span class="trk"></span>Emulate modem lines</button>
+      </div>
+      <div class="dock" style="border-radius: 6px">
+        <table class="tbl mx" style="table-layout: fixed">
+          <thead><tr><th style="width: 170px">This port drives</th><th>DSR</th><th>CTS</th><th>DCD</th><th>RI</th></tr></thead>
+          <tbody>
+            <tr><td><b>DTR</b></td><td><input type="checkbox" checked aria-label="DTR to DSR"></td><td><input type="checkbox" aria-label="DTR to CTS"></td><td><input type="checkbox" checked aria-label="DTR to DCD"></td><td><input type="checkbox" aria-label="DTR to RI"></td></tr>
+            <tr><td><b>RTS</b></td><td><input type="checkbox" aria-label="RTS to DSR"></td><td><input type="checkbox" checked aria-label="RTS to CTS"></td><td><input type="checkbox" aria-label="RTS to DCD"></td><td><input type="checkbox" aria-label="RTS to RI"></td></tr>
+          </tbody>
+        </table>
+        <div class="muted" style="padding: 8px 10px; font-size: 12px; border-top: 1px solid var(--line); background: var(--sunken)">Column headings are the inputs on terminal. The same wiring applies in the other direction.</div>
+      </div>
+      <div class="note info" style="align-items: center">
+        <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+        <span>With this wiring, raising DTR on modem raises DSR and DCD on terminal. Raising RTS raises CTS.</span>
+      </div>
+      <div style="border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px">
+        <div class="lbl">Line state now</div>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <button class="sw on" role="switch" aria-checked="true"><span class="trk"></span>DTR on</button>
+          <button class="sw" role="switch" aria-checked="false"><span class="trk"></span>RTS off</button>
+          <button class="btn sm">Break</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px">
+          <span class="chip hollow" style="height: 22px"><i></i>CTS off</span>
+          <span class="chip ok" style="height: 22px"><i></i>DSR on</span>
+          <span class="chip ok" style="height: 22px"><i></i>DCD on</span>
+          <span class="chip hollow" style="height: 22px"><i></i>RI off</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 14px">
+      <div>
+        <h2 style="font-size: 15px; line-height: 22px; font-weight: 600">Inject a fault</h2>
+        <p style="color: var(--ink2)">Simulate a bad cable or device. Each fault is reported as an error event on the port.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Parity error</div><div class="muted" style="font-size: 12px; line-height: 16px">Byte arrives with bad parity</div></div><button class="btn sm">Inject</button></div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Framing error</div><div class="muted" style="font-size: 12px; line-height: 16px">Byte arrives with no valid stop bit</div></div><button class="btn sm">Inject</button></div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Overrun</div><div class="muted" style="font-size: 12px; line-height: 16px">Incoming data lost, too fast</div></div><button class="btn sm">Inject</button></div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Break</div><div class="muted" style="font-size: 12px; line-height: 16px">A break is received on the line</div></div><button class="btn sm">Inject</button></div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Hang-up</div><div class="muted" style="font-size: 12px; line-height: 16px">Carrier drops, as a modem does</div></div><button class="btn sm">Inject</button></div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; height: 72px"><div class="grow"><div class="strong">Disconnect</div><div class="muted" style="font-size: 12px; line-height: 16px">Device vanishes, as if unplugged</div></div><button class="btn sm">Inject</button></div>
+      </div>
+
+      <div>
+        <div class="lbl">Injected so far</div>
+        <div class="dock" style="border-radius: 6px">
+          <table class="tbl hist">
+            <thead><tr><th style="width: 130px">Time</th><th style="width: 130px">Fault</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">12:09:02.410</td><td>Parity error</td><td>Error event reported on modem</td></tr>
+              <tr><td class="mono">12:09:05.118</td><td>Break</td><td>Error event reported on modem</td></tr>
+              <tr><td class="mono">12:09:11.902</td><td>Disconnect</td><td>Error event reported on modem</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="lbl">Create this fixture in code</div>
+        <div class="code"><span>studio app;
+const auto device = app.create_mock_port("modem");</span><button class="btn icon" aria-label="Copy code"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="dlg-f">
+    <span class="muted" style="font-size: 12px">Faults are only available on fixture ports.</span>
+    <span class="grow"></span>
+    <button class="btn primary">Close</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

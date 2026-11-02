@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Put a device on the network</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 760px">
+  <div class="dlg-h">
+    <div>
+      <h1>Put a device on the network</h1>
+      <p style="color: var(--ink2)">Share a serial device with other computers over TCP, UDP or RFC 2217.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div>
+      <label class="lbl" for="dev">Device to share</label>
+      <select class="inp" id="dev"><option>COM3, real device (115200 8N1)</option></select>
+    </div>
+
+    <div>
+      <div class="lbl">Share it using</div>
+      <div class="seg"><button class="on">TCP</button><button>UDP</button><button>RFC 2217</button></div>
+      <div style="display: flex; gap: 24px; margin-top: 10px">
+        <label class="chk"><input type="radio" name="role" checked> Wait for other computers to connect (server)</label>
+        <label class="chk"><input type="radio" name="role"> Connect to a server (client)</label>
+      </div>
+    </div>
+
+    <div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 12px">
+        <div>
+          <label class="lbl" for="listen">Listen on</label>
+          <select class="inp" id="listen"><option>All network interfaces (0.0.0.0)</option></select>
+        </div>
+        <div>
+          <label class="lbl" for="port">Port</label>
+          <input class="inp mono" id="port" value="4001" style="font-size: 13px">
+        </div>
+      </div>
+      <p class="hint">Choose This PC only (127.0.0.1) to test from this machine first.</p>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Other computers can connect to this PC on port <b>4001</b> and talk to <b>COM3</b>. Data flows both ways, and the Monitor shows both directions.</span>
+    </div>
+
+    <div class="note warn" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg>
+      <span>Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect.</span>
+    </div>
+
+    <div style="border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+      <div>
+        <div style="display: flex; align-items: center; margin-bottom: 4px"><span class="lbl" style="margin: 0">Address</span><span class="grow"></span><button class="btn quiet sm">Edit address</button></div>
+        <div class="code"><span>tcp://0.0.0.0:4001</span><button class="btn icon" aria-label="Copy address"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+      </div>
+      <div>
+        <div class="lbl">Same thing from the command line</div>
+        <div class="code"><span>vss_cli bridge serial://COM3?baud=115200 tcp://0.0.0.0:4001</span><button class="btn icon" aria-label="Copy command"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <button class="btn quiet">Test from this PC first</button>
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Start bridge</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

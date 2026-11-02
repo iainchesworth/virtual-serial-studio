@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create a diagnostic bundle</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .inc{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line)} .inc:last-child{border-bottom:0} .inc input{margin:0;width:18px;height:18px;accent-color:var(--accent)} .inc .d{color:var(--ink2);font-size:12.5px;line-height:17px}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 700px">
+  <div class="dlg-h">
+    <div>
+      <h1>Create a diagnostic bundle</h1>
+      <p style="color: var(--ink2)">Gathers what a helper needs to understand your setup. Nothing is sent anywhere. You choose where to save it.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div>
+      <div class="lbl">Include</div>
+      <div class="card" style="overflow: hidden; border-color: var(--control)">
+        <label class="inc"><input type="checkbox" checked><span><b>Setup</b><div class="d">Ports, links and their settings, as a topology file.</div></span><span class="tag">setup.json</span></label>
+        <label class="inc"><input type="checkbox" checked><span><b>Event log</b><div class="d">State changes and errors since the setup was opened.</div></span><span class="tag">log.txt</span></label>
+        <label class="inc"><input type="checkbox" checked><span><b>Environment</b><div class="d">Build, compiler, Qt version, operating system and architecture.</div></span><span class="tag">environment.txt</span></label>
+        <label class="inc"><input type="checkbox" checked><span><b>Port counters</b><div class="d">State, bytes in and out, and bytes dropped for each port.</div></span><span class="tag">counters.csv</span></label>
+        <label class="inc" style="background: var(--amber-soft)"><input type="checkbox"><span><b style="color: #5C3000">Traffic contents</b><div class="d" style="color: #5C3000">The actual bytes sent and received. They may include passwords or personal data.</div></span><span class="chip warn hollow"><i></i>Off by default</span></label>
+      </div>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Nothing leaves this PC until you share the file yourself. Look inside the bundle first if you want to check it.</span>
+    </div>
+
+    <div>
+      <div class="lbl">The bundle will be one file</div>
+      <div class="code"><span>vss-bundle-[date].zip</span><span class="muted" style="font-family: var(--ui)">4 files</span></div>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <button class="btn quiet">Copy environment only</button>
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Save bundle</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

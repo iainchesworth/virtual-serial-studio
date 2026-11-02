@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Port ready</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 780px">
+  <div class="dlg-h">
+    <span style="width: 44px; height: 44px; border-radius: 50%; background: var(--ok-soft); border: 1px solid var(--ok-line); color: var(--ok); display: flex; align-items: center; justify-content: center; flex: none"><svg class="ic" style="width:22px;height:22px" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span>
+    <div>
+      <h1>COM7 is ready</h1>
+      <p style="color: var(--ink2)">Your port "port-1" now exists, and other programs can open it.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border: 1px solid var(--line2); border-radius: 8px; background: var(--sunken)">
+      <div>
+        <div class="lbl" style="margin-bottom: 2px">Open this port in your program</div>
+        <div style="font-family: var(--mono); font-size: 44px; line-height: 52px; font-weight: 500; letter-spacing: .02em">COM7</div>
+      </div>
+      <button class="btn"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg>Copy name</button>
+    </div>
+
+    <p style="font-size: 14px; line-height: 20px">In your program, choose <b>COM7</b> as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</p>
+
+    <div class="note" style="align-items: center">
+      <span class="chip warn hollow"><i></i>Waiting</span>
+      <span>No program has opened COM7 yet. This panel updates when one does.</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <button class="btn quiet" onClick="{{ toggle }}" style="padding: 0 8px">
+          <sc-if value="{{ showDetails }}" hint-placeholder-val="{{ true }}"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>Hide details</sc-if>
+          <sc-if value="{{ detailsHidden }}" hint-placeholder-val="{{ false }}"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>Show details</sc-if>
+        </button>
+        <span class="muted">The address, setup file entry and command for what was just built</span>
+      </div>
+
+      <sc-if value="{{ showDetails }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 8px">
+          <dl class="kv">
+            <dt>Name</dt><dd class="mono">port-1</dd>
+            <dt>Kind</dt><dd>Auto, resolved to com0com</dd>
+            <dt>Path</dt><dd class="mono">COM7</dd>
+          </dl>
+          <div>
+            <div class="lbl">Entry in a saved setup (JSON)</div>
+            <div class="code"><span>{ "name": "port-1", "kind": "virtual", "virtual_kind": "auto" }</span><button class="btn icon" aria-label="Copy JSON"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+          </div>
+          <div>
+            <div class="lbl">Same thing from the command line</div>
+            <div class="code"><span>vss_cli virtual --kind=auto</span><button class="btn icon" aria-label="Copy command"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="grow"></span>
+    <button class="btn quiet">Connect COM7 to something</button>
+    <button class="btn">Create another</button>
+    <button class="btn primary">Done</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":780}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { showDetails: true };
+  }
+  renderVals() {
+    const show = this.state.showDetails;
+    return {
+      showDetails: show,
+      detailsHidden: !show,
+      toggle: () => this.setState({ showDetails: !this.state.showDetails }),
+    };
+  }
+}
+</script>
+</body>
+</html>

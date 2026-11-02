@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workspace, minimum window size</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .mon td{padding:3px 10px;font-family:var(--mono);font-size:12px;line-height:16px;white-space:nowrap} .ib{width:34px;padding:0;justify-content:center}</style>
+</helmet>
+<div class="win" style="width: 960px; height: 640px">
+  <div class="menubar">
+    <button>File</button><button>Edit</button><button>Ports</button><button>Topology</button><button>Tools</button><button>View</button><button>Help</button>
+  </div>
+  <div class="toolbar" style="height: 40px">
+    <button class="tb ib" aria-label="New setup"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2.5h6l4 4v7H3z"/><path d="M9 2.5v4h4"/></svg></button>
+    <button class="tb ib" aria-label="Open"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg></button>
+    <button class="tb ib" aria-label="Save"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3h8l2 2v8H3z"/><path d="M5 3v4h5V3M5 13V9h6v4"/></svg></button>
+    <span class="sep"></span>
+    <button class="tb ib" aria-label="Add port"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg></button>
+    <button class="tb ib" aria-label="Attach device"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="5" width="11" height="6" rx="1"/><path d="M5 5V3M8 5V3M11 5V3"/></svg></button>
+    <button class="tb ib" aria-label="Connect ports"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M5 8L3.8 9.2a2.4 2.4 0 0 0 3.4 3.4L8.4 11.4M11 8l1.2-1.2a2.4 2.4 0 0 0-3.4-3.4L7.6 4.6"/></svg></button>
+    <button class="tb ib" aria-label="Remove"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    <span class="grow"></span>
+    <button class="tb ib" aria-label="Search actions, Ctrl+K"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg></button>
+    <button class="tb ib" aria-label="More actions"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h.1M8 8h.1M12.5 8h.1" stroke-width="2.4"/></svg></button>
+  </div>
+  <span class="tip" style="position: absolute; left: 196px; top: 74px; z-index: 5">Add port, Ctrl+Shift+N</span>
+
+  <div class="body">
+    <div class="row" style="flex: 1">
+      <section class="dock" style="width: 240px; flex: none" aria-label="Ports">
+        <div class="dock-h">Ports <span class="count">4</span></div>
+        <div style="overflow: hidden">
+          <div style="padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="strong">device</span><span class="grow"></span><span class="mono">COM3</span></div>
+            <span class="chip ok" style="align-self: flex-start; height: 20px"><i></i>Open</span>
+          </div>
+          <div style="padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; background: var(--accent-soft)">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="strong">terminal</span><span class="grow"></span><span class="mono">COM7</span></div>
+            <span class="chip warn hollow" style="align-self: flex-start; height: 20px"><i></i>Waiting for program</span>
+          </div>
+          <div style="padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="strong">test-tool</span><span class="grow"></span><span class="mono">COM8</span></div>
+            <span class="chip ok" style="align-self: flex-start; height: 20px"><i></i>Program connected</span>
+          </div>
+          <div style="padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="strong">logger</span><span class="grow"></span><span class="mono" style="font-size: 11px">loopback</span></div>
+            <span class="chip hollow" style="align-self: flex-start; height: 20px"><i></i>Studio only</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dock grow" aria-label="Topology">
+        <div class="dock-h">Topology <span class="count">4 ports, 1 link</span></div>
+        <div class="dock-b" style="position: relative; padding: 0">
+          <div style="position: relative; width: 400px; height: 236px; margin: 40px auto 0">
+            <svg width="76" height="8" viewBox="0 0 76 8" preserveAspectRatio="none" style="position: absolute; left: 124px; top: 116px; width: 76px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 76 4"></path></svg>
+            <svg width="8" height="168" viewBox="0 0 8 168" preserveAspectRatio="none" style="position: absolute; left: 196px; top: 36px; width: 8px; height: 168px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 4 0 L 4 168"></path></svg>
+            <svg width="76" height="8" viewBox="0 0 76 8" preserveAspectRatio="none" style="position: absolute; left: 200px; top: 32px; width: 76px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 76 4"></path></svg>
+            <svg width="76" height="8" viewBox="0 0 76 8" preserveAspectRatio="none" style="position: absolute; left: 200px; top: 116px; width: 76px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 76 4"></path></svg>
+            <svg width="76" height="8" viewBox="0 0 76 8" preserveAspectRatio="none" style="position: absolute; left: 200px; top: 200px; width: 76px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 76 4"></path></svg>
+
+            <div class="node real" style="left: 4px; top: 92px; width: 120px; height: 56px"><span><b>device</b><br><span class="mono">COM3</span></span></div>
+            <div class="node sel" style="left: 276px; top: 12px; width: 120px; height: 48px"><span><b>terminal</b><br><span class="mono">COM7</span></span></div>
+            <div class="node" style="left: 276px; top: 96px; width: 120px; height: 48px"><span><b>test-tool</b><br><span class="mono">COM8</span></span></div>
+            <div class="node" style="left: 276px; top: 180px; width: 120px; height: 48px"><span><b>logger</b><br>Studio only</span></div>
+
+            <div class="tlabel" style="left: 142px; top: 92px; width: 40px">Split</div>
+            <div class="tlabel" style="left: 134px; top: 132px; width: 56px">two-way</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dock" style="width: 260px; flex: none" aria-label="Inspector and Send">
+        <div class="tabs"><button class="tab on">Inspector</button><button class="tab">Send</button></div>
+        <div class="dock-b" style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px">
+          <dl class="kv" style="row-gap: 4px; grid-template-columns: 56px minmax(0, 1fr)">
+            <dt>State</dt><dd><span class="chip warn hollow" style="height: 20px; font-size: 11px"><i></i>Waiting for program</span></dd>
+            <dt>Path</dt><dd><span class="mono">COM7</span><button class="btn icon" style="width: 24px; height: 24px" aria-label="Copy COM7"><svg class="ic" style="width:13px;height:13px" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></dd>
+            <dt>Traffic</dt><dd class="mono" style="font-size: 12px">RX 0 B, TX 1.2 kB</dd>
+          </dl>
+          <div><div>No program has opened COM7 yet.</div><a href="Troubleshoot.dc.html">Why is nothing arriving?</a></div>
+          <div>
+            <div class="lbl" style="margin-bottom: 4px">Control lines</div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>DTR off</span>
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>RTS off</span>
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>CTS off</span>
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>DSR off</span>
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>DCD off</span>
+              <span class="chip hollow" style="height: 20px; font-size: 11px; padding: 0 6px; gap: 4px"><i></i>RI off</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="dock" style="height: 156px; flex: none" aria-label="Monitor">
+      <div class="tabs" style="align-items: center"><button class="tab on" style="align-self: flex-end">Monitor</button><span class="grow"></span><button class="btn sm">Pause</button><button class="btn sm" style="margin-left: 6px">Clear</button></div>
+      <div style="overflow: hidden">
+        <table class="tbl mon">
+          <thead><tr><th style="width: 120px">Time</th><th style="width: 100px">Port</th><th style="width: 80px">Direction</th><th style="width: 60px" class="num">Bytes</th><th>Preview</th></tr></thead>
+          <tbody>
+            <tr><td>12:04:31.208</td><td>device</td><td><span class="dir rx">RX</span></td><td class="num">38</td><td>$GPRMC,123519,A,4807.038,N,01131.000</td></tr>
+            <tr><td>12:04:31.208</td><td>terminal</td><td><span class="dir tx">TX</span></td><td class="num">38</td><td>$GPRMC,123519,A,4807.038,N,01131.000</td></tr>
+            <tr><td>12:04:31.208</td><td>test-tool</td><td><span class="dir tx">TX</span></td><td class="num">38</td><td>$GPRMC,123519,A,4807.038,N,01131.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="status">
+    <span>Ports 4</span><span>Links 1</span>
+    <span class="grow"></span>
+    <span class="chip ok"><i></i>Setup ready</span>
+    <span class="seg" style="height: 24px"><button class="on" style="height: 24px; padding: 0 10px; font-size: 12px">Simple</button><button style="height: 24px; padding: 0 10px; font-size: 12px">Advanced</button></span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

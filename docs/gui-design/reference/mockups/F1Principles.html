@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Principles and standards</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .pr{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--line)} .pr:last-child{border-bottom:0} .pr b.n{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-d);display:inline-flex;align-items:center;justify-content:center;font-size:13px}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 940px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">1 Foundations</div>
+      <h1>Principles and standards</h1>
+    </div>
+    <p>Every screen on this canvas is checked against these. WCAG 2.2 AA is the benchmark, because WCAG 3.0 is still a working draft.</p>
+  </div>
+
+  <div class="sheet-b">
+    <div style="display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 32px">
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Nine design principles</div>
+        <div class="card" style="padding: 4px 18px">
+          <div class="pr"><b class="n">1</b><div><b>Recognition over recall.</b> <span style="color: var(--ink2)">Ports and links are picked from lists and cards. Addresses are previews, never required input.</span></div></div>
+          <div class="pr"><b class="n">2</b><div><b>Depth is revealed, never removed.</b> <span style="color: var(--ink2)">Launcher, workspace, power tools. Advanced adds controls in the same window.</span></div></div>
+          <div class="pr"><b class="n">3</b><div><b>Plain language first.</b> <span style="color: var(--ink2)">Two-way, split, join, monitor. Addresses and JSON sit one click away.</span></div></div>
+          <div class="pr"><b class="n">4</b><div><b>Say what will happen.</b> <span style="color: var(--ink2)">Every dialog states the result in a sentence before the user commits.</span></div></div>
+          <div class="pr"><b class="n">5</b><div><b>Prevent, then explain.</b> <span style="color: var(--ink2)">Self-links, loops and too few targets are blocked, and the refusal says what to do instead.</span></div></div>
+          <div class="pr"><b class="n">6</b><div><b>State is never colour alone.</b> <span style="color: var(--ink2)">Text, a shape (filled or hollow) and colour say the same thing.</span></div></div>
+          <div class="pr"><b class="n">7</b><div><b>Fail visibly and locally.</b> <span style="color: var(--ink2)">Errors name the operation, the cause and the next step. Work is never lost.</span></div></div>
+          <div class="pr"><b class="n">8</b><div><b>Keyboard first.</b> <span style="color: var(--ink2)">Every action has a menu item. Ctrl+K finds anything, including hidden Advanced tools.</span></div></div>
+          <div class="pr"><b class="n">9</b><div><b>Follow the platform.</b> <span style="color: var(--ink2)">System font, colour scheme, text size, native dialogs and shortcuts.</span></div></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Standards we check against</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <thead><tr><th style="width: 150px">Standard</th><th>What we apply</th></tr></thead>
+            <tbody>
+              <tr><td><b>WCAG 2.2 AA</b></td><td>Text contrast 4.5:1 (1.4.3). Control borders 3:1 (1.4.11). Colour never the only cue (1.4.1). Everything by keyboard (2.1.1). Visible focus (2.4.7). Targets at least 24px (2.5.8). Every drag has an alternative (2.5.7). Errors named with a fix (3.3.1, 3.3.3). Names, roles and values (4.1.2).</td></tr>
+              <tr><td><b>ISO 9241-110</b></td><td>The seven dialogue principles: suitability for the task, self-descriptiveness, conformity with expectations, learnability, controllability, error robustness, user engagement.</td></tr>
+              <tr><td><b>ISO 9241-210</b></td><td>Human-centred process: personas, journeys, then usability testing against the stories.</td></tr>
+              <tr><td><b>Nielsen heuristics</b></td><td>Visible status, real-world match, user control, consistency, error prevention, recognition over recall, flexibility, minimalism, error recovery, help.</td></tr>
+              <tr><td><b>Human factors</b></td><td>Hick: four launcher jobs, not twenty menu items. Fitts: large primary targets. Response limits of 0.1 s, 1 s and 10 s set the feedback rules. Jakob: platform conventions.</td></tr>
+              <tr><td><b>Platform</b></td><td>Native menu bar, Ctrl or Cmd shortcuts, native file dialogs, OS text size, high contrast and reduced motion settings.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section>
+      <div class="eyebrow" style="margin-bottom: 8px">Three people, one window</div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+        <div class="card" style="padding: 14px 16px">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Operator</b><span class="tag s">Basic</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">"My program needs a serial port and this PC has none." Needs a port that exists and its name. Never needs the word topology.</p>
+        </div>
+        <div class="card" style="padding: 14px 16px">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Integrator</b><span class="tag s">Intermediate</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">"Several programs must share one device." Repeats the same rig, moves between guided forms and addresses.</p>
+        </div>
+        <div class="card" style="padding: 14px 16px">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Diagnostician</b><span class="tag a">Advanced</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">"Why is nothing arriving, and which build is this?" Reads counters, lines and traffic. Wants raw addresses, faults and reproducible files.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":940}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

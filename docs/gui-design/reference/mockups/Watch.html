@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Watch traffic</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 600px">
+  <div class="dlg-h">
+    <div>
+      <h1>Watch traffic</h1>
+      <p style="color: var(--ink2)">See what flows through a port without changing it.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div>
+      <label class="lbl" for="pw">Port to watch</label>
+      <select class="inp" id="pw"><option>device (COM3)</option><option>terminal (COM7)</option><option>test-tool (COM8)</option></select>
+    </div>
+    <div>
+      <label class="lbl" for="wn">Name of the watcher</label>
+      <input class="inp" id="wn" value="device-monitor">
+      <p class="hint">A new Studio-only port that receives a read-only copy.</p>
+    </div>
+    <label class="chk"><input type="checkbox" checked> Open the monitor when it is ready</label>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Watching never changes what <b>device</b> sees. The watcher is a read-only copy, and it never drives modem lines.</span>
+    </div>
+
+    <div class="card" style="padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+      <span class="chip hollow"><i></i>Studio only</span>
+      <span style="color: var(--ink2)">The watcher is shown in the ports list so you can remove it when you are finished.</span>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg>Start watching</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

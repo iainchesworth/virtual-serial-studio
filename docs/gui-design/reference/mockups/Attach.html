@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Attach a real device</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .dv{display:grid;grid-template-columns:20px 90px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)} .dv:last-child{border-bottom:0} .dv input{margin:0;width:18px;height:18px;accent-color:var(--accent)} .dv.on{background:var(--accent-soft)} .dv.off{color:var(--ink3)}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 800px">
+  <div class="dlg-h">
+    <div>
+      <h1>Attach a real device</h1>
+      <p style="color: var(--ink2)">Studio opens the device once. Your programs then open the port Studio creates for them.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div>
+      <div style="display: flex; align-items: center; margin-bottom: 4px"><span class="lbl" style="margin: 0">Device</span><span class="grow"></span><button class="btn sm"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.5M13 3v3h-3"/></svg>Refresh</button></div>
+      <div class="card" style="overflow: hidden; border-color: var(--control)">
+        <label class="dv on"><input type="radio" name="dev" checked><span class="mono strong">COM3</span><span>Serial device</span><span class="chip ok"><i></i>Available</span></label>
+        <label class="dv off"><input type="radio" name="dev" disabled><span class="mono strong">COM4</span><span>Serial device. Another program is using it.</span><span class="chip warn hollow"><i></i>In use</span></label>
+        <label class="dv off"><input type="radio" name="dev" disabled><span class="mono strong">COM5</span><span>com0com pair end. This is a virtual port, not a device.</span><span class="chip hollow"><i></i>Virtual</span></label>
+      </div>
+      <p class="hint">The list is read when this window opens. Plug a device in, then choose Refresh.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; gap: 8px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg><span class="strong">Device settings</span><span class="grow"></span><button class="btn quiet sm">Use common defaults</button></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px">
+        <div><label class="lbl" for="bd">Baud rate</label><select class="inp" id="bd"><option>115200</option><option>9600</option><option>57600</option></select></div>
+        <div><label class="lbl" for="db">Data bits</label><select class="inp" id="db"><option>8</option><option>7</option></select></div>
+        <div><label class="lbl" for="pa">Parity</label><select class="inp" id="pa"><option>None</option><option>Even</option><option>Odd</option></select></div>
+        <div><label class="lbl" for="sb">Stop bits</label><select class="inp" id="sb"><option>1</option><option>2</option></select></div>
+        <div style="grid-column: span 2"><label class="lbl" for="fc">Flow control</label><select class="inp" id="fc"><option>None</option><option>Hardware (RTS and CTS)</option><option>Software (XON and XOFF)</option></select></div>
+      </div>
+      <p class="hint" style="margin: 0">Most devices use these settings. If you see garbled text, check the device's manual.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end">
+      <div><label class="lbl" for="nm">Name</label><input class="inp" id="nm" value="device"></div>
+      <label class="chk" style="height: 34px"><input type="checkbox" checked> Capture traffic in the monitor</label>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Studio will open <b>COM3</b> at 115200 baud and keep it open. Your programs should open the port Studio creates, not COM3.</span>
+    </div>
+
+    <div>
+      <div style="display: flex; align-items: center; margin-bottom: 4px"><span class="lbl" style="margin: 0">Address</span><span class="grow"></span><button class="btn quiet sm">Edit address</button></div>
+      <div class="code"><span>serial://COM3?baud=115200</span><button class="btn icon" aria-label="Copy address"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Attach device</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Connect two programs</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 740px">
+  <div class="dlg-h">
+    <div>
+      <h1>Connect two programs</h1>
+      <p style="color: var(--ink2)">Create a linked pair of ports. Whatever one program sends, the other receives.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b">
+    <div style="display: flex; align-items: center; gap: 0; padding: 20px 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--sunken)">
+      <div style="width: 170px; padding: 12px 16px; border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); text-align: center; flex: none">
+        <div class="muted" style="font-size: 12px">Program A opens</div>
+        <div style="font-family: var(--mono); font-size: 26px; line-height: 34px; font-weight: 500">COM7</div>
+      </div>
+      <div class="grow" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 12px">
+        <span class="muted" style="font-size: 12px">linked both ways, like a null-modem cable</span>
+        <div style="height: 2px; width: 100%; background: var(--ink2)"></div>
+      </div>
+      <div style="width: 170px; padding: 12px 16px; border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); text-align: center; flex: none">
+        <div class="muted" style="font-size: 12px">Program B opens</div>
+        <div style="font-family: var(--mono); font-size: 26px; line-height: 34px; font-weight: 500">COM8</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div>
+        <label class="lbl" for="pairname">Pair name</label>
+        <input class="inp" id="pairname" value="pair-1">
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div>
+          <label class="lbl" for="p1">First port</label>
+          <input class="inp mono" id="p1" value="COM7" style="font-size: 13px">
+        </div>
+        <div>
+          <label class="lbl" for="p2">Second port</label>
+          <input class="inp mono" id="p2" value="COM8" style="font-size: 13px">
+        </div>
+      </div>
+      <p class="muted" style="font-size: 12px">Names are suggested from free COM numbers. Change them if a program expects a particular name. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</p>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Anything <b>COM7</b> sends arrives at <b>COM8</b>, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</span>
+    </div>
+
+    <div class="note warn" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg>
+      <span>Windows will ask for administrator permission to create this pair.</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px dashed var(--line2); border-radius: 6px; color: var(--ink2)">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>
+      <span class="strong">More options</span>
+      <span class="badge adv">Advanced</span>
+      <span class="grow muted">Signal wiring and port kind. Turn on Advanced mode to change them.</span>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Create pair</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":740}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

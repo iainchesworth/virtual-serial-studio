@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>States, feedback and accessibility behaviour</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .spec td{font-size:12.5px;line-height:17px}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 980px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">1 Foundations</div>
+      <h1>States, feedback and accessibility behaviour</h1>
+    </div>
+    <p>One vocabulary for port state, one rule for how fast the window answers, and the keyboard and screen reader behaviour of the key controls.</p>
+  </div>
+
+  <div class="sheet-b" style="display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px; align-items: start">
+
+    <div style="display: flex; flex-direction: column; gap: 22px">
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Port state vocabulary</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <thead><tr><th style="width: 190px">State</th><th>Meaning</th><th style="width: 230px">What the user does</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip ok"><i></i>Open</span></td><td>Running and able to carry data.</td><td>Nothing.</td></tr>
+              <tr><td><span class="chip warn hollow"><i></i>Waiting for program</span></td><td>The port exists, but no program has opened it yet.</td><td>Open the port name in the program, or use Why is nothing arriving?</td></tr>
+              <tr><td><span class="chip ok"><i></i>Program connected</span></td><td>A program has the port open.</td><td>Nothing.</td></tr>
+              <tr><td><span class="chip hollow"><i></i>Studio only</span></td><td>An in-process port. Other programs cannot open it.</td><td>Create a linked pair when another program needs it.</td></tr>
+              <tr><td><span class="chip neutral hollow"><i></i>Closed</span></td><td>Stopped. No traffic is carried.</td><td>Reopen it, or remove it.</td></tr>
+              <tr><td><span class="chip bad"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Failed</span></td><td>An operation failed, for example the device was unplugged or is in use.</td><td>Read the message, fix the cause, try again.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Keyboard and screen reader behaviour</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <thead><tr><th style="width: 130px">Control</th><th>Announced as</th><th style="width: 270px">Keyboard</th></tr></thead>
+            <tbody>
+              <tr><td><b>Port row</b></td><td>"terminal, COM7, waiting for program"</td><td>Up and Down select. Enter inspects. Delete removes.</td></tr>
+              <tr><td><b>Copy button</b></td><td>"Copy COM7", then "Copied" when pressed</td><td>Space or Enter.</td></tr>
+              <tr><td><b>Topology node</b></td><td>"Port terminal, COM7, in a split link from device"</td><td>Tab moves between nodes. Arrow keys move a node, so no action needs dragging (2.5.7).</td></tr>
+              <tr><td><b>Link</b></td><td>"Split link, device to 3 ports, two-way"</td><td>Enter selects. Delete removes.</td></tr>
+              <tr><td><b>Switch</b></td><td>"DTR, switch, off"</td><td>Space toggles.</td></tr>
+              <tr><td><b>Monitor row</b></td><td>"12:04:31.208, device, received 38 bytes"</td><td>Up and Down. Traffic is not announced unless asked.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top: 8px; font-size: 12px">Focus order follows reading order: menu, toolbar, ports, topology, inspector, send, monitor, status bar. Dialogs take focus on their first field, return it to the control that opened them, and close on Escape. State changes are announced politely, for example "terminal: program connected".</p>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 22px">
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">How fast the window answers</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <tbody>
+              <tr><td style="width: 84px"><b>Under 0.1 s</b></td><td>Feels instant. No indicator. Copy, toggle, select.</td></tr>
+              <tr><td><b>Up to 1 s</b></td><td>Keep the flow. Disable the button and show "Creating..." in place.</td></tr>
+              <tr><td><b>Up to 10 s</b></td><td>Show progress with a Cancel button. Driver install, benchmark.</td></tr>
+              <tr><td><b>Over 10 s</b></td><td>Determinate progress, safe to switch away, a message when done.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top: 8px; font-size: 12px">Live counters refresh at the chosen interval (250 ms by default), never animate and never take focus.</p>
+      </section>
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Error message anatomy</div>
+        <div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+          <div class="note danger" style="flex-direction: column; gap: 6px">
+            <div style="display: flex; align-items: center; gap: 8px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg><b>Could not open COM3</b></div>
+            <div>Another program is using it, or the device was unplugged.</div>
+            <div>Close the other program, then try again. Or choose a different device.</div>
+            <div style="display: flex; gap: 8px; margin-top: 4px"><button class="btn sm primary">Try again</button><button class="btn sm">Choose another</button><button class="btn sm quiet">Copy details</button></div>
+          </div>
+          <ol class="cap" style="margin: 0; padding-left: 16px; color: var(--ink2); display: flex; flex-direction: column; gap: 3px">
+            <li>What happened, naming the operation.</li>
+            <li>The likely cause, in plain words.</li>
+            <li>What to do next, as buttons.</li>
+            <li>Engine text and codes live behind Copy details.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Motion</div>
+        <div class="card" style="padding: 12px 16px">
+          <p style="color: var(--ink2)">100 ms for hover and press, 150 ms for disclosure, 200 ms for dialogs (fade and an 8px rise), all ease-out. No bounce or parallax. With the operating system's reduce motion setting, everything is instant.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":980}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

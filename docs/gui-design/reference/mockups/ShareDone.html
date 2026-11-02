@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Share a device, step 3</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 640px">
+  <div class="dlg-h" style="padding-bottom: 12px">
+    <span style="width: 44px; height: 44px; border-radius: 50%; background: var(--ok-soft); border: 1px solid var(--ok-line); color: var(--ok); display: flex; align-items: center; justify-content: center; flex: none"><svg class="ic" style="width:22px;height:22px" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span>
+    <div>
+      <h1>COM3 is shared with 3 programs</h1>
+      <p style="color: var(--ink2)">Open one of these ports in each program.</p>
+    </div>
+  </div>
+  <div class="stepper"><span class="stp done"><b>1</b>Device</span><span class="stp-line"></span><span class="stp done"><b>2</b>Programs</span><span class="stp-line"></span><span class="stp on"><b>3</b>Ready</span></div>
+
+  <div class="dlg-b" style="gap: 14px; border-top: 1px solid var(--line); padding-top: 16px">
+    <div class="card" style="overflow: hidden; border-color: var(--control)">
+      <table class="tbl">
+        <thead><tr><th style="width: 150px">Program</th><th style="width: 190px">Open this port</th><th>State</th><th style="width: 120px"></th></tr></thead>
+        <tbody>
+          <tr><td><b>terminal</b></td><td class="mono strong" style="font-size: 15px">COM7</td><td><span class="chip warn hollow"><i></i>Waiting for program</span></td><td style="text-align: right"><button class="btn sm"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg>Copy</button></td></tr>
+          <tr><td><b>test-tool</b></td><td class="mono strong" style="font-size: 15px">COM8</td><td><span class="chip warn hollow"><i></i>Waiting for program</span></td><td style="text-align: right"><button class="btn sm"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg>Copy</button></td></tr>
+          <tr><td><b>logger</b></td><td class="mono" style="color: var(--ink3)">loopback:logger</td><td><span class="chip hollow"><i></i>Studio only</span></td><td style="text-align: right"><span class="muted" style="font-size: 12px">Not for other programs</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note ok" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>
+      <span>Everything <b>COM3</b> receives is now copied to all 3 ports. The Waiting labels change to Program connected as each program opens its port.</span>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <button class="btn quiet">Add another program</button>
+    <span class="grow"></span>
+    <button class="btn">Open monitor</button>
+    <button class="btn primary">Done</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":640}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

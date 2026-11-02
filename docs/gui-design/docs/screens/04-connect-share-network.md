@@ -1,0 +1,33 @@
+# Screens 04: connect, share and network
+Mockups: Connect (split), ConnectJoin, ShareChoose, Share, ShareDone, Bridge.
+
+## Connect ports (Connect.html, ConnectJoin.html), width 920
+Opens: Topology, Connect ports (Ctrl+L), toolbar Connect, "Connect COM7 to something". Title "Connect ports". Sub "Choose how the ports should be linked, then which ports take part." Two columns: modes on the left (420 wide), ports on the right.
+- Modes (PickCards with a mini glyph at the right), exclusive: **Two-way** "Like a null-modem cable. Both ports see everything." (A ⇄ B). **One-way redirect** "Data flows from A to B only. B cannot reply." (A → B). **Monitor** "Watch traffic without disturbing it. Never drives modem lines." (A ⇢ B). **Split one port to many** "Several programs see the same device." (A ⇄ B, C). **Join many ports into one** "Several sources feed one target." (A, B → C).
+- Right column per mode. Two-way, one-way, monitor: "From" and "To" combos listing existing ports. Split: combo "Port to split", then a checklist "Send copies to, choose at least 2" (the source row is disabled with "This is the port being split."). Join: checklist "Ports that send, choose at least 2", combo "Send everything to", and a dashed "More options" row (ADVANCED) offering "Choose one owner at a time" (maps to the owner merge policy; default is interleave).
+- Live count line under the checklist: "2 ports chosen. That is enough for a split." in `ok`, or "Choose at least 2 ports." in `bad` with the primary disabled.
+- ResultSentence per mode (names in bold, update live):
+  - Two-way: "Everything A sends arrives at B, and the other way round."
+  - One-way: "Everything A sends arrives at B. B cannot reply."
+  - Monitor: "B receives a read-only copy of what A sends. It never drives modem lines."
+  - Split: "Everything A receives is copied to B and C. Whatever either of them writes goes back to A."
+  - Join: "Everything A and B write goes to C. Their bytes are mixed in the order they arrive. C does not send anything back to them."
+- Footer: left muted "Shortcut: Ctrl+L", right Cancel and primary "Connect".
+- Rules: a port cannot link to itself (blocked, with the reason as text). A link that would create a loop is refused by the engine: show the "That link would create a loop" pattern from screens/06 and keep the dialog open. Two loopback ports cannot be linked two-way (each echoes its own writes): disable Two-way for that pair with the reason "Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port."
+
+## Share wizard (ShareChoose.html, Share.html, ShareDone.html), width 760
+A custom dialog with a Stepper ("1 Device", "2 Programs", "3 Ready"), not QWizard styling.
+**Step 1.** Title "Share a device with several programs", sub "Studio opens the device once, then gives each program its own port." Radio list "Which device?" with Refresh (same rows and rules as Attach). Card "Device settings" with the one-line summary "115200 baud, 8 data bits, no parity, 1 stop bit, no flow control" and a Change button (opens the settings section inline). Dashed row "A network device instead" (ADVANCED): "TCP, UDP or RFC 2217 address." Info: "Your programs will open the ports Studio creates, not **COM3** itself. Next you choose how many programs there are." Footer Cancel and Next.
+**Step 2.** Title "Share COM3 with several programs". Sub "Each program gets its own port. Studio copies the device's data to all of them." Control "How many programs?" (minus, value, plus; 1 to 32). Table "What each program will open": Program name input (defaults `terminal`, `test-tool`, `logger`, then `program-4`...), Port to open (mono), "Can other programs open it?" chip Yes (ok) or "No, Studio only" (warn, hollow). If some ports can only be Studio only, show the warn note: "**Only 2 of the 3 programs can open their port.** Each outside program needs its own driver pair, and Studio found 2 free pairs. The third port works only inside Studio." with buttons "Create another pair" (needs elevation on Windows) and "Keep the third as Studio only". Info: "Everything **COM3** receives is copied to all 3 ports. Whatever a program writes goes back to **COM3**." Footer: Back, Cancel, primary "Share device".
+**Step 3.** Title "COM3 is shared with 3 programs", sub "Open one of these ports in each program." Table: Program, Open this port (mono 15px), State chip (Waiting for program, then Program connected), Copy button. Studio-only rows show "Not for other programs" instead of Copy. Ok note: "Everything **COM3** receives is now copied to all 3 ports. The Waiting labels change to Program connected as each program opens its port." Footer: "Add another program" (quiet, back to step 2), Open monitor, primary Done.
+Behaviour: Share is one engine operation. If it fails, roll back (the engine rolls back a failed bridge) and show the error pattern, keeping the wizard on step 2.
+
+## Put a device on the network (Bridge.html), width 760
+Opens: Topology, Share a device (Advanced) or Ports, Network endpoint. Title "Put a device on the network". Sub "Share a serial device with other computers over TCP, UDP or RFC 2217."
+- Combo "Device to share" ("COM3, real device (115200 8N1)"). Segmented "Share it using": TCP, UDP, RFC 2217. For TCP, radios "Wait for other computers to connect (server)" (default) and "Connect to a server (client)".
+- Server: combo "Listen on" (All network interfaces (0.0.0.0), This PC only (127.0.0.1), or a specific address), field "Port" (default 4001). Client: fields "Server address" and "Port". Hint: "Choose This PC only (127.0.0.1) to test from this machine first."
+- ResultSentence: "Other computers can connect to this PC on port **4001** and talk to **COM3**. Data flows both ways, and the Monitor shows both directions."
+- Windows warn note: "Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect."
+- Address block: CodeBlock `tcp://0.0.0.0:4001` with "Edit address" (editable in Advanced and then wins over the fields), and "Same thing from the command line" `vss_cli bridge serial://COM3?baud=115200 tcp://0.0.0.0:4001`. The URI forms are `tcp://host:port`, `udp://host:port`, `rfc2217://host:port`.
+- Footer: "Test from this PC first" (quiet: switches Listen on to 127.0.0.1 and shows the hint), Cancel, primary "Start bridge". Success toast: "Bridge is running on port 4001." with action "Open monitor".
+- Validation: port 1 to 65535, "Choose a port from 1 to 65535." Address must parse. Failure to bind shows the error pattern with the cause "Port 4001 is already in use" when known.

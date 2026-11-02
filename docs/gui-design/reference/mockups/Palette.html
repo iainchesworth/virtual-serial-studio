@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Command palette in Simple mode</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 520px">
+  <div style="display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--line); flex: none">
+    <svg class="ic" style="width:20px;height:20px;color:var(--ink3)" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg>
+    <input aria-label="Search actions" value="fault" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 18px; line-height: 26px; color: var(--ink)">
+    <span class="kbd">Esc</span>
+  </div>
+
+  <div class="dlg-b" style="padding-top: 16px; gap: 18px">
+    <div>
+      <div class="lbl" style="text-transform: uppercase; letter-spacing: .04em">Available now</div>
+      <p class="muted" style="padding: 6px 0">Nothing in Simple mode matches "fault".</p>
+    </div>
+
+    <div>
+      <div class="lbl" style="text-transform: uppercase; letter-spacing: .04em">Needs Advanced mode</div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <button style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border: 1px solid var(--accent-line); border-radius: 6px; background: var(--accent-soft); text-align: left">
+          <span style="width: 32px; height: 32px; border-radius: 6px; background: var(--panel); border: 1px solid var(--accent-line); color: var(--accent-d); display: flex; align-items: center; justify-content: center; flex: none"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2L4 9h4l-1 5 5-7H8l1-5z"/></svg></span>
+          <span class="grow"><b>Inject a fault into a mock device</b><br><span class="muted" style="font-size: 12px">Parity, framing, overrun, break, hang-up or disconnect</span></span>
+          <span class="badge adv">Advanced</span>
+        </button>
+        <button style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); text-align: left">
+          <span style="width: 32px; height: 32px; border-radius: 6px; background: var(--sunken); border: 1px solid var(--line); color: var(--ink2); display: flex; align-items: center; justify-content: center; flex: none"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 6h4v4H6z"/></svg></span>
+          <span class="grow"><b>Add mock device</b><br><span class="muted" style="font-size: 12px">Create a fixture that behaves like a real device</span></span>
+          <span class="badge adv">Advanced</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="muted grow" style="font-size: 12px">Advanced mode adds panels and options to this window. Nothing you have built changes.</span>
+    <button class="btn primary">Turn on Advanced mode <span class="kbd" style="color: var(--ink)">Enter</span></button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":520}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
