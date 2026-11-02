@@ -11,14 +11,15 @@ find_package(Qt6 6.2 QUIET COMPONENTS Widgets)
 if(NOT Qt6_FOUND)
   if(VSS_GUI_REQUIRED)
     message(FATAL_ERROR
-      "Vss: the GUI was requested but Qt 6 was not found. Set QT_ROOT "
-      "(the *-gui presets read it) or CMAKE_PREFIX_PATH to your Qt 6 "
-      "installation, or configure with -DVSS_GUI_REQUIRED=OFF "
+      "Vss: the GUI was requested but Qt 6 was not found. It was searched "
+      "for in CMAKE_PREFIX_PATH, QT_ROOT, C:/Qt, C:/Repos/common/qt, ~/Qt, "
+      "/opt/Qt and /usr/local/Qt. Set QT_ROOT or CMAKE_PREFIX_PATH to your "
+      "Qt 6 installation, or configure with -DVSS_GUI_REQUIRED=OFF "
       "-DVSS_BUILD_GUI=OFF for a command-line-only build.")
   endif()
-  message(STATUS "Vss: Qt 6 not found, the GUI target is skipped "
-                 "(set CMAKE_PREFIX_PATH or QT_ROOT to your Qt "
-                 "installation, or use a *-gui preset)")
+  message(STATUS "Vss: Qt 6 not found in CMAKE_PREFIX_PATH, QT_ROOT or the "
+                 "usual install locations; the GUI target is skipped. Use a "
+                 "*-gui preset to make this an error.")
   set(VSS_QT_FOUND FALSE PARENT_SCOPE)
   return()
 endif()

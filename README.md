@@ -41,8 +41,11 @@ abstraction that puts the transport behind a seam.
 
 Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers, and a
 checkout of [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial).
-Qt 6 is optional and only needed for the GUI; the `*-gui` presets make a
-missing Qt an error instead of silently building the CLI alone.
+Qt 6 is optional and only needed for the GUI. CMake looks for it through
+Qt's own config package first, then auto-detects a prebuilt Qt in `QT_ROOT`,
+`C:/Qt`, `C:/Repos/common/qt`, `~/Qt`, `/opt/Qt` and `/usr/local/Qt`. The
+`*-gui` presets make a missing Qt an error instead of silently building the
+CLI alone.
 
 > **Dependency status.** Boost.VirtualSerial is still developed in a private
 > repository, so this one currently builds only where that checkout is
@@ -58,7 +61,7 @@ cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
   -DVSS_VIRTUAL_SERIAL_DIR=/path/to/boostasio-virtualserial \
-  -DCMAKE_PREFIX_PATH=/path/to/Qt/6.10.3/msvc2022_64   # optional, for the GUI
+  -DCMAKE_PREFIX_PATH=/path/to/Qt/6.10.3/msvc2022_64   # optional; Qt is auto-detected
 
 cmake --build build
 ctest --test-dir build --output-on-failure
@@ -83,7 +86,9 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | `perf` | Performance suite, no GUI |
 | `tracy` | Performance suite with Tracy, no GUI |
 
-The GUI presets read the `QT_ROOT` environment variable:
+Set `QT_ROOT` (or `-DCMAKE_PREFIX_PATH=...`) only when the automatic search
+picks the wrong kit; otherwise no environment variable is needed. The GUI
+presets still respect `QT_ROOT` when it is set:
 
 ```bash
 # Linux example
