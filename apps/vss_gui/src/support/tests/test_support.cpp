@@ -35,6 +35,7 @@
 #include <QComboBox>
 #include <QDir>
 #include <QFile>
+#include <QFrame>
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -646,6 +647,13 @@ TEST_CASE("support: settings persist and apply immediately")
     dark->setChecked(true);
     REQUIRE_EQ(vss::gui::Theme::instance().mode(), theme_mode::dark);
     REQUIRE_EQ(setting("ui/theme"), QStringLiteral("dark"));
+    // The dialog's own nav chrome must follow a live theme switch.
+    auto* nav = dialog.findChild<QFrame*>(QStringLiteral("settingsNav"));
+    REQUIRE(nav != nullptr);
+    REQUIRE(nav->styleSheet().contains(
+        vss::gui::Theme::instance()
+            .colour(vss::gui::colour_role::accentSoft)
+            .name(QColor::HexRgb)));
 
     auto* density = dialog.findChild<vss::gui::SegmentedControl*>(
         QStringLiteral("densityControl"));

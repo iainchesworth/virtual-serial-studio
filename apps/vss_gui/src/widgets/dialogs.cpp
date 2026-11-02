@@ -39,15 +39,22 @@ QFrame* make_footer(QWidget* parent, QHBoxLayout*& layout)
     footer->setObjectName(QStringLiteral("dialogFooter"));
     footer->setAttribute(Qt::WA_StyledBackground);
     footer->setFrameShape(QFrame::NoFrame);
-    footer->setStyleSheet(
-        QStringLiteral(
-            "QFrame#dialogFooter { background: %1; border-top: 1px solid %2; }")
-            .arg(Theme::instance()
-                     .colour(colour_role::sunken)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::line)
-                     .name(QColor::HexRgb)));
+    const auto apply_style = [footer]
+    {
+        footer->setStyleSheet(
+            QStringLiteral("QFrame#dialogFooter { background: %1; border-top: "
+                           "1px solid %2; }")
+                .arg(Theme::instance()
+                         .colour(colour_role::sunken)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::line)
+                         .name(QColor::HexRgb)));
+    };
+    apply_style();
+    // A theme switch while a dialog is open must recolour its footer too.
+    QObject::connect(&Theme::instance(), &Theme::themeChanged, footer,
+                     [apply_style] { apply_style(); });
     layout = new QHBoxLayout(footer);
     layout->setContentsMargins(20, 10, 20, 10);
     layout->setSpacing(8);

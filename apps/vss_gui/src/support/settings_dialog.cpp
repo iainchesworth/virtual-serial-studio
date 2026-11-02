@@ -117,35 +117,41 @@ void SettingsDialog::build()
     nav->setObjectName(QStringLiteral("settingsNav"));
     nav->setFixedWidth(200);
     nav->setAttribute(Qt::WA_StyledBackground, true);
-    nav->setStyleSheet(
-        QStringLiteral(
-            "QFrame#settingsNav { background: %1; border-right: 1px solid "
-            "%2; }"
-            "QFrame#settingsNav QPushButton { min-height: 34px; border: 0; "
-            "border-radius: 4px; padding: 0 12px; text-align: left; "
-            "background: transparent; color: %3; }"
-            "QFrame#settingsNav QPushButton:hover:!checked { background: "
-            "%4; }"
-            "QFrame#settingsNav QPushButton:checked { background: %5; color: "
-            "%6; font-weight: 600; }")
-            .arg(Theme::instance()
-                     .colour(colour_role::sunken)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::line)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::ink2)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::panel)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::accentSoft)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::accentStrong)
-                     .name(QColor::HexRgb)));
+    const auto apply_nav_style = [nav]
+    {
+        nav->setStyleSheet(
+            QStringLiteral(
+                "QFrame#settingsNav { background: %1; border-right: 1px solid "
+                "%2; }"
+                "QFrame#settingsNav QPushButton { min-height: 34px; border: 0; "
+                "border-radius: 4px; padding: 0 12px; text-align: left; "
+                "background: transparent; color: %3; }"
+                "QFrame#settingsNav QPushButton:hover:!checked { background: "
+                "%4; }"
+                "QFrame#settingsNav QPushButton:checked { background: %5; "
+                "color: %6; font-weight: 600; }")
+                .arg(Theme::instance()
+                         .colour(colour_role::sunken)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::line)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::ink2)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::panel)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::accentSoft)
+                         .name(QColor::HexRgb),
+                     Theme::instance()
+                         .colour(colour_role::accentStrong)
+                         .name(QColor::HexRgb)));
+    };
+    apply_nav_style();
+    connect(&Theme::instance(), &Theme::themeChanged, nav,
+            [apply_nav_style] { apply_nav_style(); });
     auto* nav_layout = new QVBoxLayout(nav);
     nav_layout->setContentsMargins(10, 12, 10, 12);
     nav_layout->setSpacing(2);

@@ -173,6 +173,9 @@ gates pass.
   `gui_backend`, `gui_theme`, `gui_shell`, `gui_support`), clang-format 22 on
   every changed C++ file, `changelog.py --check`. No `libs/vss_core`, JSON
   schema or third-party dependency changed.
+- A live theme switch from inside Settings also re-tokenises the dialog footer,
+  the Settings nav, the About tile and the troubleshooting separators; the
+  support test checks the Settings nav follows the dark accent tokens.
 - Deviations: support namespace; Undo/Redo disabled; one shortcuts table;
   Help contents index; setup-check and readiness copy for states the mockup
   did not specify; About adds a Boost row and summarised licences. All are in

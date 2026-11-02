@@ -76,10 +76,16 @@ QWidget* separator(QWidget* parent)
 {
     auto* line = new QWidget(parent);
     line->setFixedHeight(1);
-    line->setStyleSheet(QStringLiteral("background: %1")
-                            .arg(Theme::instance()
-                                     .colour(colour_role::line)
-                                     .name(QColor::HexRgb)));
+    const auto apply_style = [line]
+    {
+        line->setStyleSheet(QStringLiteral("background: %1")
+                                .arg(Theme::instance()
+                                         .colour(colour_role::line)
+                                         .name(QColor::HexRgb)));
+    };
+    apply_style();
+    QObject::connect(&Theme::instance(), &Theme::themeChanged, line,
+                     [apply_style] { apply_style(); });
     return line;
 }
 

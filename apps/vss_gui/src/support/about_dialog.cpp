@@ -121,15 +121,21 @@ void AboutDialog::build()
     auto* tile = new QLabel(header);
     tile->setFixedSize(56, 56);
     tile->setAlignment(Qt::AlignCenter);
-    tile->setStyleSheet(
-        QStringLiteral("QLabel { background: %1; border-radius: 12px; }")
-            .arg(Theme::instance()
-                     .colour(colour_role::accent)
-                     .name(QColor::HexRgb)));
-    tile->setPixmap(
-        IconProvider::instance()
-            .icon(QStringLiteral("device"), colour_role::onAccent, 30)
-            .pixmap(30, 30));
+    const auto apply_tile_style = [tile]
+    {
+        tile->setStyleSheet(
+            QStringLiteral("QLabel { background: %1; border-radius: 12px; }")
+                .arg(Theme::instance()
+                         .colour(colour_role::accent)
+                         .name(QColor::HexRgb)));
+        tile->setPixmap(
+            IconProvider::instance()
+                .icon(QStringLiteral("device"), colour_role::onAccent, 30)
+                .pixmap(30, 30));
+    };
+    apply_tile_style();
+    connect(&Theme::instance(), &Theme::themeChanged, tile,
+            [apply_tile_style] { apply_tile_style(); });
     header_layout->addWidget(tile, 0, Qt::AlignTop);
 
     auto* heading = new QVBoxLayout();
