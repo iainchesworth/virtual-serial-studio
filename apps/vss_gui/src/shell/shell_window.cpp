@@ -10,6 +10,16 @@
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
 #include "shell/status_bar.hpp"
+#include "support/about_dialog.hpp"
+#include "support/build_info.hpp"
+#include "support/diagnostic_bundle_dialog.hpp"
+#include "support/help_contents_dialog.hpp"
+#include "support/settings.hpp"
+#include "support/settings_dialog.hpp"
+#include "support/setup_check_dialog.hpp"
+#include "support/setup_facts.hpp"
+#include "support/shortcuts_dialog.hpp"
+#include "support/troubleshoot_dialog.hpp"
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
@@ -23,19 +33,20 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
+#include <QClipboard>
 #include <QCloseEvent>
 #include <QDir>
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFrame>
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QKeySequence>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
-#include <QMessageBox>
 #include <QResizeEvent>
 #include <QSettings>
 #include <QSignalBlocker>
@@ -51,6 +62,8 @@
 
 namespace vss::gui
 {
+using namespace support;
+
 namespace
 {
 
@@ -73,6 +86,7 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
     setMinimumSize(Theme::instance().size(QStringLiteral("layout.windowMin")));
     resize(Theme::instance().size(QStringLiteral("layout.windowDefault")));
     setDockOptions(QMainWindow::AllowTabbedDocks | QMainWindow::AnimatedDocks);
+    backend_.set_refresh_interval(load_ui_settings().refresh_ms);
 
     build_actions();
     build_menus();
@@ -172,18 +186,26 @@ void ShellWindow::build_actions()
         {}, action_level::advanced, later(QStringLiteral("Export as command")));
     add(QStringLiteral("file.bundle"), QStringLiteral("Diagnostic bundle"),
         QStringLiteral("support zip"), {}, {}, action_level::simple,
-        later(QStringLiteral("The diagnostic bundle")));
+        [this] { open_bundle(); });
     add(QStringLiteral("file.quit"), QStringLiteral("Quit"),
         QStringLiteral("exit"), {}, QKeySequence::Quit, action_level::simple,
         [this] { close(); });
 
     // Edit
-    add(QStringLiteral("edit.undo"), QStringLiteral("Undo"),
-        QStringLiteral("redo"), {}, QKeySequence::Undo, action_level::simple,
-        later(QStringLiteral("Undo")));
-    add(QStringLiteral("edit.redo"), QStringLiteral("Redo"),
-        QStringLiteral("undo"), {}, QKeySequence::Redo, action_level::simple,
-        later(QStringLiteral("Redo")));
+    // The engine has no stable per-endpoint identity for a restored snapshot:
+    // a re-applied document gets new endpoint ids and, for auto/pty ports, a
+    // new advertised path.  Because exact restore cannot be proven, Undo and
+    // Redo stay visible but disabled; see design-deviations.md (WP8).
+    add(
+        QStringLiteral("edit.undo"), QStringLiteral("Undo"),
+        QStringLiteral("undo stack restore"), {}, QKeySequence::Undo,
+        action_level::simple, [] {}, false,
+        [this] { return backend_.caps().undo; });
+    add(
+        QStringLiteral("edit.redo"), QStringLiteral("Redo"),
+        QStringLiteral("redo stack restore"), {}, QKeySequence::Redo,
+        action_level::simple, [] {}, false,
+        [this] { return backend_.caps().undo; });
     add(QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
         QStringLiteral("delete remove"), QStringLiteral("remove"),
         QKeySequence(Qt::Key_Delete), action_level::simple,
@@ -257,8 +279,8 @@ void ShellWindow::build_actions()
         QKeySequence(QStringLiteral("Ctrl+K")), action_level::simple,
         [this] { open_palette(); });
     add(QStringLiteral("tools.setupCheck"), QStringLiteral("Setup check"),
-        QStringLiteral("driver com0com"), {}, {}, action_level::simple,
-        later(QStringLiteral("Setup check")));
+        QStringLiteral("driver com0com permissions"), {}, {},
+        action_level::simple, [this] { open_setup_check(); });
     add(QStringLiteral("tools.benchmark"), QStringLiteral("Benchmark"),
         QStringLiteral("throughput speed"), {}, {}, action_level::advanced,
         later(QStringLiteral("Benchmark")));
@@ -272,9 +294,9 @@ void ShellWindow::build_actions()
             status_->showMessage(QStringLiteral("Refreshed."), 2000);
         });
     add(QStringLiteral("tools.settings"), QStringLiteral("Settings"),
-        QStringLiteral("preferences"), QStringLiteral("settings"),
-        QKeySequence(QStringLiteral("Ctrl+,")), action_level::simple,
-        later(QStringLiteral("Settings")));
+        QStringLiteral("preferences theme density refresh baud"),
+        QStringLiteral("settings"), QKeySequence(QStringLiteral("Ctrl+,")),
+        action_level::simple, [this] { open_settings(); });
 
     // View
     add(
@@ -352,20 +374,35 @@ void ShellWindow::build_actions()
 
     // Help
     add(QStringLiteral("help.contents"), QStringLiteral("Help contents"),
-        QStringLiteral("manual"), {}, QKeySequence(Qt::Key_F1),
-        action_level::simple, later(QStringLiteral("Help contents")));
+        QStringLiteral("manual help topics"), {}, QKeySequence(Qt::Key_F1),
+        action_level::simple, [this] { open_help_contents(); });
     add(QStringLiteral("help.why"), QStringLiteral("Why is nothing arriving?"),
-        QStringLiteral("troubleshoot"), {}, {}, action_level::simple,
-        later(QStringLiteral("The troubleshooting checklist")));
+        QStringLiteral("troubleshoot no data"), {}, {}, action_level::simple,
+        [this] { open_troubleshoot(); });
     add(QStringLiteral("help.shortcuts"), QStringLiteral("Keyboard shortcuts"),
         QStringLiteral("keys"), {}, {}, action_level::simple,
-        later(QStringLiteral("Keyboard shortcuts")));
+        [this] { open_shortcuts(); });
     add(QStringLiteral("help.environment"), QStringLiteral("Copy environment"),
         QStringLiteral("build bug report"), {}, {}, action_level::simple,
-        later(QStringLiteral("Copy environment")));
+        [this] { copy_environment(); });
     add(QStringLiteral("help.about"), QStringLiteral("About"),
-        QStringLiteral("version licence"), {}, {}, action_level::simple,
-        later(QStringLiteral("About")));
+        QStringLiteral("version licence copyright"), {}, {},
+        action_level::simple, [this] { open_about(); });
+
+    // Undo and Redo are present so the shortcuts and the menu match the IA,
+    // but the engine cannot restore a snapshot exactly (see the comment where
+    // they are registered).  They are disabled with a reason.
+    for (const QString& id :
+         {QStringLiteral("edit.undo"), QStringLiteral("edit.redo")})
+    {
+        if (QAction* action = registry_.action(id))
+        {
+            action->setToolTip(QStringLiteral("Not available in this build"));
+            action->setStatusTip(
+                QStringLiteral("Undo needs an exact restore, which this build "
+                               "cannot prove."));
+        }
+    }
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
@@ -526,7 +563,7 @@ void ShellWindow::build_central()
     connect(launcher_, &Launcher::job_requested, this,
             [this](const QString& job) { run_job(job); });
     connect(launcher_, &Launcher::setup_check_requested, this,
-            [this] { placeholder(QStringLiteral("Setup check")); });
+            [this] { open_setup_check(); });
     connect(launcher_, &Launcher::browse_requested, this,
             [this] { open_document(); });
     connect(launcher_, &Launcher::open_recent_requested, this,
@@ -666,8 +703,9 @@ void ShellWindow::connect_backend()
     connect(&backend_, &StudioBackend::lines_changed, this,
             [this](vss::endpoint_id) { status_->refresh(); });
     connect(&backend_, &StudioBackend::batch_ready, this,
-            [this]
+            [this](const event_batch& events)
             {
+                event_log_.append(events);
                 status_->refresh();
                 backend_.refresh();
             });
@@ -841,6 +879,117 @@ void ShellWindow::placeholder(const QString& what)
         QStringLiteral("%1 is part of a later work package.").arg(what), 5000);
 }
 
+void ShellWindow::open_setup_check()
+{
+    SetupCheckDialog dialog(backend_, this);
+    connect(&dialog, &SetupCheckDialog::restart_as_administrator_requested,
+            this, &ShellWindow::restart_elevated);
+    connect(&dialog, &SetupCheckDialog::continue_in_test_mode_requested, this,
+            [this]
+            {
+                ToastManager::instance().show(
+                    this, QStringLiteral("Test mode. New ports only work "
+                                         "inside Virtual Serial Studio."));
+            });
+    dialog.exec();
+    status_->refresh();
+    launcher_->refresh();
+}
+
+void ShellWindow::restart_elevated()
+{
+    if (!confirm_discard())
+        return;
+    QString error;
+    if (relaunch_as_administrator(&error))
+    {
+        restarting_ = true;
+        close();
+        return;
+    }
+    if (!error.isEmpty())
+    {
+        ErrorDialog dialog(QStringLiteral("Could not restart as administrator"),
+                           error, {}, this);
+        dialog.exec();
+    }
+}
+
+void ShellWindow::open_settings()
+{
+    SettingsDialog dialog(backend_, load_ui_settings(), this);
+    connect(&dialog, &SettingsDialog::advanced_changed, this,
+            [this](bool advanced) { level_.set_advanced(advanced); });
+    dialog.exec();
+    update_actions();
+    status_->refresh();
+    launcher_->refresh();
+}
+
+void ShellWindow::open_troubleshoot()
+{
+    vss::endpoint_id port = selection_.port();
+    if (port == 0)
+    {
+        const auto ports = backend_.ports();
+        if (!ports.empty())
+            port = ports.front().id;
+    }
+    TroubleshootDialog dialog(backend_, port, this);
+    connect(&dialog, &TroubleshootDialog::bundle_requested, this,
+            &ShellWindow::open_bundle);
+    dialog.exec();
+}
+
+void ShellWindow::open_shortcuts()
+{
+    ShortcutsDialog dialog(shortcut_entries(registry_), this);
+    dialog.exec();
+}
+
+void ShellWindow::open_about()
+{
+    AboutDialog dialog(this);
+    connect(&dialog, &AboutDialog::bundle_requested, this,
+            &ShellWindow::open_bundle);
+    dialog.exec();
+}
+
+void ShellWindow::open_help_contents()
+{
+    HelpContentsDialog dialog(this);
+    dialog.exec();
+    switch (dialog.requested())
+    {
+    case help_topic::none:
+        break;
+    case help_topic::setup_check:
+        open_setup_check();
+        break;
+    case help_topic::troubleshoot:
+        open_troubleshoot();
+        break;
+    case help_topic::shortcuts:
+        open_shortcuts();
+        break;
+    case help_topic::about:
+        open_about();
+        break;
+    }
+}
+
+void ShellWindow::open_bundle()
+{
+    DiagnosticBundleDialog dialog(backend_, event_log_, this);
+    dialog.exec();
+}
+
+void ShellWindow::copy_environment()
+{
+    QGuiApplication::clipboard()->setText(environment_report());
+    ToastManager::instance().show(this, QStringLiteral("Environment copied."));
+}
+
 void ShellWindow::new_document()
 {
     if (!confirm_discard())
@@ -951,29 +1100,30 @@ bool ShellWindow::confirm_discard()
 {
     if (!dirty_)
         return true;
-    const QSettings settings;
-    if (!settings.value(QStringLiteral("ui/askOnDiscard"), true).toBool())
+    if (!load_ui_settings().ask_on_discard)
         return true;
 
-    QMessageBox box(
-        QMessageBox::Question, QStringLiteral("Unsaved changes"),
-        QStringLiteral("Your ports and links have changed since the "
-                       "last save. You can turn this prompt off in "
-                       "Settings."),
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, this);
-    box.setWindowTitle(QStringLiteral("Save changes to %1?")
-                           .arg(document_name(document_path_)));
-    box.button(QMessageBox::Save)->setText(QStringLiteral("Save"));
-    box.button(QMessageBox::Discard)->setText(QStringLiteral("Don't save"));
-    box.button(QMessageBox::Cancel)->setText(QStringLiteral("Cancel"));
-    box.setDefaultButton(QMessageBox::Save);
-    const int answer = box.exec();
-    if (answer == QMessageBox::Save)
+    ConfirmDialog dialog(
+        QStringLiteral("Save changes to %1?")
+            .arg(document_name(document_path_)),
+        QStringLiteral("Your ports and links have changed since the last save. "
+                       "You can turn this prompt off in Settings."),
+        QVector<confirm_choice>{
+            {QStringLiteral("Don't save"), QStringLiteral("quiet"), false},
+            {QStringLiteral("Cancel"), QString(), true},
+            {QStringLiteral("Save"), QStringLiteral("primary"), false}},
+        2, this);
+    dialog.exec();
+    switch (dialog.chosen())
     {
+    case 0:
+        return true; // Don't save: carry on and discard.
+    case 2:
         save_document();
         return !dirty_;
+    default:
+        return false;
     }
-    return answer == QMessageBox::Discard;
 }
 
 void ShellWindow::add_recent(const QString& path, const QString& summary)
@@ -1161,7 +1311,7 @@ void ShellWindow::showEvent(QShowEvent* event)
 
 void ShellWindow::closeEvent(QCloseEvent* event)
 {
-    if (!confirm_discard())
+    if (!restarting_ && !confirm_discard())
     {
         event->ignore();
         return;

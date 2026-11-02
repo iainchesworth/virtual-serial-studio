@@ -7,6 +7,7 @@
 #include "shell/launcher.hpp"
 
 #include "shell/format.hpp"
+#include "support/setup_facts.hpp"
 #include "theme/focus_ring_style.hpp"
 #include "theme/icon_provider.hpp"
 
@@ -27,6 +28,8 @@
 
 namespace vss::gui
 {
+using namespace support;
+
 namespace
 {
 
@@ -34,17 +37,6 @@ QFont semibold(QFont font)
 {
     font.setWeight(QFont::DemiBold);
     return font;
-}
-
-QString platform_name()
-{
-#if defined(Q_OS_WIN)
-    return QStringLiteral("windows");
-#elif defined(Q_OS_MACOS)
-    return QStringLiteral("macos");
-#else
-    return QStringLiteral("linux");
-#endif
 }
 
 } // namespace
@@ -295,19 +287,42 @@ void Launcher::build()
 
 void Launcher::refresh()
 {
-    const setup_facts facts = backend_.facts();
-    const bool windows = platform_name() == QLatin1String("windows");
-    if (!windows)
+    const setup_report report = query_setup_report(backend_);
+    const bool windows = host_platform() == QLatin1String("windows");
+    if (report.state == setup_report::readiness::not_checked)
     {
-        readiness_->set_kind(NoteBanner::kind::ok);
-        readiness_->set_text(
-            QStringLiteral("Ready. New ports are pseudo terminals that other "
-                           "programs can open."));
+        readiness_->set_kind(NoteBanner::kind::warn);
+        readiness_->set_text(QStringLiteral(
+            "Setup was not checked. Open the setup check to see what this PC "
+            "needs."));
         if (readiness_->action_button() != nullptr)
             readiness_->action_button()->setText(
-                QStringLiteral("View setup check"));
+                QStringLiteral("Open setup check"));
     }
-    else if (facts.com0com_found)
+    else if (!windows)
+    {
+        if (report.ports_ready)
+        {
+            readiness_->set_kind(NoteBanner::kind::ok);
+            readiness_->set_text(QStringLiteral(
+                "Ready. New ports are pseudo terminals that other programs "
+                "can open."));
+            if (readiness_->action_button() != nullptr)
+                readiness_->action_button()->setText(
+                    QStringLiteral("View setup check"));
+        }
+        else
+        {
+            readiness_->set_kind(NoteBanner::kind::warn);
+            readiness_->set_text(QStringLiteral(
+                "Setup needs attention. New ports may not be usable by other "
+                "programs."));
+            if (readiness_->action_button() != nullptr)
+                readiness_->action_button()->setText(
+                    QStringLiteral("Open setup check"));
+        }
+    }
+    else if (report.ports_ready)
     {
         readiness_->set_kind(NoteBanner::kind::ok);
         readiness_->set_text(QStringLiteral(

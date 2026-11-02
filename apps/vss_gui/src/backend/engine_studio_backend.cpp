@@ -231,6 +231,30 @@ std::vector<device_view> EngineStudioBackend::devices() const
     return out;
 }
 
+std::vector<traffic_view> EngineStudioBackend::traffic(int limit) const
+{
+    std::vector<traffic_view> out;
+    const auto records =
+        studio_.engine().traffic(static_cast<std::size_t>(std::max(limit, 0)));
+    out.reserve(records.size());
+    for (const auto& record : records)
+    {
+        traffic_view view;
+        view.endpoint = record.endpoint;
+        view.name = QString::fromStdString(record.name);
+        view.direction = record.direction;
+        view.when = record.when;
+        if (record.data)
+        {
+            view.data =
+                QByteArray(reinterpret_cast<const char*>(record.data->data()),
+                           static_cast<qsizetype>(record.data->size()));
+        }
+        out.push_back(std::move(view));
+    }
+    return out;
+}
+
 setup_facts EngineStudioBackend::facts() const
 {
     setup_facts facts;

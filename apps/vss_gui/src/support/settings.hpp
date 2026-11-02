@@ -1,0 +1,54 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#ifndef VSS_GUI_SUPPORT_SETTINGS_HPP
+#define VSS_GUI_SUPPORT_SETTINGS_HPP
+
+#include "theme/theme.hpp"
+
+#include <QString>
+#include <QStringList>
+
+namespace vss::gui::support
+{
+
+/// The persisted user preferences from `03-information-architecture.md`.
+///
+/// Changes apply immediately: the Settings dialog writes this value to
+/// QSettings and applies the live effect after every edit, so there is no OK
+/// or Apply button.
+struct ui_settings
+{
+    bool advanced = false;
+    theme_mode theme = theme_mode::system;
+    density_mode density = density_mode::comfortable;
+    int refresh_ms = 250;
+    int default_baud = 115200;
+    bool ask_on_discard = true;
+};
+
+inline constexpr int refresh_min_ms = 50;
+inline constexpr int refresh_max_ms = 5000;
+inline constexpr int refresh_default_ms = 250;
+inline constexpr int default_baud_rate = 115200;
+
+ui_settings default_ui_settings();
+ui_settings load_ui_settings();
+void save_ui_settings(const ui_settings& settings);
+
+/// Keys used in QSettings; exposed so a later work package reads the same
+/// values through one place rather than re-typing string literals.
+QString theme_key(theme_mode mode);
+theme_mode theme_from_key(const QString& key);
+QString density_key(density_mode mode);
+density_mode density_from_key(const QString& key);
+
+/// The baud rates offered in the Settings combo, most likely first.
+QStringList baud_rate_choices();
+
+} // namespace vss::gui::support
+
+#endif // VSS_GUI_SUPPORT_SETTINGS_HPP

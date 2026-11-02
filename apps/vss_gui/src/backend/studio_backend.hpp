@@ -71,6 +71,10 @@ public:
     virtual std::vector<port_view> ports() const = 0;
     virtual std::vector<link_view> links() const = 0;
     virtual std::vector<device_view> devices() const = 0;
+    /// The engine's bounded traffic ring, oldest first.  A limit of zero
+    /// returns everything retained.  Used by the diagnostic bundle only when
+    /// the user opts in to traffic contents.
+    virtual std::vector<traffic_view> traffic(int limit) const = 0;
     virtual setup_facts facts() const = 0;
     virtual std::optional<port_view> port(vss::endpoint_id id) const = 0;
     virtual std::optional<link_view> link(vss::link_id id) const = 0;

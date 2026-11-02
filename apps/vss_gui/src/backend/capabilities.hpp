@@ -47,8 +47,9 @@ struct capabilities
     bool undo = false;
     /// Run the benchmark from the GUI.
     bool benchmark = false;
-    /// Create the diagnostic bundle.
-    bool diagnostics = false;
+    /// Create the diagnostic bundle.  The ZIP writer lives in the GUI layer,
+    /// so this is present whenever the GUI is built.
+    bool diagnostics = true;
     /// Report JSON validation errors with a line number.
     bool json_positions = false;
     /// The setup check can gather driver and device facts.

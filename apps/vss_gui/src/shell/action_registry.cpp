@@ -150,4 +150,22 @@ QStringList ActionRegistry::duplicate_shortcuts() const
     return duplicates;
 }
 
+QVector<support::shortcut_entry>
+shortcut_entries(const ActionRegistry& registry)
+{
+    QVector<support::shortcut_entry> entries;
+    for (QAction* action : registry.actions())
+    {
+        if (action->shortcut().isEmpty())
+            continue;
+        support::shortcut_entry entry;
+        entry.action = action->text();
+        entry.shortcut = action->shortcut();
+        entry.advanced = action->property("actionLevel").toString() ==
+                         QLatin1String("advanced");
+        entries.push_back(entry);
+    }
+    return entries;
+}
+
 } // namespace vss::gui

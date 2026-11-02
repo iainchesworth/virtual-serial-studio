@@ -12,6 +12,7 @@
 #include "shell/launcher.hpp"
 #include "shell/level_service.hpp"
 #include "shell/shell_window.hpp"
+#include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
 
@@ -20,6 +21,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QDockWidget>
+#include <QLabel>
 #include <QSettings>
 #include <QToolBar>
 #include <QToolButton>
@@ -308,4 +310,137 @@ TEST_CASE("shell: every toolbar action has a name and a unique shortcut")
         shortcuts << key;
     }
     REQUIRE(shortcuts.size() > 8);
+}
+
+TEST_CASE("shell: undo and redo are capability gated")
+{
+    clear_settings();
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::gui::ShellWindow window(backend);
+        QAction* undo = window.findChild<QAction*>(QStringLiteral("edit.undo"));
+        QAction* redo = window.findChild<QAction*>(QStringLiteral("edit.redo"));
+        REQUIRE(undo != nullptr);
+        REQUIRE(redo != nullptr);
+        REQUIRE(!undo->isEnabled());
+        REQUIRE(!redo->isEnabled());
+        REQUIRE(!undo->toolTip().isEmpty());
+    }
+
+    vss::gui::capabilities caps;
+    caps.undo = true;
+    vss::gui::FakeStudioBackend backend;
+    backend.set_capabilities(caps);
+    vss::gui::ShellWindow window(backend);
+    QAction* undo = window.findChild<QAction*>(QStringLiteral("edit.undo"));
+    REQUIRE(undo != nullptr);
+    REQUIRE(undo->isEnabled());
+}
+
+TEST_CASE("shell: the shortcuts dialog is generated from the registry")
+{
+    vss::gui::ActionRegistry registry;
+    registry.add({QStringLiteral("file.new"),
+                  QStringLiteral("New"),
+                  QStringLiteral("document"),
+                  {},
+                  QKeySequence::New,
+                  vss::gui::action_level::simple,
+                  false,
+                  [] {},
+                  {}});
+    registry.add({QStringLiteral("file.save"),
+                  QStringLiteral("Save"),
+                  QStringLiteral("file"),
+                  {},
+                  QKeySequence::Save,
+                  vss::gui::action_level::simple,
+                  false,
+                  [] {},
+                  {}});
+    registry.add({QStringLiteral("edit.find"),
+                  QStringLiteral("Find"),
+                  QStringLiteral("search"),
+                  {},
+                  {},
+                  vss::gui::action_level::simple,
+                  false,
+                  [] {},
+                  {}});
+
+    const auto entries = vss::gui::shortcut_entries(registry);
+    REQUIRE_EQ(entries.size(), 2);
+    REQUIRE_EQ(entries.at(0).action, QStringLiteral("New"));
+    REQUIRE_EQ(entries.at(0).shortcut, QKeySequence::New);
+    REQUIRE_EQ(entries.at(1).action, QStringLiteral("Save"));
+
+    vss::gui::support::ShortcutsDialog dialog(entries);
+    REQUIRE_EQ(dialog.total_row_count(), entries.size());
+    QStringList expected;
+    for (const auto& entry : entries)
+        expected << entry.action;
+    REQUIRE_EQ(dialog.action_texts(), expected);
+}
+
+TEST_CASE("shell: the unsaved prompt follows ui/askOnDiscard")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    QApplication::processEvents();
+
+    const auto port = backend.create_virtual_port(
+        QStringLiteral("terminal"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(port.has_value());
+    QApplication::processEvents();
+    REQUIRE(window.windowTitle().contains(QLatin1Char('*')));
+
+    // With the setting off, close must not open the dialog.
+    window.close();
+    QApplication::processEvents();
+    REQUIRE(!window.isVisible());
+    clear_settings();
+}
+
+TEST_CASE("shell: the status bar readiness comes from the shared facts")
+{
+    clear_settings();
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    facts.com0com_found = true;
+    facts.serial_devices = 0;
+
+    {
+        vss::gui::FakeStudioBackend backend;
+        backend.set_facts(facts);
+        vss::gui::ShellWindow window(backend);
+        window.show();
+        QApplication::processEvents();
+        bool ready = false;
+        for (QLabel* label : window.findChildren<QLabel*>())
+        {
+            if (label->text() == QStringLiteral("Setup ready"))
+                ready = true;
+        }
+        REQUIRE(ready);
+    }
+
+    facts.com0com_found = false;
+    {
+        vss::gui::FakeStudioBackend backend;
+        backend.set_facts(facts);
+        vss::gui::ShellWindow window(backend);
+        window.show();
+        QApplication::processEvents();
+        bool attention = false;
+        for (QLabel* label : window.findChildren<QLabel*>())
+        {
+            if (label->text() == QStringLiteral("Setup needs attention"))
+                attention = true;
+        }
+        REQUIRE(attention);
+    }
+    clear_settings();
 }

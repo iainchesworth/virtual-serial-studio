@@ -39,6 +39,28 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC OFF)
 
+# Build identity for the About window and for `environment.txt` in the
+# diagnostic bundle.  Resolved before the support target so its compile
+# definitions can carry the values.
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE VSS_GIT_COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE VSS_GIT_BRANCH OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+endif()
+if(NOT VSS_GIT_COMMIT)
+  set(VSS_GIT_COMMIT "unknown")
+endif()
+if(NOT VSS_GIT_BRANCH)
+  set(VSS_GIT_BRANCH "unknown")
+endif()
+string(TIMESTAMP VSS_BUILD_DATE "%Y-%m-%d")
+set(VSS_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+set(VSS_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+
 # The adapter is a separate library so the backend tests can link it without
 # Qt Widgets.
 add_subdirectory(src/backend)
@@ -48,6 +70,10 @@ add_subdirectory(src/theme)
 
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
+
+# Support and system surfaces: setup check, troubleshooting, bundle,
+# settings, About, shortcuts.
+add_subdirectory(src/support)
 
 # The redesigned window frame.
 add_subdirectory(src/shell)
@@ -85,30 +111,15 @@ target_link_libraries(vss_gui PRIVATE
   vss_gui_backend
   vss_gui_theme
   vss_gui_widgets
+  vss_gui_support
   vss_gui_shell)
-find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
-  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE VSS_GIT_COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
-  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE VSS_GIT_BRANCH OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
-endif()
-if(NOT VSS_GIT_COMMIT)
-  set(VSS_GIT_COMMIT "unknown")
-endif()
-if(NOT VSS_GIT_BRANCH)
-  set(VSS_GIT_BRANCH "unknown")
-endif()
-string(TIMESTAMP VSS_BUILD_DATE "%Y-%m-%d")
 
 target_compile_definitions(vss_gui PRIVATE
   VSS_GIT_COMMIT="${VSS_GIT_COMMIT}"
   VSS_GIT_BRANCH="${VSS_GIT_BRANCH}"
   VSS_BUILD_DATE="${VSS_BUILD_DATE}"
-  VSS_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
-  VSS_COMPILER="${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}"
+  VSS_BUILD_TYPE="${VSS_BUILD_TYPE}"
+  VSS_COMPILER="${VSS_COMPILER}"
   VSS_GUI_VERSION="${PROJECT_VERSION}"
   # vss::endpoint has a member function called `emit`; Qt's keyword macro
   # would rewrite it to nothing inside the moc translation unit.  Using the
