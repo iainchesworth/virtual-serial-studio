@@ -17,6 +17,33 @@ gates pass.
 | WP8 | `gui/wp8-support` | implemented, self-review complete | Debug `ctest` 8/8, 15 support tests, 10 shell tests, `vss_gui --selftest` ok, Python `zipfile` round trip, contrast/QSS/changelog/format clean | self-review; human G2 pending | setup check, troubleshooting, bundle, settings, About, shortcuts, help index, confirm dialog; undo/redo disabled with a recorded reason |
 | WP9 | `gui/wp9-qa` | not started | - | - | blocked on G2 |
 
+## Integration review (G2)
+
+- `gui/integration` now carries WP3, WP4, WP5, WP6, WP7 and WP8 as
+  no-fast-forward merges. The only later integration commit connects the
+  Inspector's troubleshooting and line-matrix links, the Port ready setup and
+  connect actions, the launcher's Share job and the Add port/Pair setup links
+  to the tools those packages delivered.
+- Debug: `ctest --preset debug-gui` 13/13 (unit, system, headers,
+  `gui_selftest`, `gui_backend`, `gui_theme`, `gui_shell`, `gui_panes`,
+  `gui_topology`, `gui_advanced`, `gui_support`, `gui_dialogs`, `gui_flows`);
+  `vss_gui --selftest` ok.
+- Release: `ctest --test-dir build/release-gui` 14/14 including `perf_smoke`;
+  `vss_gui --selftest` ok. Contrast `FAILURES: 0`; QSS renders both themes;
+  changelog check ok; clang-format clean on the changed integration sources.
+- Review PNGs (never committed), all with `QT_QPA_FONTDIR=C:/Windows/Fonts`:
+  `build/debug-gui/gui-shots/integration-{light,dark}.png`,
+  `integration-advanced-{light,dark}.png` and
+  `integration-compact-light.png`, plus the WP5-WP8 dialog sets.
+- Known gaps taken into G2: Log and Topology JSON are separate Advanced docks
+  rather than Monitor tabs (the in-panel placeholder tabs are hidden);
+  real-device templates stay disabled until a template device picker is
+  designed, although WP5 Attach now exists; network server, peer-open, line
+  matrix, fault injection and benchmark extraction remain capability-gated;
+  real com0com/elevation and real serial hardware were exercised only through
+  the fake backend; setup-check chip click-through and the 200 percent
+  accessibility walk belong to WP9.
+
 ## WP0 detail
 
 - Installed the bundle at `docs/gui-design/` (98 files; `agents/`, the bundle
