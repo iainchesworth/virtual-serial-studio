@@ -19,7 +19,7 @@ scriptable lifetime. Windows genuinely needs the driver.
 
 | Branch | Worktree | Scope |
 |---|---|---|
-| `main` | `C:\Repos\boostasio-virtualserial-demoapp` | Shared CI, VM harness, docs |
+| develop | C:\Repos\boostasio-virtualserial-demoapp | Trunk: shared CI, VM harness, docs, day-to-day work |
 | `feature/windows-com-driver` | `C:\Repos\vss-worktrees\windows-com-driver` | KMDF virtual COM driver, INF, test signing, VMware validation |
 | `feature/posix-virtual-ports` | `C:\Repos\vss-worktrees\posix-virtual-ports` | Stable named PTYs and a headless port command for Linux and macOS |
 
