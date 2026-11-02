@@ -239,15 +239,18 @@ void ShellWindow::build_actions()
     // a re-applied document gets new endpoint ids and, for auto/pty ports, a
     // new advertised path.  Because exact restore cannot be proven, Undo and
     // Redo stay visible but disabled; see design-deviations.md (WP8).
-    add(QStringLiteral("edit.undo"), QStringLiteral("Undo"),
+    add(
+        QStringLiteral("edit.undo"), QStringLiteral("Undo"),
         QStringLiteral("undo stack restore"), {}, QKeySequence::Undo,
         action_level::simple, [] {}, false,
         [this] { return backend_.caps().undo; });
-    add(QStringLiteral("edit.redo"), QStringLiteral("Redo"),
+    add(
+        QStringLiteral("edit.redo"), QStringLiteral("Redo"),
         QStringLiteral("redo stack restore"), {}, QKeySequence::Redo,
         action_level::simple, [] {}, false,
         [this] { return backend_.caps().undo; });
-    add(QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
+    add(
+        QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
         QStringLiteral("delete remove"), QStringLiteral("remove"),
         QKeySequence(Qt::Key_Delete), action_level::simple,
         [this] { remove_selection(); }, false,
@@ -267,14 +270,16 @@ void ShellWindow::build_actions()
     add(QStringLiteral("ports.attach"), QStringLiteral("Attach real device"),
         QStringLiteral("serial device"), QStringLiteral("device"), {},
         action_level::simple, [this] { show_attach_device(); });
-    add(QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
+    add(
+        QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
         QStringLiteral("tcp udp rfc2217"), {}, {}, action_level::advanced,
         [this] { open_network_endpoint(); }, false,
         [this] { return backend_.caps().bridge; });
     add(QStringLiteral("ports.mock"), QStringLiteral("Mock fixture"),
         QStringLiteral("fixture mock script"), QStringLiteral("fixture"), {},
         action_level::advanced, [this] { open_add_fixture(); });
-    add(QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
+    add(
+        QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
         QStringLiteral("clipboard path"), {},
         QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
         [this] { copy_selected_port(); }, false,
@@ -307,7 +312,8 @@ void ShellWindow::build_actions()
     add(QStringLiteral("topology.watch"), QStringLiteral("Watch traffic"),
         QStringLiteral("monitor copy"), QStringLiteral("watch"), {},
         action_level::simple, [this] { show_watch(); });
-    add(QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
+    add(
+        QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
         QStringLiteral("delete disconnect"), {}, {}, action_level::simple,
         [this] { remove_selected_link(); }, false,
         [this] { return selection_.link() != 0; });
@@ -364,9 +370,11 @@ void ShellWindow::build_actions()
         QStringLiteral("view.links"), QStringLiteral("Show links as a list"),
         QStringLiteral("links topology list accessible"), {}, {},
         action_level::simple, [] {}, true);
-    add(QStringLiteral("view.log"), QStringLiteral("Log"),
+    add(
+        QStringLiteral("view.log"), QStringLiteral("Log"),
         QStringLiteral("events"), {}, {}, action_level::advanced, [] {}, true);
-    add(QStringLiteral("view.json"), QStringLiteral("Topology JSON"),
+    add(
+        QStringLiteral("view.json"), QStringLiteral("Topology JSON"),
         QStringLiteral("editor schema"), {}, {}, action_level::advanced, [] {},
         true);
     add(
@@ -1494,7 +1502,8 @@ void ShellWindow::show_add_port(bool pair_selected)
 
 void ShellWindow::show_pair()
 {
-    PairDialog dialog(backend_, level_.advanced(), vss::gui::host_platform(), this);
+    PairDialog dialog(backend_, level_.advanced(), vss::gui::host_platform(),
+                      this);
     connect(&dialog, &PairDialog::advanced_requested, this,
             [this, &dialog]
             {
@@ -1515,7 +1524,8 @@ void ShellWindow::show_pair()
 
 void ShellWindow::show_attach_device()
 {
-    AttachDialog dialog(backend_, level_.advanced(), vss::gui::host_platform(), this);
+    AttachDialog dialog(backend_, level_.advanced(), vss::gui::host_platform(),
+                        this);
     if (dialog.exec() != QDialog::Accepted || dialog.logical_port() == 0)
         return;
     show_port_ready(dialog.logical_port(), QStringLiteral("auto"));
@@ -1523,7 +1533,8 @@ void ShellWindow::show_attach_device()
 
 void ShellWindow::show_watch()
 {
-    WatchDialog dialog(backend_, selection_.port(), vss::gui::host_platform(), this);
+    WatchDialog dialog(backend_, selection_.port(), vss::gui::host_platform(),
+                       this);
     if (dialog.exec() != QDialog::Accepted || dialog.link_id() == 0)
         return;
     const auto source = backend_.port(dialog.source_id());

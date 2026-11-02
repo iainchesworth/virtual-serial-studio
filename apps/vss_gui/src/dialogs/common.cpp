@@ -241,7 +241,7 @@ QFrame* make_dialog_footer(QWidget* parent, QHBoxLayout*& layout)
 }
 
 QPushButton* make_dialog_action_button(const QString& text, const char* role,
-                                QWidget* parent)
+                                       QWidget* parent)
 {
     auto* button = new QPushButton(text, parent);
     button->setCursor(Qt::PointingHandCursor);

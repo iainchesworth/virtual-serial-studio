@@ -67,7 +67,7 @@ void prepare_dialog(QDialog* dialog, const QString& accessible_title, int width,
 QFrame* make_dialog_footer(QWidget* parent, QHBoxLayout*& layout);
 
 QPushButton* make_dialog_action_button(const QString& text, const char* role,
-                                QWidget* parent);
+                                       QWidget* parent);
 
 QLabel* make_dialog_title(const QString& text, QWidget* parent);
 QLabel* make_dialog_subtitle(const QString& text, QWidget* parent);
