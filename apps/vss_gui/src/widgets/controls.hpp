@@ -47,6 +47,9 @@ public:
     void set_current(int id);
     int current() const;
     int count() const;
+    /// 24 px variant for the status bar; the default is 32 px.
+    void set_compact(bool compact);
+    bool is_compact() const noexcept { return compact_; }
 
 Q_SIGNALS:
     void current_changed(int id);
@@ -61,6 +64,7 @@ private:
     QButtonGroup* group_ = nullptr;
     int next_id_ = 0;
     int current_id_ = -1;
+    bool compact_ = false;
 };
 
 /// A card with a radio button, title, description and optional meta line.

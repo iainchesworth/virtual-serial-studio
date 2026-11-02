@@ -70,10 +70,12 @@ SegmentedControl::SegmentedControl(QWidget* parent) : QWidget(parent)
 
 void SegmentedControl::apply_style()
 {
+    const int height = compact_ ? 24 : 32;
+    const int padding = compact_ ? 10 : 12;
     setStyleSheet(
         QStringLiteral(
             "QRadioButton { border: 1px solid %1; border-radius: 0; "
-            "background: %2; color: %3; padding: 0 12px; min-height: 32px; "
+            "background: %2; color: %3; padding: 0 %8px; min-height: %9px; "
             "spacing: 0; }"
             "QRadioButton::indicator { width: 0px; height: 0px; "
             "image: none; }"
@@ -85,7 +87,24 @@ void SegmentedControl::apply_style()
                  colour_name(colour_role::accent),
                  colour_name(colour_role::onAccent),
                  colour_name(colour_role::accentStrong),
-                 colour_name(colour_role::sunken)));
+                 colour_name(colour_role::sunken))
+            .arg(padding)
+            .arg(height));
+}
+
+void SegmentedControl::set_compact(bool compact)
+{
+    if (compact_ == compact)
+        return;
+    compact_ = compact;
+    setFixedHeight(compact ? 24 : 32);
+    const auto buttons = group_->buttons();
+    for (QAbstractButton* button : buttons)
+    {
+        button->setFont(Theme::instance().font(compact ? text_style::caption
+                                                       : text_style::body));
+    }
+    apply_style();
 }
 
 int SegmentedControl::add_item(const QString& text, int id)
@@ -96,7 +115,8 @@ int SegmentedControl::add_item(const QString& text, int id)
 
     auto* button = new QRadioButton(text, this);
     button->setAccessibleName(text);
-    button->setFont(Theme::instance().font(text_style::body));
+    button->setFont(Theme::instance().font(compact_ ? text_style::caption
+                                                    : text_style::body));
     button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     group_->addButton(button, id);
     layout_->addWidget(button);

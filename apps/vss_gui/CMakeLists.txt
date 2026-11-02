@@ -49,6 +49,9 @@ add_subdirectory(src/theme)
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
 
+# The redesigned window frame.
+add_subdirectory(src/shell)
+
 add_executable(vss_gui
   main.cpp
   main_window.cpp
@@ -81,7 +84,8 @@ target_link_libraries(vss_gui PRIVATE
   Qt6::Widgets
   vss_gui_backend
   vss_gui_theme
-  vss_gui_widgets)
+  vss_gui_widgets
+  vss_gui_shell)
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
   execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD

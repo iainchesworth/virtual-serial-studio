@@ -92,6 +92,7 @@ public:
     vss::result<vss::link_id> bridge(const QString& from_uri,
                                      const QString& to_uri) override;
 
+    bool hub_running() const override;
     void refresh() override;
     void set_refresh_interval(int milliseconds) override;
 

@@ -439,6 +439,11 @@ vss::result<vss::link_id> EngineStudioBackend::bridge(const QString& from_uri,
     return *linked;
 }
 
+bool EngineStudioBackend::hub_running() const
+{
+    return studio_.engine().running();
+}
+
 void EngineStudioBackend::refresh()
 {
     rebuild();
