@@ -187,14 +187,20 @@ Two layers are added:
    bridge, coalescing, the queue cap and the shutdown race. Registered as
    CTest `gui_backend` in `tests/CMakeLists.txt`, so it only exists when Qt
    does. No new third-party test dependency.
-2. **`--selftest` additions** (WP1 and WP9) for things that need a real
-   widget tree: gallery instantiation, light/dark, 100/200 percent,
-   accessible-name walk, 24 px targets, focus rings, screenshots.
+2. **`vss_gui_theme_tests`** (WP1) links the theme and widget libraries,
+   creates a `QApplication` on the offscreen platform and uses the same
+   in-tree macros. It checks token resolution, every QSS placeholder, the
+   WCAG contrast pairs, the no-literal-colour scan, the icon cache, the
+   gallery in both themes, accessible names, 24 px targets and the widget
+   behaviours. Registered as CTest `gui_theme` in `tests/CMakeLists.txt`.
+3. **`--selftest` additions** (WP9) for the whole window and every dialog:
+   light/dark, 100/200 percent, accessible-name walk, focus rings and the
+   PNG set.
 
 The in-tree framework is deliberately Qt-free (`tests/framework`), so it is
-used for the logic tests and not for widget tests. This is a deviation from
-the WP1 prompt wording ("tests with the in-tree framework") and is recorded in
-`design-deviations.md`.
+used for the logic and widget tests and not for the whole-window walk. This is
+a deviation from the WP1 prompt wording ("tests with the in-tree framework")
+and is recorded in `design-deviations.md`.
 
 ## 7. Adapter contract
 
@@ -215,8 +221,8 @@ Screens hold a `StudioBackend&`, never a `vss::studio&`.
 - `caps()` is const and is the only place a screen asks whether a
   control exists. `line_matrix`, `peer_open`, `faults`, `rename`, `undo` and
   `benchmark` are false in the real backend today.
-- Signals: `ports_changed`, `links_changed`, `devices_changed`,
-  `lines_changed(endpoint_id)`, `batch_ready`. All are emitted on the GUI
+- Signals: `ports_changed`, `links_changed`, `lines_changed(endpoint_id)`,
+  `batch_ready`. All are emitted on the GUI
   thread. There is deliberately no per-write callback: it would have to
   touch a `QObject` from the endpoint strand. A queue-full rejection is
   published by the engine as an error event and arrives in the coalesced
@@ -248,11 +254,12 @@ and it coalesces by construction.
 
 - **WP0 (this package)**: bundle, this plan, backend + bridge + tests. No
   visual change; the current GUI keeps working.
-- **WP1**: adds `Theme`, `IconProvider`, `FocusRingStyle`, widgets, resources
-  and the gallery. Migrates the existing panels off `theme.hpp` literals where
-  they remain, or leaves the old shell on a temporary compatibility path that
-  WP2 deletes. The `no hex outside Theme` scan is scoped to `src/` until WP2
-  removes the legacy files, then becomes a whole-`apps/vss_gui` test.
+- **WP1** (this package): adds `Theme`, `IconProvider`, `FocusRingStyle`,
+  widgets, resources and the gallery, plus `vss_gui_theme_tests`. The old
+  shell stays on its legacy `theme.hpp` compatibility path; only the new
+  `src/` tree is migrated. The `no hex outside Theme` scan is scoped to
+  `src/` until WP2 removes the legacy files, then becomes a whole-
+  `apps/vss_gui` test.
 - **WP2**: introduces `vss_gui_ui`, the `ActionRegistry`, the new frame,
   launcher and palette; deletes the old flat files it replaces. `develop` is
   not merged to until WP9, so the integration branch may be incomplete.
@@ -262,10 +269,10 @@ and it coalesces by construction.
 
 ## 9. Risks and open questions
 
-1. **Legacy theme migration**: `theme.hpp` is included by every panel and
-   hard-codes colours. WP1 must either migrate all call sites or keep a
-   compatibility shim; leaving both indefinitely would fail the colour-literal
-   test. Recommendation: WP1 migrates call sites, WP2 deletes the old shell.
+1. **Legacy theme migration**: `theme.hpp` is included by every old panel and
+   hard-codes colours. WP1 keeps the old shell on a compatibility path and
+   applies the colour-literal scan to `src/` only; WP2 deletes the old files,
+   after which the scan covers the whole GUI.
 2. **Intermediate incompleteness**: after WP2 the integration branch has
    placeholders where WP3-WP8 will land. It must never be merged to `develop`
    before WP9.
@@ -301,12 +308,13 @@ and it coalesces by construction.
    `gui/integration`, not `develop`; `develop` changes only at the final
    approved merge. This keeps trunk shippable while the design replaces the
    shell. The bundle's order and review gates are unchanged.
-2. **Qt pin.** Builds use Qt 6.10.3 at `C:\Qt\6.10.3\msvc2022_64`. The
-   machine also has Qt 6.12 under `C:\Repos\common\qt`; a `QT_ROOT` with a
-   trailing space silently lets CMake find 6.12 instead, and the resulting
-   binary fails with `qt_version_tag_6_12` against the 6.10 runtime. Every
-   build command sets the variable without a trailing space and also passes
-   `-DCMAKE_PREFIX_PATH`. This is an environment trap, not a code change.
+2. **Qt pin.** GUI builds use Qt 6.12.0 at
+   `C:\Repos\common\qt\6.12.0\msvc2022_64`. That install contains the approved
+   `Qt6::Svg` module; the Qt 6.10.3 tree at `C:\Qt\6.10.3` does not, so it
+   cannot build the icon provider. Every build command pins `QT_ROOT`
+   (without a trailing space) and `-DCMAKE_PREFIX_PATH`. Mixing 6.10 and 6.12
+   produces a binary that fails to start with `qt_version_tag_6_12`; this is
+   an environment trap, not a code change.
 3. **Qt-aware logic tests.** The in-tree framework is Qt-free, so the backend
    tests use a small `QCoreApplication` runner in the same executable. Widget
    tests stay in `--selftest`. No new test framework is added.
