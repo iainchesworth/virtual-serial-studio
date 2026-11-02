@@ -49,34 +49,14 @@ add_subdirectory(src/theme)
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
 
+# Ports, Inspector, Send and Monitor.
+add_subdirectory(src/panes)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 
 add_executable(vss_gui
-  main.cpp
-  main_window.cpp
-  selftest.cpp
-  port_model.cpp
-  monitor_model.cpp
-  topology_view.cpp
-  inspector_panel.cpp
-  send_panel.cpp
-  dialogs.cpp
-  settings_dialog.cpp
-  about_dialog.cpp
-  connect_dialog.cpp
-  theme.cpp
-  main_window.hpp
-  port_model.hpp
-  monitor_model.hpp
-  topology_view.hpp
-  inspector_panel.hpp
-  send_panel.hpp
-  dialogs.hpp
-  settings_dialog.hpp
-  about_dialog.hpp
-  connect_dialog.hpp
-  theme.hpp)
+  main.cpp)
 
 target_compile_features(vss_gui PRIVATE cxx_std_23)
 target_link_libraries(vss_gui PRIVATE
@@ -85,6 +65,7 @@ target_link_libraries(vss_gui PRIVATE
   vss_gui_backend
   vss_gui_theme
   vss_gui_widgets
+  vss_gui_panes
   vss_gui_shell)
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")

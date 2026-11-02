@@ -6,6 +6,10 @@
 
 #include "shell/shell_window.hpp"
 
+#include "panes/inspector_panel.hpp"
+#include "panes/monitor_panel.hpp"
+#include "panes/ports_panel.hpp"
+#include "panes/send_panel.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
@@ -23,6 +27,7 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
+#include <QClipboard>
 #include <QCloseEvent>
 #include <QDir>
 #include <QDockWidget>
@@ -41,6 +46,8 @@
 #include <QSignalBlocker>
 #include <QStackedWidget>
 #include <QStatusBar>
+#include <QStringList>
+#include <QTabWidget>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -73,6 +80,7 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
     setMinimumSize(Theme::instance().size(QStringLiteral("layout.windowMin")));
     resize(Theme::instance().size(QStringLiteral("layout.windowDefault")));
     setDockOptions(QMainWindow::AllowTabbedDocks | QMainWindow::AnimatedDocks);
+    setTabPosition(Qt::RightDockWidgetArea, QTabWidget::North);
 
     build_actions();
     build_menus();
@@ -98,6 +106,7 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
     update_content();
     update_actions();
     update_title();
+    last_signature_ = document_signature();
 
     connect(&level_, &LevelService::changed, this,
             &ShellWindow::on_level_changed);
@@ -184,10 +193,11 @@ void ShellWindow::build_actions()
     add(QStringLiteral("edit.redo"), QStringLiteral("Redo"),
         QStringLiteral("undo"), {}, QKeySequence::Redo, action_level::simple,
         later(QStringLiteral("Redo")));
-    add(QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
+    add(
+        QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
         QStringLiteral("delete remove"), QStringLiteral("remove"),
         QKeySequence(Qt::Key_Delete), action_level::simple,
-        later(QStringLiteral("Remove")), false,
+        [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0 || selection_.link() != 0; });
 
     // Ports
@@ -211,14 +221,16 @@ void ShellWindow::build_actions()
     add(QStringLiteral("ports.mock"), QStringLiteral("Mock fixture"),
         QStringLiteral("fixture mock script"), QStringLiteral("fixture"), {},
         action_level::advanced, [this] { run_job(QStringLiteral("mock")); });
-    add(QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
+    add(
+        QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
         QStringLiteral("clipboard path"), {},
         QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
-        later(QStringLiteral("Copy port name")), false,
+        [this] { copy_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
-    add(QStringLiteral("ports.remove"), QStringLiteral("Remove port"),
+    add(
+        QStringLiteral("ports.remove"), QStringLiteral("Remove port"),
         QStringLiteral("delete remove"), {}, {}, action_level::simple,
-        later(QStringLiteral("Remove port")), false,
+        [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
 
     // Topology
@@ -558,51 +570,122 @@ void ShellWindow::build_central()
 
 void ShellWindow::build_docks()
 {
-    const auto make_dock = [this](const QString& object_name,
-                                  const QString& title, const QString& caption)
+    const auto make_dock =
+        [this](const QString& object_name, const QString& title, QWidget* page)
     {
         auto* dock = new QDockWidget(title, this);
         dock->setObjectName(object_name);
         dock->setAllowedAreas(Qt::AllDockWidgetAreas);
-        auto* page = new QWidget(dock);
-        auto* layout = new QVBoxLayout(page);
-        layout->setContentsMargins(12, 12, 12, 12);
-        auto* text = new QLabel(caption, page);
-        text->setFont(Theme::instance().font(text_style::body));
-        text->setWordWrap(true);
-        text->setProperty("muted", true);
-        layout->addWidget(text);
-        layout->addStretch(1);
         dock->setWidget(page);
         return dock;
     };
 
-    ports_dock_ =
-        make_dock(QStringLiteral("portsDock"), QStringLiteral("Ports"),
-                  QStringLiteral("The ports table arrives with WP3."));
-    inspector_dock_ =
-        make_dock(QStringLiteral("inspectorDock"), QStringLiteral("Inspector"),
-                  QStringLiteral("The inspector arrives with WP3."));
+    ports_panel_ = new PortsPanel(backend_, selection_, this);
+    inspector_panel_ = new InspectorPanel(backend_, this);
+    send_panel_ = new SendPanel(backend_, this);
+    monitor_panel_ = new MonitorPanel(backend_, this);
+
+    ports_dock_ = make_dock(QStringLiteral("portsDock"),
+                            QStringLiteral("Ports"), ports_panel_);
+    inspector_dock_ = make_dock(QStringLiteral("inspectorDock"),
+                                QStringLiteral("Inspector"), inspector_panel_);
     send_dock_ = make_dock(QStringLiteral("sendDock"), QStringLiteral("Send"),
-                           QStringLiteral("The send panel arrives with WP3."));
-    monitor_dock_ =
-        make_dock(QStringLiteral("monitorDock"), QStringLiteral("Monitor"),
-                  QStringLiteral("The monitor arrives with WP3."));
+                           send_panel_);
+    monitor_dock_ = make_dock(QStringLiteral("monitorDock"),
+                              QStringLiteral("Monitor"), monitor_panel_);
 
     ports_dock_->setMinimumWidth(
-        Theme::instance().metric(QStringLiteral("layout.ports.min")));
+        Theme::instance().metric(QStringLiteral("layout.ports.default")));
     inspector_dock_->setMinimumWidth(
-        Theme::instance().metric(QStringLiteral("layout.inspector.min")));
+        Theme::instance().metric(QStringLiteral("layout.inspector.default")));
     send_dock_->setMinimumHeight(
         Theme::instance().metric(QStringLiteral("layout.send.default")));
     monitor_dock_->setMinimumHeight(
-        Theme::instance().metric(QStringLiteral("layout.monitor.min")));
+        Theme::instance().metric(QStringLiteral("layout.monitor.default")));
 
     addDockWidget(Qt::LeftDockWidgetArea, ports_dock_);
     addDockWidget(Qt::RightDockWidgetArea, inspector_dock_);
     addDockWidget(Qt::RightDockWidgetArea, send_dock_);
     splitDockWidget(inspector_dock_, send_dock_, Qt::Vertical);
     addDockWidget(Qt::BottomDockWidgetArea, monitor_dock_);
+
+    connect(ports_panel_, &PortsPanel::count_changed, this,
+            [this](int) { update_dock_titles(); });
+    connect(ports_panel_, &PortsPanel::inspect_requested, this,
+            [this](vss::endpoint_id id)
+            {
+                selection_.select_port(id);
+                focus_inspector();
+            });
+    connect(ports_panel_, &PortsPanel::remove_requested, this,
+            [this](vss::endpoint_id id)
+            {
+                selection_.select_port(id);
+                remove_selected_port();
+            });
+    connect(ports_panel_, &PortsPanel::path_copied, this,
+            [this](const QString& path)
+            {
+                status_->showMessage(QStringLiteral("Copied %1.").arg(path),
+                                     2500);
+            });
+    connect(ports_panel_, &PortsPanel::status_message, this,
+            [this](const QString& message)
+            { status_->showMessage(message, 3000); });
+    connect(inspector_panel_, &InspectorPanel::troubleshoot_requested, this,
+            [this]
+            {
+                status_->showMessage(
+                    QStringLiteral("The troubleshooting checklist arrives with "
+                                   "WP8."),
+                    4000);
+            });
+    connect(inspector_panel_, &InspectorPanel::advanced_tools_requested, this,
+            [this]
+            {
+                status_->showMessage(
+                    QStringLiteral("Line wiring and faults arrive with WP7."),
+                    4000);
+            });
+    connect(inspector_panel_, &InspectorPanel::error_message, this,
+            [this](const QString& message)
+            { ToastManager::instance().show(this, message); });
+    connect(send_panel_, &SendPanel::sent, this,
+            [this](int bytes, const QString& name)
+            {
+                if (bytes > 0)
+                    status_->showMessage(
+                        QStringLiteral("Queued %1 bytes to %2.")
+                            .arg(bytes)
+                            .arg(name),
+                        3000);
+            });
+    connect(send_panel_, &SendPanel::status_message, this,
+            [this](const QString& message)
+            { status_->showMessage(message, 3000); });
+    connect(send_panel_, &SendPanel::error_message, this,
+            [this](const QString& message)
+            { ToastManager::instance().show(this, message); });
+    connect(monitor_panel_, &MonitorPanel::port_selected, this,
+            [this](vss::endpoint_id id) { selection_.select_port(id); });
+    connect(monitor_panel_, &MonitorPanel::status_message, this,
+            [this](const QString& message)
+            { status_->showMessage(message, 3000); });
+    connect(monitor_panel_, &MonitorPanel::error_message, this,
+            [this](const QString& message)
+            { ToastManager::instance().show(this, message); });
+
+    connect(&selection_, &SelectionService::port_changed, this,
+            [this](vss::endpoint_id id)
+            {
+                inspector_panel_->set_selected_port(id);
+                send_panel_->set_selected_port(id);
+                monitor_panel_->set_selected_port(id);
+                update_dock_titles();
+            });
+    inspector_panel_->set_selected_port(selection_.port());
+    send_panel_->set_selected_port(selection_.port());
+    monitor_panel_->set_selected_port(selection_.port());
 
     if (QAction* action = monitor_action_)
     {
@@ -623,22 +706,11 @@ void ShellWindow::build_docks()
                 monitor_action_->setChecked(visible);
             });
 
-    resizeDocks(
-        {ports_dock_},
-        {Theme::instance().metric(QStringLiteral("layout.ports.default"))},
-        Qt::Horizontal);
-    resizeDocks(
-        {inspector_dock_},
-        {Theme::instance().metric(QStringLiteral("layout.inspector.default"))},
-        Qt::Horizontal);
-    resizeDocks(
-        {send_dock_},
-        {Theme::instance().metric(QStringLiteral("layout.send.default"))},
-        Qt::Vertical);
-    resizeDocks(
-        {monitor_dock_},
-        {Theme::instance().metric(QStringLiteral("layout.monitor.default"))},
-        Qt::Vertical);
+    ports_panel_->set_advanced(level_.advanced());
+    inspector_panel_->set_advanced(level_.advanced());
+    send_panel_->set_advanced(level_.advanced());
+    monitor_panel_->set_advanced(level_.advanced());
+    update_dock_titles();
 }
 
 void ShellWindow::build_status()
@@ -677,10 +749,13 @@ void ShellWindow::on_backend_changed()
 {
     if (!backend_.ports().empty())
         launcher_forced_ = false;
+    const QString signature = document_signature();
+    if (!loading_ && signature != last_signature_)
+        set_dirty(true);
+    last_signature_ = signature;
     status_->refresh();
     update_content();
-    if (!loading_)
-        set_dirty(true);
+    update_dock_titles();
     update_actions();
 }
 
@@ -693,6 +768,27 @@ void ShellWindow::on_level_changed(bool advanced)
         advanced_action_->setChecked(advanced);
     }
     status_->set_advanced(advanced);
+    if (ports_panel_ != nullptr)
+        ports_panel_->set_advanced(advanced);
+    if (inspector_panel_ != nullptr)
+        inspector_panel_->set_advanced(advanced);
+    if (send_panel_ != nullptr)
+        send_panel_->set_advanced(advanced);
+    if (monitor_panel_ != nullptr)
+        monitor_panel_->set_advanced(advanced);
+    if (send_dock_ != nullptr)
+    {
+        const int base =
+            Theme::instance().metric(QStringLiteral("layout.send.default"));
+        send_dock_->setMinimumHeight(advanced ? base + 68 : base);
+    }
+    if (monitor_dock_ != nullptr)
+    {
+        const int base =
+            Theme::instance().metric(QStringLiteral("layout.monitor.default"));
+        monitor_dock_->setMinimumHeight(advanced ? base + 34 : base);
+    }
+    update_dock_titles();
     update_actions();
 }
 
@@ -753,6 +849,107 @@ void ShellWindow::update_status()
     status_->refresh();
 }
 
+void ShellWindow::update_dock_titles()
+{
+    if (ports_dock_ == nullptr)
+        return;
+    const auto ports = backend_.ports();
+    ports_dock_->setWindowTitle(
+        QStringLiteral("Ports %1").arg(static_cast<qulonglong>(ports.size())));
+    QString inspector = QStringLiteral("Inspector");
+    if (selection_.port() != 0)
+    {
+        if (const auto port = backend_.port(selection_.port()))
+            inspector += QStringLiteral(" ") + port->name;
+    }
+    inspector_dock_->setWindowTitle(inspector);
+}
+
+QString ShellWindow::document_signature() const
+{
+    QStringList parts;
+    for (const auto& port : backend_.ports())
+    {
+        parts << QStringLiteral("P%1:%2:%3:%4")
+                     .arg(static_cast<qulonglong>(port.id))
+                     .arg(port.name, port.path)
+                     .arg(static_cast<int>(port.kind));
+    }
+    for (const auto& link : backend_.links())
+    {
+        QStringList sources;
+        QStringList targets;
+        for (const auto id : link.sources)
+            sources << QString::number(static_cast<qulonglong>(id));
+        for (const auto id : link.targets)
+            targets << QString::number(static_cast<qulonglong>(id));
+        parts << QStringLiteral("L%1:%2:%3:%4:%5:%6")
+                     .arg(static_cast<qulonglong>(link.id))
+                     .arg(static_cast<int>(link.shape))
+                     .arg(static_cast<int>(link.mode))
+                     .arg(static_cast<qulonglong>(link.owner))
+                     .arg(sources.join(QLatin1Char(',')),
+                          targets.join(QLatin1Char(',')));
+    }
+    parts.sort();
+    return parts.join(QLatin1Char('|'));
+}
+
+void ShellWindow::remove_selected_port()
+{
+    const vss::endpoint_id id = selection_.port();
+    if (id == 0)
+        return;
+    const auto port = backend_.port(id);
+    if (!port)
+        return;
+    if (!ConfirmDialog::ask(
+            QStringLiteral("Remove %1?").arg(port->name),
+            QStringLiteral(
+                "The port and its links will be removed. This cannot "
+                "be undone."),
+            QStringLiteral("Remove port"), QStringLiteral("Cancel"), true,
+            this))
+    {
+        return;
+    }
+    const auto removed = backend_.remove_port(id);
+    if (!removed)
+    {
+        ErrorDialog dialog(
+            QStringLiteral("Could not remove %1").arg(port->name),
+            error_text(removed.error()), {}, this);
+        dialog.exec();
+        return;
+    }
+    selection_.select_port(0);
+    last_signature_ = document_signature();
+    set_dirty(true);
+    update_content();
+    status_->showMessage(QStringLiteral("Removed %1.").arg(port->name), 3000);
+}
+
+void ShellWindow::copy_selected_port()
+{
+    const vss::endpoint_id id = selection_.port();
+    if (id == 0)
+        return;
+    const auto port = backend_.port(id);
+    if (!port || port->path.isEmpty())
+        return;
+    QApplication::clipboard()->setText(port->path);
+    status_->showMessage(QStringLiteral("Copied %1.").arg(port->path), 2500);
+}
+
+void ShellWindow::focus_inspector()
+{
+    if (inspector_dock_ == nullptr)
+        return;
+    inspector_dock_->show();
+    inspector_dock_->raise();
+    inspector_panel_->setFocus(Qt::ShortcutFocusReason);
+}
+
 void ShellWindow::apply_compact()
 {
     const bool compact = width() < 1100 || height() < 700;
@@ -765,12 +962,19 @@ void ShellWindow::apply_compact()
     if (compact)
     {
         if (!tabifiedDockWidgets(inspector_dock_).contains(send_dock_))
+        {
             tabifyDockWidget(inspector_dock_, send_dock_);
+            inspector_dock_->raise();
+        }
     }
     else if (tabifiedDockWidgets(inspector_dock_).contains(send_dock_))
     {
         splitDockWidget(inspector_dock_, send_dock_, Qt::Vertical);
     }
+    if (ports_panel_ != nullptr)
+        ports_panel_->set_compact(compact_);
+    if (monitor_panel_ != nullptr)
+        monitor_panel_->set_compact(compact_);
     apply_dock_sizes();
 }
 
@@ -852,6 +1056,7 @@ void ShellWindow::new_document()
     backend_.refresh();
     loading_ = false;
     document_path_.clear();
+    last_signature_ = document_signature();
     set_dirty(false);
     selection_.clear();
     show_launcher();
@@ -896,6 +1101,7 @@ void ShellWindow::open_path(const QString& path)
         return;
     }
     document_path_ = path;
+    last_signature_ = document_signature();
     set_dirty(false);
     const auto ports = backend_.ports();
     const auto links = backend_.links();
@@ -1055,21 +1261,6 @@ void ShellWindow::apply_dock_sizes()
                 Qt::Horizontal);
     resizeDocks({send_dock_}, {metric("layout.send.default")}, Qt::Vertical);
     resizeDocks({monitor_dock_}, {monitor}, Qt::Vertical);
-
-    if (!compact_)
-    {
-        QTimer::singleShot(
-            0, this,
-            [this]
-            {
-                ports_dock_->setMinimumWidth(Theme::instance().metric(
-                    QStringLiteral("layout.ports.min")));
-                inspector_dock_->setMinimumWidth(Theme::instance().metric(
-                    QStringLiteral("layout.inspector.min")));
-                monitor_dock_->setMinimumHeight(Theme::instance().metric(
-                    QStringLiteral("layout.monitor.min")));
-            });
-    }
 }
 
 void ShellWindow::apply_theme_setting()
