@@ -376,6 +376,19 @@ void MainWindow::create_docks()
     ports_toolbar->addAction(connect_action_);
     ports_toolbar->addAction(remove_port_action_);
     ports_layout->addWidget(ports_toolbar);
+
+    hint_label_ = new QLabel(
+        tr("Start here: choose Add virtual port to create a port, "
+           "then Connect ports to wire it to another one."),
+        ports_panel);
+    hint_label_->setObjectName(QStringLiteral("ports_hint"));
+    hint_label_->setWordWrap(true);
+    hint_label_->setContentsMargins(8, 6, 8, 6);
+    hint_label_->setStyleSheet(QStringLiteral(
+        "QLabel#ports_hint { background: palette(alternate-base); "
+        "color: palette(mid); border: 1px solid palette(mid); "
+        "border-radius: 4px; margin: 6px; }"));
+    ports_layout->addWidget(hint_label_);
     ports_layout->addWidget(ports_view_, 1);
 
     ports_dock_ = new QDockWidget(tr("Ports"), this);
@@ -521,6 +534,7 @@ void MainWindow::create_statusbar()
     link_count_label_ = make_status_label(this, tr("Links: 0"), 80);
     throughput_label_ = make_status_label(this, tr("RX 0 B/s · TX 0 B/s"), 250);
     hub_label_ = make_status_label(this, tr("Hub: stopped"), 110);
+    mode_label_ = make_status_label(this, tr("Simple mode"), 110);
     port_count_label_->setToolTip(tr("Endpoints currently registered."));
     link_count_label_->setToolTip(tr("Links currently registered."));
     throughput_label_->setToolTip(
@@ -531,6 +545,7 @@ void MainWindow::create_statusbar()
     statusBar()->addPermanentWidget(link_count_label_);
     statusBar()->addPermanentWidget(throughput_label_);
     statusBar()->addPermanentWidget(hub_label_);
+    statusBar()->addPermanentWidget(mode_label_);
 }
 
 void MainWindow::connect_signals()
@@ -617,6 +632,7 @@ void MainWindow::apply_refresh(
     log_differences(endpoints, links);
 
     const bool structure_changed = port_model_->set_endpoints(endpoints);
+    update_hint();
     topology_->set_topology(endpoints, links);
 
     if (selected_endpoint_ != 0
@@ -886,7 +902,8 @@ void MainWindow::on_add_virtual_port()
 
 void MainWindow::on_attach_serial()
 {
-    AttachSerialDialog dialog(studio_, this);
+    AttachSerialDialog dialog(studio_, settings_.default_baud,
+                                  this);
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -919,7 +936,7 @@ void MainWindow::on_attach_serial()
 
 void MainWindow::on_add_mock_device()
 {
-    AddMockDialog dialog(this);
+    AddMockDialog dialog(settings_.default_baud, this);
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -1370,14 +1387,31 @@ void MainWindow::on_toggle_advanced(bool enabled)
 void MainWindow::apply_mode(bool advanced)
 {
     advanced_ = advanced;
-    const QAction* const advanced_actions[] = {
+    QAction* const advanced_actions[] = {
         add_mock_action_, null_modem_action_, share_action_,
         join_action_, bridge_action_, fit_action_};
-    for (const QAction* action : advanced_actions)
+    for (QAction* action : advanced_actions)
     {
         if (action != nullptr)
-            const_cast<QAction*>(action)->setVisible(advanced);
+            action->setVisible(advanced);
     }
+
+    // The traffic log and the JSON topology are diagnostics; simple mode keeps
+    // the screen to the ports, the monitor and the inspector.
+    if (log_dock_ != nullptr)
+        log_dock_->setVisible(advanced);
+    if (mode_label_ != nullptr)
+        mode_label_->setText(advanced ? tr("Advanced mode")
+                                      : tr("Simple mode"));
+    update_hint();
+}
+
+void MainWindow::update_hint()
+{
+    if (hint_label_ == nullptr)
+        return;
+    hint_label_->setVisible(!advanced_ && port_model_ != nullptr
+                            && port_model_->rowCount() == 0);
 }
 
 void MainWindow::apply_ui_settings(const ui_settings& value)
@@ -1393,6 +1427,7 @@ void MainWindow::apply_ui_settings(const ui_settings& value)
         advanced_action_->setChecked(value.advanced);
     }
     apply_mode(value.advanced);
+    update_hint();
 }
 
 void MainWindow::on_new_document()

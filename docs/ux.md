@@ -1,102 +1,182 @@
-# User experience
+# User experience design
 
-Virtual Serial Studio is a tool for people who need a serial port to exist,
-right now, and who should not have to understand the library's topology model
-to get one. This page records the human-factors decisions behind the window and
-the gaps still to close.
+This page records who the window is for, how the two modes differ, and the
+human-factors reasoning behind the layout. The task-by-task instructions live
+in [user-guide.md](user-guide.md).
+
+## Who it is for
+
+Three classes of user share the same engine but not the same vocabulary.
+
+### The operator
+
+"I have a program that needs a serial port and the machine has none."
+
+- Knows the port name their program expects, not link modes or URIs.
+- Cares that the port exists, is stable, and can be opened.
+- Works in **Simple** mode, ideally without ever seeing the word *topology*.
+
+### The integrator
+
+"I need several programs to share one device, or to feed one program from
+several sources."
+
+- Understands split, join and redirection conceptually, but not the library's
+  `link_mode` enum.
+- Often runs against a test rig and repeats the same setup.
+- Uses **Simple** mode for the routine work and **Advanced** mode when wiring
+  network transports.
+
+### The diagnostician
+
+"Why is nothing arriving, and which build is this?"
+
+- Reads counters, control lines and the traffic log.
+- Wants raw URIs, fixtures, the topology graph and reproducible JSON.
+- Uses **Advanced** mode plus `vss_cli --verbose` and the Tracy profiling
+  build.
+
+The modes are therefore not "basic" and "pro" feature sets; they are two
+vocabularies over the same operations. Every port and link created in simple
+mode is a full-strength studio object.
 
 ## Principles
 
-1. **Recognition over recall.** Every operation is a menu item, a toolbar
-   button or a dialog with the available ports listed by name. Nothing requires
-   typing a URI unless the user chooses the advanced path.
-2. **Progressive disclosure.** Simple mode shows the four everyday jobs —
-   create a port, attach a real one, connect two ports, watch traffic. Expert
-   tools (fixtures, raw URIs, topology editing) live behind Advanced mode,
-   which is one checkbox away and remembered.
-3. **Plain language.** The UI talks about *ports*, *listeners*, *publishers*
-   and *monitors*; it says "two-way", "one-way", "split" and "join" rather than
-   exposing `link_mode` values.
-4. **Nothing surprising.** Every action states its effect in the status bar,
-   every dialog validates before it closes, and failures are reported with the
-   library's own message.
-5. **Reversible where possible.** Ports and links can be removed from the
-   table or the topology view; removing a port removes its links explicitly
-   rather than leaving dangling routes.
-6. **Keyboard first, mouse equal.** Connect is `Ctrl+L`, settings `Ctrl+,`,
-   remove is `Delete`, file operations use the platform shortcuts.
-7. **Accessible by default.** System colours and fonts, scalable layouts,
-   labels on every control, and no information carried by colour alone (state
-   is also text).
+1. **Recognition over recall.** Operations are menu items, toolbar buttons or
+   dialogs listing the actual ports by name. No URI typing is needed for the
+   everyday jobs.
+2. **Progressive disclosure.** Simple mode shows the four everyday jobs; expert
+   tools appear in one step and the choice is remembered.
+3. **Plain language first.** "Two-way", "one-way", "split", "join", "monitor",
+   "publisher", "listener". Internal names stay in the code.
+4. **Say what will happen.** Every action has a status-bar explanation; the
+   Connect dialog prints a sentence describing the resulting wiring.
+5. **Prevent rather than report.** The Connect dialog refuses self-links and
+   too-few targets before anything is created; the add-port dialog appends
+   unique suffixes automatically.
+6. **Fail visibly and locally.** Errors name the operation and carry the
+   engine's message; they do not close the window or discard the topology.
+7. **The keyboard is a first-class path.** `Ctrl+L`, `Ctrl+,`, `F5`, `Ctrl+0`,
+   `Delete` and the platform file shortcuts.
+8. **Accessible by default.** System colours and fonts, labels on controls,
+   state conveyed by text as well as colour, scalable docks and dialogs.
+9. **No surprises on exit.** Unsaved work is protected by a prompt that can be
+   turned off for scripted sessions.
 
-## Simple mode vs advanced mode
+## The two modes
 
-| Area | Simple | Advanced |
+| Surface | Simple | Advanced |
 |---|---|---|
-| Add virtual port | yes | yes |
-| Attach a real serial device | yes | yes |
-| Connect ports (two-way, redirect, monitor, split, join) | yes | yes |
-| Remove ports and links | yes | yes |
-| Monitor, send, inspector | yes | yes |
-| Mock fixture device | hidden | yes |
-| Null-modem demo | hidden | yes |
-| Share over a network URI, join by URI, bridge | hidden | yes |
-| Topology fit / raw link editing | hidden | yes |
-| Settings (refresh, theme, default baud) | yes | yes |
+| Toolbar | File actions, Add port, Attach, Connect, Remove | Adds mock, demo, share, fit |
+| Ports menu | Add, attach, connect, remove | Adds mock device |
+| Scenarios menu | — | Share, join, bridge, null-modem demo |
+| Topology menu | Remove link | Adds fit |
+| Traffic log dock | Hidden | Shown |
+| First-run hint | Shown when the studio is empty | Hidden |
+| Status bar | "Simple mode" | "Advanced mode" |
 
-Simple is the default. The choice is stored in `QSettings` and can be toggled
-from **View → Advanced mode** or from Settings.
+The central topology view, the inspector, send panel and monitor stay visible in
+both modes: they are how the user sees that the port is real and moving data.
+Advanced mode removes the training wheels, not the feedback.
 
-## A day in the tool
+Switching is one checkable menu item (**View → Advanced mode**) and a checkbox
+in Settings. The setting is persisted; the status bar always states the current
+mode so a screenshot is self-describing.
 
-1. **"I need a COM port for this program."**
-   *Ports → Add virtual port…*, pick a name and *Auto*; the table shows the
-   advertised path (for example `COM7` or `/dev/pts/3`). That is the path the
-   other program opens.
-2. **"I need two ports wired together."**
-   *Ports → Null-modem loopback* (advanced) creates a pair and links them; or
-   add two ports and use *Connect ports… → Two-way*.
-3. **"Several programs should see the same device."**
-   *Connect ports… → Split one port to many*, select the source and tick the
-   targets. Each listener receives a copy.
-4. **"Several sources should feed one program."**
-   *Connect ports… → Join many ports into one*, tick the publishers and pick
-   the target.
-5. **"I need to watch what a program sends without disturbing it."**
-   *Connect ports… → Monitor* creates a one-way copy that never drives modem
-   lines; the monitor pane shows the traffic.
-6. **"My program is on another machine."**
-   Advanced mode: *Scenarios → Share a serial port…* (TCP listeners) or
-   *Bridge to network…* (`tcp://`, `udp://`, `rfc2217://`). A guided
-   host/port form is the next step.
+### Screen map: simple
 
-## The About window
+```
+Ports: add | attach | connect | remove        Inspector: details + lines
+┌───────────────┐  ┌──────────────────────┐  ┌──────────────────┐
+│ hint (if any) │  │ topology             │  │ Send             │
+│ ports table   │  │                      │  │                  │
+└───────────────┘  └──────────────────────┘  └──────────────────┘
+Monitor (bottom)                         status: Simple mode
+```
 
-Support questions start with "which build?". The About window therefore has
-four tabs:
+### Screen map: advanced
 
-- **About** — version, purpose, copyright and the GPLv3 notice.
-- **Environment** — commit, branch, build date and type, compiler, Qt runtime
-  and build version, OS, architecture and kernel.
-- **Licences** — Qt, Boost, Boost.VirtualSerial, Tracy and the optional
-  com0com driver, with a pointer to `THIRD_PARTY_NOTICES.md`.
-- **Fonts** — the application bundles no fonts; it names the system UI font in
-  use and explains that its licence comes from the operating system.
+The same frame plus the traffic log tab, the Scenarios menu, fixtures and
+topology tools. Nothing moves; controls appear.
 
-The environment tab is intended to be copied into a bug report.
+## Task flows
 
-## What is still missing
+### Create a port (operator)
 
-- Guided forms for **share/bridge**: host, port, protocol and listener count
-  instead of a free-form URI.
-- A **pair manager** for creating batches of virtual ports ("add 8 pairs"),
-  with names and advertised paths in one table.
-- A **line-control matrix** editor for DTR/DSR/RTS/CTS crossing per link.
-- **Bundles**: naming a group of links and applying settings to all of them.
-- **Switch** semantics as a first-class action (owner arbitration between two
-  publishers, with a visible "current owner").
-- **Undo/redo** for topology edits.
-- A first-run **onboarding** page: create a port, open the monitor, done.
+Ports → Add virtual port → name, kind, count → the table shows the path → the
+hint disappears once a port exists.
 
-Each of these is a self-contained addition to this shell; the studio API
-already exposes the operations they need.
+Design notes: the name field is pre-filled and the suffix is automatic; the
+dialog explains the three kinds in one sentence each; the advertised path is
+the column that matters and is stretched to use the space.
+
+### Wire two ports (operator/integrator)
+
+Ports → Connect ports → choose the relationship in plain words → the summary
+sentence updates live → Connect.
+
+Design notes: the dialog lists only endpoints that exist, reuses names from the
+table, and validates before closing. Failure leaves the dialog's data intact
+and reports the engine error.
+
+### Share a device (integrator)
+
+Simple mode: Add port, Connect → Split. Advanced mode adds the URI-driven
+share/join/bridge for transports the studio cannot guess.
+
+### Diagnose (diagnostician)
+
+Select a port → Inspector shows state, counters, rates and control lines →
+Monitor shows rows → Log (advanced) shows state changes → About → Environment
+gives the build.
+
+## Human factors decisions
+
+- **The hint is a sentence, not a modal.** It appears only when the studio is
+  empty and simple mode is active, and it disappears as soon as it is no longer
+  true. No "welcome wizard" to dismiss.
+- **The log is advanced-only.** It is invaluable when diagnosing and noise for
+  everyone else; the monitor carries the everyday feedback.
+- **The topology stays visible in simple mode.** Hiding it would make links
+  invisible and turn a wiring tool into a list; the boxes are the mental model.
+- **Mode is global, not per-document.** A user is an operator or a
+  diagnostician, not both from file to file.
+- **Refresh is adjustable.** 250 ms feels live; busy machines can slow it down
+  without changing what the studio does.
+- **Theme follows the desktop by default** and can be forced, because lab
+  machines and screenshots often need a fixed light or dark surface.
+- **No fonts are shipped.** The window inherits the platform UI font, so text
+  metrics, scripts and accessibility settings match the rest of the desktop;
+  the About window says so explicitly.
+
+## Accessibility
+
+- Every control has a label or tooltip; the status bar repeats the effect of
+  the focused action.
+- Colour is never the only signal: state is printed as text in the table and
+  inspector, and the topology labels its links.
+- Shortcuts are standard where the platform has a standard, and single
+  modifiers where it does not.
+- Dialogs are keyboard-navigable, validate on accept, and keep the user's
+  input when validation fails.
+
+## Open design questions
+
+- Should simple mode hide the topology entirely for very small screens, or
+  collapse it to a list?
+- Should the Connect dialog remember the last mode per user?
+- Should advanced mode be discoverable from the first-run hint ("Need more?
+  Turn on Advanced mode")?
+- How should a "switch" (owner arbitration) be represented — a link mode, or a
+  pair of links with an owner indicator?
+
+## Roadmap
+
+1. Guided share/bridge forms (protocol, host, port, listeners) with a URI
+   preview, so advanced mode does not require URI recall.
+2. Pair manager: create named batches of virtual ports in a table.
+3. Line-control matrix editor per link (DTR/DSR/RTS/CTS crossing).
+4. Named bundles and baud emulation/throttling.
+5. First-class switch with a visible current owner.
+6. Undo/redo for topology edits.
+7. First-run onboarding as an empty-state panel, replacing the single hint.

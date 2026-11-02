@@ -107,6 +107,8 @@ private:
 
     /// Shows or hides the tools that only make sense to an expert user.
     void apply_mode(bool advanced);
+    /// Shows the first-run hint only when it can help.
+    void update_hint();
     void apply_ui_settings(const ui_settings& value);
 
     void apply_refresh(const std::vector<vss::endpoint_info>& endpoints,
@@ -152,6 +154,8 @@ private:
     QCheckBox* hex_check_ = nullptr;
     QCheckBox* follow_check_ = nullptr;
     QLabel* monitor_count_label_ = nullptr;
+    QLabel* hint_label_ = nullptr;
+    QLabel* mode_label_ = nullptr;
 
     QLabel* port_count_label_ = nullptr;
     QLabel* link_count_label_ = nullptr;

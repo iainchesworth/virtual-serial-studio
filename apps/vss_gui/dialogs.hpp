@@ -57,7 +57,8 @@ class AddMockDialog final : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddMockDialog(QWidget* parent = nullptr);
+    explicit AddMockDialog(int default_baud = 115200,
+                           QWidget* parent = nullptr);
 
     QString port_name() const;
     QString target() const;
@@ -80,6 +81,7 @@ class AttachSerialDialog final : public QDialog
 
 public:
     explicit AttachSerialDialog(vss::studio& studio,
+                                int default_baud = 115200,
                                 QWidget* parent = nullptr);
 
     QString port_name() const;

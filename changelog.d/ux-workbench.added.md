@@ -19,3 +19,5 @@ Tracy and the optional com0com driver; Fonts states that no fonts are bundled
 and names the system font in use.
 
 Adding virtual ports can now create several at once (up to 32 per step), with numeric name suffixes, so a machine can be filled with ports without repeating the dialog.
+
+Simple mode now hides the traffic log and shows a first-run hint while the studio is empty; the status bar names the active mode. A task-by-task user guide and the mode design are in docs/user-guide.md and docs/ux.md.

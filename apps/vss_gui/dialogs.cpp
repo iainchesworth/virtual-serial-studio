@@ -241,7 +241,7 @@ void AddVirtualPortDialog::accept()
     QDialog::accept();
 }
 
-AddMockDialog::AddMockDialog(QWidget* parent)
+AddMockDialog::AddMockDialog(int default_baud, QWidget* parent)
     : QDialog(parent)
 {
     prepare(this, tr("Add mock device"), 440);
@@ -255,6 +255,9 @@ AddMockDialog::AddMockDialog(QWidget* parent)
 
     baud_ = new QComboBox(this);
     populate_baud(baud_);
+    if (baud_->findText(QString::number(default_baud)) < 0)
+        baud_->addItem(QString::number(default_baud));
+    baud_->setCurrentText(QString::number(default_baud));
     form->addRow(tr("Baud rate"), baud_);
 
     target_ = new QLineEdit(QStringLiteral("scripted"), this);
@@ -315,7 +318,8 @@ void AddMockDialog::accept()
     QDialog::accept();
 }
 
-AttachSerialDialog::AttachSerialDialog(vss::studio& studio, QWidget* parent)
+AttachSerialDialog::AttachSerialDialog(vss::studio& studio,
+                                       int default_baud, QWidget* parent)
     : QDialog(parent)
     , studio_(studio)
 {
@@ -375,6 +379,9 @@ AttachSerialDialog::AttachSerialDialog(vss::studio& studio, QWidget* parent)
     auto* settings_form = new QFormLayout(settings_group);
     baud_ = new QComboBox(settings_group);
     populate_baud(baud_);
+    if (baud_->findText(QString::number(default_baud)) < 0)
+        baud_->addItem(QString::number(default_baud));
+    baud_->setCurrentText(QString::number(default_baud));
     data_bits_ = new QComboBox(settings_group);
     populate_data_bits(data_bits_);
     parity_ = new QComboBox(settings_group);

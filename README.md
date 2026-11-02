@@ -27,6 +27,16 @@ abstraction that puts the transport behind a seam.
 | Save and reload a topology | Validated JSON documents, opened by the GUI and by `vss_cli run` |
 | Measure the data path | `vss_cli bench` and a CI performance suite with enforced floors |
 
+## Documentation
+
+- [docs/user-guide.md](docs/user-guide.md) — how to use the application: both modes, everyday jobs, network tools and troubleshooting.
+- [docs/ux.md](docs/ux.md) — who the interface is for, the simple/advanced design, and the human-factors decisions.
+- [docs/architecture.md](docs/architecture.md) — how the libraries, hub and transports fit together.
+- [docs/scenarios.md](docs/scenarios.md) — worked recipes for share, join, bridge and loopback.
+- [docs/profiling.md](docs/profiling.md) — Tracy zones and how to capture a trace.
+- [docs/windows-com-driver.md](docs/windows-com-driver.md) — the optional KMDF COM port driver.
+- [docs/vm-testing.md](docs/vm-testing.md) — the VMware guest matrix and driver tests.
+
 ## Building
 
 Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers, and a
@@ -350,7 +360,7 @@ perf/                performance suite and floors
 cmake/               dependency, warning, coverage and sanitizer helpers
 tools/               Boost fetch, changelog, coverage and performance reports,
                      the PTY pair helper and the commit-message checker
-docs/                architecture notes and scenario recipes
+docs/                user guide, design notes and scenario recipes
 ```
 
 ## Known limits
