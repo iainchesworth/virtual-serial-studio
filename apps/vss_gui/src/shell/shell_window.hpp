@@ -25,8 +25,11 @@ class QToolBar;
 namespace vss::gui
 {
 
+class EventLogPanel;
 class Launcher;
+class OwnerBar;
 class StatusBar;
+class TopologyJsonEditor;
 
 /// The redesigned frame: menu, toolbar, launcher, docks and status bar.
 ///
@@ -71,6 +74,17 @@ private:
     void run_job(const QString& job);
     void placeholder(const QString& what);
 
+    // Advanced tools, WP7.  Each one replaces a placeholder handler with the
+    // real dialog or dock; unsupported capabilities stay disabled inside.
+    void open_add_fixture();
+    void open_wiring();
+    void open_benchmark();
+    void open_export_command();
+    void show_owner_controls();
+    void update_owner_bar();
+    void sync_advanced_docks();
+    void log_local(const QString& text);
+
     void new_document();
     void open_document();
     void open_path(const QString& path);
@@ -100,11 +114,18 @@ private:
     QDockWidget* inspector_dock_ = nullptr;
     QDockWidget* send_dock_ = nullptr;
     QDockWidget* monitor_dock_ = nullptr;
+    QDockWidget* log_dock_ = nullptr;
+    QDockWidget* json_dock_ = nullptr;
     QToolBar* toolbar_ = nullptr;
     QLineEdit* search_ = nullptr;
     StatusBar* status_ = nullptr;
+    OwnerBar* owner_bar_ = nullptr;
+    EventLogPanel* event_log_ = nullptr;
+    TopologyJsonEditor* json_editor_ = nullptr;
     QAction* advanced_action_ = nullptr;
     QAction* monitor_action_ = nullptr;
+    QAction* log_action_ = nullptr;
+    QAction* json_action_ = nullptr;
 
     QString document_path_;
     bool dirty_ = false;

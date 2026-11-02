@@ -90,6 +90,7 @@ void StatusBar::refresh()
     std::uint64_t rx = 0;
     std::uint64_t tx = 0;
     std::uint64_t dropped = 0;
+    std::uint64_t owner_dropped = 0;
     for (const auto& port : ports)
     {
         rx += port.stats.bytes_rx;
@@ -97,7 +98,11 @@ void StatusBar::refresh()
         dropped += port.stats.dropped;
     }
     for (const auto& link : links)
+    {
         dropped += link.stats.dropped;
+        if (link.options.policy == vss::merge_policy::owner)
+            owner_dropped += link.stats.dropped;
+    }
 
     const qint64 now = rate_timer_.nsecsElapsed();
     const double seconds =
@@ -131,8 +136,20 @@ void StatusBar::refresh()
 
     if (advanced_ && dropped > 0)
     {
-        dropped_->set_text(
-            QStringLiteral("%1 dropped").arg(format_bytes(dropped)));
+        if (owner_dropped > 0 && owner_dropped == dropped)
+        {
+            dropped_->set_text(QStringLiteral("%1 dropped, not owner")
+                                   .arg(format_bytes(dropped)));
+            dropped_->setToolTip(
+                QStringLiteral("Bytes from a port that is not the owner were "
+                               "not forwarded."));
+        }
+        else
+        {
+            dropped_->set_text(
+                QStringLiteral("%1 dropped").arg(format_bytes(dropped)));
+            dropped_->setToolTip({});
+        }
         dropped_->show();
     }
     else

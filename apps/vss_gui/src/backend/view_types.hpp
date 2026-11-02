@@ -81,6 +81,28 @@ struct link_view
     vss::link_stats stats;
 };
 
+/// Which input lines each output line drives on the port at the other end of a
+/// link.
+///
+/// The engine only has the boolean null-modem crossing
+/// (`link_options::emulate_modem_lines`), so `Capabilities::line_matrix` is
+/// false and the real adapter neither reads nor writes this.  The type is the
+/// adapter seam the line matrix dialog is built and tested against; it does
+/// not change the topology JSON schema or `vss_core`.
+struct line_wiring
+{
+    bool dtr_to_dsr = true;
+    bool dtr_to_cts = false;
+    bool dtr_to_dcd = true;
+    bool dtr_to_ri = false;
+    bool rts_to_dsr = false;
+    bool rts_to_cts = true;
+    bool rts_to_dcd = false;
+    bool rts_to_ri = false;
+
+    friend bool operator==(const line_wiring&, const line_wiring&) = default;
+};
+
 /// One serial device, as returned by the platform enumeration.
 struct device_view
 {

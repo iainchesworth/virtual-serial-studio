@@ -10,6 +10,7 @@
 #include "backend/studio_backend.hpp"
 
 #include <QByteArray>
+#include <QHash>
 #include <QString>
 
 #include <optional>
@@ -80,6 +81,10 @@ public:
                                 vss::endpoint_id owner) override;
     vss::result<void> release_owner(vss::link_id id) override;
 
+    std::optional<line_wiring> link_wiring(vss::link_id id) const override;
+    vss::result<void> set_link_wiring(vss::link_id id,
+                                      const line_wiring& wiring) override;
+
     vss::result<void> send(vss::endpoint_id id,
                            const QByteArray& data) override;
     vss::result<void> set_line(vss::endpoint_id id, vss::control_line line,
@@ -115,6 +120,7 @@ private:
     std::vector<device_view> devices_;
     setup_facts facts_;
     std::vector<QByteArray> sent_;
+    QHash<vss::link_id, line_wiring> wiring_;
     std::optional<vss::error_code> next_error_;
     vss::endpoint_id next_port_ = 1;
     vss::link_id next_link_ = 1;

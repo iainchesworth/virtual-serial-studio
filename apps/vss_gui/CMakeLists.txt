@@ -49,6 +49,9 @@ add_subdirectory(src/theme)
 # Shared widgets built from those tokens.
 add_subdirectory(src/widgets)
 
+# The Advanced tools: owner, wiring and faults, fixtures, JSON, benchmark.
+add_subdirectory(src/advanced)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 
