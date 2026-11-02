@@ -15,7 +15,7 @@ gates pass.
 | WP6 | `gui/wp6-connect-share` | implemented, self-review complete | Debug `ctest` 8/8, 30 dialog tests, 7 shell tests, `vss_gui --selftest` ok, 12 review PNGs | self-review | connect/share/network/templates dialogs, real wiring, Advanced toolbar Share |
 | WP7 | `gui/wp7-advanced` | implemented, self-review complete | Debug `ctest` 8/8, 15 advanced tests, 16 review PNGs, changelog/format/contrast/QSS clean | self-review | owner bar, wiring and faults, mock fixtures, topology JSON, event log, benchmark, export command |
 | WP8 | `gui/wp8-support` | implemented, self-review complete | Debug `ctest` 8/8, 15 support tests, 10 shell tests, `vss_gui --selftest` ok, Python `zipfile` round trip, contrast/QSS/changelog/format clean | self-review; human G2 pending | setup check, troubleshooting, bundle, settings, About, shortcuts, help index, confirm dialog; undo/redo disabled with a recorded reason |
-| WP9 | `gui/wp9-qa` | not started | - | - | blocked on G2 |
+| WP9 | `gui/wp9-qa` | implemented, self-review complete | Debug `ctest` 14/14 including `gui_selftest_200`, 24-state dialog accessibility walk, 52 review PNGs, Release 15/15, contrast/QSS/changelog/format clean | self-review; pending G3 | accessibility selftest, 2x scale, high contrast/reduced motion, PNG set, docs, legacy sources removed; residual capability gaps recorded |
 
 ## Integration review (G2)
 
@@ -453,3 +453,38 @@ gates pass.
   adapter/fake supplied; Watch filter waits for WP3; pair success uses the
   status bar instead of a second ready screen. All are in
   `design-deviations.md` under WP5.
+
+## WP9 detail
+
+- Added `apps/vss_gui/src/shell/accessibility.cpp`: the selftest now constructs
+  the main window and 24 dialog states (22 classes; the Share wizard at each
+  step) against `FakeStudioBackend`, shows each in
+  light and dark, and checks every visible enabled focusable control for an
+  accessible name, a 24 by 24 target, keyboard focus and clipped plain text.
+  Composite scroll and tab containers are skipped so their children are not
+  double-counted.
+- Added `gui_selftest_200` in `tests/CMakeLists.txt` with
+  `QT_SCALE_FACTOR=2;QT_FONT_DPI=192`; the same walk runs at 200 percent.
+  Windows CTest runs set `QT_QPA_FONTDIR=C:/Windows/Fonts` so text metrics are
+  real; without a font database the clipping rule is skipped rather than
+  guessed.
+- Fixed the target rule at the source: `QToolButton`, `QCheckBox` and
+  `QRadioButton` now have a 24 px minimum width in the token stylesheet, so
+  icon-only stepper arrows and card indicators meet the minimum.
+- `Theme::high_contrast()` and `VSS_HIGH_CONTRAST=1` drop the custom stylesheet
+  for the platform palette; the selftest asserts the stylesheet is empty and
+  that `VSS_REDUCE_MOTION=1` makes transitions zero-duration.
+- `VSS_QA_SHOTS=<dir>` writes 52 offscreen images: main window light, dark,
+  compact light and compact dark, plus every dialog in both themes. They stay
+  under `build/gui-shots/` and are not committed.
+- Removed the 23 legacy flat GUI files (`main_window`, the old models/panels,
+  dialogs and `theme`); `vss_gui` now has only `main.cpp` at the executable
+  level and links the redesigned libraries.
+- Updated `docs/user-guide.md` and `docs/ux.md`: removed the guided
+  share/bridge, line-matrix, owner-switch and Undo items from "Not yet", and
+  added the honest remaining limits (network server, template device picker,
+  hardware probes).
+- Checks: Debug `ctest` 14/14, Release 15/15, both `gui_selftest` and
+  `gui_selftest_200` pass, contrast `FAILURES: 0`, QSS renders both themes,
+  changelog and clang-format clean. Residual gaps are recorded in
+  `design-deviations.md` under WP9.

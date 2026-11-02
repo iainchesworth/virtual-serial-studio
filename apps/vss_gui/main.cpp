@@ -38,7 +38,9 @@ int main(int argc, char* argv[])
     }
 
     // The self-test and the documentation screenshot are headless by
-    // contract: set the platform plugin before QApplication reads it.
+    // contract: set the platform plugin before QApplication reads it.  The
+    // accessibility pass also runs at 200 percent scale through a separate
+    // CTest entry, which sets QT_SCALE_FACTOR before this process starts.
     if (selftest || screenshot)
         qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
 

@@ -58,10 +58,24 @@ vss_set_warnings(vss_header_selftest)
 add_test(NAME headers COMMAND vss_header_selftest)
 
 if(TARGET vss_gui)
+  # The offscreen plugin needs an explicit font directory on Windows; the
+  # clipping walk cannot measure text without one.
+  set(VSS_QT_FONT_ENV "")
+  if(WIN32 AND EXISTS "C:/Windows/Fonts")
+    set(VSS_QT_FONT_ENV "QT_QPA_FONTDIR=C:/Windows/Fonts;")
+  endif()
   add_test(NAME gui_selftest COMMAND vss_gui --selftest)
   set_tests_properties(gui_selftest PROPERTIES
-    TIMEOUT 120
-    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+    TIMEOUT 240
+    ENVIRONMENT "${VSS_QT_FONT_ENV}QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+
+  # The same walk at 200 percent scale: text has to grow without clipping and
+  # every control must stay reachable.  Qt applies the scale before the first
+  # window exists, which a runtime font change cannot do for token fonts.
+  add_test(NAME gui_selftest_200 COMMAND vss_gui --selftest)
+  set_tests_properties(gui_selftest_200 PROPERTIES
+    TIMEOUT 300
+    ENVIRONMENT "${VSS_QT_FONT_ENV}QT_QPA_PLATFORM=offscreen;QT_SCALE_FACTOR=2;QT_FONT_DPI=192;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 
 # The backend tests exist only when Qt and the tests are both enabled.

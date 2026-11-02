@@ -120,6 +120,9 @@ public:
     void set_density(density_mode value);
 
     bool reduced_motion() const;
+    /// Explicit high-contrast fallback: keep the system palette and drop the
+    /// custom stylesheet so the platform's contrast scheme wins.
+    bool high_contrast() const;
     int motion_ms(motion_kind kind) const;
 
     QColor colour(colour_role role) const;
