@@ -781,20 +781,9 @@ void ShellWindow::build_docks()
             [this](const QString& message)
             { status_->showMessage(message, 3000); });
     connect(inspector_panel_, &InspectorPanel::troubleshoot_requested, this,
-            [this]
-            {
-                status_->showMessage(
-                    QStringLiteral("The troubleshooting checklist arrives with "
-                                   "WP8."),
-                    4000);
-            });
+            [this] { open_troubleshoot(); });
     connect(inspector_panel_, &InspectorPanel::advanced_tools_requested, this,
-            [this]
-            {
-                status_->showMessage(
-                    QStringLiteral("Line wiring and faults arrive with WP7."),
-                    4000);
-            });
+            [this] { open_wiring(); });
     connect(inspector_panel_, &InspectorPanel::error_message, this,
             [this](const QString& message)
             { ToastManager::instance().show(this, message); });
@@ -1436,7 +1425,7 @@ void ShellWindow::run_job(const QString& job)
     else if (job == QLatin1String("attach"))
         show_attach_device();
     else if (job == QLatin1String("share"))
-        placeholder(QStringLiteral("Share a device"));
+        open_share_wizard();
     else if (job == QLatin1String("watch"))
         show_watch();
     else if (job == QLatin1String("connect"))
@@ -1476,7 +1465,7 @@ void ShellWindow::show_add_port(bool pair_selected)
                 dialog.set_advanced(true);
             });
     connect(&dialog, &AddPortDialog::setup_check_requested, this,
-            [this] { placeholder(QStringLiteral("Setup check")); });
+            [this] { open_setup_check(); });
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -1513,7 +1502,7 @@ void ShellWindow::show_pair()
                 dialog.set_advanced(true);
             });
     connect(&dialog, &PairDialog::setup_check_requested, this,
-            [this] { placeholder(QStringLiteral("Setup check")); });
+            [this] { open_setup_check(); });
     if (dialog.exec() != QDialog::Accepted || !dialog.outcome())
         return;
     selection_.select_port(dialog.outcome()->first);
@@ -1575,13 +1564,13 @@ void ShellWindow::show_port_ready(vss::endpoint_id port,
                 [&connect_requested](vss::endpoint_id)
                 { connect_requested = true; });
         connect(&dialog, &PortReadyDialog::setup_check_requested, this,
-                [this] { placeholder(QStringLiteral("Setup check")); });
+                [this] { open_setup_check(); });
         dialog.exec();
     }
     if (create_another)
         show_add_port();
     else if (connect_requested)
-        placeholder(QStringLiteral("Connect ports"));
+        open_connect_ports();
 }
 
 void ShellWindow::focus_monitor(vss::endpoint_id port)
