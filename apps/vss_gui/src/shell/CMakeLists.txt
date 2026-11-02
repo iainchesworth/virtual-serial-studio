@@ -25,6 +25,7 @@ target_link_libraries(vss_gui_shell PUBLIC
   vss_gui_advanced
   vss_gui_dialogs
   vss_gui_widgets
+  vss_gui_flows
   vss_gui_backend
   vss_gui_theme
   vss_gui_support

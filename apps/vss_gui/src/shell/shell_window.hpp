@@ -128,6 +128,14 @@ private:
     void copy_environment();
     void restart_elevated();
 
+    // WP5 basic flows.  Each opens one real dialog and acts on its result.
+    void show_add_port(bool pair_selected = false);
+    void show_pair();
+    void show_attach_device();
+    void show_watch();
+    void show_port_ready(vss::endpoint_id port, const QString& virtual_kind);
+    void focus_monitor(vss::endpoint_id port);
+
     void new_document();
     void open_document();
     void open_path(const QString& path);

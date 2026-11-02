@@ -264,6 +264,11 @@ void NoteBanner::set_text(const QString& text, const QString& accessible_text)
     refresh_accessible_name();
 }
 
+void NoteBanner::set_text_format(Qt::TextFormat format)
+{
+    text_->setTextFormat(format);
+}
+
 QString NoteBanner::text() const
 {
     return text_->text();

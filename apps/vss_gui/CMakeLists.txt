@@ -87,6 +87,9 @@ add_subdirectory(src/support)
 # Connect, share, network and template dialogs (WP6).
 add_subdirectory(src/dialogs)
 
+# Basic flows: add, pair, attach and watch (WP5).
+add_subdirectory(src/flows)
+
 # The redesigned window frame.
 add_subdirectory(src/shell)
 
@@ -102,6 +105,7 @@ target_link_libraries(vss_gui PRIVATE
   vss_gui_widgets
   vss_gui_panes
   vss_gui_dialogs
+  vss_gui_flows
   vss_gui_support
   vss_gui_shell)
 

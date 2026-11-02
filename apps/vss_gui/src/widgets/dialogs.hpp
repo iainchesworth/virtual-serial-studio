@@ -11,8 +11,11 @@
 #include <QString>
 #include <QVector>
 
+#include <functional>
+
 class QFrame;
 class QHBoxLayout;
+class QLabel;
 class QPushButton;
 class QVBoxLayout;
 
@@ -87,8 +90,16 @@ public:
     ErrorDialog(const QString& title, const QString& body,
                 const QString& details = {}, QWidget* parent = nullptr);
 
+    /// Adds a recovery action to the footer, left of Close.  The caller owns
+    /// what the action does; pressing it does not close the dialog by itself.
+    QPushButton* add_action(const QString& text,
+                            std::function<void()> callback = {},
+                            const QString& role = QStringLiteral("quiet"));
+
 private:
     QString details_;
+    QHBoxLayout* footer_layout_ = nullptr;
+    QPushButton* close_ = nullptr;
 };
 
 } // namespace vss::gui

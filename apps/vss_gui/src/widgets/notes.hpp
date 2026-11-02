@@ -99,6 +99,7 @@ public:
     void set_text(const QString& text);
     /// Rich text for display, with a plain sentence for assistive technology.
     void set_text(const QString& text, const QString& accessible_text);
+    void set_text_format(Qt::TextFormat format);
     QString text() const;
 
     void set_action(const QString& text, std::function<void()> callback = {});
@@ -126,6 +127,8 @@ public:
     explicit ResultSentence(QWidget* parent = nullptr);
 
     void set_result_text(const QString& text);
+    /// Rich text for the visible sentence, with the plain sentence used for
+    /// assistive technology.
     void set_result_text(const QString& text, const QString& accessible_text);
 };
 

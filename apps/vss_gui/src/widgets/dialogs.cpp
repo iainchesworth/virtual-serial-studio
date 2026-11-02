@@ -18,6 +18,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <utility>
 
 namespace vss::gui
 {
@@ -237,6 +238,7 @@ ErrorDialog::ErrorDialog(const QString& title, const QString& body,
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_footer(this, footer_layout);
+    footer_layout_ = footer_layout;
 
     if (!details_.isEmpty())
     {
@@ -247,15 +249,36 @@ ErrorDialog::ErrorDialog(const QString& title, const QString& body,
         footer_layout->addWidget(copy);
     }
 
-    auto* close = make_button(QStringLiteral("Close"), "primary", footer);
-    connect(close, &QPushButton::clicked, this, &QDialog::accept);
-    close->setDefault(true);
-    close->setFocus(Qt::OtherFocusReason);
-    QTimer::singleShot(0, close,
-                       [close] { close->setFocus(Qt::OtherFocusReason); });
-    footer_layout->addWidget(close);
+    close_ = make_button(QStringLiteral("Close"), "primary", footer);
+    connect(close_, &QPushButton::clicked, this, &QDialog::accept);
+    close_->setDefault(true);
+    close_->setFocus(Qt::OtherFocusReason);
+    QTimer::singleShot(0, close_,
+                       [this]
+                       {
+                           if (close_ != nullptr)
+                               close_->setFocus(Qt::OtherFocusReason);
+                       });
+    footer_layout->addWidget(close_);
 
     layout->addWidget(footer);
+}
+
+QPushButton* ErrorDialog::add_action(const QString& text,
+                                     std::function<void()> callback,
+                                     const QString& role)
+{
+    if (footer_layout_ == nullptr)
+        return nullptr;
+    auto* action = make_button(
+        text, role.isEmpty() ? nullptr : role.toUtf8().constData(), this);
+    action->setAccessibleName(text);
+    if (callback)
+        connect(action, &QPushButton::clicked, this,
+                [callback = std::move(callback)] { callback(); });
+    // Keep Close as the rightmost primary action.
+    footer_layout_->insertWidget(footer_layout_->count() - 1, action);
+    return action;
 }
 
 } // namespace vss::gui
