@@ -71,3 +71,11 @@ if(TARGET vss_gui_backend_tests)
     TIMEOUT 120
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
+
+# Theme and widget tests need a QApplication but stay offscreen.
+if(TARGET vss_gui_theme_tests)
+  add_test(NAME gui_theme COMMAND vss_gui_theme_tests --verbose)
+  set_tests_properties(gui_theme PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()

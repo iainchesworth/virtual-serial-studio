@@ -16,11 +16,11 @@ uses the bundle path. The QA reference is treated as a typo.
 
 WP1's prompt says to test with the in-tree framework. The in-tree framework in
 `tests/framework` is deliberately Qt-free and has no `QCoreApplication`. The
-backend has signals and a `QTimer`, so its tests need an application object.
-WP0 added `vss_gui_backend_tests`, which reuses the in-tree `TEST_CASE` and
-`REQUIRE` macros and provides a small `QCoreApplication` runner. Widget-level
-checks stay in `vss_gui --selftest`. No new third-party test framework is
-added, so the intent of the rule is met.
+backend has signals and a `QTimer`, and widgets need a `QApplication`, so both
+test executables reuse the in-tree `TEST_CASE` and `REQUIRE` macros with a
+small Qt-aware runner (`vss_gui_backend_tests`, `vss_gui_theme_tests`). The
+whole-window walk stays in `vss_gui --selftest`. No new third-party test
+framework is added, so the intent of the rule is met.
 
 ### No per-write callback from the engine thread
 
@@ -43,8 +43,37 @@ This is a delivery decision, not a change to the design.
 
 The machine has Qt 6.10.3 under `C:\Qt` and Qt 6.12 under
 `C:\Repos\common\qt`. A `QT_ROOT` value with a trailing space makes CMake miss
-6.10.3 and silently select 6.12; the binary then imports
-`qt_version_tag_6_12` and fails to start against a 6.10 runtime. All WP0
-builds pin Qt 6.10.3 with both `QT_ROOT` (no trailing space) and
-`-DCMAKE_PREFIX_PATH`, and the same instruction is carried into the later
-work packages. This is an environment trap, not a product decision.
+one and silently select the other; the binary then imports a version tag that
+the runtime does not export (`qt_version_tag_6_12` against 6.10). All builds
+pin `QT_ROOT` without a trailing space and also pass
+`-DCMAKE_PREFIX_PATH`.
+
+WP0 used 6.10.3. WP1 needs the approved `Qt6::Svg` module, which the 6.10.3
+installation does not have; the 6.12 installation does. GUI builds therefore
+pin 6.12.0 from `C:\Repos\common\qt\6.12.0\msvc2022_64`. This is an
+environment decision, not a product dependency change: `Qt6::Svg` is the
+dependency the bundle already approved.
+
+## WP1
+
+### Offscreen gallery and the system font
+
+The offscreen platform on Windows has no native font database, and the
+project forbids bundling a font. `vss_gui_theme_tests` points
+`QT_QPA_FONTDIR` at `C:/Windows/Fonts` so the review PNGs show real text
+instead of missing-glyph boxes. This is test-only; the product continues to
+use the system UI font through `QFontDatabase`, and the test adds no font to
+the repository or the build output.
+
+### SegmentedControl uses QRadioButton
+
+The segmented control is a group of exclusive `QRadioButton`s with the
+indicator hidden by QSS. That gives screen readers radio-group semantics and
+arrow-key behaviour without inventing an accessible interface. The selected
+segment is still an accent fill with `onAccent` text, as the design specifies.
+
+### CopyButton paints itself
+
+A 24 px `QToolButton` inherited the 10 px toolbar padding and clipped the
+16 px copy glyph. `CopyButton` is now a custom-painted `QAbstractButton` with
+the same accessible name, tooltip, focus ring and 24 px target.

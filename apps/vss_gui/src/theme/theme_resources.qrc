@@ -1,0 +1,33 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<RCC>
+  <qresource prefix="/">
+    <file alias="tokens/tokens.json">resources/tokens.json</file>
+    <file alias="tokens/style.qss.in">resources/style.qss.in</file>
+    <file alias="icons/add.svg">resources/icons/add.svg</file>
+    <file alias="icons/chevron-down.svg">resources/icons/chevron-down.svg</file>
+    <file alias="icons/connect.svg">resources/icons/connect.svg</file>
+    <file alias="icons/copy.svg">resources/icons/copy.svg</file>
+    <file alias="icons/device.svg">resources/icons/device.svg</file>
+    <file alias="icons/done.svg">resources/icons/done.svg</file>
+    <file alias="icons/expand.svg">resources/icons/expand.svg</file>
+    <file alias="icons/export.svg">resources/icons/export.svg</file>
+    <file alias="icons/fault.svg">resources/icons/fault.svg</file>
+    <file alias="icons/fit.svg">resources/icons/fit.svg</file>
+    <file alias="icons/fixture.svg">resources/icons/fixture.svg</file>
+    <file alias="icons/info.svg">resources/icons/info.svg</file>
+    <file alias="icons/more.svg">resources/icons/more.svg</file>
+    <file alias="icons/new-file.svg">resources/icons/new-file.svg</file>
+    <file alias="icons/open.svg">resources/icons/open.svg</file>
+    <file alias="icons/pause.svg">resources/icons/pause.svg</file>
+    <file alias="icons/refresh.svg">resources/icons/refresh.svg</file>
+    <file alias="icons/remove.svg">resources/icons/remove.svg</file>
+    <file alias="icons/run.svg">resources/icons/run.svg</file>
+    <file alias="icons/save.svg">resources/icons/save.svg</file>
+    <file alias="icons/search.svg">resources/icons/search.svg</file>
+    <file alias="icons/send.svg">resources/icons/send.svg</file>
+    <file alias="icons/settings.svg">resources/icons/settings.svg</file>
+    <file alias="icons/share.svg">resources/icons/share.svg</file>
+    <file alias="icons/warning.svg">resources/icons/warning.svg</file>
+    <file alias="icons/watch.svg">resources/icons/watch.svg</file>
+  </qresource>
+</RCC>
