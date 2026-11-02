@@ -29,7 +29,7 @@ QMenu::item:selected { background: %accentSoft%; color: %ink%; }
 QMenu::item:disabled { color: %disabledText%; }
 QMenu::separator { height: 1px; background: %line%; margin: 4px 8px; }
 QToolBar { background: %panel%; border: 0; border-bottom: 1px solid %line%; spacing: 4px; padding: 0 12px; }
-QToolButton { min-height: 34px; padding: 0 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: %ink%; }
+QToolButton { min-width: 24px; min-height: 34px; padding: 0 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: %ink%; }
 QToolButton:hover { background: %sunken%; }
 QToolButton:checked { background: %accentSoft%; border-color: %accentLine%; color: %accentStrong%; }
 QToolButton:disabled { color: %disabledText%; }
@@ -56,7 +56,7 @@ QPlainTextEdit, QTextEdit { padding: 6px 10px; }
 QLineEdit:read-only { background: %sunken%; }
 QLineEdit[invalid="true"], QComboBox[invalid="true"], QSpinBox[invalid="true"] { border: 2px solid %bad%; }
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled { background: %sunken%; border-color: %line%; color: %disabledText%; }
-QCheckBox, QRadioButton { spacing: 8px; min-height: 24px; }
+QCheckBox, QRadioButton { spacing: 8px; min-width: 24px; min-height: 24px; }
 QSlider::groove:horizontal { height: 4px; background: %line2%; border-radius: 2px; }
 QSlider::handle:horizontal { width: 18px; height: 18px; margin: -7px 0; border-radius: 9px; background: %accent%; border: 1px solid %accentStrong%; }
 QProgressBar { min-height: 8px; max-height: 8px; border: 0; border-radius: 4px; background: %line%; text-align: center; }

@@ -381,9 +381,22 @@ void Theme::apply_palette_and_style()
         style_installed_ = true;
     }
 
+    if (high_contrast())
+    {
+        qApp->setPalette(QApplication::style()->standardPalette());
+        qApp->setStyleSheet(QString());
+        Q_EMIT themeChanged();
+        return;
+    }
+
     qApp->setPalette(palette());
     qApp->setStyleSheet(styleSheet());
     Q_EMIT themeChanged();
+}
+
+bool Theme::high_contrast() const
+{
+    return qEnvironmentVariableIsSet("VSS_HIGH_CONTRAST");
 }
 
 const QHash<QString, QColor>& Theme::current_colours() const

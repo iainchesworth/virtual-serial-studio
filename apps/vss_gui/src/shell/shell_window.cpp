@@ -5,6 +5,7 @@
 //
 
 #include "shell/shell_window.hpp"
+#include "shell/accessibility.hpp"
 
 #include "advanced/add_fixture_dialog.hpp"
 #include "advanced/benchmark_dialog.hpp"
@@ -2409,7 +2410,25 @@ bool ShellWindow::run_selftest()
             fail(QStringLiteral("the launcher did not return after removal"));
     }
 
+    qputenv("VSS_HIGH_CONTRAST", QByteArrayLiteral("1"));
+    Theme::instance().set_mode(theme_mode::dark);
+    Theme::instance().set_mode(theme_mode::light);
+    if (qApp == nullptr || !qApp->styleSheet().isEmpty())
+        fail(
+            QStringLiteral("high contrast did not drop the custom stylesheet"));
+    qunsetenv("VSS_HIGH_CONTRAST");
+    qputenv("VSS_REDUCE_MOTION", QByteArrayLiteral("1"));
+    if (!Theme::instance().reduced_motion() ||
+        Theme::instance().motion_ms(motion_kind::hover) != 0)
+    {
+        fail(QStringLiteral("reduced motion did not stop the animations"));
+    }
+    qunsetenv("VSS_REDUCE_MOTION");
+    Theme::instance().set_mode(theme_mode::dark);
+    Theme::instance().set_mode(theme_mode::light);
+
     set_dirty(false);
+    failures += run_accessibility_checks(registry_, this);
     if (!failures.isEmpty())
     {
         for (const auto& text : failures)

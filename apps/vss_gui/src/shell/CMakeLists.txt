@@ -5,6 +5,8 @@
 #
 
 add_library(vss_gui_shell STATIC
+  accessibility.cpp
+  accessibility.hpp
   action_registry.cpp
   action_registry.hpp
   command_palette.cpp
