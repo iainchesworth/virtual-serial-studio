@@ -38,6 +38,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC OFF)
 
+# The adapter is a separate library so the backend tests can link it without
+# Qt Widgets.
+add_subdirectory(src/backend)
+
 add_executable(vss_gui
   main.cpp
   main_window.cpp
@@ -65,7 +69,7 @@ add_executable(vss_gui
   theme.hpp)
 
 target_compile_features(vss_gui PRIVATE cxx_std_23)
-target_link_libraries(vss_gui PRIVATE Vss::studio Qt6::Widgets)
+target_link_libraries(vss_gui PRIVATE Vss::studio Qt6::Widgets vss_gui_backend)
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
   execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
