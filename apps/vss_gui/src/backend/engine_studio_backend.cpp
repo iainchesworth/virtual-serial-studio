@@ -1,0 +1,482 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "backend/engine_studio_backend.hpp"
+
+#include "backend/event_bridge.hpp"
+
+#include <vss/core/hub.hpp>
+#include <vss/studio/studio.hpp>
+
+#include <QMetaObject>
+#include <QString>
+
+#include <algorithm>
+#include <cstddef>
+#include <utility>
+
+namespace vss::gui
+{
+namespace
+{
+
+QVector<vss::endpoint_id> to_vector(const std::vector<vss::endpoint_id>& ids)
+{
+    QVector<vss::endpoint_id> out;
+    out.reserve(static_cast<qsizetype>(ids.size()));
+    for (const vss::endpoint_id id : ids)
+        out.push_back(id);
+    return out;
+}
+
+port_view make_port(const vss::endpoint_info& info)
+{
+    port_view view;
+    view.id = info.id;
+    view.name = QString::fromStdString(info.name);
+    view.path = QString::fromStdString(info.path);
+    view.description = QString::fromStdString(info.description);
+    view.kind = info.kind;
+    view.state = info.state;
+    view.serial = info.serial;
+    view.lines = info.lines;
+    view.stats = info.stats;
+    view.supports_control_lines = info.supports_control_lines;
+    view.open = info.open;
+    view.studio_only = info.kind == vss::endpoint_kind::mock ||
+                       view.path.startsWith(QStringLiteral("loopback:"));
+    // The engine cannot observe a program opening the advertised path.  The
+    // GUI must not claim what it cannot know.
+    view.peer = peer_state::unknown;
+    return view;
+}
+
+link_view make_link(const vss::link_info& info)
+{
+    link_view view;
+    view.id = info.id;
+    view.mode = info.mode;
+    view.options = info.options;
+    view.sources = to_vector(info.sources);
+    view.targets = to_vector(info.targets);
+    view.owner = info.owner;
+    view.stats = info.stats;
+
+    if (info.mode == vss::link_mode::duplex)
+    {
+        view.shape = info.sources.size() == 1 && info.targets.size() == 1
+                         ? link_shape::two_way
+                         : link_shape::split;
+    }
+    else if (!info.options.emulate_modem_lines)
+    {
+        view.shape = link_shape::monitor;
+    }
+    else
+    {
+        view.shape =
+            info.sources.size() > 1 ? link_shape::join : link_shape::one_way;
+    }
+    return view;
+}
+
+bool same_port(const port_view& left, const port_view& right)
+{
+    return left.id == right.id && left.name == right.name &&
+           left.path == right.path && left.description == right.description &&
+           left.kind == right.kind && left.state == right.state &&
+           left.lines == right.lines && left.open == right.open &&
+           left.supports_control_lines == right.supports_control_lines &&
+           left.studio_only == right.studio_only && left.peer == right.peer &&
+           left.stats.bytes_rx == right.stats.bytes_rx &&
+           left.stats.bytes_tx == right.stats.bytes_tx &&
+           left.stats.read_ops == right.stats.read_ops &&
+           left.stats.write_ops == right.stats.write_ops &&
+           left.stats.errors == right.stats.errors &&
+           left.stats.dropped == right.stats.dropped;
+}
+
+bool same_link(const link_view& left, const link_view& right)
+{
+    return left.id == right.id && left.shape == right.shape &&
+           left.mode == right.mode &&
+           left.options.policy == right.options.policy &&
+           left.options.emulate_modem_lines ==
+               right.options.emulate_modem_lines &&
+           left.sources == right.sources && left.targets == right.targets &&
+           left.owner == right.owner && left.stats.bytes == right.stats.bytes &&
+           left.stats.messages == right.stats.messages &&
+           left.stats.dropped == right.stats.dropped;
+}
+
+QString platform_name()
+{
+#if defined(Q_OS_WIN)
+    return QStringLiteral("windows");
+#elif defined(Q_OS_MACOS)
+    return QStringLiteral("macos");
+#else
+    return QStringLiteral("linux");
+#endif
+}
+
+} // namespace
+
+EngineStudioBackend::EngineStudioBackend(vss::studio& studio, QObject* parent)
+    : StudioBackend(parent), studio_(studio),
+      bridge_(std::make_unique<EventBridge>(studio.engine()))
+{
+    connect(bridge_.get(), &EventBridge::batch_ready, this,
+            [this](const event_batch& events)
+            {
+                for (const auto& event : events)
+                {
+                    if (event.kind == vss::event_kind::lines)
+                        Q_EMIT lines_changed(event.endpoint);
+                }
+                Q_EMIT batch_ready(events);
+                rebuild();
+            });
+    bridge_->start();
+    rebuild();
+}
+
+EngineStudioBackend::~EngineStudioBackend()
+{
+    bridge_->stop();
+}
+
+capabilities EngineStudioBackend::caps() const
+{
+    return capabilities{};
+}
+
+vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(
+    const QString& name, vss::virtual_port_kind kind, bool capture)
+{
+    vss::endpoint_options options = studio_.default_options();
+    options.capture_traffic = capture;
+    const auto created =
+        studio_.create_virtual_port(name.toStdString(), kind, options);
+    if (!created)
+        return created.error();
+    rebuild();
+    return (*created)->id();
+}
+
+vss::result<vss::endpoint_id>
+EngineStudioBackend::create_auto_port(const QString& name, bool capture)
+{
+    // `studio::create_virtual_port` treats pty as the auto selector and falls
+    // back to the best available kind on platforms without a pseudo
+    // terminal.  This is the documented auto path, not a simulation.
+    return create_virtual_port(name, vss::virtual_port_kind::pty, capture);
+}
+
+vss::result<vss::endpoint_id>
+EngineStudioBackend::create_mock_port(const QString& name,
+                                      const vss::serial_settings& settings,
+                                      const QString& target)
+{
+    const auto created = studio_.create_mock_port(name.toStdString(), settings,
+                                                  target.toStdString());
+    if (!created)
+        return created.error();
+    rebuild();
+    return (*created)->id();
+}
+
+vss::result<vss::endpoint_id>
+EngineStudioBackend::attach_serial(const QString& name, const QString& uri,
+                                   const vss::serial_settings& settings,
+                                   bool capture)
+{
+    vss::endpoint_options options = studio_.default_options();
+    options.capture_traffic = capture;
+    const auto attached = studio_.attach_serial(
+        name.toStdString(), uri.toStdString(), settings, options);
+    if (!attached)
+        return attached.error();
+    rebuild();
+    return (*attached)->id();
+}
+
+vss::result<void> EngineStudioBackend::remove_port(vss::endpoint_id id)
+{
+    const auto removed = studio_.remove_port(id);
+    if (!removed)
+        return removed.error();
+    rebuild();
+    return {};
+}
+
+std::vector<device_view> EngineStudioBackend::devices() const
+{
+    std::vector<device_view> out;
+    for (const auto& device : studio_.serial_devices())
+    {
+        device_view view;
+        view.path = QString::fromStdString(device.path);
+        view.description = QString::fromStdString(device.description);
+        view.hardware_id = QString::fromStdString(device.hardware_id);
+        view.virtual_device = device.virtual_device;
+        view.com0com = device.com0com;
+        view.com0com_pair = device.com0com_pair;
+        view.com0com_side = QString::fromStdString(device.com0com_side);
+        out.push_back(std::move(view));
+    }
+    return out;
+}
+
+setup_facts EngineStudioBackend::facts() const
+{
+    setup_facts facts;
+    const auto installation = studio_.detect_com0com();
+    facts.com0com_found = installation.found;
+    facts.com0com_pairs = static_cast<int>(installation.pairs.size());
+    facts.serial_devices = static_cast<int>(studio_.serial_devices().size());
+    facts.platform = platform_name();
+    // No platform helper proves elevation yet.  Leave it unknown rather than
+    // telling the user something the build cannot check.
+    facts.elevation_known = false;
+    facts.elevated = false;
+    return facts;
+}
+
+std::optional<port_view> EngineStudioBackend::port(vss::endpoint_id id) const
+{
+    const auto it =
+        std::find_if(ports_.begin(), ports_.end(),
+                     [id](const port_view& view) { return view.id == id; });
+    if (it == ports_.end())
+        return std::nullopt;
+    return *it;
+}
+
+std::optional<link_view> EngineStudioBackend::link(vss::link_id id) const
+{
+    const auto it =
+        std::find_if(links_.begin(), links_.end(),
+                     [id](const link_view& view) { return view.id == id; });
+    if (it == links_.end())
+        return std::nullopt;
+    return *it;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::connect_ports(vss::endpoint_id first,
+                                   vss::endpoint_id second,
+                                   const vss::link_options& options)
+{
+    const auto linked = studio_.engine().connect(first, second, options);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::split(vss::endpoint_id source,
+                           const std::vector<vss::endpoint_id>& targets,
+                           const vss::link_options& options)
+{
+    const auto linked = studio_.engine().split(source, targets, options);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::join(const std::vector<vss::endpoint_id>& sources,
+                          vss::endpoint_id target,
+                          const vss::link_options& options)
+{
+    const auto linked = studio_.engine().join(sources, target, options);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::redirect(vss::endpoint_id from, vss::endpoint_id to,
+                              const vss::link_options& options)
+{
+    const auto linked = studio_.engine().redirect(from, to, options);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id> EngineStudioBackend::monitor(vss::endpoint_id from,
+                                                       vss::endpoint_id to)
+{
+    const auto linked = studio_.engine().monitor(from, to);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<void> EngineStudioBackend::disconnect(vss::link_id id)
+{
+    const auto removed = studio_.engine().disconnect(id);
+    if (!removed)
+        return removed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<void> EngineStudioBackend::set_owner(vss::link_id id,
+                                                 vss::endpoint_id owner)
+{
+    const auto changed = studio_.engine().set_owner(id, owner);
+    if (!changed)
+        return changed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<void> EngineStudioBackend::release_owner(vss::link_id id)
+{
+    const auto changed = studio_.engine().release_owner(id);
+    if (!changed)
+        return changed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<void> EngineStudioBackend::send(vss::endpoint_id id,
+                                            const QByteArray& data)
+{
+    const auto endpoint = studio_.engine().find_endpoint(id);
+    if (!endpoint)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!endpoint->is_open())
+        return vss::make_error_code(vss::errc::not_open);
+
+    const vss::bytes_view bytes(
+        reinterpret_cast<const vss::byte*>(data.constData()),
+        static_cast<std::size_t>(data.size()));
+    // A queue-full rejection is published as a hub error event and reaches
+    // the GUI through the coalesced batch.  There is deliberately no
+    // per-write callback into the backend: it would have to touch a QObject
+    // from the endpoint strand.
+    endpoint->write(bytes);
+    return {};
+}
+
+vss::result<void> EngineStudioBackend::set_line(vss::endpoint_id id,
+                                                vss::control_line line,
+                                                bool state)
+{
+    const auto endpoint = studio_.engine().find_endpoint(id);
+    if (!endpoint)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!endpoint->info().supports_control_lines)
+        return vss::make_error_code(vss::errc::unsupported);
+    if (const auto error = endpoint->set_line(line, state))
+        return error;
+    Q_EMIT lines_changed(id);
+    return {};
+}
+
+void EngineStudioBackend::refresh_lines(vss::endpoint_id id)
+{
+    const auto endpoint = studio_.engine().find_endpoint(id);
+    if (!endpoint)
+        return;
+    endpoint->refresh_lines();
+    Q_EMIT lines_changed(id);
+}
+
+vss::config::document EngineStudioBackend::snapshot() const
+{
+    return studio_.snapshot();
+}
+
+vss::result<void>
+EngineStudioBackend::apply(const vss::config::document& document,
+                           bool rollback_on_error)
+{
+    const auto applied = studio_.apply(document, rollback_on_error);
+    if (!applied)
+        return applied.error();
+    rebuild();
+    return {};
+}
+
+vss::result<share_view> EngineStudioBackend::share_serial(const QString& uri,
+                                                          int listeners)
+{
+    const auto shared = studio_.share_serial(uri.toStdString(), listeners);
+    if (!shared)
+        return shared.error();
+
+    share_view view;
+    view.source = shared->source;
+    view.link = shared->link;
+    view.listeners.reserve(static_cast<qsizetype>(shared->listeners.size()));
+    for (const vss::endpoint_id id : shared->listeners)
+        view.listeners.push_back(id);
+    rebuild();
+    return view;
+}
+
+vss::result<vss::link_id> EngineStudioBackend::bridge(const QString& from_uri,
+                                                      const QString& to_uri)
+{
+    const auto linked =
+        studio_.bridge(from_uri.toStdString(), to_uri.toStdString());
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+void EngineStudioBackend::refresh()
+{
+    rebuild();
+}
+
+void EngineStudioBackend::set_refresh_interval(int milliseconds)
+{
+    bridge_->set_interval(milliseconds);
+}
+
+void EngineStudioBackend::rebuild()
+{
+    std::vector<port_view> next_ports;
+    const auto infos = studio_.endpoint_infos();
+    next_ports.reserve(infos.size());
+    for (const auto& info : infos)
+        next_ports.push_back(make_port(info));
+
+    std::vector<link_view> next_links;
+    const auto links = studio_.link_infos();
+    next_links.reserve(links.size());
+    for (const auto& info : links)
+        next_links.push_back(make_link(info));
+
+    const bool ports_differ = next_ports.size() != ports_.size() ||
+                              !std::equal(next_ports.begin(), next_ports.end(),
+                                          ports_.begin(), same_port);
+    const bool links_differ = next_links.size() != links_.size() ||
+                              !std::equal(next_links.begin(), next_links.end(),
+                                          links_.begin(), same_link);
+
+    ports_ = std::move(next_ports);
+    links_ = std::move(next_links);
+
+    if (ports_differ)
+        Q_EMIT ports_changed();
+    if (links_differ)
+        Q_EMIT links_changed();
+}
+
+} // namespace vss::gui

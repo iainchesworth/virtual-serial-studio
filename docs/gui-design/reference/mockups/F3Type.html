@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type, spacing and icons</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .ty{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center;padding:9px 16px;border-bottom:1px solid var(--line)} .ty:last-child{border-bottom:0} .ty .m{font-size:12px;line-height:16px;color:var(--ink3)} .ico{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:1px solid var(--line);border-radius:6px;font-size:12px;line-height:16px;color:var(--ink2)} .ico svg{width:24px;height:24px;color:var(--ink);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round} .lb{display:flex;align-items:center;justify-content:center;border:1px solid var(--control);border-radius:3px;background:var(--panel);font-size:11px;line-height:14px;color:var(--ink2);text-align:center}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 1000px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">1 Foundations</div>
+      <h1>Type, spacing, layout and icons</h1>
+    </div>
+    <p>The window inherits the platform UI font, text size and scale. No fonts are shipped. All sizes are logical pixels.</p>
+  </div>
+
+  <div class="sheet-b">
+    <div style="display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px; align-items: start">
+
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Type scale</div>
+        <div class="card" style="overflow: hidden">
+          <div class="ty"><div><b>Display</b><div class="m">26 / 34, 600</div></div><div style="font-size: 26px; line-height: 34px; font-weight: 600">What do you want to do?</div></div>
+          <div class="ty"><div><b>Title</b><div class="m">20 / 26, 600</div></div><div style="font-size: 20px; line-height: 26px; font-weight: 600">Connect two programs</div></div>
+          <div class="ty"><div><b>Subtitle</b><div class="m">16 / 22, 600</div></div><div style="font-size: 16px; line-height: 22px; font-weight: 600">Share one device with several programs</div></div>
+          <div class="ty"><div><b>Body large</b><div class="m">14 / 20, 400</div></div><div style="font-size: 14px; line-height: 20px">Pick a job. Studio builds it and tells you what to open.</div></div>
+          <div class="ty"><div><b>Body</b><div class="m">13 / 18, 400 (default)</div></div><div>Real device, shared with 3 programs</div></div>
+          <div class="ty"><div><b>Label</b><div class="m">12 / 16, 600</div></div><div style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink2)">Device to share</div></div>
+          <div class="ty"><div><b>Caption</b><div class="m">12 / 16, 400</div></div><div style="font-size: 12px; line-height: 16px; color: var(--ink3)">Names are suggested from free COM numbers.</div></div>
+          <div class="ty"><div><b>Data</b><div class="m">Monospace 12 / 16</div></div><div class="mono">$GPRMC,123519,A,4807.038,N,01131.000,E</div></div>
+          <div class="ty"><div><b>Port name</b><div class="m">Monospace 44 / 52, 500</div></div><div style="font-family: var(--mono); font-size: 44px; line-height: 52px; font-weight: 500">COM7</div></div>
+        </div>
+        <p class="muted" style="margin-top: 8px; font-size: 12px">Nothing below 12px, except key caps and badges at 11px. Layouts are tested at 100, 125, 150 and 200 percent scale and at 200 percent text size. Data uses the platform monospace in the product.</p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 20px">
+        <div>
+          <div class="eyebrow" style="margin-bottom: 8px">Spacing, shape and depth</div>
+          <div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
+            <div style="display: flex; align-items: flex-end; gap: 14px">
+              <div style="text-align: center"><div style="width: 4px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>4</div>
+              <div style="text-align: center"><div style="width: 8px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>8</div>
+              <div style="text-align: center"><div style="width: 12px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>12</div>
+              <div style="text-align: center"><div style="width: 16px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>16</div>
+              <div style="text-align: center"><div style="width: 24px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>24</div>
+              <div style="text-align: center"><div style="width: 32px; height: 24px; background: var(--accent); margin: 0 auto 4px"></div>32</div>
+              <div class="grow"></div>
+              <div style="display: flex; gap: 10px">
+                <div style="width: 48px; height: 32px; border: 1px solid var(--control); border-radius: 4px"></div>
+                <div style="width: 48px; height: 32px; border: 1px solid var(--line2); border-radius: 6px"></div>
+                <div style="width: 48px; height: 32px; border: 1px solid var(--line2); border-radius: 8px; box-shadow: var(--shadow)"></div>
+              </div>
+            </div>
+            <p class="muted" style="font-size: 12px">4px base unit. Radii 4 on controls, 6 inside cards, 8 on dialogs. Depth comes from 1px borders. Only dialogs, menus and toasts cast a shadow.</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="eyebrow" style="margin-bottom: 8px">Density, a Settings choice</div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <div class="card" style="overflow: hidden">
+              <div style="padding: 6px 12px; background: var(--sunken); border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 600">Comfortable, 36px rows</div>
+              <div style="height: 36px; padding: 0 12px; display: flex; align-items: center; border-bottom: 1px solid var(--line)">device</div>
+              <div style="height: 36px; padding: 0 12px; display: flex; align-items: center; border-bottom: 1px solid var(--line); background: var(--accent-soft)">terminal</div>
+              <div style="height: 36px; padding: 0 12px; display: flex; align-items: center">test-tool</div>
+            </div>
+            <div class="card" style="overflow: hidden">
+              <div style="padding: 6px 12px; background: var(--sunken); border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 600">Compact, 28px rows</div>
+              <div style="height: 28px; padding: 0 12px; display: flex; align-items: center; border-bottom: 1px solid var(--line)">device</div>
+              <div style="height: 28px; padding: 0 12px; display: flex; align-items: center; border-bottom: 1px solid var(--line); background: var(--accent-soft)">terminal</div>
+              <div style="height: 28px; padding: 0 12px; display: flex; align-items: center; border-bottom: 1px solid var(--line)">test-tool</div>
+              <div style="height: 28px; padding: 0 12px; display: flex; align-items: center">logger</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="eyebrow" style="margin-bottom: 8px">Window layout, 1280 by 800 default, 960 by 640 minimum</div>
+          <div style="height: 168px; display: grid; grid-template-columns: 30fr 44fr 26fr; grid-template-rows: 22px minmax(0, 1fr) 40px; gap: 4px; padding: 6px; border: 1px solid var(--line2); border-radius: 6px; background: var(--ground)">
+            <div class="lb" style="grid-column: 1 / 4">Menu bar 28, toolbar 48</div>
+            <div class="lb">Ports, 360 (min 240)</div>
+            <div class="lb">Topology, flexible</div>
+            <div class="lb">Inspector and Send, 340 (min 260)</div>
+            <div class="lb" style="grid-column: 1 / 4">Monitor, 196 high (min 160). Status bar, 30</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section>
+      <div class="eyebrow" style="margin-bottom: 8px">Icons: 16px grid, 1.5px stroke, round caps, drawn in currentColour. Always paired with a text label, or given a tooltip and accessible name when alone.</div>
+      <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px">
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Add</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="5" width="11" height="6" rx="1"/><path d="M5 5V3M8 5V3M11 5V3"/></svg>Device</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M5 8L3.8 9.2a2.4 2.4 0 0 0 3.4 3.4L8.4 11.4M11 8l1.2-1.2a2.4 2.4 0 0 0-3.4-3.4L7.6 4.6"/></svg>Connect</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Remove</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h4M6 8l6-4M6 8h6M6 8l6 4"/></svg>Share</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg>Watch</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg>Copy</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>Done</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg>Warning</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>Info</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg>Search</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l7 5-7 5z"/></svg>Run</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2L4 9h4l-1 5 5-7H8l1-5z"/></svg>Fault</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 6h4v4H6z"/></svg>Fixture</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>Expand</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6V3h3M13 6V3h-3M3 10v3h3M13 10v3h-3"/></svg>Fit</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3h8l2 2v8H3z"/><path d="M5 3v4h5V3M5 13V9h6v4"/></svg>Save</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5a1 1 0 0 1 1-1h3l1.5 1.5H13a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>Open</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/></svg>Settings</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.5M13 3v3h-3"/></svg>Refresh</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 3.5v9M10.5 3.5v9"/></svg>Pause</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Export</div>
+        <div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3.5h11v9h-11zM5 6.5l2 1.5-2 1.5M8.5 10h2.5"/></svg>Send</div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

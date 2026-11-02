@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add a mock fixture</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 620px">
+  <div class="dlg-h">
+    <div class="grow">
+      <div style="display: flex; align-items: center; gap: 10px"><h1>Add a mock fixture</h1><span class="badge adv">Advanced</span></div>
+      <p style="color: var(--ink2)">A pretend device you can script, for testing without hardware.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 12px">
+      <div><label class="lbl" for="nm">Name</label><input class="inp" id="nm" value="modem"></div>
+      <div><label class="lbl" for="bd">Baud rate</label><select class="inp" id="bd"><option>115200</option><option>9600</option><option>57600</option></select></div>
+    </div>
+    <div>
+      <label class="lbl" for="tg">Connect it to</label>
+      <select class="inp" id="tg"><option>terminal (COM7), two-way</option><option>Nothing yet</option></select>
+      <p class="hint">You can link it later from Connect ports.</p>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Studio adds a fixture called <b>modem</b> at 115200 baud, linked two-way to <b>terminal</b>. After it exists you can inject faults and change its line wiring from the Inspector.</span>
+    </div>
+
+    <div class="card" style="padding: 12px 14px">
+      <div class="eyebrow" style="margin-bottom: 6px">What a fixture can simulate</div>
+      <p style="color: var(--ink2)">Parity errors, framing errors, overruns, breaks, hang-ups and disconnects. Each is reported as an error event on the port.</p>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Add fixture</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":620}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

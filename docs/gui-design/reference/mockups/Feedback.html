@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feedback and error patterns</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .pt{display:flex;flex-direction:column;gap:8px} .stage{padding:18px;background:var(--ground);border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;gap:12px;flex:1} .dlg.float{width:100%}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 880px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">6 Recover and support</div>
+      <h1>Feedback and error patterns</h1>
+    </div>
+    <p>Each pattern says what happened, why, and what to do. Nothing closes the window or discards the setup.</p>
+  </div>
+
+  <div class="sheet-b" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 20px">
+
+    <section class="pt">
+      <div class="eyebrow">Device cannot be opened</div>
+      <div class="stage">
+        <div class="dlg float" style="border-radius: 10px">
+          <div style="padding: 16px 18px 8px; display: flex; gap: 12px">
+            <span style="width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--bad-soft); border: 1px solid var(--bad-line); color: var(--bad); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></span>
+            <div><b style="font-size: 15px">Could not open COM3</b><p style="margin-top: 4px; color: var(--ink2)">Another program is using it, or the device was unplugged. Close the other program, then try again.</p></div>
+          </div>
+          <div class="dlg-f" style="padding: 10px 18px; margin-top: 8px"><button class="btn sm quiet">Copy details</button><span class="grow"></span><button class="btn sm">Choose another</button><button class="btn sm primary">Try again</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt">
+      <div class="eyebrow">Unsaved changes</div>
+      <div class="stage">
+        <div class="dlg float" style="border-radius: 10px">
+          <div style="padding: 16px 18px 8px"><b style="font-size: 15px">Save changes to lab.json?</b><p style="margin-top: 4px; color: var(--ink2)">Your ports and links have changed since the last save. You can turn this prompt off in Settings.</p></div>
+          <div class="dlg-f" style="padding: 10px 18px; margin-top: 8px"><button class="btn sm quiet">Don't save</button><span class="grow"></span><button class="btn sm">Cancel</button><button class="btn sm primary">Save</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt">
+      <div class="eyebrow">Link refused, would loop</div>
+      <div class="stage">
+        <div class="note danger" style="flex-direction: column; gap: 6px">
+          <div style="display: flex; align-items: center; gap: 8px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg><b>That link would create a loop</b></div>
+          <div>Data would travel from device to terminal and back to device forever. Nothing was changed.</div>
+          <div>Remove a link first, or choose different ports.</div>
+          <div style="display: flex; gap: 8px; margin-top: 2px"><button class="btn sm">Show the loop</button><button class="btn sm quiet">Close</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt">
+      <div class="eyebrow">Remove, with undo</div>
+      <div class="stage">
+        <div class="dlg float" style="border-radius: 10px">
+          <div style="padding: 16px 18px 8px"><b style="font-size: 15px">Remove terminal?</b><p style="margin-top: 4px; color: var(--ink2)">Its link to device is removed too. You can undo this straight afterwards.</p></div>
+          <div class="dlg-f" style="padding: 10px 18px; margin-top: 8px"><span class="grow"></span><button class="btn sm">Cancel</button><button class="btn sm danger">Remove</button></div>
+        </div>
+        <div class="toast"><span class="grow">Removed terminal and its link.</span><a href="#undo">Undo</a></div>
+      </div>
+    </section>
+
+    <section class="pt">
+      <div class="eyebrow">A running port fails</div>
+      <div class="stage">
+        <div class="card" style="overflow: hidden">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bad-soft)"><b>device</b><span class="mono">COM3</span><span class="grow"></span><span class="chip bad"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Failed</span></div>
+        </div>
+        <div class="note danger" style="flex-direction: column; gap: 6px">
+          <div><b>device stopped.</b> The cable may have been unplugged. The links to it are kept.</div>
+          <div style="display: flex; gap: 8px"><button class="btn sm primary">Reconnect</button><button class="btn sm">Why?</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt">
+      <div class="eyebrow">Confirmations</div>
+      <div class="stage">
+        <div class="toast"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg><span class="grow">COM7 copied.</span></div>
+        <div class="toast"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg><span class="grow">Bridge is running on port 4001.</span><a href="#mon">Open monitor</a></div>
+        <div class="toast"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg><span class="grow">Saved lab.json.</span></div>
+        <p class="cap" style="font-size: 12px; color: var(--ink3)">Toasts stay for six seconds, pause while hovered or focused, and are also announced politely to screen readers. Anything needing a decision is a dialog, not a toast.</p>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":880}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -63,3 +63,11 @@ if(TARGET vss_gui)
     TIMEOUT 120
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
+
+# The backend tests exist only when Qt and the tests are both enabled.
+if(TARGET vss_gui_backend_tests)
+  add_test(NAME gui_backend COMMAND vss_gui_backend_tests --verbose)
+  set_tests_properties(gui_backend PROPERTIES
+    TIMEOUT 120
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()

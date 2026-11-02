@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Templates and recent setups</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .pick .m{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3)}</style>
+</helmet>
+<div class="dlg" style="width: 920px; height: 700px">
+  <div class="dlg-h">
+    <div class="grow">
+      <h1>Setups</h1>
+      <p style="color: var(--ink2)">Start from a ready-made setup, or open one you saved.</p>
+    </div>
+    <label class="search" style="width: 260px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg><input aria-label="Search setups" placeholder="Search setups" style="border:0;background:transparent;flex:1;min-width:0;outline:0;color:var(--ink)"></label>
+  </div>
+  <div class="tabs" style="padding: 0 24px; background: var(--panel)"><button class="tab on">Templates</button><button class="tab">Recent</button></div>
+
+  <div class="dlg-b" style="padding-top: 18px; gap: 18px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+      <label class="pick">
+        <input type="radio" name="t">
+        <span>
+          <h3>Test bench, no hardware</h3>
+          <p>Two Studio-only ports and a one-way link, so a fresh PC can show the whole data path.</p>
+          <div class="m"><span class="tag s">Basic</span><span>2 ports, 1 link</span></div>
+        </span>
+      </label>
+      <label class="pick on">
+        <input type="radio" name="t" checked>
+        <span>
+          <h3>Share a device with three programs</h3>
+          <p>One real device split to three ports, each ready for its own program.</p>
+          <div class="m"><span class="tag s">Intermediate</span><span>4 ports, 1 link</span></div>
+        </span>
+      </label>
+      <label class="pick">
+        <input type="radio" name="t">
+        <span>
+          <h3>Device on the network</h3>
+          <p>A serial device bridged to a TCP port, both directions visible in the monitor.</p>
+          <div class="m"><span class="tag s">Intermediate</span><span>2 ports, 1 link</span></div>
+        </span>
+      </label>
+      <label class="pick">
+        <input type="radio" name="t">
+        <span>
+          <h3>Two programs, one device, one at a time</h3>
+          <p>Two programs joined into one device, with an owner so writes never collide.</p>
+          <div class="m"><span class="tag a">Advanced</span><span>3 ports, 1 link</span></div>
+        </span>
+      </label>
+    </div>
+
+    <div>
+      <div class="eyebrow" style="margin-bottom: 8px">Recent</div>
+      <div class="card" style="overflow: hidden">
+        <table class="tbl">
+          <tbody>
+            <tr><td style="width: 200px"><span class="mono strong">lab.json</span></td><td class="muted">3 ports, 1 link</td><td class="muted">Last opened [date]</td><td style="text-align: right"><button class="btn sm quiet">Open</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <button class="btn quiet">Browse for a file</button>
+    <button class="btn quiet">Save current setup as template</button>
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Use template</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":920,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-02T00:00:00Z"
+ },
+ "title": "Virtual Serial Studio GUI Design",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [
+  {
+   "id": "foundations",
+   "name": "1 Foundations"
+  },
+  {
+   "id": "structure",
+   "name": "2 Structure and journeys"
+  },
+  {
+   "id": "basic",
+   "name": "3 Basic"
+  },
+  {
+   "id": "intermediate",
+   "name": "4 Intermediate"
+  },
+  {
+   "id": "advanced",
+   "name": "5 Advanced"
+  },
+  {
+   "id": "recover",
+   "name": "6 Recover and support"
+  },
+  {
+   "id": "system",
+   "name": "7 System"
+  },
+  {
+   "id": "themes",
+   "name": "8 Themes and sizes"
+  }
+ ],
+ "boards": {
+  "F1Principles.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 940,
+   "title": "Principles and standards",
+   "page": "foundations"
+  },
+  "F2Colour.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 1280,
+   "h": 960,
+   "title": "Colour",
+   "page": "foundations"
+  },
+  "F3Type.dc.html": {
+   "x": 2720,
+   "y": 0,
+   "w": 1280,
+   "h": 1000,
+   "title": "Type, spacing, layout and icons",
+   "page": "foundations"
+  },
+  "F4Components.dc.html": {
+   "x": 0,
+   "y": 1400,
+   "w": 1280,
+   "h": 1100,
+   "title": "Components",
+   "page": "foundations"
+  },
+  "F5States.dc.html": {
+   "x": 1360,
+   "y": 1400,
+   "w": 1280,
+   "h": 980,
+   "title": "States, feedback and accessibility behaviour",
+   "page": "foundations"
+  },
+  "J1Structure.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 1180,
+   "title": "Information architecture and levels",
+   "page": "structure"
+  },
+  "J2Journeys.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 1280,
+   "h": 960,
+   "title": "Journey maps",
+   "page": "structure"
+  },
+  "J3Traceability.dc.html": {
+   "x": 2720,
+   "y": 0,
+   "w": 1280,
+   "h": 1140,
+   "title": "Story traceability and test plan",
+   "page": "structure"
+  },
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 800,
+   "title": "Launcher, first run",
+   "page": "basic",
+   "is_interactive": true
+  },
+  "AddPort.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 760,
+   "h": 780,
+   "title": "Add a port",
+   "page": "basic",
+   "is_interactive": true
+  },
+  "GivePort.dc.html": {
+   "x": 2200,
+   "y": 0,
+   "w": 760,
+   "h": 780,
+   "title": "Port ready",
+   "page": "basic",
+   "is_interactive": true
+  },
+  "SetupCheck.dc.html": {
+   "x": 0,
+   "y": 1200,
+   "w": 760,
+   "h": 720,
+   "title": "Setup check, driver missing",
+   "page": "basic"
+  },
+  "Pair.dc.html": {
+   "x": 840,
+   "y": 1200,
+   "w": 760,
+   "h": 740,
+   "title": "Connect two programs",
+   "page": "basic"
+  },
+  "Attach.dc.html": {
+   "x": 1680,
+   "y": 1200,
+   "w": 760,
+   "h": 800,
+   "title": "Attach a real device",
+   "page": "basic"
+  },
+  "Watch.dc.html": {
+   "x": 2520,
+   "y": 1200,
+   "w": 760,
+   "h": 600,
+   "title": "Watch traffic",
+   "page": "basic"
+  },
+  "Workspace.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 800,
+   "title": "Workspace, Simple mode",
+   "page": "intermediate",
+   "is_interactive": true
+  },
+  "Connect.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 920,
+   "h": 700,
+   "title": "Connect ports, split",
+   "page": "intermediate"
+  },
+  "ConnectJoin.dc.html": {
+   "x": 2360,
+   "y": 0,
+   "w": 920,
+   "h": 720,
+   "title": "Connect ports, join",
+   "page": "intermediate"
+  },
+  "ShareChoose.dc.html": {
+   "x": 0,
+   "y": 1200,
+   "w": 760,
+   "h": 700,
+   "title": "Share a device, step 1",
+   "page": "intermediate"
+  },
+  "Share.dc.html": {
+   "x": 840,
+   "y": 1200,
+   "w": 760,
+   "h": 760,
+   "title": "Share a device, step 2",
+   "page": "intermediate"
+  },
+  "ShareDone.dc.html": {
+   "x": 1680,
+   "y": 1200,
+   "w": 760,
+   "h": 640,
+   "title": "Share a device, step 3",
+   "page": "intermediate"
+  },
+  "Bridge.dc.html": {
+   "x": 0,
+   "y": 2360,
+   "w": 760,
+   "h": 760,
+   "title": "Put a device on the network",
+   "page": "intermediate"
+  },
+  "Templates.dc.html": {
+   "x": 840,
+   "y": 2360,
+   "w": 920,
+   "h": 700,
+   "title": "Setups and templates",
+   "page": "intermediate"
+  },
+  "Advanced.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 800,
+   "title": "Workspace, Advanced mode",
+   "page": "advanced",
+   "is_interactive": true
+  },
+  "Faults.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 1100,
+   "h": 760,
+   "title": "Line wiring and fault injection",
+   "page": "advanced"
+  },
+  "Palette.dc.html": {
+   "x": 2540,
+   "y": 0,
+   "w": 760,
+   "h": 520,
+   "title": "Command palette in Simple mode",
+   "page": "advanced"
+  },
+  "JsonView.dc.html": {
+   "x": 0,
+   "y": 1200,
+   "w": 1100,
+   "h": 720,
+   "title": "Topology JSON",
+   "page": "advanced"
+  },
+  "Benchmark.dc.html": {
+   "x": 1180,
+   "y": 1200,
+   "w": 760,
+   "h": 720,
+   "title": "Benchmark a connection",
+   "page": "advanced"
+  },
+  "AddFixture.dc.html": {
+   "x": 2020,
+   "y": 1200,
+   "w": 760,
+   "h": 620,
+   "title": "Add a mock fixture",
+   "page": "advanced"
+  },
+  "Troubleshoot.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 640,
+   "h": 760,
+   "title": "Why is nothing arriving",
+   "page": "recover",
+   "is_interactive": true
+  },
+  "Feedback.dc.html": {
+   "x": 720,
+   "y": 0,
+   "w": 1280,
+   "h": 880,
+   "title": "Feedback and error patterns",
+   "page": "recover"
+  },
+  "Bundle.dc.html": {
+   "x": 2080,
+   "y": 0,
+   "w": 760,
+   "h": 700,
+   "title": "Diagnostic bundle",
+   "page": "recover"
+  },
+  "Settings.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 860,
+   "h": 760,
+   "title": "Settings",
+   "page": "system"
+  },
+  "About.dc.html": {
+   "x": 940,
+   "y": 0,
+   "w": 760,
+   "h": 620,
+   "title": "About and environment",
+   "page": "system",
+   "is_interactive": true
+  },
+  "Shortcuts.dc.html": {
+   "x": 1780,
+   "y": 0,
+   "w": 860,
+   "h": 700,
+   "title": "Keyboard shortcuts",
+   "page": "system"
+  },
+  "Dark.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 800,
+   "title": "Workspace, dark theme",
+   "page": "themes",
+   "is_interactive": true
+  },
+  "Compact.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 960,
+   "h": 640,
+   "title": "Workspace, minimum window size",
+   "page": "themes",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "F1Principles.dc.html",
+  "F2Colour.dc.html",
+  "F3Type.dc.html",
+  "F4Components.dc.html",
+  "F5States.dc.html",
+  "J1Structure.dc.html",
+  "J2Journeys.dc.html",
+  "J3Traceability.dc.html",
+  "Main.dc.html",
+  "AddPort.dc.html",
+  "GivePort.dc.html",
+  "SetupCheck.dc.html",
+  "Pair.dc.html",
+  "Attach.dc.html",
+  "Watch.dc.html",
+  "Workspace.dc.html",
+  "Connect.dc.html",
+  "ConnectJoin.dc.html",
+  "ShareChoose.dc.html",
+  "Share.dc.html",
+  "ShareDone.dc.html",
+  "Bridge.dc.html",
+  "Templates.dc.html",
+  "Advanced.dc.html",
+  "Faults.dc.html",
+  "Palette.dc.html",
+  "JsonView.dc.html",
+  "Benchmark.dc.html",
+  "AddFixture.dc.html",
+  "Troubleshoot.dc.html",
+  "Feedback.dc.html",
+  "Bundle.dc.html",
+  "Settings.dc.html",
+  "About.dc.html",
+  "Shortcuts.dc.html",
+  "Dark.dc.html",
+  "Compact.dc.html"
+ ],
+ "notes": {
+  "t1": {
+   "x": 0,
+   "y": -300,
+   "text": "Principles, colour, type",
+   "kind": "title1",
+   "maxW": 4000,
+   "page": "foundations"
+  },
+  "t2": {
+   "x": 0,
+   "y": 1100,
+   "text": "Components and states",
+   "kind": "title1",
+   "maxW": 2640,
+   "page": "foundations"
+  },
+  "t3": {
+   "x": 0,
+   "y": -300,
+   "text": "Structure, journeys and traceability",
+   "kind": "title1",
+   "maxW": 4000,
+   "page": "structure"
+  },
+  "t4": {
+   "x": 0,
+   "y": -300,
+   "text": "Basic: get a port that works",
+   "kind": "title1",
+   "maxW": 2960,
+   "page": "basic"
+  },
+  "t5": {
+   "x": 0,
+   "y": 900,
+   "text": "Basic: set up and recover",
+   "kind": "title1",
+   "maxW": 3280,
+   "page": "basic"
+  },
+  "t6": {
+   "x": 0,
+   "y": -300,
+   "text": "Intermediate: connect and link",
+   "kind": "title1",
+   "maxW": 3280,
+   "page": "intermediate"
+  },
+  "t7": {
+   "x": 0,
+   "y": 900,
+   "text": "Intermediate: share a device, three steps",
+   "kind": "title1",
+   "maxW": 2440,
+   "page": "intermediate"
+  },
+  "t8": {
+   "x": 0,
+   "y": 2060,
+   "text": "Intermediate: network and reuse",
+   "kind": "title1",
+   "maxW": 1760,
+   "page": "intermediate"
+  },
+  "t9": {
+   "x": 0,
+   "y": -300,
+   "text": "Advanced: diagnose and reproduce",
+   "kind": "title1",
+   "maxW": 3300,
+   "page": "advanced"
+  },
+  "t10": {
+   "x": 0,
+   "y": 900,
+   "text": "Advanced: scripting and measuring",
+   "kind": "title1",
+   "maxW": 2780,
+   "page": "advanced"
+  },
+  "t11": {
+   "x": 0,
+   "y": -300,
+   "text": "Recover and support",
+   "kind": "title1",
+   "maxW": 2840,
+   "page": "recover"
+  },
+  "t12": {
+   "x": 0,
+   "y": -300,
+   "text": "System",
+   "kind": "title1",
+   "maxW": 2640,
+   "page": "system"
+  },
+  "t13": {
+   "x": 0,
+   "y": -300,
+   "text": "Themes and sizes",
+   "kind": "title1",
+   "maxW": 2320,
+   "page": "themes"
+  }
+ },
+ "designSystems": []
+}
