@@ -4,8 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include "main_window.hpp"
-
+#include "backend/engine_studio_backend.hpp"
+#include "shell/shell_window.hpp"
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
 
@@ -15,8 +15,6 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QPixmap>
-#include <QStyle>
-#include <QStyleFactory>
 
 #include <chrono>
 #include <cstdio>
@@ -51,9 +49,6 @@ int main(int argc, char* argv[])
     QApplication::setOrganizationDomain(
         QStringLiteral("virtualserial.example"));
 
-    if (QStyle* fusion = QStyleFactory::create(QStringLiteral("Fusion")))
-        QApplication::setStyle(fusion);
-
     QCommandLineParser parser;
     parser.setApplicationDescription(
         QStringLiteral("Virtual Serial Studio - a playground for real, virtual "
@@ -85,7 +80,8 @@ int main(int argc, char* argv[])
     {
         vss::studio_options options;
         auto studio = std::make_unique<vss::studio>(options);
-        vss::gui::MainWindow window(*studio);
+        vss::gui::EngineStudioBackend backend(*studio);
+        vss::gui::ShellWindow window(backend);
 
         if (parser.isSet(selftest_option))
         {
@@ -102,37 +98,55 @@ int main(int argc, char* argv[])
 
         if (parser.isSet(screenshot_option))
         {
+            if (qEnvironmentVariable("VSS_SCREENSHOT_THEME") ==
+                QLatin1String("dark"))
+                vss::gui::Theme::instance().set_mode(
+                    vss::gui::theme_mode::dark);
+            else if (qEnvironmentVariable("VSS_SCREENSHOT_THEME") ==
+                     QLatin1String("light"))
+                vss::gui::Theme::instance().set_mode(
+                    vss::gui::theme_mode::light);
+
             // A representative topology so the documentation image shows the
             // real application rather than an empty window.
-            studio->create_virtual_port("console",
-                                        vss::virtual_port_kind::loopback);
-            studio->create_virtual_port("logger",
-                                        vss::virtual_port_kind::loopback);
-            studio->create_mock_port("modem");
-            if (const auto console = studio->find("console"))
+            if (!qEnvironmentVariableIsSet("VSS_SCREENSHOT_EMPTY"))
             {
-                if (const auto logger = studio->find("logger"))
-                    studio->redirect("console", "logger");
-                console->write(vss::as_bytes("AT+VERSION\r\n"));
-                console->write(vss::as_bytes("Virtual Serial Studio 0.1.0\r\n"));
+                const auto console = backend.create_virtual_port(
+                    QStringLiteral("console"), vss::virtual_port_kind::loopback,
+                    true);
+                if (!qEnvironmentVariableIsSet("VSS_SCREENSHOT_ONE"))
+                {
+                    const auto logger = backend.create_virtual_port(
+                        QStringLiteral("logger"),
+                        vss::virtual_port_kind::loopback, true);
+                    if (console && logger)
+                    {
+                        static_cast<void>(
+                            backend.connect_ports(*console, *logger, {}));
+                        static_cast<void>(backend.send(
+                            *console, QByteArrayLiteral("AT+VERSION\r\n")));
+                    }
+                    static_cast<void>(
+                        backend.create_mock_port(QStringLiteral("modem"), {},
+                                                 QStringLiteral("scripted")));
+                }
             }
 
-            window.resize(1400, 880);
+            window.resize(1280, 800);
             window.show();
-            window.refresh_now();
             for (int frame = 0; frame < 8; ++frame)
             {
                 application.processEvents();
                 std::this_thread::sleep_for(std::chrono::milliseconds(40));
             }
-            window.refresh_now();
             application.processEvents();
 
             const QPixmap image = window.grab();
             const QString path = parser.value(screenshot_option);
             if (!image.save(path))
             {
-                std::fprintf(stderr, "cannot write %s\n", path.toUtf8().constData());
+                std::fprintf(stderr, "cannot write %s\n",
+                             path.toUtf8().constData());
                 return 1;
             }
             std::printf("wrote %s (%dx%d)\n", path.toUtf8().constData(),
@@ -148,9 +162,9 @@ int main(int argc, char* argv[])
         std::fprintf(stderr, "vss_gui: fatal: %s\n", error.what());
         if (!selftest)
         {
-            QMessageBox::critical(
-                nullptr, QStringLiteral("Virtual Serial Studio"),
-                QString::fromUtf8(error.what()));
+            QMessageBox::critical(nullptr,
+                                  QStringLiteral("Virtual Serial Studio"),
+                                  QString::fromUtf8(error.what()));
         }
         return 1;
     }

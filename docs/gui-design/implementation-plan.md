@@ -118,7 +118,7 @@ apps/vss_gui/
                   CopyButton, SegmentedControl, PickCard, Switch, Stepper,
                   Disclosure, ResultSentence, Toast, FormRow, KeyCap,
                   ConfirmDialog, ErrorDialog, WidgetGallery
-    shell/        MainWindow, ActionRegistry, CommandPalette, Launcher,
+    shell/        ShellWindow, ActionRegistry, CommandPalette, Launcher,
                   StatusBar, LevelService, SelectionService
     panes/        PortsPanel, PortModel, PortDelegate, InspectorPanel,
                   SendPanel, MonitorModel, MonitorPanel, EventLog
@@ -154,6 +154,16 @@ vss_set_warnings(vss_gui_backend)
 
 `vss_gui` links `vss_gui_backend`. `QT_NO_KEYWORDS` stays on the executable and
 is set on the backend library too, so `endpoint::emit` is never rewritten.
+
+WP2 split the frame into `vss_gui_shell` rather than the planned `vss_gui_ui`.
+A dedicated static library has the same dependency shape, lets the shell tests
+link without the legacy panels, and leaves `vss_gui` as `main.cpp` plus the
+old translation units. Those old flat files still compile and are not
+instantiated by `main.cpp`; WP9 removes them and then broadens the no-hex
+scan to the whole GUI. Keeping them for WP2 meant the package could land the
+new frame without a 24-file deletion in the same commit as its first working
+build. `vss_gui_shell` links `vss_gui_widgets`, `vss_gui_backend` and
+`vss_gui_theme`; the shell tests link it with the fake backend.
 
 ## 5. Naming and conventions
 
@@ -331,3 +341,52 @@ and it coalesces by construction.
    The bundle README says not to commit those; `tokens/style.qss.in` and
    `tokens/tokens.json` are the authoritative sources and `gen_qss.py`
    regenerates the previews into a build directory.
+
+## 11. WP2 decisions
+
+1. **Shell library name.** `vss_gui_shell` (section 4) replaces the planned
+   `vss_gui_ui` for the frame. Pane, dialog, topology and support libraries
+   keep their own fragments when those packages land.
+2. **Old shell stays until WP9.** The flat `main_window`, panel, dialog and
+   legacy theme files still compile; `main.cpp` constructs `ShellWindow`
+   instead. Nothing links the old `MainWindow` into a visible window. WP9
+   deletes the files, its compatibility `theme.hpp`, and the poller. This is
+   the one deliberate departure from the migration sequence's "WP2 deletes
+   the old files" line.
+3. **Placeholder handlers.** Every action and launcher card is registered and
+   reachable, but actions whose dialog or pane belongs to WP3 to WP8 show a
+   status-bar message ("... is part of a later work package."). The message
+   is deliberately explicit rather than a fake result. The menus, palette,
+   toolbar visibility and mode behaviour are final; only the handlers are
+   temporary.
+4. **Unsaved prompt.** WP2 uses a three-button `QMessageBox` (Save / Don't
+   save / Cancel) with the spec's wording because `ConfirmDialog` in WP1 has
+   two buttons. WP8 replaces it with the shared dialog and the
+   "turn this prompt off" setting. The setting key `ui/askOnDiscard` is
+   already honoured.
+5. **Compact window.** At a width below 1100 px or a height below 700 px the
+   toolbar becomes icon-only, Inspector and Send become one tabbed dock, and
+   Monitor starts at 156 px. The design's exact minimum is 960x640; the
+   breakpoint is intentionally just above it so a 960-wide window is already
+   in the compact form. Qt's toolbar extension button handles overflow rather
+   than a hand-built More menu.
+6. **Review-only screenshot switches.** `VSS_SCREENSHOT_EMPTY=1` and
+   `VSS_SCREENSHOT_THEME=light|dark` exist only on the existing
+   `--screenshot` path so the human gate can see the launcher and both
+   themes. They are not product settings and do not write `QSettings`.
+7. **Hub display fact.** `StudioBackend::hub_running()` was added so the
+   status bar can report the engine state. It is a display-only fact, not a
+   new feature capability, and both adapters implement it (`true` for the
+   fake).
+8. **Toolbar Share.** The Topology menu has Share in Simple, but the design
+   adds the Share toolbar button only in Advanced. WP2 leaves that toolbar
+   slot to WP6, which owns sharing and can add an advanced duplicate action
+   without making the menu item Advanced.
+9. **QSS menu colour.** The product template now sets `color` on `QMenuBar`,
+   `QMenuBar::item` and `QMenu::item`. The bundle template left them to the
+   palette, which rendered the menu text black-on-dark after a runtime theme
+   switch. The token values are unchanged; only the explicit binding was
+   added.
+10. **Icon refresh.** Action icons are rebuilt from `IconProvider` when
+    `Theme::themeChanged` fires. Without that, toolbars and menus kept the
+    light-mode ink in the dark theme.

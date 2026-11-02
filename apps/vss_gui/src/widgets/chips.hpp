@@ -24,6 +24,7 @@ public:
     enum class kind
     {
         open,
+        healthy,
         waiting,
         connected,
         studio_only,

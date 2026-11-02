@@ -35,6 +35,7 @@ chip_palette palette_for(StatusChip::kind kind)
     switch (kind)
     {
     case StatusChip::kind::open:
+    case StatusChip::kind::healthy:
         return {theme.colour(colour_role::okSoft),
                 theme.colour(colour_role::okLine),
                 theme.colour(colour_role::noteOkText),

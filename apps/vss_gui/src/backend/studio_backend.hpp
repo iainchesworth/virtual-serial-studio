@@ -121,6 +121,10 @@ public:
 
     // -- lifecycle ---------------------------------------------------------
 
+    /// True while the engine hub is running.  A display fact, not a feature
+    /// capability: the GUI only reports it.
+    virtual bool hub_running() const = 0;
+
     /// Re-reads the engine snapshots and emits the changed signals.
     virtual void refresh() = 0;
 

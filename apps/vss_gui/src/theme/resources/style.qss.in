@@ -19,11 +19,11 @@ QToolTip { background: %toastBg%; color: %toastText%; border: 0; padding: 5px 9p
 QLabel[muted="true"] { color: %ink3%; }
 
 /* menu and toolbar */
-QMenuBar { background: %panel%; border-bottom: 1px solid %line%; }
-QMenuBar::item { padding: 4px 10px; border-radius: 3px; background: transparent; }
+QMenuBar { background: %panel%; color: %ink%; border-bottom: 1px solid %line%; }
+QMenuBar::item { padding: 4px 10px; border-radius: 3px; background: transparent; color: %ink%; }
 QMenuBar::item:selected { background: %accentSoft%; color: %accentStrong%; }
-QMenu { background: %panel%; border: 1px solid %line2%; padding: 4px; }
-QMenu::item { padding: 6px 24px 6px 12px; border-radius: 3px; }
+QMenu { background: %panel%; color: %ink%; border: 1px solid %line2%; padding: 4px; }
+QMenu::item { padding: 6px 24px 6px 12px; border-radius: 3px; color: %ink%; }
 QMenu::item:selected { background: %accentSoft%; color: %ink%; }
 QMenu::item:disabled { color: %disabledText%; }
 QMenu::separator { height: 1px; background: %line%; margin: 4px 8px; }

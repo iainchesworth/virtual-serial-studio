@@ -8,7 +8,7 @@ gates pass.
 |---|---|---|---|---|---|
 | WP0 | `gui/wp0-recon` | implemented, self-review complete | Debug `ctest` 5/5, Release 6/6, 10 backend tests x40, `vss_gui --selftest` ok, changelog ok, clang-format clean | self-review + human G0; reviewer sessions timed out | bundle installed; implementation plan written; backend + event bridge + 10 tests |
 | WP1 | `gui/wp1-theme-widgets` | implemented, self-review complete | Debug `ctest` 6/6, 13 theme/widget tests, gallery PNGs light and dark, contrast/QSS/changelog/format clean | self-review + human G1 | theme, icons, focus ring, widget library, gallery, token tools, CI job |
-| WP2 | `gui/wp2-shell` | not started | - | - | blocked on WP1 |
+| WP2 | `gui/wp2-shell` | implemented, self-review complete | Debug `ctest` 7/7, Release `ctest` 8/8, 6/6 shell tests, `vss_gui --selftest` ok, six review PNGs, contrast/QSS/changelog/format clean | self-review; human G1 | action registry, level, launcher, command palette, status bar, dock frame; old shell retained until WP9 |
 | WP3 | `gui/wp3-data-panes` | not started | - | - | blocked on G1 |
 | WP4 | `gui/wp4-topology` | not started | - | - | blocked on G1 |
 | WP5 | `gui/wp5-basic-flows` | not started | - | - | blocked on G1 |
@@ -79,3 +79,43 @@ gates pass.
 - Deviations: the segmented control is a QRadioButton group; CopyButton is
   custom-painted to keep the 24 px icon target; both are recorded in
   `design-deviations.md`.
+
+## WP2 detail
+
+- Added `apps/vss_gui/src/shell/`: `ActionRegistry` (one `QAction` per
+  command, level visibility, search keywords, shortcut uniqueness, enabled
+  predicates and theme-aware icons), `LevelService` (`ui/advanced`),
+  `SelectionService`, `Launcher` + `LauncherCard`, `CommandPalette`,
+  `StatusBar`, `ShellWindow` and the small `format` helpers.
+- `ShellWindow` is the application frame: menu bar, 48 px toolbar with the
+  search field, the launcher/workspace stack, Ports/Inspector/Send/Monitor
+  docks with placeholder panes, and the status bar. It opens, saves and
+  creates the existing JSON document format, tracks dirty state in the title,
+  persists geometry and dock state, handles the unsaved prompt, exposes the
+  Simple/Advanced switch in the status bar and the View menu, and applies the
+  theme/density choices. The old `MainWindow` is no longer constructed;
+  its files remain until WP9.
+- `CommandPalette` groups results into Available now and Needs Advanced mode,
+  renders the mode explanation and empty-group sentence, selects the first
+  action, supports keyboard navigation and turns Advanced mode on before
+  running a hidden action.
+- Extended WP1's `SegmentedControl` with a 24 px compact form for the status
+  bar and added a healthy status-chip kind. The QSS template gained explicit
+  menu text colours; `ActionRegistry` rebuilds icons on a theme change.
+- Added `vss_gui_shell_tests`: six tests for action levels/search/shortcut
+  uniqueness, palette grouping and activation, launcher-to-workspace
+  transitions and dock visibility, saved layout, level persistence,
+  accessible toolbar names, the no-duplicate-shortcut walk and the headless
+  self-test.
+- Review PNGs (never committed): `build/debug-gui/gui-shots/shell-light.png`,
+  `shell-dark.png`, `launcher-light.png`, `launcher-dark.png`,
+  `palette-light.png`, `palette-dark.png`.
+- Checks: Debug `ctest` 7/7 (new `gui_shell`), 6/6 shell tests,
+  `vss_gui --selftest` ok, changelog ok, clang-format clean; Release build and
+  ctest recorded in the gate report.
+- Deviations: `vss_gui_shell` instead of `vss_gui_ui`; old flat sources stay
+  until WP9; placeholders show a status-bar boundary message; unsaved prompt
+  uses a three-button QMessageBox until WP8; compact starts below 1100x700;
+  Share toolbar entry deferred to WP6; Review-only screenshot env switches.
+  All are recorded in `design-deviations.md` and section 11 of
+  `implementation-plan.md`.
