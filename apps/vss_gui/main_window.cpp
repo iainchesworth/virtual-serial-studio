@@ -6,6 +6,8 @@
 
 #include "main_window.hpp"
 
+#include "about_dialog.hpp"
+#include "connect_dialog.hpp"
 #include "dialogs.hpp"
 #include "inspector_panel.hpp"
 #include "monitor_model.hpp"
@@ -259,6 +261,28 @@ void MainWindow::create_actions()
     connect(null_modem_action_, &QAction::triggered, this,
             &MainWindow::on_null_modem_demo);
 
+    connect_action_ = new QAction(tr("&Connect ports…"), this);
+    connect_action_->setShortcut(QKeySequence(QStringLiteral("Ctrl+L")));
+    connect_action_->setStatusTip(
+        tr("Wire two or more ports: two-way, redirect, monitor, split or "
+           "join."));
+    connect(connect_action_, &QAction::triggered, this,
+            &MainWindow::on_connect_ports);
+
+    settings_action_ = new QAction(tr("&Settings…"), this);
+    settings_action_->setShortcut(QKeySequence::Preferences);
+    settings_action_->setStatusTip(
+        tr("Appearance, refresh rate and the default baud rate."));
+    connect(settings_action_, &QAction::triggered, this,
+            &MainWindow::on_settings);
+
+    advanced_action_ = new QAction(tr("&Advanced mode"), this);
+    advanced_action_->setCheckable(true);
+    advanced_action_->setStatusTip(
+        tr("Show the fixtures, topology and networking tools."));
+    connect(advanced_action_, &QAction::toggled, this,
+            &MainWindow::on_toggle_advanced);
+
     about_action_ = new QAction(tr("&About Virtual Serial Studio"), this);
     connect(about_action_, &QAction::triggered, this, &MainWindow::on_about);
 }
@@ -279,6 +303,8 @@ void MainWindow::create_menus()
     ports_menu->addAction(attach_serial_action_);
     ports_menu->addAction(add_mock_action_);
     ports_menu->addSeparator();
+    ports_menu->addAction(connect_action_);
+    ports_menu->addSeparator();
     ports_menu->addAction(remove_port_action_);
 
     auto* topology_menu = menuBar()->addMenu(tr("&Topology"));
@@ -295,6 +321,11 @@ void MainWindow::create_menus()
     scenarios_menu->addAction(null_modem_action_);
 
     view_menu_ = menuBar()->addMenu(tr("&View"));
+    view_menu_->addAction(advanced_action_);
+    view_menu_->addSeparator();
+
+    auto* tools_menu = menuBar()->addMenu(tr("&Tools"));
+    tools_menu->addAction(settings_action_);
 
     auto* help_menu = menuBar()->addMenu(tr("&Help"));
     help_menu->addAction(about_action_);
@@ -342,6 +373,7 @@ void MainWindow::create_docks()
     ports_toolbar->addAction(attach_serial_action_);
     ports_toolbar->addAction(add_mock_action_);
     ports_toolbar->addSeparator();
+    ports_toolbar->addAction(connect_action_);
     ports_toolbar->addAction(remove_port_action_);
     ports_layout->addWidget(ports_toolbar);
     ports_layout->addWidget(ports_view_, 1);
@@ -475,6 +507,8 @@ void MainWindow::create_toolbar()
     toolbar->addAction(add_mock_action_);
     toolbar->addAction(remove_port_action_);
     toolbar->addSeparator();
+    toolbar->addAction(connect_action_);
+    toolbar->addSeparator();
     toolbar->addAction(null_modem_action_);
     toolbar->addAction(share_action_);
     toolbar->addSeparator();
@@ -541,6 +575,9 @@ void MainWindow::restore_settings()
         settings.value(QStringLiteral("main/state")).toByteArray();
     if (!state.isEmpty())
         restoreState(state);
+
+    settings_ = load_ui_settings();
+    apply_ui_settings(settings_);
 }
 
 void MainWindow::save_settings()
@@ -551,6 +588,7 @@ void MainWindow::save_settings()
     QSettings settings;
     settings.setValue(QStringLiteral("main/geometry"), saveGeometry());
     settings.setValue(QStringLiteral("main/state"), saveState());
+    save_ui_settings(settings_);
 }
 
 void MainWindow::poll()
@@ -1227,24 +1265,130 @@ void MainWindow::on_fit_topology()
 
 void MainWindow::on_about()
 {
-    QMessageBox::about(
-        this, tr("About Virtual Serial Studio"),
-        tr("<h3>Virtual Serial Studio</h3>"
-           "<p>Version %1</p>"
-           "<p>A playground for real, virtual and networked serial ports, "
-           "built on Boost.Asio, Boost.VirtualSerial and Qt 6.</p>"
-           "<p>Ports, links and control lines are owned by the studio "
-           "library; this window is a polling view over it.</p>"
-           "<p>Copyright &copy; 2026 Virtual Serial Studio contributors.<br/>"
-           "Licensed under the GNU General Public License, version 3 or "
-           "later. This program comes with ABSOLUTELY NO WARRANTY.<br/>"
-           "See the LICENSE file, or "
-           "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">"
-           "https://www.gnu.org/licenses/gpl-3.0.html</a>.</p>"
-           "<p>Qt %2 · %3</p>")
-            .arg(QStringLiteral(VSS_GUI_VERSION),
-                 QString::fromLatin1(qVersion()),
-                 QSysInfo::prettyProductName()));
+    AboutDialog dialog(this);
+    dialog.exec();
+}
+
+void MainWindow::on_connect_ports()
+{
+    ConnectDialog dialog(studio_.endpoint_infos(), this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const connect_request request = dialog.request();
+    const std::string target = request.target.toStdString();
+    bool ok = false;
+    vss::error_code failure;
+
+    switch (request.mode)
+    {
+    case connect_mode::duplex:
+    {
+        const auto result =
+            studio_.connect(request.sources.value(0).toStdString(), target);
+        ok = static_cast<bool>(result);
+        if (!ok)
+            failure = result.error();
+        break;
+    }
+    case connect_mode::redirect:
+    {
+        const auto result =
+            studio_.redirect(request.sources.value(0).toStdString(), target);
+        ok = static_cast<bool>(result);
+        if (!ok)
+            failure = result.error();
+        break;
+    }
+    case connect_mode::monitor:
+    {
+        const auto result =
+            studio_.monitor(request.sources.value(0).toStdString(), target);
+        ok = static_cast<bool>(result);
+        if (!ok)
+            failure = result.error();
+        break;
+    }
+    case connect_mode::split:
+    {
+        std::vector<std::string> targets;
+        for (const QString& name : request.sources)
+            targets.push_back(name.toStdString());
+        const auto result = studio_.split(target, targets);
+        ok = static_cast<bool>(result);
+        if (!ok)
+            failure = result.error();
+        break;
+    }
+    case connect_mode::join:
+    {
+        std::vector<std::string> sources;
+        for (const QString& name : request.sources)
+            sources.push_back(name.toStdString());
+        const auto result = studio_.join(sources, target);
+        ok = static_cast<bool>(result);
+        if (!ok)
+            failure = result.error();
+        break;
+    }
+    }
+
+    if (!ok)
+    {
+        show_error(tr("Connect ports"), error_text(failure));
+        return;
+    }
+
+    log_line(tr("Connected %1 port(s) to %2.")
+                 .arg(request.sources.size())
+                 .arg(request.target));
+    refresh_now();
+    set_dirty();
+}
+
+void MainWindow::on_settings()
+{
+    SettingsDialog dialog(settings_, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    settings_ = dialog.result();
+    apply_ui_settings(settings_);
+}
+
+void MainWindow::on_toggle_advanced(bool enabled)
+{
+    settings_.advanced = enabled;
+    save_ui_settings(settings_);
+    apply_mode(enabled);
+}
+
+void MainWindow::apply_mode(bool advanced)
+{
+    advanced_ = advanced;
+    const QAction* const advanced_actions[] = {
+        add_mock_action_, null_modem_action_, share_action_,
+        join_action_, bridge_action_, fit_action_};
+    for (const QAction* action : advanced_actions)
+    {
+        if (action != nullptr)
+            const_cast<QAction*>(action)->setVisible(advanced);
+    }
+}
+
+void MainWindow::apply_ui_settings(const ui_settings& value)
+{
+    if (poll_timer_ != nullptr)
+        poll_timer_->setInterval(value.refresh_ms);
+
+    apply_theme(value.theme);
+
+    if (advanced_action_ != nullptr)
+    {
+        const QSignalBlocker blocker(advanced_action_);
+        advanced_action_->setChecked(value.advanced);
+    }
+    apply_mode(value.advanced);
 }
 
 void MainWindow::on_new_document()
@@ -1396,7 +1540,7 @@ bool MainWindow::save_to(const QString& path)
 
 bool MainWindow::confirm_discard()
 {
-    if (!dirty_)
+    if (!dirty_ || !settings_.confirm_exit)
         return true;
 
     QMessageBox box(

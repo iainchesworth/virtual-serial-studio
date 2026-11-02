@@ -7,6 +7,8 @@
 #ifndef VSS_GUI_MAIN_WINDOW_HPP
 #define VSS_GUI_MAIN_WINDOW_HPP
 
+#include "settings_dialog.hpp"
+
 #include <vss/core/endpoint.hpp>
 #include <vss/core/link.hpp>
 #include <vss/core/types.hpp>
@@ -73,6 +75,10 @@ private Q_SLOTS:
     void on_topology_selection_changed(quint64 endpoint, quint64 link);
     void on_remove_selected_link();
 
+    void on_connect_ports();
+    void on_settings();
+    void on_toggle_advanced(bool enabled);
+
     void on_new_document();
     void on_open_document();
     void on_save_document();
@@ -98,6 +104,10 @@ private:
     void connect_signals();
     void restore_settings();
     void save_settings();
+
+    /// Shows or hides the tools that only make sense to an expert user.
+    void apply_mode(bool advanced);
+    void apply_ui_settings(const ui_settings& value);
 
     void apply_refresh(const std::vector<vss::endpoint_info>& endpoints,
                        const std::vector<vss::link_info>& links,
@@ -164,6 +174,7 @@ private:
     QAction* attach_serial_action_ = nullptr;
     QAction* add_mock_action_ = nullptr;
     QAction* remove_port_action_ = nullptr;
+    QAction* connect_action_ = nullptr;
     QAction* remove_link_action_ = nullptr;
     QAction* fit_action_ = nullptr;
     QAction* refresh_action_ = nullptr;
@@ -171,6 +182,8 @@ private:
     QAction* join_action_ = nullptr;
     QAction* bridge_action_ = nullptr;
     QAction* null_modem_action_ = nullptr;
+    QAction* settings_action_ = nullptr;
+    QAction* advanced_action_ = nullptr;
     QAction* about_action_ = nullptr;
 
     QTimer* poll_timer_ = nullptr;
@@ -185,6 +198,8 @@ private:
     vss::endpoint_id selected_endpoint_ = 0;
     vss::link_id selected_link_ = 0;
 
+    ui_settings settings_;
+    bool advanced_ = false;
     bool monitor_paused_ = false;
     QString document_path_;
     QString document_name_ = QStringLiteral("untitled");

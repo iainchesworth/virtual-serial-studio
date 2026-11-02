@@ -11,6 +11,7 @@
 #include <vss/core/types.hpp>
 
 #include <QColor>
+#include <QString>
 #include <QLocale>
 #include <QString>
 
@@ -18,6 +19,9 @@
 #include <cstdint>
 
 namespace vss::gui {
+
+/// Applies the persisted appearance: "system", "light" or "dark".
+void apply_theme(const QString& name);
 
 /// The single source of truth for the state colours used by the port table,
 /// the topology boxes and the inspector.

@@ -320,7 +320,7 @@ see [docs/profiling.md](docs/profiling.md) for the zone list and caveats.
 the GUI self-test on Linux with Qt, enforces the coverage gates, runs the
 performance floors, captures a Tracy profile of the end-to-end path, and
 validates every changelog fragment. Boost is fetched by
-`tools/fetch_boost.py`, so no job depends on a system Boost.
+`tools/fetch_boost.py`, so no job depends on a system Boost. Development lands on `develop` (the trunk and default branch); `main` is the release branch and only receives merges from `develop` when a release is cut.
 
 Set the `VIRTUAL_SERIAL_REPO` repository variable once Boost.VirtualSerial is
 published; until then the workflows clone it from the default URL.

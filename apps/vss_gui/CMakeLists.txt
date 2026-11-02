@@ -39,6 +39,10 @@ add_executable(vss_gui
   inspector_panel.cpp
   send_panel.cpp
   dialogs.cpp
+  settings_dialog.cpp
+  about_dialog.cpp
+  connect_dialog.cpp
+  theme.cpp
   main_window.hpp
   port_model.hpp
   monitor_model.hpp
@@ -46,11 +50,36 @@ add_executable(vss_gui
   inspector_panel.hpp
   send_panel.hpp
   dialogs.hpp
+  settings_dialog.hpp
+  about_dialog.hpp
+  connect_dialog.hpp
   theme.hpp)
 
 target_compile_features(vss_gui PRIVATE cxx_std_23)
 target_link_libraries(vss_gui PRIVATE Vss::studio Qt6::Widgets)
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE VSS_GIT_COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE VSS_GIT_BRANCH OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+endif()
+if(NOT VSS_GIT_COMMIT)
+  set(VSS_GIT_COMMIT "unknown")
+endif()
+if(NOT VSS_GIT_BRANCH)
+  set(VSS_GIT_BRANCH "unknown")
+endif()
+string(TIMESTAMP VSS_BUILD_DATE "%Y-%m-%d")
+
 target_compile_definitions(vss_gui PRIVATE
+  VSS_GIT_COMMIT="${VSS_GIT_COMMIT}"
+  VSS_GIT_BRANCH="${VSS_GIT_BRANCH}"
+  VSS_BUILD_DATE="${VSS_BUILD_DATE}"
+  VSS_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
+  VSS_COMPILER="${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}"
   VSS_GUI_VERSION="${PROJECT_VERSION}"
   # vss::endpoint has a member function called `emit`; Qt's keyword macro
   # would rewrite it to nothing inside the moc translation unit.  Using the

@@ -98,3 +98,20 @@ they are correctness. In particular:
 
 Changes that touch `endpoint`, `hub` or a transport should be run against the
 repeated system tests (`vss_system_tests --repeat=10`) before they are merged.
+
+## Branch model
+
+Development happens on **`develop`**, which is the trunk and the default
+branch. Feature work branches from `develop` and merges back into it; `main`
+is the release branch and only receives merges from `develop` when a release
+is cut. That keeps `main` stable for users and gives releases an obvious
+trigger.
+
+```text
+feature/* ──► develop ──► (release) ──► main
+                 ▲
+            day-to-day work
+```
+
+CI runs on pushes to `develop` and `main` and on every pull request. The
+commit-authorship and changelog checks run everywhere.
