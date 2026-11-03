@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Journey maps</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .jm{display:grid;grid-template-columns:176px repeat(5,minmax(0,1fr));gap:8px} .jh{padding:8px 12px;background:var(--sunken);border:1px solid var(--line);border-radius:6px;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)} .jl{padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);display:flex;flex-direction:column;gap:6px} .jl b{font-size:15px} .jc{padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);display:flex;flex-direction:column;gap:8px;font-size:12.5px;line-height:17px} .jc .rs{padding:8px 10px;border-radius:6px;background:var(--accent-soft);color:#063F50;font-size:12px;line-height:16px} .jc .chip{align-self:flex-start;height:20px;font-size:11px}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 960px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">2 Structure and journeys</div>
+      <h1>Journey maps</h1>
+    </div>
+    <p>Each persona follows five stages. The blue note in every cell is the design response, and names the screen where it lives.</p>
+  </div>
+
+  <div class="sheet-b" style="gap: 8px">
+    <div class="jm">
+      <div></div>
+      <div class="jh">Arrive</div><div class="jh">Set up</div><div class="jh">Use</div><div class="jh">Verify</div><div class="jh">Recover or change</div>
+    </div>
+
+    <div class="jm">
+      <div class="jl"><b>Operator</b><span class="tag s" style="align-self: flex-start">Basic</span><span class="muted" style="font-size: 12px; line-height: 16px">Goal: give my program COM7</span></div>
+      <div class="jc"><div>Opens the app for the first time.</div><span class="chip warn hollow"><i></i>Unsure</span><div class="rs">Launcher asks one question and shows setup is ready.</div></div>
+      <div class="jc"><div>Picks "Give my program a serial port".</div><span class="chip ok"><i></i>Hopeful</span><div class="rs">One default name, a result sentence. Port ready.</div></div>
+      <div class="jc"><div>Copies the port name into their program.</div><span class="chip ok"><i></i>Confident</span><div class="rs">Big name, Copy button, plain instruction. Port ready.</div></div>
+      <div class="jc"><div>Watches Waiting turn into Program connected.</div><span class="chip ok"><i></i>Reassured</span><div class="rs">Live state chip with text and shape. Workspace.</div></div>
+      <div class="jc"><div>Driver is missing, or the program cannot open the port.</div><span class="chip bad"><svg class="ic" style="width:11px;height:11px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Frustrated</span><div class="rs">Setup check with a fix per problem. Troubleshoot checklist.</div></div>
+    </div>
+
+    <div class="jm">
+      <div class="jl"><b>Integrator</b><span class="tag s" style="align-self: flex-start">Intermediate</span><span class="muted" style="font-size: 12px; line-height: 16px">Goal: share one device with three programs</span></div>
+      <div class="jc"><div>Opens a saved setup or starts from a template.</div><span class="chip ok"><i></i>Focused</span><div class="rs">Recents and Templates, one click. Templates.</div></div>
+      <div class="jc"><div>Attaches the device, shares it, names the programs.</div><span class="chip warn hollow"><i></i>Careful</span><div class="rs">Safe serial defaults. Share wizard previews every port and flags Studio only ones.</div></div>
+      <div class="jc"><div>Connects each program to its port.</div><span class="chip ok"><i></i>Confident</span><div class="rs">Ports panel shows who is connected. Workspace.</div></div>
+      <div class="jc"><div>Checks each copy of the data matches.</div><span class="chip ok"><i></i>Curious</span><div class="rs">Monitor shows every copy, filtered per port.</div></div>
+      <div class="jc"><div>Adds a program or bridges to the network.</div><span class="chip warn hollow"><i></i>Unsure</span><div class="rs">Form with live address preview, and Undo. Network form.</div></div>
+    </div>
+
+    <div class="jm">
+      <div class="jl"><b>Diagnostician</b><span class="tag a" style="align-self: flex-start">Advanced</span><span class="muted" style="font-size: 12px; line-height: 16px">Goal: find why nothing arrives, then reproduce it</span></div>
+      <div class="jc"><div>Opens the failing setup file.</div><span class="chip warn hollow"><i></i>Pressured</span><div class="rs">Open recent, Topology JSON tab. Advanced.</div></div>
+      <div class="jc"><div>Adds a monitor link and a mock fixture.</div><span class="chip ok"><i></i>Focused</span><div class="rs">Monitor link mode never drives modem lines. Connect ports.</div></div>
+      <div class="jc"><div>Sends data, toggles lines, injects faults.</div><span class="chip ok"><i></i>Engaged</span><div class="rs">Line wiring matrix and fault panel. Faults.</div></div>
+      <div class="jc"><div>Reads drops, counters and hex.</div><span class="chip ok"><i></i>Confident</span><div class="rs">Filters, search, dropped chip, visible owner. Advanced.</div></div>
+      <div class="jc"><div>Hands the case to support.</div><span class="chip ok"><i></i>Relieved</span><div class="rs">Diagnostic bundle, copy as command, JSON. Bundle.</div></div>
+    </div>
+
+    <p class="muted" style="margin-top: 4px; font-size: 12px">Feeling labels are hypotheses from the user guide and UX notes. The usability test plan on the traceability board is how they get confirmed or corrected.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

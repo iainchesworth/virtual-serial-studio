@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "name": "device-on-the-network",
+  "description": "A serial device bridged to a TCP port, both directions visible in the monitor.",
+  "ports": [
+    {
+      "name": "device",
+      "kind": "physical",
+      "uri": "serial://COM3?baud=115200",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "network",
+      "kind": "tcp",
+      "uri": "tcp://127.0.0.1:4001",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    }
+  ],
+  "links": [
+    {
+      "mode": "duplex",
+      "sources": ["device"],
+      "targets": ["network"],
+      "emulate_modem_lines": false,
+      "policy": "interleave"
+    }
+  ]
+}

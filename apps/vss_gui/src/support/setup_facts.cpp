@@ -1,0 +1,491 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "support/setup_facts.hpp"
+
+#include <QCoreApplication>
+#include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
+#include <QProcess>
+#include <QStringList>
+#include <QUrl>
+
+#if defined(Q_OS_WIN)
+#include <windows.h>
+
+#include <shellapi.h>
+#elif defined(Q_OS_UNIX)
+#include <unistd.h>
+#endif
+
+#if defined(Q_OS_LINUX)
+#include <grp.h>
+
+#include <vector>
+#endif
+
+#include <algorithm>
+
+namespace vss::gui::support
+{
+namespace
+{
+
+QString t(const char* text)
+{
+    return QCoreApplication::translate("SetupCheck", text);
+}
+
+QString plural(const char* single, int count)
+{
+    return QCoreApplication::translate("SetupCheck", single, nullptr, count);
+}
+
+QString device_sentence(const QStringList& paths, int count)
+{
+    if (count <= 0)
+        return t("No serial devices are visible to Virtual Serial Studio. "
+                 "You can still use virtual ports.");
+    if (paths.isEmpty())
+        return plural("%n serial device(s) are visible to Virtual Serial "
+                      "Studio.",
+                      count);
+
+    QStringList shown = paths.mid(0, 3);
+    if (count > shown.size())
+    {
+        return t("%1 and %2 more are visible to Virtual Serial Studio.")
+            .arg(shown.join(QStringLiteral(", ")))
+            .arg(count - shown.size());
+    }
+    if (shown.size() == 1)
+        return t("%1 is visible to Virtual Serial Studio.").arg(shown.first());
+    const QString last = shown.takeLast();
+    return t("%1 and %2 are visible to Virtual Serial Studio.")
+        .arg(shown.join(QStringLiteral(", ")), last);
+}
+
+setup_row ok_row(const QString& title, const QString& sentence)
+{
+    return {setup_state::ok,
+            QStringLiteral("done"),
+            title,
+            sentence,
+            QStringLiteral("OK"),
+            {},
+            setup_action::none,
+            false};
+}
+
+setup_row not_checked_row(const QString& title, const QString& sentence)
+{
+    return {setup_state::not_checked,
+            QStringLiteral("info"),
+            title,
+            sentence,
+            t("Not checked yet"),
+            {},
+            setup_action::none,
+            false};
+}
+
+setup_row devices_row(const setup_facts& facts, const QStringList& paths,
+                      bool checks_available)
+{
+    setup_row row;
+    row.title = t("Real serial devices");
+    row.icon = QStringLiteral("device");
+    row.action_text = t("Refresh");
+    row.action = setup_action::refresh_devices;
+    if (!checks_available)
+    {
+        return not_checked_row(row.title,
+                               t("Studio did not check the serial devices."));
+    }
+    row.state = setup_state::ok;
+    row.chip = QStringLiteral("OK");
+    row.sentence = device_sentence(paths, facts.serial_devices);
+    return row;
+}
+
+void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
+                      const platform_facts& platform, bool checks_available,
+                      const QStringList& paths)
+{
+    setup_row driver;
+    driver.title = t("Virtual port driver");
+    driver.icon = QStringLiteral("warning");
+    if (!checks_available)
+    {
+        rows.push_back(not_checked_row(
+            driver.title, t("Studio did not check for the virtual port "
+                            "driver.")));
+    }
+    else if (facts.com0com_found)
+    {
+        const QString sentence =
+            facts.com0com_pairs > 0
+                ? plural("com0com is installed with %n pair(s), so other "
+                         "programs can see virtual ports as COM ports.",
+                         facts.com0com_pairs)
+                : t("com0com is installed, so other programs can see virtual "
+                    "ports as COM ports.");
+        rows.push_back(ok_row(driver.title, sentence));
+    }
+    else
+    {
+        driver.state = setup_state::attention;
+        driver.sentence = t("com0com was not found. Windows needs a driver "
+                            "before other programs can see virtual ports as "
+                            "COM ports.");
+        driver.chip = t("Needs attention");
+        driver.action_text = t("Install com0com");
+        driver.action = setup_action::install_driver;
+        driver.highlight = true;
+        rows.push_back(driver);
+    }
+
+    setup_row administrator;
+    administrator.title = t("Administrator rights");
+    administrator.icon = QStringLiteral("info");
+    if (!checks_available || !platform.elevation_known)
+    {
+        rows.push_back(not_checked_row(
+            administrator.title,
+            t("Studio could not check for administrator rights.")));
+    }
+    else if (platform.elevated)
+    {
+        rows.push_back(ok_row(
+            administrator.title,
+            t("Studio is running as administrator, so it can create linked "
+              "pairs.")));
+    }
+    else
+    {
+        administrator.state = setup_state::info;
+        administrator.sentence =
+            t("Creating a new linked pair needs administrator rights, once "
+              "per pair. Everything else runs without them.");
+        administrator.chip = t("Needed later");
+        administrator.action_text = t("Restart as administrator");
+        administrator.action = setup_action::restart_elevated;
+        rows.push_back(administrator);
+    }
+
+    rows.push_back(devices_row(facts, paths, checks_available));
+
+    setup_row carry_on;
+    carry_on.state = setup_state::info;
+    carry_on.icon = QStringLiteral("run");
+    carry_on.title = t("Carry on without a driver");
+    carry_on.sentence = t("You can still use in-process ports, the monitor "
+                          "and the Send panel to try things out.");
+    carry_on.action_text = t("Continue in test mode");
+    carry_on.action = setup_action::continue_test;
+    rows.push_back(carry_on);
+}
+
+void add_unix_rows(QVector<setup_row>& rows, const setup_facts& facts,
+                   const platform_facts& platform, bool checks_available,
+                   const QStringList& paths)
+{
+    const bool mac = facts.platform == QLatin1String("macos");
+
+    setup_row pseudo;
+    pseudo.title = t("Pseudo terminals");
+    pseudo.icon = QStringLiteral("device");
+    if (!checks_available || !platform.pty_known)
+    {
+        rows.push_back(not_checked_row(
+            pseudo.title,
+            t("Studio did not check whether pseudo terminals are available.")));
+    }
+    else if (platform.pty_available)
+    {
+        rows.push_back(ok_row(
+            pseudo.title,
+            t("Pseudo terminals are available, so other programs can open new "
+              "virtual ports.")));
+    }
+    else
+    {
+        pseudo.state = setup_state::attention;
+        pseudo.sentence = t("Pseudo terminals are not available. Other "
+                            "programs will not be able to open new virtual "
+                            "ports.");
+        pseudo.chip = t("Needs attention");
+        pseudo.highlight = true;
+        rows.push_back(pseudo);
+    }
+
+    setup_row group;
+    group.title =
+        mac ? t("Serial port access") : t("Serial port group membership");
+    group.icon = QStringLiteral("info");
+    if (mac || !checks_available || !platform.dialout_known)
+    {
+        rows.push_back(not_checked_row(
+            group.title,
+            mac ? t("Studio has no group check for macOS. If a device cannot "
+                    "be opened, check its permissions in /dev.")
+                : t("Studio did not check your membership of the dialout "
+                    "group.")));
+    }
+    else if (platform.dialout_member)
+    {
+        rows.push_back(ok_row(
+            group.title,
+            t("You are in the dialout group, so programs can open serial "
+              "devices.")));
+    }
+    else
+    {
+        group.state = setup_state::attention;
+        group.sentence = t("Your account is not in the dialout group, so "
+                           "programs may not be able to open serial devices.");
+        group.chip = t("Needs attention");
+        group.action_text = t("How to add me");
+        group.action = setup_action::dialout_help;
+        group.highlight = true;
+        rows.push_back(group);
+    }
+
+    rows.push_back(devices_row(facts, paths, checks_available));
+}
+
+} // namespace
+
+QString host_platform()
+{
+#if defined(Q_OS_WIN)
+    return QStringLiteral("windows");
+#elif defined(Q_OS_MACOS)
+    return QStringLiteral("macos");
+#else
+    return QStringLiteral("linux");
+#endif
+}
+
+platform_facts probe_platform_facts()
+{
+    platform_facts facts;
+#if defined(Q_OS_WIN)
+    facts.elevation_known = true;
+    HANDLE token = nullptr;
+    if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token) != 0)
+    {
+        TOKEN_ELEVATION elevation{};
+        DWORD size = sizeof(elevation);
+        if (GetTokenInformation(token, TokenElevation, &elevation,
+                                sizeof(elevation), &size) != 0)
+        {
+            facts.elevated = elevation.TokenIsElevated != 0;
+        }
+        CloseHandle(token);
+    }
+    // Windows has no pseudo terminals to offer other programs.
+    facts.pty_known = true;
+    facts.pty_available = false;
+#else
+    facts.elevation_known = true;
+    facts.elevated = geteuid() == 0;
+    facts.pty_known = true;
+    facts.pty_available = QFileInfo(QStringLiteral("/dev/ptmx")).exists();
+#endif
+
+#if defined(Q_OS_LINUX)
+    facts.dialout_known = true;
+    if (facts.elevated)
+    {
+        facts.dialout_member = true;
+    }
+    else
+    {
+        const group* dialout = getgrnam("dialout");
+        if (dialout == nullptr)
+        {
+            facts.dialout_known = false;
+        }
+        else
+        {
+            const gid_t target = dialout->gr_gid;
+            facts.dialout_member = getegid() == target;
+            if (!facts.dialout_member)
+            {
+                const int count = getgroups(0, nullptr);
+                std::vector<gid_t> groups(
+                    static_cast<std::size_t>(std::max(count, 0)));
+                if (count > 0 && getgroups(count, groups.data()) == count)
+                {
+                    facts.dialout_member =
+                        std::find(groups.begin(), groups.end(), target) !=
+                        groups.end();
+                }
+            }
+        }
+    }
+#endif
+    return facts;
+}
+
+setup_report build_setup_report(const setup_facts& facts,
+                                const platform_facts& platform,
+                                const QStringList& device_paths,
+                                bool checks_available)
+{
+    setup_report report;
+    const QString platform_name =
+        facts.platform.isEmpty() ? host_platform() : facts.platform;
+    const bool windows = platform_name == QLatin1String("windows");
+
+    setup_facts normalised = facts;
+    normalised.platform = platform_name;
+    if (windows)
+    {
+        add_windows_rows(report.rows, normalised, platform, checks_available,
+                         device_paths);
+    }
+    else
+    {
+        add_unix_rows(report.rows, normalised, platform, checks_available,
+                      device_paths);
+    }
+
+    int attention = 0;
+    int not_checked = 0;
+    for (const setup_row& row : report.rows)
+    {
+        if (row.state == setup_state::attention)
+            ++attention;
+        else if (row.state == setup_state::not_checked)
+            ++not_checked;
+    }
+    if (!checks_available)
+        report.header_chip = t("Not checked yet");
+    else if (attention > 0)
+    {
+        report.header_chip = attention == 1
+                                 ? t("1 thing to fix")
+                                 : plural("%n things to fix", attention);
+    }
+    else if (not_checked > 0)
+        report.header_chip = t("Not checked yet");
+    else
+        report.header_chip = t("All set");
+
+    if (windows && checks_available && !normalised.com0com_found)
+    {
+        report.driver_note =
+            t("Until a driver is installed, new ports only work inside "
+              "Virtual Serial Studio. Other programs will not see them.");
+    }
+
+    if (!checks_available || (not_checked > 0 && attention == 0))
+        report.state = setup_report::readiness::not_checked;
+    else if (attention > 0)
+        report.state = setup_report::readiness::needs_attention;
+    else
+        report.state = setup_report::readiness::ready;
+
+    if (!checks_available)
+        report.ports_ready = false;
+    else if (windows)
+        report.ports_ready = normalised.com0com_found;
+    else
+        report.ports_ready = platform.pty_known && platform.pty_available;
+
+    report.platform_note = QCoreApplication::translate(
+        "SetupCheck", "On Linux and macOS this check looks at "
+                      "pseudo terminals and your serial port "
+                      "group membership instead.");
+    return report;
+}
+
+setup_report query_setup_report(const StudioBackend& backend)
+{
+    const setup_facts facts = backend.facts();
+    const platform_facts platform = probe_platform_facts();
+    const bool checks_available = backend.caps().setup_check;
+
+    QStringList paths;
+    for (const device_view& device : backend.devices())
+    {
+        if (!device.path.isEmpty())
+            paths.push_back(device.path);
+    }
+    return build_setup_report(facts, platform, paths, checks_available);
+}
+
+QString com0com_project_url()
+{
+    return QStringLiteral("https://sourceforge.net/projects/com0com/");
+}
+
+bool open_com0com_project_page()
+{
+    return QDesktopServices::openUrl(QUrl(com0com_project_url()));
+}
+
+QString dialout_add_command()
+{
+    return QStringLiteral("sudo usermod -aG dialout $USER");
+}
+
+bool open_system_accessibility_settings()
+{
+#if defined(Q_OS_WIN)
+    return QDesktopServices::openUrl(
+        QUrl(QStringLiteral("ms-settings:easeofaccess")));
+#elif defined(Q_OS_MACOS)
+    return QDesktopServices::openUrl(QUrl(QStringLiteral(
+        "x-apple.systempreferences:com.apple.preference.universalaccess")));
+#else
+    if (QProcess::startDetached(QStringLiteral("gnome-control-center"),
+                                {QStringLiteral("universal-access")}))
+    {
+        return true;
+    }
+    return QProcess::startDetached(QStringLiteral("systemsettings"),
+                                   {QStringLiteral("kcm_access")});
+#endif
+}
+
+bool relaunch_as_administrator(QString* error)
+{
+#if defined(Q_OS_WIN)
+    const QString executable = QCoreApplication::applicationFilePath();
+    if (executable.isEmpty())
+    {
+        if (error != nullptr)
+            *error = t("The application path is not known.");
+        return false;
+    }
+    const std::wstring path =
+        QDir::toNativeSeparators(executable).toStdWString();
+    const auto result = reinterpret_cast<INT_PTR>(ShellExecuteW(
+        nullptr, L"runas", path.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
+    if (result > 32)
+        return true;
+    if (error != nullptr)
+    {
+        *error = result == SE_ERR_ACCESSDENIED || result == ERROR_CANCELLED
+                     ? t("Windows did not allow the elevated restart. Try "
+                         "again from the Start menu.")
+                     : t("Windows could not restart Virtual Serial Studio as "
+                         "administrator.");
+    }
+    return false;
+#else
+    if (error != nullptr)
+        *error = t("Restarting as administrator is only available on "
+                   "Windows.");
+    return false;
+#endif
+}
+
+} // namespace vss::gui::support

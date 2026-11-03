@@ -7,14 +7,15 @@
 # snapshots the studio on a timer and never touches widgets from hub threads.
 #
 
-find_package(Qt6 6.2 QUIET COMPONENTS Widgets)
+find_package(Qt6 6.2 QUIET COMPONENTS Widgets Svg)
 if(NOT Qt6_FOUND)
   if(VSS_GUI_REQUIRED)
     message(FATAL_ERROR
-      "Vss: the GUI was requested but Qt 6 was not found. It was searched "
-      "for in CMAKE_PREFIX_PATH, QT_ROOT, C:/Qt, C:/Repos/common/qt, ~/Qt, "
-      "/opt/Qt and /usr/local/Qt. Set QT_ROOT or CMAKE_PREFIX_PATH to your "
-      "Qt 6 installation, or configure with -DVSS_GUI_REQUIRED=OFF "
+      "Vss: the GUI was requested but Qt 6 with the Widgets and Svg modules "
+      "was not found. It was searched for in CMAKE_PREFIX_PATH, QT_ROOT, "
+      "C:/Qt, C:/Repos/common/qt, ~/Qt, /opt/Qt and /usr/local/Qt. Set "
+      "QT_ROOT or CMAKE_PREFIX_PATH to a Qt 6 installation that includes "
+      "Qt6::Svg, or configure with -DVSS_GUI_REQUIRED=OFF "
       "-DVSS_BUILD_GUI=OFF for a command-line-only build.")
   endif()
   message(STATUS "Vss: Qt 6 not found in CMAKE_PREFIX_PATH, QT_ROOT or the "
@@ -38,34 +39,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC OFF)
 
-add_executable(vss_gui
-  main.cpp
-  main_window.cpp
-  selftest.cpp
-  port_model.cpp
-  monitor_model.cpp
-  topology_view.cpp
-  inspector_panel.cpp
-  send_panel.cpp
-  dialogs.cpp
-  settings_dialog.cpp
-  about_dialog.cpp
-  connect_dialog.cpp
-  theme.cpp
-  main_window.hpp
-  port_model.hpp
-  monitor_model.hpp
-  topology_view.hpp
-  inspector_panel.hpp
-  send_panel.hpp
-  dialogs.hpp
-  settings_dialog.hpp
-  about_dialog.hpp
-  connect_dialog.hpp
-  theme.hpp)
-
-target_compile_features(vss_gui PRIVATE cxx_std_23)
-target_link_libraries(vss_gui PRIVATE Vss::studio Qt6::Widgets)
+# Build identity for the About window and for `environment.txt` in the
+# diagnostic bundle.  Resolved before the support target so its compile
+# definitions can carry the values.
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
   execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
@@ -82,13 +58,63 @@ if(NOT VSS_GIT_BRANCH)
   set(VSS_GIT_BRANCH "unknown")
 endif()
 string(TIMESTAMP VSS_BUILD_DATE "%Y-%m-%d")
+set(VSS_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+set(VSS_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+
+# The adapter is a separate library so the backend tests can link it without
+# Qt Widgets.
+add_subdirectory(src/backend)
+
+# Design tokens, resources, icons and the focus style.
+add_subdirectory(src/theme)
+
+# Shared widgets built from those tokens.
+add_subdirectory(src/widgets)
+
+# Ports, Inspector, Send and Monitor.
+add_subdirectory(src/panes)
+
+# The topology dock: nodes, links, layout and the accessible links list.
+add_subdirectory(src/topology)
+
+# The Advanced tools: owner, wiring and faults, fixtures, JSON, benchmark.
+add_subdirectory(src/advanced)
+
+# Support and system surfaces: setup check, troubleshooting, bundle,
+# settings, About, shortcuts.
+add_subdirectory(src/support)
+
+# Connect, share, network and template dialogs (WP6).
+add_subdirectory(src/dialogs)
+
+# Basic flows: add, pair, attach and watch (WP5).
+add_subdirectory(src/flows)
+
+# The redesigned window frame.
+add_subdirectory(src/shell)
+
+add_executable(vss_gui
+  main.cpp)
+
+target_compile_features(vss_gui PRIVATE cxx_std_23)
+target_link_libraries(vss_gui PRIVATE
+  Vss::studio
+  Qt6::Widgets
+  vss_gui_backend
+  vss_gui_theme
+  vss_gui_widgets
+  vss_gui_panes
+  vss_gui_dialogs
+  vss_gui_flows
+  vss_gui_support
+  vss_gui_shell)
 
 target_compile_definitions(vss_gui PRIVATE
   VSS_GIT_COMMIT="${VSS_GIT_COMMIT}"
   VSS_GIT_BRANCH="${VSS_GIT_BRANCH}"
   VSS_BUILD_DATE="${VSS_BUILD_DATE}"
-  VSS_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
-  VSS_COMPILER="${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}"
+  VSS_BUILD_TYPE="${VSS_BUILD_TYPE}"
+  VSS_COMPILER="${VSS_COMPILER}"
   VSS_GUI_VERSION="${PROJECT_VERSION}"
   # vss::endpoint has a member function called `emit`; Qt's keyword macro
   # would rewrite it to nothing inside the moc translation unit.  Using the

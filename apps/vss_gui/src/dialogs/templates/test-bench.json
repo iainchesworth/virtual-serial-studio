@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "name": "test-bench",
+  "description": "Two Studio-only ports and a one-way link, so a fresh PC can show the whole data path.",
+  "ports": [
+    {
+      "name": "sender",
+      "kind": "virtual",
+      "virtual_kind": "loopback",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "receiver",
+      "kind": "virtual",
+      "virtual_kind": "loopback",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    }
+  ],
+  "links": [
+    {
+      "mode": "redirect",
+      "sources": ["sender"],
+      "targets": ["receiver"],
+      "emulate_modem_lines": false,
+      "policy": "interleave"
+    }
+  ]
+}

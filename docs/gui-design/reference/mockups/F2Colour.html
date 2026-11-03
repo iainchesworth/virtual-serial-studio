@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colour</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .sw2{height:44px;border-radius:6px;border:1px solid var(--line2);margin-bottom:6px} .tok{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 10px} .tok b{display:block;font-size:12px;line-height:16px} .tok .mono{font-size:11px;color:var(--ink3)} .spec td.r{font-family:var(--mono);font-size:12px;white-space:nowrap}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 960px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">1 Foundations</div>
+      <h1>Colour</h1>
+    </div>
+    <p>One token set, two themes. The theme follows the operating system and can be forced in Settings. Every ratio below was computed, not estimated.</p>
+  </div>
+
+  <div class="sheet-b">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+      <section style="padding: 16px; background: var(--ground); border: 1px solid var(--line); border-radius: 8px; color: var(--ink)">
+        <div class="eyebrow" style="margin-bottom: 12px">Light</div>
+        <div class="tok">
+          <div><div class="sw2" style="background:#F2F4F7"></div><b>ground</b><span class="mono">#F2F4F7</span></div>
+          <div><div class="sw2" style="background:#FFFFFF"></div><b>panel</b><span class="mono">#FFFFFF</span></div>
+          <div><div class="sw2" style="background:#F7F8FA"></div><b>sunken</b><span class="mono">#F7F8FA</span></div>
+          <div><div class="sw2" style="background:#D8DDE4"></div><b>line</b><span class="mono">#D8DDE4</span></div>
+          <div><div class="sw2" style="background:#748090"></div><b>control</b><span class="mono">#748090</span></div>
+          <div><div class="sw2" style="background:#18212D"></div><b>ink</b><span class="mono">#18212D</span></div>
+          <div><div class="sw2" style="background:#465263"></div><b>ink2</b><span class="mono">#465263</span></div>
+          <div><div class="sw2" style="background:#566273"></div><b>ink3</b><span class="mono">#566273</span></div>
+          <div><div class="sw2" style="background:#0B6E8A"></div><b>accent</b><span class="mono">#0B6E8A</span></div>
+          <div><div class="sw2" style="background:#E2F0F4"></div><b>accent-soft</b><span class="mono">#E2F0F4</span></div>
+          <div><div class="sw2" style="background:#1B7447"></div><b>ok</b><span class="mono">#1B7447</span></div>
+          <div><div class="sw2" style="background:#9A4F00"></div><b>amber</b><span class="mono">#9A4F00</span></div>
+          <div><div class="sw2" style="background:#B3261E"></div><b>bad</b><span class="mono">#B3261E</span></div>
+          <div><div class="sw2" style="background:#0A5C75"></div><b>focus</b><span class="mono">#0A5C75</span></div>
+        </div>
+      </section>
+      <section class="dark" style="padding: 16px; background: var(--ground); border: 1px solid var(--line); border-radius: 8px; color: var(--ink)">
+        <div class="eyebrow" style="margin-bottom: 12px">Dark</div>
+        <div class="tok">
+          <div><div class="sw2" style="background:#11161D"></div><b>ground</b><span class="mono">#11161D</span></div>
+          <div><div class="sw2" style="background:#1A212B"></div><b>panel</b><span class="mono">#1A212B</span></div>
+          <div><div class="sw2" style="background:#151B23"></div><b>sunken</b><span class="mono">#151B23</span></div>
+          <div><div class="sw2" style="background:#2B3543"></div><b>line</b><span class="mono">#2B3543</span></div>
+          <div><div class="sw2" style="background:#7E8A9C"></div><b>control</b><span class="mono">#7E8A9C</span></div>
+          <div><div class="sw2" style="background:#E8EDF3"></div><b>ink</b><span class="mono">#E8EDF3</span></div>
+          <div><div class="sw2" style="background:#B8C3D1"></div><b>ink2</b><span class="mono">#B8C3D1</span></div>
+          <div><div class="sw2" style="background:#9EABBB"></div><b>ink3</b><span class="mono">#9EABBB</span></div>
+          <div><div class="sw2" style="background:#59B9D4"></div><b>accent</b><span class="mono">#59B9D4</span></div>
+          <div><div class="sw2" style="background:#163640"></div><b>accent-soft</b><span class="mono">#163640</span></div>
+          <div><div class="sw2" style="background:#6FD29C"></div><b>ok</b><span class="mono">#6FD29C</span></div>
+          <div><div class="sw2" style="background:#F2B764"></div><b>amber</b><span class="mono">#F2B764</span></div>
+          <div><div class="sw2" style="background:#FF8D86"></div><b>bad</b><span class="mono">#FF8D86</span></div>
+          <div><div class="sw2" style="background:#86CDE2"></div><b>focus</b><span class="mono">#86CDE2</span></div>
+        </div>
+      </section>
+    </div>
+
+    <div style="display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 24px; align-items: start">
+      <section>
+        <div class="eyebrow" style="margin-bottom: 8px">Contrast, computed</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <thead><tr><th>Pair</th><th>Used for</th><th>Light</th><th>Dark</th><th>Needs</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>ink on panel</td><td>Body text</td><td class="r">16.2 : 1</td><td class="r">13.8 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>ink2 on panel</td><td>Secondary text</td><td class="r">7.9 : 1</td><td class="r">9.1 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>ink3 on ground</td><td>Captions and hints</td><td class="r">5.6 : 1</td><td class="r">7.8 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>accent text on panel</td><td>Links, accent labels</td><td class="r">7.9 : 1</td><td class="r">9.1 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>label on accent</td><td>Primary button</td><td class="r">5.8 : 1</td><td class="r">7.3 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>control on panel</td><td>Input, button, switch edges</td><td class="r">4.0 : 1</td><td class="r">4.6 : 1</td><td class="r">3 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>focus on panel</td><td>Focus ring</td><td class="r">7.5 : 1</td><td class="r">9.1 : 1</td><td class="r">3 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>ok on ok-soft</td><td>Healthy status text</td><td class="r">5.0 : 1</td><td class="r">7.8 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>amber on amber-soft</td><td>Attention text</td><td class="r">5.4 : 1</td><td class="r">7.7 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+              <tr><td>bad on bad-soft</td><td>Failure text</td><td class="r">5.6 : 1</td><td class="r">7.1 : 1</td><td class="r">4.5 : 1</td><td><span class="tag ok">Pass</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted" style="margin-top: 8px; font-size: 12px">Disabled controls are exempt from contrast rules but stay near 3 : 1 so they remain legible. Decorative dividers (line) are not relied on to find anything.</p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 16px">
+        <div>
+          <div class="eyebrow" style="margin-bottom: 8px">Colour never works alone</div>
+          <div class="card" style="padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <span class="chip ok"><i></i>Open</span>
+              <span class="chip warn hollow"><i></i>Waiting for program</span>
+              <span class="chip bad"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Failed</span>
+              <span class="chip hollow"><i></i>Studio only</span>
+            </div>
+            <div style="display: flex; gap: 8px"><span class="dir rx">RX</span><span class="dir tx">TX</span><span class="dir drop">DROP</span></div>
+            <p class="muted" style="font-size: 12px">Filled means active, hollow means waiting or off, a cross means failed. Blue and amber have similar lightness, so the text and shape always carry the meaning.</p>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom: 8px">Proposed QPalette mapping</div>
+          <div class="card" style="overflow: hidden">
+            <table class="spec" style="font-size: 12px">
+              <tbody>
+                <tr><td>ground</td><td>Window</td></tr>
+                <tr><td>panel</td><td>Base</td></tr>
+                <tr><td>sunken</td><td>AlternateBase</td></tr>
+                <tr><td>ink, ink3</td><td>Text, PlaceholderText</td></tr>
+                <tr><td>accent, accent-soft</td><td>Highlight, selection fill</td></tr>
+                <tr><td>accent text</td><td>Link</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

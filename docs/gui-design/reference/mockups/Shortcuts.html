@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Keyboard shortcuts</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .spec td{padding:6px 12px} .spec .kbd{white-space:nowrap}</style>
+</helmet>
+<div class="dlg" style="width: 860px; height: 700px">
+  <div class="dlg-h">
+    <div class="grow">
+      <h1>Keyboard shortcuts</h1>
+      <p style="color: var(--ink2)">Every action has a menu item. These are the quick ways.</p>
+    </div>
+    <label class="search" style="width: 240px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg><input aria-label="Filter shortcuts" placeholder="Filter shortcuts" style="border:0;background:transparent;flex:1;min-width:0;outline:0;color:var(--ink)"></label>
+  </div>
+
+  <div class="dlg-b" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; padding-top: 4px">
+    <section>
+      <div class="eyebrow" style="margin-bottom: 8px">Available today</div>
+      <div class="card" style="overflow: hidden">
+        <table class="spec">
+          <thead><tr><th>Action</th><th>Windows, Linux</th><th>macOS</th></tr></thead>
+          <tbody>
+            <tr><td>New setup</td><td><span class="kbd">Ctrl+N</span></td><td><span class="kbd">Cmd+N</span></td></tr>
+            <tr><td>Open</td><td><span class="kbd">Ctrl+O</span></td><td><span class="kbd">Cmd+O</span></td></tr>
+            <tr><td>Save</td><td><span class="kbd">Ctrl+S</span></td><td><span class="kbd">Cmd+S</span></td></tr>
+            <tr><td>Save as</td><td><span class="kbd">Ctrl+Shift+S</span></td><td><span class="kbd">Cmd+Shift+S</span></td></tr>
+            <tr><td>Connect ports</td><td><span class="kbd">Ctrl+L</span></td><td><span class="kbd">Cmd+L</span></td></tr>
+            <tr><td>Settings</td><td><span class="kbd">Ctrl+,</span></td><td><span class="kbd">Cmd+,</span></td></tr>
+            <tr><td>Refresh now</td><td><span class="kbd">F5</span></td><td><span class="kbd">F5</span></td></tr>
+            <tr><td>Fit topology</td><td><span class="kbd">Ctrl+0</span></td><td><span class="kbd">Cmd+0</span></td></tr>
+            <tr><td>Remove selected</td><td><span class="kbd">Delete</span></td><td><span class="kbd">Delete</span></td></tr>
+            <tr><td>Quit</td><td><span class="kbd">Ctrl+Q</span></td><td><span class="kbd">Cmd+Q</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px"><span class="eyebrow">Proposed</span><span class="tag n">New</span></div>
+      <div class="card" style="overflow: hidden">
+        <table class="spec">
+          <thead><tr><th>Action</th><th>Windows, Linux</th><th>macOS</th></tr></thead>
+          <tbody>
+            <tr><td>Search actions</td><td><span class="kbd">Ctrl+K</span></td><td><span class="kbd">Cmd+K</span></td></tr>
+            <tr><td>Add port</td><td><span class="kbd">Ctrl+Shift+N</span></td><td><span class="kbd">Cmd+Shift+N</span></td></tr>
+            <tr><td>Undo</td><td><span class="kbd">Ctrl+Z</span></td><td><span class="kbd">Cmd+Z</span></td></tr>
+            <tr><td>Redo</td><td><span class="kbd">Ctrl+Y</span></td><td><span class="kbd">Cmd+Shift+Z</span></td></tr>
+            <tr><td>Rename port</td><td><span class="kbd">F2</span></td><td><span class="kbd">Return</span></td></tr>
+            <tr><td>Copy port name</td><td><span class="kbd">Ctrl+Shift+C</span></td><td><span class="kbd">Cmd+Shift+C</span></td></tr>
+            <tr><td>Find in monitor</td><td><span class="kbd">Ctrl+F</span></td><td><span class="kbd">Cmd+F</span></td></tr>
+            <tr><td>Pause or resume monitor</td><td><span class="kbd">Space</span></td><td><span class="kbd">Space</span></td></tr>
+            <tr><td>Toggle Advanced mode</td><td><span class="kbd">Ctrl+Shift+A</span></td><td><span class="kbd">Cmd+Shift+A</span></td></tr>
+            <tr><td>Help</td><td><span class="kbd">F1</span></td><td><span class="kbd">Cmd+?</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="dlg-f">
+    <span class="muted grow" style="font-size: 12px">Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and tooltips. Open this list with Help, Keyboard shortcuts.</span>
+    <button class="btn primary">Close</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":860,"height":700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# Screens 06: support and system
+Mockups: SetupCheck, Troubleshoot, Bundle, Feedback, Settings, About, Shortcuts.
+
+## Setup check (SetupCheck.html), width 760
+Opens: Tools, Setup check, the status bar readiness chip, and launcher links. Title "Setup check". Sub "What this PC needs so other programs can use your virtual ports." Header chip "1 thing to fix" (warn) or "All set" (ok). Top note (warn, only when something is missing): "Until a driver is installed, new ports only work **inside** Virtual Serial Studio. Other programs will not see them."
+Rows (icon in a 36px circle, title, chip, one sentence, one action):
+1. **Virtual port driver**. Missing: chip "Needs attention", "com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports." Action "Install com0com". Present: chip "OK".
+2. **Administrator rights**. Chip "Needed later", "Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them." Action "Restart as administrator".
+3. **Real serial devices**. Chip "OK", "COM3 and COM4 are visible to Virtual Serial Studio." Action "Refresh".
+4. **Carry on without a driver**. "You can still use in-process ports, the monitor and the Send panel to try things out." Action "Continue in test mode".
+Muted line: "On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead." On Linux the rows are: pseudo terminals available, membership of the `dialout` group (action "How to add me", showing the command), real devices.
+Footer: link "Why is a driver needed?", Re-check, Close. Uses `vss::detect_com0com()` and device enumeration, which work without elevation.
+
+## Why is nothing arriving (Troubleshoot.html), width 640
+Opens: Inspector link, Help, Why is nothing arriving?. Title "Why is nothing arriving on COM7?" Sub "Studio checked each step between the device and your program."
+Checklist, each row with icon, title, one sentence, chip:
+1. "The port exists and is open", "terminal is open on COM7." (Passed or Needs attention if closed or failed.)
+2. "The port is linked to the device", "terminal is in a split link from device." (Needs attention: "This port has no link. Connect it to a device.")
+3. "The device is sending", "device received data in the last minute." (Needs attention: "device has not sent anything in the last minute. Check the cable and the device's power.")
+4. "A program has opened COM7", "No program has opened COM7 yet, so nothing can arrive." (Needs attention row highlighted in amber.)
+5. "Data reaches the program", "Checked once a program connects." (Not checked yet, hollow.)
+Card "Try this": numbered steps "In your program, choose **COM7** as the serial port." "If the program shows an error, another program may be using COM7. Close it, then try again." "Some programs only list ports when they start. Restart the program after creating the port." Buttons "Copy COM7" and "Check again". Muted: "Still stuck? A diagnostic bundle gathers the setup, the log and the environment for whoever helps you. Traffic contents are left out unless you choose to include them." Footer: link "Create diagnostic bundle", primary Close.
+Chips use text plus shape. The checks come from endpoint state, counters and events. If the engine cannot know whether a program has opened a port, mark checks 4 and 5 "Not checked yet" and explain, see 08-engine-gaps.md.
+
+## Diagnostic bundle (Bundle.html), width 760
+Title "Create a diagnostic bundle". Sub "Gathers what a helper needs to understand your setup. Nothing is sent anywhere. You choose where to save it." Checklist "Include": Setup (setup.json), Event log (log.txt), Environment (environment.txt), Port counters (counters.csv), all default on; **Traffic contents** default **off**, amber row: "The actual bytes sent and received. They may include passwords or personal data." with chip "Off by default". Info: "Nothing leaves this PC until you share the file yourself. Look inside the bundle first if you want to check it." Shows the file name `vss-bundle-<date>.zip` and its file count. Footer: "Copy environment only", Cancel, primary "Save bundle" (native save dialog). The zip is written locally only.
+
+## Feedback and error patterns (Feedback.html)
+All use the shared components, set initial focus on the safest button, keep the setup intact, and put engine text behind "Copy details".
+1. **Device cannot be opened**. Title "Could not open COM3". Text "Another program is using it, or the device was unplugged. Close the other program, then try again." Buttons: "Copy details" (quiet), "Choose another", "Try again" (primary).
+2. **Unsaved changes**. Title "Save changes to lab.json?" Text "Your ports and links have changed since the last save. You can turn this prompt off in Settings." Buttons "Don't save" (quiet), Cancel, Save (primary). Honour the setting "Ask before discarding an unsaved setup".
+3. **Link refused, would loop**. Danger note "That link would create a loop. Data would travel from device to terminal and back to device forever. Nothing was changed. Remove a link first, or choose different ports." Buttons "Show the loop" (highlights the cycle in the topology) and Close.
+4. **Remove with undo**. Title "Remove terminal?" Text "Its link to device is removed too. You can undo this straight afterwards." Buttons Cancel and "Remove" (danger, not the default). After removal the toast "Removed terminal and its link." with action "Undo". This requires an undo stack (see 08-engine-gaps.md).
+5. **A running port fails**. Row shows chip "Failed"; danger note "**device stopped.** The cable may have been unplugged. The links to it are kept." Buttons "Reconnect" (primary) and "Why?" (opens Troubleshoot).
+6. **Confirmations** (toasts): "COM7 copied.", "Bridge is running on port 4001." (action "Open monitor"), "Saved lab.json." Six seconds, pause on hover and focus, announced politely. Anything that needs a decision is a dialog.
+
+## Settings (Settings.html), width 860
+Opens: Tools, Settings (Ctrl+,). Left nav (200 wide): General, Appearance, Performance. Changes apply immediately, so there is no OK or Apply. Footer: muted "Changes apply immediately.", quiet "Reset to defaults", primary Close.
+- General: Switch "Advanced mode" with hint "Adds panels, options and tools to the same window. Nothing you have built changes." Combo "Default baud rate" (115200) with hint "Offered first when you attach a device." Checkbox "Ask before discarding an unsaved setup" (default on).
+- Appearance: radio group Theme (Follow the system, Light, Dark). Segmented Density (Comfortable, Compact). Info: "Text size, display scale, high contrast and reduced motion follow your operating system." with link "Open system settings".
+- Performance: slider "Refresh interval", 50 to 5000 ms, current value shown in mono ("250 ms"), end labels "50 ms, live" and "5000 ms, light", hint "How often counters and states are read. Shorter feels live. Longer is lighter on a busy machine."
+
+## About (About.html), width 760
+Title "Virtual Serial Studio", sub "Version <version>. Free software under the GNU General Public License, version 3 or later." Tabs: About, Environment, Licences, Fonts. Environment tab: "Copy this into a bug report. It answers "which build is this?"" then rows Commit, Branch, Build (date and type), Compiler, Qt (runtime version, built with), Operating system, Architecture and kernel, in the fixed font. Licences tab: Qt, Boost, Boost.VirtualSerial, Tracy, and the optional com0com driver. Fonts tab: "No fonts are bundled. Studio uses your system's UI font." Footer: link "Create diagnostic bundle", button "Copy environment", primary Close.
+
+## Keyboard shortcuts (Shortcuts.html), width 860
+Title "Keyboard shortcuts", sub "Every action has a menu item. These are the quick ways." Filter field. Two tables, columns Action, Windows and Linux, macOS, using KeyCaps. The data comes from the `ActionRegistry`, not a hand-typed list. The full list is in `03-information-architecture.md` (existing keys: Ctrl+N, O, S, Shift+S, L, comma, F5, 0, Delete, Q; proposed: Ctrl+K, Ctrl+Shift+N, Ctrl+Z, Ctrl+Y, F2, Ctrl+Shift+C, Ctrl+F in the monitor, Space to pause, Ctrl+Shift+A, F1). Footer note: "Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and tooltips. Open this list with Help, Keyboard shortcuts."

@@ -159,6 +159,12 @@ gives the build.
   modifiers where it does not.
 - Dialogs are keyboard-navigable, validate on accept, and keep the user's
   input when validation fails.
+- `vss_gui --selftest` walks the main window and every dialog in both themes,
+  and a second CTest entry repeats the walk at 200 percent scale. It fails on
+  an unnamed focusable control, a target under 24 by 24, a control that cannot
+  take keyboard focus, or clipped text.
+- `VSS_HIGH_CONTRAST=1` drops the custom stylesheet and uses the system
+  palette; `VSS_REDUCE_MOTION=1` makes every transition zero-duration.
 
 ## Open design questions
 
@@ -167,16 +173,13 @@ gives the build.
 - Should the Connect dialog remember the last mode per user?
 - Should advanced mode be discoverable from the first-run hint ("Need more?
   Turn on Advanced mode")?
-- How should a "switch" (owner arbitration) be represented — a link mode, or a
-  pair of links with an owner indicator?
 
 ## Roadmap
 
-1. Guided share/bridge forms (protocol, host, port, listeners) with a URI
-   preview, so advanced mode does not require URI recall.
-2. Pair manager: create named batches of virtual ports in a table.
-3. Line-control matrix editor per link (DTR/DSR/RTS/CTS crossing).
-4. Named bundles and baud emulation/throttling.
-5. First-class switch with a visible current owner.
-6. Undo/redo for topology edits.
-7. First-run onboarding as an empty-state panel, replacing the single hint.
+1. Pair manager: create named batches of virtual ports in a table.
+2. Named bundles and baud emulation/throttling.
+3. Undo/redo for topology edits, once the engine can restore endpoint identities.
+4. First-run onboarding as an empty-state panel, replacing the single hint.
+5. A device picker for the bundled real-device templates.
+6. A listening network transport, so the network endpoint can offer the server
+   role instead of only connecting.

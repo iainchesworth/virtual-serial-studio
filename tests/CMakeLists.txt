@@ -58,8 +58,89 @@ vss_set_warnings(vss_header_selftest)
 add_test(NAME headers COMMAND vss_header_selftest)
 
 if(TARGET vss_gui)
+  # The offscreen plugin needs an explicit font directory on Windows; the
+  # clipping walk cannot measure text without one.
+  set(VSS_QT_FONT_ENV "")
+  if(WIN32 AND EXISTS "C:/Windows/Fonts")
+    set(VSS_QT_FONT_ENV "QT_QPA_FONTDIR=C:/Windows/Fonts;")
+  endif()
   add_test(NAME gui_selftest COMMAND vss_gui --selftest)
   set_tests_properties(gui_selftest PROPERTIES
+    TIMEOUT 240
+    ENVIRONMENT "${VSS_QT_FONT_ENV}QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+
+  # The same walk at 200 percent scale: text has to grow without clipping and
+  # every control must stay reachable.  Qt applies the scale before the first
+  # window exists, which a runtime font change cannot do for token fonts.
+  add_test(NAME gui_selftest_200 COMMAND vss_gui --selftest)
+  set_tests_properties(gui_selftest_200 PROPERTIES
+    TIMEOUT 300
+    ENVIRONMENT "${VSS_QT_FONT_ENV}QT_QPA_PLATFORM=offscreen;QT_SCALE_FACTOR=2;QT_FONT_DPI=192;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# The backend tests exist only when Qt and the tests are both enabled.
+if(TARGET vss_gui_backend_tests)
+  add_test(NAME gui_backend COMMAND vss_gui_backend_tests --verbose)
+  set_tests_properties(gui_backend PROPERTIES
     TIMEOUT 120
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# Theme and widget tests need a QApplication but stay offscreen.
+if(TARGET vss_gui_theme_tests)
+  add_test(NAME gui_theme COMMAND vss_gui_theme_tests --verbose)
+  set_tests_properties(gui_theme PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+if(TARGET vss_gui_shell_tests)
+  add_test(NAME gui_shell COMMAND vss_gui_shell_tests --verbose)
+  set_tests_properties(gui_shell PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# Ports, Inspector, Send and Monitor models and panels.
+if(TARGET vss_gui_panes_tests)
+  add_test(NAME gui_panes COMMAND vss_gui_panes_tests --verbose)
+  set_tests_properties(gui_panes PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+if(TARGET vss_gui_topology_tests)
+  add_test(NAME gui_topology COMMAND vss_gui_topology_tests --verbose)
+  set_tests_properties(gui_topology PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# Advanced tools need a QApplication; every case runs offscreen.
+if(TARGET vss_gui_advanced_tests)
+  add_test(NAME gui_advanced COMMAND vss_gui_advanced_tests --verbose)
+  set_tests_properties(gui_advanced PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+if(TARGET vss_gui_support_tests)
+  add_test(NAME gui_support COMMAND vss_gui_support_tests --verbose)
+  set_tests_properties(gui_support PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# Connect, share, network and template dialogs (WP6).
+if(TARGET vss_gui_dialogs_tests)
+  add_test(NAME gui_dialogs COMMAND vss_gui_dialogs_tests --verbose)
+  set_tests_properties(gui_dialogs PROPERTIES
+    TIMEOUT 240
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+if(TARGET vss_gui_flows_tests)
+  add_test(NAME gui_flows COMMAND vss_gui_flows_tests --verbose)
+  set_tests_properties(gui_flows PROPERTIES
+    TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()

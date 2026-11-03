@@ -1,0 +1,64 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#ifndef VSS_GUI_DIALOGS_NETWORK_URI_HPP
+#define VSS_GUI_DIALOGS_NETWORK_URI_HPP
+
+#include <QString>
+
+#include <optional>
+
+namespace vss::gui
+{
+
+enum class network_transport
+{
+    tcp,
+    udp,
+    rfc2217
+};
+
+enum class network_role
+{
+    server,
+    client
+};
+
+/// One TCP, UDP or RFC 2217 address, before it is turned into a URI.
+struct network_endpoint
+{
+    network_transport transport = network_transport::tcp;
+    network_role role = network_role::server;
+    QString host;
+    int port = 4001;
+};
+
+QString network_scheme(network_transport transport);
+QString network_transport_name(network_transport transport);
+
+/// `tcp://0.0.0.0:4001`.  IPv6 literals are bracketed.
+QString build_network_uri(network_transport transport, const QString& host,
+                          int port);
+
+/// True for 1 to 65535 inclusive.
+bool valid_port(int port);
+bool parse_port(const QString& text, int& port);
+
+/// Parses the three schemes the engine's `attach_serial` accepts for a
+/// network endpoint.  The URI does not carry the server/client role.
+std::optional<network_endpoint> parse_network_uri(const QString& text,
+                                                  QString* error = nullptr);
+
+/// The port number at the end of a URI, or 0 when there is none.
+int network_port_from_uri(const QString& uri);
+
+/// The sentence used for a validation failure.
+QString network_address_error();
+QString network_port_error();
+
+} // namespace vss::gui
+
+#endif // VSS_GUI_DIALOGS_NETWORK_URI_HPP

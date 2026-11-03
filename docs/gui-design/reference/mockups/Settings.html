@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .nv{display:flex;flex-direction:column;gap:2px;padding:12px 10px;background:var(--sunken);border-right:1px solid var(--line);width:200px;flex:none} .nv button{height:34px;padding:0 12px;border:0;border-radius:4px;background:transparent;text-align:left} .nv button.on{background:var(--accent-soft);color:var(--accent-d);font-weight:600} .st{display:flex;flex-direction:column;gap:14px;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)} .st:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0} .st h2{margin:0;font-size:16px;line-height:22px;font-weight:600} .rd{display:flex;align-items:center;gap:10px;min-height:28px} .rd input{margin:0;width:18px;height:18px;accent-color:var(--accent)}</style>
+</helmet>
+<div class="dlg" style="width: 860px; height: 760px">
+  <div class="dlg-h" style="border-bottom: 1px solid var(--line); padding-bottom: 14px">
+    <div class="grow"><h1>Settings</h1></div>
+    <span class="muted" style="font-size: 12px">Ctrl+,</span>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex">
+    <nav class="nv" aria-label="Settings sections">
+      <button class="on">General</button>
+      <button>Appearance</button>
+      <button>Performance</button>
+    </nav>
+
+    <div style="flex: 1; min-width: 0; padding: 22px 28px; overflow: hidden">
+      <section class="st">
+        <h2>General</h2>
+        <div style="display: flex; align-items: flex-start; gap: 14px">
+          <button class="sw" role="switch" aria-checked="false" style="margin-top: 0"><span class="trk"></span><span class="strong">Advanced mode</span></button>
+        </div>
+        <p class="hint" style="margin-top: -8px">Adds panels, options and tools to the same window. Nothing you have built changes.</p>
+        <div style="max-width: 320px"><label class="lbl" for="bd">Default baud rate</label><select class="inp" id="bd"><option>115200</option><option>9600</option></select><p class="hint">Offered first when you attach a device.</p></div>
+        <label class="chk"><input type="checkbox" checked> Ask before discarding an unsaved setup</label>
+      </section>
+
+      <section class="st">
+        <h2>Appearance</h2>
+        <div role="radiogroup" aria-label="Theme">
+          <div class="lbl">Theme</div>
+          <label class="rd"><input type="radio" name="th" checked> Follow the system</label>
+          <label class="rd"><input type="radio" name="th"> Light</label>
+          <label class="rd"><input type="radio" name="th"> Dark</label>
+        </div>
+        <div>
+          <div class="lbl">Density</div>
+          <div class="seg"><button class="on">Comfortable</button><button>Compact</button></div>
+        </div>
+        <div class="note info" style="align-items: center">
+          <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+          <span class="grow">Text size, display scale, high contrast and reduced motion follow your operating system.</span>
+          <a href="#os">Open system settings</a>
+        </div>
+      </section>
+
+      <section class="st">
+        <h2>Performance</h2>
+        <div style="max-width: 460px">
+          <div style="display: flex; align-items: center; margin-bottom: 4px"><label class="lbl" for="rf" style="margin: 0">Refresh interval</label><span class="grow"></span><span class="mono strong">250 ms</span></div>
+          <input id="rf" type="range" min="50" max="5000" value="250" style="width: 100%; accent-color: var(--accent); height: 28px">
+          <div style="display: flex; justify-content: space-between" class="hint"><span>50 ms, live</span><span>5000 ms, light</span></div>
+          <p class="hint">How often counters and states are read. Shorter feels live. Longer is lighter on a busy machine.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="muted" style="font-size: 12px">Changes apply immediately.</span>
+    <span class="grow"></span>
+    <button class="btn quiet">Reset to defaults</button>
+    <button class="btn primary">Close</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":860,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

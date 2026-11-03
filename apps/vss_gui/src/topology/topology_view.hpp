@@ -1,0 +1,183 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#ifndef VSS_GUI_TOPOLOGY_TOPOLOGY_VIEW_HPP
+#define VSS_GUI_TOPOLOGY_TOPOLOGY_VIEW_HPP
+
+#include "backend/capabilities.hpp"
+#include "backend/view_types.hpp"
+#include "topology/topology_layout.hpp"
+#include "widgets/notes.hpp"
+
+#include <QGraphicsView>
+#include <QHash>
+#include <QRectF>
+#include <QSizeF>
+#include <QString>
+#include <QStringList>
+#include <QVector>
+
+#include <vector>
+
+class QLabel;
+
+namespace vss::gui::topology
+{
+
+class LinkItem;
+class NodeItem;
+
+/// The topology dock: a scene of port nodes and link lines.
+///
+/// The view owns presentation and input only.  It is fed a snapshot with
+/// `set_topology`, reports intent with signals, and keeps node positions for
+/// the session (the JSON schema has no positions).  Keyboard operation is
+/// complete: Tab reaches nodes then links, Enter inspects, Delete removes,
+/// the arrow keys nudge, Shift+F10 opens the context menu and Ctrl+0 fits.
+class TopologyView final : public QGraphicsView
+{
+    Q_OBJECT
+
+public:
+    explicit TopologyView(QWidget* parent = nullptr);
+    ~TopologyView() override;
+
+    /// What this build can do; a missing capability hides its control.
+    void set_capabilities(const capabilities& caps);
+
+    /// Replaces the graph.  Existing node positions are kept per port id for
+    /// the rest of the session; positions never enter the document.
+    void set_topology(const std::vector<port_view>& ports,
+                      const std::vector<link_view>& links);
+
+    /// Mirrors the shared selection without emitting the selection signals.
+    void set_selection(vss::endpoint_id port, vss::link_id link);
+    vss::endpoint_id selected_port() const noexcept { return selected_port_; }
+    vss::link_id selected_link() const noexcept { return selected_link_; }
+
+    int node_count() const;
+    int link_count() const;
+    bool is_compact() const noexcept { return compact_; }
+    qreal zoom() const;
+
+    /// The generated accessible description.
+    QString summary() const { return summary_; }
+    QRectF node_rect(vss::endpoint_id id) const;
+    QSizeF node_size(vss::endpoint_id id) const;
+    QPointF link_anchor(vss::link_id id) const;
+    QRectF link_bounds(vss::link_id id) const;
+    QString link_description(vss::link_id id) const;
+    QStringList link_descriptions() const;
+    bool node_is_unlinked(vss::endpoint_id id) const;
+    bool node_is_device(vss::endpoint_id id) const;
+    QStringList node_badges(vss::endpoint_id id) const;
+
+    vss::endpoint_id focused_port() const noexcept { return focused_port_; }
+    vss::link_id focused_link() const noexcept { return focused_link_; }
+
+    /// The labels of the context menu, in order.  The product menu is built
+    /// from the same list; the tests read it without opening a popup.
+    QStringList node_menu_labels(vss::endpoint_id id) const;
+    QStringList link_menu_labels(vss::link_id id) const;
+
+    void fit_content();
+    void zoom_in();
+    void zoom_out();
+
+    /// The "That link would create a loop" pattern: highlights the cycle and
+    /// shows the danger note with its "Show the loop" action.  Returns false
+    /// when the current links are acyclic (nothing to show).
+    bool show_loop_note();
+    void dismiss_loop_note();
+    QString loop_note_text() const;
+    int loop_link_count() const;
+    QVector<vss::endpoint_id> loop_ports() const { return loop_nodes_; }
+
+Q_SIGNALS:
+    void port_selected(vss::endpoint_id id);
+    void link_selected(vss::link_id id);
+    void inspect_requested(vss::endpoint_id id);
+    void copy_name_requested(vss::endpoint_id id);
+    void connect_requested(vss::endpoint_id id);
+    void remove_port_requested(vss::endpoint_id id);
+    void remove_link_requested(vss::link_id id);
+    /// Emitted only when the build can rename (Capabilities::rename_port).
+    void rename_requested(vss::endpoint_id id);
+    void status_message(const QString& text);
+
+protected:
+    bool focusNextPrevChild(bool next) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void focusInEvent(QFocusEvent* event) override;
+    void focusOutEvent(QFocusEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    void drawBackground(QPainter* painter, const QRectF& rect) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+private:
+    void rebuild_items();
+    void apply_positions();
+    void update_scene_rect();
+    void update_overlays();
+    void update_accessibility();
+    void refresh_focus_visuals();
+
+    bool select_port(vss::endpoint_id id);
+    bool select_link(vss::link_id id);
+    void focus_at(qsizetype index, bool select);
+    void clear_focus();
+    void nudge_focused(qreal dx, qreal dy);
+    void open_context_menu(const QPoint& viewport_position);
+    void open_focused_menu();
+    void centre_on_links(const QVector<vss::link_id>& ids);
+    void scale_by(qreal factor, QGraphicsView::ViewportAnchor anchor,
+                  bool user_action);
+    qsizetype focus_index_of_port(vss::endpoint_id id) const;
+    qsizetype focus_index_of_link(vss::link_id id) const;
+
+    QGraphicsScene* scene_ = nullptr;
+    std::vector<port_view> ports_;
+    std::vector<link_view> links_;
+    QHash<vss::endpoint_id, QString> names_;
+    QVector<topo_link_input> link_inputs_;
+    QVector<vss::endpoint_id> node_ids_;
+
+    QHash<vss::endpoint_id, NodeItem*> node_items_;
+    QHash<vss::link_id, LinkItem*> link_items_;
+    QVector<vss::endpoint_id> node_order_;
+    QVector<vss::link_id> link_order_;
+    topology_layout layout_;
+    QHash<vss::endpoint_id, QPointF> base_positions_;
+    QHash<vss::endpoint_id, QPointF> overrides_;
+    QHash<vss::endpoint_id, QSizeF> node_sizes_;
+
+    QLabel* empty_ = nullptr;
+    QLabel* hint_ = nullptr;
+    NoteBanner* loop_note_ = nullptr;
+
+    QString summary_;
+    capabilities caps_;
+
+    vss::endpoint_id selected_port_ = 0;
+    vss::link_id selected_link_ = 0;
+    vss::endpoint_id focused_port_ = 0;
+    vss::link_id focused_link_ = 0;
+    qsizetype focus_index_ = -1;
+    bool show_focus_ = false;
+
+    bool compact_ = false;
+    bool user_zoomed_ = false;
+    bool fitting_ = false;
+
+    QVector<vss::link_id> loop_links_;
+    QVector<vss::endpoint_id> loop_nodes_;
+};
+
+} // namespace vss::gui::topology
+
+#endif // VSS_GUI_TOPOLOGY_TOPOLOGY_VIEW_HPP

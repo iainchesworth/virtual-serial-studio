@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Topology JSON</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} pre{margin:0;font-family:var(--mono);font-size:13px;line-height:22px} .gut{width:44px;padding:12px 0;text-align:right;padding-right:12px;color:var(--ink3);background:var(--sunken);border-right:1px solid var(--line);flex:none;user-select:none} .src{padding:12px 16px;flex:1;min-width:0;overflow:hidden}</style>
+</helmet>
+<div class="win" style="width: 1100px; height: 720px">
+  <div class="body" style="gap: 0; padding: 8px">
+    <section class="dock grow" aria-label="Topology JSON">
+      <div class="tabs"><button class="tab">Monitor</button><button class="tab">Log</button><button class="tab on">Topology JSON</button></div>
+      <div style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 12px; border-bottom: 1px solid var(--line); flex: none">
+        <span class="chip ok"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>Valid, version 1</span>
+        <span class="muted" style="font-size: 12px">Unsaved edits are checked as you type. Nothing changes until you apply.</span>
+        <span class="grow"></span>
+        <button class="btn sm">Revert</button>
+        <button class="btn sm">Format</button>
+        <button class="btn sm primary" disabled style="opacity: .55">Apply changes</button>
+      </div>
+      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px">
+        <div style="display: flex; min-height: 0; overflow: hidden; border-right: 1px solid var(--line)">
+          <pre class="gut" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre>
+          <pre class="src" aria-label="Topology JSON editor">{
+  "version": 1,
+  "name": "lab",
+  "ports": [
+    { "name": "device", "kind": "physical",
+      "uri": "serial://COM3?baud=115200",
+      "serial": { "baud_rate": 115200, "parity": "none" } },
+    { "name": "terminal", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "logger",   "kind": "virtual", "virtual_kind": "loopback" }
+  ],
+  "links": [
+    { "mode": "split", "sources": ["device"], "targets": ["terminal", "logger"] }
+  ]
+}</pre>
+        </div>
+
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; overflow: hidden">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 8px">Run it without the window</div>
+            <div class="code"><span>vss_cli run lab.json --seconds=60</span><button class="btn icon" aria-label="Copy command"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+            <div style="display: flex; gap: 8px; margin-top: 10px"><button class="btn sm">Copy as command</button><button class="btn sm"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3M3 13h10"/></svg>Export file</button></div>
+          </div>
+
+          <div>
+            <div class="eyebrow" style="margin-bottom: 8px">Checks</div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <div style="display: flex; gap: 8px; align-items: center"><svg class="ic" style="color: var(--ok)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>Valid JSON, version 1</div>
+              <div style="display: flex; gap: 8px; align-items: center"><svg class="ic" style="color: var(--ok)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>3 ports, all names unique</div>
+              <div style="display: flex; gap: 8px; align-items: center"><svg class="ic" style="color: var(--ok)" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>1 link, no loops</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="eyebrow" style="margin-bottom: 8px">When a check fails</div>
+            <div class="note danger" style="flex-direction: column; gap: 6px">
+              <div style="display: flex; align-items: center; gap: 8px"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg><b>Line 12: unknown link mode "splt"</b></div>
+              <div>Did you mean "split"? The line is highlighted and nothing was applied.</div>
+              <div style="display: flex; gap: 8px"><button class="btn sm">Go to line 12</button><button class="btn sm quiet">Use "split"</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

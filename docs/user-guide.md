@@ -316,15 +316,20 @@ changes and errors.
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
 
-## Not yet in the interface
+## Deliberate limits
 
-These are designed and tracked, but not exposed by the window yet:
+These remain unavailable in this build, with a visible reason in the window:
 
-- guided host/port forms for share and bridge (URIs are typed today);
-- a line-control matrix per link (which signal crosses to which);
-- named bundles of links, and baud-rate emulation/throttling controls;
-- first-class "switch" arbitration that names the current owner of a port;
-- undo/redo for topology edits.
+- the network endpoint can connect to a server but cannot wait for one (the
+  engine has no listening transport);
+- a real device's "in use" state is reported only when the adapter can prove
+  it; the engine does not probe devices;
+- the real adapter cannot select a com0com pair name, so linked-pair names are
+  read-only;
+- undo/redo need an exact restore that the engine cannot prove;
+- real-device templates need a device picker before they can be enabled;
+- named bundles of links and baud-rate throttling are not implemented.
 
-See [ux.md](ux.md) for the design and roadmap, and
+The Log and Topology JSON tools are Advanced docks; the main Monitor carries
+the everyday traffic view. See [ux.md](ux.md) for the design and roadmap, and
 [scenarios.md](scenarios.md) for more worked examples.

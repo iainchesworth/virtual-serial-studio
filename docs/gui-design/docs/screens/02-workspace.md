@@ -1,0 +1,38 @@
+# Screens 02: workspace
+Mockups: Workspace (Simple), Advanced, Compact (960 by 640), Dark. Frame and persistence rules are in `03-information-architecture.md`.
+
+## Ports dock (Workspace, Advanced)
+Header "Ports" with a count. Selection is shared with the Topology and Inspector.
+- Simple: one PortDelegate row per port (3 lines): name (600) with StatusChip at the right; role line (12, ink3); mono path with CopyButton, plus "115200 8N1" for real devices.
+- Role text: "Real device, shared with N programs", "Virtual port, linked to <name>", "In-process port. Only Studio can open it", "Fixture (mock)".
+- States (see states in `docs/04-components.md`): Open, Waiting for program, Program connected, Studio only, Closed, Failed.
+- Advanced: filter field "Filter ports" above a table: Port (name over mono path), State (compact chip), RX, TX, Dropped (right aligned, mono). Dropped text is `bad` when above zero.
+- Keyboard: Up and Down select, Enter moves focus to the Inspector, Delete removes (confirm, Undo toast), F2 renames, Ctrl+Shift+C copies the path.
+- Compact window: rows are two lines (name and mono path, then the chip), 240 wide.
+
+## Inspector
+Header "Inspector" and the port name.
+- Simple: State (chip), Path (mono with copy), Traffic ("RX 0 B, TX 1.2 kB"). When waiting: "No program has opened COM7 yet." and the link "Why is nothing arriving?" (opens the troubleshoot dialog). "Control lines" label and six read-only chips in a 3 by 2 grid: DTR, RTS, CTS, DSR, DCD, RI, each "<name> on" (ok, filled) or "<name> off" (hollow).
+- Advanced: also Serial ("115200 8N1, no flow control") for real devices. DTR and RTS become Switches ("DTR on", "RTS off"), a "Break" button, input chips CTS, DSR, DCD, RI, and a link "Open line matrix and faults".
+- Virtual ports accept the operations and report their own state. Unsupported operations are disabled with a tooltip, never silent.
+
+## Send
+Header "Send". Combo "Send to port" (default the selected port), primary "Send", input with placeholder "Type text, or hex if Hex is ticked", checkboxes "Hex" and "Add CRLF" (default on). Advanced adds "Repeat" (interval field appears) and a "Saved sends" combo. Hex input is validated live: invalid hex shows the inline error "Hex needs pairs of digits, such as 48 65 6C 6C 6F." and disables Send. Engine errors appear as a toast and in the Log.
+
+## Monitor
+Tabs: "Monitor". Advanced also "Log" and "Topology JSON".
+- Toolbar: Pause, Clear, checkboxes Hex and Follow (Follow default on), right aligned "All ports". Space pauses and resumes when the table has focus.
+- Advanced filter row: port combo (All ports), checkboxes RX, TX, Dropped, search field "Search payload" (Ctrl+F), segmented ASCII or Hex, Export (saves the visible rows as text).
+- Columns: Time (HH:MM:SS.mmm), Port, Direction (DirectionBadge), Bytes (right aligned), Preview (fixed font). ASCII mode shows `\r` and `\n` as escapes and other non-printables as a dot. Hex mode shows `48 65 6C 6C 6F`.
+- DROP rows add the muted `bad` text "not the owner, not forwarded".
+- Performance: a bounded ring (default 10,000 rows, a named constant). Updates are batched per refresh interval and inserted on the GUI thread. Never create per-row widgets. Pause stops appending, traffic still flows and is counted.
+- Empty state: "No traffic yet. Send some bytes, or open the port in a program."
+
+## Status bar
+Left: "Ports 4", "Links 1", "RX 38 B/s", "TX 114 B/s", "Hub running". Advanced adds a warn chip "214 B dropped, not owner" when relevant. Right: readiness chip and the Simple or Advanced segmented switch (24 high).
+
+## Threading
+Engine callbacks run on hub threads. Marshal everything to the GUI thread with queued connections, coalesce by the refresh interval (default 250 ms, range 50 to 5000), and never block the GUI thread on the engine. Subscribers must capture state that outlives the hub, see `docs/architecture.md` in the repo.
+
+## Acceptance
+Select a port in any of Ports, Topology or Monitor and the other two follow. The window is usable at 960 by 640 and at 200 percent text. Dark theme has no unreadable text (run the contrast tool and a visual review of the Dark mockup).

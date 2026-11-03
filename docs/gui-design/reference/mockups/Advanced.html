@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workspace, Advanced mode</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .mon td{padding:3px 10px;font-family:var(--mono);font-size:12px;line-height:16px;white-space:nowrap} .pt th,.pt td{padding:6px 8px}</style>
+</helmet>
+<div class="win" style="width: 1280px; height: 800px">
+  <div class="menubar">
+    <button>File</button><button>Ports</button><button>Topology</button><button>Scenarios</button><button>Tools</button><button>View</button><button>Help</button>
+  </div>
+  <div class="toolbar">
+    <button class="tb">New</button>
+    <button class="tb">Open</button>
+    <button class="tb">Save</button>
+    <span class="sep"></span>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Add port</button>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="5" width="11" height="6" rx="1"/><path d="M5 5V3M8 5V3M11 5V3"/></svg>Attach device</button>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M5 8L3.8 9.2a2.4 2.4 0 0 0 3.4 3.4L8.4 11.4M11 8l1.2-1.2a2.4 2.4 0 0 0-3.4-3.4L7.6 4.6"/></svg>Connect</button>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Remove</button>
+    <span class="sep"></span>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 6h4v4H6z"/></svg>Mock device</button>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h4M6 8l6-4M6 8h6M6 8l6 4"/></svg>Share</button>
+    <button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6V3h3M13 6V3h-3M3 10v3h3M13 10v3h-3"/></svg>Fit</button>
+    <span class="grow"></span>
+    <label class="search"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg><input aria-label="Search actions" placeholder="Search actions" style="border:0;background:transparent;flex:1;min-width:0;outline:0;color:var(--ink)"><span class="kbd">Ctrl+K</span></label>
+  </div>
+
+  <div class="body">
+    <div class="row" style="flex: 1">
+
+      <section class="dock" style="width: 400px; flex: none" aria-label="Ports">
+        <div class="dock-h">Ports <span class="count">4</span></div>
+        <div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px; border-bottom: 1px solid var(--line); flex: none">
+          <input class="inp" aria-label="Filter ports" placeholder="Filter ports" style="height: 28px">
+        </div>
+        <div style="overflow: hidden">
+          <table class="tbl pt" style="table-layout: fixed">
+            <thead><tr><th style="width: 128px">Port</th><th style="width: 72px">State</th><th class="num" style="width: 58px">RX</th><th class="num" style="width: 58px">TX</th><th class="num" style="width: 82px">Dropped</th></tr></thead>
+            <tbody>
+              <tr class="sel"><td><b>device</b><br><span class="mono muted">COM3</span></td><td><span class="chip ok" style="height: 20px"><i></i>Open</span></td><td class="num">0 B</td><td class="num">1.1 kB</td><td class="num">0 B</td></tr>
+              <tr><td><b>recipe-tool</b><br><span class="mono muted">COM9</span></td><td><span class="chip ok" style="height: 20px"><i></i>Open</span></td><td class="num">214 B</td><td class="num">0 B</td><td class="num" style="color: var(--bad)">214 B</td></tr>
+              <tr><td><b>qa-runner</b><br><span class="mono muted">COM10</span></td><td><span class="chip ok" style="height: 20px"><i></i>Open</span></td><td class="num">1.1 kB</td><td class="num">0 B</td><td class="num">0 B</td></tr>
+              <tr><td><b>modem</b><br><span class="muted" style="font-size: 12px">Fixture (mock)</span></td><td><span class="chip ok" style="height: 20px"><i></i>Open</span></td><td class="num">0 B</td><td class="num">0 B</td><td class="num">0 B</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="dock grow" aria-label="Topology">
+        <div class="dock-h">Topology <span class="count">4 ports, 1 link</span></div>
+        <div class="dock-b" style="position: relative; padding: 0; display: flex; flex-direction: column">
+          <div style="flex: 1; min-height: 0; overflow: hidden">
+            <div style="position: relative; width: 460px; height: 256px; margin: 14px auto 0">
+              <svg width="62" height="8" viewBox="0 0 62 8" preserveAspectRatio="none" style="position: absolute; left: 168px; top: 48px; width: 62px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 62 4"></path></svg>
+              <svg width="8" height="120" viewBox="0 0 8 120" preserveAspectRatio="none" style="position: absolute; left: 226px; top: 52px; width: 8px; height: 120px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 4 0 L 4 120"></path></svg>
+              <svg width="62" height="8" viewBox="0 0 62 8" preserveAspectRatio="none" style="position: absolute; left: 168px; top: 168px; width: 62px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M 0 4 L 62 4"></path></svg>
+              <svg width="61" height="8" viewBox="0 0 61 8" preserveAspectRatio="none" style="position: absolute; left: 230px; top: 108px; width: 61px; height: 8px; overflow: visible; fill: none; stroke: #566273; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><defs><marker id="dc-arrow-head-filled-1" orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible"><path d="M0 0 L4 2 L0 4 Z" fill="#566273" stroke="none" style="stroke: none; fill: #566273; fill: context-stroke"/></marker></defs><path d="M 0 4 L 57 4" marker-end="url(#dc-arrow-head-filled-1)"></path></svg>
+
+              <div class="node" style="left: 8px; top: 24px; width: 160px; height: 56px"><span><b>recipe-tool</b> <span class="chip warn" style="height: 18px; font-size: 11px; padding: 0 6px">Dropped</span><br><span class="mono">COM9</span></span></div>
+              <div class="node" style="left: 8px; top: 144px; width: 160px; height: 56px"><span><b>qa-runner</b> <span class="chip ok" style="height: 18px; font-size: 11px; padding: 0 6px">Owner</span><br><span class="mono">COM10</span></span></div>
+              <div class="node sel real" style="left: 292px; top: 80px; width: 160px; height: 64px"><span><b>device</b><br>Real device, <span class="mono">COM3</span></span></div>
+              <div class="node" style="left: 292px; top: 192px; width: 160px; height: 48px; border-style: dashed"><span><b>modem</b> <span class="muted">not linked</span></span></div>
+
+              <div class="tlabel" style="left: 244px; top: 84px; width: 32px">Join</div>
+              <div class="tlabel" style="left: 240px; top: 124px; width: 40px">owner</div>
+            </div>
+          </div>
+          <div style="border-top: 1px solid var(--line); background: var(--sunken); padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; flex: none">
+            <div style="display: flex; align-items: center; gap: 8px"><span class="strong">Links on device</span><span class="chip info">Join</span><span class="muted">recipe-tool and qa-runner into device</span></div>
+            <div style="display: flex; align-items: center; gap: 8px">
+              <label for="pol" class="muted" style="white-space: nowrap">If both write at once</label>
+              <select class="inp" id="pol" style="height: 28px; width: 210px"><option>One owner at a time</option></select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px">
+              <span class="muted">Owner now</span><span class="chip ok"><i></i>qa-runner</span>
+              <span class="grow"></span>
+              <button class="btn sm">Release owner</button>
+              <button class="btn sm">Give to recipe-tool</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style="width: 340px; flex: none; display: flex; flex-direction: column; gap: 8px; min-height: 0">
+        <section class="dock grow" aria-label="Inspector">
+          <div class="dock-h">Inspector <span class="count">device</span></div>
+          <div class="dock-b" style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px">
+            <dl class="kv" style="row-gap: 4px">
+              <dt>State</dt><dd><span class="chip ok"><i></i>Open</span></dd>
+              <dt>Path</dt><dd><span class="mono">COM3</span><button class="btn icon" style="width: 24px; height: 24px" aria-label="Copy COM3"><svg class="ic" style="width:13px;height:13px" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></dd>
+              <dt>Serial</dt><dd class="mono">115200 8N1, no flow control</dd>
+            </dl>
+            <div>
+              <div class="lbl" style="margin-bottom: 4px">Control lines</div>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <button class="sw" role="switch" aria-checked="false"><span class="trk"></span>DTR off</button>
+                <button class="sw on" role="switch" aria-checked="true"><span class="trk"></span>RTS on</button>
+                <span class="grow"></span>
+                <button class="btn sm">Break</button>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px">
+                <span class="chip ok" style="height: 20px; font-size: 11px"><i></i>CTS on</span>
+                <span class="chip ok" style="height: 20px; font-size: 11px"><i></i>DSR on</span>
+                <span class="chip hollow" style="height: 20px; font-size: 11px"><i></i>DCD off</span>
+                <span class="chip hollow" style="height: 20px; font-size: 11px"><i></i>RI off</span>
+              </div>
+            </div>
+            <a href="Faults.dc.html">Open line matrix and faults</a>
+          </div>
+        </section>
+        <section class="dock" style="height: 162px; flex: none" aria-label="Send">
+          <div class="dock-h">Send</div>
+          <div class="dock-b" style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px">
+            <div style="display: flex; gap: 8px">
+              <select class="inp" aria-label="Send to port" style="flex: 1; height: 30px"><option>device (COM3)</option></select>
+              <button class="btn primary" style="height: 30px">Send</button>
+            </div>
+            <input class="inp mono" aria-label="Bytes to send" placeholder="Type text, or hex if Hex is ticked" style="height: 30px">
+            <div style="display: flex; gap: 16px; align-items: center">
+              <label class="chk"><input type="checkbox"> Hex</label>
+              <label class="chk"><input type="checkbox" checked> Add CRLF</label>
+              <label class="chk"><input type="checkbox"> Repeat</label>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section class="dock" style="height: 230px; flex: none" aria-label="Monitor">
+      <div class="tabs"><button class="tab on">Monitor</button><button class="tab">Log</button><button class="tab">Topology JSON</button></div>
+      <div style="display: flex; align-items: center; gap: 12px; height: 36px; padding: 0 12px; border-bottom: 1px solid var(--line); flex: none">
+        <select class="inp" aria-label="Filter by port" style="width: 130px; height: 28px"><option>All ports</option></select>
+        <label class="chk"><input type="checkbox" checked> RX</label>
+        <label class="chk"><input type="checkbox" checked> TX</label>
+        <label class="chk"><input type="checkbox" checked> Dropped</label>
+        <input class="inp" aria-label="Search payload" placeholder="Search payload" style="width: 200px; height: 28px">
+        <span class="seg" style="height: 28px"><button class="on" style="height: 28px">ASCII</button><button style="height: 28px">Hex</button></span>
+        <span class="grow"></span>
+        <button class="btn sm">Pause</button>
+        <button class="btn sm">Clear</button>
+        <button class="btn sm">Export</button>
+      </div>
+      <div style="overflow: hidden">
+        <table class="tbl mon">
+          <thead><tr><th style="width: 130px">Time</th><th style="width: 130px">Port</th><th style="width: 80px">Direction</th><th style="width: 60px" class="num">Bytes</th><th>Preview</th></tr></thead>
+          <tbody>
+            <tr><td>12:07:44.120</td><td>qa-runner</td><td><span class="dir rx">RX</span></td><td class="num">16</td><td>START RUN 0042\r\n</td></tr>
+            <tr><td>12:07:44.120</td><td>device</td><td><span class="dir tx">TX</span></td><td class="num">16</td><td>START RUN 0042\r\n</td></tr>
+            <tr><td>12:07:44.381</td><td>recipe-tool</td><td><span class="dir drop">DROP</span></td><td class="num">13</td><td>SET TEMP 72\r\n <span style="font-family: var(--ui); color: var(--bad)">not the owner, not forwarded</span></td></tr>
+            <tr><td>12:07:44.902</td><td>qa-runner</td><td><span class="dir rx">RX</span></td><td class="num">13</td><td>READ STATUS\r\n</td></tr>
+            <tr><td>12:07:44.902</td><td>device</td><td><span class="dir tx">TX</span></td><td class="num">13</td><td>READ STATUS\r\n</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="status">
+    <span>Ports 4</span><span>Links 1</span><span>RX 26 B/s</span><span>TX 26 B/s</span><span>Hub running</span>
+    <span class="chip warn"><i></i>214 B dropped, not owner</span>
+    <span class="grow"></span>
+    <span class="chip ok"><i></i>Setup ready</span>
+    <span class="seg" style="height: 24px"><button style="height: 24px; padding: 0 10px; font-size: 12px">Simple</button><button class="on" style="height: 24px; padding: 0 10px; font-size: 12px">Advanced</button></span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/* Virtual Serial Studio: Qt style sheet template.
+ * Percent-wrapped names (for example the accent colour) are replaced from tokens/tokens.json for the active theme (light or dark).
+ * Render at runtime in Theme::styleSheet(); tools/gen_qss.py renders both themes for review.
+ *
+ * QSS LIMITS you must design around:
+ *  - No box-shadow, no outline, no CSS variables, no flex or grid. Layout lives in C++ layouts.
+ *  - QSS cannot tell keyboard focus from mouse focus. The 2px focus ring is painted by a QProxyStyle
+ *    (PE_FrameFocusRect), see docs/02-design-tokens.md.
+ *  - Do not set font-family or font-size here. Fonts come from the platform and are scaled in C++.
+ *  - Status chips, switches, steppers and the topology are custom painted widgets, not QSS.
+ *  - Select by dynamic property, e.g. QPushButton[role="primary"]. After changing a property call
+ *    style()->unpolish(w); style()->polish(w);
+ */
+
+QMainWindow, QDialog { background: %ground%; color: %ink%; }
+QDialog[surface="panel"] { background: %panel%; }
+QWidget:disabled { color: %disabledText%; }
+QToolTip { background: %toastBg%; color: %toastText%; border: 0; padding: 5px 9px; }
+QLabel[muted="true"] { color: %ink3%; }
+QLabel[secondary="true"] { color: %ink2%; }
+
+/* menu and toolbar */
+QMenuBar { background: %panel%; color: %ink%; border-bottom: 1px solid %line%; }
+QMenuBar::item { padding: 4px 10px; border-radius: 3px; background: transparent; color: %ink%; }
+QMenuBar::item:selected { background: %accentSoft%; color: %accentStrong%; }
+QMenu { background: %panel%; color: %ink%; border: 1px solid %line2%; padding: 4px; }
+QMenu::item { padding: 6px 24px 6px 12px; border-radius: 3px; color: %ink%; }
+QMenu::item:selected { background: %accentSoft%; color: %ink%; }
+QMenu::item:disabled { color: %disabledText%; }
+QMenu::separator { height: 1px; background: %line%; margin: 4px 8px; }
+QToolBar { background: %panel%; border: 0; border-bottom: 1px solid %line%; spacing: 4px; padding: 0 12px; }
+QToolButton { min-width: 24px; min-height: 34px; padding: 0 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: %ink%; }
+QToolButton:hover { background: %sunken%; }
+QToolButton:checked { background: %accentSoft%; border-color: %accentLine%; color: %accentStrong%; }
+QToolButton:disabled { color: %disabledText%; }
+QStatusBar { background: %panel%; border-top: 1px solid %line%; color: %ink2%; }
+QStatusBar::item { border: 0; }
+
+/* buttons */
+QPushButton { min-height: 34px; padding: 0 16px; border: 1px solid %control%; border-radius: 4px; background: %panel%; color: %ink%; font-weight: 500; }
+QPushButton:hover { background: %sunken%; }
+QPushButton:pressed { background: %accentSoft%; }
+QPushButton:disabled { color: %disabledText%; border-color: %line%; background: %sunken%; }
+QPushButton[role="primary"] { background: %accent%; border-color: %accentStrong%; color: %onAccent%; }
+QPushButton[role="primary"]:hover { background: %accentStrong%; }
+QPushButton[role="primary"]:disabled { background: %sunken%; border-color: %line%; color: %disabledText%; }
+QPushButton[role="quiet"] { background: transparent; border-color: transparent; color: %accentStrong%; }
+QPushButton[role="quiet"]:hover { background: %sunken%; }
+QPushButton[role="danger"] { background: %bad%; border-color: %dangerBorder%; color: %onDanger%; }
+QPushButton[size="small"] { min-height: 28px; padding: 0 10px; }
+QPushButton[size="icon"] { min-height: 24px; min-width: 24px; padding: 0; }
+
+/* fields */
+QLineEdit, QSpinBox, QComboBox, QPlainTextEdit, QTextEdit { min-height: 32px; padding: 0 10px; border: 1px solid %control%; border-radius: 4px; background: %panel%; color: %ink%; selection-background-color: %accent%; selection-color: %onAccent%; }
+QPlainTextEdit, QTextEdit { padding: 6px 10px; }
+QLineEdit:read-only { background: %sunken%; }
+QLineEdit[invalid="true"], QComboBox[invalid="true"], QSpinBox[invalid="true"] { border: 2px solid %bad%; }
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled { background: %sunken%; border-color: %line%; color: %disabledText%; }
+QCheckBox, QRadioButton { spacing: 8px; min-width: 24px; min-height: 24px; }
+QSlider::groove:horizontal { height: 4px; background: %line2%; border-radius: 2px; }
+QSlider::handle:horizontal { width: 18px; height: 18px; margin: -7px 0; border-radius: 9px; background: %accent%; border: 1px solid %accentStrong%; }
+QProgressBar { min-height: 8px; max-height: 8px; border: 0; border-radius: 4px; background: %line%; text-align: center; }
+QProgressBar::chunk { background: %accent%; border-radius: 4px; }
+
+/* item views */
+QTableView, QTreeView, QListView { background: %panel%; alternate-background-color: %sunken%; gridline-color: %line%; border: 0; selection-background-color: %accentSoft%; selection-color: %ink%; outline: 0; }
+QHeaderView::section { background: %sunken%; color: %ink2%; border: 0; border-bottom: 1px solid %line%; padding: 0 10px; min-height: 28px; font-weight: 600; }
+QScrollBar:vertical { width: 12px; background: transparent; margin: 0; }
+QScrollBar:horizontal { height: 12px; background: transparent; margin: 0; }
+QScrollBar::handle:vertical { background: %line2%; min-height: 24px; border-radius: 4px; margin: 2px; }
+QScrollBar::handle:horizontal { background: %line2%; min-width: 24px; border-radius: 4px; margin: 2px; }
+QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }
+
+/* tabs and docks */
+QTabWidget::pane { border: 0; }
+QTabBar { background: %sunken%; }
+QTabBar::tab { padding: 0 14px; min-height: 32px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: %ink2%; }
+QTabBar::tab:selected { border-bottom: 2px solid %accent%; color: %ink%; font-weight: 600; }
+QTabBar::tab:hover:!selected { background: %panel%; }
+QDockWidget::title { background: %sunken%; padding: 6px 12px; border-bottom: 1px solid %line%; font-weight: 600; text-align: left; }
+QSplitter::handle { background: transparent; }
+
+/* cards, notes, code, toast: QFrame with dynamic properties */
+QFrame[card="true"] { background: %panel%; border: 1px solid %line%; border-radius: 8px; }
+QFrame[pick="true"] { background: %panel%; border: 1px solid %control%; border-radius: 8px; }
+QFrame[pick="true"][selected="true"] { background: %accentSoft%; border: 1px solid %accent%; }
+QFrame[dashed="true"] { background: transparent; border: 1px dashed %control%; border-radius: 8px; }
+QFrame[dashed="true"]:hover { background: %sunken%; }
+QFrame[spin="true"] { background: %panel%; border: 1px solid %control%; border-radius: 4px; }
+QFrame[spin="true"] QToolButton { min-height: 32px; padding: 0; border: 0; background: transparent; }
+QFrame[spin="true"] QToolButton:hover { background: %sunken%; }
+QFrame[spin="true"] QLabel#shareProgramCount { border-left: 1px solid %line%; border-right: 1px solid %line%; background: %panel%; }
+QFrame#dialogFooter { background: %sunken%; border-top: 1px solid %line%; }
+QFrame[note="info"] { background: %accentSoft%; border: 1px solid %accentLine%; border-radius: 6px; }
+QFrame[note="info"] QLabel { color: %noteInfoText%; }
+QFrame[note="ok"] { background: %okSoft%; border: 1px solid %okLine%; border-radius: 6px; }
+QFrame[note="ok"] QLabel { color: %noteOkText%; }
+QFrame[note="warn"] { background: %amberSoft%; border: 1px solid %amberLine%; border-radius: 6px; }
+QFrame[note="warn"] QLabel { color: %noteWarnText%; }
+QFrame[note="danger"] { background: %badSoft%; border: 1px solid %badLine%; border-radius: 6px; }
+QFrame[note="danger"] QLabel { color: %noteDangerText%; }
+QFrame[code="true"] { background: %sunken%; border: 1px solid %line%; border-radius: 4px; }
+QFrame#Toast { background: %toastBg%; border: 0; border-radius: 6px; }
+QFrame#Toast QLabel { color: %toastText%; }

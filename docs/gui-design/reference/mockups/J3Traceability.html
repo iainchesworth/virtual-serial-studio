@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Story traceability and test plan</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .spec td{font-size:12.5px;line-height:17px;padding:6px 12px} .spec td.id{font-family:var(--mono);font-size:12px;font-weight:600}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 1140px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">2 Structure and journeys</div>
+      <h1>Story traceability and test plan</h1>
+    </div>
+    <p>Every story from the discovery work maps to a screen on this canvas. The test plan is how the design gets proved with real people.</p>
+  </div>
+
+  <div class="sheet-b">
+    <section>
+      <div class="card" style="overflow: hidden">
+        <table class="spec">
+          <thead><tr><th style="width: 46px">Story</th><th style="width: 330px">Job, in the user's words</th><th style="width: 110px">Level</th><th style="width: 330px">Screens</th><th>Key decision</th></tr></thead>
+          <tbody>
+            <tr><td class="id">A1</td><td>"My program needs a COM port and I have none."</td><td><span class="tag s">Basic</span></td><td>Launcher, Add port, Port ready</td><td>The result is a name with a Copy button, not a topology.</td></tr>
+            <tr><td class="id">A2</td><td>"Is this machine set up properly?"</td><td><span class="tag s">Basic</span></td><td>Setup check, status bar chip</td><td>Each problem has its own fix button.</td></tr>
+            <tr><td class="id">A3</td><td>"Make two programs talk to each other."</td><td><span class="tag s">Basic</span></td><td>Connect two programs</td><td>A pair is one object with a live summary sentence.</td></tr>
+            <tr><td class="id">A4</td><td>"Test my program with no hardware."</td><td><span class="tag s">Basic</span></td><td>Templates, Workspace Send panel</td><td>"Studio only" sets the right expectation.</td></tr>
+            <tr><td class="id">B1</td><td>"Let three programs use my one device."</td><td><span class="tag s">Intermediate</span></td><td>Share wizard, Workspace</td><td>Preview every port and flag the ones other programs cannot open.</td></tr>
+            <tr><td class="id">B2</td><td>"Feed one program from several sources."</td><td><span class="tag s">Intermediate</span></td><td>Connect ports (join)</td><td>Mode cards with live validation.</td></tr>
+            <tr><td class="id">B3</td><td>"Only one program should talk at a time."</td><td><span class="tag a">Advanced</span></td><td>Advanced workspace link bar</td><td>The owner is always visible, with Release and Give.</td></tr>
+            <tr><td class="id">B4</td><td>"Put this device on the network."</td><td><span class="tag s">Intermediate</span></td><td>Network form</td><td>A form builds the address. The address stays editable.</td></tr>
+            <tr><td class="id">B5</td><td>"Save this rig and bring it back."</td><td><span class="tag s">Intermediate</span></td><td>Templates, Feedback patterns</td><td>Recents, templates, and a safe exit prompt.</td></tr>
+            <tr><td class="id">C1</td><td>"What is actually going over the wire?"</td><td><span class="tag s">Intermediate</span></td><td>Workspace, Advanced workspace</td><td>Pause, hex and follow for all. Filter, search and export in Advanced.</td></tr>
+            <tr><td class="id">C2</td><td>"Send this exact sequence."</td><td><span class="tag s">Intermediate</span></td><td>Send panel</td><td>Text or hex with CRLF. Saved sends and repeat in Advanced.</td></tr>
+            <tr><td class="id">C3</td><td>"Does my software react to DTR and CTS?"</td><td><span class="tag a">Advanced</span></td><td>Line wiring and faults</td><td>A per-link matrix with live line state.</td></tr>
+            <tr><td class="id">C4</td><td>"Make the device misbehave."</td><td><span class="tag a">Advanced</span></td><td>Line wiring and faults</td><td>Six faults on fixtures, with a history of what was injected.</td></tr>
+            <tr><td class="id">C5</td><td>"Why is nothing arriving?"</td><td><span class="tag">All</span></td><td>Troubleshoot, Workspace inspector</td><td>A checklist that ends in a next step, not a diagnosis.</td></tr>
+            <tr><td class="id">C6</td><td>"How fast is it, and does it lose data?"</td><td><span class="tag a">Advanced</span></td><td>Benchmark</td><td>A short byte count fails the run.</td></tr>
+            <tr><td class="id">C7</td><td>"Give support everything."</td><td><span class="tag">All</span></td><td>Diagnostic bundle, About</td><td>Traffic payloads are off by default, for privacy.</td></tr>
+            <tr><td class="id">D1</td><td>"Run this without the window."</td><td><span class="tag a">Advanced</span></td><td>Topology JSON</td><td>Validated JSON with copy as command.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px; align-items: start">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 8px">Usability test plan, five people per persona per round</div>
+        <div class="card" style="overflow: hidden">
+          <table class="spec">
+            <thead><tr><th>Task</th><th style="width: 130px">Persona</th><th style="width: 250px">Passes when</th></tr></thead>
+            <tbody>
+              <tr><td>Get a COM port for a program, with no help.</td><td>Operator</td><td>Completed without a hint, no wrong turns.</td></tr>
+              <tr><td>Fix a missing driver from the setup check.</td><td>Operator</td><td>Reaches a working port, unprompted.</td></tr>
+              <tr><td>Share a device with three programs and confirm each gets data.</td><td>Integrator</td><td>All three verified in the monitor.</td></tr>
+              <tr><td>Find why COM7 shows no traffic.</td><td>Operator, Integrator</td><td>Names the cause from the checklist.</td></tr>
+              <tr><td>Reproduce a parity error and save the case.</td><td>Diagnostician</td><td>Bundle contains the fixture and the fault.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom: 8px">Measures and accessibility checks</div>
+        <div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; color: var(--ink2)">
+          <div><b style="color: var(--ink)">Measures.</b> Task success, time on task, errors, and the System Usability Scale. Target 80 or higher, against a commonly cited average of 68.</div>
+          <div><b style="color: var(--ink)">Keyboard only.</b> Every task done without a pointer, focus never lost or hidden.</div>
+          <div><b style="color: var(--ink)">Screen readers.</b> Narrator or NVDA on Windows, VoiceOver on macOS, Orca on Linux.</div>
+          <div><b style="color: var(--ink)">Scale.</b> 100 and 200 percent display scale, 200 percent text size, light, dark and high contrast.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1140}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

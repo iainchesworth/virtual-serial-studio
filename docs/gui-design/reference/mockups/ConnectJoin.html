@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Connect ports, join</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .md{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border:1px solid var(--control);border-radius:8px;background:var(--panel)} .md input{margin:0;width:18px;height:18px;accent-color:var(--accent)} .md.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)} .md b{font-size:13.5px} .md .d{color:var(--ink2);font-size:12.5px;line-height:17px} .md .g{font-family:var(--mono);font-size:12px;color:var(--ink2);white-space:nowrap} .pl{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line)} .pl:last-child{border-bottom:0} .pl input{margin:0;width:18px;height:18px;accent-color:var(--accent)}</style>
+</helmet>
+<div class="dlg" style="width: 920px; height: 720px">
+  <div class="dlg-h">
+    <div>
+      <h1>Connect ports</h1>
+      <p style="color: var(--ink2)">Choose how the ports should be linked, then which ports take part.</p>
+    </div>
+  </div>
+
+  <div class="dlg-b" style="gap: 14px">
+    <div style="display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 24px; align-items: start">
+      <div style="display: flex; flex-direction: column; gap: 8px" role="radiogroup" aria-label="Link mode">
+        <label class="md"><input type="radio" name="m"><span><b>Two-way</b><div class="d">Like a null-modem cable. Both ports see everything.</div></span><span class="g">A ⇄ B</span></label>
+        <label class="md"><input type="radio" name="m"><span><b>One-way redirect</b><div class="d">Data flows from A to B only. B cannot reply.</div></span><span class="g">A → B</span></label>
+        <label class="md"><input type="radio" name="m"><span><b>Monitor</b><div class="d">Watch traffic without disturbing it. Never drives modem lines.</div></span><span class="g">A ⇢ B</span></label>
+        <label class="md"><input type="radio" name="m"><span><b>Split one port to many</b><div class="d">Several programs see the same device.</div></span><span class="g">A ⇄ B, C</span></label>
+        <label class="md on"><input type="radio" name="m" checked><span><b>Join many ports into one</b><div class="d">Several sources feed one target.</div></span><span class="g">A, B → C</span></label>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <div>
+          <div class="lbl">Ports that send, choose at least 2</div>
+          <div class="card" style="overflow: hidden; border-color: var(--control)">
+            <label class="pl"><input type="checkbox" checked><span><b>recipe-tool</b> <span class="mono muted">COM9</span></span><span class="chip ok"><i></i>Open</span></label>
+            <label class="pl"><input type="checkbox" checked><span><b>qa-runner</b> <span class="mono muted">COM10</span></span><span class="chip ok"><i></i>Open</span></label>
+            <label class="pl"><input type="checkbox"><span><b>logger</b> <span class="muted">Studio only</span></span><span class="chip hollow"><i></i>Open</span></label>
+          </div>
+          <p class="hint" style="display: flex; align-items: center; gap: 6px; color: var(--ok)"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>2 ports chosen. That is enough for a join.</p>
+        </div>
+        <div>
+          <label class="lbl" for="tgt">Send everything to</label>
+          <select class="inp" id="tgt"><option>device (COM3)</option></select>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px dashed var(--control); border-radius: 6px; color: var(--ink2)">
+          <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>
+          <span class="strong">More options</span>
+          <span class="badge adv">Advanced</span>
+          <span class="grow muted">Choose one owner at a time.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note info" style="align-items: center">
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg>
+      <span>Everything <b>recipe-tool</b> and <b>qa-runner</b> write goes to <b>device</b>. Their bytes are mixed in the order they arrive. <b>device</b> does not send anything back to them.</span>
+    </div>
+  </div>
+
+  <div class="dlg-f">
+    <span class="muted" style="font-size: 12px">Shortcut: Ctrl+L</span>
+    <span class="grow"></span>
+    <button class="btn">Cancel</button>
+    <button class="btn primary">Connect</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":920,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

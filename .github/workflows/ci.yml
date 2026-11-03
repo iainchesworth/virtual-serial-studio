@@ -64,6 +64,19 @@ jobs:
           python3 tools/changelog.py --check
           python3 -m unittest discover -s tools -p "test_*.py" -v
 
+  design:
+    name: Design tokens
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Check contrast
+        run: python3 tools/check_contrast.py
+      - name: Render the theme style sheets
+        run: python3 tools/gen_qss.py --out "${RUNNER_TEMP}/qss"
+
   build:
     strategy:
       fail-fast: false
@@ -117,7 +130,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
-          modules: ''
+          modules: 'qtsvg'
 
       - name: Install GUI system libraries
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev

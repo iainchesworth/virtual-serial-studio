@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "name": "share-three-programs",
+  "description": "One real device split to three ports, each ready for its own program.",
+  "ports": [
+    {
+      "name": "device",
+      "kind": "physical",
+      "uri": "serial://COM3?baud=115200",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "program-1",
+      "kind": "virtual",
+      "virtual_kind": "auto",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "program-2",
+      "kind": "virtual",
+      "virtual_kind": "auto",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    },
+    {
+      "name": "program-3",
+      "kind": "virtual",
+      "virtual_kind": "auto",
+      "serial": {
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "none",
+        "stop_bits": "1",
+        "flow_control": "none",
+        "read_timeout_ms": 0,
+        "write_timeout_ms": 0,
+        "exclusive": false
+      },
+      "capture": true
+    }
+  ],
+  "links": [
+    {
+      "mode": "split",
+      "sources": ["device"],
+      "targets": ["program-1", "program-2", "program-3"],
+      "emulate_modem_lines": true,
+      "policy": "interleave"
+    }
+  ]
+}

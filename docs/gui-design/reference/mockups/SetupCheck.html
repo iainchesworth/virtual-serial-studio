@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Setup check, driver missing</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="dlg" style="width: 760px; height: 720px">
+  <div class="dlg-h">
+    <div class="grow">
+      <h1>Setup check</h1>
+      <p style="color: var(--ink2)">What this PC needs so other programs can use your virtual ports.</p>
+    </div>
+    <span class="chip warn"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg>1 thing to fix</span>
+  </div>
+
+  <div class="dlg-b">
+    <div class="note warn" style="align-items: center">
+      <span>Until a driver is installed, new ports only work <b>inside</b> Virtual Serial Studio. Other programs will not see them.</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--amber-line); border-radius: 8px; background: var(--panel)">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: var(--amber-soft); border: 1px solid var(--amber-line); color: var(--amber); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg></span>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px"><span class="strong" style="font-size: 14px">Virtual port driver</span><span class="chip warn">Needs attention</span></div>
+        <p style="margin-top: 2px; color: var(--ink2)">com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</p>
+      </div>
+      <button class="btn primary">Install com0com</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel)">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent-d); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg></span>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px"><span class="strong" style="font-size: 14px">Administrator rights</span><span class="chip info">Needed later</span></div>
+        <p style="margin-top: 2px; color: var(--ink2)">Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</p>
+      </div>
+      <button class="btn">Restart as administrator</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel)">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: var(--ok-soft); border: 1px solid var(--ok-line); color: var(--ok); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px"><span class="strong" style="font-size: 14px">Real serial devices</span><span class="chip ok"><i></i>OK</span></div>
+        <p style="margin-top: 2px; color: var(--ink2)"><span class="mono">COM3</span> and <span class="mono">COM4</span> are visible to Virtual Serial Studio.</p>
+      </div>
+      <button class="btn quiet">Refresh</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--sunken)">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line2); color: var(--ink2); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l7 5-7 5z"/></svg></span>
+      <div>
+        <div class="strong" style="font-size: 14px">Carry on without a driver</div>
+        <p style="margin-top: 2px; color: var(--ink2)">You can still use in-process ports, the monitor and the Send panel to try things out.</p>
+      </div>
+      <button class="btn">Continue in test mode</button>
+    </div>
+
+    <p class="muted" style="font-size: 12px">On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</p>
+  </div>
+
+  <div class="dlg-f">
+    <a href="#why">Why is a driver needed?</a>
+    <span class="grow"></span>
+    <button class="btn">Re-check</button>
+    <button class="btn">Close</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

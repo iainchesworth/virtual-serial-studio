@@ -1,0 +1,176 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#ifndef VSS_GUI_BACKEND_VIEW_TYPES_HPP
+#define VSS_GUI_BACKEND_VIEW_TYPES_HPP
+
+#include <vss/core/control_lines.hpp>
+#include <vss/core/error.hpp>
+#include <vss/core/event.hpp>
+#include <vss/core/link.hpp>
+#include <vss/core/serial_settings.hpp>
+#include <vss/core/stats.hpp>
+#include <vss/core/types.hpp>
+
+#include <QByteArray>
+#include <QMetaType>
+#include <QString>
+#include <QVector>
+
+#include <cstdint>
+
+namespace vss::gui
+{
+
+/// What the studio can know about the program on the other side of a port.
+///
+/// `unknown` is the honest answer for every transport the engine cannot
+/// observe today.  The GUI shows "Open" and omits the waiting sentence; it
+/// never claims a program has or has not connected.
+enum class peer_state
+{
+    unknown,
+    not_open,
+    open
+};
+
+/// The plain-language shape of a link, derived from the engine's mode,
+/// arity and modem-line setting.  Mirrors `studio::snapshot()`.
+enum class link_shape
+{
+    two_way,
+    split,
+    join,
+    one_way,
+    monitor
+};
+
+/// One endpoint as the GUI needs it.  Engine snapshots are converted here,
+/// once, so no screen includes a core header for display data.
+struct port_view
+{
+    vss::endpoint_id id = 0;
+    QString name;
+    QString path;
+    QString description;
+    vss::endpoint_kind kind = vss::endpoint_kind::virtual_port;
+    vss::endpoint_state state = vss::endpoint_state::created;
+    vss::serial_settings serial;
+    vss::control_lines lines;
+    vss::endpoint_stats stats;
+    bool supports_control_lines = false;
+    bool open = false;
+    /// A loopback or mock endpoint: no other program can open it.
+    bool studio_only = false;
+    peer_state peer = peer_state::unknown;
+};
+
+/// One link as the GUI needs it.
+struct link_view
+{
+    vss::link_id id = 0;
+    link_shape shape = link_shape::two_way;
+    vss::link_mode mode = vss::link_mode::duplex;
+    vss::link_options options;
+    QVector<vss::endpoint_id> sources;
+    QVector<vss::endpoint_id> targets;
+    vss::endpoint_id owner = 0;
+    vss::link_stats stats;
+};
+
+/// Which input lines each output line drives on the port at the other end of a
+/// link.
+///
+/// The engine only has the boolean null-modem crossing
+/// (`link_options::emulate_modem_lines`), so `Capabilities::line_matrix` is
+/// false and the real adapter neither reads nor writes this.  The type is the
+/// adapter seam the line matrix dialog is built and tested against; it does
+/// not change the topology JSON schema or `vss_core`.
+struct line_wiring
+{
+    bool dtr_to_dsr = true;
+    bool dtr_to_cts = false;
+    bool dtr_to_dcd = true;
+    bool dtr_to_ri = false;
+    bool rts_to_dsr = false;
+    bool rts_to_cts = true;
+    bool rts_to_dcd = false;
+    bool rts_to_ri = false;
+
+    friend bool operator==(const line_wiring&, const line_wiring&) = default;
+};
+
+/// One captured chunk of traffic from the engine's bounded ring buffer.
+struct traffic_view
+{
+    vss::endpoint_id endpoint = 0;
+    QString name;
+    vss::data_direction direction = vss::data_direction::rx;
+    QByteArray data;
+    vss::time_point when{};
+};
+
+/// One serial device, as returned by the platform enumeration.
+struct device_view
+{
+    QString path;
+    QString description;
+    QString hardware_id;
+    bool virtual_device = false;
+    bool com0com = false;
+    int com0com_pair = -1;
+    QString com0com_side;
+    /// True when another process holds the device.  The engine cannot prove
+    /// this today, so `EngineStudioBackend` always leaves it false; tests and
+    /// a future platform probe can set it.
+    bool in_use = false;
+};
+
+/// Facts the setup check, launcher strip and status chip read.
+struct setup_facts
+{
+    bool com0com_found = false;
+    int com0com_pairs = 0;
+    int serial_devices = 0;
+    QString platform;
+    /// False until a platform helper can prove elevation; the GUI must not
+    /// guess.
+    bool elevation_known = false;
+    bool elevated = false;
+};
+
+/// One selected event from the hub, converted for the GUI thread.
+struct gui_event
+{
+    vss::event_kind kind = vss::event_kind::log_message;
+    vss::endpoint_id endpoint = 0;
+    QString name;
+    vss::data_direction direction = vss::data_direction::rx;
+    QByteArray data;
+    vss::control_lines lines;
+    QString message;
+    QString error;
+    vss::time_point when{};
+};
+
+using event_batch = QVector<gui_event>;
+
+/// The result of `studio::share_serial`, flattened for the share wizard.
+struct share_view
+{
+    vss::endpoint_id source = 0;
+    QVector<vss::endpoint_id> listeners;
+    vss::link_id link = 0;
+};
+
+/// One-line rendering of an engine error, used by dialogs and the status bar.
+QString error_text(const vss::error_code& error);
+
+} // namespace vss::gui
+
+Q_DECLARE_METATYPE(vss::gui::gui_event)
+
+#endif // VSS_GUI_BACKEND_VIEW_TYPES_HPP

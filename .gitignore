@@ -4,6 +4,7 @@
 /out/
 /.build/
 /cmake-build-*/
+gui-shots/
 *.user
 *.suo
 *.sln

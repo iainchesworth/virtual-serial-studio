@@ -1,0 +1,261 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "test_framework.hpp"
+
+#include "backend/fake_studio_backend.hpp"
+#include "dialogs/network_endpoint.hpp"
+#include "dialogs/network_uri.hpp"
+#include "widgets/notes.hpp"
+
+#include <boost/asio/error.hpp>
+
+#include <QApplication>
+#include <QPushButton>
+#include <QRadioButton>
+
+namespace
+{
+
+void show(QDialog& dialog)
+{
+    dialog.show();
+    QApplication::processEvents();
+}
+
+vss::gui::device_view device(const QString& path)
+{
+    vss::gui::device_view view;
+    view.path = path;
+    view.description = QStringLiteral("Serial device");
+    return view;
+}
+
+void configure(vss::gui::FakeStudioBackend& backend, bool server = false)
+{
+    vss::gui::capabilities caps;
+    caps.network_server = server;
+    backend.set_capabilities(caps);
+    backend.set_devices({device(QStringLiteral("COM3"))});
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    backend.set_facts(facts);
+}
+
+} // namespace
+
+TEST_CASE("network URI: builds, parses and rejects every transport")
+{
+    REQUIRE_EQ(vss::gui::build_network_uri(vss::gui::network_transport::tcp,
+                                           QStringLiteral("0.0.0.0"), 4001),
+               QStringLiteral("tcp://0.0.0.0:4001"));
+    REQUIRE_EQ(vss::gui::build_network_uri(vss::gui::network_transport::udp,
+                                           QStringLiteral("192.168.1.50"),
+                                           4002),
+               QStringLiteral("udp://192.168.1.50:4002"));
+    REQUIRE_EQ(vss::gui::build_network_uri(vss::gui::network_transport::rfc2217,
+                                           QStringLiteral("lab-host"), 7001),
+               QStringLiteral("rfc2217://lab-host:7001"));
+    REQUIRE_EQ(vss::gui::build_network_uri(vss::gui::network_transport::tcp,
+                                           QStringLiteral("::1"), 4001),
+               QStringLiteral("tcp://[::1]:4001"));
+
+    const auto parsed =
+        vss::gui::parse_network_uri(QStringLiteral("udp://10.0.0.5:5000"));
+    REQUIRE(parsed.has_value());
+    REQUIRE_EQ(parsed->transport, vss::gui::network_transport::udp);
+    REQUIRE_EQ(parsed->host, QStringLiteral("10.0.0.5"));
+    REQUIRE_EQ(parsed->port, 5000);
+
+    const auto ipv6 =
+        vss::gui::parse_network_uri(QStringLiteral("rfc2217://[::1]:7001"));
+    REQUIRE(ipv6.has_value());
+    REQUIRE_EQ(ipv6->host, QStringLiteral("::1"));
+
+    REQUIRE(!vss::gui::valid_port(0));
+    REQUIRE(!vss::gui::valid_port(65536));
+    REQUIRE(vss::gui::valid_port(1));
+    REQUIRE(vss::gui::valid_port(65535));
+
+    for (const char* bad :
+         {"", "tcp://host", "tcp://host:0", "tcp://host:65536",
+          "ftp://host:4001", "tcp://:4001", "tcp://[::1:4001"})
+    {
+        QString error;
+        REQUIRE(!vss::gui::parse_network_uri(QString::fromLatin1(bad), &error)
+                     .has_value());
+        REQUIRE(!error.isEmpty());
+    }
+}
+
+TEST_CASE("network dialog: client role, URI preview and port validation")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend);
+    vss::gui::NetworkEndpointDialog dialog(backend);
+    show(dialog);
+
+    REQUIRE(!dialog.server_available());
+    REQUIRE_EQ(dialog.role(), vss::gui::network_role::client);
+    REQUIRE_EQ(dialog.device_path(), QStringLiteral("COM3"));
+    REQUIRE(!dialog.server_selected());
+
+    QRadioButton* server = nullptr;
+    for (QRadioButton* radio : dialog.findChildren<QRadioButton*>())
+    {
+        if (radio->text() ==
+            QStringLiteral("Wait for other computers to connect (server)"))
+        {
+            server = radio;
+        }
+    }
+    REQUIRE(server != nullptr);
+    REQUIRE(!server->isEnabled());
+    REQUIRE_EQ(server->toolTip(),
+               QStringLiteral("Not available in this build"));
+    REQUIRE(!dialog.test_button()->isEnabled());
+    REQUIRE_EQ(dialog.test_button()->toolTip(),
+               QStringLiteral("Not available in this build"));
+
+    dialog.set_server_address(QStringLiteral("192.168.1.50"));
+    dialog.set_port(4001);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp://192.168.1.50:4001"));
+    REQUIRE_EQ(dialog.command(),
+               QStringLiteral("vss_cli bridge serial://COM3?baud=115200 "
+                              "tcp://192.168.1.50:4001"));
+    REQUIRE_EQ(
+        dialog.accessible_result_text(),
+        QStringLiteral("Studio connects to 192.168.1.50 on port 4001 and talks "
+                       "to COM3. Data flows both ways, and the Monitor shows "
+                       "both directions."));
+
+    dialog.set_transport(vss::gui::network_transport::udp);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("udp://192.168.1.50:4001"));
+    dialog.set_transport(vss::gui::network_transport::rfc2217);
+    REQUIRE_EQ(dialog.role(), vss::gui::network_role::client);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("rfc2217://192.168.1.50:4001"));
+    dialog.set_transport(vss::gui::network_transport::tcp);
+
+    dialog.set_port(0);
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_visible());
+    REQUIRE_EQ(dialog.error_body(),
+               QStringLiteral("Choose a port from 1 to 65535."));
+    REQUIRE(backend.links().empty());
+
+    dialog.set_port(4002);
+    REQUIRE(!dialog.error_visible());
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(dialog.result_port(), 4002);
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+}
+
+TEST_CASE("network dialog: server role appears only with the capability")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend, true);
+    vss::gui::NetworkEndpointDialog dialog(backend, false, 0);
+    show(dialog);
+
+    REQUIRE(dialog.server_available());
+    REQUIRE(dialog.server_selected());
+    REQUIRE_EQ(dialog.role(), vss::gui::network_role::server);
+    REQUIRE(dialog.test_button()->isEnabled());
+    REQUIRE_EQ(
+        dialog.accessible_result_text(),
+        QStringLiteral("Other computers can connect to this PC on port 4001 "
+                       "and talk to COM3. Data flows both ways, and the "
+                       "Monitor shows both directions."));
+
+    bool firewall = false;
+    for (vss::gui::NoteBanner* note :
+         dialog.findChildren<vss::gui::NoteBanner*>())
+    {
+        if (note->text().contains(QStringLiteral("Windows Firewall")))
+            firewall = note->isVisibleTo(&dialog);
+    }
+    REQUIRE(firewall);
+
+    dialog.test_button()->click();
+    QApplication::processEvents();
+    REQUIRE_EQ(dialog.listen_address(), QStringLiteral("127.0.0.1"));
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp://127.0.0.1:4001"));
+
+    dialog.set_listen_address(QStringLiteral("0.0.0.0"));
+    dialog.set_port(4010);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp://0.0.0.0:4010"));
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(dialog.result_port(), 4010);
+}
+
+TEST_CASE("network dialog: a known bind failure keeps the dialog open")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend);
+    vss::gui::NetworkEndpointDialog dialog(backend);
+    show(dialog);
+    dialog.set_server_address(QStringLiteral("127.0.0.1"));
+    dialog.set_port(4001);
+
+    backend.fail_next(boost::asio::error::make_error_code(
+        boost::asio::error::address_in_use));
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_visible());
+    REQUIRE_EQ(dialog.error_title(),
+               QStringLiteral("Could not start the bridge"));
+    REQUIRE(dialog.error_body().contains(
+        QStringLiteral("Port 4001 is already in use")));
+    REQUIRE(!dialog.result_link().has_value());
+
+    dialog.set_port(4002);
+    REQUIRE(!dialog.error_visible());
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(dialog.result_port(), 4002);
+}
+
+TEST_CASE("network dialog: Advanced address editing wins over the fields")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend);
+    vss::gui::NetworkEndpointDialog dialog(backend, true);
+    show(dialog);
+    dialog.set_server_address(QStringLiteral("192.168.1.50"));
+    dialog.set_port(4001);
+
+    dialog.set_address_override(QStringLiteral("udp://10.0.0.5:5000"));
+    REQUIRE(dialog.override_active());
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("udp://10.0.0.5:5000"));
+    REQUIRE_EQ(dialog.command(),
+               QStringLiteral("vss_cli bridge serial://COM3?baud=115200 "
+                              "udp://10.0.0.5:5000"));
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(dialog.result_port(), 5000);
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+
+    vss::gui::NetworkEndpointDialog invalid(backend, true);
+    show(invalid);
+    invalid.set_address_override(QStringLiteral("not an address"));
+    REQUIRE(!invalid.submit());
+    REQUIRE(invalid.error_visible());
+    REQUIRE(invalid.error_body().contains(
+        QStringLiteral("Enter an address such as")));
+}
+
+TEST_CASE("network dialog: a build without bridging disables the action")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend);
+    vss::gui::capabilities caps;
+    caps.bridge = false;
+    backend.set_capabilities(caps);
+    vss::gui::NetworkEndpointDialog dialog(backend);
+    show(dialog);
+    REQUIRE(!dialog.primary_button()->isEnabled());
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_visible());
+    REQUIRE_EQ(dialog.error_title(),
+               QStringLiteral("Could not start the bridge"));
+}

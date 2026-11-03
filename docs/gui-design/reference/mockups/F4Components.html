@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Components</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .spc{padding:14px 16px;display:flex;flex-direction:column;gap:12px} .rw{display:flex;flex-wrap:wrap;gap:10px;align-items:center} .cap{font-size:12px;line-height:16px;color:var(--ink3)} .num-c{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--panel);font-size:11px;font-weight:600;flex:none}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 1100px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">1 Foundations</div>
+      <h1>Components</h1>
+    </div>
+    <p>Real controls, every state. Each one has a visible focus ring, a name a screen reader can announce, and a target of at least 24px.</p>
+  </div>
+
+  <div class="sheet-b" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; grid-auto-flow: row">
+
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <section class="card spc">
+        <div class="eyebrow">Buttons</div>
+        <div class="rw"><button class="btn primary">Create pair</button><button class="btn">Cancel</button><button class="btn quiet">Edit address</button><button class="btn danger">Remove port</button></div>
+        <div class="rw"><button class="btn sm">Inject</button><button class="btn icon" aria-label="Copy name"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button><button class="btn" disabled>Save</button><button class="btn primary focus-demo">Focused</button></div>
+        <p class="cap">One primary action per dialog, always rightmost. Destructive actions are never the default.</p>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Toolbar</div>
+        <div class="rw" style="gap: 4px"><button class="tb"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Add port</button><button class="tb on">Advanced</button><button class="tb" disabled>Remove</button></div>
+        <p class="cap">Icon and text together. Active state uses a tint, an edge and text weight.</p>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Selection</div>
+        <div class="rw" style="gap: 18px"><label class="chk"><input type="checkbox" checked> Hex</label><label class="chk"><input type="checkbox"> Follow</label><label class="chk"><input type="radio" name="r1" checked> Server</label><label class="chk"><input type="radio" name="r1"> Client</label></div>
+        <div class="rw" style="gap: 18px"><button class="sw on" role="switch" aria-checked="true"><span class="trk"></span>DTR on</button><button class="sw" role="switch" aria-checked="false"><span class="trk"></span>RTS off</button></div>
+        <div class="seg"><button class="on">TCP</button><button>UDP</button><button>RFC 2217</button></div>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Fields</div>
+        <div><label class="lbl" for="f1">Port name</label><input class="inp" id="f1" value="port-1"></div>
+        <div><label class="lbl" for="f2">Focused</label><input class="inp focus-demo" id="f2" value="COM7" style="font-family: var(--mono)"></div>
+        <div><label class="lbl" for="f3">With an error</label><input class="inp" id="f3" value="COM3" aria-invalid="true" aria-describedby="f3e" style="border-color: var(--bad); border-width: 2px; font-family: var(--mono)"><p class="hint" id="f3e" style="color: var(--bad); display: flex; gap: 6px; align-items: center"><svg class="ic" style="width:14px;height:14px" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg>COM3 is already used. Try COM9.</p></div>
+        <div><label class="lbl" for="f4">Disabled</label><input class="inp" id="f4" value="Needs a driver" disabled style="background: var(--sunken); color: #8A94A3"></div>
+        <div class="code"><span>vss_cli virtual --kind=auto</span><button class="btn icon" aria-label="Copy command"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1.5"/><path d="M3 10.5V4a1 1 0 0 1 1-1h6.5"/></svg></button></div>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <section class="card spc">
+        <div class="eyebrow">Status</div>
+        <div class="rw" style="gap: 8px"><span class="chip ok"><i></i>Open</span><span class="chip ok"><i></i>Program connected</span><span class="chip warn hollow"><i></i>Waiting for program</span><span class="chip hollow"><i></i>Studio only</span><span class="chip neutral hollow"><i></i>Closed</span><span class="chip bad"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Failed</span><span class="chip info">Fixture</span></div>
+        <div class="rw"><span class="dir rx">RX</span><span class="dir tx">TX</span><span class="dir drop">DROP</span><span class="badge adv">Advanced</span><span class="tag n">New</span></div>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Banners</div>
+        <div class="note info" style="align-items: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></svg><span class="grow">Data flows both ways.</span><a href="#a">Details</a></div>
+        <div class="note ok" style="align-items: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg><span class="grow">Bridge is running on port 4001.</span><a href="#b">Open monitor</a></div>
+        <div class="note warn" style="align-items: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l6 10.5H2L8 2.5z"/><path d="M8 7v3M8 11.8v.2"/></svg><span class="grow">Windows will ask for permission.</span></div>
+        <div class="note danger" style="align-items: center"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg><span class="grow">Could not open COM3.</span><a href="#c">What to try</a></div>
+      </section>
+
+      <section class="card spc" style="padding: 0; overflow: hidden">
+        <div style="padding: 14px 16px 0"><div class="eyebrow">Tabs, dock header and rows</div></div>
+        <div class="tabs"><button class="tab on">Monitor</button><button class="tab">Log</button><button class="tab">Topology JSON</button></div>
+        <div class="dock-h" style="border-top: 0">Ports <span class="count">4</span></div>
+        <table class="tbl">
+          <tbody>
+            <tr><td>device</td><td class="muted">Default</td></tr>
+            <tr><td style="background: var(--sunken)">terminal</td><td class="muted" style="background: var(--sunken)">Hover</td></tr>
+            <tr class="sel"><td><b>test-tool</b></td><td class="muted">Selected</td></tr>
+            <tr><td style="background: var(--bad-soft)">logger</td><td style="background: var(--bad-soft)"><span class="chip bad"><svg class="ic" style="width:12px;height:12px" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>Failed</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <section class="card spc">
+        <div class="eyebrow">Dialog anatomy</div>
+        <div style="display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 14px; align-items: start">
+          <div class="dlg float" style="border-radius: 8px">
+            <div style="padding: 12px 14px 8px"><div style="display: flex; align-items: center; gap: 6px"><span class="num-c">1</span><b style="font-size: 15px">Connect two programs</b></div><div class="cap" style="margin-top: 2px">Whatever one sends, the other receives.</div></div>
+            <div style="padding: 0 14px 10px"><div class="inp" style="height: 28px"><span class="num-c" style="margin-right: 6px">2</span>pair-1</div><div class="note info" style="margin-top: 8px; padding: 6px 8px; font-size: 12px"><span class="num-c">3</span><span>COM7 sends, COM8 receives.</span></div></div>
+            <div class="dlg-f" style="padding: 8px 14px"><span class="num-c">4</span><span class="grow"></span><button class="btn sm">Cancel</button><button class="btn sm primary">Create</button></div>
+          </div>
+          <ol class="cap" style="margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 8px; color: var(--ink2)">
+            <li>Title names the job. One sentence of context.</li>
+            <li>Fields hold sensible defaults.</li>
+            <li>A result sentence says what will happen.</li>
+            <li>Primary action rightmost. Escape and Cancel always leave work untouched.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Feedback</div>
+        <div class="toast"><span class="grow">Removed terminal and its link.</span><a href="#undo">Undo</a></div>
+        <div class="rw" style="gap: 14px"><span class="tip">Copy COM7</span><span class="cap">Tooltip on every icon button, shown on hover and on focus.</span></div>
+        <div><div class="cap" style="margin-bottom: 4px">Progress, determinate after one second</div><div class="prog"><i style="width: 62%"></i></div></div>
+      </section>
+
+      <section class="card spc">
+        <div class="eyebrow">Search and shortcuts</div>
+        <label class="search" style="width: 100%"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg><input aria-label="Search actions" placeholder="Search actions" style="border:0;background:transparent;flex:1;min-width:0;outline:0;color:var(--ink)"><span class="kbd">Ctrl+K</span></label>
+        <div class="stepper" style="padding: 0"><span class="stp done"><b>1</b>Device</span><span class="stp-line"></span><span class="stp on"><b>2</b>Programs</span><span class="stp-line"></span><span class="stp"><b>3</b>Ready</span></div>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

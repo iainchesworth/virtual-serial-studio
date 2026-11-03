@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Information architecture and levels</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="../vss2.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{margin:0} .mn{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px} .mc{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)} .mc h3{margin:0;padding:8px 12px;background:var(--sunken);border-bottom:1px solid var(--line);font-size:13px;font-weight:600} .mi{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 12px;border-bottom:1px solid var(--line);font-size:12.5px;line-height:18px} .mi:last-child{border-bottom:0} .lay{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px} .lay .card{padding:14px 16px} .spec td{font-size:12.5px;line-height:17px}</style>
+</helmet>
+<div class="sheet" style="width: 1280px; height: 1180px">
+  <div class="sheet-h">
+    <div class="grow">
+      <div class="eyebrow">2 Structure and journeys</div>
+      <h1>Information architecture and levels</h1>
+    </div>
+    <p>One menu structure for both levels. Advanced reveals items and panes in place, so a user who grows never has to relearn where things live.</p>
+  </div>
+
+  <div class="sheet-b">
+    <section>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px"><span class="eyebrow">Menu structure</span><span class="tag a">Advanced only</span><span class="tag n">New in this design</span></div>
+      <div class="mn">
+        <div class="mc"><h3>File</h3>
+          <div class="mi"><span>New</span></div>
+          <div class="mi"><span>Open</span></div>
+          <div class="mi"><span>Open recent</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Templates</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Save, Save as</span></div>
+          <div class="mi"><span>Export command</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Diagnostic bundle</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Quit</span></div>
+        </div>
+        <div class="mc"><h3>Edit</h3>
+          <div class="mi"><span>Undo</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Redo</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Rename port</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Remove selected</span></div>
+        </div>
+        <div class="mc"><h3>Ports</h3>
+          <div class="mi"><span>Add port</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Virtual port</span></div>
+          <div class="mi"><span>Linked pair</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Attach real device</span></div>
+          <div class="mi"><span>Network endpoint</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Mock fixture</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Copy path</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Remove port</span></div>
+        </div>
+        <div class="mc"><h3>Topology</h3>
+          <div class="mi"><span>Connect ports</span></div>
+          <div class="mi"><span>Share a device</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Remove link</span></div>
+          <div class="mi"><span>Link wiring</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Owner</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Fit</span><span class="tag a">Adv</span></div>
+        </div>
+        <div class="mc"><h3>Tools</h3>
+          <div class="mi"><span>Search actions</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Setup check</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Benchmark</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Refresh now</span></div>
+          <div class="mi"><span>Settings</span></div>
+        </div>
+        <div class="mc"><h3>View</h3>
+          <div class="mi"><span>Advanced mode</span></div>
+          <div class="mi"><span>Monitor</span></div>
+          <div class="mi"><span>Log</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Topology JSON</span><span class="tag a">Adv</span></div>
+          <div class="mi"><span>Theme</span></div>
+          <div class="mi"><span>Density</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Reset layout</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Show launcher</span><span class="tag n">New</span></div>
+        </div>
+        <div class="mc"><h3>Help</h3>
+          <div class="mi"><span>Help contents</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Why is nothing arriving?</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Keyboard shortcuts</span><span class="tag n">New</span></div>
+          <div class="mi"><span>Copy environment</span></div>
+          <div class="mi"><span>About</span></div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 8px; font-size: 12px">The Scenarios menu retires. Share and bridge move to Topology and Ports, and the null-modem demo becomes a template, so both levels use the same menus.</p>
+    </section>
+
+    <section>
+      <div class="eyebrow" style="margin-bottom: 8px">Three layers</div>
+      <div class="lay">
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Launcher</b><span class="tag s">Basic</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">Four jobs, the readiness strip and recent setups. Shown while the studio is empty, and from View, Show launcher.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Workspace</b><span class="tag s">Intermediate</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">Ports, topology, inspector, send and monitor. Always the same frame once a port exists.</p>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 8px"><b style="font-size: 15px">Power tools</b><span class="tag a">Advanced</span></div>
+          <p style="margin-top: 6px; color: var(--ink2)">Log, topology JSON, link wiring, owner control, fault injection, benchmark, network endpoints and fixtures.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow" style="margin-bottom: 8px">What Advanced adds, in place</div>
+      <div class="card" style="overflow: hidden">
+        <table class="spec">
+          <thead><tr><th style="width: 150px">Area</th><th>Simple</th><th>Advanced adds</th></tr></thead>
+          <tbody>
+            <tr><td><b>Toolbar</b></td><td>New, Open, Save, Add port, Attach device, Connect, Remove</td><td>Mock device, Share, Fit</td></tr>
+            <tr><td><b>Ports</b></td><td>Name, role, state, path with copy</td><td>RX, TX and dropped columns, filter</td></tr>
+            <tr><td><b>Topology</b></td><td>Boxes and lines, click to inspect</td><td>Link bar with arbitration policy and owner controls</td></tr>
+            <tr><td><b>Inspector</b></td><td>State, path, traffic, control lines shown</td><td>Drive DTR and RTS, send Break, open line wiring and faults</td></tr>
+            <tr><td><b>Send</b></td><td>Text or hex, optional CRLF</td><td>Saved sends, repeat</td></tr>
+            <tr><td><b>Monitor</b></td><td>Pause, clear, hex, follow</td><td>Filter, search, export, Log and Topology JSON tabs</td></tr>
+            <tr><td><b>Dialogs</b></td><td>Guided, with defaults and a result sentence</td><td>Editable address and command, extra options</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top: 8px; font-size: 12px">The switch lives in the status bar and in Settings. Ctrl+K lists hidden tools with a prompt to turn Advanced on. Switching never changes anything already built.</p>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
