@@ -13,7 +13,7 @@ Do not ask for screenshots. Everything you need is text: the specs in `docs/gui-
 - Stack: C++23, Boost.Asio, CMake 3.21+ with presets, Qt 6 (GUI only). Build with `cmake --preset debug-gui` or `release-gui` (these fail if Qt is missing). Run tests with `ctest --preset debug-gui`. GUI self-test: `QT_QPA_PLATFORM=offscreen vss_gui --selftest`.
 - Boost.VirtualSerial is a private dependency, so the repo only builds where that checkout is available. If configuration fails, **stop and report**. Do not stub the dependency or remove it.
 - Every first-party source file carries `SPDX-License-Identifier: GPL-3.0-or-later`. Qt is linked dynamically. No other new third-party dependency without an explicit instruction. `Qt6::Svg` is approved.
-- Each change adds one fragment in `changelog.d/`; check with `python tools/changelog.py --check`. Read `CONTRIBUTING.md` and `.githooks` before committing and follow the commit-message rules. Respect `.clang-format` and `.editorconfig`.
+- Each change adds one fragment in `changelog.d/`; check with `python tools/changelog.py --check`. Read `CONTRIBUTING.md` before committing and follow the commit text rules. Respect `.clang-format` and `.editorconfig`.
 - Warnings are errors in CI (`VSS_WARNINGS_AS_ERRORS`). CI builds with GCC, Clang, AppleClang and MSVC. Write portable code.
 - The project has an in-tree test framework (`tests/`, `vss_unit_tests`). Use it, do not add another.
 - `vss::result<T>` is `boost::system::result`. The engine event sink is a `std::function` behind the `vss::EventSink` concept.

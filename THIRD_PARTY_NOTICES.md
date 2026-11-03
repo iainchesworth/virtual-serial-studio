@@ -37,8 +37,6 @@ relicensed by this project:
 | `tools/fetch_boost.py` | BSL-1.0 |
 | `tools/changelog.py` | BSL-1.0 |
 | `tools/test_changelog.py` | BSL-1.0 |
-| `tools/check_commit_message.py` | BSL-1.0 |
-| `tools/test_commit_message.py` | BSL-1.0 |
 | `tools/pty_loopback.py` | BSL-1.0 |
 | `changelog.d/README.md` | BSL-1.0 |
 

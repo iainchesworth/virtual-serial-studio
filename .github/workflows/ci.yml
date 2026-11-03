@@ -12,21 +12,21 @@ permissions:
 
 jobs:
   commits:
-    name: Commit authorship
+    name: Commit text
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+      - uses: iainchesworthlabs/icl-common-infra/actions/checkout-infra@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
 
-      - name: Check authors and messages
-        env:
-          MAINTAINER_EMAIL: iain.chesworth@gmail.com
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Check commit messages
         shell: bash
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -45,8 +45,20 @@ jobs:
           else
             RANGE="HEAD"
           fi
-          python tools/check_commit_message.py --range "$RANGE" \
-            --author-email "$MAINTAINER_EMAIL"
+          python3 .icl-infra/scripts/check_text_policy.py commits "$RANGE"
+
+      - name: Check committed files
+        run: python3 .icl-infra/scripts/check_text_policy.py files
+
+      - name: Check pull request text
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
+          python3 .icl-infra/scripts/check_text_policy.py text \
+            --title "$PR_TITLE" --body-file "$RUNNER_TEMP/pr-body.md"
 
   changelog:
     runs-on: ubuntu-latest
