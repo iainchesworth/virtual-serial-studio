@@ -33,7 +33,8 @@ This page records how Virtual Serial Studio and its library, Boost.VirtualSerial
 | Preprocessor rule | A baseline file records the existing `#if` lines. Platform code moves to `src/platform/` alongside the virtual-port work, and the baseline shrinks to zero. |
 | Dependencies | Boost headers and Tracy through vcpkg in the organisation fork. The library through a vcpkg port in the fork and FetchContent of a release tag; `VSS_VIRTUAL_SERIAL_DIR` stays as the local override. The deploy key, the repository variable and the sibling-folder default go. |
 | Qt | One pinned version in `.github/toolchain-versions.json`: 6.10.3 if the shared Qt setup offers it on all three platforms, otherwise 6.12. |
-| Languages | `en`, `fr`, `es`, `de`, `he`, `yi`, `ja`, `zh_CN` (D3), with right-to-left support (`he`, `yi`) on by default. Arabic is a possible ninth. |
+| Languages | `en`, `fr`, `es`, `de`, `he`, `yi`, `ja`, `zh_CN` (D3) and `ar` as a ninth. Right-to-left support (`he`, `yi`, `ar`) is on by default. Catalogues other than English are drafts until a fluent reader has been through them, and the documentation says so. |
+| Bundle identifier | `com.iainchesworthlabs.virtualserialstudio`. |
 | Releases | Studio: first pre-release `v0.1.0-beta.1`, then release candidates. Library: next pre-release `v0.1.0-beta.2`. The macOS build has not been run on real hardware; the release notes and `docs/platforms.md` say so. |
 | Network job | The studio gets a listening backend in `vss_ports` (Boost.Asio directly). The library is not changed for it. |
 | Disabled capabilities | Faults, benchmark, line matrix, peer open, rename, undo, JSON positions and the network server are built. |
@@ -75,9 +76,7 @@ Organisation side, in this order: settings part 1 (repository settings, security
 
 - TODO(owner): copyright holder name and public contact address for the library's headers and `meta/libraries.json`.
 - TODO(owner): location of the public signing key in the library tree, and its fingerprint for `SECURITY.md`.
-- TODO(owner): the application part of the bundle identifier `com.iainchesworthlabs.<app>` for the studio.
 - TODO(owner): whether the library documentation says anything about the tools used to write it.
-- TODO(owner): whether Arabic is added as a ninth language.
 
 ## Changes to the standard this work raises
 
