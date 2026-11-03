@@ -44,8 +44,9 @@ cmake -S . -B build-tracy `
 
 Rules that apply to every sub-session:
 
-- The maintainer authors and commits every change; no trailers, attribution or
-  tool markers. `.githooks/commit-msg` enforces it.
+- Commit messages and pull request text carry no trailers other than a human
+  `Signed-off-by`, no attribution and no tool markers. The `Commit text` CI
+  job enforces it.
 - Rebase on `develop` before pushing; the shared harness and CI live there.
 - Keep the branch's CI green before asking for a review. Feature branches do
   not run CI on push, so dispatch it explicitly:
