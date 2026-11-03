@@ -227,14 +227,18 @@ TEST_CASE("endpoint: monitor links do not propagate control lines")
 TEST_CASE("endpoint: peer close is graceful")
 {
     auto hub = start_hub();
+
+    // The transport reports end of file as soon as the endpoint starts, so
+    // subscribe first or the stopped event can be published before anyone is
+    // listening.
+    event_recorder recorder;
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
+
     auto transport = std::make_shared<failing_transport>(
         hub->executor(), boost::asio::error::eof);
     auto added = hub->add_endpoint("closing", endpoint_kind::mock,
                                    std::move(transport), test_options());
     REQUIRE(added);
-
-    event_recorder recorder;
-    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     REQUIRE(wait_until(
         [&] { return (*added)->state() == endpoint_state::closed; }, 2000ms));
@@ -376,14 +380,16 @@ TEST_CASE("endpoint: write_sync without a timeout waits for completion")
 TEST_CASE("endpoint: a reset connection is graceful")
 {
     auto hub = start_hub();
+
+    // Subscribe before the endpoint starts; see the peer close test.
+    event_recorder recorder;
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
+
     auto transport = std::make_shared<failing_transport>(
         hub->executor(), boost::asio::error::connection_reset);
     auto added = hub->add_endpoint("reset", endpoint_kind::mock,
                                    std::move(transport), test_options());
     REQUIRE(added);
-
-    event_recorder recorder;
-    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
     REQUIRE(wait_until(
         [&] { return (*added)->state() == endpoint_state::closed; }, 2000ms));
