@@ -6,6 +6,3 @@ unchanged on Windows.
 The sharing system test now asserts fan-out from the shared port instead of
 relying on loopback echo, so it exercises the real behaviour on every
 platform.
-
-CI also skips the jobs that need the private library's deploy key on pull
-requests from forks, and the macOS job is controlled by `ENABLE_MACOS`.

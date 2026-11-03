@@ -9,7 +9,7 @@ redistributing the combined application under GPL-3.0-or-later.
 
 | Component | Version | Licence | How it is used |
 |---|---|---|---|
-| [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial) | 1.0 (local checkout) | Boost Software License 1.0 | Header-only; the serial transport, backends and mock fixture behind every endpoint |
+| [Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial) | v0.1.0-beta.1 | Boost Software License 1.0 | Header-only; the serial transport, backends and mock fixture behind every endpoint |
 | [Boost](https://boost.org) | 1.92 headers | Boost Software License 1.0 | Asio, System, JSON |
 | [Qt](https://qt.io) | 6.10.3 | LGPL-3.0-only OR GPL-3.0-only OR commercial | The GUI; linked dynamically |
 | [Tracy](https://github.com/wolfpld/tracy) | 0.14.1 (vcpkg) | BSD-3-Clause | Optional profiling client, compiled in only with `VSS_TRACY=ON`; the capture and CSV tools are built from source in CI |
