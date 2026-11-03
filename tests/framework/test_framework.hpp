@@ -124,11 +124,32 @@ inline std::string to_text(const std::exception& value)
     throw failure(out.str());
 }
 
+/// True for the integer types std::cmp_equal accepts: not bool, not a
+/// character type.
+template <class T>
+inline constexpr bool is_comparable_integer_v =
+    std::is_integral_v<T> && !std::is_same_v<T, bool> &&
+    !std::is_same_v<T, char> && !std::is_same_v<T, wchar_t> &&
+    !std::is_same_v<T, char8_t> && !std::is_same_v<T, char16_t> &&
+    !std::is_same_v<T, char32_t>;
+
+/// Equality that is safe between signed and unsigned integers, so a test can
+/// compare an identifier with a literal without a sign conversion warning.
+template <class Left, class Right>
+constexpr bool values_equal(const Left& left, const Right& right)
+{
+    if constexpr (is_comparable_integer_v<Left> &&
+                  is_comparable_integer_v<Right>)
+        return std::cmp_equal(left, right);
+    else
+        return left == right;
+}
+
 template <class Left, class Right>
 void check_equal(const Left& left, const Right& right, const char* left_text,
                  const char* right_text, const char* file, int line)
 {
-    if (left == right)
+    if (values_equal(left, right))
         return;
 
     std::ostringstream out;
@@ -143,7 +164,7 @@ void check_not_equal(const Left& left, const Right& right,
                      const char* left_text, const char* right_text,
                      const char* file, int line)
 {
-    if (!(left == right))
+    if (!values_equal(left, right))
         return;
 
     std::ostringstream out;

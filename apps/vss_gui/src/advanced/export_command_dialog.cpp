@@ -24,16 +24,6 @@
 
 namespace vss::gui
 {
-namespace
-{
-
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("ExportCommand", text);
-}
-
-} // namespace
-
 ExportCommandDialog::ExportCommandDialog(StudioBackend& backend,
                                          const QString& document_path,
                                          QWidget* parent)

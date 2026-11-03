@@ -196,9 +196,6 @@ void ShellWindow::build_actions()
         registry_.add({id, text, keywords, icon, shortcut, level, checkable,
                        std::move(handler), std::move(enabled), palette});
     };
-    const auto later = [this](const QString& what)
-    { return [this, what] { placeholder(what); }; };
-
     // File
     add(QStringLiteral("file.new"), QStringLiteral("New"),
         QStringLiteral("new document setup"), QStringLiteral("new-file"),

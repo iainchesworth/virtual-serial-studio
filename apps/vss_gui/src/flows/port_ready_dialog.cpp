@@ -108,10 +108,10 @@ PortReadyDialog::PortReadyDialog(StudioBackend& backend, vss::endpoint_id port,
     connect(&backend_, &StudioBackend::ports_changed, this,
             [this]
             {
-                const auto view = backend_.port(port_id_);
-                if (view)
+                const auto current = backend_.port(port_id_);
+                if (current)
                 {
-                    port_ = *view;
+                    port_ = *current;
                     refresh_peer();
                 }
             });

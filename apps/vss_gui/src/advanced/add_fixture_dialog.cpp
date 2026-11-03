@@ -25,16 +25,6 @@
 
 namespace vss::gui
 {
-namespace
-{
-
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("AddFixture", text);
-}
-
-} // namespace
-
 AddFixtureDialog::AddFixtureDialog(StudioBackend& backend,
                                    vss::endpoint_id selected_port,
                                    QWidget* parent)

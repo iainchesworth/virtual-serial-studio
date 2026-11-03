@@ -22,7 +22,6 @@
 #include <QStyleHints>
 
 #include <algorithm>
-#include <cmath>
 #include <stdexcept>
 #include <utility>
 
@@ -79,13 +78,6 @@ void flatten_layout(const QString& prefix, const QJsonObject& object,
             integers.insert(key, value.toInt());
         }
     }
-}
-
-double channel(double value)
-{
-    value /= 255.0;
-    return value <= 0.03928 ? value / 12.92
-                            : std::pow((value + 0.055) / 1.055, 2.4);
 }
 
 } // namespace
