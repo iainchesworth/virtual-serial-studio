@@ -44,6 +44,31 @@ gates pass.
   the fake backend; setup-check chip click-through and the 200 percent
   accessibility walk belong to WP9.
 
+## Integration review (G3)
+
+- WP9 is merged at `7a828ab Merge WP9: accessibility and QA` (branch commit
+  `f303ce4`). The legacy flat GUI files are gone; `vss_gui` builds only
+  `main.cpp`, the redesigned libraries and the accessibility walk.
+- Debug: `ctest --preset debug-gui` 14/14, including `gui_selftest` and
+  `gui_selftest_200` (the latter with `QT_SCALE_FACTOR=2;QT_FONT_DPI=192`).
+  `vss_gui --selftest` prints `selftest ok`; the walk builds the main window and
+  24 dialog states (22 dialog classes, Share at three steps).
+- Release: `ctest --test-dir build/release-gui` 15/15 including
+  `gui_selftest_200` and `perf_smoke`; Release `--selftest` ok.
+- `VSS_WARNINGS_AS_ERRORS=ON` Debug build clean. Contrast `FAILURES: 0`; QSS
+  renders both themes; changelog check ok; clang-format clean on the changed
+  sources.
+- Review PNGs (never committed): 52 images in `build/gui-shots/` — main window
+  light/dark/compact light/compact dark plus every dialog light and dark. The
+  `VSS_QA_SHOTS` walk produces the dialog set; the four main-window files come
+  from the existing `--screenshot` path so they show the populated workspace.
+- Residual limits, all in `design-deviations.md`: the network server, peer-open,
+  fault injection, editable line matrix and benchmark extraction stay
+  capability-gated; real-device templates need a device picker; Log and
+  Topology JSON are Advanced docks; real com0com/elevation and hardware were
+  not exercised. Undo/redo remains visibly disabled.
+- `develop` is untouched; the final merge waits for G3 approval.
+
 ## WP0 detail
 
 - Installed the bundle at `docs/gui-design/` (98 files; `agents/`, the bundle
