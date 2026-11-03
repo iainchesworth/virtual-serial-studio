@@ -43,12 +43,6 @@ namespace vss::gui
 namespace
 {
 
-QFont semibold(QFont font)
-{
-    font.setWeight(QFont::DemiBold);
-    return font;
-}
-
 QString kind_name(vss::event_kind kind)
 {
     switch (kind)

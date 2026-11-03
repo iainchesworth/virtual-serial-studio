@@ -32,11 +32,6 @@ namespace vss::gui
 namespace
 {
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("LineMatrix", text);
-}
-
 constexpr int kRows = 2;
 constexpr int kColumns = 4;
 

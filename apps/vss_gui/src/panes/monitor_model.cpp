@@ -180,13 +180,13 @@ int MonitorModel::columnCount(const QModelIndex& parent) const
     return parent.isValid() ? 0 : 5;
 }
 
-QVariant MonitorModel::data(const QModelIndex& index, int role) const
+QVariant MonitorModel::data(const QModelIndex& index, int item_role) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= rowCount())
         return {};
     const traffic_row& row =
         rows_[static_cast<std::size_t>(visible_[index.row()])];
-    switch (role)
+    switch (item_role)
     {
     case Qt::DisplayRole:
         switch (index.column())
@@ -254,10 +254,11 @@ QVariant MonitorModel::data(const QModelIndex& index, int role) const
 }
 
 QVariant MonitorModel::headerData(int section, Qt::Orientation orientation,
-                                  int role) const
+                                  int item_role) const
 {
-    if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
-        return QAbstractTableModel::headerData(section, orientation, role);
+    if (orientation != Qt::Horizontal || item_role != Qt::DisplayRole)
+        return QAbstractTableModel::headerData(section, orientation,
+                                               item_role);
     switch (section)
     {
     case 0:

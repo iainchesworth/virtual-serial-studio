@@ -20,16 +20,6 @@
 
 namespace vss::gui
 {
-namespace
-{
-
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("CommandPanel", text);
-}
-
-} // namespace
-
 CommandPanel::CommandPanel(const QString& heading, QWidget* parent)
     : QWidget(parent)
 {

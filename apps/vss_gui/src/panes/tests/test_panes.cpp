@@ -110,7 +110,7 @@ TEST_CASE("ports: state words, role text and filtering")
 
     model.set_filter(QStringLiteral("COM3"));
     REQUIRE_EQ(model.rowCount(), 1);
-    REQUIRE_EQ(model.port_id(0), 2);
+    REQUIRE_EQ(model.port_id(0), vss::endpoint_id{2});
     REQUIRE_EQ(model.row_for_id(2), 0);
     model.set_filter(QStringLiteral("nope"));
     REQUIRE_EQ(model.rowCount(), 0);

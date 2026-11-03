@@ -228,9 +228,6 @@ void InspectorPanel::build()
     auto* simple_grid = new QGridLayout(simple_lines_);
     simple_grid->setContentsMargins(0, 0, 0, 0);
     simple_grid->setSpacing(6);
-    const std::array<vss::control_line, 6> lines = {
-        vss::control_line::dtr, vss::control_line::rts, vss::control_line::cts,
-        vss::control_line::dsr, vss::control_line::dcd, vss::control_line::ri};
     for (int index = 0; index < static_cast<int>(line_chips_.size()); ++index)
     {
         auto* chip = new StatusChip(simple_lines_);
@@ -260,9 +257,6 @@ void InspectorPanel::build()
     auto* input_grid = new QGridLayout();
     input_grid->setContentsMargins(0, 0, 0, 0);
     input_grid->setSpacing(6);
-    const std::array<vss::control_line, 4> inputs = {
-        vss::control_line::cts, vss::control_line::dsr, vss::control_line::dcd,
-        vss::control_line::ri};
     for (int index = 0; index < static_cast<int>(input_chips_.size()); ++index)
     {
         auto* chip = new StatusChip(advanced_lines_);
