@@ -41,11 +41,6 @@ namespace vss::gui
 namespace
 {
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("TopologyJson", text);
-}
-
 class LineNumberArea final : public QWidget
 {
 public:
