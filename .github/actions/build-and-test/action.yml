@@ -17,7 +17,6 @@ runs:
         cmake -S . -B build \
           -DCMAKE_BUILD_TYPE=Release \
           -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-          -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
           -DVSS_BUILD_GUI=OFF \
           -DVSS_BUILD_TOOLS=ON \
           -DVSS_BUILD_TESTS=ON \

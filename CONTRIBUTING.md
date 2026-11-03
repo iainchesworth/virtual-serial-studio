@@ -4,15 +4,15 @@
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
-  -DVSS_BOOST_ROOT=/path/to/boost \
-  -DVSS_VIRTUAL_SERIAL_DIR=/path/to/boostasio-virtualserial
+  -DVSS_BOOST_ROOT=/path/to/boost
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
 Boost.VirtualSerial is consumed as a custom library, not as a Boost release.
-Point `VSS_VIRTUAL_SERIAL_DIR` at a checkout; the sibling directory is used
-automatically when it exists.
+CMake fetches a release tag from its public repository. To build against a local
+checkout, set `VSS_VIRTUAL_SERIAL_DIR`, for example in a
+`CMakeUserPresets.json`, which Git ignores.
 
 ## Before opening a pull request
 

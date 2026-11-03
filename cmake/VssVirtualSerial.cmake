@@ -7,12 +7,12 @@
 #
 #   1. an already defined Boost::virtual_serial target (superproject build)
 #   2. VSS_VIRTUAL_SERIAL_DIR, a checkout of the library
-#   3. the sibling checkout "../boostasio-virtualserial", if present
-#   4. FetchContent, when VSS_FETCH_VIRTUAL_SERIAL is ON
-#   5. find_package(boost_virtual_serial CONFIG)
+#   3. FetchContent of a release tag from the public repository, unless
+#      VSS_FETCH_VIRTUAL_SERIAL is OFF (it is ON by default)
+#   4. find_package(boost_virtual_serial CONFIG)
 #
-# The same lookup order applies to the Boost headers themselves, with the
-# cache inside the sibling checkout as a convenient default.
+# To build against a local checkout, set VSS_VIRTUAL_SERIAL_DIR, for example
+# in a CMakeUserPresets.json, which Git ignores.
 
 include_guard(GLOBAL)
 
@@ -21,21 +21,12 @@ set(VSS_BOOST_ROOT "" CACHE PATH
 set(VSS_VIRTUAL_SERIAL_DIR "" CACHE PATH
   "Path to a Boost.VirtualSerial checkout (the directory containing include/boost/virtual_serial.hpp)")
 option(VSS_FETCH_VIRTUAL_SERIAL
-  "Fetch Boost.VirtualSerial from git when no local checkout is configured" OFF)
-set(VSS_VIRTUAL_SERIAL_GIT_REPO "" CACHE STRING
+  "Fetch Boost.VirtualSerial from git when no local checkout is configured" ON)
+set(VSS_VIRTUAL_SERIAL_GIT_REPO
+  "https://github.com/iainchesworthlabs/virtual-serial.git" CACHE STRING
   "Git repository used by VSS_FETCH_VIRTUAL_SERIAL")
-set(VSS_VIRTUAL_SERIAL_GIT_TAG "main" CACHE STRING
+set(VSS_VIRTUAL_SERIAL_GIT_TAG "v0.1.0-beta.1" CACHE STRING
   "Git tag or branch used by VSS_FETCH_VIRTUAL_SERIAL")
-
-if(NOT VSS_VIRTUAL_SERIAL_DIR)
-  get_filename_component(_vss_sibling
-    "${CMAKE_CURRENT_SOURCE_DIR}/../boostasio-virtualserial" ABSOLUTE)
-  if(EXISTS "${_vss_sibling}/include/boost/virtual_serial.hpp")
-    set(VSS_VIRTUAL_SERIAL_DIR "${_vss_sibling}")
-    message(STATUS
-      "Vss: using the sibling Boost.VirtualSerial checkout at ${VSS_VIRTUAL_SERIAL_DIR}")
-  endif()
-endif()
 
 # ---------------------------------------------------------------------------
 # Boost headers
@@ -92,19 +83,29 @@ elseif(VSS_VIRTUAL_SERIAL_DIR
     INTERFACE_INCLUDE_DIRECTORIES "${VSS_VIRTUAL_SERIAL_DIR}/include"
     INTERFACE_LINK_LIBRARIES "${VSS_BOOST_TARGET}"
     INTERFACE_COMPILE_FEATURES cxx_std_14)
+elseif(VSS_VIRTUAL_SERIAL_DIR)
+  message(FATAL_ERROR
+    "VSS_VIRTUAL_SERIAL_DIR is set to '${VSS_VIRTUAL_SERIAL_DIR}', which does "
+    "not contain include/boost/virtual_serial.hpp.")
 elseif(VSS_FETCH_VIRTUAL_SERIAL)
   include(FetchContent)
-  if(NOT VSS_VIRTUAL_SERIAL_GIT_REPO)
-    set(VSS_VIRTUAL_SERIAL_GIT_REPO
-      "https://github.com/boostorg/virtual_serial.git")
-  endif()
+  # SOURCE_SUBDIR names a directory that does not exist, so the library is
+  # downloaded but its own build is not added: only its headers are used.
   FetchContent_Declare(boost_virtual_serial
     GIT_REPOSITORY "${VSS_VIRTUAL_SERIAL_GIT_REPO}"
     GIT_TAG "${VSS_VIRTUAL_SERIAL_GIT_TAG}"
-    GIT_SHALLOW TRUE)
+    GIT_SHALLOW TRUE
+    SOURCE_SUBDIR vss-headers-only)
   FetchContent_MakeAvailable(boost_virtual_serial)
-  add_library(Vss::VirtualSerial ALIAS boost_virtual_serial)
-  message(STATUS "Vss: fetched Boost.VirtualSerial from ${VSS_VIRTUAL_SERIAL_GIT_REPO}")
+  FetchContent_GetProperties(boost_virtual_serial)
+  set(VSS_VIRTUAL_SERIAL_DIR "${boost_virtual_serial_SOURCE_DIR}")
+  add_library(Vss::VirtualSerial INTERFACE IMPORTED GLOBAL)
+  set_target_properties(Vss::VirtualSerial PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${VSS_VIRTUAL_SERIAL_DIR}/include"
+    INTERFACE_LINK_LIBRARIES "${VSS_BOOST_TARGET}"
+    INTERFACE_COMPILE_FEATURES cxx_std_14)
+  message(STATUS "Vss: fetched Boost.VirtualSerial ${VSS_VIRTUAL_SERIAL_GIT_TAG} "
+    "from ${VSS_VIRTUAL_SERIAL_GIT_REPO}")
 else()
   find_package(boost_virtual_serial CONFIG QUIET)
   if(TARGET Boost::virtual_serial)
@@ -113,8 +114,8 @@ else()
     message(FATAL_ERROR
       "Boost.VirtualSerial was not found.\n"
       "  Set VSS_VIRTUAL_SERIAL_DIR to a checkout of the library, for example\n"
-      "    -DVSS_VIRTUAL_SERIAL_DIR=C:/Repos/boostasio-virtualserial\n"
-      "  or configure with -DVSS_FETCH_VIRTUAL_SERIAL=ON to clone it.")
+      "    -DVSS_VIRTUAL_SERIAL_DIR=/path/to/virtual-serial\n"
+      "  or configure with -DVSS_FETCH_VIRTUAL_SERIAL=ON to fetch a release.")
   endif()
 endif()
 

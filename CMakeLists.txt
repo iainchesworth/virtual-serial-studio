@@ -23,7 +23,7 @@ project(
   virtual_serial_studio
   VERSION 0.1.0
   DESCRIPTION "Playground for real, virtual and networked serial ports"
-  HOMEPAGE_URL "https://github.com/boostorg/virtual_serial"
+  HOMEPAGE_URL "https://github.com/iainchesworthlabs/virtual-serial-studio"
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

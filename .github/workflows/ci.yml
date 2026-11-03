@@ -10,12 +10,6 @@ on:
 permissions:
   contents: read
 
-env:
-  # The library is private; CI reaches it through a read-only deploy key
-  # stored as VIRTUAL_SERIAL_DEPLOY_KEY. Override the URL with a repository
-  # variable if the library ever moves or goes public.
-  VIRTUAL_SERIAL_REPO: ${{ vars.VIRTUAL_SERIAL_REPO || 'git@github.com:iainchesworth/virtual_serial.git' }}
-
 jobs:
   commits:
     name: Commit authorship
@@ -90,41 +84,25 @@ jobs:
             name: windows-msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
-    # A fork pull request cannot see the deploy key for the private library;
-    # run builds for branches in this repository only.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
       - uses: ./.github/actions/build-and-test
 
-  # macOS runners are free for public repositories and cost paid minutes on a
-  # private one; the ENABLE_MACOS repository variable controls the job.
   macos:
     runs-on: macos-latest
     name: Build and test (macos-appleclang)
-    if: ${{ vars.ENABLE_MACOS == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
       - uses: ./.github/actions/build-and-test
   gui:
     runs-on: ubuntu-24.04
     name: Qt GUI (offscreen self-test)
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -139,7 +117,6 @@ jobs:
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial" \
             -DVSS_BUILD_GUI=ON \
             -DVSS_WARNINGS_AS_ERRORS=ON
 
@@ -152,14 +129,10 @@ jobs:
   coverage:
     runs-on: ubuntu-24.04
     name: Coverage (90% statements, 80% branches)
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
 
       - name: Install LLVM
         run: |
@@ -173,8 +146,7 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++ \
             -DVSS_COVERAGE=ON \
             -DVSS_BUILD_GUI=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
 
       - name: Build
         run: cmake --build build-cov
@@ -213,14 +185,10 @@ jobs:
   performance:
     runs-on: ubuntu-24.04
     name: Performance floors
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
 
       - name: Configure
         run: |
@@ -228,8 +196,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DVSS_BUILD_PERF=ON \
             -DVSS_BUILD_GUI=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
 
       - name: Build
         run: cmake --build build
@@ -251,14 +218,10 @@ jobs:
   profiling:
     runs-on: ubuntu-24.04
     name: End-to-end profiling (Tracy)
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/prepare-deps
-        with:
-          library-key: ${{ secrets.VIRTUAL_SERIAL_DEPLOY_KEY }}
-          library-repo: ${{ env.VIRTUAL_SERIAL_REPO }}
 
       - name: Set up vcpkg
         run: |
@@ -290,8 +253,7 @@ jobs:
             -DVSS_BUILD_GUI=OFF \
             -DVSS_BUILD_TESTS=OFF \
             -DVSS_BUILD_TOOLS=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_VIRTUAL_SERIAL_DIR="$PWD/.cache/virtual_serial"
+            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
 
       - name: Build
         run: cmake --build build-tracy --target vss_perf --parallel

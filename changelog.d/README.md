@@ -60,7 +60,7 @@ python tools/changelog.py --release 1.1.0    # cut a dated release
 in the changelog, writes the version heading and date, moves the entries under
 it, empties `[Unreleased]`, and refreshes the link references at the bottom of
 `CHANGELOG.md`. The repository URL defaults to
-`https://github.com/boostorg/virtual_serial` and can be overridden with
+`https://github.com/iainchesworthlabs/virtual-serial-studio` and can be overridden with
 `--repo-url`.
 
 The same rules are enforced by the `Changelog fragments` CI job, which also

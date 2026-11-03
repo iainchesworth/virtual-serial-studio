@@ -7,8 +7,8 @@ as you like. It splits a device across several virtual ports, merges several
 publishers into one, redirects traffic, bridges a COM port to TCP, RFC 2217 or
 UDP, drives the modem control lines, and records everything it sees. It is
 built on [Boost.Asio](https://boost.org/libs/asio) and on
-[Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial), the drop-in serial stream
-abstraction that puts the transport behind a seam.
+[Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial), the drop-in serial stream
+abstraction that makes the transport replaceable.
 
 ![Virtual Serial Studio](docs/images/studio.png)
 
@@ -39,19 +39,13 @@ abstraction that puts the transport behind a seam.
 
 ## Building
 
-Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers, and a
-checkout of [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial).
+Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers and git.
+CMake fetches [Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial) at a release tag.
 Qt 6 is optional and only needed for the GUI. CMake looks for it through
 Qt's own config package first, then auto-detects a prebuilt Qt in `QT_ROOT`,
 `C:/Qt`, `C:/Repos/common/qt`, `~/Qt`, `/opt/Qt` and `/usr/local/Qt`. The
 `*-gui` presets make a missing Qt an error instead of silently building the
 CLI alone.
-
-> **Dependency status.** Boost.VirtualSerial is still developed in a private
-> repository, so this one currently builds only where that checkout is
-> available. CI reaches it through a read-only deploy key. Everything here is
-> laid out as a normal dependency, so once the library is published the
-> application builds with no changes.
 
 ```bash
 # Boost headers, if you do not already have them
@@ -60,7 +54,6 @@ python tools/fetch_boost.py --dest .cache/boost-root
 cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-  -DVSS_VIRTUAL_SERIAL_DIR=/path/to/boostasio-virtualserial \
   -DCMAKE_PREFIX_PATH=/path/to/Qt/6.10.3/msvc2022_64   # optional; Qt is auto-detected
 
 cmake --build build
@@ -68,9 +61,11 @@ ctest --test-dir build --output-on-failure
 ```
 
 On Windows, run the configure and build from a Visual Studio developer prompt
-(`vcvars64.bat`) so CMake can find `cl.exe`. The sibling checkout is picked up
-automatically when it is named `boostasio-virtualserial` next to this
-repository, and its `.cache/boost-root` is used for Boost.
+(`vcvars64.bat`) so CMake can find `cl.exe`. To build against a local checkout
+of the library, set `VSS_VIRTUAL_SERIAL_DIR` to it, for example in a
+`CMakeUserPresets.json` (Git ignores that file). `VSS_FETCH_VIRTUAL_SERIAL`,
+`VSS_VIRTUAL_SERIAL_GIT_REPO` and `VSS_VIRTUAL_SERIAL_GIT_TAG` control the
+fetched release.
 
 Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 `VSS_BUILD_TOOLS`, `VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`,
@@ -367,9 +362,6 @@ performance floors, captures a Tracy profile of the end-to-end path, and
 validates every changelog fragment. Boost is fetched by
 `tools/fetch_boost.py`, so no job depends on a system Boost. Development lands on `develop` (the trunk and default branch); `main` is the release branch and only receives merges from `develop` when a release is cut.
 
-Set the `VIRTUAL_SERIAL_REPO` repository variable once Boost.VirtualSerial is
-published; until then the workflows clone it from the default URL.
-
 ## Changelog
 
 Every change lands as one fragment in [`changelog.d/`](changelog.d/README.md):
@@ -440,7 +432,7 @@ GPL-3.0-or-later` tag.
 
 The dependencies keep their own terms, all compatible with the GPL:
 
-* [Boost.VirtualSerial](https://github.com/iainchesworth/virtual_serial) and Boost itself are
+* [Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial) and Boost itself are
   **BSL-1.0**; BSL-1.0 is a permissive licence that can be combined with GPLv3.
 * Qt 6 is **LGPL-3.0 / GPL-3.0 / commercial**; the GUI links it dynamically.
 * `com0com` is an optional, separately installed Windows driver, invoked rather
