@@ -1,0 +1,17 @@
+{
+  "description": "Virtual Serial Studio: a Qt 6 and Boost.Asio playground for real, virtual and networked serial ports. Split, share, join, redirect and bridge COM/tty ports with control-line emulation, JSON topologies and a live monitor.",
+  "topics": [
+    "boost-asio",
+    "com0com",
+    "cpp23",
+    "linux",
+    "macos",
+    "qt6",
+    "rfc2217",
+    "serial-port",
+    "serial-testing",
+    "tcp-bridge",
+    "virtual-serial-port",
+    "windows"
+  ]
+}
