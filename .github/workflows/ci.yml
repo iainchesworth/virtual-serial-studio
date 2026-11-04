@@ -215,9 +215,10 @@ jobs:
       - name: Create a serial pair for the system tests
         shell: bash
         run: |
+          : > pty.txt
           python3 tools/pty_loopback.py > pty.txt &
-          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25; do
-            [ -s pty.txt ] && break
+          for i in $(seq 1 100); do
+            [ "$(wc -l < pty.txt)" -ge 2 ] && break
             sleep 0.2
           done
           A=$(sed -n 1p pty.txt)
@@ -343,9 +344,10 @@ jobs:
 
       - name: Create a serial pair for the terminal path
         run: |
+          : > pty.txt
           python3 tools/pty_loopback.py > pty.txt &
-          for i in $(seq 1 25); do
-            [ -s pty.txt ] && break
+          for i in $(seq 1 100); do
+            [ "$(wc -l < pty.txt)" -ge 2 ] && break
             sleep 0.2
           done
           A=$(sed -n 1p pty.txt)
