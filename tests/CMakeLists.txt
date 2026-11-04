@@ -16,6 +16,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_native_and_com0com.cpp
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
+  unit/test_stable_link.cpp
   unit/test_studio.cpp
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)
@@ -52,11 +53,23 @@ add_test(NAME system COMMAND vss_system_tests
   --verbose --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
 set_tests_properties(system PROPERTIES TIMEOUT 600)
 
+add_subdirectory(fuzz)
+
 # A packaging smoke test: the public headers compile on their own.
 add_executable(vss_header_selftest compile/header_selftest.cpp)
 target_link_libraries(vss_header_selftest PRIVATE vss_studio vss_testkit)
 vss_set_warnings(vss_header_selftest)
 add_test(NAME headers COMMAND vss_header_selftest)
+
+# The VM harness is checked against a stand-in for vmrun, so no VM is needed.
+# PowerShell 7 is on every hosted runner and optional elsewhere.
+find_program(VSS_PWSH NAMES pwsh)
+if(VSS_PWSH)
+  add_test(NAME vm_harness
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-vmrun.ps1)
+  set_tests_properties(vm_harness PROPERTIES TIMEOUT 120)
+endif()
 
 if(TARGET vss_gui)
   # The offscreen plugin needs an explicit font directory on Windows; the

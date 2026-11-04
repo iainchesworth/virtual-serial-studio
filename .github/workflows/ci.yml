@@ -415,6 +415,41 @@ jobs:
         with:
           preset: linux-asan-ubsan
 
+  # Builds the libFuzzer targets and replays the seed corpus and the regression inputs under AddressSanitizer
+  # and UBSan. The fuzz workflow does the fuzzing itself, on pushes to develop and at night.
+  fuzz-regress:
+    runs-on: ubuntu-26.04
+    name: Fuzz regression replay
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Configure
+        run: cmake --preset linux-fuzz
+
+      - name: Build
+        run: cmake --build --preset linux-fuzz
+
+      - name: Replay
+        run: python3 tools/fuzz.py --mode regress
+
+      - name: Test the runner
+        run: python3 -m unittest discover -s tools -p "test_fuzz.py" -v
+
   # Threading findings come from timing, so this leg runs for merge-queue entries and pushes, not for every pull request.
   tsan:
     runs-on: ubuntu-26.04
@@ -504,7 +539,7 @@ jobs:
   ci-status:
     name: CI Status
     if: always()
-    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, tsan, driver, zizmor, dependency-scan]
+    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, fuzz-regress, tsan, driver, zizmor, dependency-scan]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -523,6 +558,7 @@ jobs:
               "performance": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "profiling": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "asan-ubsan": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "fuzz-regress": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "tsan": ${{ needs.plan.outputs.build == 'true' && github.event_name != 'pull_request' }},
               "driver": ${{ needs.plan.outputs.driver == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "dependency-scan": ${{ github.event_name != 'push' }}

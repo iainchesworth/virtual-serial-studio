@@ -71,7 +71,7 @@ fetched release.
 
 Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 `VSS_BUILD_TOOLS`, `VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`,
-`VSS_INSTALL`.
+`VSS_INSTALL`, `ICL_ENABLE_FUZZING`.
 
 `CMakePresets.json` provides:
 
@@ -81,6 +81,7 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | the same names with `-gui` | The same plus the GUI; **fails** if Qt is missing |
 | `linux-coverage`, `macos-coverage`, `windows-llvm-coverage` | Instrumented libraries (Clang, LLVM profiles), no GUI |
 | `linux-asan-ubsan`, `linux-tsan` | Clang with AddressSanitizer and UBSan, or ThreadSanitizer, at -O1 (`ICL_SANITIZERS`); no GUI |
+| `linux-fuzz` | The libFuzzer targets with AddressSanitizer and UBSan at -O1 (Clang); see [`docs/fuzzing.md`](docs/fuzzing.md) |
 | `linux-tracy`, `windows-msvc-tracy` | Performance suite with Tracy, no GUI; needs `VCPKG_ROOT` |
 
 A preset only exists on the operating system it names. Each builds in `build/<preset>`. The compiler is the one in `CC` and `CXX`, or the platform default.
