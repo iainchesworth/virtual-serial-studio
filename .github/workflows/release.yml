@@ -1,0 +1,180 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Release
+
+# A tag v* pushed from develop builds the packages for each platform, signs the
+# Windows ones as the SIGN_WINDOWS repository variable says, and hands them to the
+# shared publish workflow, which checks the tag, signs, attests and publishes
+# (docs/releasing.md). Without a tag the same packages are built and kept as workflow
+# artifacts and nothing is published: by hand (`gh workflow run release.yml`), every
+# Monday so the install rules cannot rot unseen, and on a pull request that changes
+# this workflow.
+
+on:
+  push:
+    tags: ["v*"]
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+  pull_request:
+    branches: [develop]
+    paths:
+      - ".github/workflows/release.yml"
+      - "tools/check_release_version.py"
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  version:
+    name: Check the version
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Compare the tag with the project version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: python3 tools/check_release_version.py "$TAG"
+      - name: Work out the version
+        id: tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" == *-* ]]; then echo "prerelease=true" >> "$GITHUB_OUTPUT"; else echo "prerelease=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Check the release has notes
+        uses: iainchesworthlabs/icl-common-infra/actions/release-notes@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          version: ${{ steps.tag.outputs.version }}
+          prerelease: ${{ steps.tag.outputs.prerelease }}
+          output-file: ${{ runner.temp }}/notes.md
+
+  package:
+    name: Package (${{ matrix.name }})
+    needs: version
+    if: ${{ !cancelled() && (needs.version.result == 'success' || needs.version.result == 'skipped') }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - {name: linux-x86_64, runner: ubuntu-26.04, preset: linux-release-gui, compiler: gcc}
+          - {name: macos-arm64, runner: macos-26, preset: macos-release-gui, compiler: none}
+          - {name: windows-x86_64, runner: windows-2025, preset: windows-msvc-release-gui, compiler: msvc}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: ${{ matrix.compiler }}
+          qt: "true"
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Configure, build and install
+        shell: bash
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: |
+          set -euo pipefail
+          cmake --preset "$PRESET"
+          cmake --build --preset "$PRESET"
+          cmake --install "build/$PRESET" --component runtime --prefix stage
+
+      # Both programs run from the installed tree. The command line tool checks the wiring with no hardware. The GUI
+      # needs a display to start, which a hosted Linux runner does not have, so there the check is that every library
+      # it is linked to is found in the package.
+      - name: Run the installed programs
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$RUNNER_OS" in
+            Windows)
+              stage/bin/vss_cli.exe selftest
+              stage/bin/vss_gui.exe --version
+              ;;
+            macOS)
+              stage/bin/vss_cli selftest
+              stage/vss_gui.app/Contents/MacOS/vss_gui --version
+              ;;
+            *)
+              stage/bin/vss_cli selftest
+              if env -u LD_LIBRARY_PATH ldd stage/bin/vss_gui | grep "not found"; then
+                echo "vss_gui needs a library the package does not hold" >&2
+                exit 1
+              fi
+              ;;
+          esac
+
+      - name: Check the glibc the package needs
+        if: runner.os == 'Linux'
+        uses: iainchesworthlabs/icl-common-infra/actions/check-glibc-floor@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          folder: stage
+
+      - name: Sign the Windows binaries
+        id: sign
+        if: runner.os == 'Windows'
+        uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          mode: ${{ vars.SIGN_WINDOWS || 'false' }}
+          files: |
+            stage/bin/vss_gui.exe
+            stage/bin/vss_cli.exe
+          rename: "false"
+          pfx-base64: ${{ secrets.WIN_TESTSIGN_PFX_BASE64 }}
+          pfx-password: ${{ secrets.WIN_TESTSIGN_PFX_PASSWORD }}
+
+      - name: Archive
+        shell: bash
+        env:
+          NAME: virtual-serial-studio-${{ github.ref_type == 'tag' && github.ref_name || 'dry-run' }}-${{ matrix.name }}${{ steps.sign.outputs.suffix }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            7z a "dist/$NAME.zip" ./stage/*
+          else
+            tar -C stage -czf "dist/$NAME.tar.gz" .
+          fi
+
+      - name: Upload
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ matrix.name }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    name: Publish
+    needs: package
+    if: ${{ !cancelled() && github.ref_type == 'tag' && needs.package.result == 'success' }}
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    uses: iainchesworthlabs/icl-common-infra/.github/workflows/release-publish.yml@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+    secrets:
+      REPO_GPG_PRIVATE_KEY: ${{ secrets.REPO_GPG_PRIVATE_KEY }}
+      REPO_GPG_PASSPHRASE: ${{ secrets.REPO_GPG_PASSPHRASE }}
+      RELEASE_BOT_APP_ID: ${{ secrets.RELEASE_BOT_APP_ID }}
+      RELEASE_BOT_PRIVATE_KEY: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
