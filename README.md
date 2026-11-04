@@ -40,6 +40,8 @@ abstraction that makes the transport replaceable.
 ## Building
 
 Requirements: CMake 3.21+, a **C++23** compiler, Boost 1.74+ headers and git.
+CI builds with the versions pinned in `.github/toolchain-versions.json`: GCC 16,
+Clang 23, MSVC 19.51 and Qt 6.12.
 CMake fetches [Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial) at a release tag.
 Qt 6 is optional and only needed for the GUI. CMake looks for it through
 Qt's own config package first, then auto-detects a prebuilt Qt in `QT_ROOT`,

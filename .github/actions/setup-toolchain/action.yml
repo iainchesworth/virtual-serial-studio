@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Set up the toolchain
+description: >
+  Install the compiler, CMake and (optionally) Qt at the versions pinned in
+  .github/toolchain-versions.json. Run it after the checkout.
+
+inputs:
+  compiler:
+    description: gcc, clang, msvc or none (the runner's own compiler, as on macOS).
+    default: none
+  qt:
+    description: true to install the pinned Qt kit.
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up GCC
+      if: inputs.compiler == 'gcc' || inputs.compiler == 'clang'
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-gcc@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      with:
+        export-compiler: ${{ inputs.compiler == 'gcc' && 'true' || 'false' }}
+
+    - name: Set up Clang
+      if: inputs.compiler == 'clang'
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-llvm@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+
+    - name: Set up MSVC
+      if: inputs.compiler == 'msvc'
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-msvc-env@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+
+    - name: Set up CMake
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-cmake@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+
+    - name: Set up Qt
+      if: inputs.qt == 'true'
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-qt@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19

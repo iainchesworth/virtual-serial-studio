@@ -88,38 +88,46 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
             name: linux-gcc
-          - os: ubuntu-24.04
+            compiler: gcc
+          - os: ubuntu-26.04
             name: linux-clang
-          - os: windows-2022
+            compiler: clang
+          - os: windows-2025
             name: windows-msvc
+            compiler: msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: ${{ matrix.compiler }}
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
 
   macos:
-    runs-on: macos-latest
+    runs-on: macos-26
     name: Build and test (macos-appleclang)
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-toolchain
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
+
   gui:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Qt GUI (offscreen self-test)
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/prepare-deps
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+      - uses: ./.github/actions/setup-toolchain
         with:
-          version: '6.8.3'
+          compiler: gcc
+          qt: "true"
+
+      - uses: ./.github/actions/prepare-deps
 
       - name: Install GUI system libraries
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
@@ -139,23 +147,26 @@ jobs:
         run: QT_QPA_PLATFORM=offscreen ./build/bin/vss_gui --selftest
 
   coverage:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Coverage (90% statements, 80% branches)
     steps:
       - uses: actions/checkout@v4
 
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
       - uses: ./.github/actions/prepare-deps
 
-      - name: Install LLVM
+      - name: Put the LLVM tools on the path
         run: |
-          sudo apt-get update && sudo apt-get install -y llvm
-          echo "/usr/lib/llvm-18/bin" >> "$GITHUB_PATH"
+          LLVM=$(python3 -c "import json; print(json.load(open('.github/toolchain-versions.json'))['llvm'])")
+          echo "/usr/lib/llvm-$LLVM/bin" >> "$GITHUB_PATH"
 
       - name: Configure
         run: |
           cmake -S . -B build-cov \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_CXX_COMPILER=clang++ \
             -DVSS_COVERAGE=ON \
             -DVSS_BUILD_GUI=OFF \
             -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
@@ -195,10 +206,14 @@ jobs:
           cat coverage.md >> "$GITHUB_STEP_SUMMARY"
 
   performance:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Performance floors
     steps:
       - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: gcc
 
       - uses: ./.github/actions/prepare-deps
 
@@ -228,10 +243,14 @@ jobs:
             perf.md
 
   profiling:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: End-to-end profiling (Tracy)
     steps:
       - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: gcc
 
       - uses: ./.github/actions/prepare-deps
 
