@@ -163,3 +163,14 @@ if(VSS_INSTALL)
     NO_TRANSLATIONS)
   install(SCRIPT "${vss_gui_deploy_script}" COMPONENT runtime)
 endif()
+
+# Journey tests drive the real window with QTest key and mouse events; they
+# need the Qt Test module on top of Widgets.
+if(VSS_BUILD_TESTS)
+  find_package(Qt6 6.2 QUIET COMPONENTS Test)
+  if(TARGET Qt6::Test)
+    add_subdirectory(ui-tests)
+  else()
+    message(STATUS "Vss: Qt6::Test not found; the GUI journey tests are skipped.")
+  endif()
+endif()

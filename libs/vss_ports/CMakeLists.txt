@@ -10,6 +10,7 @@ add_library(vss_ports
   src/native_lines.cpp
   src/serial_enumeration.cpp
   src/serial_transport.cpp
+  src/stable_link.cpp
   src/vcom_driver.cpp
   src/virtual_port.cpp)
 add_library(Vss::ports ALIAS vss_ports)
@@ -19,6 +20,7 @@ target_include_directories(vss_ports PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_compile_features(vss_ports PUBLIC cxx_std_23)
 target_link_libraries(vss_ports PUBLIC vss_core Vss::VirtualSerial)
+icl_platform_sources(vss_ports)
 
 if(WIN32)
   target_link_libraries(vss_ports PRIVATE setupapi shell32 advapi32 ws2_32 mswsock)
