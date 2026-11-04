@@ -61,23 +61,24 @@ public:
     /// pseudo terminal on POSIX, a com0com pair on Windows when one exists,
     /// and an in-process loopback otherwise.
     result<std::shared_ptr<endpoint>> create_virtual_port(
-        std::string name, virtual_port_kind kind = virtual_port_kind::pty,
+        const std::string& name,
+        virtual_port_kind kind = virtual_port_kind::pty,
         endpoint_options options = {});
 
     /// Attaches a real serial port or a network backend from a URI.
-    result<std::shared_ptr<endpoint>> attach_serial(std::string name,
-                                                    std::string uri,
+    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
+                                                    const std::string& uri,
                                                     endpoint_options options = {});
 
-    result<std::shared_ptr<endpoint>> attach_serial(std::string name,
-                                                    std::string uri,
+    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
+                                                    const std::string& uri,
                                                     const serial_settings& settings,
                                                     endpoint_options options = {});
 
     /// Creates a scriptable in-memory device.
     result<std::shared_ptr<endpoint>> create_mock_port(
-        std::string name, const serial_settings& settings = {},
-        std::string target = "scripted");
+        const std::string& name, const serial_settings& settings = {},
+        const std::string& target = "scripted");
 
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
@@ -154,7 +155,7 @@ private:
         endpoint_options options);
 
     result<std::shared_ptr<endpoint>> create_auto_virtual_port(
-        std::string name, endpoint_options options);
+        const std::string& name, endpoint_options options);
 
     std::string unique_name(std::string_view base) const;
     std::vector<endpoint_id> resolve_all(const std::vector<std::string>& names,

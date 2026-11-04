@@ -65,7 +65,7 @@ config::port_entry record_to_entry(const std::string& name,
 } // namespace
 
 studio::studio(studio_options options)
-    : options_(std::move(options))
+    : options_(options)
     , hub_(std::make_shared<vss::hub>(options_.hub))
 {
     if (options_.start_hub)
@@ -152,13 +152,12 @@ result<std::shared_ptr<endpoint>> studio::register_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_virtual_port(
-    std::string name, virtual_port_kind kind, endpoint_options options)
+    const std::string& name, virtual_port_kind kind, endpoint_options options)
 {
     if (kind == virtual_port_kind::pty && !supports(virtual_port_kind::pty))
-        return create_auto_virtual_port(std::move(name), options);
+        return create_auto_virtual_port(name, options);
 
-    const std::string requested = name;
-    const std::string final_name = unique_name(requested);
+    const std::string final_name = unique_name(name);
 
     auto created = vss::create_virtual_port(hub_->executor(), kind, final_name);
     if (!created)
@@ -176,7 +175,7 @@ result<std::shared_ptr<endpoint>> studio::create_virtual_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
-    std::string name, endpoint_options options)
+    const std::string& name, endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
@@ -252,7 +251,7 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::attach_serial(
-    std::string name, std::string uri, endpoint_options options)
+    const std::string& name, const std::string& uri, endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
@@ -277,7 +276,8 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
 }
 
 result<std::shared_ptr<endpoint>> studio::attach_serial(
-    std::string name, std::string uri, const serial_settings& settings,
+    const std::string& name, const std::string& uri,
+    const serial_settings& settings,
     endpoint_options options)
 {
     if (const error_code invalid = validate(settings))
@@ -308,7 +308,8 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_mock_port(
-    std::string name, const serial_settings& settings, std::string target)
+    const std::string& name, const serial_settings& settings,
+    const std::string& target)
 {
     const std::string final_name = unique_name(name);
 
@@ -632,6 +633,8 @@ result<void> studio::apply(const config::document& value, bool rollback_on_error
     {
         std::vector<endpoint_id> sources;
         std::vector<endpoint_id> targets;
+        sources.reserve(link.sources.size());
+        targets.reserve(link.targets.size());
         for (const auto& name : link.sources)
             sources.push_back(ids.at(name));
         for (const auto& name : link.targets)

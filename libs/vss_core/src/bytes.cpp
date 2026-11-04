@@ -137,10 +137,8 @@ std::string to_printable(bytes_view data, char placeholder)
             out.append("\\n");
         else if (value == '\t')
             out.append("\\t");
-        else if (value >= 0x20 && value < 0x7f)
-            out.push_back(static_cast<char>(value));
-        else if (value >= 0x80)
-            out.push_back(static_cast<char>(value)); // assume UTF-8
+        else if ((value >= 0x20 && value < 0x7f) || value >= 0x80)
+            out.push_back(static_cast<char>(value)); // or assume UTF-8
         else
             out.push_back(placeholder);
     }

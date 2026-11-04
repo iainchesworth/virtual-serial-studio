@@ -34,10 +34,10 @@ struct endpoint_options
     serial_settings serial;
 
     /// Read buffer handed to the transport per operation.
-    std::size_t read_buffer_size = 64 * 1024;
+    std::size_t read_buffer_size = std::size_t{64} * 1024;
 
     /// Outstanding bytes allowed before new writes are rejected.
-    std::size_t max_write_queue_bytes = 8 * 1024 * 1024;
+    std::size_t max_write_queue_bytes = std::size_t{8} * 1024 * 1024;
 
     /// Record traffic in the hub's ring buffer.
     bool capture_traffic = true;
@@ -134,7 +134,7 @@ private:
     void on_read(boost::system::error_code ec, std::size_t count);
     void request_write();
     void start_next_write();
-    void on_write(std::shared_ptr<pending_write> write,
+    void on_write(const std::shared_ptr<pending_write>& write,
                   boost::system::error_code ec, std::size_t count);
     void handle_read_failure(const boost::system::error_code& ec,
                              std::string_view what);
