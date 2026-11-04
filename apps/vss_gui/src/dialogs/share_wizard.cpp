@@ -292,7 +292,8 @@ QWidget* ShareWizard::build_device_page()
     summary_column->addWidget(summary_title);
     summary_column->addWidget(settings_summary_);
     summary_row->addLayout(summary_column, 1);
-    change_settings_ = make_dialog_action_button(tr("Change"), "quiet", settings_card);
+    change_settings_ =
+        make_dialog_action_button(tr("Change"), "quiet", settings_card);
     change_settings_->setProperty("size", QStringLiteral("small"));
     polish(change_settings_);
     change_settings_->setCheckable(true);
@@ -401,11 +402,10 @@ QWidget* ShareWizard::build_device_page()
             .pixmap(16, 16));
     network_layout->addWidget(chevron);
     network_toggle_ = make_dialog_action_button(tr("A network device instead"),
-                                         "quiet", network_row);
+                                                "quiet", network_row);
     network_toggle_->setAccessibleName(tr("A network device instead"));
     network_layout->addWidget(network_toggle_);
-    network_layout->addWidget(
-        new Badge(QStringLiteral("ADVANCED"), network_row));
+    network_layout->addWidget(new Badge(tr("ADVANCED"), network_row));
     network_layout->addStretch(1);
     auto* network_hint =
         new QLabel(tr("TCP, UDP or RFC 2217 address."), network_row);
@@ -580,12 +580,12 @@ QWidget* ShareWizard::build_programs_page()
     auto* warn_buttons = new QHBoxLayout();
     warn_buttons->setContentsMargins(24, 0, 0, 0);
     warn_buttons->setSpacing(8);
-    create_pair_ =
-        make_dialog_action_button(tr("Create another pair"), "quiet", warn_note_);
+    create_pair_ = make_dialog_action_button(tr("Create another pair"), "quiet",
+                                             warn_note_);
     create_pair_->setProperty("size", QStringLiteral("small"));
     polish(create_pair_);
     keep_only_ = make_dialog_action_button(tr("Keep the third as Studio only"),
-                                    "quiet", warn_note_);
+                                           "quiet", warn_note_);
     keep_only_->setProperty("size", QStringLiteral("small"));
     polish(keep_only_);
     warn_buttons->addWidget(create_pair_);
@@ -684,7 +684,8 @@ void ShareWizard::build_footer()
             [this] { static_cast<void>(share()); });
     layout->addWidget(primary_);
 
-    open_monitor_ = make_dialog_action_button(tr("Open monitor"), nullptr, footer);
+    open_monitor_ =
+        make_dialog_action_button(tr("Open monitor"), nullptr, footer);
     connect(open_monitor_, &QPushButton::clicked, this,
             [this]
             {
@@ -769,22 +770,22 @@ void ShareWizard::update_device_list()
             device_group_->addButton(row->radio(), index);
         if (row->radio()->isEnabled())
         {
-            connect(row->radio(), &QRadioButton::toggled, this,
-                    [this, index](bool checked)
+            connect(
+                row->radio(), &QRadioButton::toggled, this,
+                [this, index](bool checked)
+                {
+                    if (!checked || network_mode_)
+                        return;
+                    if (index >= 0 && index < static_cast<int>(devices_.size()))
                     {
-                        if (!checked || network_mode_)
-                            return;
-                        if (index >= 0 &&
-                            index < static_cast<int>(devices_.size()))
-                        {
-                            selected_device_ =
-                                devices_.at(static_cast<std::size_t>(index)).path;
-                            network_row_->clear_error();
-                            clear_error();
-                            update_step1_info();
-                            update_step();
-                        }
-                    });
+                        selected_device_ =
+                            devices_.at(static_cast<std::size_t>(index)).path;
+                        network_row_->clear_error();
+                        clear_error();
+                        update_step1_info();
+                        update_step();
+                    }
+                });
         }
     }
 
@@ -1068,11 +1069,11 @@ QString ShareWizard::program_default(int index) const
     switch (index)
     {
     case 0:
-        return QStringLiteral("terminal");
+        return tr("terminal");
     case 1:
-        return QStringLiteral("test-tool");
+        return tr("test-tool");
     case 2:
-        return QStringLiteral("logger");
+        return tr("logger");
     default:
         return tr("program-%1").arg(index + 1);
     }
@@ -1440,7 +1441,8 @@ void ShareWizard::update_ready_table()
         }
         else
         {
-            auto* copy = make_dialog_action_button(tr("Copy"), "quiet", ready_table_);
+            auto* copy =
+                make_dialog_action_button(tr("Copy"), "quiet", ready_table_);
             copy->setProperty("size", QStringLiteral("small"));
             polish(copy);
             copy->setAccessibleName(tr("Copy %1").arg(path));

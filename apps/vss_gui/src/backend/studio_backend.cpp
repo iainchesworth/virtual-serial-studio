@@ -20,7 +20,7 @@ QString error_text(const vss::error_code& error)
     const QString message = QString::fromStdString(error.message());
     if (!message.isEmpty())
         return message;
-    return QStringLiteral("Error %1").arg(error.value());
+    return QObject::tr("Error %1").arg(error.value());
 }
 
 } // namespace vss::gui

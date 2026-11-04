@@ -176,18 +176,17 @@ void Launcher::build()
     layout->setSpacing(16);
 
     readiness_ = new NoteBanner(NoteBanner::kind::ok, {}, content);
-    readiness_->set_action(QStringLiteral("View setup check"),
+    readiness_->set_action(tr("View setup check"),
                            [this] { Q_EMIT setup_check_requested(); });
     layout->addWidget(readiness_);
 
-    auto* heading =
-        new QLabel(QStringLiteral("What do you want to do?"), content);
+    auto* heading = new QLabel(tr("What do you want to do?"), content);
     heading->setFont(Theme::instance().font(text_style::display));
     layout->addWidget(heading);
-    auto* sub = new QLabel(
-        QStringLiteral("Pick a job. Virtual Serial Studio builds it and tells "
-                       "you what to open in your other program."),
-        content);
+    auto* sub =
+        new QLabel(tr("Pick a job. Virtual Serial Studio builds it and tells "
+                      "you what to open in your other program."),
+                   content);
     sub->setFont(Theme::instance().font(text_style::bodyLarge));
     sub->setWordWrap(true);
     layout->addWidget(sub);
@@ -205,31 +204,26 @@ void Launcher::build()
                 [this, job] { Q_EMIT job_requested(job); });
         grid->addWidget(card, row, column);
     };
-    add_card(
-        0, 0, QStringLiteral("device"),
-        QStringLiteral("Give my program a serial port"),
-        QStringLiteral("Create a virtual port and get the name to open. "
-                       "Use it when a program needs a COM port and this PC "
-                       "has none."),
-        QStringLiteral("Result: a port name, such as COM7"),
-        QStringLiteral("add"));
-    add_card(0, 1, QStringLiteral("connect"),
-             QStringLiteral("Connect two programs"),
-             QStringLiteral("Make a linked pair so one program can talk to "
-                            "another, like a null-modem cable."),
-             QStringLiteral("Result: two ports, such as COM7 and COM8"),
+    add_card(0, 0, QStringLiteral("device"),
+             tr("Give my program a serial port"),
+             tr("Create a virtual port and get the name to open. "
+                "Use it when a program needs a COM port and this PC "
+                "has none."),
+             tr("Result: a port name, such as COM7"), QStringLiteral("add"));
+    add_card(0, 1, QStringLiteral("connect"), tr("Connect two programs"),
+             tr("Make a linked pair so one program can talk to "
+                "another, like a null-modem cable."),
+             tr("Result: two ports, such as COM7 and COM8"),
              QStringLiteral("pair"));
     add_card(1, 0, QStringLiteral("share"),
-             QStringLiteral("Share one device with several programs"),
-             QStringLiteral("Open a real serial device once, then give each "
-                            "program its own port."),
-             QStringLiteral("Result: one port per program"),
-             QStringLiteral("share"));
-    add_card(1, 1, QStringLiteral("watch"), QStringLiteral("Watch traffic"),
-             QStringLiteral("See what flows through a port without changing "
-                            "it."),
-             QStringLiteral("Result: a live monitor, read only"),
-             QStringLiteral("watch"));
+             tr("Share one device with several programs"),
+             tr("Open a real serial device once, then give each "
+                "program its own port."),
+             tr("Result: one port per program"), QStringLiteral("share"));
+    add_card(1, 1, QStringLiteral("watch"), tr("Watch traffic"),
+             tr("See what flows through a port without changing "
+                "it."),
+             tr("Result: a live monitor, read only"), QStringLiteral("watch"));
     layout->addLayout(grid);
 
     auto* saved = new QFrame(content);
@@ -238,7 +232,7 @@ void Launcher::build()
     auto* saved_layout = new QHBoxLayout(saved);
     saved_layout->setContentsMargins(16, 12, 16, 12);
     saved_layout->setSpacing(12);
-    auto* saved_title = new QLabel(QStringLiteral("Saved setups"), saved);
+    auto* saved_title = new QLabel(tr("Saved setups"), saved);
     saved_title->setFont(semibold(Theme::instance().font(text_style::body)));
     saved_layout->addWidget(saved_title);
     recent_name_ = new QLabel(saved);
@@ -249,17 +243,17 @@ void Launcher::build()
     recent_summary_->setProperty("muted", true);
     saved_layout->addWidget(recent_summary_);
     saved_layout->addStretch(1);
-    no_recent_ = new QLabel(QStringLiteral("No saved setups yet"), saved);
+    no_recent_ = new QLabel(tr("No saved setups yet"), saved);
     no_recent_->setFont(Theme::instance().font(text_style::body));
     no_recent_->setProperty("muted", true);
     saved_layout->addWidget(no_recent_);
-    recent_open_ = new QPushButton(QStringLiteral("Open"), saved);
+    recent_open_ = new QPushButton(tr("Open"), saved);
     recent_open_->setProperty("size", QStringLiteral("small"));
     polish(recent_open_);
     connect(recent_open_, &QPushButton::clicked, this,
             [this] { Q_EMIT open_recent_requested(recent_path_); });
     saved_layout->addWidget(recent_open_);
-    recent_browse_ = new QPushButton(QStringLiteral("Browse"), saved);
+    recent_browse_ = new QPushButton(tr("Browse"), saved);
     recent_browse_->setProperty("size", QStringLiteral("small"));
     polish(recent_browse_);
     connect(recent_browse_, &QPushButton::clicked, this,
@@ -268,10 +262,9 @@ void Launcher::build()
     layout->addWidget(saved);
 
     auto* hint = new QLabel(
-        QStringLiteral(
-            "Need addresses, fault injection or port ownership? "
-            "<a href=\"advanced\">Advanced mode</a> adds them to this "
-            "same window. Nothing you have built changes."),
+        tr("Need addresses, fault injection or port ownership? "
+           "<a href=\"advanced\">Advanced mode</a> adds them to this "
+           "same window. Nothing you have built changes."),
         content);
     hint->setTextFormat(Qt::RichText);
     hint->setFont(Theme::instance().font(text_style::body));
@@ -292,55 +285,50 @@ void Launcher::refresh()
     if (report.state == setup_report::readiness::not_checked)
     {
         readiness_->set_kind(NoteBanner::kind::warn);
-        readiness_->set_text(QStringLiteral(
+        readiness_->set_text(tr(
             "Setup was not checked. Open the setup check to see what this PC "
             "needs."));
         if (readiness_->action_button() != nullptr)
-            readiness_->action_button()->setText(
-                QStringLiteral("Open setup check"));
+            readiness_->action_button()->setText(tr("Open setup check"));
     }
     else if (!windows)
     {
         if (report.ports_ready)
         {
             readiness_->set_kind(NoteBanner::kind::ok);
-            readiness_->set_text(QStringLiteral(
-                "Ready. New ports are pseudo terminals that other programs "
-                "can open."));
+            readiness_->set_text(
+                tr("Ready. New ports are pseudo terminals that other programs "
+                   "can open."));
             if (readiness_->action_button() != nullptr)
-                readiness_->action_button()->setText(
-                    QStringLiteral("View setup check"));
+                readiness_->action_button()->setText(tr("View setup check"));
         }
         else
         {
             readiness_->set_kind(NoteBanner::kind::warn);
-            readiness_->set_text(QStringLiteral(
+            readiness_->set_text(tr(
                 "Setup needs attention. New ports may not be usable by other "
                 "programs."));
             if (readiness_->action_button() != nullptr)
-                readiness_->action_button()->setText(
-                    QStringLiteral("Open setup check"));
+                readiness_->action_button()->setText(tr("Open setup check"));
         }
     }
     else if (report.ports_ready)
     {
         readiness_->set_kind(NoteBanner::kind::ok);
-        readiness_->set_text(QStringLiteral(
-            "Ready. This PC can create ports that other programs "
-            "can open (com0com detected)."));
+        readiness_->set_text(
+            tr("Ready. This PC can create ports that other programs "
+               "can open (com0com detected)."));
         if (readiness_->action_button() != nullptr)
-            readiness_->action_button()->setText(
-                QStringLiteral("View setup check"));
+            readiness_->action_button()->setText(tr("View setup check"));
     }
     else
     {
         readiness_->set_kind(NoteBanner::kind::warn);
-        readiness_->set_text(QStringLiteral(
-            "Setup needs attention. Other programs cannot see new "
-            "ports until a driver is installed."));
+        readiness_->set_text(
+            tr("Setup needs attention. Other programs cannot see new "
+               "ports until a driver is installed."));
         if (readiness_->action_button() != nullptr)
-            readiness_->action_button()->setText(
-                QStringLiteral("Open setup check"));
+            readiness_->action_button()->setText(tr("Open setup check"));
     }
 
     update_saved_setups();
@@ -367,8 +355,7 @@ void Launcher::update_saved_setups()
     recent_name_->setText(QFileInfo(recent_path_).fileName());
     const QString summary =
         settings.value(QStringLiteral("ui/recentSummary")).toString();
-    recent_summary_->setText(summary.isEmpty() ? QStringLiteral("Saved setup")
-                                               : summary);
+    recent_summary_->setText(summary.isEmpty() ? tr("Saved setup") : summary);
 }
 
 } // namespace vss::gui

@@ -185,9 +185,10 @@ void PairPanel::build(bool advanced)
     more_layout->setContentsMargins(12, 10, 12, 10);
     more_layout->setSpacing(10);
     auto* more_title = new QLabel(tr("More options"), more_simple_);
-    more_title->setFont(flow_semibold(Theme::instance().font(text_style::body)));
+    more_title->setFont(
+        flow_semibold(Theme::instance().font(text_style::body)));
     more_layout->addWidget(more_title);
-    more_layout->addWidget(new Badge(QStringLiteral("ADVANCED"), more_simple_));
+    more_layout->addWidget(new Badge(tr("ADVANCED"), more_simple_));
     auto* more_text = new QLabel(
         tr("Signal wiring and port kind. Turn on Advanced mode to change "
            "them."),
@@ -507,7 +508,7 @@ bool PairPanel::validate()
             if (pair.first != current && !used.contains(pair.first))
                 return pair.first;
         }
-        return QStringLiteral("another free COM port");
+        return tr("another free COM port");
     };
 
     if (first == second)

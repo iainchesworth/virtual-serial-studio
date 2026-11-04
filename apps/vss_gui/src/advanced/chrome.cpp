@@ -99,7 +99,7 @@ QWidget* make_header(const QString& title, const QString& subtitle,
     }
     if (advanced_badge)
     {
-        auto* badge = new Badge(QStringLiteral("ADVANCED"), header);
+        auto* badge = new Badge(QObject::tr("ADVANCED"), header);
         badge->setAccessibleName(
             QCoreApplication::translate("Advanced", "Advanced tool"));
         row->addWidget(badge, 0, Qt::AlignVCenter);

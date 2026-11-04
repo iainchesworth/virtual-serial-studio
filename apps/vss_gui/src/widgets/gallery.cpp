@@ -130,7 +130,7 @@ void WidgetGallery::build()
     theme_segment_->add_item(QStringLiteral("Light"), 1);
     theme_segment_->add_item(QStringLiteral("Dark"), 2);
     connect(theme_segment_, &SegmentedControl::current_changed, this,
-            [this](int id)
+            [](int id)
             {
                 if (id == 1)
                     Theme::instance().set_mode(theme_mode::light);
@@ -148,7 +148,7 @@ void WidgetGallery::build()
     density_segment_->add_item(QStringLiteral("Comfortable"));
     density_segment_->add_item(QStringLiteral("Compact"), 1);
     connect(density_segment_, &SegmentedControl::current_changed, this,
-            [this](int id)
+            [](int id)
             {
                 Theme::instance().set_density(id == 1
                                                   ? density_mode::compact

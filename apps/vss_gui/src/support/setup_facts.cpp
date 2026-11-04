@@ -75,7 +75,7 @@ setup_row ok_row(const QString& title, const QString& sentence)
             QStringLiteral("done"),
             title,
             sentence,
-            QStringLiteral("OK"),
+            t("OK"),
             {},
             setup_action::none,
             false};
@@ -107,7 +107,7 @@ setup_row devices_row(const setup_facts& facts, const QStringList& paths,
                                t("Studio did not check the serial devices."));
     }
     row.state = setup_state::ok;
-    row.chip = QStringLiteral("OK");
+    row.chip = t("OK");
     row.sentence = device_sentence(paths, facts.serial_devices);
     return row;
 }
