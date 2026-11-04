@@ -358,7 +358,8 @@ see [docs/profiling.md](docs/profiling.md) for the zone list and caveats.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` builds with GCC, Clang, AppleClang and MSVC, runs
+`.github/workflows/ci.yml` first runs the shared policy checks and a planner that
+skips the builds for documentation-only changes, then builds with GCC, Clang, AppleClang and MSVC, runs
 the GUI self-test on Linux with Qt, enforces the coverage gates, runs the
 performance floors, captures a Tracy profile of the end-to-end path, and
 validates every changelog fragment. Boost is fetched by

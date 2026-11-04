@@ -1,0 +1,9 @@
+{
+  "docs": ["docs/**", "*.md", "LICENSE*", "changelog.d/**"],
+  "no_build": [".github/dependabot.yml", ".github/repo-settings.json", ".github/labels.json", "REUSE.toml",
+               ".editorconfig", "LICENSES/**", ".clang-format", ".clang-tidy", "apps/**/.clang-tidy"],
+  "build": ["libs/**", "apps/**", "tests/**", "perf/**", "tools/**", "CMakeLists.txt", "CMakePresets.json",
+            "vcpkg.json", "cmake/**"],
+  "gui": [],
+  "machinery": [".github/workflows/**", ".github/actions/**", ".github/ci/**", ".github/toolchain-versions.json"]
+}
