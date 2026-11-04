@@ -26,6 +26,11 @@ platform_ensure_private_directory(const std::filesystem::path& directory)
     return posix::ensure_private_directory(directory);
 }
 
+std::optional<std::string> platform_getenv(std::string_view name)
+{
+    return posix::getenv_value(name);
+}
+
 bool platform_is_character_device(const std::filesystem::path& path) noexcept
 {
     return posix::is_character_device(path);

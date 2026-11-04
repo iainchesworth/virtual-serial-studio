@@ -8,7 +8,6 @@
 
 #include "platform/stable_link_platform.hpp"
 
-#include <cstdlib>
 #include <system_error>
 
 namespace vss
@@ -51,15 +50,7 @@ std::optional<std::string> non_empty(const env_lookup& lookup,
 
 env_lookup process_environment()
 {
-    return [](std::string_view name) -> std::optional<std::string>
-    {
-        // std::getenv wants a terminated string.
-        const std::string key(name);
-        // NOLINTNEXTLINE(concurrency-mt-unsafe)
-        if (const char* value = std::getenv(key.c_str()))
-            return std::string(value);
-        return std::nullopt;
-    };
+    return [](std::string_view name) { return detail::platform_getenv(name); };
 }
 
 bool stable_links_supported() noexcept

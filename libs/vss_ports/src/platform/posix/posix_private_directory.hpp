@@ -17,7 +17,11 @@
 #include <unistd.h>
 
 #include <cerrno>
+#include <cstdlib>
 #include <filesystem>
+#include <optional>
+#include <string>
+#include <string_view>
 
 namespace vss::detail::posix
 {
@@ -47,6 +51,15 @@ ensure_private_directory(const std::filesystem::path& directory)
     if ((info.st_mode & (S_IRWXG | S_IRWXO)) != 0)
         return make_error_code(errc::permission_denied);
     return {};
+}
+
+inline std::optional<std::string> getenv_value(std::string_view name)
+{
+    const std::string key(name);
+    // NOLINTNEXTLINE(concurrency-mt-unsafe)
+    if (const char* value = std::getenv(key.c_str()))
+        return std::string(value);
+    return std::nullopt;
 }
 
 inline bool is_character_device(const std::filesystem::path& path) noexcept
