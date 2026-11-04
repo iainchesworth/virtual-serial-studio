@@ -97,11 +97,13 @@ endif()
 # Dependencies and shared settings
 # ---------------------------------------------------------------------------
 
+include(IclPlatform)
 include(VssWarnings)
 include(VssVirtualSerial)
 include(VssCoverage)
 include(VssSanitizers)
 include(VssTracy)
+include(VssFuzz)
 
 # ---------------------------------------------------------------------------
 # Subprojects

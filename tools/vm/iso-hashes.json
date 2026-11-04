@@ -1,0 +1,9 @@
+{
+  "comment": "SHA-256 of the install media the guests are built from, checked on 2026-11-05. The Windows 11 value equals the publisher's .sha256 file; the Ubuntu value equals Canonical's SHA256SUMS for 26.04.1; the Windows 10 value was computed locally because the publisher's figure is not available offline. The no-prompt Windows 11 image is the same media with the boot prompt removed, so its value was computed locally.",
+  "isos": {
+    "Win11_25H2_English_x64_v2.iso": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3",
+    "Win10_22H2_English_x64.iso": "1c3f8490b6a2715db907aa383a9f61ea6f03b78a98c382515381ff1aa3e68e4a",
+    "ubuntu-26.04.1-live-server-amd64.iso": "cc8a95cde20f6ced61a322420de00f10cc3c90ced545daa46cb9c1a117f1d927",
+    "Win11_25H2_English_x64_v2-noprompt.iso": "efedd3630ed40b45cacbbdfea9986fe0c07585d806c68b9879803ed3d60c8b3c"
+  }
+}
