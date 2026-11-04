@@ -55,8 +55,8 @@ public:
     };
 
     /// The design's named cap: 10,000 rows.
-    static constexpr int max_rows = 10'000;
-    static constexpr int preview_bytes = 256;
+    static constexpr int kMaxRows = 10'000;
+    static constexpr int kPreviewBytes = 256;
 
     explicit MonitorModel(QObject* parent = nullptr);
 

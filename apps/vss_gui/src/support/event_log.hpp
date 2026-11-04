@@ -42,7 +42,7 @@ public:
     static QString format(const gui_event& event);
 
     /// Entries retained before the oldest is dropped.
-    static constexpr int max_lines = 5000;
+    static constexpr int kMaxLines = 5000;
 
 private:
     QStringList lines_;

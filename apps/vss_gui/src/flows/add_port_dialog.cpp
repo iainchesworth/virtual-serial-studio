@@ -207,7 +207,7 @@ void AddPortDialog::build(bool advanced, mode initial)
                          .name(QColor::HexRgb)));
     };
     apply_more_style();
-    connect(&Theme::instance(), &Theme::themeChanged, this, apply_more_style);
+    connect(&Theme::instance(), &Theme::theme_changed, this, apply_more_style);
 
     body_layout()->addLayout(cards_layout);
     body_layout()->addSpacing(4);

@@ -67,7 +67,7 @@ PairPanel::PairPanel(StudioBackend& backend, bool advanced,
 {
     build(advanced);
     refresh();
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 first_diagram_->setFont(
@@ -254,7 +254,7 @@ void PairPanel::build(bool advanced)
 
     connect(wiring_, &QComboBox::currentIndexChanged, this,
             [this] { refresh_result(); });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this, diagram, connector_line]
             {
                 apply_dashed_frame(more_simple_);

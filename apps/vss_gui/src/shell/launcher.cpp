@@ -97,7 +97,7 @@ LauncherCard::LauncherCard(const QString& icon, const QString& title,
     column->addWidget(result_label);
     layout->addLayout(column, 1);
 
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this, tile, glyph, icon]
             {
                 tile->setStyleSheet(
@@ -160,7 +160,7 @@ Launcher::Launcher(StudioBackend& backend, QWidget* parent)
             [this] { refresh(); });
     connect(&backend_, &StudioBackend::links_changed, this,
             [this] { refresh(); });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { refresh(); });
 }
 

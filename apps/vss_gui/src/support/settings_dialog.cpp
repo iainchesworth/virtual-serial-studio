@@ -150,7 +150,7 @@ void SettingsDialog::build()
                          .name(QColor::HexRgb)));
     };
     apply_nav_style();
-    connect(&Theme::instance(), &Theme::themeChanged, nav,
+    connect(&Theme::instance(), &Theme::theme_changed, nav,
             [apply_nav_style] { apply_nav_style(); });
     auto* nav_layout = new QVBoxLayout(nav);
     nav_layout->setContentsMargins(10, 12, 10, 12);
@@ -332,7 +332,7 @@ void SettingsDialog::build()
     refresh_ = new QSlider(Qt::Horizontal, refresh_holder);
     refresh_->setObjectName(QStringLiteral("refreshSlider"));
     refresh_->setAccessibleName(t("Refresh interval"));
-    refresh_->setRange(refresh_min_ms, refresh_max_ms);
+    refresh_->setRange(kRefreshMinMs, kRefreshMaxMs);
     refresh_->setSingleStep(10);
     refresh_->setPageStep(250);
     refresh_->setValue(settings_.refresh_ms);
@@ -429,7 +429,7 @@ void SettingsDialog::apply_density()
 void SettingsDialog::apply_refresh()
 {
     settings_.refresh_ms =
-        std::clamp(settings_.refresh_ms, refresh_min_ms, refresh_max_ms);
+        std::clamp(settings_.refresh_ms, kRefreshMinMs, kRefreshMaxMs);
     backend_.set_refresh_interval(settings_.refresh_ms);
     if (refresh_value_ != nullptr)
         refresh_value_->setText(t("%1 ms").arg(settings_.refresh_ms));

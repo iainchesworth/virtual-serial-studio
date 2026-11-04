@@ -138,11 +138,11 @@ public:
     QSize size(const QString& name) const;
 
     QPalette palette() const;
-    QString styleSheet() const;
+    QString style_sheet() const;
     void apply();
 
 Q_SIGNALS:
-    void themeChanged();
+    void theme_changed();
 
 private:
     explicit Theme(QObject* parent = nullptr);

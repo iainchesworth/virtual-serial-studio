@@ -79,7 +79,7 @@ LineMatrixPanel::LineMatrixPanel(StudioBackend& backend,
 {
     build();
     refresh();
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { refresh(); });
 }
 

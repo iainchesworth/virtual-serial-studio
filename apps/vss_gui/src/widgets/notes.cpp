@@ -83,7 +83,7 @@ CopyButton::CopyButton(QWidget* parent) : QAbstractButton(parent)
     setFocusPolicy(Qt::StrongFocus);
     setAccessibleName(QStringLiteral("Copy"));
     connect(this, &QAbstractButton::clicked, this, &CopyButton::do_copy);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { update(); });
 }
 

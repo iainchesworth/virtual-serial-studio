@@ -67,7 +67,7 @@ void set_ink2(QWidget* widget)
     if (widget == nullptr)
         return;
     apply_ink2(widget);
-    QObject::connect(&Theme::instance(), &Theme::themeChanged, widget,
+    QObject::connect(&Theme::instance(), &Theme::theme_changed, widget,
                      [widget] { apply_ink2(widget); });
 }
 
@@ -134,7 +134,7 @@ QFrame* make_footer(QWidget* parent, QHBoxLayout*& layout)
     footer->setAttribute(Qt::WA_StyledBackground);
     footer->setFrameShape(QFrame::NoFrame);
     apply_footer_style(footer);
-    QObject::connect(&Theme::instance(), &Theme::themeChanged, footer,
+    QObject::connect(&Theme::instance(), &Theme::theme_changed, footer,
                      [footer] { apply_footer_style(footer); });
     layout = new QHBoxLayout(footer);
     layout->setContentsMargins(20, 10, 20, 10);

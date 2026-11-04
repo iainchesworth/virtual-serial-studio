@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Naming rules for Virtual Serial Studio (standard D9: an established
+# repository keeps its conventions, and this file is where they are written).
+#
+#   namespaces, types, functions, methods, variables, parameters: snake_case
+#   private and protected data members, and static data members: trailing _
+#   template parameters: CamelCase
+#
+# apps/vss_gui/.clang-tidy adds the Qt-facing exceptions. Only the naming check
+# is enabled here; the wider check set arrives with the CI restructure.
+Checks: >-
+  -*,
+  readability-identifier-naming
+WarningsAsErrors: ''
+HeaderFilterRegex: '(libs|apps|tests|perf)/.*'
+CheckOptions:
+  - { key: readability-identifier-naming.NamespaceCase,          value: lower_case }
+  - { key: readability-identifier-naming.ClassCase,              value: lower_case }
+  - { key: readability-identifier-naming.StructCase,             value: lower_case }
+  - { key: readability-identifier-naming.UnionCase,              value: lower_case }
+  - { key: readability-identifier-naming.EnumCase,               value: lower_case }
+  - { key: readability-identifier-naming.EnumConstantCase,       value: lower_case }
+  - { key: readability-identifier-naming.TypeAliasCase,          value: lower_case }
+  - { key: readability-identifier-naming.TypedefCase,            value: lower_case }
+  - { key: readability-identifier-naming.FunctionCase,           value: lower_case }
+  - { key: readability-identifier-naming.MethodCase,             value: lower_case }
+  - { key: readability-identifier-naming.VariableCase,           value: lower_case }
+  - { key: readability-identifier-naming.ParameterCase,          value: lower_case }
+  - { key: readability-identifier-naming.MemberCase,             value: lower_case }
+  - { key: readability-identifier-naming.PrivateMemberSuffix,    value: _ }
+  - { key: readability-identifier-naming.ProtectedMemberSuffix,  value: _ }
+  - { key: readability-identifier-naming.ClassMemberSuffix,      value: _ }
+  - { key: readability-identifier-naming.TemplateParameterCase,  value: CamelCase }

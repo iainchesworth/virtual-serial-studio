@@ -1,53 +1,67 @@
-# AGENTS.md: rules for coding agents working on the Virtual Serial Studio GUI
+# Instructions for coding agents
 
-Copy this file to the repository root as `AGENTS.md` (and as `CLAUDE.md` if your harness reads that name). It is loaded at the start of every session.
+This file applies to any automated contributor. Read it before changing the repository. The project standard is
+[`docs/standard.md`](https://github.com/iainchesworthlabs/icl-common-infra/blob/develop/docs/standard.md) in
+`icl-common-infra`; `docs/migration.md` lists where this repository differs from it.
 
-## Your job
-Implement the redesigned Qt 6 GUI in `apps/vss_gui` from the specs in `docs/gui-design/` (this bundle, copied into the repo by WP0). You are one of several agents, each owning one work package (WP). Stay inside your package.
+## Working rules
 
-## You cannot see images
-Do not ask for screenshots. Everything you need is text: the specs in `docs/gui-design/docs/`, the tokens in `docs/gui-design/tokens/`, and the HTML mockups in `docs/gui-design/reference/mockups/` (read the markup for exact pixel sizes and structure, never copy the CSS into the product). For visual checks, write offscreen `grab()` PNGs for human review.
+- Work on a branch named `<prefix>/<slug>` with the prefix `feature`, `bugfix`, `docs`, `chore` or `agent`, and a
+  lower-case slug with hyphens. Never commit to `develop` or `main` directly.
+- Commit with `git commit -s`. Write the subject in the imperative, 72 characters or fewer, and the body as a plain
+  description of what changed and why. Commit messages and pull request text carry no attribution of any kind.
+- Open pull requests against `develop`. Squash merge is the only method.
+- Do not create or edit secrets, tags, releases, repository settings or rulesets. The owner does those.
+- Do not edit `cmake/icl/`. Change `icl-common-infra` and run `python3 tools/sync_cmake.py --infra <checkout>`.
+- Boost.VirtualSerial comes from `iainchesworthlabs/virtual-serial`. Do not change `libs/vss_core` behaviour or the
+  JSON topology schema without being asked. If a capability is missing, follow `docs/gui-design/docs/08-engine-gaps.md`:
+  add a capability flag and degrade visibly.
+- Warnings are errors in every build. The build must stay clean on GCC, Clang, AppleClang and MSVC, so write portable
+  code and never disable a test, warning, hook or lint to get green.
+- No secrets in the repository or in logs. No network access from the GUI, no telemetry, no analytics.
 
-## Repository facts (verify each in WP0 and record corrections in `docs/gui-design/implementation-plan.md`)
-- Trunk is `develop`. `main` is the release branch. Work on a branch `gui/wp<N>-<slug>` created from the latest `develop`. Never push to `develop` or `main`.
-- Stack: C++23, Boost.Asio, CMake 3.21+ with presets, Qt 6 (GUI only). Build with `cmake --preset debug-gui` or `release-gui` (these fail if Qt is missing). Run tests with `ctest --preset debug-gui`. GUI self-test: `QT_QPA_PLATFORM=offscreen vss_gui --selftest`.
-- Boost.VirtualSerial is a private dependency, so the repo only builds where that checkout is available. If configuration fails, **stop and report**. Do not stub the dependency or remove it.
-- Every first-party source file carries `SPDX-License-Identifier: GPL-3.0-or-later`. Qt is linked dynamically. No other new third-party dependency without an explicit instruction. `Qt6::Svg` is approved.
-- Each change adds one fragment in `changelog.d/`; check with `python tools/changelog.py --check`. Read `CONTRIBUTING.md` before committing and follow the commit text rules. Respect `.clang-format` and `.editorconfig`.
-- Warnings are errors in every build (the shared `icl::warnings` set). CI builds with GCC, Clang, AppleClang and MSVC. Write portable code.
-- The project has an in-tree test framework (`tests/`, `vss_unit_tests`). Use it, do not add another.
-- `vss::result<T>` is `boost::system::result`. The engine event sink is a `std::function` behind the `vss::EventSink` concept.
-- Threading: each endpoint runs on its own strand and events are dispatched on the hub's dispatcher strand. The GUI thread must never be called from, or block on, those threads. Marshal events to the GUI thread with queued connections and coalesce them. `unsubscribe` cannot recall a delivery that is already running, so sinks must capture state that outlives the hub (a `shared_ptr`), never a stack local.
-- No fonts are bundled and none may be added.
+## Build and test
 
-## Hard rules
-1. Read the relevant spec and the existing code before writing. Prefer extending existing patterns over inventing new ones.
-2. Use design tokens only. No literal colours, font families or font sizes outside the `Theme` module. Colours and fonts come from `Theme`. Icons come from `IconProvider`.
-3. Copy strings exactly from the specs and wrap them in `tr()`.
-4. Every widget you add: accessible name and role, keyboard reachable, visible focus ring, both themes, 24 px minimum targets, works at 200 percent text.
-5. Do not change `libs/vss_core` behaviour or the JSON topology schema. If a capability is missing, follow `docs/08-engine-gaps.md`: add a capability flag and degrade visibly.
-6. Do not copy code, layouts or wording from other products (for example VSPE or Virtual Serial Port Driver).
-7. No network access from the GUI, no telemetry, no analytics.
-8. Never disable tests, warnings, hooks or lints to get green. Never edit CI to hide a failure.
-9. No secrets in the repository or in logs.
-10. Do not commit build output, generated QSS, or screenshots.
-
-## Method
-1. State a short plan in your first message: files you will touch, tests you will add, risks.
-2. Work in small commits (one concern each) with the checks passing at each commit.
-3. When the spec and the code disagree, follow the spec, and write the disagreement (and why) in `docs/gui-design/design-deviations.md`.
-4. When the spec is silent, choose the option most consistent with `docs/01-principles-and-standards.md`, and record the decision in the same file.
-5. Stop and report only if: the build cannot be configured, the task needs engine behaviour changes not authorised in your prompt, or the spec asks for something unsafe (for example silently discarding a user's setup).
-6. Finish with a summary: what was built, files changed, tests run with results, deviations, open questions.
-
-## Commands you will use
 ```
 cmake --preset debug-gui
 cmake --build --preset debug-gui
 ctest --preset debug-gui --output-on-failure
-QT_QPA_PLATFORM=offscreen ./build/<dir>/bin/vss_gui --selftest
-python tools/changelog.py --check
-python docs/gui-design/tools/check_contrast.py
-python docs/gui-design/tools/gen_qss.py --out /tmp
+QT_QPA_PLATFORM=offscreen ./build/debug-gui/bin/vss_gui --selftest
+python3 tools/changelog.py --check
 ```
-(Adjust build directories to what the presets actually create.)
+
+Qt is found through `VSS_QT_ROOT`, `ICL_QT_ROOT`, `QT_ROOT_DIR` or `QTDIR`. The project has its own test framework
+(`tests/`, `vss_unit_tests`); use it and do not add another.
+
+## Code rules
+
+- C++23. Every first-party source file carries `SPDX-License-Identifier: GPL-3.0-or-later`.
+- Names follow `.clang-tidy`: `snake_case` for namespaces, types, functions and variables, and a trailing `_` on data
+  members. The Qt widgets in `apps/vss_gui` are the exception, as `apps/vss_gui/.clang-tidy` says. Layout follows
+  `.clang-format` (Allman braces, 80 columns).
+- Threading: each endpoint runs on its own strand and events are dispatched on the hub's dispatcher strand. The GUI
+  thread must never be called from, or block on, those threads. Marshal events to the GUI thread with queued
+  connections and coalesce them. `unsubscribe` cannot recall a delivery that is already running, so a sink must
+  capture state that outlives the hub (a `shared_ptr`), never a stack local.
+- `vss::result<T>` is `boost::system::result`. The engine event sink is a `std::function` behind `vss::EventSink`.
+
+## GUI rules
+
+The specs are in `docs/gui-design/`. Specs, tokens and the HTML mockups are text; for a visual check write an offscreen
+`grab()` PNG for a person to review, and do not commit it.
+
+- Use design tokens only. No literal colours, font families or font sizes outside the `Theme` module. Icons come from
+  `IconProvider`. No fonts are bundled and none may be added.
+- Copy strings exactly from the specs and wrap them in `tr()`.
+- Every widget has an accessible name and role, is reachable by keyboard, shows a visible focus ring, works in both
+  themes, has targets of at least 24 px and works at 200 percent text.
+
+## If you change X, update Y
+
+| You change | Also update |
+|---|---|
+| A user-visible behaviour | A fragment in `changelog.d/` |
+| A CMake option or preset | `README.md` |
+| A workflow in `.github/workflows` | Pin every `uses:` to a full SHA with a version comment |
+| A toolchain version | `.github/toolchain-versions.json` only |
+| A new source file | The SPDX licence header, copied from an existing file |

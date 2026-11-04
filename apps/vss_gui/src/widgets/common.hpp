@@ -20,7 +20,7 @@ namespace vss::gui
 /// Repaints a custom-painted widget when the theme or density changes.
 inline void repaint_on_theme_change(QWidget* widget)
 {
-    QObject::connect(&Theme::instance(), &Theme::themeChanged, widget,
+    QObject::connect(&Theme::instance(), &Theme::theme_changed, widget,
                      [widget] { widget->update(); });
 }
 

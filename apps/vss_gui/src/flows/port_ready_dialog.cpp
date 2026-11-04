@@ -186,7 +186,7 @@ void PortReadyDialog::build(bool advanced)
                          .name(QColor::HexRgb)));
     };
     apply_path_style();
-    connect(&Theme::instance(), &Theme::themeChanged, this, apply_path_style);
+    connect(&Theme::instance(), &Theme::theme_changed, this, apply_path_style);
 
     if (studio_only_)
     {

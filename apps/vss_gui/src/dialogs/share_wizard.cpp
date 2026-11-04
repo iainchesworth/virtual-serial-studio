@@ -223,7 +223,7 @@ void ShareWizard::build()
             [this] { refresh_step3_states(); });
     connect(&backend_, &StudioBackend::links_changed, this,
             [this] { refresh_step3_states(); });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { update_warning(); });
 }
 

@@ -30,10 +30,10 @@ struct ui_settings
     bool ask_on_discard = true;
 };
 
-inline constexpr int refresh_min_ms = 50;
-inline constexpr int refresh_max_ms = 5000;
-inline constexpr int refresh_default_ms = 250;
-inline constexpr int default_baud_rate = 115200;
+inline constexpr int kRefreshMinMs = 50;
+inline constexpr int kRefreshMaxMs = 5000;
+inline constexpr int kRefreshDefaultMs = 250;
+inline constexpr int kDefaultBaudRate = 115200;
 
 ui_settings default_ui_settings();
 ui_settings load_ui_settings();
