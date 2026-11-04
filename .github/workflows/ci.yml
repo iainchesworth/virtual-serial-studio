@@ -26,6 +26,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Check the vendored CMake modules
+        run: python3 tools/sync_cmake.py --infra .icl-infra --check
+
       - name: Check commit messages
         shell: bash
         run: |
