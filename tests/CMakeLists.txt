@@ -51,6 +51,8 @@ add_test(NAME system COMMAND vss_system_tests
   --verbose --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
 set_tests_properties(system PROPERTIES TIMEOUT 600)
 
+add_subdirectory(fuzz)
+
 # A packaging smoke test: the public headers compile on their own.
 add_executable(vss_header_selftest compile/header_selftest.cpp)
 target_link_libraries(vss_header_selftest PRIVATE vss_studio vss_testkit)
