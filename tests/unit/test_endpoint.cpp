@@ -467,6 +467,27 @@ TEST_CASE("hub: destroying the hub releases an idle endpoint")
     REQUIRE(weak.expired());
 }
 
+TEST_CASE("hub: destroying the hub releases an endpoint removed just before")
+{
+    auto hub = start_hub();
+    std::weak_ptr<endpoint> weak;
+    {
+        auto port = add_loopback(*hub, "removed");
+        weak = port;
+
+        std::promise<void> armed;
+        auto ready = armed.get_future();
+        boost::asio::post(port->get_executor(), [&armed] { armed.set_value(); });
+        REQUIRE(ready.wait_for(2000ms) == std::future_status::ready);
+
+        REQUIRE(hub->remove_endpoint(port->id()));
+    }
+
+    // The removal queued a shutdown; stopping must not discard it.
+    hub.reset();
+    REQUIRE(weak.expired());
+}
+
 TEST_CASE("endpoint: removal closes it and drops its links")
 {
     auto hub = start_hub();

@@ -178,6 +178,7 @@ private:
     void erase_routes(link_id link);
     link_info describe(const link_record& record) const;
     void dispatch(endpoint_event event);
+    void endpoint_closed();
 
     hub_options options_;
     boost::asio::io_context io_;
@@ -185,6 +186,10 @@ private:
         work_;
     std::vector<std::thread> threads_;
     std::atomic<bool> running_{false};
+    // Shutdowns in flight, from remove_endpoint() and stop(). The io_context is
+    // stopped only once stop() has been called and this reaches zero.
+    std::atomic<std::size_t> closing_{0};
+    std::atomic<bool> stopping_{false};
 
     mutable std::shared_mutex mutex_;
     endpoint_id next_endpoint_id_ = 1;
