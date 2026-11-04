@@ -43,27 +43,30 @@ nothing. So:
 
 ### Linux
 
-A PTY is a tty. `tcsetattr`, `ioctl(TIOCMGET)`, `poll`, `select`, `read`,
-`write` and every termios flag work exactly as they do on a UART. The studio
-owns the master and holds the slave open, so the port exists before an
-application connects. Nothing more is needed; out-of-tree modules such as
-`tty0tty` exist only to make pairs without a process holding one end, which is
-not our problem because we hold both.
+A PTY is a tty. `tcsetattr`, `poll`, `select`, `read`, `write` and the termios
+flags work as they do on a UART. The modem lines do not: the kernel's PTY has
+no `TIOCMGET` or `TIOCMSET`, so a program that opens the slave cannot read or
+set DTR, RTS, CTS or DSR. The studio owns the master and holds the slave open,
+so the port exists before an application connects.
 
-The only gap is naming: some software looks for `/dev/ttyUSB*`. A udev rule or
-a symlink can provide that, and both need root — the same trust level as
-installing a driver.
+Two gaps remain. The name is `/dev/pts/N` and changes on every run; see
+`posix-virtual-ports.md` for the stable names that `vss_cli vport` makes. And
+programs that offer a list of detected ports (pyserial's `list_ports`, Qt's
+`QSerialPortInfo`) do not list a PTY; a program that takes a typed or
+configured path works.
 
 ### macOS
 
 Same answer, with two caveats:
 
-* Applications that insist on `/dev/cu.*` will not find a PTY. A symlink
-  (`/dev/cu.vserial0 -> /dev/ttysNNN`) works but needs root; the GUI can offer
-  to create it with authorisation.
+* Applications that insist on `/dev/cu.*` or list ports through IOKit will not
+  find a PTY. A stable link from `vss_cli vport` helps programs that take a
+  path. Whether a root-owned alias in `/dev` works is not known yet.
 * A kext is not a viable distribution path. Apple requires reduced security
-  mode and notarisation, DriverKit has no tty family, and Apple Silicon makes
-  third-party kexts a support problem. PTY is the supported answer.
+  mode and notarisation, and Apple Silicon makes third-party kexts a support
+  problem. SerialDriverKit (`IOUserSerial`) is a possible later route to a
+  port that IOKit lists; it needs an Apple entitlement and a Mac to try, and it
+  is not planned. PTY is the supported answer.
 
 ## Options considered for Windows
 

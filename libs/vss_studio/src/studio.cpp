@@ -9,6 +9,7 @@
 #include <vss/ports/serial_transport.hpp>
 
 #include <algorithm>
+#include <filesystem>
 #include <utility>
 
 namespace vss {
@@ -40,6 +41,24 @@ std::string label_for_uri(const std::string& uri)
     return "port";
 }
 
+/// A port name as a link name: the characters a link may hold, at most 64.
+std::string link_name(const std::string& name)
+{
+    std::string result;
+    for (const char c : name)
+    {
+        const bool letter = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        const bool digit = c >= '0' && c <= '9';
+        result +=
+            (letter || digit || c == '.' || c == '_' || c == '-') ? c : '-';
+    }
+    if (result.size() > 64)
+        result.resize(64);
+    if (result.empty() || result == "." || result == "..")
+        result = "port";
+    return result;
+}
+
 endpoint_kind kind_for_record(const std::string& kind)
 {
     const auto mapped = config::to_endpoint_kind(kind);
@@ -65,7 +84,7 @@ config::port_entry record_to_entry(const std::string& name,
 } // namespace
 
 studio::studio(studio_options options)
-    : options_(std::move(options))
+    : options_(options)
     , hub_(std::make_shared<vss::hub>(options_.hub))
 {
     if (options_.start_hub)
@@ -78,6 +97,13 @@ studio::~studio()
     {
         hub_->stop();
         hub_->join();
+    }
+
+    // The ports are closed, so no application can use the names any more.
+    for (const auto& [id, record] : records_)
+    {
+        if (record.link)
+            remove_stable_link(*record.link);
     }
 }
 
@@ -128,6 +154,30 @@ void studio::claim_paths(const std::string& target, const std::string& advertise
         claimed_paths_.insert(advertised);
 }
 
+result<void> studio::link_pty(port_record& record)
+{
+    if (!options_.stable_links ||
+        record.virtual_kind != to_string(virtual_port_kind::pty))
+        return {};
+
+    std::filesystem::path directory(options_.stable_dir);
+    if (options_.stable_dir.empty())
+    {
+        const auto resolved = resolve_link_directory(process_environment());
+        if (!resolved)
+            return resolved.error();
+        directory = *resolved;
+    }
+
+    const auto made =
+        make_stable_link(directory, link_name(record.name), record.target);
+    if (!made)
+        return made.error();
+    record.link = *made;
+    record.advertised = made->path;
+    return {};
+}
+
 result<std::shared_ptr<endpoint>> studio::register_port(
     port_record record, std::shared_ptr<transport> transport,
     endpoint_options options)
@@ -135,10 +185,18 @@ result<std::shared_ptr<endpoint>> studio::register_port(
     if (!transport)
         return make_error_code(errc::invalid_argument);
 
+    const auto linked = link_pty(record);
+    if (!linked)
+        return linked.error();
+
     auto created = hub_->add_endpoint(record.name, kind_for_record(record.kind),
                                       std::move(transport), options);
     if (!created)
+    {
+        if (record.link)
+            remove_stable_link(*record.link);
         return created.error();
+    }
 
     record.id = (*created)->id();
     if (record.advertised.empty())
@@ -152,13 +210,12 @@ result<std::shared_ptr<endpoint>> studio::register_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_virtual_port(
-    std::string name, virtual_port_kind kind, endpoint_options options)
+    const std::string& name, virtual_port_kind kind, endpoint_options options)
 {
     if (kind == virtual_port_kind::pty && !supports(virtual_port_kind::pty))
-        return create_auto_virtual_port(std::move(name), options);
+        return create_auto_virtual_port(name, options);
 
-    const std::string requested = name;
-    const std::string final_name = unique_name(requested);
+    const std::string final_name = unique_name(name);
 
     auto created = vss::create_virtual_port(hub_->executor(), kind, final_name);
     if (!created)
@@ -176,7 +233,7 @@ result<std::shared_ptr<endpoint>> studio::create_virtual_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
-    std::string name, endpoint_options options)
+    const std::string& name, endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
@@ -252,7 +309,7 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
 }
 
 result<std::shared_ptr<endpoint>> studio::attach_serial(
-    std::string name, std::string uri, endpoint_options options)
+    const std::string& name, const std::string& uri, endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
@@ -277,7 +334,8 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
 }
 
 result<std::shared_ptr<endpoint>> studio::attach_serial(
-    std::string name, std::string uri, const serial_settings& settings,
+    const std::string& name, const std::string& uri,
+    const serial_settings& settings,
     endpoint_options options)
 {
     if (const error_code invalid = validate(settings))
@@ -308,7 +366,8 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
 }
 
 result<std::shared_ptr<endpoint>> studio::create_mock_port(
-    std::string name, const serial_settings& settings, std::string target)
+    const std::string& name, const serial_settings& settings,
+    const std::string& target)
 {
     const std::string final_name = unique_name(name);
 
@@ -352,6 +411,9 @@ result<void> studio::remove_port(endpoint_id id)
         return removed.error();
 
     std::lock_guard lock(record_mutex_);
+    if (const auto it = records_.find(id);
+        it != records_.end() && it->second.link)
+        remove_stable_link(*it->second.link);
     records_.erase(id);
     if (!target.empty())
         claimed_paths_.erase(target);
@@ -632,6 +694,8 @@ result<void> studio::apply(const config::document& value, bool rollback_on_error
     {
         std::vector<endpoint_id> sources;
         std::vector<endpoint_id> targets;
+        sources.reserve(link.sources.size());
+        targets.reserve(link.targets.size());
         for (const auto& name : link.sources)
             sources.push_back(ids.at(name));
         for (const auto& name : link.targets)

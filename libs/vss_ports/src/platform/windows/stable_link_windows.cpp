@@ -31,6 +31,11 @@ error_code platform_ensure_private_directory(const std::filesystem::path&)
     return make_error_code(errc::unsupported);
 }
 
+error_code platform_check_private_directory(const std::filesystem::path&)
+{
+    return make_error_code(errc::unsupported);
+}
+
 std::optional<std::string> platform_getenv(std::string_view name)
 {
     const std::string key(name);

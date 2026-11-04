@@ -18,6 +18,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
   unit/test_studio.cpp
+  unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)
 
@@ -40,6 +41,11 @@ set(VSS_SYSTEM_TEST_SOURCES
   system/test_system_tcp.cpp
   system/test_system_udp.cpp)
 
+# The vport tests start vss_cli as a separate process, the way a script does.
+if(NOT WIN32 AND TARGET vss_cli)
+  list(APPEND VSS_SYSTEM_TEST_SOURCES system/test_system_vport.cpp)
+endif()
+
 add_executable(vss_system_tests ${VSS_SYSTEM_TEST_SOURCES})
 target_include_directories(vss_system_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -52,6 +58,11 @@ vss_enable_coverage(vss_system_tests)
 add_test(NAME system COMMAND vss_system_tests
   --verbose --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
 set_tests_properties(system PROPERTIES TIMEOUT 600)
+if(NOT WIN32 AND TARGET vss_cli)
+  add_dependencies(vss_system_tests vss_cli)
+  target_compile_definitions(vss_system_tests PRIVATE
+    VSS_CLI_PATH="$<TARGET_FILE:vss_cli>")
+endif()
 
 add_subdirectory(fuzz)
 
@@ -69,6 +80,19 @@ if(VSS_PWSH)
     COMMAND ${VSS_PWSH} -NoProfile -File
             ${PROJECT_SOURCE_DIR}/tools/vm/test-vmrun.ps1)
   set_tests_properties(vm_harness PROPERTIES TIMEOUT 120)
+
+  # The VMX builder runs in its dry-run mode. The answer disc is built with IMAPI2,
+  # so its test is for Windows only.
+  add_test(NAME vm_builder
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-vm.ps1)
+  set_tests_properties(vm_builder PROPERTIES TIMEOUT 120)
+  if(WIN32)
+    add_test(NAME vm_seed
+      COMMAND ${VSS_PWSH} -NoProfile -File
+              ${PROJECT_SOURCE_DIR}/tools/vm/test-seed.ps1)
+    set_tests_properties(vm_seed PROPERTIES TIMEOUT 180)
+  endif()
 endif()
 
 if(TARGET vss_gui)
@@ -97,6 +121,15 @@ if(TARGET vss_gui_backend_tests)
   add_test(NAME gui_backend COMMAND vss_gui_backend_tests --verbose)
   set_tests_properties(gui_backend PROPERTIES
     TIMEOUT 120
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# Journey tests send key and mouse events to the real window.
+if(TARGET vss_gui_journey_tests)
+  add_test(NAME gui_journeys COMMAND vss_gui_journey_tests --verbose)
+  set_tests_properties(gui_journeys PROPERTIES
+    LABELS ui
+    TIMEOUT 300
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 

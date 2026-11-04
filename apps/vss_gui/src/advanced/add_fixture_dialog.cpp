@@ -231,27 +231,28 @@ void AddFixtureDialog::update_result()
     QString plain;
     if (!other.isEmpty())
     {
-        html = tr("Studio adds a fixture called <b>%1</b> at %2 baud, linked "
-                  "two-way to <b>%3</b>.")
-                   .arg(name, baud, other);
-        plain = tr("Studio adds a fixture called %1 at %2 baud, linked two-way "
-                   "to %3.")
-                    .arg(name, baud, other);
         if (backend_.caps().faults && backend_.caps().line_matrix)
         {
-            html += QStringLiteral(" ") +
-                    tr("After it exists you can inject faults and change its "
-                       "line wiring from the Inspector.");
-            plain += QStringLiteral(" ") +
-                     tr("After it exists you can inject faults and change its "
-                        "line wiring from the Inspector.");
+            html = tr("Studio adds a fixture called <b>%1</b> at %2 baud, "
+                      "linked two-way to <b>%3</b>. After it exists you can "
+                      "inject faults and change its line wiring from the "
+                      "Inspector.")
+                       .arg(name, baud, other);
+            plain = tr("Studio adds a fixture called %1 at %2 baud, linked "
+                       "two-way to %3. After it exists you can inject faults "
+                       "and change its line wiring from the Inspector.")
+                        .arg(name, baud, other);
         }
         else
         {
-            html += QStringLiteral(" ") +
-                    tr("After it exists you can open it from the Inspector.");
-            plain += QStringLiteral(" ") +
-                     tr("After it exists you can open it from the Inspector.");
+            html = tr("Studio adds a fixture called <b>%1</b> at %2 baud, "
+                      "linked two-way to <b>%3</b>. After it exists you can "
+                      "open it from the Inspector.")
+                       .arg(name, baud, other);
+            plain = tr("Studio adds a fixture called %1 at %2 baud, linked "
+                       "two-way to %3. After it exists you can open it from "
+                       "the Inspector.")
+                        .arg(name, baud, other);
         }
     }
     else

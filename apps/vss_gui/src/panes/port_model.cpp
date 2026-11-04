@@ -179,7 +179,7 @@ QVariant PortModel::data(const QModelIndex& index, int item_role) const
     case Qt::ToolTipRole:
         return port.path;
     case Qt::AccessibleTextRole:
-        return QStringLiteral("%1, %2, %3")
+        return tr("%1, %2, %3")
             .arg(port.name, port.path.isEmpty() ? state_text(port) : port.path,
                  state_text(port));
     case port_id_role:
@@ -211,20 +211,19 @@ QVariant PortModel::headerData(int section, Qt::Orientation orientation,
                                int item_role) const
 {
     if (orientation != Qt::Horizontal || item_role != Qt::DisplayRole)
-        return QAbstractTableModel::headerData(section, orientation,
-                                               item_role);
+        return QAbstractTableModel::headerData(section, orientation, item_role);
     switch (section)
     {
     case 0:
-        return QStringLiteral("Port");
+        return tr("Port");
     case 1:
-        return QStringLiteral("State");
+        return tr("State");
     case 2:
-        return QStringLiteral("RX");
+        return tr("RX");
     case 3:
-        return QStringLiteral("TX");
+        return tr("TX");
     case 4:
-        return QStringLiteral("Dropped");
+        return tr("Dropped");
     default:
         return {};
     }
@@ -257,27 +256,27 @@ std::optional<port_view> PortModel::port_at(int row) const
 QString PortModel::state_text(const port_view& port)
 {
     if (port.state == vss::endpoint_state::failed)
-        return QStringLiteral("Failed");
+        return tr("Failed");
     if (port.kind == vss::endpoint_kind::mock)
-        return QStringLiteral("Fixture");
+        return tr("Fixture");
     if (port.studio_only)
-        return QStringLiteral("Studio only");
+        return tr("Studio only");
     if (port.open)
     {
         switch (port.peer)
         {
         case peer_state::not_open:
-            return QStringLiteral("Waiting for program");
+            return tr("Waiting for program");
         case peer_state::open:
-            return QStringLiteral("Program connected");
+            return tr("Program connected");
         case peer_state::unknown:
             break;
         }
-        return QStringLiteral("Open");
+        return tr("Open");
     }
     if (port.state == vss::endpoint_state::closed)
-        return QStringLiteral("Closed");
-    return QStringLiteral("Closed");
+        return tr("Closed");
+    return tr("Closed");
 }
 
 port_state_kind PortModel::state_kind(const port_view& port)
@@ -307,27 +306,27 @@ QString PortModel::role_text(const port_view& port,
     switch (port.kind)
     {
     case vss::endpoint_kind::mock:
-        return QStringLiteral("Fixture (mock)");
+        return tr("Fixture (mock)");
     case vss::endpoint_kind::physical:
         if (!others.isEmpty())
         {
             const QStringList names = others.split(QStringLiteral(", "));
-            return QStringLiteral("Real device, shared with %1 programs")
-                .arg(names.size());
+            return tr("Real device, shared with %n programs", "",
+                      static_cast<int>(names.size()));
         }
-        return QStringLiteral("Real device");
+        return tr("Real device");
     case vss::endpoint_kind::tcp:
     case vss::endpoint_kind::udp:
     case vss::endpoint_kind::rfc2217:
-        return QStringLiteral("Network port");
+        return tr("Network port");
     case vss::endpoint_kind::virtual_port:
         break;
     }
     if (port.studio_only)
-        return QStringLiteral("In-process port. Only Studio can open it");
+        return tr("In-process port. Only Studio can open it");
     if (!others.isEmpty())
-        return QStringLiteral("Virtual port, linked to %1").arg(others);
-    return QStringLiteral("Virtual port");
+        return tr("Virtual port, linked to %1").arg(others);
+    return tr("Virtual port");
 }
 
 QString PortModel::serial_text(const port_view& port)

@@ -199,11 +199,11 @@ QVariant MonitorModel::data(const QModelIndex& index, int item_role) const
             switch (row.direction)
             {
             case traffic_direction::rx:
-                return QStringLiteral("RX");
+                return tr("RX");
             case traffic_direction::tx:
-                return QStringLiteral("TX");
+                return tr("TX");
             case traffic_direction::drop:
-                return QStringLiteral("DROP");
+                return tr("DROP");
             }
             return {};
         case 3:
@@ -226,16 +226,15 @@ QVariant MonitorModel::data(const QModelIndex& index, int item_role) const
             return Theme::instance().colour(colour_role::accentSoft);
         return {};
     case Qt::ToolTipRole:
-        return row.dropped ? QStringLiteral("Not the owner, not forwarded.")
+        return row.dropped ? tr("Not the owner, not forwarded.")
                            : preview_for(row);
     case Qt::AccessibleTextRole:
     {
-        const QString dir = row.direction == traffic_direction::rx
-                                ? QStringLiteral("received")
-                            : row.direction == traffic_direction::tx
-                                ? QStringLiteral("sent")
-                                : QStringLiteral("dropped");
-        return QStringLiteral("%1, %2, %3, %4 bytes, %5")
+        const QString dir =
+            row.direction == traffic_direction::rx   ? tr("received")
+            : row.direction == traffic_direction::tx ? tr("sent")
+                                                     : tr("dropped");
+        return tr("%1, %2, %3, %4 bytes, %5")
             .arg(row.time.toString(QStringLiteral("HH:mm:ss.zzz")), row.port,
                  dir, QLocale().toString(static_cast<qulonglong>(row.bytes)),
                  preview_for(row));
@@ -257,20 +256,19 @@ QVariant MonitorModel::headerData(int section, Qt::Orientation orientation,
                                   int item_role) const
 {
     if (orientation != Qt::Horizontal || item_role != Qt::DisplayRole)
-        return QAbstractTableModel::headerData(section, orientation,
-                                               item_role);
+        return QAbstractTableModel::headerData(section, orientation, item_role);
     switch (section)
     {
     case 0:
-        return QStringLiteral("Time");
+        return tr("Time");
     case 1:
-        return QStringLiteral("Port");
+        return tr("Port");
     case 2:
-        return QStringLiteral("Direction");
+        return tr("Direction");
     case 3:
-        return QStringLiteral("Bytes");
+        return tr("Bytes");
     case 4:
-        return QStringLiteral("Preview");
+        return tr("Preview");
     default:
         return {};
     }
@@ -293,7 +291,7 @@ const traffic_row* MonitorModel::row_at(int row) const
 QString MonitorModel::preview_for(const traffic_row& row) const
 {
     if (row.dropped)
-        return QStringLiteral("not the owner, not forwarded");
+        return tr("not the owner, not forwarded");
     return hex_ ? hex_preview(row.preview) : ascii_preview(row.preview);
 }
 

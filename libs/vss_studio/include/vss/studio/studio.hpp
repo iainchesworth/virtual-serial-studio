@@ -12,6 +12,7 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/serial_enumeration.hpp>
+#include <vss/ports/stable_link.hpp>
 #include <vss/ports/virtual_port.hpp>
 
 #include <memory>
@@ -32,6 +33,12 @@ struct studio_options
     bool start_hub = true;
     /// Capture traffic in the ring buffer by default.
     bool capture = true;
+    /// Give every pseudo terminal a stable name (a symbolic link named after
+    /// the port) and advertise that name instead of `/dev/pts/N`.  Linux and
+    /// macOS only; creating a port fails if the link cannot be made.
+    bool stable_links = false;
+    /// Directory for the links.  Empty means `resolve_link_directory`.
+    std::string stable_dir;
 };
 
 /// The application service shared by the command line tool and the GUI.
@@ -61,23 +68,24 @@ public:
     /// pseudo terminal on POSIX, a com0com pair on Windows when one exists,
     /// and an in-process loopback otherwise.
     result<std::shared_ptr<endpoint>> create_virtual_port(
-        std::string name, virtual_port_kind kind = virtual_port_kind::pty,
+        const std::string& name,
+        virtual_port_kind kind = virtual_port_kind::pty,
         endpoint_options options = {});
 
     /// Attaches a real serial port or a network backend from a URI.
-    result<std::shared_ptr<endpoint>> attach_serial(std::string name,
-                                                    std::string uri,
+    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
+                                                    const std::string& uri,
                                                     endpoint_options options = {});
 
-    result<std::shared_ptr<endpoint>> attach_serial(std::string name,
-                                                    std::string uri,
+    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
+                                                    const std::string& uri,
                                                     const serial_settings& settings,
                                                     endpoint_options options = {});
 
     /// Creates a scriptable in-memory device.
     result<std::shared_ptr<endpoint>> create_mock_port(
-        std::string name, const serial_settings& settings = {},
-        std::string target = "scripted");
+        const std::string& name, const serial_settings& settings = {},
+        const std::string& target = "scripted");
 
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
@@ -145,6 +153,7 @@ private:
         std::string target;
         std::string virtual_kind = "auto";
         std::string advertised;
+        std::optional<stable_link> link;
         serial_settings serial;
         bool capture = true;
     };
@@ -154,7 +163,11 @@ private:
         endpoint_options options);
 
     result<std::shared_ptr<endpoint>> create_auto_virtual_port(
-        std::string name, endpoint_options options);
+        const std::string& name, endpoint_options options);
+
+    /// Makes the stable link for a new pseudo terminal when the options ask
+    /// for one, and points the record's advertised path at it.
+    result<void> link_pty(port_record& record);
 
     std::string unique_name(std::string_view base) const;
     std::vector<endpoint_id> resolve_all(const std::vector<std::string>& names,

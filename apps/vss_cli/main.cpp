@@ -13,7 +13,9 @@
 #include <vss/testkit/harness.hpp>
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <map>
@@ -81,7 +83,18 @@ void print_usage()
         "      A virtual port, a redirect and a monitor: no hardware needed.\n"
         "\n"
         "  vss_cli virtual [--kind=auto|loopback|pty] [--seconds=N]\n"
-        "      Create one virtual port and print the path to open from an app.\n"
+        "      Create one virtual port and print the path to open from an "
+        "app.\n"
+        "      It runs until Ctrl-C or SIGTERM, or for N seconds.\n"
+        "\n"
+        "  vss_cli vport --name=<name>[,<name>...] [--link=<a>:<b>[,...]]\n"
+        "                [--stable-dir=<dir>] [--seconds=N]\n"
+        "      Create pseudo terminals with stable names (Linux and macOS). "
+        "Each\n"
+        "      name is a symbolic link an application can open; --link joins "
+        "two\n"
+        "      of the ports like a null-modem cable.  Runs until Ctrl-C or "
+        "SIGTERM.\n"
         "\n"
         "  vss_cli run <topology.json> [--seconds=N]\n"
         "      Apply a saved topology and keep it alive.\n"
@@ -151,6 +164,46 @@ void run_for(studio& app, int seconds, bool verbose)
             print_topology(app);
     }
     print_topology(app);
+}
+
+std::atomic<bool> g_stop_requested{false};
+
+extern "C" void request_stop(int)
+{
+    g_stop_requested.store(true);
+}
+
+/// Starts catching SIGINT and SIGTERM.  A command that stays alive calls this
+/// before it prints anything: a script that has read the path may signal at
+/// once, and a signal that arrives before the handler exists kills the process
+/// with its links still in place.
+void catch_stop_signals()
+{
+    g_stop_requested.store(false);
+    std::signal(SIGINT, request_stop);
+    std::signal(SIGTERM, request_stop);
+}
+
+/// Keeps the studio alive until a signal, or for `seconds` when that is more
+/// than zero.  Needs catch_stop_signals() first.  Returns true when a signal
+/// ended it.
+bool run_until_stopped(studio& app, int seconds, bool verbose)
+{
+    const auto started = std::chrono::steady_clock::now();
+    auto last_print = started;
+    while (!g_stop_requested.load())
+    {
+        const auto now = std::chrono::steady_clock::now();
+        if (seconds > 0 && now - started >= std::chrono::seconds(seconds))
+            break;
+        if (verbose && now - last_print >= 500ms)
+        {
+            print_topology(app);
+            last_print = now;
+        }
+        std::this_thread::sleep_for(100ms);
+    }
+    return g_stop_requested.load();
 }
 
 int command_devices(const arguments& args)
@@ -324,6 +377,7 @@ int command_loopback(const arguments& args)
 
 int command_virtual(const arguments& args)
 {
+    catch_stop_signals();
     const std::string kind = args.get("--kind", "auto");
 
     vss::virtual_port_kind requested = vss::virtual_port_kind::loopback;
@@ -371,7 +425,98 @@ int command_virtual(const arguments& args)
             std::printf("  device: %s\n", device.path.c_str());
     }
 
-    run_for(app, args.number("--seconds", 0), false);
+    // A script reading this through a pipe must see the path now, not when
+    // the buffer fills or the process ends.
+    std::fflush(stdout);
+    run_until_stopped(app, args.number("--seconds", 0), false);
+    return 0;
+}
+
+std::vector<std::string> split_list(const std::string& text, char separator)
+{
+    std::vector<std::string> parts;
+    std::size_t start = 0;
+    while (start <= text.size())
+    {
+        const auto end = text.find(separator, start);
+        const auto stop = end == std::string::npos ? text.size() : end;
+        if (stop > start)
+            parts.push_back(text.substr(start, stop - start));
+        if (end == std::string::npos)
+            break;
+        start = end + 1;
+    }
+    return parts;
+}
+
+int command_vport(const arguments& args)
+{
+    catch_stop_signals();
+    if (!vss::stable_links_supported())
+    {
+        std::fprintf(stderr,
+                     "vport needs pseudo terminals, which this platform does "
+                     "not have.\nUse `vss_cli virtual` instead.\n");
+        return 2;
+    }
+
+    const auto names = split_list(args.get("--name"), ',');
+    if (names.empty())
+    {
+        std::fprintf(stderr, "vport needs --name=<name>[,<name>...]\n");
+        return 2;
+    }
+
+    vss::studio_options options;
+    options.stable_links = true;
+    options.stable_dir = args.get("--stable-dir");
+    studio app(options);
+
+    for (const auto& name : names)
+    {
+        const auto created =
+            app.create_virtual_port(name, vss::virtual_port_kind::pty);
+        if (!created)
+        {
+            std::fprintf(stderr, "cannot create %s: %s\n", name.c_str(),
+                         created.error().message().c_str());
+            return 1;
+        }
+        // A name the studio had to change (it was already taken) would print
+        // something other than what the operator asked for.
+        if ((*created)->name() != name)
+        {
+            std::fprintf(stderr, "cannot create %s: the name is taken\n",
+                         name.c_str());
+            return 1;
+        }
+        std::printf("%s -> %s\n", app.advertised_path((*created)->id()).c_str(),
+                    (*created)->public_path().c_str());
+    }
+
+    for (const auto& pair : split_list(args.get("--link"), ','))
+    {
+        const auto colon = pair.find(':');
+        if (colon == std::string::npos || colon == 0 ||
+            colon + 1 == pair.size())
+        {
+            std::fprintf(stderr, "--link wants <a>:<b>, not %s\n",
+                         pair.c_str());
+            return 2;
+        }
+        const auto joined =
+            app.connect(pair.substr(0, colon), pair.substr(colon + 1));
+        if (!joined)
+        {
+            std::fprintf(stderr, "cannot link %s: %s\n", pair.c_str(),
+                         joined.error().message().c_str());
+            return 1;
+        }
+        std::printf("linked %s\n", pair.c_str());
+    }
+
+    std::fflush(stdout);
+    run_until_stopped(app, args.number("--seconds", 0), args.has("--verbose"));
     return 0;
 }
 
@@ -561,6 +706,8 @@ int main(int argc, char** argv)
             return command_loopback(args);
         if (command == "virtual")
             return command_virtual(args);
+        if (command == "vport")
+            return command_vport(args);
         if (command == "run")
             return command_run(args);
         if (command == "bench")

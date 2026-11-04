@@ -6,52 +6,20 @@
 
 #include <vss/ports/stable_link.hpp>
 
+#include "scratch_directory.hpp"
 #include "test_framework.hpp"
 
-#include <atomic>
-#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <map>
 #include <string>
 
 using namespace vss;
+using vss_test_support::scratch_directory;
 namespace fs = std::filesystem;
 
 namespace
 {
-
-/// A fresh directory under the system temp directory, removed on exit.  It is
-/// made with the default mode, so a test that wants the module to make its own
-/// private directory names a child of it that does not exist yet.
-class scratch_directory
-{
-public:
-    scratch_directory()
-    {
-        static std::atomic<unsigned> counter{0};
-        const auto stamp =
-            std::chrono::steady_clock::now().time_since_epoch().count();
-        path_ = fs::temp_directory_path() /
-                ("vss-link-test-" + std::to_string(stamp) + "-" +
-                 std::to_string(counter.fetch_add(1)));
-        fs::create_directories(path_);
-    }
-
-    ~scratch_directory()
-    {
-        std::error_code ignored;
-        fs::remove_all(path_, ignored);
-    }
-
-    scratch_directory(const scratch_directory&) = delete;
-    scratch_directory& operator=(const scratch_directory&) = delete;
-
-    const fs::path& path() const noexcept { return path_; }
-
-private:
-    fs::path path_;
-};
 
 env_lookup fake_environment(std::map<std::string, std::string> values)
 {
@@ -288,4 +256,44 @@ TEST_CASE("stable link: an unsafe directory is refused, not used")
     const auto file = scratch.path() / "file";
     std::ofstream(file) << "x";
     REQUIRE(!make_stable_link(file, "x", "/dev/null").has_value());
+}
+
+TEST_CASE("stable link: a picker lists live links and leaves out dead ones")
+{
+    if (!stable_links_supported())
+    {
+        REQUIRE(list_stable_links(fake_environment({})).empty());
+        return;
+    }
+
+    scratch_directory scratch;
+    const auto directory = scratch.path() / "links";
+    REQUIRE(make_stable_link(directory, "live", "/dev/null").has_value());
+    // The remains of a process that died: a link to nothing.
+    REQUIRE(
+        make_stable_link(directory, "dead", (scratch.path() / "gone").string())
+            .has_value());
+    std::ofstream(directory / "file") << "not a link";
+
+    const auto links = list_stable_links(
+        fake_environment({{"VSS_VPORT_DIR", directory.string()}}));
+    REQUIRE_EQ(links.size(), std::size_t{1});
+    REQUIRE_EQ(links.front().path, (directory / "live").string());
+    REQUIRE_EQ(links.front().target, std::string("/dev/null"));
+
+    // Looking does not create anything.
+    const auto missing = scratch.path() / "missing";
+    REQUIRE(list_stable_links(
+                fake_environment({{"VSS_VPORT_DIR", missing.string()}}))
+                .empty());
+    REQUIRE(!fs::exists(missing));
+
+    // A directory that is open to others is not read.
+    const auto open = scratch.path() / "open";
+    fs::create_directory(open);
+    fs::create_symlink("/dev/null", open / "x");
+    fs::permissions(open, fs::perms::all, fs::perm_options::replace);
+    REQUIRE(
+        list_stable_links(fake_environment({{"VSS_VPORT_DIR", open.string()}}))
+            .empty());
 }

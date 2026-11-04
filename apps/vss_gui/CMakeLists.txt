@@ -128,3 +128,14 @@ set_target_properties(vss_gui PROPERTIES
   OUTPUT_NAME vss_gui)
 
 vss_set_warnings(vss_gui)
+
+# Journey tests drive the real window with QTest key and mouse events; they
+# need the Qt Test module on top of Widgets.
+if(VSS_BUILD_TESTS)
+  find_package(Qt6 6.2 QUIET COMPONENTS Test)
+  if(TARGET Qt6::Test)
+    add_subdirectory(ui-tests)
+  else()
+    message(STATUS "Vss: Qt6::Test not found; the GUI journey tests are skipped.")
+  endif()
+endif()

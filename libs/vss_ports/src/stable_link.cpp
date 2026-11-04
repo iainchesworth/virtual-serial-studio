@@ -93,6 +93,45 @@ result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup)
     return last;
 }
 
+std::vector<stable_link> list_stable_links(const env_lookup& lookup)
+{
+    std::vector<stable_link> links;
+    if (!stable_links_supported())
+        return links;
+
+    std::vector<std::filesystem::path> directories;
+    if (const auto chosen = non_empty(lookup, "VSS_VPORT_DIR"))
+        directories.emplace_back(*chosen);
+    else if (const auto runtime = non_empty(lookup, "XDG_RUNTIME_DIR"))
+        directories.push_back(std::filesystem::path(*runtime) / "vss");
+    else
+        directories = detail::platform_link_directories();
+
+    for (const auto& directory : directories)
+    {
+        if (detail::platform_check_private_directory(directory))
+            continue;
+
+        std::error_code ec;
+        std::filesystem::directory_iterator entries(directory, ec);
+        if (ec)
+            continue;
+        for (const auto& entry : entries)
+        {
+            std::error_code status_ec;
+            if (!entry.is_symlink(status_ec) || status_ec)
+                continue;
+            if (!detail::platform_is_character_device(entry.path()))
+                continue;
+            const auto target = std::filesystem::read_symlink(entry.path(), ec);
+            if (ec)
+                continue;
+            links.push_back({entry.path().string(), target.string()});
+        }
+    }
+    return links;
+}
+
 result<stable_link> make_stable_link(const std::filesystem::path& directory,
                                      std::string_view name,
                                      std::string_view target)

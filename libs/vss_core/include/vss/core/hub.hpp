@@ -70,11 +70,11 @@ public:
     // -- endpoints ---------------------------------------------------------
 
     result<std::shared_ptr<endpoint>> add_endpoint(
-        std::string name, endpoint_kind kind,
+        const std::string& name, endpoint_kind kind,
         std::shared_ptr<transport> transport, endpoint_options options = {});
 
     result<void> remove_endpoint(endpoint_id id);
-    result<void> rename_endpoint(endpoint_id id, std::string name);
+    result<void> rename_endpoint(endpoint_id id, const std::string& name);
 
     std::shared_ptr<endpoint> find_endpoint(endpoint_id id) const;
     std::shared_ptr<endpoint> find_endpoint(std::string_view name) const;
@@ -128,8 +128,7 @@ public:
     template <EventSink Sink>
     subscriber_id subscribe(event_filter filter, Sink&& sink)
     {
-        return subscribe(std::move(filter),
-                         event_sink(std::forward<Sink>(sink)));
+        return subscribe(filter, event_sink(std::forward<Sink>(sink)));
     }
     void unsubscribe(subscriber_id id);
 
@@ -177,7 +176,7 @@ private:
     void add_route(link_id link, endpoint_id from, endpoint_id to);
     void erase_routes(link_id link);
     link_info describe(const link_record& record) const;
-    void dispatch(endpoint_event event);
+    void dispatch(const endpoint_event& event);
     void endpoint_closed();
 
     hub_options options_;

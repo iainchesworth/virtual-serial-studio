@@ -259,7 +259,7 @@ void AttachDialog::build_device_section()
     manual_path_ = new QLineEdit(this);
     manual_path_->setObjectName(QStringLiteral("attachManualPath"));
     manual_path_->setFont(Theme::instance().font(text_style::data));
-    manual_path_->setPlaceholderText(QStringLiteral("COM3 or /dev/ttyUSB0"));
+    manual_path_->setPlaceholderText(tr("COM3 or /dev/ttyUSB0"));
     manual_path_->setAccessibleName(tr("Device path"));
     manual_row_ = new FormRow(tr("Device path"), manual_path_,
                               tr("For example, COM3 or /dev/ttyUSB0."), this);
@@ -435,8 +435,7 @@ void AttachDialog::rebuild_rows()
     const auto devices = backend_.devices();
     for (int index = 0; index < static_cast<int>(devices.size()); ++index)
     {
-        const device_view& device =
-            devices.at(static_cast<std::size_t>(index));
+        const device_view& device = devices.at(static_cast<std::size_t>(index));
         const bool is_virtual = device.com0com || device.virtual_device;
         const bool available = !is_virtual && !device.in_use;
 

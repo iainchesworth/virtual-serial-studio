@@ -14,6 +14,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace vss
 {
@@ -50,6 +51,13 @@ bool stable_links_supported() noexcept;
 /// closed to everyone else; a directory that is not is refused rather than
 /// used.  A directory named by an environment variable has no fallback.
 result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup);
+
+/// The stable links that exist now, for a port picker.
+///
+/// It looks where resolve_link_directory would, but creates nothing and skips a
+/// directory that is not private. A link counts only while it points at a
+/// character device, so the remains of a process that died are left out.
+std::vector<stable_link> list_stable_links(const env_lookup& lookup);
 
 /// Makes `name` in `directory` point at `target`.
 ///
