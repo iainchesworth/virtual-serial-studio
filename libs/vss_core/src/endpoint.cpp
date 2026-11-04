@@ -8,7 +8,6 @@
 #include <vss/core/profile.hpp>
 #include <vss/core/hub.hpp>
 
-#include <boost/asio/bind_executor.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/asio/post.hpp>
 
@@ -89,7 +88,10 @@ void endpoint::start()
         lines_ = transport_->lines();
     }
     transition(endpoint_state::open);
-    do_read();
+
+    // Arm the first read on the strand, like every later one.
+    auto self = shared_from_this();
+    boost::asio::post(strand_, [self] { self->do_read(); });
 }
 
 void endpoint::stop()
@@ -141,13 +143,17 @@ void endpoint::do_read()
     if (!running_.load())
         return;
 
+    // The transport takes a std::function, which carries no executor, so a
+    // bind_executor around the handler would be lost on the way. The completion
+    // enters the strand here instead, and everything that touches the
+    // transport stays serialised, as the serial library's contract asks.
     auto self = shared_from_this();
     transport_->async_read_some(
         boost::asio::buffer(read_buffer_),
-        boost::asio::bind_executor(
-            strand_, [self](boost::system::error_code ec, std::size_t count) {
-                self->on_read(ec, count);
-            }));
+        [self](boost::system::error_code ec, std::size_t count) {
+            boost::asio::post(self->strand_,
+                              [self, ec, count] { self->on_read(ec, count); });
+        });
 }
 
 void endpoint::on_read(boost::system::error_code ec, std::size_t count)
@@ -265,12 +271,15 @@ void endpoint::start_next_write()
     }
 
     auto self = shared_from_this();
+    // As in do_read: the std::function loses an executor binding, so the
+    // completion enters the strand explicitly.
     transport_->async_write_some(
         boost::asio::buffer(*next->data) + next->offset,
-        boost::asio::bind_executor(
-            strand_, [self, next](boost::system::error_code ec, std::size_t count) {
+        [self, next](boost::system::error_code ec, std::size_t count) {
+            boost::asio::post(self->strand_, [self, next, ec, count] {
                 self->on_write(next, ec, count);
-            }));
+            });
+        });
 }
 
 void endpoint::on_write(std::shared_ptr<pending_write> write,
