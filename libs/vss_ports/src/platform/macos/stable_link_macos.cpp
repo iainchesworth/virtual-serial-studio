@@ -26,6 +26,12 @@ platform_ensure_private_directory(const std::filesystem::path& directory)
     return posix::ensure_private_directory(directory);
 }
 
+error_code
+platform_check_private_directory(const std::filesystem::path& directory)
+{
+    return posix::check_private_directory(directory);
+}
+
 std::optional<std::string> platform_getenv(std::string_view name)
 {
     return posix::getenv_value(name);
