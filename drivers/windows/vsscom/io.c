@@ -299,7 +299,7 @@ VOID VssComEvtWaitCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
 
     WdfSpinLockAcquire(context->Lock);
-    context->Events.waiting = false;
+    context->Events.waiting = 0;
     context->WaitQueued = FALSE;
     WdfSpinLockRelease(context->Lock);
 
