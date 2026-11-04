@@ -30,6 +30,32 @@ $env:VSS_VM_PASSWORD = Read-Host -AsSecureString | ConvertFrom-SecureString -AsP
 `vmrun` takes them as arguments, so they are visible to other processes on the host while a guest command runs. The harness
 prints `<hidden>` in place of the password. Under WSL, add both names to `WSLENV`.
 
+## Building a guest
+
+The install media are in `E:\ISOs`. `tools/vm/iso-hashes.json` holds the SHA-256 of each, and `new-vm.ps1` checks it.
+
+```powershell
+# 1. The answer disc for the unattended install, written outside the repository.
+#    It reads VSS_VM_USER and VSS_VM_PASSWORD from your shell and prints neither.
+./tools/vm/new-seed.ps1 -Guest windows11
+
+# 2. The disk and the VMX. This does not start the guest, and it never overwrites one.
+./tools/vm/new-vm.ps1 -Guest windows11
+
+# 3. Start it. The guest installs, sets itself up and powers off.
+vmrun -T ws start 'D:\Virtual Machines\VSS - Windows 11\VSS - Windows 11.vmx' gui
+
+# 4. Disconnect the install media and take the snapshot.
+./tools/vm/new-vm.ps1 -Guest windows11 -DetachMedia
+./tools/vm/vmrun.ps1 snapshot -Vm 'D:\Virtual Machines\VSS - Windows 11\VSS - Windows 11.vmx' -Name clean
+```
+
+The guest ids are `windows10`, `windows11` and `ubuntu2604`. For Ubuntu, `new-seed.ps1` hashes the password with `openssl passwd -6`
+in WSL Debian, from standard input, and reads your SSH public key from `%USERPROFILE%\.vss`. The Windows answer file skips the TPM,
+Secure Boot, RAM and CPU checks of Windows 11 setup, so the guest needs no virtual TPM and no encryption password. After the first
+logon, `tools/vm/guest/setup-guest.ps1` installs VMware Tools, turns on test signing, creates `C:\vss` and powers the guest off.
+Creating a guest and taking its first snapshot are deliberate steps: nothing in the harness does either for you.
+
 ## The loop
 
 ```powershell
@@ -47,7 +73,7 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 
 `run` exits with the exit code of the guest command, and fails if the guest does not report one. `snapshot` creates a
 snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
-lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and runs in CI.
+lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and `test-vm.ps1` and `test-seed.ps1` check the guest builders with placeholders. All three run in CI.
 
 ## Safety
 
