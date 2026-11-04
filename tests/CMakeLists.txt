@@ -69,6 +69,19 @@ if(VSS_PWSH)
     COMMAND ${VSS_PWSH} -NoProfile -File
             ${PROJECT_SOURCE_DIR}/tools/vm/test-vmrun.ps1)
   set_tests_properties(vm_harness PROPERTIES TIMEOUT 120)
+
+  # The VMX builder runs in its dry-run mode. The answer disc is built with IMAPI2,
+  # so its test is for Windows only.
+  add_test(NAME vm_builder
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-vm.ps1)
+  set_tests_properties(vm_builder PROPERTIES TIMEOUT 120)
+  if(WIN32)
+    add_test(NAME vm_seed
+      COMMAND ${VSS_PWSH} -NoProfile -File
+              ${PROJECT_SOURCE_DIR}/tools/vm/test-seed.ps1)
+    set_tests_properties(vm_seed PROPERTIES TIMEOUT 180)
+  endif()
 endif()
 
 if(TARGET vss_gui)

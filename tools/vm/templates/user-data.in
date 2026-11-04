@@ -1,0 +1,37 @@
+#cloud-config
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Autoinstall answers for the Ubuntu guest. tools/vm/new-seed.ps1 fills the fields written between two at signs.
+# The result holds the password hash and the public key, so it is written outside every
+# repository.
+autoinstall:
+  version: 1
+  locale: en_AU.UTF-8
+  keyboard:
+    layout: us
+  timezone: UTC
+  identity:
+    hostname: @HOSTNAME@
+    username: @USER@
+    password: '@PASSWORD_HASH@'
+  ssh:
+    install-server: true
+    allow-pw: true
+    authorized-keys:
+      - @PUBLIC_KEY@
+  storage:
+    layout:
+      name: direct
+  packages:
+    - open-vm-tools
+    - python3
+    - python3-serial
+    - socat
+    - picocom
+    - minicom
+    - screen
+    - udev
+  late-commands:
+    - echo '@USER@ ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/90-vss
+    - chmod 0440 /target/etc/sudoers.d/90-vss
+  shutdown: poweroff
