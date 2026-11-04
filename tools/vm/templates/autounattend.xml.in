@@ -20,6 +20,12 @@
 @DISKCONFIG@
       <UserData>
         <AcceptEula>true</AcceptEula>
+        <!-- Microsoft's published generic key for Windows 10 and 11 Pro. It installs the edition
+             without a prompt and does not activate it; the guests stay unactivated. -->
+        <ProductKey>
+          <Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key>
+          <WillShowUI>OnError</WillShowUI>
+        </ProductKey>
       </UserData>
     </component>
   </settings>
