@@ -358,16 +358,16 @@ QWidget* TopologyJsonEditor::build_error_panel()
                     QStringLiteral("\"%1\"").arg(validation_.problem->fix_to);
                 // Search from the reported line so an identical port name
                 // earlier in the document is not replaced by mistake.
-                int line_start = 0;
+                qsizetype line_start = 0;
                 for (int line = 1; line < validation_.problem->line; ++line)
                 {
-                    const int next =
+                    const qsizetype next =
                         current.indexOf(QLatin1Char('\n'), line_start);
                     if (next < 0)
                         break;
                     line_start = next + 1;
                 }
-                const int index = current.indexOf(from, line_start);
+                const qsizetype index = current.indexOf(from, line_start);
                 if (index < 0)
                     return;
                 current.replace(index, from.size(), to);

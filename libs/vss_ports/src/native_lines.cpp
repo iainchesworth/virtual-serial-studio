@@ -110,7 +110,7 @@ result<void> write_line(std::intptr_t handle, control_line line, bool state)
         return make_error_code(errc::unsupported);
     }
 
-    const int request = state ? TIOCMBIS : TIOCMBIC;
+    const auto request = static_cast<unsigned long>(state ? TIOCMBIS : TIOCMBIC);
     if (::ioctl(static_cast<int>(handle), request, &bit) != 0)
         return last_error();
     return {};

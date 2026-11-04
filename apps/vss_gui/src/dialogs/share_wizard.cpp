@@ -727,7 +727,8 @@ void ShareWizard::update_device_list()
     QString first_available;
     for (int index = 0; index < static_cast<int>(devices_.size()); ++index)
     {
-        const device_view& device = devices_.at(index);
+        const device_view& device =
+            devices_.at(static_cast<std::size_t>(index));
         QString description = device.description;
         QString chip_text;
         StatusChip::kind chip = StatusChip::kind::healthy;
@@ -776,7 +777,8 @@ void ShareWizard::update_device_list()
                         if (index >= 0 &&
                             index < static_cast<int>(devices_.size()))
                         {
-                            selected_device_ = devices_.at(index).path;
+                            selected_device_ =
+                                devices_.at(static_cast<std::size_t>(index)).path;
                             network_row_->clear_error();
                             clear_error();
                             update_step1_info();
@@ -815,7 +817,8 @@ void ShareWizard::update_device_list()
             {
                 const int index = device_group_->id(button);
                 if (index >= 0 && index < static_cast<int>(devices_.size()) &&
-                    devices_.at(index).path == first_available)
+                    devices_.at(static_cast<std::size_t>(index)).path ==
+                        first_available)
                 {
                     const QSignalBlocker blocker(button);
                     button->setChecked(true);
@@ -1396,7 +1399,7 @@ void ShareWizard::update_ready_table()
 {
     if (ready_table_ == nullptr)
         return;
-    ready_table_->setRowCount(listener_ids_.size());
+    ready_table_->setRowCount(static_cast<int>(listener_ids_.size()));
     for (int row = 0; row < listener_ids_.size(); ++row)
     {
         const vss::endpoint_id id = listener_ids_.at(row);

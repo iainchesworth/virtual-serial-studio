@@ -242,7 +242,7 @@ topology_layout compute_topology_layout(const QVector<topo_node_input>& nodes,
 
     for (int column = 1; column < columns.size(); ++column)
         order_column(column, column - 1);
-    for (int column = columns.size() - 2; column >= 0; --column)
+    for (int column = static_cast<int>(columns.size()) - 2; column >= 0; --column)
         order_column(column, column + 1);
 
     QVector<qreal> column_width(columns.size(), 0.0);

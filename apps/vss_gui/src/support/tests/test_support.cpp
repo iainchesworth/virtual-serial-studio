@@ -223,7 +223,7 @@ QVector<zip_entry> read_zip(const QByteArray& archive)
 {
     QVector<zip_entry> entries;
     int eocd = -1;
-    for (int offset = archive.size() - 22; offset >= 0; --offset)
+    for (int offset = static_cast<int>(archive.size()) - 22; offset >= 0; --offset)
     {
         if (read_u32(archive, offset) == 0x06054b50U)
         {

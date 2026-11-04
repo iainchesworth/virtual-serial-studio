@@ -14,7 +14,7 @@ Do not ask for screenshots. Everything you need is text: the specs in `docs/gui-
 - Boost.VirtualSerial is a private dependency, so the repo only builds where that checkout is available. If configuration fails, **stop and report**. Do not stub the dependency or remove it.
 - Every first-party source file carries `SPDX-License-Identifier: GPL-3.0-or-later`. Qt is linked dynamically. No other new third-party dependency without an explicit instruction. `Qt6::Svg` is approved.
 - Each change adds one fragment in `changelog.d/`; check with `python tools/changelog.py --check`. Read `CONTRIBUTING.md` before committing and follow the commit text rules. Respect `.clang-format` and `.editorconfig`.
-- Warnings are errors in CI (`VSS_WARNINGS_AS_ERRORS`). CI builds with GCC, Clang, AppleClang and MSVC. Write portable code.
+- Warnings are errors in every build (the shared `icl::warnings` set). CI builds with GCC, Clang, AppleClang and MSVC. Write portable code.
 - The project has an in-tree test framework (`tests/`, `vss_unit_tests`). Use it, do not add another.
 - `vss::result<T>` is `boost::system::result`. The engine event sink is a `std::function` behind the `vss::EventSink` concept.
 - Threading: each endpoint runs on its own strand and events are dispatched on the hub's dispatcher strand. The GUI thread must never be called from, or block on, those threads. Marshal events to the GUI thread with queued connections and coalesce them. `unsubscribe` cannot recall a delivery that is already running, so sinks must capture state that outlives the hub (a `shared_ptr`), never a stack local.

@@ -140,8 +140,7 @@ jobs:
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_BUILD_GUI=ON \
-            -DVSS_WARNINGS_AS_ERRORS=ON
+            -DVSS_BUILD_GUI=ON
 
       - name: Build
         run: cmake --build build

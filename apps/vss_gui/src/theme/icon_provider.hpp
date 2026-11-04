@@ -31,7 +31,7 @@ public:
                int logical_size = 16);
 
     void flush();
-    int cache_size() const noexcept { return cache_.size(); }
+    int cache_size() const noexcept { return static_cast<int>(cache_.size()); }
 
 private:
     explicit IconProvider(QObject* parent = nullptr);

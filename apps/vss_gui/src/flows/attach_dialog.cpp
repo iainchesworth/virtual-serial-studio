@@ -435,7 +435,8 @@ void AttachDialog::rebuild_rows()
     const auto devices = backend_.devices();
     for (int index = 0; index < static_cast<int>(devices.size()); ++index)
     {
-        const device_view& device = devices.at(index);
+        const device_view& device =
+            devices.at(static_cast<std::size_t>(index));
         const bool is_virtual = device.com0com || device.virtual_device;
         const bool available = !is_virtual && !device.in_use;
 

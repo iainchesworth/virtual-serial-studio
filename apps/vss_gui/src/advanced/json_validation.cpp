@@ -55,8 +55,8 @@ QString links_check_text(int count, bool no_loops)
 
 int edit_distance(const QString& left, const QString& right)
 {
-    const int rows = left.size() + 1;
-    const int columns = right.size() + 1;
+    const int rows = static_cast<int>(left.size()) + 1;
+    const int columns = static_cast<int>(right.size()) + 1;
     QVector<int> previous(columns);
     QVector<int> current(columns);
     for (int column = 0; column < columns; ++column)

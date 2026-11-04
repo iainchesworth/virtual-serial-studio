@@ -53,7 +53,7 @@ public:
     CodeBlock* address_block() const noexcept { return address_; }
     Disclosure* settings_disclosure() const noexcept { return settings_; }
     NoteBanner* empty_note() const noexcept { return empty_note_; }
-    int device_row_count() const { return rows_.size(); }
+    int device_row_count() const { return static_cast<int>(rows_.size()); }
     QRadioButton* device_radio(int index) const;
     vss::endpoint_id logical_port() const noexcept { return logical_port_; }
     vss::endpoint_id physical_port() const noexcept { return physical_port_; }
