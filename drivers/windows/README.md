@@ -10,7 +10,7 @@ no com0com and no hardware. The design and the reasons for it are in
 |---|---|
 | Package: `vsscom.sys`, `vsscom.inf`, catalog, for x64 and ARM64 | builds in CI; `InfVerif` and `Inf2Cat` pass |
 | COM name: device interface, `\DosDevices` link, `SERIALCOMM` | in the driver; not yet run in a guest |
-| Loopback data path and the serial requests | first version; being replaced |
+| Loopback port: waiting reads with the `SetCommTimeouts` rules, `WaitCommEvent`, purge and cancel, modem lines, exclusive open | in the driver; not yet run in a guest |
 | Paired ports with a hub end, ports on demand | not yet |
 | Signing | not done: the package is unsigned |
 
@@ -33,7 +33,10 @@ the package as the artifact `vsscom-<platform>`.
 | Path | What |
 |---|---|
 | `vsscom/driver.c` | driver entry, device creation, COM name registration |
+| `vsscom/io.c` | reads, writes and the serial control requests |
+| `vsscom/vsscom.h` | the device context shared by the two |
 | `vsscom/public.h` | what user mode sees: interface GUID, control codes |
 | `vsscom/vsscom.inf` | the package description |
 | `vsscom/core/` | the serial rules in plain C; built for the host and unit-tested |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat` |
+| `test/` | guest scripts: `install-driver.ps1`, `test-driver.ps1` (tests D1 to D7), `uninstall-driver.ps1` |
