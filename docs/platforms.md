@@ -52,11 +52,27 @@ python3 tools/matrix/merge_results.py out --check
 
 ## Last results
 
-| Cell | Date | Commit | Result | Evidence |
-|---|---|---|---|---|
-| `wsl-debian` (WSL2 Debian, glibc 2.41, GCC 13, Qt 6.12.0, kernel 6.6.87) | 2026-11-05 | `9d5df03` plus the matrix change | T2 to T7 and T10 pass; T1 not passed to the runner; T8, T9, T11 skipped. T10 measured 20.4 MB/s. | `run_cell.py` output of that day |
+The first complete hosted run is [run 41919800221](https://github.com/iainchesworthlabs/virtual-serial-studio/actions/runs/41919800221), on commit `c3d4472` of the matrix pull request, on 2026-11-05. Every cell passed every applicable test.
 
-The hosted cells have not run yet. This table gains their rows after the first nightly run, each with a link to the run.
+| Cell | System | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T10 |
+|---|---|---|---|---|---|---|---|---|---|
+| `ubuntu-24.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | 55.6 MB/s |
+| `ubuntu-26.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | 111.1 MB/s |
+| `windows-2025` | Windows Server 2025 (10.0.26100) | pass | skip | skip | pass | pass | pass | skip | skip |
+| `macos-15` | macOS 15.8, Apple silicon | pass | pass | pass | pass | pass | pass | pass | 5.1 MB/s |
+| `macos-26` | macOS 26.6, Apple silicon | pass | pass | pass | pass | pass | pass | pass | 7.0 MB/s |
+| `macos-15-intel` | macOS 15.7, Intel | pass | pass | pass | pass | pass | pass | pass | 2.1 MB/s |
+| `macos-26-intel` | macOS 26.6, Intel | pass | pass | pass | pass | pass | pass | pass | 1.6 MB/s |
+| `wsl-debian` (owner's machine) | WSL2 Debian, GCC 13, Qt 6.12.0 | not given | pass | pass | pass | pass | pass | pass | 20.4 MB/s |
+
+T8, T9 and T11 are skipped everywhere, and T7 observations are in each cell's `result-<cell>.json` artifact. What the first run showed:
+
+- The GUI had never been built on macOS or Windows in CI. It failed on eight lambdas that capture `this` without using it (AppleClang) and on a missing `aqtsource` pin for Qt 6.12 on Windows. Both are fixed.
+- macOS refuses 921600 baud on a pseudo terminal, so T10 asks for 115200.
+- On macOS, `ls /dev/cu.* /dev/tty.*` finds nothing and `ioreg -c IOSerialBSDClient` is empty while a studio pseudo terminal exists, so programs that list ports through IOKit do not see it.
+- Pseudo terminal throughput on the Intel macOS runners is two to four times lower than on Apple silicon, which is why T10 records the rate and holds it to no floor yet.
+
+The guest cells have not run yet.
 
 ## macOS
 

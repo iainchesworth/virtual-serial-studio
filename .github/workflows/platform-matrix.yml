@@ -68,6 +68,15 @@ jobs:
           preset: ${{ matrix.preset }}
           keep-going: "true"
 
+      # T7 asks pyserial what it lists, so the probe needs it in the interpreter that runs the cell.
+      - name: Install pyserial for the enumeration probe
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/probe"
+          "$RUNNER_TEMP/probe/bin/pip" install --quiet pyserial==3.5
+
       - name: Run the cell tests
         if: ${{ !cancelled() }}
         shell: bash
@@ -82,6 +91,7 @@ jobs:
           set -uo pipefail
           PY=python
           command -v python3 >/dev/null 2>&1 && PY=python3
+          [ -x "$RUNNER_TEMP/probe/bin/python" ] && PY="$RUNNER_TEMP/probe/bin/python"
           suite=1
           [ "$SUITE_OUTCOME" = success ] && suite=0
           "$PY" tools/matrix/run_cell.py --cell "$CELL" --build-dir "build/$PRESET" --out out \
