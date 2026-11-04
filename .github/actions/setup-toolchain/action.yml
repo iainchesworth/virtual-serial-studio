@@ -17,21 +17,21 @@ runs:
   steps:
     - name: Set up GCC
       if: inputs.compiler == 'gcc' || inputs.compiler == 'clang'
-      uses: iainchesworthlabs/icl-common-infra/actions/setup-gcc@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-gcc@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
       with:
         export-compiler: ${{ inputs.compiler == 'gcc' && 'true' || 'false' }}
 
     - name: Set up Clang
       if: inputs.compiler == 'clang'
-      uses: iainchesworthlabs/icl-common-infra/actions/setup-llvm@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-llvm@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
 
     - name: Set up MSVC
       if: inputs.compiler == 'msvc'
-      uses: iainchesworthlabs/icl-common-infra/actions/setup-msvc-env@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-msvc-env@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
 
     - name: Set up CMake
-      uses: iainchesworthlabs/icl-common-infra/actions/setup-cmake@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-cmake@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
 
     - name: Set up Qt
       if: inputs.qt == 'true'
-      uses: iainchesworthlabs/icl-common-infra/actions/setup-qt@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-qt@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19

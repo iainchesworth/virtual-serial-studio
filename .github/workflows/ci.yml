@@ -1,78 +1,76 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 name: CI
 
+# The pull request gate. Pull requests (drafts included) run the static checks. Ready pull
+# requests and merge-queue entries also build. Required status checks are the two jobs
+# defined here by name, "CI Status" and "Scan dependency diff": a check from a called
+# workflow carries the caller's job name as a prefix, so it cannot be required by its plain name.
+
 on:
-  push:
-    branches: [develop, main]
   pull_request:
+    branches: [develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+  push:
+    branches: [develop]
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  commits:
-    name: Commit text
-    runs-on: ubuntu-latest
+  policy:
+    name: Policy
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: iainchesworthlabs/icl-common-infra/.github/workflows/policy.yml@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+
+  plan:
+    name: Plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      build: ${{ steps.plan.outputs.build }}
+      docs_only: ${{ steps.plan.outputs.docs_only }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
-
-      - uses: iainchesworthlabs/icl-common-infra/actions/checkout-infra@f7d67297fcb2dd711e7acc3f6a24a0c816c5529b # v0.1.19
-
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
-
+      - name: Check out the shared scripts
+        uses: iainchesworthlabs/icl-common-infra/actions/checkout-infra@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
       - name: Check the vendored CMake modules
         run: python3 tools/sync_cmake.py --infra .icl-infra --check
-
-      - name: Check licensing (REUSE)
-        run: |
-          python3 -m pip install --quiet "reuse[charset-normalizer]==6.2.0"
-          reuse lint
-
-      - name: Check commit messages
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            RANGE="origin/${{ github.base_ref }}..HEAD"
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            # A force-push rewrites history, so the recorded "before" commit
-            # may no longer exist in the repository. Check the pushed tip
-            # instead of failing to resolve an impossible range.
-            if git rev-parse --quiet --verify \
-                "${{ github.event.before }}^{commit}" >/dev/null 2>&1; then
-              RANGE="${{ github.event.before }}..${{ github.sha }}"
-            else
-              echo "history was rewritten; checking the pushed tip only" >&2
-              RANGE="${{ github.sha }}"
-            fi
-          else
-            RANGE="HEAD"
-          fi
-          python3 .icl-infra/scripts/check_text_policy.py commits "$RANGE"
-
-      - name: Check committed files
-        run: python3 .icl-infra/scripts/check_text_policy.py files
-
-      - name: Check pull request text
-        if: github.event_name == 'pull_request'
+      - name: Decide scope
+        id: plan
         env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_BODY: ${{ github.event.pull_request.body }}
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
         run: |
-          printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
-          python3 .icl-infra/scripts/check_text_policy.py text \
-            --title "$PR_TITLE" --body-file "$RUNNER_TEMP/pr-body.md"
+          set -euo pipefail
+          if [ "$EVENT" = "pull_request" ] || [ "$EVENT" = "merge_group" ]; then
+            git diff --name-only "$BASE_SHA"...HEAD | python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json >> "$GITHUB_OUTPUT"
+          else
+            python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json --force-all >> "$GITHUB_OUTPUT"
+          fi
 
   changelog:
     runs-on: ubuntu-latest
     name: Changelog fragments
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Validate the changelog
         run: |
           python3 tools/changelog.py --check
@@ -81,9 +79,14 @@ jobs:
   design:
     name: Design tokens
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.x"
       - name: Check contrast
@@ -107,8 +110,15 @@ jobs:
             compiler: msvc
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: ${{ matrix.compiler }}
@@ -118,8 +128,15 @@ jobs:
   macos:
     runs-on: macos-26
     name: Build and test (macos-appleclang)
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/setup-toolchain
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
@@ -127,8 +144,15 @@ jobs:
   gui:
     runs-on: ubuntu-26.04
     name: Qt GUI (offscreen self-test)
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: ./.github/actions/setup-toolchain
         with:
@@ -156,8 +180,15 @@ jobs:
   coverage:
     runs-on: ubuntu-26.04
     name: Coverage (90% statements, 80% branches)
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: ./.github/actions/setup-toolchain
         with:
@@ -215,8 +246,15 @@ jobs:
   performance:
     runs-on: ubuntu-26.04
     name: Performance floors
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: ./.github/actions/setup-toolchain
         with:
@@ -242,7 +280,7 @@ jobs:
             --markdown | tee perf.md
           cat perf.md >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: perf-results
           path: |
@@ -252,8 +290,15 @@ jobs:
   profiling:
     runs-on: ubuntu-26.04
     name: End-to-end profiling (Tracy)
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: ./.github/actions/setup-toolchain
         with:
@@ -322,7 +367,7 @@ jobs:
             --require perf.e2e.tcp,perf.e2e.pty,perf.e2e.pty.chunk,hub.route,config.to_json \
             --markdown tracy-report.md --json tracy-zones.json | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tracy-profile
           path: |
@@ -331,3 +376,51 @@ jobs:
             tracy-report.md
             tracy-zones.json
             perf-tracy.txt
+
+  zizmor:
+    name: Workflow analysis
+    permissions:
+      contents: read
+      security-events: write
+    uses: iainchesworthlabs/icl-common-infra/.github/workflows/zizmor.yml@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+
+  dependency-scan:
+    name: Scan dependency diff
+    if: github.event_name != 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Dependency review
+        if: github.event_name == 'pull_request'
+        uses: iainchesworthlabs/icl-common-infra/actions/dependency-review@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+
+  ci-status:
+    name: CI Status
+    if: always()
+    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, zizmor, dependency-scan]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Aggregate
+        uses: iainchesworthlabs/icl-common-infra/actions/ci-status@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          needs: ${{ toJSON(needs) }}
+          expected: >-
+            {
+              "build": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "macos": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "gui": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "coverage": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "performance": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "profiling": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "dependency-scan": ${{ github.event_name != 'push' }}
+            }
