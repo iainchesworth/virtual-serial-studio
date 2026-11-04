@@ -26,7 +26,12 @@ project(
   HOMEPAGE_URL "https://github.com/iainchesworthlabs/virtual-serial-studio"
   LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# cmake/icl is a vendored copy of icl-common-infra/cmake (see cmake/icl/SOURCE
+# and tools/sync_cmake.py); its FindQt6.cmake answers find_package(Qt6).
+list(APPEND CMAKE_MODULE_PATH
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/icl")
+set(ICL_PROJECT_PREFIX VSS)
 
 include(GNUInstallDirs)
 

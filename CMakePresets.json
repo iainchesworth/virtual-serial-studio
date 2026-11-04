@@ -15,8 +15,7 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "VSS_BUILD_TESTS": "ON",
         "VSS_BUILD_TOOLS": "ON",
-        "VSS_BUILD_GUI": "ON",
-        "CMAKE_PREFIX_PATH": "$env{QT_ROOT}"
+        "VSS_BUILD_GUI": "ON"
       }
     },
     {
@@ -39,7 +38,7 @@
     {
       "name": "debug-gui",
       "inherits": "debug",
-      "displayName": "Debug GUI (requires QT_ROOT)",
+      "displayName": "Debug GUI (requires Qt)",
       "cacheVariables": {
         "VSS_GUI_REQUIRED": "ON"
       }
@@ -47,7 +46,7 @@
     {
       "name": "release-gui",
       "inherits": "release",
-      "displayName": "Release GUI (requires QT_ROOT)",
+      "displayName": "Release GUI (requires Qt)",
       "cacheVariables": {
         "VSS_GUI_REQUIRED": "ON"
       }

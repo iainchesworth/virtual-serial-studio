@@ -44,8 +44,8 @@ CI builds with the versions pinned in `.github/toolchain-versions.json`: GCC 16,
 Clang 23, MSVC 19.51 and Qt 6.12.
 CMake fetches [Boost.VirtualSerial](https://github.com/iainchesworthlabs/virtual-serial) at a release tag.
 Qt 6 is optional and only needed for the GUI. CMake looks for it through
-Qt's own config package first, then auto-detects a prebuilt Qt in `QT_ROOT`,
-`C:/Qt`, `C:/Repos/common/qt`, `~/Qt`, `/opt/Qt` and `/usr/local/Qt`. The
+Qt's own config package first, then looks in `VSS_QT_ROOT`, `ICL_QT_ROOT`,
+`QT_ROOT_DIR`, `QTDIR` and the usual install locations. The
 `*-gui` presets make a missing Qt an error instead of silently building the
 CLI alone.
 
@@ -56,7 +56,7 @@ python tools/fetch_boost.py --dest .cache/boost-root
 cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-  -DCMAKE_PREFIX_PATH=/path/to/Qt/6.10.3/msvc2022_64   # optional; Qt is auto-detected
+  -DCMAKE_PREFIX_PATH=/path/to/Qt/6.12.0/msvc2022_64   # optional; Qt is auto-detected
 
 cmake --build build
 ctest --test-dir build --output-on-failure
@@ -83,24 +83,24 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | `perf` | Performance suite, no GUI |
 | `tracy` | Performance suite with Tracy, no GUI |
 
-Set `QT_ROOT` (or `-DCMAKE_PREFIX_PATH=...`) only when the automatic search
-picks the wrong kit; otherwise no environment variable is needed. The GUI
-presets still respect `QT_ROOT` when it is set:
+Set `VSS_QT_ROOT` (or `-DCMAKE_PREFIX_PATH=...`) only when the automatic search
+picks the wrong kit; otherwise no environment variable is needed. `ICL_QT_ROOT`
+is the per-machine setting shared with the other projects of the organisation:
 
 ```bash
 # Linux example
-export QT_ROOT=$HOME/Qt/6.10.3/gcc_64
+export VSS_QT_ROOT=$HOME/Qt/6.12.0/gcc_64
 cmake --preset release-gui
 cmake --build --preset release-gui
 ctest --preset debug-gui
 
 # Windows (from a vcvars64 prompt)
-set QT_ROOT=C:\Qt\6.10.3\msvc2022_64
+set VSS_QT_ROOT=C:\Qt\6.12.0\msvc2022_64
 cmake --preset release-gui
 cmake --build --preset release-gui
 ```
 
-`QT_ROOT` is the directory that contains `lib/cmake/Qt6`. If it is unset and
+`VSS_QT_ROOT` is the directory that contains `lib/cmake/Qt6`. If it is unset and
 Qt is not on `CMAKE_PREFIX_PATH`, the `*-gui` presets stop with an explanatory
 error; `-DVSS_GUI_REQUIRED=OFF` restores the old "build the CLI only"
 behaviour.
