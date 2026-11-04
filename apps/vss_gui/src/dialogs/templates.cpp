@@ -21,29 +21,28 @@ namespace vss::gui
 QVector<bundled_template> bundled_templates()
 {
     return {
-        {QStringLiteral("test-bench"),
-         QStringLiteral("Test bench, no hardware"),
-         QStringLiteral("Two Studio-only ports and a one-way link, so a fresh "
-                        "PC can show the whole data path."),
-         QStringLiteral("Basic"), 2, 1, false,
+        {QStringLiteral("test-bench"), QObject::tr("Test bench, no hardware"),
+         QObject::tr("Two Studio-only ports and a one-way link, so a fresh "
+                     "PC can show the whole data path."),
+         QObject::tr("Basic"), 2, 1, false,
          QStringLiteral(":/templates/test-bench.json")},
         {QStringLiteral("share-three-programs"),
-         QStringLiteral("Share a device with three programs"),
-         QStringLiteral("One real device split to three ports, each ready for "
-                        "its own program."),
-         QStringLiteral("Intermediate"), 4, 1, true,
+         QObject::tr("Share a device with three programs"),
+         QObject::tr("One real device split to three ports, each ready for "
+                     "its own program."),
+         QObject::tr("Intermediate"), 4, 1, true,
          QStringLiteral(":/templates/share-three-programs.json")},
         {QStringLiteral("device-on-the-network"),
-         QStringLiteral("Device on the network"),
-         QStringLiteral("A serial device bridged to a TCP port, both "
-                        "directions visible in the monitor."),
-         QStringLiteral("Intermediate"), 2, 1, true,
+         QObject::tr("Device on the network"),
+         QObject::tr("A serial device bridged to a TCP port, both "
+                     "directions visible in the monitor."),
+         QObject::tr("Intermediate"), 2, 1, true,
          QStringLiteral(":/templates/device-on-the-network.json")},
         {QStringLiteral("two-programs-owner"),
-         QStringLiteral("Two programs, one device, one at a time"),
-         QStringLiteral("Two programs joined into one device, with an owner so "
-                        "writes never collide."),
-         QStringLiteral("Advanced"), 3, 1, false,
+         QObject::tr("Two programs, one device, one at a time"),
+         QObject::tr("Two programs joined into one device, with an owner so "
+                     "writes never collide."),
+         QObject::tr("Advanced"), 3, 1, false,
          QStringLiteral(":/templates/two-programs-owner.json")},
     };
 }

@@ -288,10 +288,9 @@ void SetupCheckDialog::rebuild()
         spec.highlight = row.highlight;
         spec.framed = true;
         auto* widget = new CheckRowWidget(spec, rows_host_);
-        widget->setAccessibleName(
-            row.chip.isEmpty()
-                ? row.title
-                : QStringLiteral("%1, %2").arg(row.title, row.chip));
+        widget->setAccessibleName(row.chip.isEmpty()
+                                      ? row.title
+                                      : tr("%1, %2").arg(row.title, row.chip));
         const setup_action action = row.action;
         connect(widget, &CheckRowWidget::action_triggered, this,
                 [this, action] { handle_action(action); });

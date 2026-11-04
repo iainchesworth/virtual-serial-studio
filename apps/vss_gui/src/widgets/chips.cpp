@@ -223,16 +223,16 @@ void DirectionBadge::set_direction(direction value)
     switch (value)
     {
     case direction::rx:
-        label = QStringLiteral("RX");
-        accessible = QStringLiteral("received");
+        label = QObject::tr("RX");
+        accessible = QObject::tr("received");
         break;
     case direction::tx:
-        label = QStringLiteral("TX");
-        accessible = QStringLiteral("sent");
+        label = QObject::tr("TX");
+        accessible = QObject::tr("sent");
         break;
     case direction::drop:
-        label = QStringLiteral("DROP");
-        accessible = QStringLiteral("dropped");
+        label = QObject::tr("DROP");
+        accessible = QObject::tr("dropped");
         break;
     }
     QLabel::setText(label);

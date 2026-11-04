@@ -102,7 +102,7 @@ constexpr const char* kRecentFiles = "ui/recentFiles";
 
 QString document_name(const QString& path)
 {
-    return path.isEmpty() ? QStringLiteral("untitled")
+    return path.isEmpty() ? QObject::tr("untitled")
                           : QFileInfo(path).fileName();
 }
 
@@ -197,14 +197,14 @@ void ShellWindow::build_actions()
                        std::move(handler), std::move(enabled), palette});
     };
     // File
-    add(QStringLiteral("file.new"), QStringLiteral("New"),
-        QStringLiteral("new document setup"), QStringLiteral("new-file"),
-        QKeySequence::New, action_level::simple, [this] { new_document(); });
-    add(QStringLiteral("file.open"), QStringLiteral("Open"),
-        QStringLiteral("open file setup"), QStringLiteral("open"),
-        QKeySequence::Open, action_level::simple, [this] { open_document(); });
-    add(QStringLiteral("file.recent"), QStringLiteral("Open recent"),
-        QStringLiteral("recent file"), {}, {}, action_level::simple,
+    add(QStringLiteral("file.new"), tr("New"), tr("new document setup"),
+        QStringLiteral("new-file"), QKeySequence::New, action_level::simple,
+        [this] { new_document(); });
+    add(QStringLiteral("file.open"), tr("Open"), tr("open file setup"),
+        QStringLiteral("open"), QKeySequence::Open, action_level::simple,
+        [this] { open_document(); });
+    add(QStringLiteral("file.recent"), tr("Open recent"), tr("recent file"), {},
+        {}, action_level::simple,
         [this]
         {
             const QStringList recent =
@@ -212,25 +212,23 @@ void ShellWindow::build_actions()
             if (!recent.isEmpty())
                 open_path(recent.first());
         });
-    add(QStringLiteral("file.templates"),
-        QStringLiteral("Setups and templates"),
-        QStringLiteral("template setup"), {}, {}, action_level::simple,
+    add(QStringLiteral("file.templates"), tr("Setups and templates"),
+        tr("template setup"), {}, {}, action_level::simple,
         [this] { open_templates(); });
-    add(QStringLiteral("file.save"), QStringLiteral("Save"),
-        QStringLiteral("save file setup"), QStringLiteral("save"),
-        QKeySequence::Save, action_level::simple, [this] { save_document(); });
-    add(QStringLiteral("file.saveAs"), QStringLiteral("Save as"),
-        QStringLiteral("save as file"), {}, QKeySequence::SaveAs,
-        action_level::simple, [this] { save_document_as(); });
-    add(QStringLiteral("file.exportCommand"),
-        QStringLiteral("Export as command"), QStringLiteral("cli command"), {},
-        {}, action_level::advanced, [this] { open_export_command(); });
-    add(QStringLiteral("file.bundle"), QStringLiteral("Diagnostic bundle"),
-        QStringLiteral("support zip"), {}, {}, action_level::simple,
+    add(QStringLiteral("file.save"), tr("Save"), tr("save file setup"),
+        QStringLiteral("save"), QKeySequence::Save, action_level::simple,
+        [this] { save_document(); });
+    add(QStringLiteral("file.saveAs"), tr("Save as"), tr("save as file"), {},
+        QKeySequence::SaveAs, action_level::simple,
+        [this] { save_document_as(); });
+    add(QStringLiteral("file.exportCommand"), tr("Export as command"),
+        tr("cli command"), {}, {}, action_level::advanced,
+        [this] { open_export_command(); });
+    add(QStringLiteral("file.bundle"), tr("Diagnostic bundle"),
+        tr("support zip"), {}, {}, action_level::simple,
         [this] { open_bundle(); });
-    add(QStringLiteral("file.quit"), QStringLiteral("Quit"),
-        QStringLiteral("exit"), {}, QKeySequence::Quit, action_level::simple,
-        [this] { close(); });
+    add(QStringLiteral("file.quit"), tr("Quit"), tr("exit"), {},
+        QKeySequence::Quit, action_level::simple, [this] { close(); });
 
     // Edit
     // The engine has no stable per-endpoint identity for a restored snapshot:
@@ -238,92 +236,86 @@ void ShellWindow::build_actions()
     // new advertised path.  Because exact restore cannot be proven, Undo and
     // Redo stay visible but disabled; see design-deviations.md (WP8).
     add(
-        QStringLiteral("edit.undo"), QStringLiteral("Undo"),
-        QStringLiteral("undo stack restore"), {}, QKeySequence::Undo,
-        action_level::simple, [] {}, false,
+        QStringLiteral("edit.undo"), tr("Undo"), tr("undo stack restore"), {},
+        QKeySequence::Undo, action_level::simple, [] {}, false,
         [this] { return backend_.caps().undo; });
     add(
-        QStringLiteral("edit.redo"), QStringLiteral("Redo"),
-        QStringLiteral("redo stack restore"), {}, QKeySequence::Redo,
-        action_level::simple, [] {}, false,
+        QStringLiteral("edit.redo"), tr("Redo"), tr("redo stack restore"), {},
+        QKeySequence::Redo, action_level::simple, [] {}, false,
         [this] { return backend_.caps().undo; });
     add(
-        QStringLiteral("edit.remove"), QStringLiteral("Remove selected"),
-        QStringLiteral("delete remove"), QStringLiteral("remove"),
+        QStringLiteral("edit.remove"), tr("Remove selected"),
+        tr("delete remove"), QStringLiteral("remove"),
         QKeySequence(Qt::Key_Delete), action_level::simple,
         [this] { remove_selection(); }, false,
         [this] { return selection_.port() != 0 || selection_.link() != 0; });
 
     // Ports
-    add(QStringLiteral("ports.add"), QStringLiteral("Add port"),
-        QStringLiteral("new virtual create"), QStringLiteral("add"),
-        QKeySequence(QStringLiteral("Ctrl+Shift+N")), action_level::simple,
+    add(QStringLiteral("ports.add"), tr("Add port"), tr("new virtual create"),
+        QStringLiteral("add"), QKeySequence(QStringLiteral("Ctrl+Shift+N")),
+        action_level::simple, [this] { show_add_port(); });
+    add(QStringLiteral("ports.virtual"), tr("Virtual port"),
+        tr("new virtual create"), {}, {}, action_level::simple,
         [this] { show_add_port(); });
-    add(QStringLiteral("ports.virtual"), QStringLiteral("Virtual port"),
-        QStringLiteral("new virtual create"), {}, {}, action_level::simple,
-        [this] { show_add_port(); });
-    add(QStringLiteral("ports.pair"), QStringLiteral("Linked pair"),
-        QStringLiteral("pair two null modem"), QStringLiteral("connect"), {},
+    add(QStringLiteral("ports.pair"), tr("Linked pair"),
+        tr("pair two null modem"), QStringLiteral("connect"), {},
         action_level::simple, [this] { show_pair(); });
-    add(QStringLiteral("ports.attach"), QStringLiteral("Attach real device"),
-        QStringLiteral("serial device"), QStringLiteral("device"), {},
-        action_level::simple, [this] { show_attach_device(); });
+    add(QStringLiteral("ports.attach"), tr("Attach real device"),
+        tr("serial device"), QStringLiteral("device"), {}, action_level::simple,
+        [this] { show_attach_device(); });
     add(
-        QStringLiteral("ports.network"), QStringLiteral("Network endpoint"),
-        QStringLiteral("tcp udp rfc2217"), {}, {}, action_level::advanced,
+        QStringLiteral("ports.network"), tr("Network endpoint"),
+        tr("tcp udp rfc2217"), {}, {}, action_level::advanced,
         [this] { open_network_endpoint(); }, false,
         [this] { return backend_.caps().bridge; });
-    add(QStringLiteral("ports.mock"), QStringLiteral("Mock fixture"),
-        QStringLiteral("fixture mock script"), QStringLiteral("fixture"), {},
+    add(QStringLiteral("ports.mock"), tr("Mock fixture"),
+        tr("fixture mock script"), QStringLiteral("fixture"), {},
         action_level::advanced, [this] { open_add_fixture(); });
     add(
-        QStringLiteral("ports.copyName"), QStringLiteral("Copy port name"),
-        QStringLiteral("clipboard path"), {},
-        QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
-        [this] { copy_selected_port(); }, false,
+        QStringLiteral("ports.copyName"), tr("Copy port name"),
+        tr("clipboard path"), {}, QKeySequence(QStringLiteral("Ctrl+Shift+C")),
+        action_level::simple, [this] { copy_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
     add(
-        QStringLiteral("ports.remove"), QStringLiteral("Remove port"),
-        QStringLiteral("delete remove"), {}, {}, action_level::simple,
-        [this] { remove_selected_port(); }, false,
+        QStringLiteral("ports.remove"), tr("Remove port"), tr("delete remove"),
+        {}, {}, action_level::simple, [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
 
     // Topology
     add(
-        QStringLiteral("topology.connect"), QStringLiteral("Connect ports"),
-        QStringLiteral("link split join redirect monitor"),
-        QStringLiteral("connect"), QKeySequence(QStringLiteral("Ctrl+L")),
-        action_level::simple, [this] { open_connect_ports(); }, false,
+        QStringLiteral("topology.connect"), tr("Connect ports"),
+        tr("link split join redirect monitor"), QStringLiteral("connect"),
+        QKeySequence(QStringLiteral("Ctrl+L")), action_level::simple,
+        [this] { open_connect_ports(); }, false,
         [this] { return backend_.ports().size() >= 2; });
     add(
-        QStringLiteral("topology.share"), QStringLiteral("Share a device"),
-        QStringLiteral("split listeners"), QStringLiteral("share"), {},
+        QStringLiteral("topology.share"), tr("Share a device"),
+        tr("split listeners"), QStringLiteral("share"), {},
         action_level::simple, [this] { open_share_wizard(); }, false,
         [this] { return backend_.caps().share; });
     // The design's Advanced toolbar adds Share.  It is a placement-only
     // duplicate of the Simple Topology action, so it stays out of the palette.
     add(
-        QStringLiteral("topology.shareToolbar"),
-        QStringLiteral("Share a device"), QStringLiteral("split listeners"),
-        QStringLiteral("share"), {}, action_level::advanced,
-        [this] { open_share_wizard(); }, false, {}, false);
-    add(QStringLiteral("topology.watch"), QStringLiteral("Watch traffic"),
-        QStringLiteral("monitor copy"), QStringLiteral("watch"), {},
-        action_level::simple, [this] { show_watch(); });
+        QStringLiteral("topology.shareToolbar"), tr("Share a device"),
+        tr("split listeners"), QStringLiteral("share"), {},
+        action_level::advanced, [this] { open_share_wizard(); }, false, {},
+        false);
+    add(QStringLiteral("topology.watch"), tr("Watch traffic"),
+        tr("monitor copy"), QStringLiteral("watch"), {}, action_level::simple,
+        [this] { show_watch(); });
     add(
-        QStringLiteral("topology.removeLink"), QStringLiteral("Remove link"),
-        QStringLiteral("delete disconnect"), {}, {}, action_level::simple,
+        QStringLiteral("topology.removeLink"), tr("Remove link"),
+        tr("delete disconnect"), {}, {}, action_level::simple,
         [this] { remove_selected_link(); }, false,
         [this] { return selection_.link() != 0; });
-    add(QStringLiteral("topology.wiring"), QStringLiteral("Link wiring"),
-        QStringLiteral("line matrix faults"), {}, {}, action_level::advanced,
+    add(QStringLiteral("topology.wiring"), tr("Link wiring"),
+        tr("line matrix faults"), {}, {}, action_level::advanced,
         [this] { open_wiring(); });
-    add(QStringLiteral("topology.owner"), QStringLiteral("Owner"),
-        QStringLiteral("policy arbitration"), {}, {}, action_level::advanced,
-        [this] { show_owner_controls(); });
-    add(QStringLiteral("topology.fit"), QStringLiteral("Fit"),
-        QStringLiteral("zoom"), QStringLiteral("fit"),
-        QKeySequence(QStringLiteral("Ctrl+0")), action_level::advanced,
+    add(QStringLiteral("topology.owner"), tr("Owner"), tr("policy arbitration"),
+        {}, {}, action_level::advanced, [this] { show_owner_controls(); });
+    add(QStringLiteral("topology.fit"), tr("Fit"), tr("zoom"),
+        QStringLiteral("fit"), QKeySequence(QStringLiteral("Ctrl+0")),
+        action_level::advanced,
         [this]
         {
             if (topology_ != nullptr)
@@ -331,55 +323,53 @@ void ShellWindow::build_actions()
         });
 
     // Tools
-    add(QStringLiteral("tools.search"), QStringLiteral("Search actions"),
-        QStringLiteral("command palette"), QStringLiteral("search"),
+    add(QStringLiteral("tools.search"), tr("Search actions"),
+        tr("command palette"), QStringLiteral("search"),
         QKeySequence(QStringLiteral("Ctrl+K")), action_level::simple,
         [this] { open_palette(); });
-    add(QStringLiteral("tools.setupCheck"), QStringLiteral("Setup check"),
-        QStringLiteral("driver com0com permissions"), {}, {},
-        action_level::simple, [this] { open_setup_check(); });
-    add(QStringLiteral("tools.benchmark"), QStringLiteral("Benchmark"),
-        QStringLiteral("throughput speed"), {}, {}, action_level::advanced,
+    add(QStringLiteral("tools.setupCheck"), tr("Setup check"),
+        tr("driver com0com permissions"), {}, {}, action_level::simple,
+        [this] { open_setup_check(); });
+    add(QStringLiteral("tools.benchmark"), tr("Benchmark"),
+        tr("throughput speed"), {}, {}, action_level::advanced,
         [this] { open_benchmark(); });
-    add(QStringLiteral("tools.refresh"), QStringLiteral("Refresh now"),
-        QStringLiteral("reload"), QStringLiteral("refresh"),
-        QKeySequence(Qt::Key_F5), action_level::simple,
+    add(QStringLiteral("tools.refresh"), tr("Refresh now"), tr("reload"),
+        QStringLiteral("refresh"), QKeySequence(Qt::Key_F5),
+        action_level::simple,
         [this]
         {
             backend_.refresh();
             status_->refresh();
-            status_->showMessage(QStringLiteral("Refreshed."), 2000);
+            status_->showMessage(tr("Refreshed."), 2000);
         });
-    add(QStringLiteral("tools.settings"), QStringLiteral("Settings"),
-        QStringLiteral("preferences theme density refresh baud"),
+    add(QStringLiteral("tools.settings"), tr("Settings"),
+        tr("preferences theme density refresh baud"),
         QStringLiteral("settings"), QKeySequence(QStringLiteral("Ctrl+,")),
         action_level::simple, [this] { open_settings(); });
 
     // View
     add(
-        QStringLiteral("view.advanced"), QStringLiteral("Advanced mode"),
-        QStringLiteral("simple expert level"), {},
+        QStringLiteral("view.advanced"), tr("Advanced mode"),
+        tr("simple expert level"), {},
         QKeySequence(QStringLiteral("Ctrl+Shift+A")), action_level::simple,
         [] {}, true);
     add(
-        QStringLiteral("view.monitor"), QStringLiteral("Monitor"),
-        QStringLiteral("traffic"), {}, {}, action_level::simple, [] {}, true);
-    add(
-        QStringLiteral("view.links"), QStringLiteral("Show links as a list"),
-        QStringLiteral("links topology list accessible"), {}, {},
+        QStringLiteral("view.monitor"), tr("Monitor"), tr("traffic"), {}, {},
         action_level::simple, [] {}, true);
     add(
-        QStringLiteral("view.log"), QStringLiteral("Log"),
-        QStringLiteral("events"), {}, {}, action_level::advanced, [] {}, true);
+        QStringLiteral("view.links"), tr("Show links as a list"),
+        tr("links topology list accessible"), {}, {}, action_level::simple,
+        [] {}, true);
     add(
-        QStringLiteral("view.json"), QStringLiteral("Topology JSON"),
-        QStringLiteral("editor schema"), {}, {}, action_level::advanced, [] {},
-        true);
+        QStringLiteral("view.log"), tr("Log"), tr("events"), {}, {},
+        action_level::advanced, [] {}, true);
     add(
-        QStringLiteral("view.theme.system"),
-        QStringLiteral("Follow the system"),
-        QStringLiteral("theme colour scheme"), {}, {}, action_level::simple,
-        [this]
+        QStringLiteral("view.json"), tr("Topology JSON"), tr("editor schema"),
+        {}, {}, action_level::advanced, [] {}, true);
+    add(
+        QStringLiteral("view.theme.system"), tr("Follow the system"),
+        tr("theme colour scheme"), {}, {}, action_level::simple,
+        []
         {
             Theme::instance().set_mode(theme_mode::system);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -387,9 +377,9 @@ void ShellWindow::build_actions()
         },
         true);
     add(
-        QStringLiteral("view.theme.light"), QStringLiteral("Light"),
-        QStringLiteral("theme"), {}, {}, action_level::simple,
-        [this]
+        QStringLiteral("view.theme.light"), tr("Light"), tr("theme"), {}, {},
+        action_level::simple,
+        []
         {
             Theme::instance().set_mode(theme_mode::light);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -397,9 +387,9 @@ void ShellWindow::build_actions()
         },
         true);
     add(
-        QStringLiteral("view.theme.dark"), QStringLiteral("Dark"),
-        QStringLiteral("theme"), {}, {}, action_level::simple,
-        [this]
+        QStringLiteral("view.theme.dark"), tr("Dark"), tr("theme"), {}, {},
+        action_level::simple,
+        []
         {
             Theme::instance().set_mode(theme_mode::dark);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -407,10 +397,9 @@ void ShellWindow::build_actions()
         },
         true);
     add(
-        QStringLiteral("view.density.comfortable"),
-        QStringLiteral("Comfortable"), QStringLiteral("density spacing"), {},
-        {}, action_level::simple,
-        [this]
+        QStringLiteral("view.density.comfortable"), tr("Comfortable"),
+        tr("density spacing"), {}, {}, action_level::simple,
+        []
         {
             Theme::instance().set_density(density_mode::comfortable);
             QSettings().setValue(QStringLiteral("ui/density"),
@@ -418,38 +407,37 @@ void ShellWindow::build_actions()
         },
         true);
     add(
-        QStringLiteral("view.density.compact"), QStringLiteral("Compact"),
-        QStringLiteral("density spacing"), {}, {}, action_level::simple,
-        [this]
+        QStringLiteral("view.density.compact"), tr("Compact"),
+        tr("density spacing"), {}, {}, action_level::simple,
+        []
         {
             Theme::instance().set_density(density_mode::compact);
             QSettings().setValue(QStringLiteral("ui/density"),
                                  QStringLiteral("compact"));
         },
         true);
-    add(QStringLiteral("view.resetLayout"), QStringLiteral("Reset layout"),
-        QStringLiteral("docks window"), {}, {}, action_level::simple,
+    add(QStringLiteral("view.resetLayout"), tr("Reset layout"),
+        tr("docks window"), {}, {}, action_level::simple,
         [this] { reset_layout(); });
-    add(QStringLiteral("view.showLauncher"), QStringLiteral("Show launcher"),
-        QStringLiteral("empty start"), {}, {}, action_level::simple,
+    add(QStringLiteral("view.showLauncher"), tr("Show launcher"),
+        tr("empty start"), {}, {}, action_level::simple,
         [this] { show_launcher(); });
 
     // Help
-    add(QStringLiteral("help.contents"), QStringLiteral("Help contents"),
-        QStringLiteral("manual help topics"), {}, QKeySequence(Qt::Key_F1),
+    add(QStringLiteral("help.contents"), tr("Help contents"),
+        tr("manual help topics"), {}, QKeySequence(Qt::Key_F1),
         action_level::simple, [this] { open_help_contents(); });
-    add(QStringLiteral("help.why"), QStringLiteral("Why is nothing arriving?"),
-        QStringLiteral("troubleshoot no data"), {}, {}, action_level::simple,
+    add(QStringLiteral("help.why"), tr("Why is nothing arriving?"),
+        tr("troubleshoot no data"), {}, {}, action_level::simple,
         [this] { open_troubleshoot(); });
-    add(QStringLiteral("help.shortcuts"), QStringLiteral("Keyboard shortcuts"),
-        QStringLiteral("keys"), {}, {}, action_level::simple,
-        [this] { open_shortcuts(); });
-    add(QStringLiteral("help.environment"), QStringLiteral("Copy environment"),
-        QStringLiteral("build bug report"), {}, {}, action_level::simple,
+    add(QStringLiteral("help.shortcuts"), tr("Keyboard shortcuts"), tr("keys"),
+        {}, {}, action_level::simple, [this] { open_shortcuts(); });
+    add(QStringLiteral("help.environment"), tr("Copy environment"),
+        tr("build bug report"), {}, {}, action_level::simple,
         [this] { copy_environment(); });
-    add(QStringLiteral("help.about"), QStringLiteral("About"),
-        QStringLiteral("version licence copyright"), {}, {},
-        action_level::simple, [this] { open_about(); });
+    add(QStringLiteral("help.about"), tr("About"),
+        tr("version licence copyright"), {}, {}, action_level::simple,
+        [this] { open_about(); });
 
     // Undo and Redo are present so the shortcuts and the menu match the IA,
     // but the engine cannot restore a snapshot exactly (see the comment where
@@ -459,10 +447,10 @@ void ShellWindow::build_actions()
     {
         if (QAction* action = registry_.action(id))
         {
-            action->setToolTip(QStringLiteral("Not available in this build"));
+            action->setToolTip(tr("Not available in this build"));
             action->setStatusTip(
-                QStringLiteral("Undo needs an exact restore, which this build "
-                               "cannot prove."));
+                tr("Undo needs an exact restore, which this build "
+                   "cannot prove."));
         }
     }
 
@@ -474,12 +462,12 @@ void ShellWindow::build_actions()
     if (QAction* network = registry_.action(QStringLiteral("ports.network"));
         network != nullptr && !backend_.caps().bridge)
     {
-        network->setToolTip(QStringLiteral("Not available in this build"));
+        network->setToolTip(tr("Not available in this build"));
     }
     if (QAction* share = registry_.action(QStringLiteral("topology.share"));
         share != nullptr && !backend_.caps().share)
     {
-        share->setToolTip(QStringLiteral("Not available in this build"));
+        share->setToolTip(tr("Not available in this build"));
     }
     connect(advanced_action_, &QAction::toggled, this,
             [this](bool on) { level_.set_advanced(on); });
@@ -510,7 +498,7 @@ void ShellWindow::build_menus()
     const auto add_menu = [this](const QString& title)
     { return menuBar()->addMenu(title); };
 
-    QMenu* file = add_menu(QStringLiteral("&File"));
+    QMenu* file = add_menu(tr("&File"));
     add(file, QStringLiteral("file.new"));
     add(file, QStringLiteral("file.open"));
     add(file, QStringLiteral("file.recent"));
@@ -524,13 +512,13 @@ void ShellWindow::build_menus()
     file->addSeparator();
     add(file, QStringLiteral("file.quit"));
 
-    QMenu* edit = add_menu(QStringLiteral("&Edit"));
+    QMenu* edit = add_menu(tr("&Edit"));
     add(edit, QStringLiteral("edit.undo"));
     add(edit, QStringLiteral("edit.redo"));
     edit->addSeparator();
     add(edit, QStringLiteral("edit.remove"));
 
-    QMenu* ports = add_menu(QStringLiteral("&Ports"));
+    QMenu* ports = add_menu(tr("&Ports"));
     add(ports, QStringLiteral("ports.add"));
     add(ports, QStringLiteral("ports.virtual"));
     add(ports, QStringLiteral("ports.pair"));
@@ -542,7 +530,7 @@ void ShellWindow::build_menus()
     add(ports, QStringLiteral("ports.copyName"));
     add(ports, QStringLiteral("ports.remove"));
 
-    QMenu* topology = add_menu(QStringLiteral("&Topology"));
+    QMenu* topology = add_menu(tr("&Topology"));
     add(topology, QStringLiteral("topology.connect"));
     add(topology, QStringLiteral("topology.share"));
     add(topology, QStringLiteral("topology.watch"));
@@ -553,7 +541,7 @@ void ShellWindow::build_menus()
     topology->addSeparator();
     add(topology, QStringLiteral("topology.fit"));
 
-    QMenu* tools = add_menu(QStringLiteral("&Tools"));
+    QMenu* tools = add_menu(tr("&Tools"));
     add(tools, QStringLiteral("tools.search"));
     add(tools, QStringLiteral("tools.setupCheck"));
     add(tools, QStringLiteral("tools.benchmark"));
@@ -561,7 +549,7 @@ void ShellWindow::build_menus()
     add(tools, QStringLiteral("tools.refresh"));
     add(tools, QStringLiteral("tools.settings"));
 
-    QMenu* view = add_menu(QStringLiteral("&View"));
+    QMenu* view = add_menu(tr("&View"));
     add(view, QStringLiteral("view.advanced"));
     view->addSeparator();
     add(view, QStringLiteral("view.monitor"));
@@ -569,18 +557,18 @@ void ShellWindow::build_menus()
     add(view, QStringLiteral("view.log"));
     add(view, QStringLiteral("view.json"));
     view->addSeparator();
-    QMenu* theme = view->addMenu(QStringLiteral("Theme"));
+    QMenu* theme = view->addMenu(tr("Theme"));
     add(theme, QStringLiteral("view.theme.system"));
     add(theme, QStringLiteral("view.theme.light"));
     add(theme, QStringLiteral("view.theme.dark"));
-    QMenu* density = view->addMenu(QStringLiteral("Density"));
+    QMenu* density = view->addMenu(tr("Density"));
     add(density, QStringLiteral("view.density.comfortable"));
     add(density, QStringLiteral("view.density.compact"));
     view->addSeparator();
     add(view, QStringLiteral("view.resetLayout"));
     add(view, QStringLiteral("view.showLauncher"));
 
-    QMenu* help = add_menu(QStringLiteral("&Help"));
+    QMenu* help = add_menu(tr("&Help"));
     add(help, QStringLiteral("help.contents"));
     add(help, QStringLiteral("help.why"));
     add(help, QStringLiteral("help.shortcuts"));
@@ -590,7 +578,7 @@ void ShellWindow::build_menus()
 
 void ShellWindow::build_toolbar()
 {
-    toolbar_ = new QToolBar(QStringLiteral("Main toolbar"), this);
+    toolbar_ = new QToolBar(tr("Main toolbar"), this);
     toolbar_->setObjectName(QStringLiteral("mainToolbar"));
     toolbar_->setMovable(false);
     toolbar_->setFloatable(false);
@@ -621,8 +609,8 @@ void ShellWindow::build_toolbar()
     toolbar_->addWidget(spacer);
 
     search_ = new QLineEdit(toolbar_);
-    search_->setPlaceholderText(QStringLiteral("Search actions"));
-    search_->setAccessibleName(QStringLiteral("Search actions"));
+    search_->setPlaceholderText(tr("Search actions"));
+    search_->setAccessibleName(tr("Search actions"));
     search_->setClearButtonEnabled(true);
     search_->setFixedWidth(240);
     search_->setFont(Theme::instance().font(text_style::body));
@@ -712,12 +700,10 @@ void ShellWindow::build_central()
             [this](vss::endpoint_id id) { remove_port(id); });
     connect(topology_, &topology::TopologyView::remove_link_requested, this,
             [this](vss::link_id id) { remove_link(id); });
-    connect(topology_, &topology::TopologyView::rename_requested, this,
-            [this](vss::endpoint_id)
-            {
-                status_->showMessage(
-                    QStringLiteral("Not available in this build."), 5000);
-            });
+    connect(
+        topology_, &topology::TopologyView::rename_requested, this,
+        [this](vss::endpoint_id)
+        { status_->showMessage(tr("Not available in this build."), 5000); });
     connect(topology_, &topology::TopologyView::status_message, this,
             [this](const QString& text) { status_->showMessage(text, 4000); });
 }
@@ -739,14 +725,13 @@ void ShellWindow::build_docks()
     send_panel_ = new SendPanel(backend_, this);
     monitor_panel_ = new MonitorPanel(backend_, this);
 
-    ports_dock_ = make_dock(QStringLiteral("portsDock"),
-                            QStringLiteral("Ports"), ports_panel_);
+    ports_dock_ =
+        make_dock(QStringLiteral("portsDock"), tr("Ports"), ports_panel_);
     inspector_dock_ = make_dock(QStringLiteral("inspectorDock"),
-                                QStringLiteral("Inspector"), inspector_panel_);
-    send_dock_ = make_dock(QStringLiteral("sendDock"), QStringLiteral("Send"),
-                           send_panel_);
-    monitor_dock_ = make_dock(QStringLiteral("monitorDock"),
-                              QStringLiteral("Monitor"), monitor_panel_);
+                                tr("Inspector"), inspector_panel_);
+    send_dock_ = make_dock(QStringLiteral("sendDock"), tr("Send"), send_panel_);
+    monitor_dock_ =
+        make_dock(QStringLiteral("monitorDock"), tr("Monitor"), monitor_panel_);
 
     ports_dock_->setMinimumWidth(
         Theme::instance().metric(QStringLiteral("layout.ports.default")));
@@ -779,10 +764,7 @@ void ShellWindow::build_docks()
             });
     connect(ports_panel_, &PortsPanel::path_copied, this,
             [this](const QString& path)
-            {
-                status_->showMessage(QStringLiteral("Copied %1.").arg(path),
-                                     2500);
-            });
+            { status_->showMessage(tr("Copied %1.").arg(path), 2500); });
     connect(ports_panel_, &PortsPanel::status_message, this,
             [this](const QString& message)
             { status_->showMessage(message, 3000); });
@@ -798,9 +780,7 @@ void ShellWindow::build_docks()
             {
                 if (bytes > 0)
                     status_->showMessage(
-                        QStringLiteral("Queued %1 bytes to %2.")
-                            .arg(bytes)
-                            .arg(name),
+                        tr("Queued %1 bytes to %2.").arg(bytes).arg(name),
                         3000);
             });
     connect(send_panel_, &SendPanel::status_message, this,
@@ -856,7 +836,7 @@ void ShellWindow::build_docks()
     monitor_panel_->set_advanced(level_.advanced());
     update_dock_titles();
 
-    links_dock_ = new QDockWidget(QStringLiteral("Links"), this);
+    links_dock_ = new QDockWidget(tr("Links"), this);
     links_dock_->setObjectName(QStringLiteral("linksDock"));
     links_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
     links_ = new topology::LinksList(links_dock_);
@@ -896,7 +876,7 @@ void ShellWindow::build_docks()
     // Advanced bottom tabs.  Log and Topology JSON are tabified with the
     // Monitor dock; WP3 owns the Monitor pane, this package owns these two.
     event_log_ = new EventLogPanel(this);
-    log_dock_ = new QDockWidget(QStringLiteral("Log"), this);
+    log_dock_ = new QDockWidget(tr("Log"), this);
     log_dock_->setObjectName(QStringLiteral("logDock"));
     log_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
     log_dock_->setWidget(event_log_);
@@ -910,9 +890,9 @@ void ShellWindow::build_docks()
                 if (status_ != nullptr)
                     status_->showMessage(text, 6000);
             });
-    connect(json_editor_, &TopologyJsonEditor::applied, this, [this]
-            { log_local(QStringLiteral("Applied the topology JSON.")); });
-    json_dock_ = new QDockWidget(QStringLiteral("Topology JSON"), this);
+    connect(json_editor_, &TopologyJsonEditor::applied, this,
+            [this] { log_local(tr("Applied the topology JSON.")); });
+    json_dock_ = new QDockWidget(tr("Topology JSON"), this);
     json_dock_->setObjectName(QStringLiteral("jsonDock"));
     json_dock_->setAllowedAreas(Qt::AllDockWidgetAreas);
     json_dock_->setWidget(json_editor_);
@@ -1115,7 +1095,7 @@ void ShellWindow::update_title()
                                              : title_override_;
     if (dirty_)
         name += QLatin1Char('*');
-    setWindowTitle(QStringLiteral("%1 - Virtual Serial Studio").arg(name));
+    setWindowTitle(tr("%1 - Virtual Serial Studio").arg(name));
     if (json_editor_ != nullptr)
         json_editor_->set_document_path(document_path_);
 }
@@ -1137,12 +1117,12 @@ void ShellWindow::update_dock_titles()
         return;
     const auto ports = backend_.ports();
     ports_dock_->setWindowTitle(
-        QStringLiteral("Ports %1").arg(static_cast<qulonglong>(ports.size())));
-    QString inspector = QStringLiteral("Inspector");
+        tr("Ports %1").arg(static_cast<qulonglong>(ports.size())));
+    QString inspector = tr("Inspector");
     if (selection_.port() != 0)
     {
         if (const auto port = backend_.port(selection_.port()))
-            inspector += QStringLiteral(" ") + port->name;
+            inspector = tr("Inspector %1").arg(port->name);
     }
     inspector_dock_->setWindowTitle(inspector);
 }
@@ -1186,21 +1166,18 @@ void ShellWindow::remove_selected_port()
     if (!port)
         return;
     if (!ConfirmDialog::ask(
-            QStringLiteral("Remove %1?").arg(port->name),
-            QStringLiteral(
-                "The port and its links will be removed. This cannot "
-                "be undone."),
-            QStringLiteral("Remove port"), QStringLiteral("Cancel"), true,
-            this))
+            tr("Remove %1?").arg(port->name),
+            tr("The port and its links will be removed. This cannot "
+               "be undone."),
+            tr("Remove port"), tr("Cancel"), true, this))
     {
         return;
     }
     const auto removed = backend_.remove_port(id);
     if (!removed)
     {
-        ErrorDialog dialog(
-            QStringLiteral("Could not remove %1").arg(port->name),
-            error_text(removed.error()), {}, this);
+        ErrorDialog dialog(tr("Could not remove %1").arg(port->name),
+                           error_text(removed.error()), {}, this);
         dialog.exec();
         return;
     }
@@ -1208,7 +1185,7 @@ void ShellWindow::remove_selected_port()
     last_signature_ = document_signature();
     set_dirty(true);
     update_content();
-    status_->showMessage(QStringLiteral("Removed %1.").arg(port->name), 3000);
+    status_->showMessage(tr("Removed %1.").arg(port->name), 3000);
 }
 
 void ShellWindow::copy_selected_port()
@@ -1220,7 +1197,7 @@ void ShellWindow::copy_selected_port()
     if (!port || port->path.isEmpty())
         return;
     QApplication::clipboard()->setText(port->path);
-    status_->showMessage(QStringLiteral("Copied %1.").arg(port->path), 2500);
+    status_->showMessage(tr("Copied %1.").arg(port->path), 2500);
 }
 
 void ShellWindow::focus_inspector()
@@ -1303,8 +1280,8 @@ void ShellWindow::open_share_wizard()
 {
     if (!backend_.caps().share)
     {
-        status_->showMessage(
-            QStringLiteral("Sharing is not available in this build."), 4000);
+        status_->showMessage(tr("Sharing is not available in this build."),
+                             4000);
         return;
     }
     ShareWizard wizard(backend_, level_.advanced(), this);
@@ -1330,8 +1307,8 @@ void ShellWindow::open_network_endpoint()
 {
     if (!backend_.caps().bridge)
     {
-        status_->showMessage(
-            QStringLiteral("Networking is not available in this build."), 4000);
+        status_->showMessage(tr("Networking is not available in this build."),
+                             4000);
         return;
     }
     NetworkEndpointDialog dialog(backend_, level_.advanced(), selection_.port(),
@@ -1352,10 +1329,8 @@ void ShellWindow::open_network_endpoint()
     set_dirty(true);
     status_->refresh();
     ToastManager::instance().show(
-        this,
-        QStringLiteral("Bridge is running on port %1.")
-            .arg(dialog.result_port()),
-        QStringLiteral("Open monitor"), [this] { show_monitor(); });
+        this, tr("Bridge is running on port %1.").arg(dialog.result_port()),
+        tr("Open monitor"), [this] { show_monitor(); });
 }
 
 void ShellWindow::open_templates()
@@ -1376,10 +1351,10 @@ void ShellWindow::open_templates()
     if (!applied)
     {
         ErrorDialog error(
-            QStringLiteral("Could not open %1").arg(dialog.result_title()),
-            QStringLiteral("The setup needs a device or network endpoint that "
-                           "is not available on this PC. Nothing was changed. "
-                           "Check the device, then try again."),
+            tr("Could not open %1").arg(dialog.result_title()),
+            tr("The setup needs a device or network endpoint that "
+               "is not available on this PC. Nothing was changed. "
+               "Check the device, then try again."),
             error_text(applied.error()), this);
         error.exec();
         status_->refresh();
@@ -1400,7 +1375,7 @@ void ShellWindow::open_templates()
         const auto ports = backend_.ports();
         const auto links = backend_.links();
         add_recent(document_path_,
-                   QStringLiteral("%1 ports, %2 links")
+                   tr("%1 ports, %2 links")
                        .arg(static_cast<qulonglong>(ports.size()))
                        .arg(static_cast<qulonglong>(links.size())));
     }
@@ -1601,14 +1576,13 @@ void ShellWindow::focus_monitor(vss::endpoint_id port)
 
 void ShellWindow::placeholder(const QString& what)
 {
-    status_->showMessage(
-        QStringLiteral("%1 is part of a later work package.").arg(what), 5000);
+    status_->showMessage(tr("%1 is part of a later work package.").arg(what),
+                         5000);
 }
 
 void ShellWindow::later_package(const QString& what, const QString& package)
 {
-    status_->showMessage(
-        QStringLiteral("%1 arrives with %2.").arg(what, package), 6000);
+    status_->showMessage(tr("%1 arrives with %2.").arg(what, package), 6000);
 }
 
 void ShellWindow::refresh_topology()
@@ -1692,12 +1666,11 @@ void ShellWindow::remove_link(vss::link_id id)
     const QString description = topology_text::link_name(*link, names);
 
     if (!ConfirmDialog::ask(
-            QStringLiteral("Remove link"),
-            QStringLiteral("Remove this link? %1. Nothing is saved until you "
-                           "save the setup.")
+            tr("Remove link"),
+            tr("Remove this link? %1. Nothing is saved until you "
+               "save the setup.")
                 .arg(description),
-            QStringLiteral("Remove link"), QStringLiteral("Cancel"), true,
-            this))
+            tr("Remove link"), tr("Cancel"), true, this))
     {
         return;
     }
@@ -1705,7 +1678,7 @@ void ShellWindow::remove_link(vss::link_id id)
     const auto removed = backend_.disconnect(id);
     if (!removed)
     {
-        ErrorDialog dialog(QStringLiteral("Could not remove the link"),
+        ErrorDialog dialog(tr("Could not remove the link"),
                            error_text(removed.error()), {}, this);
         dialog.exec();
         return;
@@ -1713,7 +1686,7 @@ void ShellWindow::remove_link(vss::link_id id)
 
     selection_.select_link(0);
     backend_.refresh();
-    status_->showMessage(QStringLiteral("Removed the link."), 3000);
+    status_->showMessage(tr("Removed the link."), 3000);
 }
 
 void ShellWindow::remove_port(vss::endpoint_id id)
@@ -1725,12 +1698,11 @@ void ShellWindow::remove_port(vss::endpoint_id id)
         return;
 
     if (!ConfirmDialog::ask(
-            QStringLiteral("Remove port"),
-            QStringLiteral("Remove %1 and its links? Nothing is saved until "
-                           "you save the setup.")
+            tr("Remove port"),
+            tr("Remove %1 and its links? Nothing is saved until "
+               "you save the setup.")
                 .arg(port->name),
-            QStringLiteral("Remove port"), QStringLiteral("Cancel"), true,
-            this))
+            tr("Remove port"), tr("Cancel"), true, this))
     {
         return;
     }
@@ -1738,16 +1710,15 @@ void ShellWindow::remove_port(vss::endpoint_id id)
     const auto removed = backend_.remove_port(id);
     if (!removed)
     {
-        ErrorDialog dialog(
-            QStringLiteral("Could not remove %1").arg(port->name),
-            error_text(removed.error()), {}, this);
+        ErrorDialog dialog(tr("Could not remove %1").arg(port->name),
+                           error_text(removed.error()), {}, this);
         dialog.exec();
         return;
     }
 
     selection_.clear();
     backend_.refresh();
-    status_->showMessage(QStringLiteral("Removed %1.").arg(port->name), 3000);
+    status_->showMessage(tr("Removed %1.").arg(port->name), 3000);
 }
 
 void ShellWindow::show_links_dock(bool shown)
@@ -1804,8 +1775,8 @@ void ShellWindow::open_wiring()
     }
     if (target == 0)
     {
-        status_->showMessage(
-            QStringLiteral("Add a port before opening the line matrix."), 6000);
+        status_->showMessage(tr("Add a port before opening the line matrix."),
+                             6000);
         return;
     }
     WiringDialog dialog(backend_, target, this);
@@ -1839,8 +1810,8 @@ void ShellWindow::show_owner_controls()
     if (owner_bar_ == nullptr || !owner_bar_->has_link())
     {
         status_->showMessage(
-            QStringLiteral("Select the target of a join with the owner policy "
-                           "to control who writes."),
+            tr("Select the target of a join with the owner policy "
+               "to control who writes."),
             6000);
         return;
     }
@@ -1920,8 +1891,8 @@ void ShellWindow::open_setup_check()
             [this]
             {
                 ToastManager::instance().show(
-                    this, QStringLiteral("Test mode. New ports only work "
-                                         "inside Virtual Serial Studio."));
+                    this, tr("Test mode. New ports only work "
+                             "inside Virtual Serial Studio."));
             });
     dialog.exec();
     status_->refresh();
@@ -1941,8 +1912,8 @@ void ShellWindow::restart_elevated()
     }
     if (!error.isEmpty())
     {
-        ErrorDialog dialog(QStringLiteral("Could not restart as administrator"),
-                           error, {}, this);
+        ErrorDialog dialog(tr("Could not restart as administrator"), error, {},
+                           this);
         dialog.exec();
     }
 }
@@ -2019,7 +1990,7 @@ void ShellWindow::open_bundle()
 void ShellWindow::copy_environment()
 {
     QGuiApplication::clipboard()->setText(environment_report());
-    ToastManager::instance().show(this, QStringLiteral("Environment copied."));
+    ToastManager::instance().show(this, tr("Environment copied."));
 }
 
 void ShellWindow::new_document()
@@ -2038,7 +2009,7 @@ void ShellWindow::new_document()
     set_dirty(false);
     update_title();
     selection_.clear();
-    log_local(QStringLiteral("Started a new setup."));
+    log_local(tr("Started a new setup."));
     show_launcher();
     status_->refresh();
 }
@@ -2048,8 +2019,8 @@ void ShellWindow::open_document()
     if (!confirm_discard())
         return;
     const QString path = QFileDialog::getOpenFileName(
-        this, QStringLiteral("Open setup"), QString(),
-        QStringLiteral("Virtual Serial Studio setups (*.json);;All files (*)"));
+        this, tr("Open setup"), QString(),
+        tr("Virtual Serial Studio setups (*.json);;All files (*)"));
     if (path.isEmpty())
         return;
     open_path(path);
@@ -2063,7 +2034,7 @@ void ShellWindow::open_path(const QString& path)
     if (!document)
     {
         ErrorDialog dialog(
-            QStringLiteral("Could not open %1").arg(QFileInfo(path).fileName()),
+            tr("Could not open %1").arg(QFileInfo(path).fileName()),
             error_text(document.error()), {}, this);
         dialog.exec();
         return;
@@ -2075,7 +2046,7 @@ void ShellWindow::open_path(const QString& path)
     if (!applied)
     {
         ErrorDialog dialog(
-            QStringLiteral("Could not open %1").arg(QFileInfo(path).fileName()),
+            tr("Could not open %1").arg(QFileInfo(path).fileName()),
             error_text(applied.error()), {}, this);
         dialog.exec();
         return;
@@ -2087,10 +2058,10 @@ void ShellWindow::open_path(const QString& path)
     update_title();
     const auto ports = backend_.ports();
     const auto links = backend_.links();
-    add_recent(path, QStringLiteral("%1 ports, %2 links")
+    add_recent(path, tr("%1 ports, %2 links")
                          .arg(static_cast<qulonglong>(ports.size()))
                          .arg(static_cast<qulonglong>(links.size())));
-    log_local(QStringLiteral("Opened %1.").arg(QFileInfo(path).fileName()));
+    log_local(tr("Opened %1.").arg(QFileInfo(path).fileName()));
     show_workspace();
     status_->refresh();
 }
@@ -2106,7 +2077,7 @@ void ShellWindow::save_document()
                                               backend_.snapshot());
     if (!saved)
     {
-        ErrorDialog dialog(QStringLiteral("Could not save this setup"),
+        ErrorDialog dialog(tr("Could not save this setup"),
                            error_text(saved.error()), {}, this);
         dialog.exec();
         return;
@@ -2115,20 +2086,20 @@ void ShellWindow::save_document()
     update_title();
     const auto ports = backend_.ports();
     const auto links = backend_.links();
-    add_recent(document_path_, QStringLiteral("%1 ports, %2 links")
+    add_recent(document_path_, tr("%1 ports, %2 links")
                                    .arg(static_cast<qulonglong>(ports.size()))
                                    .arg(static_cast<qulonglong>(links.size())));
     const QString saved_name = QFileInfo(document_path_).fileName();
-    status_->showMessage(QStringLiteral("Saved %1.").arg(saved_name), 3000);
-    log_local(QStringLiteral("Saved %1.").arg(saved_name));
+    status_->showMessage(tr("Saved %1.").arg(saved_name), 3000);
+    log_local(tr("Saved %1.").arg(saved_name));
 }
 
 void ShellWindow::save_document_as()
 {
     QString path = QFileDialog::getSaveFileName(
-        this, QStringLiteral("Save setup"),
+        this, tr("Save setup"),
         document_path_.isEmpty() ? QStringLiteral("lab.json") : document_path_,
-        QStringLiteral("Virtual Serial Studio setups (*.json)"));
+        tr("Virtual Serial Studio setups (*.json)"));
     if (path.isEmpty())
         return;
     if (!path.endsWith(QLatin1String(".json"), Qt::CaseInsensitive))
@@ -2146,14 +2117,13 @@ bool ShellWindow::confirm_discard()
         return true;
 
     ConfirmDialog dialog(
-        QStringLiteral("Save changes to %1?")
-            .arg(document_name(document_path_)),
-        QStringLiteral("Your ports and links have changed since the last save. "
-                       "You can turn this prompt off in Settings."),
+        tr("Save changes to %1?").arg(document_name(document_path_)),
+        tr("Your ports and links have changed since the last save. "
+           "You can turn this prompt off in Settings."),
         QVector<confirm_choice>{
-            {QStringLiteral("Don't save"), QStringLiteral("quiet"), false},
-            {QStringLiteral("Cancel"), QString(), true},
-            {QStringLiteral("Save"), QStringLiteral("primary"), false}},
+            {tr("Don't save"), QStringLiteral("quiet"), false},
+            {tr("Cancel"), QString(), true},
+            {tr("Save"), QStringLiteral("primary"), false}},
         2, this);
     dialog.exec();
     switch (dialog.chosen())
@@ -2216,7 +2186,7 @@ void ShellWindow::reset_layout()
         Qt::Horizontal);
     apply_dock_sizes();
     show_workspace();
-    status_->showMessage(QStringLiteral("Layout reset."), 2500);
+    status_->showMessage(tr("Layout reset."), 2500);
 }
 
 void ShellWindow::apply_dock_sizes()

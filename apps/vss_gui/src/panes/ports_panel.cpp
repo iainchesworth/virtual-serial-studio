@@ -45,8 +45,8 @@ void PortsPanel::build()
     layout->setSpacing(0);
 
     filter_ = new QLineEdit(this);
-    filter_->setPlaceholderText(QStringLiteral("Filter ports"));
-    filter_->setAccessibleName(QStringLiteral("Filter ports"));
+    filter_->setPlaceholderText(tr("Filter ports"));
+    filter_->setAccessibleName(tr("Filter ports"));
     filter_->setClearButtonEnabled(true);
     filter_->setVisible(false);
     filter_->setContentsMargins(8, 8, 8, 8);
@@ -65,7 +65,7 @@ void PortsPanel::build()
 
     simple_ = new QListView(stack_);
     simple_->setModel(model_);
-    simple_->setAccessibleName(QStringLiteral("Ports"));
+    simple_->setAccessibleName(tr("Ports"));
     simple_->setSelectionMode(QAbstractItemView::SingleSelection);
     simple_->setSelectionBehavior(QAbstractItemView::SelectRows);
     simple_->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -88,7 +88,7 @@ void PortsPanel::build()
 
     table_ = new QTableView(stack_);
     table_->setModel(model_);
-    table_->setAccessibleName(QStringLiteral("Ports table"));
+    table_->setAccessibleName(tr("Ports table"));
     table_->setSelectionMode(QAbstractItemView::SingleSelection);
     table_->setSelectionBehavior(QAbstractItemView::SelectRows);
     table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -257,7 +257,7 @@ void PortsPanel::copy_selected_path()
         return;
     QApplication::clipboard()->setText(port->path);
     Q_EMIT path_copied(port->path);
-    Q_EMIT status_message(QStringLiteral("Copied %1.").arg(port->path));
+    Q_EMIT status_message(tr("Copied %1.").arg(port->path));
 }
 
 bool PortsPanel::eventFilter(QObject* watched, QEvent* event)

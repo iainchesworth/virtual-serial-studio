@@ -338,7 +338,7 @@ InlineError::InlineError(QWidget* parent) : QFrame(parent)
     column->addWidget(body_);
     layout->addLayout(column, 1);
 
-    copy_ = new QPushButton(QStringLiteral("Copy details"), this);
+    copy_ = new QPushButton(tr("Copy details"), this);
     set_role(copy_, "quiet");
     copy_->setProperty("size", QStringLiteral("small"));
     polish(copy_);
@@ -358,7 +358,7 @@ void InlineError::show_error(const QString& title, const QString& body,
     body_->setText(body);
     details_ = details;
     copy_->setVisible(!details.isEmpty());
-    copy_->setToolTip(QStringLiteral("Copy details"));
+    copy_->setToolTip(tr("Copy details"));
     show();
     refresh_accessibility();
 }
@@ -401,9 +401,9 @@ void InlineError::refresh_accessibility()
 void InlineError::copy_details()
 {
     QGuiApplication::clipboard()->setText(details_);
-    copy_->setToolTip(QStringLiteral("Copied"));
-    QToolTip::showText(mapToGlobal(QPoint(width() / 2, height())),
-                       QStringLiteral("Copied"), copy_);
+    copy_->setToolTip(tr("Copied"));
+    QToolTip::showText(mapToGlobal(QPoint(width() / 2, height())), tr("Copied"),
+                       copy_);
 }
 
 } // namespace vss::gui

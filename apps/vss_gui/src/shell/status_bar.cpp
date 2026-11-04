@@ -21,7 +21,7 @@ StatusBar::StatusBar(StudioBackend& backend, QWidget* parent)
     : QStatusBar(parent), backend_(backend)
 {
     setSizeGripEnabled(false);
-    setAccessibleName(QStringLiteral("Status bar"));
+    setAccessibleName(tr("Status bar"));
     rate_timer_.start();
     last_ns_ = rate_timer_.nsecsElapsed();
 
@@ -36,21 +36,20 @@ StatusBar::StatusBar(StudioBackend& backend, QWidget* parent)
         addWidget(label, 0);
     }
 
-    dropped_ = new StatusChip(QStringLiteral("0 dropped"),
-                              StatusChip::kind::waiting, this);
+    dropped_ = new StatusChip(tr("0 dropped"), StatusChip::kind::waiting, this);
     dropped_->set_small(true);
     dropped_->hide();
     addWidget(dropped_, 0);
 
-    readiness_ = new StatusChip(QStringLiteral("Setup ready"),
-                                StatusChip::kind::healthy, this);
+    readiness_ =
+        new StatusChip(tr("Setup ready"), StatusChip::kind::healthy, this);
     addPermanentWidget(readiness_, 0);
 
     level_ = new SegmentedControl(this);
     level_->set_compact(true);
-    level_->setAccessibleName(QStringLiteral("Interface mode"));
-    level_->add_item(QStringLiteral("Simple"));
-    level_->add_item(QStringLiteral("Advanced"), 1);
+    level_->setAccessibleName(tr("Interface mode"));
+    level_->add_item(tr("Simple"));
+    level_->add_item(tr("Advanced"), 1);
     connect(level_, &SegmentedControl::current_changed, this,
             [this](int id) { Q_EMIT level_requested(id == 1); });
     addPermanentWidget(level_, 0);
@@ -107,16 +106,15 @@ void StatusBar::refresh()
 
     const bool empty = ports.empty();
     if (empty)
-        ports_->setText(QStringLiteral("No ports yet"));
+        ports_->setText(tr("No ports yet"));
     else
-        ports_->setText(QStringLiteral("Ports %1")
-                            .arg(static_cast<qulonglong>(ports.size())));
-    links_->setText(
-        QStringLiteral("Links %1").arg(static_cast<qulonglong>(links.size())));
-    rates_->setText(QStringLiteral("RX %1   TX %2")
-                        .arg(format_rate(rx_rate), format_rate(tx_rate)));
-    hub_->setText(backend_.hub_running() ? QStringLiteral("Hub running")
-                                         : QStringLiteral("Hub stopped"));
+        ports_->setText(
+            tr("Ports %1").arg(static_cast<qulonglong>(ports.size())));
+    links_->setText(tr("Links %1").arg(static_cast<qulonglong>(links.size())));
+    rates_->setText(
+        tr("RX %1   TX %2").arg(format_rate(rx_rate), format_rate(tx_rate)));
+    hub_->setText(backend_.hub_running() ? tr("Hub running")
+                                         : tr("Hub stopped"));
     links_->setVisible(!empty);
     rates_->setVisible(!empty);
     hub_->setVisible(!empty);
@@ -125,16 +123,15 @@ void StatusBar::refresh()
     {
         if (owner_dropped > 0 && owner_dropped == dropped)
         {
-            dropped_->set_text(QStringLiteral("%1 dropped, not owner")
-                                   .arg(format_bytes(dropped)));
+            dropped_->set_text(
+                tr("%1 dropped, not owner").arg(format_bytes(dropped)));
             dropped_->setToolTip(
-                QStringLiteral("Bytes from a port that is not the owner were "
-                               "not forwarded."));
+                tr("Bytes from a port that is not the owner were "
+                   "not forwarded."));
         }
         else
         {
-            dropped_->set_text(
-                QStringLiteral("%1 dropped").arg(format_bytes(dropped)));
+            dropped_->set_text(tr("%1 dropped").arg(format_bytes(dropped)));
             dropped_->setToolTip({});
         }
         dropped_->show();
@@ -154,20 +151,19 @@ void StatusBar::update_readiness()
     {
     case setup_report::readiness::ready:
         readiness_->set_kind(StatusChip::kind::healthy);
-        readiness_->set_text(QStringLiteral("Setup ready"));
+        readiness_->set_text(tr("Setup ready"));
         break;
     case setup_report::readiness::needs_attention:
         readiness_->set_kind(StatusChip::kind::waiting);
-        readiness_->set_text(QStringLiteral("Setup needs attention"));
+        readiness_->set_text(tr("Setup needs attention"));
         break;
     case setup_report::readiness::not_checked:
         readiness_->set_kind(StatusChip::kind::closed);
-        readiness_->set_text(QStringLiteral("Setup not checked"));
+        readiness_->set_text(tr("Setup not checked"));
         break;
     }
     readiness_->setAccessibleName(readiness_->text());
-    readiness_->setToolTip(
-        QStringLiteral("Open Tools, Setup check for the details."));
+    readiness_->setToolTip(tr("Open Tools, Setup check for the details."));
 }
 
 } // namespace vss::gui

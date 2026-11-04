@@ -82,7 +82,7 @@ QString ShortcutsDialog::windows_linux_text(const QKeySequence& shortcut)
     for (QString& part : parts)
     {
         if (part == QLatin1String("Del"))
-            part = QStringLiteral("Delete");
+            part = tr("Delete");
     }
     return joined(parts);
 }
@@ -95,7 +95,7 @@ QString ShortcutsDialog::macos_text(const QKeySequence& shortcut)
         if (part == QLatin1String("Ctrl") || part == QLatin1String("Meta"))
             part = QStringLiteral("Cmd");
         else if (part == QLatin1String("Del"))
-            part = QStringLiteral("Delete");
+            part = tr("Delete");
     }
     return joined(parts);
 }
