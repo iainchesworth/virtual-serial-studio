@@ -140,8 +140,15 @@ if(VSS_INSTALL)
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
 
-  # The deploy script puts the Qt libraries in lib/, beside bin/.
-  if(UNIX AND NOT APPLE)
+  # The deploy script puts the Qt libraries in lib/, beside bin/. On macOS
+  # macdeployqt copies the frameworks into the bundle, and it finds them through
+  # the program's run path, so the installed program keeps the directories it
+  # was linked from (INSTALL_RPATH_USE_LINK_PATH) until macdeployqt has run.
+  if(APPLE)
+    set_target_properties(vss_gui PROPERTIES
+      INSTALL_RPATH "@executable_path/../Frameworks"
+      INSTALL_RPATH_USE_LINK_PATH ON)
+  elseif(UNIX)
     set_target_properties(vss_gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
   endif()
 
