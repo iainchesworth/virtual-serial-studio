@@ -9,9 +9,11 @@
 #include <vss/core/hub.hpp>
 
 #include <boost/asio/error.hpp>
+#include <boost/asio/post.hpp>
 
 #include <chrono>
 #include <future>
+#include <memory>
 
 using namespace vss;
 using namespace vss::testkit;
@@ -441,6 +443,28 @@ TEST_CASE("endpoint: peer inputs are idempotent")
     inputs.set(control_line::cts, true);
     port->set_peer_inputs(inputs);
     REQUIRE(port->lines().cts());
+}
+
+TEST_CASE("hub: destroying the hub releases an idle endpoint")
+{
+    auto hub = start_hub();
+    std::weak_ptr<endpoint> weak;
+    {
+        auto port = add_loopback(*hub, "idle");
+        weak = port;
+
+        // The first read is armed on the strand. Once this marker has run, the
+        // loopback transport holds the pending read.
+        std::promise<void> armed;
+        auto ready = armed.get_future();
+        boost::asio::post(port->get_executor(), [&armed] { armed.set_value(); });
+        REQUIRE(ready.wait_for(2000ms) == std::future_status::ready);
+    }
+
+    // Stopping cancels the pending read; without that the endpoint and its
+    // transport keep each other alive after the hub is gone.
+    hub.reset();
+    REQUIRE(weak.expired());
 }
 
 TEST_CASE("endpoint: removal closes it and drops its links")

@@ -64,7 +64,10 @@ void hub::stop()
     if (!running_.exchange(false))
         return;
 
-    work_.reset();
+    // The work guard stays until join(). Releasing it here would let the worker
+    // threads leave an idle io_context before the shutdown handlers below are
+    // posted, so those handlers would never run and an endpoint with a parked
+    // read would keep itself alive through its transport.
 
     // Ask every endpoint to close itself on its own strand: transports are
     // single-threaded objects, so closing them from this thread while a read
@@ -102,6 +105,7 @@ void hub::join()
             thread.join();
     }
     threads_.clear();
+    work_.reset();
 }
 
 result<std::shared_ptr<endpoint>> hub::add_endpoint(
