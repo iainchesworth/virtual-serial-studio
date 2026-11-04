@@ -25,7 +25,7 @@ This page records how Virtual Serial Studio and its library, Boost.VirtualSerial
 | Library branches | `main` and `develop`. Trunk development on `develop`; a release is a tag on a `develop` commit and `main` fast-forwards to it. `main` is renamed to `master` only if the Boost review is accepted. |
 | Studio branches | Standard D1: `develop` is the trunk, `main` holds releases, squash merges through the merge queue. |
 | Licences | Library: BSL-1.0, with a `REUSE.toml` that annotates existing files. Studio: GPL-3.0-or-later; the files derived from the library keep BSL-1.0 and are recorded in `THIRD_PARTY_NOTICES.md`. |
-| Commit policy | Shared text policy in both repositories. The studio requires a DCO `Signed-off-by`. The library allows it and does not require it. The old checkers (`tools/check_commit_message.py`, the hard-coded author address) are removed. |
+| Commit policy | Shared text policy in both repositories. The shared check allows a human `Signed-off-by` and does not require one, in both repositories; `CONTRIBUTING.md` asks for it. The old checkers (`tools/check_commit_message.py`, the hard-coded author address) are removed. |
 | Naming conventions | Both keep their own. Studio: `snake_case` for functions and types; the rules are written into `.clang-tidy` and the inconsistencies fixed. |
 | Platforms | Windows, Linux and macOS only. The label set has no iOS, Android or WebAssembly entries. A platform declaration for desktop-only projects is added to the standard. |
 | Test framework | The in-tree framework stays. Coverage gates (90% lines, 80% branches) stay and a ratchet floor is added. |

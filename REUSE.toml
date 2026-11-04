@@ -1,0 +1,8 @@
+version = 1
+
+# Files without a copyright line take the one below; files that carry their own keep it.
+[[annotations]]
+path = "**"
+precedence = "closest"
+SPDX-FileCopyrightText = "Iain Chesworth Labs contributors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
