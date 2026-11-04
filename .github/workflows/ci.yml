@@ -38,6 +38,7 @@ jobs:
     outputs:
       build: ${{ steps.plan.outputs.build }}
       docs_only: ${{ steps.plan.outputs.docs_only }}
+      driver: ${{ steps.driver.outputs.driver }}
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -60,6 +61,22 @@ jobs:
           else
             python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json --force-all >> "$GITHUB_OUTPUT"
           fi
+      # The driver build runs on a Windows runner for each architecture, so it
+      # runs only when the driver or the gate itself changed.
+      - name: Decide driver scope
+        id: driver
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          driver=true
+          if [ "$EVENT" = "pull_request" ] || [ "$EVENT" = "merge_group" ]; then
+            if ! git diff --name-only "$BASE_SHA"...HEAD | grep -qE '^(drivers/windows/|\.github/workflows/ci\.yml|\.github/ci/|\.github/toolchain-versions\.json)'; then
+              driver=false
+            fi
+          fi
+          echo "driver=$driver" >> "$GITHUB_OUTPUT"
 
   changelog:
     runs-on: ubuntu-latest
@@ -398,6 +415,41 @@ jobs:
         with:
           preset: linux-asan-ubsan
 
+  # Builds the libFuzzer targets and replays the seed corpus and the regression inputs under AddressSanitizer
+  # and UBSan. The fuzz workflow does the fuzzing itself, on pushes to develop and at night.
+  fuzz-regress:
+    runs-on: ubuntu-26.04
+    name: Fuzz regression replay
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Configure
+        run: cmake --preset linux-fuzz
+
+      - name: Build
+        run: cmake --build --preset linux-fuzz
+
+      - name: Replay
+        run: python3 tools/fuzz.py --mode regress
+
+      - name: Test the runner
+        run: python3 -m unittest discover -s tools -p "test_fuzz.py" -v
+
   # Threading findings come from timing, so this leg runs for merge-queue entries and pushes, not for every pull request.
   tsan:
     runs-on: ubuntu-26.04
@@ -424,6 +476,41 @@ jobs:
       - uses: ./.github/actions/build-and-test
         with:
           preset: linux-tsan
+
+  driver:
+    name: Windows driver (${{ matrix.platform }})
+    needs: plan
+    if: needs.plan.outputs.driver == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    runs-on: windows-2025
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, ARM64]
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The Windows SDK and the WDK are NuGet packages, about a gigabyte of them.
+      - name: Cache the NuGet packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~\.nuget\packages
+          key: nuget-driver-${{ hashFiles('drivers/windows/vsscom/vsscom.vcxproj') }}
+      - name: Build, verify and package the driver
+        shell: pwsh
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: ./drivers/windows/build.ps1 -Platform $env:PLATFORM
+      - name: Upload the package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: vsscom-${{ matrix.platform }}
+          path: drivers/windows/artifacts/package/${{ matrix.platform }}/
+          if-no-files-found: error
 
   zizmor:
     name: Workflow analysis
@@ -452,7 +539,7 @@ jobs:
   ci-status:
     name: CI Status
     if: always()
-    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, tsan, zizmor, dependency-scan]
+    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, fuzz-regress, tsan, driver, zizmor, dependency-scan]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -471,6 +558,8 @@ jobs:
               "performance": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "profiling": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "asan-ubsan": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "fuzz-regress": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "tsan": ${{ needs.plan.outputs.build == 'true' && github.event_name != 'pull_request' }},
+              "driver": ${{ needs.plan.outputs.driver == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "dependency-scan": ${{ github.event_name != 'push' }}
             }

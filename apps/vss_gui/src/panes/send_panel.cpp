@@ -67,7 +67,7 @@ SendPanel::SendPanel(StudioBackend& backend, QWidget* parent)
 
 void SendPanel::build()
 {
-    setAccessibleName(QStringLiteral("Send"));
+    setAccessibleName(tr("Send"));
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(8, 8, 8, 8);
     layout->setSpacing(6);
@@ -75,21 +75,20 @@ void SendPanel::build()
     auto* top = new QHBoxLayout();
     top->setSpacing(8);
     ports_ = new QComboBox(this);
-    ports_->setAccessibleName(QStringLiteral("Send to port"));
+    ports_->setAccessibleName(tr("Send to port"));
     ports_->setSizeAdjustPolicy(
         QComboBox::AdjustToMinimumContentsLengthWithIcon);
     ports_->setMinimumContentsLength(8);
     top->addWidget(ports_, 1);
-    send_ = new QPushButton(QStringLiteral("Send"), this);
+    send_ = new QPushButton(tr("Send"), this);
     send_->setProperty("role", QStringLiteral("primary"));
     polish(send_);
     top->addWidget(send_);
     layout->addLayout(top);
 
     input_ = new QLineEdit(this);
-    input_->setAccessibleName(QStringLiteral("Bytes to send"));
-    input_->setPlaceholderText(
-        QStringLiteral("Type text, or hex if Hex is ticked"));
+    input_->setAccessibleName(tr("Bytes to send"));
+    input_->setPlaceholderText(tr("Type text, or hex if Hex is ticked"));
     input_->setFont(Theme::instance().font(text_style::data));
     layout->addWidget(input_);
 
@@ -105,17 +104,17 @@ void SendPanel::build()
 
     auto* options = new QHBoxLayout();
     options->setSpacing(16);
-    hex_ = new QCheckBox(QStringLiteral("Hex"), this);
-    crlf_ = new QCheckBox(QStringLiteral("Add CRLF"), this);
+    hex_ = new QCheckBox(tr("Hex"), this);
+    crlf_ = new QCheckBox(tr("Add CRLF"), this);
     crlf_->setChecked(true);
     options->addWidget(hex_);
     options->addWidget(crlf_);
-    repeat_ = new QCheckBox(QStringLiteral("Repeat"), this);
+    repeat_ = new QCheckBox(tr("Repeat"), this);
     interval_ = new QSpinBox(this);
     interval_->setRange(50, 5000);
     interval_->setValue(1000);
-    interval_->setSuffix(QStringLiteral(" ms"));
-    interval_->setAccessibleName(QStringLiteral("Repeat interval"));
+    interval_->setSuffix(tr(" ms"));
+    interval_->setAccessibleName(tr("Repeat interval"));
     interval_->setVisible(false);
     options->addWidget(repeat_);
     options->addWidget(interval_);
@@ -124,12 +123,12 @@ void SendPanel::build()
 
     auto* saved_row = new QHBoxLayout();
     saved_row->setSpacing(8);
-    saved_label_ = new QLabel(QStringLiteral("Saved sends"), this);
+    saved_label_ = new QLabel(tr("Saved sends"), this);
     saved_label_->setFont(Theme::instance().font(text_style::caption));
     saved_label_->setProperty("muted", true);
     polish(saved_label_);
     saved_ = new QComboBox(this);
-    saved_->setAccessibleName(QStringLiteral("Saved sends"));
+    saved_->setAccessibleName(tr("Saved sends"));
     saved_row->addWidget(saved_label_);
     saved_row->addWidget(saved_, 1);
     layout->addLayout(saved_row);
@@ -206,9 +205,9 @@ void SendPanel::refresh_ports()
     ports_->clear();
     for (const auto& port : backend_.ports())
     {
-        ports_->addItem(port.path.isEmpty() ? port.name
-                                            : QStringLiteral("%1 (%2)").arg(
-                                                  port.name, port.path),
+        ports_->addItem(port.path.isEmpty()
+                            ? port.name
+                            : tr("%1 (%2)").arg(port.name, port.path),
                         QVariant::fromValue<qulonglong>(port.id));
     }
     if (previous != 0)
@@ -261,8 +260,7 @@ void SendPanel::validate_hex()
         polish(input_);
         return;
     }
-    error_->setText(
-        QStringLiteral("Hex needs pairs of digits, such as 48 65 6C 6C 6F."));
+    error_->setText(tr("Hex needs pairs of digits, such as 48 65 6C 6C 6F."));
     error_->setVisible(true);
     input_->setProperty("invalid", true);
     polish(input_);
@@ -273,8 +271,7 @@ void SendPanel::update_send_enabled()
     const bool has_port = selected_port() != 0;
     const bool has_text = !input_->text().isEmpty();
     send_->setEnabled(has_port && has_text && error_->isHidden());
-    send_->setToolTip(has_port ? QString()
-                               : QStringLiteral("Select a port to send to."));
+    send_->setToolTip(has_port ? QString() : tr("Select a port to send to."));
 }
 
 QByteArray SendPanel::payload(bool& ok) const
@@ -319,9 +316,9 @@ void SendPanel::send_now()
     const QString name = ports_->currentText();
     remember_send(input_->text());
     Q_EMIT sent(static_cast<int>(bytes.size()), name);
-    Q_EMIT status_message(QStringLiteral("Queued %1 bytes to %2.")
-                              .arg(static_cast<qulonglong>(bytes.size()))
-                              .arg(name));
+    Q_EMIT status_message(
+        tr("Queued %n bytes to %1.", "", static_cast<int>(bytes.size()))
+            .arg(name));
 }
 
 void SendPanel::start_repeat()

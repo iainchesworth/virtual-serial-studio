@@ -52,19 +52,19 @@ QString line_name(vss::control_line line)
     switch (line)
     {
     case vss::control_line::dtr:
-        return QStringLiteral("DTR");
+        return QObject::tr("DTR");
     case vss::control_line::rts:
-        return QStringLiteral("RTS");
+        return QObject::tr("RTS");
     case vss::control_line::cts:
-        return QStringLiteral("CTS");
+        return QObject::tr("CTS");
     case vss::control_line::dsr:
-        return QStringLiteral("DSR");
+        return QObject::tr("DSR");
     case vss::control_line::dcd:
-        return QStringLiteral("DCD");
+        return QObject::tr("DCD");
     case vss::control_line::ri:
-        return QStringLiteral("RI");
+        return QObject::tr("RI");
     case vss::control_line::break_signal:
-        return QStringLiteral("Break");
+        return QObject::tr("Break");
     case vss::control_line::count:
         break;
     }
@@ -97,11 +97,11 @@ QString flow_text(vss::flow_control_mode mode)
     switch (mode)
     {
     case vss::flow_control_mode::none:
-        return QStringLiteral("no flow control");
+        return QObject::tr("no flow control");
     case vss::flow_control_mode::software:
-        return QStringLiteral("software flow control");
+        return QObject::tr("software flow control");
     case vss::flow_control_mode::hardware:
-        return QStringLiteral("hardware flow control");
+        return QObject::tr("hardware flow control");
     }
     return {};
 }
@@ -112,7 +112,7 @@ InspectorPanel::InspectorPanel(StudioBackend& backend, QWidget* parent)
     : QWidget(parent), backend_(backend)
 {
     setFocusPolicy(Qt::StrongFocus);
-    setAccessibleName(QStringLiteral("Inspector"));
+    setAccessibleName(tr("Inspector"));
     build();
     connect(&backend_, &StudioBackend::ports_changed, this,
             [this] { refresh(); });
@@ -133,7 +133,7 @@ void InspectorPanel::build()
     root->setContentsMargins(0, 0, 0, 0);
     root->setSpacing(0);
 
-    empty_ = new QLabel(QStringLiteral("Select a port to inspect it."), this);
+    empty_ = new QLabel(tr("Select a port to inspect it."), this);
     empty_->setAlignment(Qt::AlignCenter);
     empty_->setWordWrap(true);
     empty_->setFont(Theme::instance().font(text_style::body));
@@ -164,13 +164,11 @@ void InspectorPanel::build()
     form->setColumnStretch(1, 1);
 
     int row = 0;
-    form->addWidget(caption(QStringLiteral("State"), content_), row, 0,
-                    Qt::AlignTop);
+    form->addWidget(caption(tr("State"), content_), row, 0, Qt::AlignTop);
     state_ = new StatusChip(content_);
     form->addWidget(state_, row++, 1, Qt::AlignLeft);
 
-    form->addWidget(caption(QStringLiteral("Path"), content_), row, 0,
-                    Qt::AlignTop);
+    form->addWidget(caption(tr("Path"), content_), row, 0, Qt::AlignTop);
     auto* path_row = new QWidget(content_);
     auto* path_layout = new QHBoxLayout(path_row);
     path_layout->setContentsMargins(0, 0, 0, 0);
@@ -180,12 +178,12 @@ void InspectorPanel::build()
     path_->setTextInteractionFlags(Qt::TextSelectableByMouse);
     path_->setWordWrap(true);
     copy_ = new CopyButton(path_row);
-    copy_->set_copy_text({}, QStringLiteral("path"));
+    copy_->set_copy_text({}, tr("path"));
     path_layout->addWidget(path_, 1);
     path_layout->addWidget(copy_, 0, Qt::AlignTop);
     form->addWidget(path_row, row++, 1);
 
-    form->addWidget(caption(QStringLiteral("Traffic"), content_), row, 0);
+    form->addWidget(caption(tr("Traffic"), content_), row, 0);
     traffic_ = new QLabel(content_);
     traffic_->setFont(Theme::instance().font(text_style::data));
     form->addWidget(traffic_, row++, 1);
@@ -194,7 +192,7 @@ void InspectorPanel::build()
     auto* serial_layout = new QHBoxLayout(serial_row_);
     serial_layout->setContentsMargins(0, 0, 0, 0);
     serial_layout->setSpacing(8);
-    serial_layout->addWidget(caption(QStringLiteral("Serial"), content_));
+    serial_layout->addWidget(caption(tr("Serial"), content_));
     serial_label_ = new QLabel(content_);
     serial_label_->setFont(Theme::instance().font(text_style::data));
     serial_label_->setWordWrap(true);
@@ -211,8 +209,7 @@ void InspectorPanel::build()
     help_text_->setFont(Theme::instance().font(text_style::body));
     help_text_->setWordWrap(true);
     help_link_ = new QLabel(
-        QStringLiteral("<a href=\"troubleshoot\">Why is nothing arriving?</a>"),
-        help);
+        tr("<a href=\"troubleshoot\">Why is nothing arriving?</a>"), help);
     help_link_->setTextFormat(Qt::RichText);
     help_link_->setFont(Theme::instance().font(text_style::body));
     connect(help_link_, &QLabel::linkActivated, this,
@@ -221,7 +218,7 @@ void InspectorPanel::build()
     help_layout->addWidget(help_link_);
     layout->addWidget(help);
 
-    auto* controls_title = caption(QStringLiteral("Control lines"), content_);
+    auto* controls_title = caption(tr("Control lines"), content_);
     layout->addWidget(controls_title);
 
     simple_lines_ = new QWidget(content_);
@@ -243,9 +240,9 @@ void InspectorPanel::build()
     advanced_layout->setSpacing(6);
     auto* switch_row = new QHBoxLayout();
     switch_row->setSpacing(12);
-    dtr_ = new Switch(QStringLiteral("DTR"), advanced_lines_);
-    rts_ = new Switch(QStringLiteral("RTS"), advanced_lines_);
-    break_ = new QPushButton(QStringLiteral("Break"), advanced_lines_);
+    dtr_ = new Switch(tr("DTR"), advanced_lines_);
+    rts_ = new Switch(tr("RTS"), advanced_lines_);
+    break_ = new QPushButton(tr("Break"), advanced_lines_);
     break_->setProperty("size", QStringLiteral("small"));
     polish(break_);
     switch_row->addWidget(dtr_);
@@ -268,8 +265,7 @@ void InspectorPanel::build()
     layout->addWidget(advanced_lines_);
 
     advanced_link_ = new QLabel(
-        QStringLiteral("<a href=\"faults\">Open line matrix and faults</a>"),
-        content_);
+        tr("<a href=\"faults\">Open line matrix and faults</a>"), content_);
     advanced_link_->setTextFormat(Qt::RichText);
     advanced_link_->setFont(Theme::instance().font(text_style::body));
     connect(advanced_link_, &QLabel::linkActivated, this,
@@ -347,11 +343,11 @@ void InspectorPanel::update_content()
     state_->set_kind(chip_kind(PortModel::state_kind(port)));
     state_->set_text(PortModel::state_text(port));
     state_->setToolTip(port.state == vss::endpoint_state::failed
-                           ? QStringLiteral("The engine reported a failure.")
+                           ? tr("The engine reported a failure.")
                            : QString());
     path_->setText(port.path);
-    copy_->set_copy_text(port.path, QStringLiteral("path"));
-    traffic_->setText(QStringLiteral("RX %1, TX %2")
+    copy_->set_copy_text(port.path, tr("path"));
+    traffic_->setText(tr("RX %1, TX %2")
                           .arg(format_bytes(port.stats.bytes_rx),
                                format_bytes(port.stats.bytes_tx)));
     serial_row_->setVisible(advanced_ &&
@@ -360,11 +356,11 @@ void InspectorPanel::update_content()
 
     const bool waiting = port.open && port.peer == peer_state::not_open;
     help_text_->setVisible(waiting);
-    help_text_->setText(
-        waiting ? QStringLiteral("No program has opened %1 yet.").arg(port.path)
-                : QString());
-    help_link_->setText(QStringLiteral(
-        "<a href=\"troubleshoot\">Why is nothing arriving?</a>"));
+    help_text_->setText(waiting
+                            ? tr("No program has opened %1 yet.").arg(port.path)
+                            : QString());
+    help_link_->setText(
+        tr("<a href=\"troubleshoot\">Why is nothing arriving?</a>"));
 
     simple_lines_->setVisible(!advanced_);
     advanced_lines_->setVisible(advanced_);
@@ -376,8 +372,7 @@ void InspectorPanel::update_content()
     rts_->setEnabled(can_drive);
     break_->setEnabled(can_drive);
     const QString tooltip =
-        can_drive ? QString()
-                  : QStringLiteral("This port does not support control lines.");
+        can_drive ? QString() : tr("This port does not support control lines.");
     dtr_->setToolTip(tooltip);
     rts_->setToolTip(tooltip);
     break_->setToolTip(tooltip);
@@ -405,9 +400,8 @@ void InspectorPanel::update_lines()
         const auto line = lines[static_cast<std::size_t>(index)];
         const bool on = port.lines.test(line);
         StatusChip* chip = line_chips_[static_cast<std::size_t>(index)];
-        chip->set_text(QStringLiteral("%1 %2").arg(line_name(line),
-                                                   on ? QStringLiteral("on")
-                                                      : QStringLiteral("off")));
+        chip->set_text(on ? tr("%1 on").arg(line_name(line))
+                          : tr("%1 off").arg(line_name(line)));
         chip->set_kind(on ? StatusChip::kind::healthy
                           : StatusChip::kind::closed);
     }
@@ -420,9 +414,8 @@ void InspectorPanel::update_lines()
         const auto line = inputs[static_cast<std::size_t>(index)];
         const bool on = port.lines.test(line);
         StatusChip* chip = input_chips_[static_cast<std::size_t>(index)];
-        chip->set_text(QStringLiteral("%1 %2").arg(line_name(line),
-                                                   on ? QStringLiteral("on")
-                                                      : QStringLiteral("off")));
+        chip->set_text(on ? tr("%1 on").arg(line_name(line))
+                          : tr("%1 off").arg(line_name(line)));
         chip->set_kind(on ? StatusChip::kind::healthy
                           : StatusChip::kind::closed);
     }
@@ -441,7 +434,7 @@ QString InspectorPanel::serial_description() const
 {
     if (!port_ || port_->kind != vss::endpoint_kind::physical)
         return {};
-    return QStringLiteral("%1, %2").arg(
+    return tr("%1, %2").arg(
         QString::fromStdString(vss::to_label(port_->serial)),
         flow_text(port_->serial.flow_control));
 }

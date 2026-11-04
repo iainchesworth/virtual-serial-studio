@@ -111,7 +111,8 @@ void hub::join()
 }
 
 result<std::shared_ptr<endpoint>> hub::add_endpoint(
-    std::string name, endpoint_kind kind, std::shared_ptr<transport> transport,
+    const std::string& name, endpoint_kind kind,
+    std::shared_ptr<transport> transport,
     endpoint_options options)
 {
     if (name.empty())
@@ -184,7 +185,7 @@ result<void> hub::remove_endpoint(endpoint_id id)
     return {};
 }
 
-result<void> hub::rename_endpoint(endpoint_id id, std::string name)
+result<void> hub::rename_endpoint(endpoint_id id, const std::string& name)
 {
     if (name.empty())
         return make_error_code(errc::invalid_argument);
@@ -517,11 +518,11 @@ void hub::publish(endpoint_event event)
     }
     boost::asio::post(event_strand_,
                       [this, event = std::move(event)]() mutable {
-                          dispatch(std::move(event));
+                          dispatch(event);
                       });
 }
 
-void hub::dispatch(endpoint_event event)
+void hub::dispatch(const endpoint_event& event)
 {
     VSS_PROFILE_ZONE("hub.dispatch");
 
@@ -545,7 +546,7 @@ void hub::dispatch(endpoint_event event)
         {
             entry.sink(event);
         }
-        catch (...)
+        catch (...) // NOLINT(bugprone-empty-catch)
         {
             // A subscriber must never take the hub down.
         }
@@ -556,7 +557,7 @@ subscriber_id hub::subscribe(event_filter filter, event_sink sink)
 {
     std::lock_guard lock(subscriber_mutex_);
     const subscriber_id id = next_subscriber_id_++;
-    subscribers_.push_back(subscription{id, std::move(filter), std::move(sink)});
+    subscribers_.push_back(subscription{id, filter, std::move(sink)});
     return id;
 }
 

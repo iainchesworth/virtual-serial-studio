@@ -171,9 +171,10 @@ void AddPortDialog::build(bool advanced, mode initial)
     more_layout->setContentsMargins(10, 10, 12, 10);
     more_layout->setSpacing(10);
     auto* more_title = new QLabel(tr("More types"), more);
-    more_title->setFont(flow_semibold(Theme::instance().font(text_style::body)));
+    more_title->setFont(
+        flow_semibold(Theme::instance().font(text_style::body)));
     more_layout->addWidget(more_title);
-    more_layout->addWidget(new Badge(QStringLiteral("ADVANCED"), more));
+    more_layout->addWidget(new Badge(tr("ADVANCED"), more));
     more_types_ = new QLabel(
         tr("Network endpoint and mock fixture. Turn on Advanced mode to add "
            "them."),
@@ -567,8 +568,8 @@ void AddPortDialog::create_virtual_ports()
     for (const QString& target : names)
     {
         vss::result<vss::endpoint_id> added =
-            kind == 1   ? backend_.create_virtual_port(
-                              target, vss::virtual_port_kind::pty, true)
+            kind == 1 ? backend_.create_virtual_port(
+                            target, vss::virtual_port_kind::pty, true)
             : kind == 2 ? backend_.create_virtual_port(
                               target, vss::virtual_port_kind::loopback, true)
                         : backend_.create_auto_port(target, true);

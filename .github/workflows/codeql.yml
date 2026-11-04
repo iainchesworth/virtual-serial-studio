@@ -1,0 +1,80 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: CodeQL
+
+# Code scanning, nightly on develop. There is no pull request trigger, so a finding never blocks a
+# merge and a required check cannot be left waiting. The shared reusable workflow does not fetch
+# Boost, so the C++ build is written out here. A failed analysis opens or updates one
+# `nightly-analysis` issue.
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: codeql-nightly-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      security-events: write
+      contents: read
+      issues: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: cpp
+            build_mode: manual
+          - language: python
+            build_mode: none
+          - language: actions
+            build_mode: none
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the toolchain
+        if: matrix.build_mode == 'manual'
+        uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: gcc
+
+      - name: Prepare dependencies
+        if: matrix.build_mode == 'manual'
+        uses: ./.github/actions/prepare-deps
+
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build_mode }}
+          queries: security-extended
+
+      - name: Build
+        if: matrix.build_mode == 'manual'
+        run: |
+          set -euo pipefail
+          cmake --preset linux-release
+          cmake --build --preset linux-release
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: /language:${{ matrix.language }}
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: CodeQL (${{ matrix.language }})
+          detail: The CodeQL analysis failed to build or to complete. Open the run, fix the build or the finding, or dismiss the alert in Security > Code scanning with a justification.

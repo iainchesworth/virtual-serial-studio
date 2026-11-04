@@ -1,0 +1,105 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: MSVC Code Analysis
+
+# MSVC /analyze (PREfast) over the Windows build, nightly on develop. CodeQL builds the Linux
+# GCC leg only, so defects that are specific to MSVC would go unseen without this. There is no
+# pull request trigger and nothing gates on it. Findings are uploaded as code-scanning alerts;
+# upload-sarif does not fail on findings, so the second job asks the API for alerts created since
+# the last night and opens or updates one `nightly-analysis` issue.
+
+on:
+  schedule:
+    - cron: "23 2 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: msvc-analysis-nightly-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    name: MSVC Code Analysis
+    runs-on: windows-2025
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      security-events: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: msvc
+
+      - uses: ./.github/actions/prepare-deps
+
+      # The debug preset keeps assert() in the code the analyser sees.
+      - name: Configure
+        shell: bash
+        run: cmake --preset windows-msvc-debug
+
+      - name: Build
+        shell: bash
+        run: cmake --build --preset windows-msvc-debug
+
+      # Test code, the fetched library and the build tree are not ours to fix here.
+      - name: Run MSVC Code Analysis
+        id: run-analysis
+        uses: microsoft/msvc-code-analysis-action@24c285ab36952c9e9182f4b78dfafbac38a7e5ee # v0.1.1
+        with:
+          cmakeBuildDirectory: ${{ github.workspace }}/build/windows-msvc-debug
+          buildConfiguration: Debug
+          ruleset: NativeRecommendedRules.ruleset
+          ignoredPaths: tests;.cache;build
+
+      - name: Upload SARIF to GitHub
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: ${{ steps.run-analysis.outputs.sarif }}
+
+  surface:
+    name: Surface findings
+    needs: analyze
+    if: ${{ !cancelled() && github.ref == 'refs/heads/develop' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: read
+      issues: write
+    steps:
+      - name: Fail on alerts created since the last night
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANALYSED_REF: ${{ github.ref }}
+          ANALYSE_RESULT: ${{ needs.analyze.result }}
+        run: |
+          set -euo pipefail
+          if [ "$ANALYSE_RESULT" != "success" ]; then
+            echo "::error::the analysis did not complete ($ANALYSE_RESULT)"
+            exit 1
+          fi
+          since="$(date -u -d "-25 hours" +%Y-%m-%dT%H:%M:%SZ)"
+          gh api "repos/${GITHUB_REPOSITORY}/code-scanning/alerts?state=open&ref=${ANALYSED_REF}&tool_name=PREfast&sort=created&direction=desc&per_page=100" \
+            --jq ".[] | select(.created_at > \"${since}\") | \"\\(.number)\\t\\(.rule.id)\\t\\(.most_recent_instance.location.path):\\(.most_recent_instance.location.start_line)\\t\\(.html_url)\"" \
+            > new-alerts.tsv
+          count="$(wc -l < new-alerts.tsv | tr -d '[:space:]')"
+          if [ "$count" -gt 0 ]; then
+            echo "::error::${count} new PREfast alert(s) since ${since}:"
+            cat new-alerts.tsv
+            exit 1
+          fi
+          echo "No new PREfast alerts since ${since}."
+
+      - name: Report the failure
+        if: failure()
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: PREfast
+          detail: New PREfast alerts since the previous night, or the analysis itself failed. See the run log, then Security > Code scanning filtered to the develop branch and the tool PREfast.

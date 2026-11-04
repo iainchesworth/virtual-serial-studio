@@ -389,7 +389,7 @@ QWidget* ConnectPortsDialog::build_join_page()
     auto* more_title = new QLabel(tr("More options"), more);
     more_title->setFont(semibold(Theme::instance().font(text_style::body)));
     more_layout->addWidget(more_title);
-    more_layout->addWidget(new Badge(QStringLiteral("ADVANCED"), more));
+    more_layout->addWidget(new Badge(tr("ADVANCED"), more));
     more_layout->addStretch(1);
     owner_check_ = new QCheckBox(tr("Choose one owner at a time"), more);
     owner_check_->setAccessibleName(tr("Choose one owner at a time"));

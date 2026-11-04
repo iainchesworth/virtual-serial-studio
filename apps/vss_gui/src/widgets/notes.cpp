@@ -81,7 +81,7 @@ CopyButton::CopyButton(QWidget* parent) : QAbstractButton(parent)
     setFixedSize(24, 24);
     setCursor(Qt::PointingHandCursor);
     setFocusPolicy(Qt::StrongFocus);
-    setAccessibleName(QStringLiteral("Copy"));
+    setAccessibleName(tr("Copy"));
     connect(this, &QAbstractButton::clicked, this, &CopyButton::do_copy);
     connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { update(); });
@@ -157,9 +157,8 @@ void CopyButton::set_copy_text(const QString& text, const QString& thing)
 {
     text_ = text;
     thing_ = thing;
-    const QString label = thing.isEmpty()
-                              ? QStringLiteral("Copy")
-                              : QStringLiteral("Copy %1").arg(thing);
+    const QString label =
+        thing.isEmpty() ? tr("Copy") : tr("Copy %1").arg(thing);
     setAccessibleName(label);
     setToolTip(label);
 }
@@ -167,9 +166,9 @@ void CopyButton::set_copy_text(const QString& text, const QString& thing)
 void CopyButton::do_copy()
 {
     QGuiApplication::clipboard()->setText(text_);
-    setToolTip(QStringLiteral("Copied"));
-    QToolTip::showText(mapToGlobal(QPoint(width() / 2, height())),
-                       QStringLiteral("Copied"), this);
+    setToolTip(tr("Copied"));
+    QToolTip::showText(mapToGlobal(QPoint(width() / 2, height())), tr("Copied"),
+                       this);
     Q_EMIT copied();
 }
 
@@ -306,14 +305,14 @@ void NoteBanner::clear_action()
 
 void NoteBanner::refresh_accessible_name()
 {
-    QString prefix;
-    if (kind_ == kind::warn)
-        prefix = QStringLiteral("Warning: ");
-    else if (kind_ == kind::danger)
-        prefix = QStringLiteral("Error: ");
     const QString plain =
         accessible_text_.isEmpty() ? text_->text() : accessible_text_;
-    setAccessibleName(prefix + plain);
+    if (kind_ == kind::warn)
+        setAccessibleName(tr("Warning: %1").arg(plain));
+    else if (kind_ == kind::danger)
+        setAccessibleName(tr("Error: %1").arg(plain));
+    else
+        setAccessibleName(plain);
     announce_name_change(this);
 }
 

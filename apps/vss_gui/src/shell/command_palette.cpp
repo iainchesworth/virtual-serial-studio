@@ -41,7 +41,7 @@ CommandPalette::CommandPalette(ActionRegistry& registry, LevelService& level,
     setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
     setModal(true);
     setAttribute(Qt::WA_StyledBackground, true);
-    setAccessibleName(QStringLiteral("Command palette"));
+    setAccessibleName(tr("Command palette"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(760, 520);
@@ -62,11 +62,11 @@ CommandPalette::CommandPalette(ActionRegistry& registry, LevelService& level,
     search_layout->addWidget(search_icon);
     search_ = new QLineEdit(search_row);
     search_->setFont(Theme::instance().font(text_style::subtitle));
-    search_->setPlaceholderText(QStringLiteral("Search actions"));
-    search_->setAccessibleName(QStringLiteral("Search actions"));
+    search_->setPlaceholderText(tr("Search actions"));
+    search_->setAccessibleName(tr("Search actions"));
     search_->setFrame(false);
     search_layout->addWidget(search_, 1);
-    search_layout->addWidget(new KeyCap(QStringLiteral("Esc"), search_row));
+    search_layout->addWidget(new KeyCap(tr("Esc"), search_row));
     root->addWidget(search_row);
 
     auto* divider = new QFrame(this);
@@ -81,7 +81,7 @@ CommandPalette::CommandPalette(ActionRegistry& registry, LevelService& level,
     results_->setFrameShape(QFrame::NoFrame);
     results_->setSelectionMode(QAbstractItemView::SingleSelection);
     results_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    results_->setAccessibleName(QStringLiteral("Actions"));
+    results_->setAccessibleName(tr("Actions"));
     root->addWidget(results_, 1);
 
     auto* footer = new QFrame(this);
@@ -104,7 +104,7 @@ CommandPalette::CommandPalette(ActionRegistry& registry, LevelService& level,
     footer_->setProperty("muted", true);
     footer_->setWordWrap(true);
     footer_layout->addWidget(footer_, 1);
-    turn_on_ = new QPushButton(QStringLiteral("Turn on Advanced mode"), footer);
+    turn_on_ = new QPushButton(tr("Turn on Advanced mode"), footer);
     turn_on_->setProperty("role", QStringLiteral("primary"));
     polish(turn_on_);
     turn_on_->setVisible(false);
@@ -252,9 +252,9 @@ void CommandPalette::rebuild()
     hidden_ = static_cast<int>(hidden.size());
 
     results_->clear();
-    add_group(QStringLiteral("Available now"), available);
+    add_group(tr("Available now"), available);
     if (!level_.advanced())
-        add_group(QStringLiteral("Needs Advanced mode"), hidden);
+        add_group(tr("Needs Advanced mode"), hidden);
 
     for (int index = 0; index < results_->count(); ++index)
     {
@@ -277,21 +277,19 @@ void CommandPalette::update_footer()
     turn_on_->setVisible(needs_advanced);
     if (needs_advanced)
     {
-        footer_->setText(
-            QStringLiteral("Advanced mode adds panels and options to this "
-                           "window. Nothing you have built changes."));
+        footer_->setText(tr("Advanced mode adds panels and options to this "
+                            "window. Nothing you have built changes."));
     }
     else
     {
-        footer_->setText(
-            QStringLiteral("Enter runs the selected action. Escape closes."));
+        footer_->setText(tr("Enter runs the selected action. Escape closes."));
     }
 }
 
 void CommandPalette::add_group(const QString& title,
                                const QVector<QAction*>& actions)
 {
-    if (!level_.advanced() && title == QLatin1String("Needs Advanced mode") &&
+    if (!level_.advanced() && title == tr("Needs Advanced mode") &&
         actions.isEmpty())
     {
         // The empty group is still shown with its explanation, per the spec.
@@ -311,13 +309,11 @@ void CommandPalette::add_group(const QString& title,
 
     if (actions.isEmpty())
     {
-        const QString mode = title == QLatin1String("Available now")
-                                 ? QStringLiteral("Simple mode")
-                                 : QStringLiteral("Advanced mode");
-        auto* empty =
-            new QListWidgetItem(QStringLiteral("Nothing in %1 matches \"%2\".")
-                                    .arg(mode, search_->text()),
-                                results_);
+        const QString mode = title == tr("Available now") ? tr("Simple mode")
+                                                          : tr("Advanced mode");
+        auto* empty = new QListWidgetItem(
+            tr("Nothing in %1 matches \"%2\".").arg(mode, search_->text()),
+            results_);
         empty->setFlags(Qt::NoItemFlags);
         empty->setForeground(Theme::instance().colour(colour_role::ink2));
         empty->setFont(Theme::instance().font(text_style::body));
@@ -373,7 +369,7 @@ QListWidgetItem* CommandPalette::add_action(QAction* action)
             QLatin1String("advanced") &&
         !level_.advanced())
     {
-        layout->addWidget(new Badge(QStringLiteral("ADVANCED"), row));
+        layout->addWidget(new Badge(tr("ADVANCED"), row));
     }
 
     results_->setItemWidget(item, row);

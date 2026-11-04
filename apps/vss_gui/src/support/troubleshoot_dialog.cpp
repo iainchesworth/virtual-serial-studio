@@ -308,8 +308,7 @@ void TroubleshootDialog::rebuild()
         spec.highlight = row.highlight;
         spec.framed = false;
         auto* widget = new CheckRowWidget(spec, checks_host_);
-        widget->setAccessibleName(
-            QStringLiteral("%1, %2").arg(row.title, row.chip));
+        widget->setAccessibleName(tr("%1, %2").arg(row.title, row.chip));
         checks_layout_->addWidget(widget);
         rows_.push_back(widget);
     }
