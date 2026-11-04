@@ -29,8 +29,8 @@ TEST_CASE("events: filter by endpoint")
         recorder.record(event);
     });
 
-    first.transport->mock()->inject_read("one");
-    second.transport->mock()->inject_read("two");
+    first.inject_read("one");
+    second.inject_read("two");
 
     REQUIRE(wait_until(
         [&] { return recorder.data_ascii(data_direction::rx) == "one"; }, 2000ms));
@@ -53,7 +53,7 @@ TEST_CASE("events: filter by kind")
         data_only.record(event);
     });
 
-    mock.transport->mock()->inject_read("payload");
+    mock.inject_read("payload");
     mock.endpoint->write(as_bytes("reply"));
 
     REQUIRE(wait_until([&] { return data_only.count(event_kind::data) == 2; },
@@ -70,12 +70,12 @@ TEST_CASE("events: unsubscribe stops delivery")
     const subscriber_id id =
         hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
-    mock.transport->mock()->inject_read("first");
+    mock.inject_read("first");
     REQUIRE(wait_until(
         [&] { return recorder.data_ascii(data_direction::rx) == "first"; }, 2000ms));
 
     hub->unsubscribe(id);
-    mock.transport->mock()->inject_read("second");
+    mock.inject_read("second");
     REQUIRE(wait_until(
         [&] { return mock.endpoint->stats().bytes_rx == 11; }, 2000ms));
 
@@ -94,7 +94,7 @@ TEST_CASE("events: a throwing subscriber does not break the hub")
     event_recorder recorder;
     hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
-    mock.transport->mock()->inject_read("survives");
+    mock.inject_read("survives");
     REQUIRE(wait_until(
         [&] { return recorder.data_ascii(data_direction::rx) == "survives"; },
         2000ms));
@@ -105,7 +105,7 @@ TEST_CASE("events: the traffic ring records both directions")
     auto hub = start_hub();
     auto mock = add_mock(*hub, "device");
 
-    mock.transport->mock()->inject_read("in");
+    mock.inject_read("in");
     mock.endpoint->write(as_bytes("out"));
 
     REQUIRE(wait_until([&] { return hub->traffic().size() >= 2; }, 2000ms));

@@ -17,6 +17,9 @@
 
 #include <boost/asio/post.hpp>
 
+#include <chrono>
+#include <exception>
+#include <future>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -48,10 +51,51 @@ inline std::shared_ptr<vss::endpoint> add_loopback(vss::hub& hub,
 /// An endpoint backed by the serial library's scriptable mock device.  The
 /// typed transport is returned so the test can inject reads and inspect
 /// writes.
+///
+/// The mock port is "distinct objects: safe, shared objects: unsafe, use a
+/// strand", and the endpoint drives it from its own strand. The members below
+/// therefore run on that strand and wait for the result, so a test on its own
+/// thread never touches the port at the same time as the endpoint.
 struct mock_endpoint
 {
     std::shared_ptr<vss::endpoint> endpoint;
     std::shared_ptr<vss::serial_transport> transport;
+
+    /// Runs `work` on the endpoint's strand and returns once it has finished.
+    template <class Work>
+    void on_strand(Work&& work) const
+    {
+        std::promise<void> done;
+        auto finished = done.get_future();
+        boost::asio::post(endpoint->get_executor(), [&] {
+            try
+            {
+                work();
+                done.set_value();
+            }
+            catch (...)
+            {
+                done.set_exception(std::current_exception());
+            }
+        });
+        REQUIRE(finished.wait_for(std::chrono::seconds(10)) ==
+                std::future_status::ready);
+        finished.get();
+    }
+
+    /// Delivers `data` as if the device had sent it.
+    void inject_read(const std::string& data) const
+    {
+        on_strand([&] { transport->mock()->inject_read(data); });
+    }
+
+    /// Everything the endpoint has written to the device so far.
+    std::string written() const
+    {
+        std::string bytes;
+        on_strand([&] { bytes = transport->mock()->written(); });
+        return bytes;
+    }
 };
 
 inline mock_endpoint add_mock(vss::hub& hub, const std::string& name)
