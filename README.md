@@ -77,11 +77,12 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 
 | Preset | What it builds |
 |---|---|
-| `debug`, `release` | Tests and tools; GUI when Qt is found |
-| `debug-gui`, `release-gui` | The same plus the GUI; **fails** if Qt is missing |
-| `coverage`, `coverage-unix` | Instrumented libraries, no GUI |
-| `perf` | Performance suite, no GUI |
-| `tracy` | Performance suite with Tracy, no GUI |
+| `linux-debug`, `linux-release`, `macos-debug`, `macos-release`, `windows-msvc-debug`, `windows-msvc-release` | Tests and tools, no GUI. The release presets also build the performance suite |
+| the same names with `-gui` | The same plus the GUI; **fails** if Qt is missing |
+| `linux-coverage`, `macos-coverage`, `windows-llvm-coverage` | Instrumented libraries (Clang, LLVM profiles), no GUI |
+| `linux-tracy`, `windows-msvc-tracy` | Performance suite with Tracy, no GUI; needs `VCPKG_ROOT` |
+
+A preset only exists on the operating system it names. Each builds in `build/<preset>`. The compiler is the one in `CC` and `CXX`, or the platform default.
 
 Set `VSS_QT_ROOT` (or `-DCMAKE_PREFIX_PATH=...`) only when the automatic search
 picks the wrong kit; otherwise no environment variable is needed. `ICL_QT_ROOT`
@@ -90,14 +91,14 @@ is the per-machine setting shared with the other projects of the organisation:
 ```bash
 # Linux example
 export VSS_QT_ROOT=$HOME/Qt/6.12.0/gcc_64
-cmake --preset release-gui
-cmake --build --preset release-gui
-ctest --preset debug-gui
+cmake --preset linux-release-gui
+cmake --build --preset linux-release-gui
+ctest --preset linux-release-gui
 
 # Windows (from a vcvars64 prompt)
 set VSS_QT_ROOT=C:\Qt\6.12.0\msvc2022_64
-cmake --preset release-gui
-cmake --build --preset release-gui
+cmake --preset windows-msvc-release-gui
+cmake --build --preset windows-msvc-release-gui
 ```
 
 `VSS_QT_ROOT` is the directory that contains `lib/cmake/Qt6`. If it is unset and
@@ -292,15 +293,15 @@ Coverage uses LLVM profile instrumentation and is gated at **90% statements**
 and **80% branches**:
 
 ```bash
-cmake -S . -B build-cov -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ \
-  -DVSS_COVERAGE=ON -DVSS_BUILD_GUI=OFF
-cmake --build build-cov
-mkdir -p build-cov/profiles
-LLVM_PROFILE_FILE="$PWD/build-cov/profiles/%p-%m.profraw" \
-  ./build-cov/bin/vss_unit_tests
-LLVM_PROFILE_FILE="$PWD/build-cov/profiles/%p-%m.profraw" \
-  ./build-cov/bin/vss_system_tests
-python tools/coverage_report.py --build build-cov \
+export CXX=clang++
+cmake --preset linux-coverage
+cmake --build --preset linux-coverage
+mkdir -p build/linux-coverage/profiles
+LLVM_PROFILE_FILE="$PWD/build/linux-coverage/profiles/%p-%m.profraw" \
+  ./build/linux-coverage/bin/vss_unit_tests
+LLVM_PROFILE_FILE="$PWD/build/linux-coverage/profiles/%p-%m.profraw" \
+  ./build/linux-coverage/bin/vss_system_tests
+python tools/coverage_report.py --build build/linux-coverage \
   --exclude libs/vss_testkit \
   --gate-exclude libs/vss_ports/src/vcom_driver.cpp \
   --min-lines 90 --min-branches 80
@@ -336,7 +337,7 @@ running process is the normal workflow.
 
 ```bash
 # Debug: Tracy is on when configured with the vcpkg toolchain
-cmake --preset debug \
+cmake --preset linux-debug \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 
 # Release: opt in explicitly when something needs profiling

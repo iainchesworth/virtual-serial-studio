@@ -46,18 +46,16 @@ Debug, with the toolchain that supplies the package:
 
 ```bash
 export VCPKG_ROOT=/path/to/vcpkg
-cmake --preset debug -DVSS_BUILD_PERF=ON \
+cmake --preset linux-debug -DVSS_BUILD_PERF=ON \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build --preset debug
+cmake --build --preset linux-debug
 ```
 
 Release, opting in for a triage build:
 
 ```bash
-cmake -S . -B build-tracy -DCMAKE_BUILD_TYPE=Release -DVSS_TRACY=ON \
-  -DVSS_BUILD_PERF=ON \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build build-tracy
+cmake --preset linux-tracy
+cmake --build --preset linux-tracy
 ```
 
 The manifest ([`vcpkg.json`](../vcpkg.json)) pins `tracy` and the vcpkg
@@ -75,7 +73,7 @@ the pinned source tag to keep the Linux job light.
 
 ```bash
 tracy-capture -o trace.tracy &          # waits for a client, saves on disconnect
-./build-tracy/bin/vss_perf --tracy   # `vss_perf` needs -DVSS_BUILD_PERF=ON
+./build/linux-tracy/bin/vss_perf --tracy
 wait                                    # the client exiting ends the capture
 tracy-csvexport trace.tracy > trace.csv
 python tools/tracy_report.py trace.csv

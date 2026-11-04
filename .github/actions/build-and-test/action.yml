@@ -4,22 +4,25 @@ description: >
   Configure, build and run the full suite. Shared by the matrix job and the
   opt-in macOS job so the two cannot drift.
 
+inputs:
+  preset:
+    description: The configure, build and test preset to use.
+    required: true
+
 runs:
   using: composite
   steps:
     - name: Configure
       shell: bash
-      run: |
-        cmake -S . -B build \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-          -DVSS_BUILD_GUI=OFF \
-          -DVSS_BUILD_TOOLS=ON \
-          -DVSS_BUILD_TESTS=ON
+      env:
+        PRESET: ${{ inputs.preset }}
+      run: cmake --preset "$PRESET"
 
     - name: Build
       shell: bash
-      run: cmake --build build --config Release
+      env:
+        PRESET: ${{ inputs.preset }}
+      run: cmake --build --preset "$PRESET"
 
     - name: Create a serial pair for the system tests
       if: runner.os != 'Windows'
@@ -40,4 +43,6 @@ runs:
 
     - name: Test
       shell: bash
-      run: ctest --test-dir build -C Release --output-on-failure --timeout 180
+      env:
+        PRESET: ${{ inputs.preset }}
+      run: ctest --preset "$PRESET"

@@ -36,9 +36,8 @@ change.
 
 ```powershell
 cd C:\Repos\vss-worktrees\windows-com-driver
-cmake -S . -B build-tracy `
-  -DVSS_BOOST_ROOT=C:/path/to/boost-root `
-  -DVSS_BUILD_GUI=OFF -DVSS_BUILD_TESTS=ON
+$env:BOOST_ROOT = 'C:/path/to/boost-root'
+cmake --preset windows-msvc-release
 ```
 
 Rules that apply to every sub-session:
