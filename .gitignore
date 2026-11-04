@@ -50,3 +50,9 @@ Thumbs.db
 /tracy-report.md
 /tracy-zones.json
 /perf-tracy.txt
+
+# Driver build output
+/drivers/windows/artifacts/
+
+# The driver project is hand-written source, not a generated Visual Studio file
+!drivers/windows/**/*.vcxproj
