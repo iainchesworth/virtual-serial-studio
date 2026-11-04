@@ -157,3 +157,14 @@ if(VSS_GUI_TS_FILES)
     SOURCES ${VSS_GUI_TRANSLATABLE}
     RESOURCE_PREFIX "/i18n")
 endif()
+
+# Journey tests drive the real window with QTest key and mouse events; they
+# need the Qt Test module on top of Widgets.
+if(VSS_BUILD_TESTS)
+  find_package(Qt6 6.2 QUIET COMPONENTS Test)
+  if(TARGET Qt6::Test)
+    add_subdirectory(ui-tests)
+  else()
+    message(STATUS "Vss: Qt6::Test not found; the GUI journey tests are skipped.")
+  endif()
+endif()
