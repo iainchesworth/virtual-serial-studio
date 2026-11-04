@@ -18,14 +18,15 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
   unit/test_studio.cpp
-  unit/test_virtual_ports.cpp)
+  unit/test_virtual_ports.cpp
+  unit/test_vsscom_core.cpp)
 
 add_executable(vss_unit_tests ${VSS_UNIT_TEST_SOURCES})
 target_include_directories(vss_unit_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/framework
   ${CMAKE_CURRENT_SOURCE_DIR}/support)
-target_link_libraries(vss_unit_tests PRIVATE vss_studio vss_testkit)
+target_link_libraries(vss_unit_tests PRIVATE vss_studio vss_testkit vsscom_core)
 vss_set_warnings(vss_unit_tests)
 vss_enable_coverage(vss_unit_tests)
 

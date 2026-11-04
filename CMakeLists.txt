@@ -111,6 +111,12 @@ include(VssFuzz)
 
 add_subdirectory(libs)
 
+# The portable core of the Windows driver is C. It is built for the tests only.
+if(VSS_BUILD_TESTS)
+  enable_language(C)
+  add_subdirectory(drivers/windows/vsscom/core)
+endif()
+
 if(VSS_BUILD_TOOLS)
   add_subdirectory(apps/vss_cli)
 endif()
