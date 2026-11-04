@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Workflows and the project's own composite actions.
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/*
+    target-branch: develop
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    rebase-strategy: disabled
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]
+  # The manifest baseline moves monthly and is reviewed by a person. The baseline must
+  # name a commit that exists in the iainchesworthlabs/vcpkg fork (the policy job checks it).
+  - package-ecosystem: vcpkg
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    rebase-strategy: disabled
