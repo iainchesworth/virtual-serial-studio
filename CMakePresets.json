@@ -176,6 +176,24 @@
       }
     },
     {
+      "name": "linux-asan-ubsan",
+      "displayName": "Linux, AddressSanitizer and UBSan, -O1",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ICL_SANITIZERS": "address,undefined"
+      }
+    },
+    {
+      "name": "linux-tsan",
+      "displayName": "Linux, ThreadSanitizer, -O1",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ICL_SANITIZERS": "thread"
+      }
+    },
+    {
       "name": "windows-llvm-coverage",
       "displayName": "Windows, coverage (clang-cl, LLVM profile instrumentation)",
       "inherits": "windows-base",
@@ -286,6 +304,14 @@
     {
       "name": "windows-msvc-tracy",
       "configurePreset": "windows-msvc-tracy"
+    },
+    {
+      "name": "linux-asan-ubsan",
+      "configurePreset": "linux-asan-ubsan"
+    },
+    {
+      "name": "linux-tsan",
+      "configurePreset": "linux-tsan"
     }
   ],
   "testPresets": [
@@ -432,6 +458,26 @@
     {
       "name": "windows-llvm-coverage",
       "configurePreset": "windows-llvm-coverage",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "linux-asan-ubsan",
+      "configurePreset": "linux-asan-ubsan",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "linux-tsan",
+      "configurePreset": "linux-tsan",
       "output": {
         "outputOnFailure": true
       },

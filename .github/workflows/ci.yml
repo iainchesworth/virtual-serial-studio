@@ -371,6 +371,60 @@ jobs:
         if: always()
         continue-on-error: true
         uses: iainchesworthlabs/icl-common-infra/actions/save-vcpkg-cache@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+  asan-ubsan:
+    runs-on: ubuntu-26.04
+    name: AddressSanitizer and UBSan
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      ASAN_OPTIONS: detect_leaks=1:strict_string_checks=1
+      UBSAN_OPTIONS: print_stacktrace=1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: linux-asan-ubsan
+
+  # Threading findings come from timing, so this leg runs for merge-queue entries and pushes, not for every pull request.
+  tsan:
+    runs-on: ubuntu-26.04
+    name: ThreadSanitizer
+    needs: plan
+    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && github.event_name != 'pull_request'
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: linux-tsan
+
   zizmor:
     name: Workflow analysis
     permissions:
@@ -398,7 +452,7 @@ jobs:
   ci-status:
     name: CI Status
     if: always()
-    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, zizmor, dependency-scan]
+    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, tsan, zizmor, dependency-scan]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -416,5 +470,7 @@ jobs:
               "coverage": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "performance": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
               "profiling": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "asan-ubsan": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "tsan": ${{ needs.plan.outputs.build == 'true' && github.event_name != 'pull_request' }},
               "dependency-scan": ${{ github.event_name != 'push' }}
             }

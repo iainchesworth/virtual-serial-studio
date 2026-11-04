@@ -56,8 +56,6 @@ option(VSS_BUILD_TOOLS
   "Build the auxiliary developer tools" ${VSS_IS_TOP_LEVEL})
 option(VSS_COVERAGE
   "Instrument the libraries for statement and branch coverage" OFF)
-option(VSS_SANITIZE
-  "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
 # Tracy is part of a normal Debug build: the client is compiled in and waits
 # for a profiler, so it can be attached at any point. Release keeps it out by
 # default, but -DVSS_TRACY=ON builds a release binary that can still be

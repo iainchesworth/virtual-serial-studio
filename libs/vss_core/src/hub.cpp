@@ -47,6 +47,7 @@ void hub::start()
     if (running_.exchange(true))
         return;
 
+    stopping_.store(false);
     io_.restart();
     work_ = std::make_unique<
         boost::asio::executor_work_guard<boost::asio::io_context::executor_type>>(
@@ -64,12 +65,17 @@ void hub::stop()
     if (!running_.exchange(false))
         return;
 
-    work_.reset();
+    // The work guard stays until join(). Releasing it here would let the worker
+    // threads leave an idle io_context before the shutdown handlers below are
+    // posted, so those handlers would never run and an endpoint with a parked
+    // read would keep itself alive through its transport.
 
     // Ask every endpoint to close itself on its own strand: transports are
     // single-threaded objects, so closing them from this thread while a read
-    // is in flight would race the serial library.  The last closure stops the
-    // io_context, so a transport that never completes cannot hang shutdown.
+    // is in flight would race the serial library.  The io_context is stopped
+    // once every shutdown has finished, including the ones remove_endpoint()
+    // started earlier, so a transport that never completes cannot hang
+    // shutdown and a queued shutdown is never thrown away.
     std::vector<std::shared_ptr<endpoint>> endpoints;
     {
         std::shared_lock lock(mutex_);
@@ -78,20 +84,19 @@ void hub::stop()
             endpoints.push_back(entry.second);
     }
 
-    if (endpoints.empty())
-    {
+    closing_.fetch_add(endpoints.size());
+    stopping_.store(true);
+    if (closing_.load() == 0)
         io_.stop();
-        return;
-    }
 
-    auto remaining = std::make_shared<std::atomic<std::size_t>>(endpoints.size());
     for (const auto& entry : endpoints)
-    {
-        entry->shutdown([this, remaining] {
-            if (remaining->fetch_sub(1) == 1)
-                io_.stop();
-        });
-    }
+        entry->shutdown([this] { endpoint_closed(); });
+}
+
+void hub::endpoint_closed()
+{
+    if (closing_.fetch_sub(1) == 1 && stopping_.load())
+        io_.stop();
 }
 
 void hub::join()
@@ -102,6 +107,7 @@ void hub::join()
             thread.join();
     }
     threads_.clear();
+    work_.reset();
 }
 
 result<std::shared_ptr<endpoint>> hub::add_endpoint(
@@ -173,7 +179,8 @@ result<void> hub::remove_endpoint(endpoint_id id)
         endpoints_.erase(it);
     }
 
-    victim->stop();
+    closing_.fetch_add(1);
+    victim->shutdown([this] { endpoint_closed(); });
     return {};
 }
 

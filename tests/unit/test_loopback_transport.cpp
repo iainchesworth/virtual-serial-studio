@@ -12,6 +12,7 @@
 #include <boost/asio/io_context.hpp>
 
 #include <array>
+#include <memory>
 
 using namespace vss;
 
@@ -204,4 +205,41 @@ TEST_CASE("loopback: describe mentions the name")
     boost::asio::io_context io;
     auto port = loopback_transport::create(io.get_executor(), "demo");
     REQUIRE_EQ(port->describe(), std::string("loopback device 'demo'"));
+}
+
+TEST_CASE("loopback: a completed read leaves nothing parked")
+{
+    fixture f;
+    byte_buffer buffer(8);
+    int completions = 0;
+
+    // Only the parked handler holds the token. Once the read has completed, a
+    // copy left behind in the transport would keep it alive and would complete
+    // a second time on the next write (libc++ does not empty a moved-from
+    // std::function that holds a small callable).
+    std::weak_ptr<int> watch;
+    {
+        auto token = std::make_shared<int>(0);
+        watch = token;
+        f.port->async_read_some(
+            boost::asio::buffer(buffer),
+            [&completions, token](boost::system::error_code, std::size_t) {
+                ++completions;
+            });
+    }
+    REQUIRE(!watch.expired());
+
+    f.port->async_write_some(boost::asio::buffer("ab", 2),
+                             [](boost::system::error_code, std::size_t) {});
+    f.io.restart();
+    f.io.run();
+    REQUIRE_EQ(completions, 1);
+    REQUIRE(watch.expired());
+
+    f.port->async_write_some(boost::asio::buffer("cd", 2),
+                             [](boost::system::error_code, std::size_t) {});
+    f.io.restart();
+    f.io.run();
+    REQUIRE_EQ(completions, 1);
+    REQUIRE_EQ(f.port->available(), std::size_t{2});
 }

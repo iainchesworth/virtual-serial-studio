@@ -80,6 +80,7 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | `linux-debug`, `linux-release`, `macos-debug`, `macos-release`, `windows-msvc-debug`, `windows-msvc-release` | Tests and tools, no GUI. The release presets also build the performance suite |
 | the same names with `-gui` | The same plus the GUI; **fails** if Qt is missing |
 | `linux-coverage`, `macos-coverage`, `windows-llvm-coverage` | Instrumented libraries (Clang, LLVM profiles), no GUI |
+| `linux-asan-ubsan`, `linux-tsan` | Clang with AddressSanitizer and UBSan, or ThreadSanitizer, at -O1 (`ICL_SANITIZERS`); no GUI |
 | `linux-tracy`, `windows-msvc-tracy` | Performance suite with Tracy, no GUI; needs `VCPKG_ROOT` |
 
 A preset only exists on the operating system it names. Each builds in `build/<preset>`. The compiler is the one in `CC` and `CXX`, or the platform default.
