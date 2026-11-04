@@ -379,7 +379,7 @@ void ShellWindow::build_actions()
         QStringLiteral("view.theme.system"),
         QStringLiteral("Follow the system"),
         QStringLiteral("theme colour scheme"), {}, {}, action_level::simple,
-        [this]
+        []
         {
             Theme::instance().set_mode(theme_mode::system);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -389,7 +389,7 @@ void ShellWindow::build_actions()
     add(
         QStringLiteral("view.theme.light"), QStringLiteral("Light"),
         QStringLiteral("theme"), {}, {}, action_level::simple,
-        [this]
+        []
         {
             Theme::instance().set_mode(theme_mode::light);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -399,7 +399,7 @@ void ShellWindow::build_actions()
     add(
         QStringLiteral("view.theme.dark"), QStringLiteral("Dark"),
         QStringLiteral("theme"), {}, {}, action_level::simple,
-        [this]
+        []
         {
             Theme::instance().set_mode(theme_mode::dark);
             QSettings().setValue(QStringLiteral("ui/theme"),
@@ -410,7 +410,7 @@ void ShellWindow::build_actions()
         QStringLiteral("view.density.comfortable"),
         QStringLiteral("Comfortable"), QStringLiteral("density spacing"), {},
         {}, action_level::simple,
-        [this]
+        []
         {
             Theme::instance().set_density(density_mode::comfortable);
             QSettings().setValue(QStringLiteral("ui/density"),
@@ -420,7 +420,7 @@ void ShellWindow::build_actions()
     add(
         QStringLiteral("view.density.compact"), QStringLiteral("Compact"),
         QStringLiteral("density spacing"), {}, {}, action_level::simple,
-        [this]
+        []
         {
             Theme::instance().set_density(density_mode::compact);
             QSettings().setValue(QStringLiteral("ui/density"),
