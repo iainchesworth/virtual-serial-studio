@@ -18,6 +18,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
   unit/test_studio.cpp
+  unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)
 
@@ -40,6 +41,11 @@ set(VSS_SYSTEM_TEST_SOURCES
   system/test_system_tcp.cpp
   system/test_system_udp.cpp)
 
+# The vport tests start vss_cli as a separate process, the way a script does.
+if(NOT WIN32 AND TARGET vss_cli)
+  list(APPEND VSS_SYSTEM_TEST_SOURCES system/test_system_vport.cpp)
+endif()
+
 add_executable(vss_system_tests ${VSS_SYSTEM_TEST_SOURCES})
 target_include_directories(vss_system_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -52,6 +58,11 @@ vss_enable_coverage(vss_system_tests)
 add_test(NAME system COMMAND vss_system_tests
   --verbose --junit=${CMAKE_BINARY_DIR}/system-tests.xml)
 set_tests_properties(system PROPERTIES TIMEOUT 600)
+if(NOT WIN32 AND TARGET vss_cli)
+  add_dependencies(vss_system_tests vss_cli)
+  target_compile_definitions(vss_system_tests PRIVATE
+    VSS_CLI_PATH="$<TARGET_FILE:vss_cli>")
+endif()
 
 add_subdirectory(fuzz)
 

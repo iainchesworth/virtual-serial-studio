@@ -6,52 +6,20 @@
 
 #include <vss/ports/stable_link.hpp>
 
+#include "scratch_directory.hpp"
 #include "test_framework.hpp"
 
-#include <atomic>
-#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <map>
 #include <string>
 
 using namespace vss;
+using vss_test_support::scratch_directory;
 namespace fs = std::filesystem;
 
 namespace
 {
-
-/// A fresh directory under the system temp directory, removed on exit.  It is
-/// made with the default mode, so a test that wants the module to make its own
-/// private directory names a child of it that does not exist yet.
-class scratch_directory
-{
-public:
-    scratch_directory()
-    {
-        static std::atomic<unsigned> counter{0};
-        const auto stamp =
-            std::chrono::steady_clock::now().time_since_epoch().count();
-        path_ = fs::temp_directory_path() /
-                ("vss-link-test-" + std::to_string(stamp) + "-" +
-                 std::to_string(counter.fetch_add(1)));
-        fs::create_directories(path_);
-    }
-
-    ~scratch_directory()
-    {
-        std::error_code ignored;
-        fs::remove_all(path_, ignored);
-    }
-
-    scratch_directory(const scratch_directory&) = delete;
-    scratch_directory& operator=(const scratch_directory&) = delete;
-
-    const fs::path& path() const noexcept { return path_; }
-
-private:
-    fs::path path_;
-};
 
 env_lookup fake_environment(std::map<std::string, std::string> values)
 {

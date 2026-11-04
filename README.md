@@ -163,6 +163,7 @@ QT_QPA_PLATFORM=offscreen vss_gui --selftest
 ```bash
 vss_cli devices                     # serial ports and com0com pairs
 vss_cli virtual                     # one virtual port; prints what to open
+vss_cli vport --name=ttyVSS0        # a pseudo terminal with a stable name (Linux, macOS)
 vss_cli loopback                    # a virtual port plus a monitor, no hardware
 vss_cli share serial://COM3 --listeners=3 --seconds=30
 vss_cli bridge serial://COM3 tcp://192.168.1.50:4001 --seconds=30
