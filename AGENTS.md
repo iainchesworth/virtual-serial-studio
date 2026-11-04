@@ -23,10 +23,10 @@ This file applies to any automated contributor. Read it before changing the repo
 ## Build and test
 
 ```
-cmake --preset debug-gui
-cmake --build --preset debug-gui
-ctest --preset debug-gui --output-on-failure
-QT_QPA_PLATFORM=offscreen ./build/debug-gui/bin/vss_gui --selftest
+cmake --preset linux-debug-gui        # windows-msvc-debug-gui or macos-debug-gui elsewhere
+cmake --build --preset linux-debug-gui
+ctest --preset linux-debug-gui
+QT_QPA_PLATFORM=offscreen ./build/linux-debug-gui/bin/vss_gui --selftest
 python3 tools/changelog.py --check
 ```
 

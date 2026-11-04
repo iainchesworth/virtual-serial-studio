@@ -102,12 +102,15 @@ jobs:
           - os: ubuntu-26.04
             name: linux-gcc
             compiler: gcc
+            preset: linux-release
           - os: ubuntu-26.04
             name: linux-clang
             compiler: clang
+            preset: linux-release
           - os: windows-2025
             name: windows-msvc
             compiler: msvc
+            preset: windows-msvc-release
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
     needs: plan
@@ -115,6 +118,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -124,6 +129,8 @@ jobs:
           compiler: ${{ matrix.compiler }}
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
+        with:
+          preset: ${{ matrix.preset }}
 
   macos:
     runs-on: macos-26
@@ -133,6 +140,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -140,6 +149,8 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
+        with:
+          preset: macos-release
 
   gui:
     runs-on: ubuntu-26.04
@@ -149,6 +160,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -165,17 +178,13 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
 
       - name: Configure
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
-            -DVSS_BUILD_GUI=ON
+        run: cmake --preset linux-release-gui
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build --preset linux-release-gui
 
       - name: GUI self-test
-        run: QT_QPA_PLATFORM=offscreen ./build/bin/vss_gui --selftest
+        run: QT_QPA_PLATFORM=offscreen ./build/linux-release-gui/bin/vss_gui --selftest
 
   coverage:
     runs-on: ubuntu-26.04
@@ -185,6 +194,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -202,15 +213,10 @@ jobs:
           echo "/usr/lib/llvm-$LLVM/bin" >> "$GITHUB_PATH"
 
       - name: Configure
-        run: |
-          cmake -S . -B build-cov \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DVSS_COVERAGE=ON \
-            -DVSS_BUILD_GUI=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
+        run: cmake --preset linux-coverage
 
       - name: Build
-        run: cmake --build build-cov
+        run: cmake --build --preset linux-coverage
 
       - name: Create a serial pair for the system tests
         shell: bash
@@ -230,14 +236,14 @@ jobs:
 
       - name: Run the suites with profiling
         run: |
-          mkdir -p build-cov/profiles
-          export LLVM_PROFILE_FILE="$PWD/build-cov/profiles/%p-%m.profraw"
-          ./build-cov/bin/vss_unit_tests --junit=unit.xml
-          ./build-cov/bin/vss_system_tests --junit=system.xml
+          mkdir -p build/linux-coverage/profiles
+          export LLVM_PROFILE_FILE="$PWD/build/linux-coverage/profiles/%p-%m.profraw"
+          ./build/linux-coverage/bin/vss_unit_tests --junit=unit.xml
+          ./build/linux-coverage/bin/vss_system_tests --junit=system.xml
 
       - name: Enforce the gates
         run: |
-          python3 tools/coverage_report.py --build build-cov \
+          python3 tools/coverage_report.py --build build/linux-coverage \
             --exclude libs/vss_testkit \
             --gate-exclude libs/vss_ports/src/vcom_driver.cpp \
             --min-lines 90 --min-branches 80 \
@@ -252,6 +258,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -264,19 +272,14 @@ jobs:
       - uses: ./.github/actions/prepare-deps
 
       - name: Configure
-        run: |
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DVSS_BUILD_PERF=ON \
-            -DVSS_BUILD_GUI=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
+        run: cmake --preset linux-release
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build --preset linux-release
 
       - name: Measure and gate
         run: |
-          ./build/bin/vss_perf --output=perf-results.json
+          ./build/linux-release/bin/vss_perf --output=perf-results.json
           python3 tools/perf_report.py perf-results.json --floors perf/floors.json \
             --markdown | tee perf.md
           cat perf.md >> "$GITHUB_STEP_SUMMARY"
@@ -296,6 +299,8 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -308,14 +313,7 @@ jobs:
       - uses: ./.github/actions/prepare-deps
 
       - name: Set up vcpkg
-        run: |
-          git clone --filter=blob:none https://github.com/microsoft/vcpkg.git "$RUNNER_TEMP/vcpkg"
-          git -C "$RUNNER_TEMP/vcpkg" checkout 7712087e65bac8d126e3700ba15b7a84cd1f5a7c
-          "$RUNNER_TEMP/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
-          echo "VCPKG_ROOT=$RUNNER_TEMP/vcpkg" >> "$GITHUB_ENV"
-
-      - name: Install the Tracy client
-        run: "$VCPKG_ROOT/vcpkg install --triplet x64-linux --clean-after-build"
+        uses: iainchesworthlabs/icl-common-infra/actions/setup-vcpkg@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
 
       - name: Build the Tracy command line tools
         run: |
@@ -327,20 +325,10 @@ jobs:
           cmake --build tracy-tools/csvexport --parallel
 
       - name: Configure with instrumentation
-        run: |
-          cmake -S . -B build-tracy -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
-            -DVCPKG_TARGET_TRIPLET=x64-linux \
-            -DVSS_TRACY=ON \
-            -DVSS_BUILD_PERF=ON \
-            -DVSS_BUILD_GUI=OFF \
-            -DVSS_BUILD_TESTS=OFF \
-            -DVSS_BUILD_TOOLS=OFF \
-            -DVSS_BOOST_ROOT="$PWD/.cache/boost-root"
+        run: cmake --preset linux-tracy
 
       - name: Build
-        run: cmake --build build-tracy --target vss_perf --parallel
+        run: cmake --build --preset linux-tracy --target vss_perf --parallel
 
       - name: Create a serial pair for the terminal path
         run: |
@@ -361,7 +349,7 @@ jobs:
           ./tracy-tools/capture/tracy-capture -o tracy.trace -s 120 &
           CAP=$!
           sleep 2
-          ./build-tracy/bin/vss_perf --tracy | tee perf-tracy.txt
+          ./build/linux-tracy/bin/vss_perf --tracy | tee perf-tracy.txt
           wait $CAP
           ./tracy-tools/csvexport/tracy-csvexport tracy.trace > tracy.csv
           echo "### Tracy zones" >> "$GITHUB_STEP_SUMMARY"
@@ -379,6 +367,10 @@ jobs:
             tracy-zones.json
             perf-tracy.txt
 
+      - name: Save caches
+        if: always()
+        continue-on-error: true
+        uses: iainchesworthlabs/icl-common-infra/actions/save-vcpkg-cache@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
   zizmor:
     name: Workflow analysis
     permissions:
