@@ -307,6 +307,7 @@ changes and errors.
 | Task | Command |
 |---|---|
 | Create one virtual port | `vss_cli virtual --kind=auto` |
+| Create a port with a stable name (Linux, macOS) | `vss_cli vport --name=ttyVSS0` |
 | Create and hold a topology | `vss_cli run topology.json` |
 | Share a device | `vss_cli share serial://COM3 --listeners=3` |
 | Join publishers | `vss_cli join tcp://a:1 tcp://b:2 --target=serial://COM4` |
