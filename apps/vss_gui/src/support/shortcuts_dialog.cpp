@@ -212,7 +212,7 @@ void ShortcutsDialog::rebuild()
     }();
 
     table_->setRowCount(0);
-    table_->setRowCount(shown.size());
+    table_->setRowCount(static_cast<int>(shown.size()));
     for (int row = 0; row < shown.size(); ++row)
     {
         const shortcut_entry& entry = shown.at(row);

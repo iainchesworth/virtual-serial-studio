@@ -54,8 +54,6 @@ option(VSS_BUILD_PERF
   "Build the performance measurement suite" OFF)
 option(VSS_BUILD_TOOLS
   "Build the auxiliary developer tools" ${VSS_IS_TOP_LEVEL})
-option(VSS_WARNINGS_AS_ERRORS
-  "Treat compiler warnings as errors" OFF)
 option(VSS_COVERAGE
   "Instrument the libraries for statement and branch coverage" OFF)
 option(VSS_SANITIZE

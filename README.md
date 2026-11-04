@@ -71,7 +71,7 @@ fetched release.
 
 Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 `VSS_BUILD_TOOLS`, `VSS_BUILD_PERF`, `VSS_TRACY`, `VSS_COVERAGE`,
-`VSS_WARNINGS_AS_ERRORS`, `VSS_INSTALL`.
+`VSS_INSTALL`.
 
 `CMakePresets.json` provides:
 
@@ -114,8 +114,8 @@ attaches.
 
 The application targets **C++23** (`std::span`, `std::string_view`, defaulted
 comparisons, designated initialisers, concepts, `std::to_underlying`) and builds
-clean with MSVC `/std:c++latest` and clang-cl `-std=c++23` under
-`-DVSS_WARNINGS_AS_ERRORS=ON`.
+clean with MSVC `/std:c++latest` and clang-cl `-std=c++23`, with warnings as
+errors.
 
 C23 is the *C* standard and does not apply to a C++/Boost.Asio application; if
 you meant "the newest standard", C++23 is that target. Boost.VirtualSerial

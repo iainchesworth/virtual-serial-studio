@@ -15,8 +15,7 @@ runs:
           -DVSS_BOOST_ROOT="$PWD/.cache/boost-root" \
           -DVSS_BUILD_GUI=OFF \
           -DVSS_BUILD_TOOLS=ON \
-          -DVSS_BUILD_TESTS=ON \
-          -DVSS_WARNINGS_AS_ERRORS=ON
+          -DVSS_BUILD_TESTS=ON
 
     - name: Build
       shell: bash

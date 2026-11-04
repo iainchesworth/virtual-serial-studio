@@ -183,7 +183,7 @@ QWidget* TemplatesDialog::build_templates_page()
     }
     grid->setColumnStretch(0, 1);
     grid->setColumnStretch(1, 1);
-    grid->setRowStretch((templates_.size() + 1) / 2, 1);
+    grid->setRowStretch(static_cast<int>((templates_.size() + 1) / 2), 1);
     scroll->setWidget(content);
     outer->addWidget(scroll, 1);
     return page;
@@ -430,7 +430,7 @@ void TemplatesDialog::apply_filter()
 void TemplatesDialog::refresh_recent()
 {
     const QVector<recent_entry> entries = recent_entries();
-    recent_table_->setRowCount(entries.size());
+    recent_table_->setRowCount(static_cast<int>(entries.size()));
     for (int row = 0; row < entries.size(); ++row)
     {
         const recent_entry& entry = entries.at(row);

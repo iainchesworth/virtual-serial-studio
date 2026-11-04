@@ -76,7 +76,7 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     if (error != nullptr)
         error->clear();
     const QString value = text.trimmed();
-    const int scheme_end = value.indexOf(QStringLiteral("://"));
+    const qsizetype scheme_end = value.indexOf(QStringLiteral("://"));
     if (scheme_end <= 0)
     {
         if (error != nullptr)
@@ -100,7 +100,7 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     }
 
     QString rest = value.mid(scheme_end + 3);
-    const int query = rest.indexOf(QLatin1Char('?'));
+    const qsizetype query = rest.indexOf(QLatin1Char('?'));
     if (query >= 0)
         rest = rest.left(query);
     if (rest.isEmpty())
@@ -114,7 +114,7 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     QString port_text;
     if (rest.startsWith(QLatin1Char('[')))
     {
-        const int close = rest.indexOf(QLatin1Char(']'));
+        const qsizetype close = rest.indexOf(QLatin1Char(']'));
         if (close < 0 || close + 1 >= rest.size() ||
             rest.at(close + 1) != QLatin1Char(':'))
         {
@@ -127,7 +127,7 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     }
     else
     {
-        const int colon = rest.lastIndexOf(QLatin1Char(':'));
+        const qsizetype colon = rest.lastIndexOf(QLatin1Char(':'));
         if (colon <= 0)
         {
             if (error != nullptr)

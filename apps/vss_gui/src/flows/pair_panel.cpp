@@ -370,7 +370,7 @@ void PairPanel::refresh()
     const bool windows = windows_platform(platform_);
     driver_available_ = !windows || facts.com0com_found;
     const QVector<free_pair> pairs = free_pairs();
-    free_pair_count_ = pairs.size();
+    free_pair_count_ = static_cast<int>(pairs.size());
 
     can_create_ = backend_.caps().links && driver_available_;
     if (windows)

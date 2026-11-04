@@ -23,7 +23,7 @@ checkout, set `VSS_VIRTUAL_SERIAL_DIR`, for example in a
    `tools/coverage_report.py --min-lines 90 --min-branches 80`).
 4. Performance floors still hold (`vss_perf`, `tools/perf_report.py`).
 5. The change has a fragment in `changelog.d/` (see below).
-6. The build is clean with `-DVSS_WARNINGS_AS_ERRORS=ON`.
+6. The build is clean: warnings are errors in every build.
 
 ## Commit and pull request text
 

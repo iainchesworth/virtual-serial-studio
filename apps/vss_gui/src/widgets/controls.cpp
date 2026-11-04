@@ -173,7 +173,7 @@ void SegmentedControl::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
     {
         const int direction = event->key() == Qt::Key_Right ? 1 : -1;
-        index = (index + direction + buttons.size()) % buttons.size();
+        index = static_cast<int>((index + direction + buttons.size()) % buttons.size());
         buttons.at(index)->setFocus(Qt::OtherFocusReason);
         set_current(group_->id(buttons.at(index)));
         event->accept();
@@ -852,7 +852,7 @@ void ToastManager::position_toasts(QWidget* window)
                   toasts_.end());
 
     int bottom = window->height() - 24;
-    for (int index = toasts_.size() - 1; index >= 0; --index)
+    for (int index = static_cast<int>(toasts_.size()) - 1; index >= 0; --index)
     {
         Toast* toast = toasts_.at(index);
         if (toast == nullptr || !toast->isVisible())
