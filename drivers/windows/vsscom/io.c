@@ -283,7 +283,7 @@ static VOID VssComFinishWait(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 // Something happened that an application can wait for.
 static VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events)
 {
-    uint32_t fired = 0;
+    vsscom_u32 fired = 0;
     BOOLEAN complete;
 
     WdfSpinLockAcquire(Context->Lock);
@@ -316,7 +316,7 @@ static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     Context->Dtr = Dtr;
     Context->Rts = Rts;
     {
-        const uint32_t levels = vsscom_loopback_lines(Dtr != FALSE, Rts != FALSE);
+        const vsscom_u32 levels = vsscom_loopback_lines(Dtr != FALSE, Rts != FALSE);
         events = vsscom_modem_events(Context->ModemLevels, levels);
         Context->ModemDeltas |= vsscom_modem_deltas(Context->ModemLevels, levels);
         Context->ModemLevels = levels;
@@ -424,8 +424,8 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     }
 
     WdfSpinLockAcquire(context->Lock);
-    written = vsscom_ring_write(&context->Rx, (const uint8_t*)buffer,
-                                (uint32_t)Length);
+    written = vsscom_ring_write(&context->Rx, (const vsscom_u8*)buffer,
+                                (vsscom_u32)Length);
     WdfSpinLockRelease(context->Lock);
 
     WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, written);
@@ -764,7 +764,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
 
     case IOCTL_SERIAL_WAIT_ON_MASK:
     {
-        uint32_t fired = 0;
+        vsscom_u32 fired = 0;
         BOOLEAN ready;
         NTSTATUS status;
 

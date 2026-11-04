@@ -17,6 +17,12 @@
 #include <cstring>
 #include <string>
 
+// The core defines its own types so the kernel build needs no C library; they
+// must still be the sizes the rest of the code assumes.
+static_assert(sizeof(vsscom_u8) == 1);
+static_assert(sizeof(vsscom_u32) == 4);
+static_assert(sizeof(vsscom_u64) == 8);
+
 namespace
 {
 

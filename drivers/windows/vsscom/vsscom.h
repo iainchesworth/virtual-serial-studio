@@ -58,7 +58,7 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
 
     // Everything below is guarded by Lock.
     WDFSPINLOCK Lock;
-    uint8_t RxStorage[VSSCOM_RX_SIZE];
+    vsscom_u8 RxStorage[VSSCOM_RX_SIZE];
     vsscom_ring Rx;
     vsscom_timeouts Timeouts;
     vsscom_events Events;
