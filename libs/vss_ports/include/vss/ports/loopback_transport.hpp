@@ -57,6 +57,8 @@ public:
 
 private:
     void finish_pending_read();
+    /// Removes and returns the parked read. The caller holds `mutex_`.
+    io_handler take_pending_read();
 
     executor_type executor_;
     std::string name_;

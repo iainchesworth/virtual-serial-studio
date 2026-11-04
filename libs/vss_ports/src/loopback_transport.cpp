@@ -11,6 +11,7 @@
 #include <boost/asio/post.hpp>
 
 #include <algorithm>
+#include <utility>
 
 namespace vss {
 namespace {
@@ -55,6 +56,14 @@ std::size_t loopback_transport::available() const
 {
     std::lock_guard lock(mutex_);
     return buffer_.size();
+}
+
+loopback_transport::io_handler loopback_transport::take_pending_read()
+{
+    // std::move alone is not enough: libc++ leaves a moved-from std::function
+    // that holds a small callable non-empty, which would keep the endpoint the
+    // callable captures alive and let a second write complete it again.
+    return std::exchange(pending_read_, io_handler{});
 }
 
 void loopback_transport::async_read_some(boost::asio::mutable_buffer buffer,
@@ -104,7 +113,7 @@ void loopback_transport::async_write_some(boost::asio::const_buffer buffer,
 
         if (pending_read_)
         {
-            auto parked = std::move(pending_read_);
+            auto parked = take_pending_read();
             auto target = read_buffer_;
             const std::size_t count =
                 std::min<std::size_t>(target.size(), size);
@@ -132,7 +141,7 @@ void loopback_transport::inject(bytes_view data)
 
     if (pending_read_)
     {
-        auto parked = std::move(pending_read_);
+        auto parked = take_pending_read();
         auto target = read_buffer_;
         const std::size_t count =
             std::min<std::size_t>(target.size(), data.size());
@@ -163,7 +172,7 @@ void loopback_transport::finish_pending_read()
     io_handler parked;
     {
         std::lock_guard lock(mutex_);
-        parked = std::move(pending_read_);
+        parked = take_pending_read();
     }
     if (parked)
         complete_on(executor_, parked, boost::asio::error::operation_aborted,
