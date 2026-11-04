@@ -8,6 +8,11 @@ inputs:
   preset:
     description: The configure, build and test preset to use.
     required: true
+  keep-going:
+    description: >
+      true to let the build continue past a failing target, so the programs that do build can
+      still be tested. The build step still fails if any target failed.
+    default: "false"
 
 runs:
   using: composite
@@ -22,7 +27,13 @@ runs:
       shell: bash
       env:
         PRESET: ${{ inputs.preset }}
-      run: cmake --build --preset "$PRESET"
+        KEEP_GOING: ${{ inputs.keep-going }}
+      run: |
+        if [ "$KEEP_GOING" = true ]; then
+          cmake --build --preset "$PRESET" -- -k 0
+        else
+          cmake --build --preset "$PRESET"
+        fi
 
     - name: Create a serial pair for the system tests
       if: runner.os != 'Windows'

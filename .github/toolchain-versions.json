@@ -1,6 +1,7 @@
 {
   "qt": "6.12.0",
   "cmake": "4.4.4",
+  "aqtsource": "git+https://github.com/miurahr/aqtinstall.git@076e1659807d0b362a3ed684d54c2e9c775eb9c7",
   "gcc": "16",
   "llvm": "23",
   "msvc_toolset": "14.51"

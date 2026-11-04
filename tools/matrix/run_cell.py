@@ -266,7 +266,7 @@ def test_t1(rec: Recorder, args, out: Path) -> None:
     if args.t1_exit == 0:
         rec.add("T1", "pass", "ctest passed", evidence)
     else:
-        rec.add("T1", "fail", f"ctest exited with {args.t1_exit}", evidence)
+        rec.add("T1", "fail", "the build or the ctest suite failed; the job log has the output", evidence)
 
 
 def test_t4(rec: Recorder, cli: Path | None, out: Path) -> None:

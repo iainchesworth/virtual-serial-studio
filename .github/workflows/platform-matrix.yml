@@ -66,6 +66,7 @@ jobs:
         uses: ./.github/actions/build-and-test
         with:
           preset: ${{ matrix.preset }}
+          keep-going: "true"
 
       - name: Run the cell tests
         if: ${{ !cancelled() }}

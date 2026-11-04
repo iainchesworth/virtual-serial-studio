@@ -293,7 +293,7 @@ void TopologyJsonEditor::build()
 
     repaint_on_theme_change(this);
     connect(&Theme::instance(), &Theme::theme_changed, this,
-            [this, side]
+            [side]
             {
                 QPalette palette = side->palette();
                 palette.setColor(QPalette::Window,
