@@ -11,14 +11,13 @@ shared publish workflow adds the checks.
 
 | Package | Built on | Holds |
 |---|---|---|
-| `virtual-serial-studio-<tag>-linux-x86_64.tar.gz` | Ubuntu 26.04 | `bin/vss_gui`, `bin/vss_cli`, the Qt libraries in `lib/` and `plugins/`, the licence texts |
+| `virtual-serial-studio-<tag>-linux-x86_64.tar.gz` | Ubuntu 26.04 | `bin/vss_gui`, `bin/vss_cli`, the Qt libraries in `lib/` and `plugins/`, the licence texts. Needs glibc 2.42 or newer |
 | `virtual-serial-studio-<tag>-macos-arm64.tar.gz` | macOS 26 | `vss_gui.app`, `bin/vss_cli`, the licence texts |
 | `virtual-serial-studio-<tag>-windows-x86_64.zip` | Windows 2025 | `bin/vss_gui.exe`, `bin/vss_cli.exe`, the Qt DLLs, the licence texts |
 
 The release also has `SHA512SUMS`, a detached GPG signature (`.asc`) for every
 file, an SPDX software bill of materials and a build provenance attestation for
-every package. The Linux package is checked against glibc 2.39, so it starts on
-Ubuntu 24.04. The libraries and headers (the `development` install component)
+every package. The libraries and headers (the `development` install component)
 are not in the packages.
 
 ## Signing
@@ -68,6 +67,13 @@ These are not in the repository and an agent does not create them.
 
 ## Known gaps
 
+- The Linux package needs glibc 2.42 or newer, which is Ubuntu 26.04 or later.
+  Boost.Asio's serial port code calls `cfsetspeed`, and glibc 2.42 gave that
+  function a new symbol version, so a program built there will not start on
+  Ubuntu 24.04 (glibc 2.39). The release workflow passes `allowed: "2.42"` to
+  the `check-glibc-floor` action for this reason. The package also relies on the
+  system's libstdc++ from GCC 16. Building on an older system, or linking the C++
+  runtime statically, would lower the floor; neither is done yet.
 - On Windows the GUI keeps a console window, because `vss_gui --selftest` has
   to print to its caller. A double click shows the console beside the window.
 - The GUI package has no installer. Unpack it where you like.

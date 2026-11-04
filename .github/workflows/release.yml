@@ -130,6 +130,9 @@ jobs:
         uses: iainchesworthlabs/icl-common-infra/actions/check-glibc-floor@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
         with:
           folder: stage
+          # Boost.Asio's serial port code calls cfsetspeed, which glibc 2.42 (Ubuntu 26.04, the runner) versions anew.
+          # The reason and the way out are in docs/releasing.md.
+          allowed: "2.42"
 
       - name: Sign the Windows binaries
         id: sign
