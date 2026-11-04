@@ -80,6 +80,9 @@ add_subdirectory(src/topology)
 # The Advanced tools: owner, wiring and faults, fixtures, JSON, benchmark.
 add_subdirectory(src/advanced)
 
+# Which catalogue the system's languages select, and the layout direction.
+add_subdirectory(src/language)
+
 # Support and system surfaces: setup check, troubleshooting, bundle,
 # settings, About, shortcuts.
 add_subdirectory(src/support)
@@ -107,6 +110,7 @@ target_link_libraries(vss_gui PRIVATE
   vss_gui_dialogs
   vss_gui_flows
   vss_gui_support
+  vss_gui_language
   vss_gui_shell)
 
 target_compile_definitions(vss_gui PRIVATE
@@ -128,3 +132,28 @@ set_target_properties(vss_gui PROPERTIES
   OUTPUT_NAME vss_gui)
 
 vss_set_warnings(vss_gui)
+
+# Translations. English is the source language; every other language of the
+# standard has a catalogue translations/vss_gui_<code>.ts, which lrelease turns
+# into a .qm file inside the program (:/i18n/vss_gui_<code>.qm). The
+# `update_translations` target refreshes the .ts files from the sources, and
+# `release_translations` builds the .qm files. See docs/i18n.md.
+find_package(Qt6 6.2 QUIET COMPONENTS LinguistTools)
+file(GLOB VSS_GUI_TS_FILES CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/translations/vss_gui_*.ts")
+if(VSS_GUI_TS_FILES)
+  if(NOT TARGET Qt6::lupdate)
+    message(FATAL_ERROR
+      "Vss: translations/ holds catalogues but Qt6 LinguistTools was not "
+      "found. Install the Qt Linguist tools with the Qt kit.")
+  endif()
+  file(GLOB_RECURSE VSS_GUI_TRANSLATABLE CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+  list(FILTER VSS_GUI_TRANSLATABLE EXCLUDE REGEX "/tests/")
+  qt_add_translations(vss_gui
+    TS_FILES ${VSS_GUI_TS_FILES}
+    SOURCES ${VSS_GUI_TRANSLATABLE}
+    RESOURCE_PREFIX "/i18n")
+endif()

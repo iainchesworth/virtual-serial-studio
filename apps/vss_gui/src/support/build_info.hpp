@@ -38,6 +38,8 @@ struct build_info
     QString operating_system;
     QString architecture;
     QString kernel;
+    /// The language chosen at start-up and the languages the system offered.
+    QString language;
 };
 
 /// The build this binary was produced from.

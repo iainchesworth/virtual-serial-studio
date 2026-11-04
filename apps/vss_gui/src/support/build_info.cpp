@@ -6,6 +6,8 @@
 
 #include "support/build_info.hpp"
 
+#include "language/language_choice.hpp"
+
 #include <QCoreApplication>
 #include <QSysInfo>
 #include <QtGlobal>
@@ -70,6 +72,7 @@ build_info current_build_info()
     info.architecture = QSysInfo::currentCpuArchitecture();
     info.kernel = QStringLiteral("%1 %2").arg(QSysInfo::kernelType(),
                                               QSysInfo::kernelVersion());
+    info.language = vss::gui::language_choice_description();
     return info;
 }
 
@@ -87,6 +90,7 @@ QVector<environment_row> environment_rows(const build_info& info)
         {QStringLiteral("Operating system"), info.operating_system},
         {QStringLiteral("Architecture"),
          QStringLiteral("%1, kernel %2").arg(info.architecture, info.kernel)},
+        {QStringLiteral("Language"), info.language},
     };
 }
 
