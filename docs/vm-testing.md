@@ -27,6 +27,10 @@ $env:VSS_VM_USER = 'vss'
 $env:VSS_VM_PASSWORD = Read-Host -AsSecureString | ConvertFrom-SecureString -AsPlainText
 ```
 
+For guests that only exist to test this software, `. ./tools/vm/credentials.ps1 -Create` makes the user `vss` with a random
+password in `$HOME/.vss/guest-credentials.json` (readable by your user only, never replaced once it exists) and loads both variables
+without printing the password. Use it for these disposable guests and for nothing else.
+
 `vmrun` takes them as arguments, so they are visible to other processes on the host while a guest command runs. The harness
 prints `<hidden>` in place of the password. Under WSL, add both names to `WSLENV`.
 
