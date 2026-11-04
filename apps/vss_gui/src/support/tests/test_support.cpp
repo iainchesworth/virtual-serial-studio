@@ -223,7 +223,8 @@ QVector<zip_entry> read_zip(const QByteArray& archive)
 {
     QVector<zip_entry> entries;
     int eocd = -1;
-    for (int offset = static_cast<int>(archive.size()) - 22; offset >= 0; --offset)
+    for (int offset = static_cast<int>(archive.size()) - 22; offset >= 0;
+         --offset)
     {
         if (read_u32(archive, offset) == 0x06054b50U)
         {
@@ -269,7 +270,7 @@ TEST_CASE("support: build info and the environment report")
 
     const QVector<support::environment_row> rows =
         support::environment_rows(info);
-    REQUIRE_EQ(rows.size(), 8);
+    REQUIRE_EQ(rows.size(), 9);
     QStringList labels;
     for (const support::environment_row& row : rows)
         labels << row.label;
@@ -278,6 +279,7 @@ TEST_CASE("support: build info and the environment report")
     REQUIRE(labels.contains(QStringLiteral("Boost")));
     REQUIRE(labels.contains(QStringLiteral("Operating system")));
     REQUIRE(labels.contains(QStringLiteral("Architecture")));
+    REQUIRE(labels.contains(QStringLiteral("Language")));
 
     const QString report = support::environment_report(info);
     REQUIRE(report.contains(

@@ -75,10 +75,14 @@
 
   <ItemGroup>
     <ClCompile Include="driver.c" />
+    <ClCompile Include="io.c" />
+    <ClCompile Include="core\vsscom_core.c" />
   </ItemGroup>
 
   <ItemGroup>
     <ClInclude Include="public.h" />
+    <ClInclude Include="vsscom.h" />
+    <ClInclude Include="core\vsscom_core.h" />
   </ItemGroup>
 
   <ItemGroup>

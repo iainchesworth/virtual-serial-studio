@@ -41,6 +41,7 @@ add_library(vss_gui_support STATIC
 target_include_directories(vss_gui_support PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 target_link_libraries(vss_gui_support PUBLIC
+  vss_gui_language
   vss_gui_widgets
   vss_gui_backend
   Qt6::Widgets)
