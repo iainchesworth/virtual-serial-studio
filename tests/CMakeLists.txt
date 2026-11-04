@@ -100,6 +100,15 @@ if(TARGET vss_gui_backend_tests)
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 
+# Journey tests send key and mouse events to the real window.
+if(TARGET vss_gui_journey_tests)
+  add_test(NAME gui_journeys COMMAND vss_gui_journey_tests --verbose)
+  set_tests_properties(gui_journeys PROPERTIES
+    LABELS ui
+    TIMEOUT 300
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
 # Theme and widget tests need a QApplication but stay offscreen.
 if(TARGET vss_gui_theme_tests)
   add_test(NAME gui_theme COMMAND vss_gui_theme_tests --verbose)
