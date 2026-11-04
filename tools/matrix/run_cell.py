@@ -555,7 +555,7 @@ def test_t10(rec: Recorder, cli: Path | None, out: Path) -> None:
     pty_child, near, far = pair
     try:
         code, text = run_to_end(
-            [str(cli), "bench", f"--from=serial://{near}?baud=921600", f"--to=serial://{far}?baud=921600", "--bytes=4MB"],
+            [str(cli), "bench", f"--from=serial://{near}?baud=115200", f"--to=serial://{far}?baud=115200", "--bytes=4MB"],
             180,
         )
         evidence = write_evidence(out, "t10.log", text)
