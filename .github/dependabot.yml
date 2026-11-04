@@ -24,3 +24,12 @@ updates:
     cooldown:
       default-days: 7
     rebase-strategy: disabled
+  # The documentation tooling.
+  - package-ecosystem: pip
+    directory: /requirements
+    target-branch: develop
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    rebase-strategy: disabled
