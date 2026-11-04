@@ -1,4 +1,4 @@
-# Temporary: finds out what the hosted Windows image has for building a driver.
+# Temporary: finds out how to build a driver on the hosted Windows image.
 name: Driver probe
 
 on:
@@ -11,54 +11,48 @@ permissions:
 jobs:
   probe:
     runs-on: windows-2025
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Kits
+      - name: Restore the WDK packages
         shell: pwsh
         run: |
-          $kits = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10'
-          "== $kits"
-          Get-ChildItem $kits -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          "== bin versions"
-          Get-ChildItem (Join-Path $kits 'bin') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          "== Include versions"
-          Get-ChildItem (Join-Path $kits 'Include') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          "== km headers"
-          Get-ChildItem (Join-Path $kits 'Include') -Directory | ForEach-Object { $_.Name + ' km=' + (Test-Path (Join-Path $_.FullName 'km\ntddk.h')) + ' wdf=' + (Test-Path (Join-Path $_.FullName 'km\wdf')) }
-          "== tools"
-          foreach ($tool in 'infverif.exe','Inf2Cat.exe','stampinf.exe','signtool.exe','devgen.exe','devcon.exe','pnputil.exe') {
-            "-- $tool"
-            Get-ChildItem $kits -Recurse -Filter $tool -ErrorAction SilentlyContinue | Select-Object -First 8 -ExpandProperty FullName
-          }
-          "== lib km"
-          Get-ChildItem (Join-Path $kits 'Lib') -Directory | ForEach-Object { $_.Name + ' km=' + (Test-Path (Join-Path $_.FullName 'km')) }
-          "== wdf libs"
-          Get-ChildItem $kits -Recurse -Filter 'WdfDriverEntry.lib' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
-      - name: Visual Studio
-        shell: pwsh
-        run: |
-          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-          & $vswhere -all -products * -format json | ConvertFrom-Json | ForEach-Object { "$($_.displayName) $($_.installationVersion) $($_.installationPath)" }
-          "== components"
-          & $vswhere -latest -products * -property installationPath | ForEach-Object {
-            Get-ChildItem (Join-Path $_ 'MSBuild\Microsoft\VC') -Recurse -Directory -Filter 'WindowsKernelModeDriver*' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
-          }
-          "== arm64 tools"
-          & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.ARM64 -property installationPath
-          "== wdk extension"
-          Get-ChildItem "${env:ProgramFiles(x86)}\Microsoft Visual Studio" -Recurse -Filter '*WDK*' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
-      - name: NuGet WDK package contents
-        shell: pwsh
-        run: |
-          nuget help 2>&1 | Select-Object -First 2
           $dir = Join-Path $env:RUNNER_TEMP 'wdk'
           New-Item -ItemType Directory $dir | Out-Null
-          Push-Location $dir
-          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.26100.6584 -OutputDirectory . -NonInteractive 2>&1 | Select-Object -Last 5
-          Get-ChildItem -Recurse -Filter 'infverif.exe' | Select-Object -First 5 -ExpandProperty FullName
-          Get-ChildItem -Recurse -Filter 'Inf2Cat.exe' | Select-Object -First 5 -ExpandProperty FullName
-          Get-ChildItem -Recurse -Filter 'WdfDriverEntry.lib' | Select-Object -First 5 -ExpandProperty FullName
-          Pop-Location
+          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.26100.6584 -OutputDirectory $dir -NonInteractive | Select-Object -Last 3
+          $pkg = Join-Path $dir 'Microsoft.Windows.WDK.x64.10.0.26100.6584'
+          "== package top"
+          Get-ChildItem $pkg | Select-Object -ExpandProperty Name
+          "== build dir"
+          Get-ChildItem (Join-Path $pkg 'build') -Recurse -ErrorAction SilentlyContinue | Select-Object -First 30 -ExpandProperty FullName
+          "== c dir"
+          Get-ChildItem (Join-Path $pkg 'c') | Select-Object -ExpandProperty Name
+          "== c\bin versions"
+          Get-ChildItem (Join-Path $pkg 'c\bin') -Directory | Select-Object -ExpandProperty Name
+          "== tools"
+          foreach ($tool in 'infverif.exe','Inf2Cat.exe','stampinf.exe','devgen.exe','devcon.exe','signtool.exe','inf2cat.exe') {
+            "-- $tool"
+            Get-ChildItem $pkg -Recurse -Filter $tool | Select-Object -First 6 -ExpandProperty FullName
+          }
+          "== kmdf versions x64"
+          Get-ChildItem (Join-Path $pkg 'c\Lib\wdf\kmdf\x64') -Directory | Select-Object -ExpandProperty Name
+          "== kmdf versions arm64"
+          Get-ChildItem (Join-Path $pkg 'c\Lib\wdf\kmdf\arm64') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          "== km include"
+          Test-Path (Join-Path $pkg 'c\Include\10.0.26100.0\km\ntddk.h')
+          "== props"
+          Get-ChildItem $pkg -Recurse -Include '*.props','*.targets' | Select-Object -First 20 -ExpandProperty FullName
+          "== other packages restored"
+          Get-ChildItem $dir -Directory | Select-Object -ExpandProperty Name
+          "WDK_PKG=$pkg" | Out-File -Append $env:GITHUB_ENV
+      - name: Try to build the old project against the package
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+          $msbuild = & $vswhere -latest -products * -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
+          $msbuild
+          $root = Join-Path $env:WDK_PKG 'c\'
+          & $msbuild drivers\windows\vsscom\vsscom.vcxproj /m /p:Configuration=Release /p:Platform=x64 "/p:WDKNuGetDir=$env:WDK_PKG" "/p:WDKContentRoot=$root" "/p:SolutionDir=$env:GITHUB_WORKSPACE\" /v:n 2>&1 | Select-Object -Last 60

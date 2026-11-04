@@ -1,0 +1,60 @@
+; Copyright (c) 2026 Virtual Serial Studio contributors
+; SPDX-License-Identifier: GPL-3.0-or-later
+;
+; Root-enumerated virtual serial port. The Ports class installer names it
+; COM<n>; the driver behind it is vsscom.sys (KMDF).
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=vsscom.cat
+DriverVer=01/01/2026,1.0.0.0
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir=12
+
+[Manufacturer]
+%ManufacturerName%=VssCom,NTamd64
+
+[VssCom.NTamd64]
+%VssCom.DeviceDesc%=VssCom_Inst, VSSCOM\VSSCOM0
+
+[VssCom_Inst]
+Include=msports.inf
+Needs=ComPort.NT
+AddReg=VssCom_AddReg
+CopyFiles=VssCom_CopyFiles
+
+[VssCom_Inst.HW]
+AddReg=VssCom_HW_AddReg
+
+[VssCom_Inst.Services]
+AddService=VssCom,%SPSVCINST_ASSOCSERVICE%,VssCom_Service
+
+[VssCom_Inst.NT]
+KmdfLibraryVersion=1.31
+
+[VssCom_AddReg]
+HKR,,PortSubClass,1,01
+
+[VssCom_HW_AddReg]
+HKR,,PortSubClass,1,01
+
+[VssCom_Service]
+DisplayName=%VssCom.ServiceDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\vsscom.sys
+
+[VssCom_CopyFiles]
+vsscom.sys
+
+[Strings]
+ManufacturerName="Virtual Serial Studio"
+VssCom.DeviceDesc="Virtual Serial Studio COM Port"
+VssCom.ServiceDesc="Virtual Serial Studio COM Port Driver"
+SPSVCINST_ASSOCSERVICE=0x00000002
