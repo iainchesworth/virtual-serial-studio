@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!--
+  The vsscom driver. It builds with Visual Studio 2026 and the NuGet packages
+  below, so neither the Windows SDK nor the WDK has to be installed: the
+  packages are restored by `msbuild -restore`, and their props files point the
+  toolset at them. drivers/windows/build.ps1 runs the whole build.
+-->
 <Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -9,21 +16,23 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B0F4C2A1-6E3D-4A87-9B2C-5D1E8F0A7C33}</ProjectGuid>
     <RootNamespace>vsscom</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.28000.0</WindowsTargetPlatformVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <KMDF_VERSION_MAJOR>1</KMDF_VERSION_MAJOR>
-    <KMDF_VERSION_MINOR>31</KMDF_VERSION_MINOR>
-  </PropertyGroup>
-
-  <!-- CI supplies the WDK content from the NuGet package. Only the WDK root
-       is redirected; the installed 26100 SDK still satisfies the SDK check. -->
-  <PropertyGroup Condition="'$(WDKNuGetDir)' != ''">
-    <WDKContentRoot>$(WDKNuGetDir)\c\</WDKContentRoot>
-    <WDK_NuGet>true</WDK_NuGet>
+    <KMDF_VERSION_MINOR>27</KMDF_VERSION_MINOR>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -46,24 +55,22 @@
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
 
-  <ImportGroup Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-
   <PropertyGroup>
-    <OutDir>$(ProjectDir)..\artifacts\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)..\artifacts\obj\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\artifacts\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\artifacts\obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>vsscom</TargetName>
+    <!-- The package is signed by build.ps1 or the release job, not here: the
+         toolset would sign with a certificate it makes on the build machine. -->
+    <SignMode>Off</SignMode>
+    <EnableInf2cat>false</EnableInf2cat>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
-    <DriverSign>
-      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
-    </DriverSign>
   </ItemDefinitionGroup>
 
   <ItemGroup>
@@ -72,6 +79,22 @@
 
   <ItemGroup>
     <ClInclude Include="public.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Inf Include="vsscom.inf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.CPP" Version="10.0.28000.1721" />
+    <PackageReference Include="Microsoft.Windows.WDK.x64" Version="10.0.28000.2526" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.x64" Version="10.0.28000.1721" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='ARM64'">
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.arm64" Version="10.0.28000.1721" />
+    <PackageReference Include="Microsoft.Windows.WDK.ARM64" Version="10.0.28000.2526" />
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

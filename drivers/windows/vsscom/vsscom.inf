@@ -1,8 +1,9 @@
 ; Copyright (c) 2026 Virtual Serial Studio contributors
 ; SPDX-License-Identifier: GPL-3.0-or-later
 ;
-; Root-enumerated virtual serial port. The Ports class installer names it
-; COM<n>; the driver behind it is vsscom.sys (KMDF).
+; A virtual serial port, root-enumerated with the hardware ID VSSCOM\VSSCOM0.
+; The Ports class installer names it COM<n>; vsscom.sys (KMDF) is the driver
+; behind it. The DIRID 13 file placement needs Windows 10 version 1803.
 
 [Version]
 Signature="$WINDOWS NT$"
@@ -13,48 +14,57 @@ CatalogFile=vsscom.cat
 DriverVer=01/01/2026,1.0.0.0
 PnpLockdown=1
 
-[DestinationDirs]
-DefaultDestDir=12
-
 [Manufacturer]
-%ManufacturerName%=VssCom,NTamd64
+%ManufacturerName%=VssCom,NTamd64.10.0...17134,NTarm64.10.0...17134
 
-[VssCom.NTamd64]
-%VssCom.DeviceDesc%=VssCom_Inst, VSSCOM\VSSCOM0
+[VssCom.NTamd64.10.0...17134]
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
 
-[VssCom_Inst]
-Include=msports.inf
-Needs=ComPort.NT
-AddReg=VssCom_AddReg
+[VssCom.NTarm64.10.0...17134]
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
+
+[SourceDisksNames]
+1=%DiskName%
+
+[SourceDisksFiles]
+vsscom.sys=1
+
+[DestinationDirs]
+DefaultDestDir=13
+
+; --- The device -------------------------------------------------------------
+
+[VssCom_Install.NT]
 CopyFiles=VssCom_CopyFiles
 
-[VssCom_Inst.HW]
+[VssCom_CopyFiles]
+vsscom.sys
+
+[VssCom_Install.NT.HW]
 AddReg=VssCom_HW_AddReg
 
-[VssCom_Inst.Services]
-AddService=VssCom,%SPSVCINST_ASSOCSERVICE%,VssCom_Service
-
-[VssCom_Inst.NT]
-KmdfLibraryVersion=1.31
-
-[VssCom_AddReg]
-HKR,,PortSubClass,1,01
-
 [VssCom_HW_AddReg]
-HKR,,PortSubClass,1,01
+; 0x1b is FILE_DEVICE_SERIAL_PORT.
+HKR,,DeviceType,0x10001,0x0000001b
+
+[VssCom_Install.NT.Services]
+AddService=vsscom,0x00000002,VssCom_Service
 
 [VssCom_Service]
 DisplayName=%VssCom.ServiceDesc%
 ServiceType=1
 StartType=3
 ErrorControl=1
-ServiceBinary=%12%\vsscom.sys
+ServiceBinary=%13%\vsscom.sys
 
-[VssCom_CopyFiles]
-vsscom.sys
+[VssCom_Install.NT.Wdf]
+KmdfService=vsscom,VssCom_Wdf
+
+[VssCom_Wdf]
+KmdfLibraryVersion=1.27
 
 [Strings]
 ManufacturerName="Virtual Serial Studio"
+DiskName="Virtual Serial Studio driver"
 VssCom.DeviceDesc="Virtual Serial Studio COM Port"
 VssCom.ServiceDesc="Virtual Serial Studio COM Port Driver"
-SPSVCINST_ASSOCSERVICE=0x00000002

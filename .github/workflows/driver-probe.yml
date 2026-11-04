@@ -1,4 +1,4 @@
-# Temporary: finds out how to build a driver on the hosted Windows image.
+# Temporary: runs the driver build script on the hosted Windows image.
 name: Driver probe
 
 on:
@@ -11,48 +11,15 @@ permissions:
 jobs:
   probe:
     runs-on: windows-2025
-    timeout-minutes: 30
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, ARM64]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Restore the WDK packages
+      - name: Build the package
         shell: pwsh
-        run: |
-          $dir = Join-Path $env:RUNNER_TEMP 'wdk'
-          New-Item -ItemType Directory $dir | Out-Null
-          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.28000.2526 -OutputDirectory $dir -NonInteractive | Select-Object -Last 3
-          $pkg = Join-Path $dir 'Microsoft.Windows.WDK.x64.10.0.28000.2526'
-          "== package top"
-          Get-ChildItem $pkg | Select-Object -ExpandProperty Name
-          "== build dir"
-          Get-ChildItem (Join-Path $pkg 'build') -Recurse -ErrorAction SilentlyContinue | Select-Object -First 30 -ExpandProperty FullName
-          "== c dir"
-          Get-ChildItem (Join-Path $pkg 'c') | Select-Object -ExpandProperty Name
-          "== c\bin versions"
-          Get-ChildItem (Join-Path $pkg 'c\bin') -Directory | Select-Object -ExpandProperty Name
-          "== tools"
-          foreach ($tool in 'infverif.exe','Inf2Cat.exe','stampinf.exe','devgen.exe','devcon.exe','signtool.exe','inf2cat.exe') {
-            "-- $tool"
-            Get-ChildItem $pkg -Recurse -Filter $tool | Select-Object -First 6 -ExpandProperty FullName
-          }
-          "== kmdf versions x64"
-          Get-ChildItem (Join-Path $pkg 'c\Lib\wdf\kmdf\x64') -Directory | Select-Object -ExpandProperty Name
-          "== kmdf versions arm64"
-          Get-ChildItem (Join-Path $pkg 'c\Lib\wdf\kmdf\arm64') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-          "== km include"
-          Test-Path (Join-Path $pkg 'c\Include\10.0.26100.0\km\ntddk.h')
-          "== props"
-          Get-ChildItem $pkg -Recurse -Include '*.props','*.targets' | Select-Object -First 20 -ExpandProperty FullName
-          "== other packages restored"
-          Get-ChildItem $dir -Directory | Select-Object -ExpandProperty Name
-          "WDK_PKG=$pkg" | Out-File -Append $env:GITHUB_ENV
-      - name: Try to build the old project against the package
-        shell: pwsh
-        continue-on-error: true
-        run: |
-          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-          $msbuild = & $vswhere -latest -products * -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
-          $msbuild
-          $root = Join-Path $env:WDK_PKG 'c\'
-          & $msbuild drivers\windows\vsscom\vsscom.vcxproj /m /p:Configuration=Release /p:Platform=x64 "/p:WDKNuGetDir=$env:WDK_PKG" "/p:WDKContentRoot=$root" "/p:SolutionDir=$env:GITHUB_WORKSPACE\" "/p:WindowsTargetPlatformVersion=10.0.28000.0" /v:n 2>&1 | Select-Object -Last 70
+        run: ./drivers/windows/build.ps1 -Platform ${{ matrix.platform }}
