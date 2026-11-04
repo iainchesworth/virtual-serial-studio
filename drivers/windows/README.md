@@ -10,7 +10,7 @@ no com0com and no hardware. The design and the reasons for it are in
 |---|---|
 | Package: `vsscom.sys`, `vsscom.inf`, catalog, for x64 and ARM64 | builds in CI; `InfVerif` and `Inf2Cat` pass |
 | COM name: device interface, `\DosDevices` link, `SERIALCOMM` | in the driver; not yet run in a guest |
-| Loopback data path and the serial requests | first version; being replaced |
+| Loopback port: waiting reads with the `SetCommTimeouts` rules, `WaitCommEvent`, purge and cancel, modem lines, exclusive open | in the driver; not yet run in a guest |
 | Paired ports with a hub end, ports on demand | not yet |
 | Signing | not done: the package is unsigned |
 
@@ -33,7 +33,29 @@ the package as the artifact `vsscom-<platform>`.
 | Path | What |
 |---|---|
 | `vsscom/driver.c` | driver entry, device creation, COM name registration |
+| `vsscom/io.c` | reads, writes and the serial control requests |
+| `vsscom/vsscom.h` | the device context shared by the two |
 | `vsscom/public.h` | what user mode sees: interface GUID, control codes |
 | `vsscom/vsscom.inf` | the package description |
 | `vsscom/core/` | the serial rules in plain C; built for the host and unit-tested |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat` |
+| `test/` | guest scripts: `install-driver.ps1`, `test-driver.ps1` (tests D1 to D7), `uninstall-driver.ps1` |
+
+## Try it in a guest
+
+Only in a disposable test guest that reverts to a clean snapshot. Copy the
+package (`vsscom.sys`, `vsscom.inf`, `vsscom.cat`) and the scripts from `test/`
+into one folder in the guest, then, in an elevated PowerShell:
+
+```powershell
+./prepare-test-signing.ps1 -ConfirmDisposableGuest -EnableTestSigning   # makes a throwaway certificate, signs, turns on test signing
+# restart the guest
+./install-driver.ps1 -ResultPath C:\vss\install.json
+./test-driver.ps1 -ResultPath C:\vss\test.json
+./uninstall-driver.ps1 -ResultPath C:\vss\uninstall.json
+```
+
+`prepare-test-signing.ps1` creates the certificate in the guest with a key that
+cannot be exported and trusts it only there; the revert discards it. Test
+signing needs Secure Boot off. A release package is signed with an organisation
+certificate instead, which is a separate step.
