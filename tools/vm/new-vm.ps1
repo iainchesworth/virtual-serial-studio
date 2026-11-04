@@ -39,7 +39,7 @@ param(
     [string] $Guest,
 
     [string] $IsoDir = 'E:\ISOs',
-    [string] $SeedDir = (Join-Path $env:USERPROFILE '.vss\seeds'),
+    [string] $SeedDir = (Join-Path $HOME '.vss/seeds'),
     [string] $Root,
     [string] $ToolsIso = 'C:\Program Files\VMware\VMware Workstation\windows.iso',
     [switch] $DetachMedia,
@@ -56,8 +56,9 @@ if (-not $Root) { $Root = $matrix.root }
 
 $name = $entry.name
 if ($name -notmatch '^VSS[ -]') { throw "refusing '$name': a VSS guest name starts with 'VSS '" }
-$directory = Join-Path $Root $name
-$vmx = Join-Path $directory "$name.vmx"
+# Path.Combine does not check that the drive exists, which Join-Path does.
+$directory = [IO.Path]::Combine($Root, $name)
+$vmx = [IO.Path]::Combine($directory, "$name.vmx")
 
 if ($DetachMedia) {
     if (-not (Test-Path -LiteralPath $vmx)) { throw "no such guest: $vmx" }
@@ -74,8 +75,8 @@ if (Test-Path -LiteralPath $directory) {
     throw "'$directory' exists; this script never overwrites a guest. Delete the guest first, from the approved list."
 }
 
-$iso = Join-Path $IsoDir $entry.iso
-$seed = Join-Path $SeedDir "$Guest-seed.iso"
+$iso = [IO.Path]::Combine($IsoDir, $entry.iso)
+$seed = [IO.Path]::Combine($SeedDir, "$Guest-seed.iso")
 if (-not $DryRun) {
     if (-not (Test-Path -LiteralPath $iso)) { throw "install ISO not found: $iso" }
     if (-not (Test-Path -LiteralPath $seed)) { throw "answer disc not found: $seed (run new-seed.ps1)" }

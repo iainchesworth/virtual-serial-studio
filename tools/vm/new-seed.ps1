@@ -33,8 +33,8 @@ param(
     [ValidateSet('windows10', 'windows11', 'ubuntu2604')]
     [string] $Guest,
 
-    [string] $OutDir = (Join-Path $env:USERPROFILE '.vss\seeds'),
-    [string] $PublicKeyFile = (Join-Path $env:USERPROFILE '.vss\vss_vm_ed25519.pub'),
+    [string] $OutDir = (Join-Path $HOME '.vss/seeds'),
+    [string] $PublicKeyFile = (Join-Path $HOME '.vss/vss_vm_ed25519.pub'),
     [string] $WslDistro = 'Debian',
     [switch] $DryRun
 )
@@ -64,7 +64,7 @@ if ($user -notmatch '^[a-z][a-z0-9_-]{0,30}$') {
 function Protect-Xml([string] $Text) { return [System.Security.SecurityElement]::Escape($Text) }
 
 function Get-Template([string] $Name) {
-    return Get-Content (Join-Path $here "templates\$Name") -Raw
+    return Get-Content (Join-Path $here "templates/$Name") -Raw
 }
 
 function New-IsoImage {
@@ -192,7 +192,7 @@ try {
         $xml = $xml.Replace('@USER@', (Protect-Xml $user))
         $xml = $xml.Replace('@PASSWORD@', (Protect-Xml $password))
         [IO.File]::WriteAllText((Join-Path $staging 'autounattend.xml'), $xml, (New-Object Text.UTF8Encoding($false)))
-        Copy-Item (Join-Path $here 'guest\setup-guest.ps1') $staging
+        Copy-Item (Join-Path $here 'guest/setup-guest.ps1') $staging
         $label = 'VSSSEED'
     } else {
         if ($DryRun) {

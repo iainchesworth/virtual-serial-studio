@@ -41,7 +41,7 @@ try {
         $want = $expected[$guest]
         $output = & $pwsh -NoProfile -File $script $guest -DryRun -Root $work 2>&1 | Out-String
         Assert-That "${guest}: the script succeeds" ($LASTEXITCODE -eq 0) $output
-        $vmx = Join-Path $work "$($want.Name)\$($want.Name).vmx"
+        $vmx = Join-Path (Join-Path $work $want.Name) "$($want.Name).vmx"
         Assert-That "${guest}: the VMX is named for the guest" (Test-Path -LiteralPath $vmx)
         if (-not (Test-Path -LiteralPath $vmx)) { continue }
         $v = Read-Vmx $vmx
@@ -62,8 +62,8 @@ try {
     }
 
     Assert-That 'Windows 10 puts the disk on SATA and Windows 11 on NVMe' (
-        (Read-Vmx (Join-Path $work 'VSS - Windows 10\VSS - Windows 10.vmx')).ContainsKey('sata0:0.fileName') -and
-        (Read-Vmx (Join-Path $work 'VSS - Windows 11\VSS - Windows 11.vmx')).ContainsKey('nvme0:0.fileName'))
+        (Read-Vmx (Join-Path (Join-Path $work 'VSS - Windows 10') 'VSS - Windows 10.vmx')).ContainsKey('sata0:0.fileName') -and
+        (Read-Vmx (Join-Path (Join-Path $work 'VSS - Windows 11') 'VSS - Windows 11.vmx')).ContainsKey('nvme0:0.fileName'))
 }
 finally {
     Remove-Item -Recurse -Force -LiteralPath $work -ErrorAction SilentlyContinue
