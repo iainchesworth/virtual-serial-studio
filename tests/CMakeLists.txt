@@ -63,11 +63,23 @@ if(NOT WIN32 AND TARGET vss_cli)
     VSS_CLI_PATH="$<TARGET_FILE:vss_cli>")
 endif()
 
+add_subdirectory(fuzz)
+
 # A packaging smoke test: the public headers compile on their own.
 add_executable(vss_header_selftest compile/header_selftest.cpp)
 target_link_libraries(vss_header_selftest PRIVATE vss_studio vss_testkit)
 vss_set_warnings(vss_header_selftest)
 add_test(NAME headers COMMAND vss_header_selftest)
+
+# The VM harness is checked against a stand-in for vmrun, so no VM is needed.
+# PowerShell 7 is on every hosted runner and optional elsewhere.
+find_program(VSS_PWSH NAMES pwsh)
+if(VSS_PWSH)
+  add_test(NAME vm_harness
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-vmrun.ps1)
+  set_tests_properties(vm_harness PROPERTIES TIMEOUT 120)
+endif()
 
 if(TARGET vss_gui)
   # The offscreen plugin needs an explicit font directory on Windows; the

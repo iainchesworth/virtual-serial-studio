@@ -1,0 +1,1 @@
+serial://COM%33?baud=%39600

@@ -1,0 +1,39 @@
+{
+  "root": "D:\\Virtual Machines",
+  "snapshot": "clean",
+  "guests": [
+    {
+      "id": "windows10",
+      "name": "VSS - Windows 10",
+      "kind": "windows",
+      "os": "Windows 10 22H2",
+      "iso": "Win10_22H2_English_x64.iso",
+      "firmware": "bios",
+      "cpus": 2,
+      "memory_mb": 4096,
+      "disk_gb": 60
+    },
+    {
+      "id": "windows11",
+      "name": "VSS - Windows 11",
+      "kind": "windows",
+      "os": "Windows 11 25H2",
+      "iso": "Win11_25H2_English_x64_v2-noprompt.iso",
+      "firmware": "efi",
+      "cpus": 4,
+      "memory_mb": 8192,
+      "disk_gb": 64
+    },
+    {
+      "id": "ubuntu2604",
+      "name": "VSS - Ubuntu 26.04",
+      "kind": "linux",
+      "os": "Ubuntu 26.04.1 LTS",
+      "iso": "ubuntu-26.04.1-live-server-amd64.iso",
+      "firmware": "bios",
+      "cpus": 2,
+      "memory_mb": 4096,
+      "disk_gb": 40
+    }
+  ]
+}
