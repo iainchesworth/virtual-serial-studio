@@ -38,7 +38,7 @@ void MonitorModel::append_events(const event_batch& events)
                             ? traffic_direction::tx
                             : traffic_direction::rx;
         row.bytes = static_cast<std::uint64_t>(event.data.size());
-        row.preview = event.data.left(preview_bytes);
+        row.preview = event.data.left(kPreviewBytes);
         rows_.push_back(std::move(row));
         changed = true;
     }
@@ -123,9 +123,9 @@ void MonitorModel::set_selected_port(vss::endpoint_id id)
 
 void MonitorModel::trim()
 {
-    if (rows_.size() <= static_cast<std::size_t>(max_rows))
+    if (rows_.size() <= static_cast<std::size_t>(kMaxRows))
         return;
-    const auto excess = rows_.size() - static_cast<std::size_t>(max_rows);
+    const auto excess = rows_.size() - static_cast<std::size_t>(kMaxRows);
     rows_.erase(rows_.begin(),
                 rows_.begin() + static_cast<std::ptrdiff_t>(excess));
 }

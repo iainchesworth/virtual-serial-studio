@@ -133,7 +133,7 @@ void AddFixtureDialog::build()
                                            .name(QColor::HexRgb)));
     };
     apply_error_colour();
-    connect(&Theme::instance(), &Theme::themeChanged, error_,
+    connect(&Theme::instance(), &Theme::theme_changed, error_,
             [apply_error_colour] { apply_error_colour(); });
     error_->hide();
     layout->addWidget(error_);

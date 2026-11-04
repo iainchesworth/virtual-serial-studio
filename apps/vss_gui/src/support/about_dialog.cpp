@@ -134,7 +134,7 @@ void AboutDialog::build()
                 .pixmap(30, 30));
     };
     apply_tile_style();
-    connect(&Theme::instance(), &Theme::themeChanged, tile,
+    connect(&Theme::instance(), &Theme::theme_changed, tile,
             [apply_tile_style] { apply_tile_style(); });
     header_layout->addWidget(tile, 0, Qt::AlignTop);
 

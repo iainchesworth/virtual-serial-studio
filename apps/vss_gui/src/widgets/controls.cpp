@@ -64,7 +64,7 @@ SegmentedControl::SegmentedControl(QWidget* parent) : QWidget(parent)
                 Q_EMIT current_changed(id);
             });
     apply_style();
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { apply_style(); });
 }
 
@@ -232,7 +232,7 @@ PickCard::PickCard(QWidget* parent) : QFrame(parent)
                 if (checked)
                     Q_EMIT selected();
             });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { refresh(); });
     repaint_on_theme_change(this);
 }
@@ -305,7 +305,7 @@ Switch::Switch(const QString& label, QWidget* parent) : QCheckBox(parent)
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     connect(this, &QCheckBox::toggled, this, [this] { refresh_text(); });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { update(); });
     set_label(label);
     refresh_text();
@@ -541,7 +541,7 @@ Disclosure::Disclosure(const QString& title, QWidget* parent) : QWidget(parent)
                     content_->setMaximumHeight(QWIDGETSIZE_MAX);
             });
     connect(header_, &QToolButton::clicked, this, [this] { toggle(); });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { apply_state(header_->isChecked(), false); });
 
     apply_state(false, false);
@@ -677,7 +677,7 @@ FormRow::FormRow(const QString& label, QWidget* field, const QString& hint,
 
     field_->setAccessibleName(label);
     field_->setFont(Theme::instance().font(text_style::body));
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 label_->setFont(
@@ -690,7 +690,7 @@ FormRow::FormRow(const QString& label, QWidget* field, const QString& hint,
                                                    .colour(colour_role::bad)
                                                    .name(QColor::HexRgb)));
             });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { update(); });
 }
 

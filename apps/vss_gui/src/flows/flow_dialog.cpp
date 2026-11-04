@@ -85,7 +85,7 @@ FlowDialog::FlowDialog(const QString& title, const QString& subtitle,
     footer_layout_->addStretch(1);
     outer->addWidget(footer);
 
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this, footer]
             {
                 apply_theme();

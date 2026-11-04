@@ -39,7 +39,7 @@ void EventLog::append(const gui_event& event)
     if (line.isEmpty())
         return;
     lines_.append(line);
-    while (lines_.size() > max_lines)
+    while (lines_.size() > kMaxLines)
         lines_.removeFirst();
 }
 

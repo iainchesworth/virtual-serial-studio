@@ -327,7 +327,7 @@ QPalette Theme::palette() const
     return value;
 }
 
-QString Theme::styleSheet() const
+QString Theme::style_sheet() const
 {
     const QString source =
         read_resource(QStringLiteral(":/tokens/style.qss.in"));
@@ -377,13 +377,13 @@ void Theme::apply_palette_and_style()
     {
         qApp->setPalette(QApplication::style()->standardPalette());
         qApp->setStyleSheet(QString());
-        Q_EMIT themeChanged();
+        Q_EMIT theme_changed();
         return;
     }
 
     qApp->setPalette(palette());
-    qApp->setStyleSheet(styleSheet());
-    Q_EMIT themeChanged();
+    qApp->setStyleSheet(style_sheet());
+    Q_EMIT theme_changed();
 }
 
 bool Theme::high_contrast() const

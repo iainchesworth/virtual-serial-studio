@@ -54,7 +54,7 @@ QFrame* make_footer(QWidget* parent, QHBoxLayout*& layout)
     };
     apply_style();
     // A theme switch while a dialog is open must recolour its footer too.
-    QObject::connect(&Theme::instance(), &Theme::themeChanged, footer,
+    QObject::connect(&Theme::instance(), &Theme::theme_changed, footer,
                      [apply_style] { apply_style(); });
     layout = new QHBoxLayout(footer);
     layout->setContentsMargins(20, 10, 20, 10);

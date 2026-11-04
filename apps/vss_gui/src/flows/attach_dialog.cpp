@@ -107,7 +107,7 @@ AttachDialog::AttachDialog(StudioBackend& backend, bool advanced,
     QWidget::setTabOrder(name_, capture_);
     QWidget::setTabOrder(capture_, cancel);
     QWidget::setTabOrder(cancel, attach);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { refresh_row_styles(); });
 }
 

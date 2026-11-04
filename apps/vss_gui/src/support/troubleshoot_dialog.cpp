@@ -84,7 +84,7 @@ QWidget* separator(QWidget* parent)
                                          .name(QColor::HexRgb)));
     };
     apply_style();
-    QObject::connect(&Theme::instance(), &Theme::themeChanged, line,
+    QObject::connect(&Theme::instance(), &Theme::theme_changed, line,
                      [apply_style] { apply_style(); });
     return line;
 }

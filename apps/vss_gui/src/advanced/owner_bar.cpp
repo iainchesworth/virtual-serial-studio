@@ -115,7 +115,7 @@ OwnerBar::OwnerBar(StudioBackend& backend, QWidget* parent)
 
     refresh();
     repaint_on_theme_change(this);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { refresh(); });
     connect(&backend_, &StudioBackend::links_changed, this,
             [this]

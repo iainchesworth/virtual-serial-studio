@@ -41,10 +41,10 @@ ui_settings load_ui_settings()
         store.value(QLatin1String(kDensity), QStringLiteral("comfortable"))
             .toString());
     settings.refresh_ms = std::clamp(
-        store.value(QLatin1String(kRefreshMs), refresh_default_ms).toInt(),
-        refresh_min_ms, refresh_max_ms);
+        store.value(QLatin1String(kRefreshMs), kRefreshDefaultMs).toInt(),
+        kRefreshMinMs, kRefreshMaxMs);
     settings.default_baud =
-        store.value(QLatin1String(kDefaultBaud), default_baud_rate).toInt();
+        store.value(QLatin1String(kDefaultBaud), kDefaultBaudRate).toInt();
     settings.ask_on_discard =
         store.value(QLatin1String(kAskOnDiscard), true).toBool();
     return settings;
@@ -58,7 +58,7 @@ void save_ui_settings(const ui_settings& settings)
     store.setValue(QLatin1String(kDensity), density_key(settings.density));
     store.setValue(
         QLatin1String(kRefreshMs),
-        std::clamp(settings.refresh_ms, refresh_min_ms, refresh_max_ms));
+        std::clamp(settings.refresh_ms, kRefreshMinMs, kRefreshMaxMs));
     store.setValue(QLatin1String(kDefaultBaud), settings.default_baud);
     store.setValue(QLatin1String(kAskOnDiscard), settings.ask_on_discard);
 }

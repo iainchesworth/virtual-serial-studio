@@ -16,7 +16,7 @@ namespace vss::gui
 
 ActionRegistry::ActionRegistry(QObject* parent) : QObject(parent)
 {
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 // The cache is colour-keyed, so flush before rebuilding the

@@ -125,7 +125,7 @@ TopologyView::TopologyView(QWidget* parent) : QGraphicsView(parent)
     hint_->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
     viewport()->installEventFilter(this);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 empty_->setFont(Theme::instance().font(text_style::body));

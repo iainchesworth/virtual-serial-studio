@@ -93,7 +93,7 @@ TEST_CASE("theme: every QSS placeholder resolves in both themes")
          {vss::gui::theme_mode::light, vss::gui::theme_mode::dark})
     {
         theme.set_mode(mode);
-        const QString sheet = theme.styleSheet();
+        const QString sheet = theme.style_sheet();
         REQUIRE(!sheet.isEmpty());
         REQUIRE(!sheet.contains(QLatin1Char('%')));
     }

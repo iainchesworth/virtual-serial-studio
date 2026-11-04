@@ -116,7 +116,7 @@ CheckRowWidget::CheckRowWidget(const spec& row, QWidget* parent)
     }
 
     apply_style();
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { apply_style(); });
 }
 

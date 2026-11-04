@@ -82,7 +82,7 @@ JsonCodeEdit::JsonCodeEdit(QWidget* parent) : QPlainTextEdit(parent)
             [this](int) { setViewportMargins(gutter_width(), 0, 0, 0); });
     connect(this, &QPlainTextEdit::updateRequest, this,
             &JsonCodeEdit::update_gutter);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 highlight_error_line();
@@ -292,7 +292,7 @@ void TopologyJsonEditor::build()
     layout->addLayout(body, 1);
 
     repaint_on_theme_change(this);
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this, side]
             {
                 QPalette palette = side->palette();

@@ -26,7 +26,7 @@ IconProvider& IconProvider::instance()
 
 IconProvider::IconProvider(QObject* parent) : QObject(parent)
 {
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this] { flush(); });
 }
 

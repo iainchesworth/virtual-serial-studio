@@ -162,7 +162,7 @@ ShellWindow::ShellWindow(StudioBackend& backend, QWidget* parent)
                 update_actions();
                 update_owner_bar();
             });
-    connect(&Theme::instance(), &Theme::themeChanged, this,
+    connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
                 launcher_->refresh();
