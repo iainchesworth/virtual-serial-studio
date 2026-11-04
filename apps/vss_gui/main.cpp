@@ -5,6 +5,7 @@
 //
 
 #include "backend/engine_studio_backend.hpp"
+#include "language/language_choice.hpp"
 #include "shell/shell_window.hpp"
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
@@ -52,6 +53,7 @@ int main(int argc, char* argv[])
     QApplication::setOrganizationName(QStringLiteral("Virtual Serial Studio"));
     QApplication::setOrganizationDomain(
         QStringLiteral("virtualserial.example"));
+    vss::gui::apply_language();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(
