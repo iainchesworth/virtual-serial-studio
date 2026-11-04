@@ -71,7 +71,7 @@ jobs:
     env:
       BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - {name: linux-x86_64, runner: ubuntu-26.04, preset: linux-release-gui, compiler: gcc}
