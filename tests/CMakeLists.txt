@@ -59,8 +59,8 @@ add_test(NAME system COMMAND vss_system_tests
 set_tests_properties(system PROPERTIES TIMEOUT 600)
 if(NOT WIN32 AND TARGET vss_cli)
   add_dependencies(vss_system_tests vss_cli)
-  set_tests_properties(system PROPERTIES
-    ENVIRONMENT "VSS_CLI=$<TARGET_FILE:vss_cli>")
+  target_compile_definitions(vss_system_tests PRIVATE
+    VSS_CLI_PATH="$<TARGET_FILE:vss_cli>")
 endif()
 
 # A packaging smoke test: the public headers compile on their own.

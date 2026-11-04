@@ -45,10 +45,11 @@ class cli_process
 public:
     explicit cli_process(const std::vector<std::string>& arguments)
     {
-        const std::string program = testkit::environment("VSS_CLI");
+        // CMake names the program this test was built with; VSS_CLI overrides
+        // it for a binary somewhere else.
+        std::string program = testkit::environment("VSS_CLI");
         if (program.empty())
-            throw vss_test::failure(
-                "VSS_CLI does not name the vss_cli program");
+            program = VSS_CLI_PATH;
 
         int pipes[2] = {-1, -1};
         if (::pipe(pipes) != 0)

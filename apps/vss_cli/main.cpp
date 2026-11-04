@@ -173,14 +173,22 @@ extern "C" void request_stop(int)
     g_stop_requested.store(true);
 }
 
-/// Keeps the studio alive until SIGINT or SIGTERM, or for `seconds` when
-/// that is more than zero.  Returns true when a signal ended it.
-bool run_until_stopped(studio& app, int seconds, bool verbose)
+/// Starts catching SIGINT and SIGTERM.  A command that stays alive calls this
+/// before it prints anything: a script that has read the path may signal at
+/// once, and a signal that arrives before the handler exists kills the process
+/// with its links still in place.
+void catch_stop_signals()
 {
     g_stop_requested.store(false);
     std::signal(SIGINT, request_stop);
     std::signal(SIGTERM, request_stop);
+}
 
+/// Keeps the studio alive until a signal, or for `seconds` when that is more
+/// than zero.  Needs catch_stop_signals() first.  Returns true when a signal
+/// ended it.
+bool run_until_stopped(studio& app, int seconds, bool verbose)
+{
     const auto started = std::chrono::steady_clock::now();
     auto last_print = started;
     while (!g_stop_requested.load())
@@ -369,6 +377,7 @@ int command_loopback(const arguments& args)
 
 int command_virtual(const arguments& args)
 {
+    catch_stop_signals();
     const std::string kind = args.get("--kind", "auto");
 
     vss::virtual_port_kind requested = vss::virtual_port_kind::loopback;
@@ -442,6 +451,7 @@ std::vector<std::string> split_list(const std::string& text, char separator)
 
 int command_vport(const arguments& args)
 {
+    catch_stop_signals();
     if (!vss::stable_links_supported())
     {
         std::fprintf(stderr,
