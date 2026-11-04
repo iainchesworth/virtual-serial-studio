@@ -1,0 +1,64 @@
+# Temporary: finds out what the hosted Windows image has for building a driver.
+name: Driver probe
+
+on:
+  push:
+    branches: [feature/windows-driver-package]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Kits
+        shell: pwsh
+        run: |
+          $kits = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10'
+          "== $kits"
+          Get-ChildItem $kits -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          "== bin versions"
+          Get-ChildItem (Join-Path $kits 'bin') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          "== Include versions"
+          Get-ChildItem (Join-Path $kits 'Include') -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+          "== km headers"
+          Get-ChildItem (Join-Path $kits 'Include') -Directory | ForEach-Object { $_.Name + ' km=' + (Test-Path (Join-Path $_.FullName 'km\ntddk.h')) + ' wdf=' + (Test-Path (Join-Path $_.FullName 'km\wdf')) }
+          "== tools"
+          foreach ($tool in 'infverif.exe','Inf2Cat.exe','stampinf.exe','signtool.exe','devgen.exe','devcon.exe','pnputil.exe') {
+            "-- $tool"
+            Get-ChildItem $kits -Recurse -Filter $tool -ErrorAction SilentlyContinue | Select-Object -First 8 -ExpandProperty FullName
+          }
+          "== lib km"
+          Get-ChildItem (Join-Path $kits 'Lib') -Directory | ForEach-Object { $_.Name + ' km=' + (Test-Path (Join-Path $_.FullName 'km')) }
+          "== wdf libs"
+          Get-ChildItem $kits -Recurse -Filter 'WdfDriverEntry.lib' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
+      - name: Visual Studio
+        shell: pwsh
+        run: |
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+          & $vswhere -all -products * -format json | ConvertFrom-Json | ForEach-Object { "$($_.displayName) $($_.installationVersion) $($_.installationPath)" }
+          "== components"
+          & $vswhere -latest -products * -property installationPath | ForEach-Object {
+            Get-ChildItem (Join-Path $_ 'MSBuild\Microsoft\VC') -Recurse -Directory -Filter 'WindowsKernelModeDriver*' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
+          }
+          "== arm64 tools"
+          & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.ARM64 -property installationPath
+          "== wdk extension"
+          Get-ChildItem "${env:ProgramFiles(x86)}\Microsoft Visual Studio" -Recurse -Filter '*WDK*' -ErrorAction SilentlyContinue | Select-Object -First 10 -ExpandProperty FullName
+      - name: NuGet WDK package contents
+        shell: pwsh
+        run: |
+          nuget help 2>&1 | Select-Object -First 2
+          $dir = Join-Path $env:RUNNER_TEMP 'wdk'
+          New-Item -ItemType Directory $dir | Out-Null
+          Push-Location $dir
+          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.26100.6584 -OutputDirectory . -NonInteractive 2>&1 | Select-Object -Last 5
+          Get-ChildItem -Recurse -Filter 'infverif.exe' | Select-Object -First 5 -ExpandProperty FullName
+          Get-ChildItem -Recurse -Filter 'Inf2Cat.exe' | Select-Object -First 5 -ExpandProperty FullName
+          Get-ChildItem -Recurse -Filter 'WdfDriverEntry.lib' | Select-Object -First 5 -ExpandProperty FullName
+          Pop-Location
