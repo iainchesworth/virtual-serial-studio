@@ -21,8 +21,8 @@ jobs:
         run: |
           $dir = Join-Path $env:RUNNER_TEMP 'wdk'
           New-Item -ItemType Directory $dir | Out-Null
-          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.26100.6584 -OutputDirectory $dir -NonInteractive | Select-Object -Last 3
-          $pkg = Join-Path $dir 'Microsoft.Windows.WDK.x64.10.0.26100.6584'
+          nuget install Microsoft.Windows.WDK.x64 -Version 10.0.28000.2526 -OutputDirectory $dir -NonInteractive | Select-Object -Last 3
+          $pkg = Join-Path $dir 'Microsoft.Windows.WDK.x64.10.0.28000.2526'
           "== package top"
           Get-ChildItem $pkg | Select-Object -ExpandProperty Name
           "== build dir"
@@ -55,4 +55,4 @@ jobs:
           $msbuild = & $vswhere -latest -products * -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
           $msbuild
           $root = Join-Path $env:WDK_PKG 'c\'
-          & $msbuild drivers\windows\vsscom\vsscom.vcxproj /m /p:Configuration=Release /p:Platform=x64 "/p:WDKNuGetDir=$env:WDK_PKG" "/p:WDKContentRoot=$root" "/p:SolutionDir=$env:GITHUB_WORKSPACE\" /v:n 2>&1 | Select-Object -Last 60
+          & $msbuild drivers\windows\vsscom\vsscom.vcxproj /m /p:Configuration=Release /p:Platform=x64 "/p:WDKNuGetDir=$env:WDK_PKG" "/p:WDKContentRoot=$root" "/p:SolutionDir=$env:GITHUB_WORKSPACE\" "/p:WindowsTargetPlatformVersion=10.0.28000.0" /v:n 2>&1 | Select-Object -Last 70
