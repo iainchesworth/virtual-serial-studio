@@ -1,112 +1,57 @@
-# Testing the Windows driver in VMware
+# Testing in the VSS guests
 
-The driver cannot be loaded on the development machine: it needs test signing,
-a reboot and a kernel that is disposable. A VMware snapshot is the unit of
-disposal.
+Anything that loads a driver, turns on test signing or needs a disposable kernel runs in a VMware Workstation guest, never on
+the development machine. A snapshot is the unit of disposal.
 
-## Inventory
+## The guests
 
-`vmrun` is part of VMware Workstation and lives in
-`C:\Program Files\VMware\VMware Workstation\vmrun.exe`; the harness finds it,
-or uses `VSS_VMRUN`. The machine already has these VMs under
-`D:\Virtual Machines`:
+The guests are being rebuilt from the install media; this page describes the result. `tools/vm/matrix.json` lists them. The harness works on these three and refuses every other VM.
 
-| VM | Suggested use |
-|---|---|
-| `Developer VM` | Driver test guest (take a snapshot before changing it) |
-| `Atmos Driver Test` | Spare driver guest |
-| `Boost Build Machine` | Leave alone; it is a build cache |
+| Guest | System | Used for |
+|---|---|---|
+| `VSS - Windows 10` | Windows 10 22H2, BIOS | The Windows virtual COM driver on a down-level stack, the installed package, a screenshot |
+| `VSS - Windows 11` | Windows 11 25H2, UEFI, Secure Boot off, no vTPM | The same on the newest stack |
+| `VSS - Ubuntu 26.04` | Ubuntu 26.04.1 LTS | Pseudo-terminal ports, `vport`, what third-party serial programs see |
 
-Use one VM for driver testing and keep it disposable.
+The Windows guests have test signing on, VMware Tools, auto-logon (so a screenshot shows a desktop) and an empty `C:\vss`.
+The Ubuntu guest has `open-vm-tools`, `python3`, `python3-serial`, `socat`, `picocom`, `minicom`, `screen` and `udev`, and
+passwordless `sudo`, as the hosted CI runners do. None has a compiler: CI builds the package and the harness copies it in.
+Each has a snapshot named `clean`, taken after setup.
 
-## Prepare the guest once
+## Credentials
 
-1. Install/update VMware Tools so `vmrun` guest operations work.
-2. Enable test signing and reboot:
-
-   ```cmd
-   bcdedit /set testsigning on
-   bcdedit /set nointegritychecks on
-   shutdown /r /t 0
-   ```
-
-3. Confirm the boot screen shows **Test Mode**.
-4. Create `C:\vss` and copy the test script there when running a test.
-5. Shut the guest down cleanly and take the snapshot:
-
-   ```powershell
-   ./tools/vm/vmrun.ps1 snapshot -Vm 'D:\Virtual Machines\Developer VM\Developer VM.vmx' -Name clean
-   ```
-
-Credentials are never committed. Export them for the session:
+The guest user name and password never enter the repository. Set them in your own shell:
 
 ```powershell
-$env:VSS_VM_USER = 'tester'
-$env:VSS_VM_PASSWORD = '<password>'
+$env:VSS_VM_USER = 'vss'
+$env:VSS_VM_PASSWORD = Read-Host -AsSecureString | ConvertFrom-SecureString -AsPlainText
 ```
+
+`vmrun` takes them as arguments, so they are visible to other processes on the host while a guest command runs. The harness
+prints `<hidden>` in place of the password. Under WSL, add both names to `WSLENV`.
 
 ## The loop
 
 ```powershell
-$vm = 'D:\Virtual Machines\Developer VM\Developer VM.vmx'
+$vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 
-# Always start from the prepared state.
-./tools/vm/vmrun.ps1 revert -Vm $vm
+./tools/vm/vmrun.ps1 revert -Vm $vm            # always start from the prepared state
 ./tools/vm/vmrun.ps1 start  -Vm $vm
-
-# Driver package from the CI artifact or a local build.
-./tools/vm/vmrun.ps1 copy-to -Vm $vm -Local build/vsscom -Guest 'C:\vss'
-
-# Install (test signing makes the unsigned/test-signed package loadable).
-./tools/vm/vmrun.ps1 run -Vm $vm -CommandLine `
-  'cmd.exe /c C:\vss\install-driver.cmd'
-
-# Exercise the port, then collect the result.
-$code = ./tools/vm/vmrun.ps1 run -Vm $vm -CommandLine `
-  'powershell -ExecutionPolicy Bypass -File C:\vss\test-port.ps1'
-if ($code -ne 0) { throw "guest test failed: $code" }
-
+./tools/vm/vmrun.ps1 wait-tools -Vm $vm
+./tools/vm/vmrun.ps1 copy-to -Vm $vm -Local build\package.zip -Guest 'C:\vss\package.zip'
+./tools/vm/vmrun.ps1 run -Vm $vm -CommandLine 'powershell -File C:\vss\test.ps1'
+"guest exit code: $LASTEXITCODE"
+./tools/vm/vmrun.ps1 screenshot -Vm $vm -Local out\windows10.png
 ./tools/vm/vmrun.ps1 stop -Vm $vm
 ```
 
-`vmrun.ps1 run` wraps the guest command so its exit code comes back to the
-host; `copy-to` needs the guest credentials above. `list`, `status`, `start`,
-`stop`, `snapshot` and `revert` need no credentials.
-
-## Install and remove
-
-```cmd
-:: install (from C:\vss)
-pnputil /add-driver vsscom.inf /install
-
-:: remove every package published from this INF
-pnputil /enum-drivers | findstr /i vsscom
-pnputil /delete-driver oem<NN>.inf /uninstall /force
-```
-
-Install creates the device from the INF's hardware ID; the Ports class
-installer assigns the `COM<n>` name. `devcon` from the WDK is an alternative.
-
-## What the guest test must cover
-
-- The device enumerates and appears under **Ports (COM & LPT)**.
-- Opening `\\.\COM<n>` succeeds and `SetCommState` accepts 115200 8N1.
-- Write followed by read returns the same bytes (loopback mode).
-- `EscapeCommFunction(SETDTR)`, `SETRTS`, `CLRDTR`, `CLRRTS` succeed and
-  `GetCommModemStatus` reports CTS/DSR.
-- `PurgeComm` empties the buffer.
-- The package uninstalls without leaving the device behind.
-
-## CI
-
-The driver branch adds a workflow that builds the package on a Windows runner
-with the WDK (the hosted image ships it) and uploads `vsscom.sys`, the INF and
-the catalog. The VM harness consumes that artifact, so the guest never needs a
-compiler.
+`run` exits with the exit code of the guest command, and fails if the guest does not report one. `snapshot` creates a
+snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
+lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and runs in CI.
 
 ## Safety
 
-- Never run this on the development machine's own installation.
-- Revert to `clean` before each run; a failed install can leave the guest in a
-  state that is tedious to repair.
-- Keep guest credentials in the environment, never in a file that git sees.
+- Never load a driver or turn on test signing on the development machine.
+- Revert to `clean` before each run. A failed install can leave a guest in a state that is tedious to repair.
+- The snapshot, the VM files and the seed ISOs hold the guest password. Keep them out of every repository and every
+  artifact upload.
