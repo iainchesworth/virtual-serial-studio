@@ -24,7 +24,7 @@ endpoint::endpoint(hub& owner, endpoint_id id, std::string name,
     , name_(std::move(name))
     , kind_(kind)
     , transport_(std::move(transport))
-    , options_(std::move(options))
+    , options_(options)
     , strand_(boost::asio::make_strand(owner.executor()))
     , read_buffer_(options_.read_buffer_size == 0 ? std::size_t{1}
                                                   : options_.read_buffer_size)
@@ -282,7 +282,7 @@ void endpoint::start_next_write()
         });
 }
 
-void endpoint::on_write(std::shared_ptr<pending_write> write,
+void endpoint::on_write(const std::shared_ptr<pending_write>& write,
                         boost::system::error_code ec, std::size_t count)
 {
     VSS_PROFILE_ZONE("endpoint.write");

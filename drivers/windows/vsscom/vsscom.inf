@@ -1,0 +1,70 @@
+; Copyright (c) 2026 Virtual Serial Studio contributors
+; SPDX-License-Identifier: GPL-3.0-or-later
+;
+; A virtual serial port, root-enumerated with the hardware ID VSSCOM\VSSCOM0.
+; The Ports class installer names it COM<n>; vsscom.sys (KMDF) is the driver
+; behind it. The DIRID 13 file placement needs Windows 10 version 1803.
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=vsscom.cat
+DriverVer=01/01/2026,1.0.0.0
+PnpLockdown=1
+
+[Manufacturer]
+%ManufacturerName%=VssCom,NTamd64.10.0...17134,NTarm64.10.0...17134
+
+[VssCom.NTamd64.10.0...17134]
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
+
+[VssCom.NTarm64.10.0...17134]
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
+
+[SourceDisksNames]
+1=%DiskName%
+
+[SourceDisksFiles]
+vsscom.sys=1
+
+[DestinationDirs]
+DefaultDestDir=13
+
+; --- The device -------------------------------------------------------------
+
+[VssCom_Install.NT]
+CopyFiles=VssCom_CopyFiles
+
+[VssCom_CopyFiles]
+vsscom.sys
+
+[VssCom_Install.NT.HW]
+AddReg=VssCom_HW_AddReg
+
+[VssCom_HW_AddReg]
+; 0x1b is FILE_DEVICE_SERIAL_PORT.
+HKR,,DeviceType,0x10001,0x0000001b
+
+[VssCom_Install.NT.Services]
+AddService=vsscom,0x00000002,VssCom_Service
+
+[VssCom_Service]
+DisplayName=%VssCom.ServiceDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%13%\vsscom.sys
+
+[VssCom_Install.NT.Wdf]
+KmdfService=vsscom,VssCom_Wdf
+
+[VssCom_Wdf]
+KmdfLibraryVersion=1.27
+
+[Strings]
+ManufacturerName="Virtual Serial Studio"
+DiskName="Virtual Serial Studio driver"
+VssCom.DeviceDesc="Virtual Serial Studio COM Port"
+VssCom.ServiceDesc="Virtual Serial Studio COM Port Driver"

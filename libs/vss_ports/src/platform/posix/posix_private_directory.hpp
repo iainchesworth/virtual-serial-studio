@@ -27,6 +27,24 @@ namespace vss::detail::posix
 {
 
 inline error_code
+check_private_directory(const std::filesystem::path& directory)
+{
+    const std::string text = directory.string();
+
+    // lstat, not stat: a link in place of the directory is refused.
+    struct stat info{};
+    if (::lstat(text.c_str(), &info) != 0)
+        return error_code(errno, boost::system::system_category());
+    if (!S_ISDIR(info.st_mode))
+        return make_error_code(errc::permission_denied);
+    if (info.st_uid != ::geteuid())
+        return make_error_code(errc::permission_denied);
+    if ((info.st_mode & (S_IRWXG | S_IRWXO)) != 0)
+        return make_error_code(errc::permission_denied);
+    return {};
+}
+
+inline error_code
 ensure_private_directory(const std::filesystem::path& directory)
 {
     const std::string text = directory.string();
@@ -40,17 +58,7 @@ ensure_private_directory(const std::filesystem::path& directory)
     if (::mkdir(text.c_str(), S_IRWXU) != 0 && errno != EEXIST)
         return error_code(errno, boost::system::system_category());
 
-    // lstat, not stat: a link in place of the directory is refused.
-    struct stat info{};
-    if (::lstat(text.c_str(), &info) != 0)
-        return error_code(errno, boost::system::system_category());
-    if (!S_ISDIR(info.st_mode))
-        return make_error_code(errc::permission_denied);
-    if (info.st_uid != ::geteuid())
-        return make_error_code(errc::permission_denied);
-    if ((info.st_mode & (S_IRWXG | S_IRWXO)) != 0)
-        return make_error_code(errc::permission_denied);
-    return {};
+    return check_private_directory(directory);
 }
 
 inline std::optional<std::string> getenv_value(std::string_view name)

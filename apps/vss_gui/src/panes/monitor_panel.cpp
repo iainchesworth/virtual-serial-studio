@@ -48,19 +48,19 @@ QString kind_name(vss::event_kind kind)
     switch (kind)
     {
     case vss::event_kind::started:
-        return QStringLiteral("started");
+        return QObject::tr("started");
     case vss::event_kind::stopped:
-        return QStringLiteral("stopped");
+        return QObject::tr("stopped");
     case vss::event_kind::data:
-        return QStringLiteral("data");
+        return QObject::tr("data");
     case vss::event_kind::lines:
-        return QStringLiteral("lines");
+        return QObject::tr("lines");
     case vss::event_kind::error:
-        return QStringLiteral("error");
+        return QObject::tr("error");
     case vss::event_kind::stats:
-        return QStringLiteral("stats");
+        return QObject::tr("stats");
     case vss::event_kind::log_message:
-        return QStringLiteral("log");
+        return QObject::tr("log");
     }
     return {};
 }
@@ -143,7 +143,7 @@ MonitorPanel::MonitorPanel(StudioBackend& backend, QWidget* parent)
 
 void MonitorPanel::build()
 {
-    setAccessibleName(QStringLiteral("Monitor"));
+    setAccessibleName(tr("Monitor"));
     auto* root = new QVBoxLayout(this);
     root->setContentsMargins(0, 0, 0, 0);
     root->setSpacing(0);
@@ -151,7 +151,7 @@ void MonitorPanel::build()
     tabs_ = new QTabWidget(this);
     tabs_->setDocumentMode(true);
     tabs_->setTabBarAutoHide(true);
-    tabs_->setAccessibleName(QStringLiteral("Monitor tabs"));
+    tabs_->setAccessibleName(tr("Monitor tabs"));
     root->addWidget(tabs_);
 
     monitor_page_ = new QWidget(tabs_);
@@ -164,16 +164,16 @@ void MonitorPanel::build()
     auto* simple_layout = new QHBoxLayout(simple_bar_);
     simple_layout->setContentsMargins(12, 0, 12, 0);
     simple_layout->setSpacing(12);
-    simple_pause_ = new QPushButton(QStringLiteral("Pause"), simple_bar_);
+    simple_pause_ = new QPushButton(tr("Pause"), simple_bar_);
     simple_pause_->setProperty("size", QStringLiteral("small"));
     polish(simple_pause_);
-    clear_ = new QPushButton(QStringLiteral("Clear"), simple_bar_);
+    clear_ = new QPushButton(tr("Clear"), simple_bar_);
     clear_->setProperty("size", QStringLiteral("small"));
     polish(clear_);
-    hex_ = new QCheckBox(QStringLiteral("Hex"), simple_bar_);
-    follow_ = new QCheckBox(QStringLiteral("Follow"), simple_bar_);
+    hex_ = new QCheckBox(tr("Hex"), simple_bar_);
+    follow_ = new QCheckBox(tr("Follow"), simple_bar_);
     follow_->setChecked(true);
-    all_ports_ = new QLabel(QStringLiteral("All ports"), simple_bar_);
+    all_ports_ = new QLabel(tr("All ports"), simple_bar_);
     all_ports_->setFont(Theme::instance().font(text_style::caption));
     all_ports_->setProperty("muted", true);
     polish(all_ports_);
@@ -191,36 +191,34 @@ void MonitorPanel::build()
     advanced_layout->setContentsMargins(12, 0, 12, 0);
     advanced_layout->setSpacing(8);
     port_filter_ = new QComboBox(advanced_bar_);
-    port_filter_->setAccessibleName(QStringLiteral("Filter by port"));
+    port_filter_->setAccessibleName(tr("Filter by port"));
     port_filter_->setMinimumWidth(120);
     port_filter_->setMaximumWidth(160);
-    rx_ = new QCheckBox(QStringLiteral("RX"), advanced_bar_);
-    tx_ = new QCheckBox(QStringLiteral("TX"), advanced_bar_);
-    drop_ = new QCheckBox(QStringLiteral("Dropped"), advanced_bar_);
+    rx_ = new QCheckBox(tr("RX"), advanced_bar_);
+    tx_ = new QCheckBox(tr("TX"), advanced_bar_);
+    drop_ = new QCheckBox(tr("Dropped"), advanced_bar_);
     rx_->setChecked(true);
     tx_->setChecked(true);
     drop_->setChecked(true);
     search_ = new QLineEdit(advanced_bar_);
-    search_->setPlaceholderText(QStringLiteral("Search payload"));
-    search_->setAccessibleName(QStringLiteral("Search payload"));
+    search_->setPlaceholderText(tr("Search payload"));
+    search_->setAccessibleName(tr("Search payload"));
     search_->setClearButtonEnabled(true);
     search_->setMaximumWidth(190);
     mode_ = new SegmentedControl(advanced_bar_);
     mode_->set_compact(true);
-    mode_->setAccessibleName(QStringLiteral("Preview format"));
-    mode_->add_item(QStringLiteral("ASCII"));
-    mode_->add_item(QStringLiteral("Hex"), 1);
-    pause_ = new QPushButton(QStringLiteral("Pause"), advanced_bar_);
+    mode_->setAccessibleName(tr("Preview format"));
+    mode_->add_item(tr("ASCII"));
+    mode_->add_item(tr("Hex"), 1);
+    pause_ = new QPushButton(tr("Pause"), advanced_bar_);
     pause_->setProperty("size", QStringLiteral("small"));
     polish(pause_);
-    auto* advanced_clear =
-        new QPushButton(QStringLiteral("Clear"), advanced_bar_);
+    auto* advanced_clear = new QPushButton(tr("Clear"), advanced_bar_);
     advanced_clear->setProperty("size", QStringLiteral("small"));
     polish(advanced_clear);
-    auto* advanced_follow =
-        new QCheckBox(QStringLiteral("Follow"), advanced_bar_);
+    auto* advanced_follow = new QCheckBox(tr("Follow"), advanced_bar_);
     advanced_follow->setChecked(true);
-    export_ = new QPushButton(QStringLiteral("Export"), advanced_bar_);
+    export_ = new QPushButton(tr("Export"), advanced_bar_);
     export_->setProperty("size", QStringLiteral("small"));
     polish(export_);
     advanced_layout->addWidget(port_filter_);
@@ -240,7 +238,7 @@ void MonitorPanel::build()
     model_ = new MonitorModel(this);
     table_ = new QTableView(monitor_page_);
     table_->setModel(model_);
-    table_->setAccessibleName(QStringLiteral("Traffic"));
+    table_->setAccessibleName(tr("Traffic"));
     table_->setSelectionBehavior(QAbstractItemView::SelectRows);
     table_->setSelectionMode(QAbstractItemView::SingleSelection);
     table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -271,8 +269,7 @@ void MonitorPanel::build()
     empty_->setFont(Theme::instance().font(text_style::body));
     empty_->setProperty("muted", true);
     empty_->setContentsMargins(16, 16, 16, 16);
-    empty_->setText(
-        QStringLiteral("No traffic yet. Send some bytes, or open the port in a "
+    empty_->setText(tr("No traffic yet. Send some bytes, or open the port in a "
                        "program."));
 
     content_ = new QStackedWidget(monitor_page_);
@@ -280,22 +277,21 @@ void MonitorPanel::build()
     content_->addWidget(table_);
     content_->addWidget(empty_);
     page_layout->addWidget(content_, 1);
-    tabs_->addTab(monitor_page_, QStringLiteral("Monitor"));
+    tabs_->addTab(monitor_page_, tr("Monitor"));
 
     log_ = new QPlainTextEdit(tabs_);
     log_->setReadOnly(true);
-    log_->setAccessibleName(QStringLiteral("Log"));
+    log_->setAccessibleName(tr("Log"));
     log_->setFont(Theme::instance().font(text_style::data));
     log_->setMaximumBlockCount(10'000);
-    tabs_->addTab(log_, QStringLiteral("Log"));
+    tabs_->addTab(log_, tr("Log"));
 
-    json_ = new QLabel(
-        QStringLiteral("The topology JSON editor arrives with WP7."), tabs_);
+    json_ = new QLabel(tr("The topology JSON editor arrives with WP7."), tabs_);
     json_->setAlignment(Qt::AlignCenter);
     json_->setWordWrap(true);
     json_->setProperty("muted", true);
     polish(json_);
-    tabs_->addTab(json_, QStringLiteral("Topology JSON"));
+    tabs_->addTab(json_, tr("Topology JSON"));
     tabs_->setTabVisible(1, false);
     tabs_->setTabVisible(2, false);
     tabs_->tabBar()->hide();
@@ -431,7 +427,7 @@ void MonitorPanel::refresh_ports()
     {
         const QSignalBlocker blocker(port_filter_);
         port_filter_->clear();
-        port_filter_->addItem(QStringLiteral("All ports"),
+        port_filter_->addItem(tr("All ports"),
                               QVariant::fromValue<qulonglong>(0));
         for (const auto& port : backend_.ports())
         {
@@ -444,7 +440,7 @@ void MonitorPanel::refresh_ports()
     }
     refreshing_ports_ = false;
     if (all_ports_ != nullptr)
-        all_ports_->setText(QStringLiteral("All ports"));
+        all_ports_->setText(tr("All ports"));
     update_filters();
 }
 
@@ -486,8 +482,7 @@ void MonitorPanel::update_actions()
 {
     if (model_ == nullptr)
         return;
-    const QString pause_text =
-        model_->paused() ? QStringLiteral("Resume") : QStringLiteral("Pause");
+    const QString pause_text = model_->paused() ? tr("Resume") : tr("Pause");
     pause_->setText(pause_text);
     if (simple_pause_ != nullptr)
         simple_pause_->setText(pause_text);
@@ -516,12 +511,11 @@ void MonitorPanel::update_empty()
     }
     if (model_->total_rows() > 0)
     {
-        empty_->setText(QStringLiteral("No traffic matches these filters."));
+        empty_->setText(tr("No traffic matches these filters."));
     }
     else
     {
-        empty_->setText(
-            QStringLiteral("No traffic yet. Send some bytes, or open the port "
+        empty_->setText(tr("No traffic yet. Send some bytes, or open the port "
                            "in a program."));
     }
     content_->setCurrentWidget(empty_);
@@ -545,7 +539,7 @@ void MonitorPanel::update_drop_rows()
             const auto it = std::find_if(ports.begin(), ports.end(),
                                          [id](const port_view& view)
                                          { return view.id == id; });
-            return it == ports.end() ? QStringLiteral("link") : it->name;
+            return it == ports.end() ? tr("link") : it->name;
         };
         const vss::endpoint_id id = !link.sources.empty() ? link.sources.front()
                                     : !link.targets.empty()
@@ -581,19 +575,18 @@ void MonitorPanel::toggle_pause()
 void MonitorPanel::export_visible()
 {
     const QString path = QFileDialog::getSaveFileName(
-        this, QStringLiteral("Export visible traffic"),
-        QStringLiteral("traffic.txt"),
-        QStringLiteral("Text files (*.txt);;All files (*)"));
+        this, tr("Export visible traffic"), QStringLiteral("traffic.txt"),
+        tr("Text files (*.txt);;All files (*)"));
     if (path.isEmpty())
         return;
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        Q_EMIT error_message(QStringLiteral("Could not save %1.").arg(path));
+        Q_EMIT error_message(tr("Could not save %1.").arg(path));
         return;
     }
     file.write(model_->export_text().toUtf8());
-    Q_EMIT status_message(QStringLiteral("Exported %1.").arg(path));
+    Q_EMIT status_message(tr("Exported %1.").arg(path));
 }
 
 void MonitorPanel::follow_if_enabled()

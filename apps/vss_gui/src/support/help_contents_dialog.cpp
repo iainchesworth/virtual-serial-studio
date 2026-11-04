@@ -107,8 +107,7 @@ void HelpContentsDialog::build()
         card_layout->addLayout(column, 1);
         auto* open = make_dialog_button(t("Open"), nullptr, card);
         open->setAutoDefault(false);
-        open->setAccessibleName(
-            QStringLiteral("%1: %2").arg(t("Open"), t(item.title)));
+        open->setAccessibleName(tr("%1: %2").arg(t("Open"), t(item.title)));
         connect(open, &QPushButton::clicked, this,
                 [this, value = item.value] { choose(value); });
         card_layout->addWidget(open, 0, Qt::AlignVCenter);

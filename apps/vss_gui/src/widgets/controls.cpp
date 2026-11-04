@@ -173,7 +173,8 @@ void SegmentedControl::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
     {
         const int direction = event->key() == Qt::Key_Right ? 1 : -1;
-        index = static_cast<int>((index + direction + buttons.size()) % buttons.size());
+        index = static_cast<int>((index + direction + buttons.size()) %
+                                 buttons.size());
         buttons.at(index)->setFocus(Qt::OtherFocusReason);
         set_current(group_->id(buttons.at(index)));
         event->accept();
@@ -252,7 +253,7 @@ void PickCard::set_title(const QString& title)
     const QString accessible =
         description_->text().isEmpty()
             ? title
-            : QStringLiteral("%1. %2").arg(title, description_->text());
+            : tr("%1. %2").arg(title, description_->text());
     setAccessibleName(accessible);
 }
 
@@ -321,11 +322,13 @@ void Switch::set_label(const QString& label)
 
 void Switch::refresh_text()
 {
-    QCheckBox::setText(label_.isEmpty()
-                           ? QString()
-                           : QStringLiteral("%1 %2").arg(
-                                 label_, isChecked() ? QStringLiteral("on")
-                                                     : QStringLiteral("off")));
+    QString text;
+    if (!label_.isEmpty())
+    {
+        text = isChecked() ? QObject::tr("%1 on").arg(label_)
+                           : QObject::tr("%1 off").arg(label_);
+    }
+    QCheckBox::setText(text);
     update();
 }
 
@@ -416,7 +419,7 @@ void Stepper::update_accessible_name()
     }
     const int index =
         std::clamp(current_, 0, static_cast<int>(steps_.size()) - 1);
-    setAccessibleName(QStringLiteral("Step %1 of %2, %3")
+    setAccessibleName(QObject::tr("Step %1 of %2, %3")
                           .arg(index + 1)
                           .arg(steps_.size())
                           .arg(steps_.at(index)));
@@ -639,9 +642,9 @@ void Disclosure::apply_state(bool expanded, bool animate)
         pixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
     }
     header_->setIcon(QIcon(pixmap));
-    header_->setAccessibleName(QStringLiteral("%1, %2").arg(
-        header_->text(),
-        expanded ? QStringLiteral("expanded") : QStringLiteral("collapsed")));
+    header_->setAccessibleName(expanded
+                                   ? tr("%1, expanded").arg(header_->text())
+                                   : tr("%1, collapsed").arg(header_->text()));
 }
 
 FormRow::FormRow(const QString& label, QWidget* field, const QString& hint,

@@ -41,7 +41,7 @@ QStringList names_for(const QVector<port_view>& ports,
         if (const port_view* port = find_port(ports, id))
             names.push_back(port->name);
         else
-            names.push_back(QStringLiteral("port %1").arg(id));
+            names.push_back(t("port %1").arg(id));
     }
     return names;
 }
@@ -53,8 +53,7 @@ QString joined(const QStringList& names)
     if (names.size() == 1)
         return names.first();
     QStringList head = names.mid(0, names.size() - 1);
-    return QStringLiteral("%1 and %2")
-        .arg(head.join(QStringLiteral(", ")), names.last());
+    return t("%1 and %2").arg(head.join(QStringLiteral(", ")), names.last());
 }
 
 /// The endpoint on the other side of a link, preferring a real or mock device

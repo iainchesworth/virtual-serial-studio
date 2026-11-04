@@ -169,7 +169,7 @@ void ConfirmDialog::build(const QString& title, const QString& body,
 
     if (choices.isEmpty())
     {
-        auto* close = make_button(QStringLiteral("Close"), "primary", footer);
+        auto* close = make_button(tr("Close"), "primary", footer);
         connect(close, &QPushButton::clicked, this, &QDialog::accept);
         buttons_.push_back(close);
         footer_layout->addWidget(close);
@@ -242,14 +242,13 @@ ErrorDialog::ErrorDialog(const QString& title, const QString& body,
 
     if (!details_.isEmpty())
     {
-        auto* copy =
-            make_button(QStringLiteral("Copy details"), "quiet", footer);
+        auto* copy = make_button(tr("Copy details"), "quiet", footer);
         connect(copy, &QPushButton::clicked, this,
                 [this] { QGuiApplication::clipboard()->setText(details_); });
         footer_layout->addWidget(copy);
     }
 
-    close_ = make_button(QStringLiteral("Close"), "primary", footer);
+    close_ = make_button(tr("Close"), "primary", footer);
     connect(close_, &QPushButton::clicked, this, &QDialog::accept);
     close_->setDefault(true);
     close_->setFocus(Qt::OtherFocusReason);

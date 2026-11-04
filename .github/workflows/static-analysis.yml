@@ -1,0 +1,85 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Static Analysis
+
+# clang-tidy over the libraries and the command line tool, nightly on develop. The naming rules in
+# .clang-tidy are the only checks the pull request gate runs. This job adds the bugprone,
+# concurrency, performance, portability, misc and clang-analyzer groups, which find real defects
+# but take longer. It builds first, because clang-tidy reads the compile database and the
+# generated files. A finding fails the job and opens or updates one `nightly-analysis` issue.
+#
+# Three checks are left out on purpose:
+#   misc-const-correctness       asks for const on almost every local; it is style, not a defect.
+#   performance-enum-size        asks for narrower enum bases; the saving is a few bytes.
+#   bugprone-unused-return-value flags the error_code out-parameter calls that ignore a result
+#                                on purpose (`non_blocking(true, ignored)`).
+
+on:
+  schedule:
+    - cron: "29 2 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: static-analysis-nightly-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      CHECKS: >-
+        -*,
+        bugprone-*,
+        -bugprone-easily-swappable-parameters,
+        -bugprone-unused-return-value,
+        concurrency-*,
+        -concurrency-mt-unsafe,
+        performance-*,
+        -performance-enum-size,
+        portability-*,
+        clang-analyzer-*,
+        misc-*,
+        -misc-include-cleaner,
+        -misc-const-correctness,
+        -misc-non-private-member-variables-in-classes,
+        -misc-no-recursion,
+        readability-identifier-naming
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      # The debug preset keeps assert() in the code clang-tidy parses.
+      - name: Configure and build
+        run: |
+          set -euo pipefail
+          cmake --preset linux-debug
+          cmake --build --preset linux-debug
+
+      - name: clang-tidy
+        run: |
+          set -euo pipefail
+          version="$(python3 -c "import json; print(json.load(open('.github/toolchain-versions.json'))['llvm'])")"
+          "run-clang-tidy-${version}" -j "$(nproc)" -p build/linux-debug \
+            -warnings-as-errors='*' -checks="$(echo "$CHECKS" | tr -d ' \n')" \
+            '(libs/[^/]+/src/.*|apps/vss_cli/.*)\.cpp'
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: clang-tidy
+          detail: clang-tidy reported a finding in the nightly check set (the job fails on any), or the debug build it analyses failed. The run log names the file and the check.

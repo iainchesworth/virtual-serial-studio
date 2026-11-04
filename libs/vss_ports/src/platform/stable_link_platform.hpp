@@ -32,6 +32,11 @@ platform_ensure_private_directory(const std::filesystem::path& directory);
 /// The value of an environment variable, if it is set.
 std::optional<std::string> platform_getenv(std::string_view name);
 
+/// Like platform_ensure_private_directory, but a missing directory is an
+/// error and nothing is created.
+error_code
+platform_check_private_directory(const std::filesystem::path& directory);
+
 /// True when `path` is a character device.
 bool platform_is_character_device(const std::filesystem::path& path) noexcept;
 
