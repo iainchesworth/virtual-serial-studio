@@ -11,6 +11,7 @@
 #include <boost/asio/error.hpp>
 
 #include <chrono>
+#include <future>
 
 using namespace vss;
 using namespace vss::testkit;
@@ -50,7 +51,7 @@ TEST_CASE("endpoint: writes reach the transport and count bytes")
 
     mock.endpoint->write(as_bytes("PING"));
     REQUIRE(wait_until(
-        [&] { return mock.transport->mock()->written() == "PING"; }, 2000ms));
+        [&] { return mock.written() == "PING"; }, 2000ms));
     REQUIRE(wait_until(
         [&] { return mock.endpoint->stats().bytes_tx == 4; }, 2000ms));
     REQUIRE_EQ(mock.endpoint->stats().write_ops, std::uint64_t{1});
@@ -62,7 +63,7 @@ TEST_CASE("endpoint: injected data is received and routed")
     auto hub = start_hub();
     auto mock = add_mock(*hub, "device");
 
-    mock.transport->mock()->inject_read("PONG");
+    mock.inject_read("PONG");
     REQUIRE(wait_for_rx(*mock.endpoint, 4, 2000ms));
     REQUIRE_EQ(mock.endpoint->stats().bytes_rx, std::uint64_t{4});
     REQUIRE_EQ(mock.endpoint->stats().read_ops, std::uint64_t{1});
@@ -76,7 +77,7 @@ TEST_CASE("endpoint: data events carry payload in both directions")
     event_recorder recorder;
     hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
-    mock.transport->mock()->inject_read("in");
+    mock.inject_read("in");
     mock.endpoint->write(as_bytes("out"));
 
     REQUIRE(wait_until(
@@ -105,7 +106,7 @@ TEST_CASE("endpoint: capture can be disabled")
     event_recorder recorder;
     hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
 
-    transport->mock()->inject_read("data");
+    mock_endpoint{*added, transport}.inject_read("data");
     REQUIRE(wait_for_rx(**added, 4, 2000ms));
     REQUIRE_EQ(recorder.count(event_kind::data), std::size_t{0});
     REQUIRE_EQ(hub->traffic().size(), std::size_t{0});
@@ -119,7 +120,7 @@ TEST_CASE("endpoint: write_sync completes with the byte count")
     const auto written = mock.endpoint->write_sync(as_bytes("hello"), 2000ms);
     REQUIRE(written);
     REQUIRE_EQ(*written, std::size_t{5});
-    REQUIRE_EQ(mock.transport->mock()->written(), std::string("hello"));
+    REQUIRE_EQ(mock.written(), std::string("hello"));
 }
 
 TEST_CASE("endpoint: write_sync reports timeouts")
@@ -151,16 +152,16 @@ TEST_CASE("endpoint: a full write queue rejects new data")
     port.write(byte_buffer{1, 2, 3, 4});
     REQUIRE(wait_until([&] { return port.stats().bytes_tx == 0; }, 500ms));
 
-    boost::system::error_code error;
-    bool called = false;
+    // The handler runs on a hub thread, so the result travels through a promise.
+    std::promise<boost::system::error_code> result;
+    auto outcome = result.get_future();
     port.write(byte_buffer{5, 6, 7, 8},
-               [&](boost::system::error_code ec, std::size_t) {
-                   error = ec;
-                   called = true;
+               [&result](boost::system::error_code ec, std::size_t) {
+                   result.set_value(ec);
                });
 
-    REQUIRE(wait_until([&] { return called; }, 2000ms));
-    REQUIRE_EQ(error, make_error_code(errc::queue_full));
+    REQUIRE(outcome.wait_for(2000ms) == std::future_status::ready);
+    REQUIRE_EQ(outcome.get(), make_error_code(errc::queue_full));
     REQUIRE_EQ(port.stats().dropped, std::uint64_t{4});
 }
 

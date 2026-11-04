@@ -34,7 +34,7 @@ void prepare(topology& fixture)
 
 std::string written(const mock_endpoint& port)
 {
-    return port.transport->mock()->written();
+    return port.written();
 }
 } // namespace
 
@@ -105,10 +105,10 @@ TEST_CASE("hub: duplex link forwards both ways")
     REQUIRE_EQ(links.front().id, *link);
     REQUIRE(fixture.hub->find_link(*link));
 
-    fixture.a.transport->mock()->inject_read("to-b");
+    fixture.a.inject_read("to-b");
     REQUIRE(wait_until([&] { return written(fixture.b) == "to-b"; }, 2000ms));
 
-    fixture.b.transport->mock()->inject_read("to-a");
+    fixture.b.inject_read("to-a");
     REQUIRE(wait_until([&] { return written(fixture.a) == "to-a"; }, 2000ms));
 
     const auto stats = fixture.hub->find_link(*link);
@@ -163,14 +163,14 @@ TEST_CASE("hub: split fans out to every listener")
     REQUIRE_EQ(info->sources.size(), std::size_t{1});
     REQUIRE_EQ(info->targets.size(), std::size_t{2});
 
-    fixture.a.transport->mock()->inject_read("broadcast");
+    fixture.a.inject_read("broadcast");
     REQUIRE(wait_until([&] { return written(fixture.b) == "broadcast"; }, 2000ms));
     REQUIRE(wait_until([&] { return written(fixture.c) == "broadcast"; }, 2000ms));
 
     // Replies from either listener are merged back into the source.
-    fixture.b.transport->mock()->inject_read("reply-b");
+    fixture.b.inject_read("reply-b");
     REQUIRE(wait_until([&] { return written(fixture.a) == "reply-b"; }, 2000ms));
-    fixture.c.transport->mock()->inject_read("reply-c");
+    fixture.c.inject_read("reply-c");
     REQUIRE(wait_until([&] { return written(fixture.a) == "reply-breply-c"; },
                        2000ms));
 }
@@ -197,13 +197,13 @@ TEST_CASE("hub: join merges publishers into one target")
     REQUIRE_EQ(info->mode, link_mode::one_way);
     REQUIRE_EQ(info->sources.size(), std::size_t{2});
 
-    fixture.a.transport->mock()->inject_read("one");
+    fixture.a.inject_read("one");
     REQUIRE(wait_until([&] { return written(fixture.c) == "one"; }, 2000ms));
-    fixture.b.transport->mock()->inject_read("two");
+    fixture.b.inject_read("two");
     REQUIRE(wait_until([&] { return written(fixture.c) == "onetwo"; }, 2000ms));
 
     // One way: replies from the target do not reach the publishers.
-    fixture.c.transport->mock()->inject_read("reply");
+    fixture.c.inject_read("reply");
     REQUIRE(wait_until(
         [&] { return fixture.c.endpoint->stats().bytes_rx == 5; }, 2000ms));
     REQUIRE_EQ(written(fixture.a), std::string());
@@ -217,10 +217,10 @@ TEST_CASE("hub: redirect is one way")
     REQUIRE(fixture.hub->redirect(fixture.a.endpoint->id(),
                                   fixture.b.endpoint->id()));
 
-    fixture.a.transport->mock()->inject_read("forward");
+    fixture.a.inject_read("forward");
     REQUIRE(wait_until([&] { return written(fixture.b) == "forward"; }, 2000ms));
 
-    fixture.b.transport->mock()->inject_read("back");
+    fixture.b.inject_read("back");
     REQUIRE(wait_until(
         [&] { return fixture.b.endpoint->stats().bytes_rx == 4; }, 2000ms));
     REQUIRE_EQ(written(fixture.a), std::string());
@@ -267,10 +267,10 @@ TEST_CASE("hub: owner policy arbitrates publishers")
 
     REQUIRE(fixture.hub->set_owner(*link, fixture.a.endpoint->id()));
 
-    fixture.a.transport->mock()->inject_read("owned");
+    fixture.a.inject_read("owned");
     REQUIRE(wait_until([&] { return written(fixture.c) == "owned"; }, 2000ms));
 
-    fixture.b.transport->mock()->inject_read("rejected");
+    fixture.b.inject_read("rejected");
     REQUIRE(wait_until([&] {
         const auto info = fixture.hub->find_link(*link);
         return info && info->stats.dropped == 8;
@@ -279,7 +279,7 @@ TEST_CASE("hub: owner policy arbitrates publishers")
 
     // Releasing ownership lets the next publisher claim it.
     REQUIRE(fixture.hub->release_owner(*link));
-    fixture.b.transport->mock()->inject_read("now-mine");
+    fixture.b.inject_read("now-mine");
     REQUIRE(wait_until([&] { return written(fixture.c) == "ownednow-mine"; },
                        2000ms));
     const auto info = fixture.hub->find_link(*link);
@@ -308,7 +308,7 @@ TEST_CASE("hub: removing an endpoint removes its links")
     REQUIRE_EQ(fixture.hub->endpoints().size(), std::size_t{2});
 
     // The surviving endpoints still work.
-    fixture.a.transport->mock()->inject_read("alive");
+    fixture.a.inject_read("alive");
     REQUIRE(wait_until(
         [&] { return fixture.a.endpoint->stats().bytes_rx == 5; }, 2000ms));
 }
