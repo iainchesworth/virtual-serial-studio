@@ -429,8 +429,8 @@ it under the terms of the **GNU General Public License, version 3 or later**
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE. The full text is in [LICENSE](LICENSE).
 
-Every first-party source file carries an `SPDX-License-Identifier:
-GPL-3.0-or-later` tag.
+Every first-party source file carries an SPDX licence line naming
+GPL-3.0-or-later.
 
 The dependencies keep their own terms, all compatible with the GPL:
 

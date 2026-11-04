@@ -44,7 +44,7 @@ The BSL-1.0 text is kept at [LICENSES/BSL-1.0.txt](LICENSES/BSL-1.0.txt).
 
 ## Notes on GPL compliance
 
-* Each source file starts with `SPDX-License-Identifier: GPL-3.0-or-later`,
+* Each source file starts with an SPDX licence line naming GPL-3.0-or-later,
   except the derived files listed above and the machine-readable configuration
   files where a comment is not possible.
 * The GUI's **Help → About** box and `vss_cli --help` display the copyright,

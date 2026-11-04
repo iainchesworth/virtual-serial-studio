@@ -82,7 +82,7 @@ under the **Boost Software License 1.0** (`tools/fetch_boost.py`,
 `tools/changelog.py`, `tools/test_changelog.py`, `changelog.d/README.md`). Keep
 their notices intact; do not relicense them.
 
-New first-party files need an `SPDX-License-Identifier: GPL-3.0-or-later` tag.
+New first-party files need an SPDX licence line naming GPL-3.0-or-later. `REUSE.toml` supplies the copyright line, and CI runs `reuse lint`.
 
 ## Threading rules
 

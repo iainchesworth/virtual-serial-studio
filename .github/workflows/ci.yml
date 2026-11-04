@@ -29,6 +29,11 @@ jobs:
       - name: Check the vendored CMake modules
         run: python3 tools/sync_cmake.py --infra .icl-infra --check
 
+      - name: Check licensing (REUSE)
+        run: |
+          python3 -m pip install --quiet "reuse[charset-normalizer]==6.2.0"
+          reuse lint
+
       - name: Check commit messages
         shell: bash
         run: |

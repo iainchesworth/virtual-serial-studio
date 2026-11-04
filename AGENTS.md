@@ -35,7 +35,7 @@ Qt is found through `VSS_QT_ROOT`, `ICL_QT_ROOT`, `QT_ROOT_DIR` or `QTDIR`. The 
 
 ## Code rules
 
-- C++23. Every first-party source file carries `SPDX-License-Identifier: GPL-3.0-or-later`.
+- C++23. Every first-party source file carries an SPDX licence line naming GPL-3.0-or-later.
 - Names follow `.clang-tidy`: `snake_case` for namespaces, types, functions and variables, and a trailing `_` on data
   members. The Qt widgets in `apps/vss_gui` are the exception, as `apps/vss_gui/.clang-tidy` says. Layout follows
   `.clang-format` (Allman braces, 80 columns).

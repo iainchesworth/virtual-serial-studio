@@ -178,7 +178,7 @@ build. `vss_gui_shell` links `vss_gui_widgets`, `vss_gui_backend` and
   `link_shape::two_way`).
 - Engine types are used unchanged in the adapter's return values until they
   cross into a view struct; no `std::string`/`QString` mix inside one struct.
-- Every new file carries `SPDX-License-Identifier: GPL-3.0-or-later`.
+- Every new file carries an SPDX licence line naming GPL-3.0-or-later.
 
 ## 6. Self-test and test strategy
 
