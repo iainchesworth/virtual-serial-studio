@@ -229,5 +229,5 @@ the setup, log and environment, with traffic contents off unless chosen.
 4. Reconnect for a port that failed, with the note and button the design
    specifies.
 5. Real-device templates that open the attach dialog.
-6. An RFC 2217 server role, so the network endpoint can offer it as it already
-   does for TCP and UDP.
+6. Applying the baud rate and framing an RFC 2217 client asks for to a real
+   device that the server is linked to.

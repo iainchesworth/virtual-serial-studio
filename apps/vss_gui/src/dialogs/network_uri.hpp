@@ -44,9 +44,8 @@ QString network_transport_name(network_transport transport);
 QString build_network_uri(network_transport transport, const QString& host,
                           int port);
 
-/// As above, and for the server role `tcp-listen://0.0.0.0:4001` or
-/// `udp-listen://0.0.0.0:4001`.  RFC 2217 has no server role, so it always
-/// connects.
+/// As above, and for the server role `tcp-listen://0.0.0.0:4001`,
+/// `udp-listen://0.0.0.0:4001` or `rfc2217-listen://0.0.0.0:4001`.
 QString build_network_uri(network_transport transport, network_role role,
                           const QString& host, int port);
 
@@ -56,7 +55,8 @@ bool parse_port(const QString& text, int& port);
 
 /// Parses the schemes the engine's `attach_serial` accepts for a network
 /// endpoint: `tcp`, `udp` and `rfc2217` connect (the client role), and
-/// `tcp-listen` and `udp-listen` wait for others (the server role).
+/// `tcp-listen`, `udp-listen` and `rfc2217-listen` wait for others (the server
+/// role).
 std::optional<network_endpoint> parse_network_uri(const QString& text,
                                                   QString* error = nullptr);
 

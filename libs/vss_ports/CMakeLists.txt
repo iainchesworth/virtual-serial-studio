@@ -9,6 +9,7 @@ add_library(vss_ports
   src/listen_transport.cpp
   src/loopback_transport.cpp
   src/native_lines.cpp
+  src/rfc2217.cpp
   src/serial_enumeration.cpp
   src/serial_transport.cpp
   src/stable_link.cpp

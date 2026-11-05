@@ -22,6 +22,9 @@ enum class listen_protocol
 {
     tcp,
     udp,
+    /// TCP carrying Telnet with the COM-PORT option: an RFC 2217 access
+    /// server.
+    rfc2217,
 };
 
 /// Where a listening endpoint waits for other computers.
@@ -36,11 +39,13 @@ struct listen_address
     friend bool operator==(const listen_address&, const listen_address&) = default;
 };
 
-/// True for `tcp-listen://` and `udp-listen://`, the schemes of an endpoint
-/// that waits for others to connect instead of connecting itself.
+/// True for `tcp-listen://`, `udp-listen://` and `rfc2217-listen://`, the
+/// schemes of an endpoint that waits for others to connect instead of
+/// connecting itself.
 bool is_listen_uri(std::string_view uri) noexcept;
 
-/// Parses `tcp-listen://host:port` and `udp-listen://host:port`. The host is
+/// Parses `tcp-listen://host:port`, `udp-listen://host:port` and
+/// `rfc2217-listen://host:port`. The host is
 /// an IP address, `[::1]` for IPv6, or empty for every IPv4 interface. The
 /// URI carries nothing else.
 result<listen_address> parse_listen_uri(std::string_view uri);
@@ -57,6 +62,14 @@ std::string make_listen_uri(const listen_address& address);
 ///
 /// UDP: datagrams from anyone are read, and a write is sent to every sender
 /// heard from lately (up to sixteen).
+///
+/// RFC 2217: TCP clients speak Telnet and negotiate the COM-PORT option, so a
+/// serial-over-network client (pySerial's `rfc2217://`, a terminal server
+/// driver) can open the endpoint as a serial port. Payload bytes travel as
+/// they do for TCP, with 0xFF escaped. The client's baud rate, framing, flow
+/// control, DTR, RTS and break are accepted and remembered but change no real
+/// device; DTR and RTS are the endpoint's output lines, and CTS, DSR, DCD and
+/// RI that reach the endpoint are sent to the clients as modem state.
 class listen_transport final : public transport
 {
 public:
@@ -80,6 +93,11 @@ public:
 
     void close() override;
     void cancel() override;
+
+    /// True for the RFC 2217 role, which has control lines.
+    bool supports_control_lines() const noexcept override;
+    void set_control_line(control_line line, bool state) override;
+    control_lines lines() const override;
 
     /// The port actually bound, which differs from the request when that was 0.
     std::uint16_t local_port() const noexcept;
