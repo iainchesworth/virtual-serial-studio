@@ -858,7 +858,7 @@
     <context>
         <name>Benchmark</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="38" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="44" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
@@ -866,132 +866,225 @@
     <context>
         <name>BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
             <source>Benchmark a connection</source>
             <translation>בענטשמאַרקירן אַ פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>שיקט דאַטן פֿון איין פּאָרט צו אַן אַנדערן און צעלט וואָס קומט אָן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
             <source>Send from</source>
             <translation>שיקן פֿון</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Receive on</source>
             <translation>באַקומען אויף</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
             <source>Amount of data</source>
             <translation>דאַטן־מענג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
             <source>Chunk size</source>
             <translation>שטיק־גרייס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>פֿאַרבינדט נישט די צוויי פּאָרטן אין Studio. די דאַטן מוזן גיין דורכן קאַבל אָדער דורכן דרײַווער־פּאָר, כדי די צאָל זאָל האָבן אַ באַטײַט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>די צוויי פּאָרטן זענען פֿאַרבונדן אין Studio. טרענט זיי פֿריִער אָפּ.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
             <source>Not run yet</source>
             <translation>נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
             <source>Benchmark result: not run yet</source>
             <translation>בענטשמאַרק־רעזולטאַט: נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
             <source>Not started</source>
             <translation>נישט אָנגעהויבן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Benchmark progress</source>
             <translation>בענטשמאַרק־פּראָגרעס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Sent</source>
+            <translation>געשיקט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Received</source>
+            <translation>באקומען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Lost</source>
+            <translation>פֿאַרלוירן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <source>Throughput</source>
+            <translation>דורכגאַנג</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
             <source>Not run</source>
             <translation>נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
             <source>%1: not run yet</source>
             <translation>%1: נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>אַ לויף פֿאַלט דורך ווען די באַקומענע צאָל איז צו קליין, און דער רעזולטאַט זאָגט מיט וויפֿל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
             <source>Copy result</source>
             <translation>קאָפּירן רעזולטאַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
             <source>Copied the result.</source>
             <translation>דער רעזולטאַט איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
             <source>Run</source>
             <translation>לויפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>לייגט צו צוויי פּאָרטן כדי צו בענטשמאַרקירן אַ פֿאַרבינדונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Choose two different ports.</source>
             <translation>קלײַבט אויס צוויי פֿאַרשידענע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <source>Cancel</source>
+            <translation>אָפּזאָגן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <source>Running</source>
+            <translation>לויפֿט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <source>Benchmark result: %1</source>
+            <translation>בענטשמאַרק־רעזולטאַט: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <source>%1 of %2 received</source>
+            <translation>%1 פֿון %2 באקומען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Failed</source>
+            <translation>דורכגעפֿאַלן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <source>Could not finish: %1</source>
+            <translation>נישט געקענט ענדיקן: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <source>Cancelled</source>
+            <translation>אַנולירט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Passed</source>
+            <translation>דורכגעגאַנגען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <source>Finished at %1</source>
+            <translation>פֿאַרענדיקט אום %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
+            <translation>%1: געשיקט %2, באקומען %3, פֿאַרלוירן %4, דורכגאַנג %5.</translation>
+        </message>
+        <message>
             <source>The benchmark command is not available in this build.</source>
-            <translation>די בענטשמאַרק־קאָמאַנדע איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
+            <translation type="vanished">די בענטשמאַרק־קאָמאַנדע איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
     </context>
     <context>
@@ -8545,132 +8638,225 @@
     <context>
         <name>vss::gui::BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
             <source>Benchmark a connection</source>
             <translation>בענטשמאַרקירן אַ פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>שיקט דאַטן פֿון איין פּאָרט צו אַן אַנדערן און צעלט וואָס קומט אָן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
             <source>Send from</source>
             <translation>שיקן פֿון</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Receive on</source>
             <translation>באַקומען אויף</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
             <source>Amount of data</source>
             <translation>דאַטן־מענג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
             <source>Chunk size</source>
             <translation>שטיק־גרייס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>פֿאַרבינדט נישט די צוויי פּאָרטן אין Studio. די דאַטן מוזן גיין דורכן קאַבל אָדער דורכן דרײַווער־פּאָר, כדי די צאָל זאָל האָבן אַ באַטײַט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>די צוויי פּאָרטן זענען פֿאַרבונדן אין Studio. טרענט זיי פֿריִער אָפּ.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
             <source>Not run yet</source>
             <translation>נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
             <source>Benchmark result: not run yet</source>
             <translation>בענטשמאַרק־רעזולטאַט: נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
             <source>Not started</source>
             <translation>נישט אָנגעהויבן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Benchmark progress</source>
             <translation>בענטשמאַרק־פּראָגרעס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Sent</source>
+            <translation>געשיקט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Received</source>
+            <translation>באקומען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Lost</source>
+            <translation>פֿאַרלוירן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <source>Throughput</source>
+            <translation>דורכגאַנג</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
             <source>Not run</source>
             <translation>נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
             <source>%1: not run yet</source>
             <translation>%1: נאָך נישט אָפּגעלאָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>אַ לויף פֿאַלט דורך ווען די באַקומענע צאָל איז צו קליין, און דער רעזולטאַט זאָגט מיט וויפֿל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
             <source>Copy result</source>
             <translation>קאָפּירן רעזולטאַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
             <source>Copied the result.</source>
             <translation>דער רעזולטאַט איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
             <source>Run</source>
             <translation>לויפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>לייגט צו צוויי פּאָרטן כדי צו בענטשמאַרקירן אַ פֿאַרבינדונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Choose two different ports.</source>
             <translation>קלײַבט אויס צוויי פֿאַרשידענע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <source>Cancel</source>
+            <translation>אָפּזאָגן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <source>Running</source>
+            <translation>לויפֿט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <source>Benchmark result: %1</source>
+            <translation>בענטשמאַרק־רעזולטאַט: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <source>%1 of %2 received</source>
+            <translation>%1 פֿון %2 באקומען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Failed</source>
+            <translation>דורכגעפֿאַלן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <source>Could not finish: %1</source>
+            <translation>נישט געקענט ענדיקן: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <source>Cancelled</source>
+            <translation>אַנולירט</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Passed</source>
+            <translation>דורכגעגאַנגען</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <source>Finished at %1</source>
+            <translation>פֿאַרענדיקט אום %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
+            <translation>%1: געשיקט %2, באקומען %3, פֿאַרלוירן %4, דורכגאַנג %5.</translation>
+        </message>
+        <message>
             <source>The benchmark command is not available in this build.</source>
-            <translation>די בענטשמאַרק־קאָמאַנדע איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
+            <translation type="vanished">די בענטשמאַרק־קאָמאַנדע איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
     </context>
     <context>

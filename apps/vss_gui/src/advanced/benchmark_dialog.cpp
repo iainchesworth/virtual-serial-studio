@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/bytes.hpp>
+
 #include <QClipboard>
 #include <QComboBox>
 #include <QCoreApplication>
@@ -20,11 +22,15 @@
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMetaObject>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QSignalBlocker>
+#include <QTime>
 #include <QTimer>
 #include <QVBoxLayout>
+
+#include <algorithm>
 
 namespace vss::gui
 {
@@ -46,6 +52,22 @@ BenchmarkDialog::BenchmarkDialog(StudioBackend& backend, QWidget* parent)
 {
     build();
     refresh();
+}
+
+BenchmarkDialog::~BenchmarkDialog()
+{
+    cancel_.store(true);
+    if (worker_.joinable())
+        worker_.join();
+}
+
+void BenchmarkDialog::done(int result)
+{
+    // The thread is joined by the destructor or by the result handler; this
+    // only asks it to stop, so closing the dialog never waits for a write.
+    if (running_)
+        cancel_.store(true);
+    QDialog::done(result);
 }
 
 void BenchmarkDialog::build()
@@ -142,7 +164,8 @@ void BenchmarkDialog::build()
     auto* metrics = new QGridLayout();
     metrics->setContentsMargins(0, 0, 0, 0);
     metrics->setHorizontalSpacing(10);
-    const char* names[4] = {"Sent", "Received", "Lost", "Throughput"};
+    const char* names[4] = {QT_TR_NOOP("Sent"), QT_TR_NOOP("Received"),
+                            QT_TR_NOOP("Lost"), QT_TR_NOOP("Throughput")};
     for (int index = 0; index < 4; ++index)
     {
         auto* cell = new QFrame(result_card);
@@ -194,7 +217,7 @@ void BenchmarkDialog::build()
             {
                 if (!has_result_)
                     return;
-                QGuiApplication::clipboard()->setText(result_summary());
+                QGuiApplication::clipboard()->setText(summary_);
                 Q_EMIT message(tr("Copied the result."));
             });
     footer_layout->addWidget(copy_result_);
@@ -295,15 +318,26 @@ QString BenchmarkDialog::block_reason() const
     if (ports_linked())
         return tr("These two ports are linked in Studio. Disconnect them "
                   "first.");
-    // The shared benchmark core has not been extracted from vss_cli (it
-    // needs maintainer approval), so even a test double that reports the
-    // capability cannot start a run in this build.
-    return not_available_text();
+    if (!backend_.caps().benchmark)
+        return not_available_text();
+    return {};
 }
 
 bool BenchmarkDialog::can_run() const
 {
     return block_reason().isEmpty();
+}
+
+QString BenchmarkDialog::metric_text(int index) const
+{
+    if (index < 0 || index >= 4)
+        return {};
+    return metrics_[index]->text();
+}
+
+QString BenchmarkDialog::finished_text() const
+{
+    return finished_->text();
 }
 
 QString BenchmarkDialog::result_summary() const
@@ -355,22 +389,179 @@ void BenchmarkDialog::update_state()
 {
     const bool linked = ports_linked();
     linked_note_->setVisible(linked);
-    const QString reason = block_reason();
-    run_->setEnabled(can_run());
-    run_->setToolTip(reason);
-    run_->setAccessibleDescription(reason);
-    copy_result_->setEnabled(has_result_);
+    for (QComboBox* combo : {from_, to_, amount_, chunk_})
+        combo->setEnabled(!running_);
+    if (running_)
+    {
+        // While a run is going the same button stops it.
+        run_->setText(tr("Cancel"));
+        run_->setEnabled(true);
+        run_->setToolTip({});
+        run_->setAccessibleDescription({});
+    }
+    else
+    {
+        const QString reason = block_reason();
+        run_->setText(tr("Run"));
+        run_->setEnabled(can_run());
+        run_->setToolTip(reason);
+        run_->setAccessibleDescription(reason);
+    }
+    copy_result_->setEnabled(has_result_ && !running_);
+}
+
+void BenchmarkDialog::set_metrics(const QString& sent, const QString& received,
+                                  const QString& lost,
+                                  const QString& throughput)
+{
+    static const char* const names[4] = {
+        QT_TR_NOOP("Sent"), QT_TR_NOOP("Received"), QT_TR_NOOP("Lost"),
+        QT_TR_NOOP("Throughput")};
+    const QString values[4] = {sent, received, lost, throughput};
+    for (int index = 0; index < 4; ++index)
+    {
+        metrics_[index]->setText(values[index]);
+        metrics_[index]->setAccessibleName(
+            tr("%1: %2").arg(tr(names[index]), values[index]));
+    }
 }
 
 void BenchmarkDialog::run()
 {
+    if (running_)
+    {
+        cancel_.store(true);
+        return;
+    }
     if (!can_run())
     {
         Q_EMIT message(block_reason());
         return;
     }
-    // Unreachable in this build: no benchmark core is linked in.
-    Q_EMIT message(tr("The benchmark command is not available in this build."));
+    start();
+}
+
+void BenchmarkDialog::start()
+{
+    const auto bytes = vss::parse_byte_size(
+        amount_->currentData().toString().toStdString());
+    const auto chunk =
+        vss::parse_byte_size(chunk_->currentData().toString().toStdString());
+    if (!bytes || !chunk || *chunk == 0)
+        return;
+
+    vss::benchmark_options options;
+    options.bytes = *bytes;
+    options.chunk = static_cast<std::size_t>(*chunk);
+    const auto from =
+        static_cast<vss::endpoint_id>(from_->currentData().toULongLong());
+    const auto to =
+        static_cast<vss::endpoint_id>(to_->currentData().toULongLong());
+
+    if (worker_.joinable())
+        worker_.join();
+    cancel_.store(false);
+    running_ = true;
+    has_result_ = false;
+    summary_.clear();
+    progress_->setValue(0);
+    result_->set_text(tr("Running"));
+    result_->set_kind(StatusChip::kind::waiting);
+    result_->setAccessibleName(tr("Benchmark result: %1").arg(tr("Running")));
+    finished_->setText(tr("%1 of %2 received")
+                           .arg(vss::format_byte_size(0).c_str(),
+                                vss::format_byte_size(options.bytes).c_str()));
+    set_metrics(tr("Not run"), tr("Not run"), tr("Not run"), tr("Not run"));
+    update_state();
+
+    // The worker touches no widget: it calls the backend and posts plain
+    // values back.  The destructor joins it before the dialog goes.
+    worker_ = std::thread(
+        [this, from, to, options]
+        {
+            const auto outcome = backend_.run_benchmark(
+                from, to, options,
+                [this](const vss::benchmark_progress& progress)
+                {
+                    QMetaObject::invokeMethod(
+                        this, [this, progress] { on_progress(progress); },
+                        Qt::QueuedConnection);
+                },
+                &cancel_);
+            QMetaObject::invokeMethod(
+                this, [this, outcome] { on_finished(outcome); },
+                Qt::QueuedConnection);
+        });
+}
+
+void BenchmarkDialog::on_progress(const vss::benchmark_progress& progress)
+{
+    if (!running_ || progress.total == 0)
+        return;
+    const std::uint64_t done = progress.sent + progress.received;
+    const std::uint64_t whole = progress.total * 2;
+    progress_->setValue(static_cast<int>(
+        std::min<std::uint64_t>(100, done * 100 / whole)));
+    finished_->setText(
+        tr("%1 of %2 received")
+            .arg(vss::format_byte_size(progress.received).c_str(),
+                 vss::format_byte_size(progress.total).c_str()));
+}
+
+void BenchmarkDialog::on_finished(
+    const vss::result<vss::benchmark_result>& outcome)
+{
+    if (worker_.joinable())
+        worker_.join();
+    running_ = false;
+
+    const auto show = [this](const QString& text, StatusChip::kind kind)
+    {
+        result_->set_text(text);
+        result_->set_kind(kind);
+        result_->setAccessibleName(tr("Benchmark result: %1").arg(text));
+    };
+
+    if (!outcome)
+    {
+        show(tr("Failed"), StatusChip::kind::failed);
+        finished_->setText(
+            tr("Could not finish: %1").arg(error_text(outcome.error())));
+        set_metrics(tr("Not run"), tr("Not run"), tr("Not run"), tr("Not run"));
+        update_state();
+        Q_EMIT message(finished_->text());
+        return;
+    }
+
+    const vss::benchmark_result& ran = *outcome;
+    const QString sent = QString::fromStdString(vss::format_byte_size(ran.sent));
+    const QString received =
+        QString::fromStdString(vss::format_byte_size(ran.received));
+    const QString lost = QString::fromStdString(vss::format_byte_size(ran.lost()));
+    const QString rate = QString::fromStdString(
+        vss::format_throughput(ran.received, ran.elapsed));
+    set_metrics(sent, received, lost, rate);
+
+    if (ran.cancelled)
+    {
+        show(tr("Cancelled"), StatusChip::kind::closed);
+        finished_->setText(tr("Cancelled"));
+        update_state();
+        Q_EMIT message(tr("Cancelled"));
+        return;
+    }
+
+    progress_->setValue(100);
+    show(ran.complete ? tr("Passed") : tr("Failed"),
+         ran.complete ? StatusChip::kind::healthy : StatusChip::kind::failed);
+    finished_->setText(
+        tr("Finished at %1")
+            .arg(QTime::currentTime().toString(QStringLiteral("HH:mm:ss"))));
+    summary_ = tr("%1: sent %2, received %3, lost %4, throughput %5.")
+                   .arg(result_->text(), sent, received, lost, rate);
+    has_result_ = true;
+    update_state();
+    Q_EMIT message(summary_);
 }
 
 } // namespace vss::gui

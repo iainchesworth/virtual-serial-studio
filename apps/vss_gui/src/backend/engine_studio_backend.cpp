@@ -159,11 +159,29 @@ capabilities EngineStudioBackend::caps() const
     // `udp-listen://`), which `vss::studio::attach_serial` opens. RFC 2217 has
     // no server role.
     caps.network_server = true;
+    // `vss::run_benchmark` is the core `vss_cli bench` uses, shared with the
+    // GUI.
+    caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;
+}
+
+vss::result<vss::benchmark_result> EngineStudioBackend::run_benchmark(
+    vss::endpoint_id from, vss::endpoint_id to,
+    const vss::benchmark_options& options,
+    const vss::benchmark_progress_handler& progress,
+    const std::atomic<bool>* cancel)
+{
+    // Runs on a worker thread: it uses only the hub's lookup, which is safe
+    // from any thread, and holds the endpoints so a removal cannot free them.
+    const auto sender = studio_.engine().find_endpoint(from);
+    const auto receiver = studio_.engine().find_endpoint(to);
+    if (!sender || !receiver)
+        return vss::make_error_code(vss::errc::not_found);
+    return vss::run_benchmark(*sender, *receiver, options, progress, cancel);
 }
 
 vss::result<void> EngineStudioBackend::inject_fault(vss::endpoint_id id,

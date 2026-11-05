@@ -135,6 +135,7 @@
     "libs/vss_ports/src/platform/stable_link_platform.hpp": 3,
     "libs/vss_ports/src/platform/vcom_driver_platform.hpp": 3,
     "libs/vss_ports/src/platform/virtual_port_platform.hpp": 3,
+    "libs/vss_studio/include/vss/studio/benchmark.hpp": 3,
     "libs/vss_studio/include/vss/studio/studio.hpp": 3,
     "libs/vss_testkit/include/vss/testkit/harness.hpp": 3,
     "libs/vss_testkit/src/platform/environment_platform.hpp": 3,

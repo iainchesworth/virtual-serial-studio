@@ -16,12 +16,14 @@
 #include <vss/core/serial_settings.hpp>
 #include <vss/core/types.hpp>
 #include <vss/ports/virtual_port.hpp>
+#include <vss/studio/benchmark.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QByteArray>
 #include <QObject>
 #include <QString>
 
+#include <atomic>
 #include <optional>
 #include <vector>
 
@@ -125,6 +127,23 @@ public:
     /// a build without `Capabilities::line_matrix` must never simulate it.
     virtual vss::result<void> set_link_wiring(vss::link_id /*id*/,
                                               const line_wiring& /*wiring*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
+    // -- benchmark (capability: benchmark) ---------------------------------
+
+    /// Sends a test payload from one port and counts what arrives on another.
+    ///
+    /// The call blocks until the run ends, so it belongs on a worker thread;
+    /// `progress` and the checks of `cancel` happen on that thread.  It touches
+    /// no GUI state.  The default is `unsupported`: a build without
+    /// `Capabilities::benchmark` never invents a result.
+    virtual vss::result<vss::benchmark_result>
+    run_benchmark(vss::endpoint_id /*from*/, vss::endpoint_id /*to*/,
+                  const vss::benchmark_options& /*options*/,
+                  const vss::benchmark_progress_handler& /*progress*/,
+                  const std::atomic<bool>* /*cancel*/)
     {
         return vss::make_error_code(vss::errc::unsupported);
     }

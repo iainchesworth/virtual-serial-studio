@@ -3,7 +3,7 @@
 # The application service shared by the CLI and the Qt GUI.
 #
 
-add_library(vss_studio src/studio.cpp)
+add_library(vss_studio src/studio.cpp src/benchmark.cpp)
 add_library(Vss::studio ALIAS vss_studio)
 
 target_include_directories(vss_studio PUBLIC

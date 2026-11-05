@@ -269,7 +269,15 @@ have no physical wires.
   It shows the standard null-modem preset, read only.
 - **Topology → Owner** shows the owner bar for a link that uses an owner
   policy. The owner can be released or given to another port.
-- **Tools → Benchmark** measures throughput between two endpoints.
+- **Tools → Benchmark** sends data from one port and counts what arrives on
+  another, so you can measure a cable or a driver pair. Choose the two ports,
+  the amount (1, 10 or 100 MB) and the chunk size, then **Run**. The bar shows
+  progress, and **Cancel** stops the run. The result is *Passed* when every byte
+  arrived and *Failed* when some did not, with the number lost; **Copy result**
+  puts the figures on the clipboard. The two ports must not be linked in
+  Studio, because the data has to travel through the cable or the driver pair.
+  It is the same measurement as `vss_cli bench`, and the dialog shows the
+  matching command.
 
 Some of these depend on what the engine can do; see
 [what this build cannot do](#what-this-build-cannot-do).
@@ -403,7 +411,6 @@ available in this build". It never pretends. At the moment:
 - **"Waiting for a program" and "Program connected"**: the engine cannot see
   whether another program has opened a port, so a port reads **Open** and no
   more.
-- **Benchmark** from the window; use `vss_cli bench`.
 - **Line numbers** in JSON errors in the Topology JSON editor.
 - An **RFC 2217 server**: Studio can connect to one but cannot act as one.
 
