@@ -20,7 +20,9 @@ add_library(vss_gui_flows STATIC
   attach_dialog.cpp
   attach_dialog.hpp
   watch_dialog.cpp
-  watch_dialog.hpp)
+  watch_dialog.hpp
+  rename_dialog.cpp
+  rename_dialog.hpp)
 
 target_include_directories(vss_gui_flows PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/..)

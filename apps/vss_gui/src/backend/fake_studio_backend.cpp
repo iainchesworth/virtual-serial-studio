@@ -248,6 +248,30 @@ vss::result<void> FakeStudioBackend::remove_port(vss::endpoint_id id)
     return {};
 }
 
+vss::result<void> FakeStudioBackend::rename_port(vss::endpoint_id id,
+                                                 const QString& name)
+{
+    if (const auto error = take_error())
+        return *error;
+    if (name.isEmpty())
+        return vss::make_error_code(vss::errc::invalid_argument);
+    const auto it =
+        std::find_if(ports_.begin(), ports_.end(),
+                     [id](const port_view& view) { return view.id == id; });
+    if (it == ports_.end())
+        return vss::make_error_code(vss::errc::not_found);
+    if (it->name == name)
+        return {};
+    const bool taken = std::any_of(
+        ports_.begin(), ports_.end(),
+        [&name](const port_view& view) { return view.name == name; });
+    if (taken)
+        return vss::make_error_code(vss::errc::already_exists);
+    it->name = name;
+    refresh();
+    return {};
+}
+
 vss::result<vss::link_id>
 FakeStudioBackend::connect_ports(vss::endpoint_id first,
                                  vss::endpoint_id second,

@@ -81,6 +81,15 @@ TEST_CASE("hub: rename validates uniqueness")
     REQUIRE(fixture.hub->rename_endpoint(fixture.a.endpoint->id(), "renamed"));
     REQUIRE_EQ(fixture.hub->find_endpoint("renamed")->id(),
                fixture.a.endpoint->id());
+    // The endpoint reports the new name too, so events and info follow it.
+    REQUIRE_EQ(fixture.a.endpoint->name(), std::string("renamed"));
+    REQUIRE_EQ(fixture.a.endpoint->info().name, std::string("renamed"));
+    REQUIRE(fixture.hub->find_endpoint("a") == nullptr);
+    REQUIRE(fixture.hub->rename_endpoint(fixture.a.endpoint->id(), "again"));
+    REQUIRE(fixture.hub->find_endpoint("renamed") == nullptr);
+    REQUIRE_EQ(fixture.hub->find_endpoint("again")->id(),
+               fixture.a.endpoint->id());
+    REQUIRE(fixture.hub->rename_endpoint(fixture.a.endpoint->id(), "renamed"));
 
     REQUIRE_EQ(fixture.hub->rename_endpoint(fixture.a.endpoint->id(), "b"),
                make_error_code(errc::already_exists));

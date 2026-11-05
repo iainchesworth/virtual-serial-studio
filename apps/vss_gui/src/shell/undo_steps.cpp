@@ -138,4 +138,19 @@ undo_step owner_step(StudioBackend& backend, const link_view& spec,
             }};
 }
 
+undo_step rename_step(StudioBackend& backend, vss::endpoint_id port,
+                      const QString& before, const QString& after,
+                      const QString& text)
+{
+    const auto rename = [&backend, port](const QString& name)
+    {
+        if (!backend.rename_port(port, name))
+            return false;
+        backend.refresh();
+        return true;
+    };
+    return {text, [rename, before] { return rename(before); },
+            [rename, after] { return rename(after); }};
+}
+
 } // namespace vss::gui

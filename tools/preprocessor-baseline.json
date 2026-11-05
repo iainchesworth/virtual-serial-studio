@@ -40,6 +40,7 @@
     "apps/vss_gui/src/flows/pair_dialog.hpp": 3,
     "apps/vss_gui/src/flows/pair_panel.hpp": 3,
     "apps/vss_gui/src/flows/port_ready_dialog.hpp": 3,
+    "apps/vss_gui/src/flows/rename_dialog.hpp": 3,
     "apps/vss_gui/src/flows/tests/main.cpp": 4,
     "apps/vss_gui/src/flows/watch_dialog.hpp": 3,
     "apps/vss_gui/src/language/language_choice.hpp": 3,

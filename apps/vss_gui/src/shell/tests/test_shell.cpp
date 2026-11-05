@@ -480,6 +480,22 @@ TEST_CASE("undo: link steps use exact inverse operations")
     REQUIRE(history.redo());
     REQUIRE_EQ(vss::gui::find_link(backend, *again)->owner, *first);
 
+    // A rename is reversed by naming the port as it was.
+    history.clear();
+    REQUIRE(backend.rename_port(*first, QStringLiteral("renamed")).has_value());
+    history.push(vss::gui::rename_step(backend, *first, QStringLiteral("a"),
+                                       QStringLiteral("renamed"),
+                                       QStringLiteral("Rename port")));
+    REQUIRE(history.undo());
+    REQUIRE_EQ(backend.port(*first)->name, QStringLiteral("a"));
+    REQUIRE(history.redo());
+    REQUIRE_EQ(backend.port(*first)->name, QStringLiteral("renamed"));
+    REQUIRE(history.undo());
+    history.clear();
+    history.push(vss::gui::owner_step(backend, *again, *second, *first,
+                                      QStringLiteral("Change owner")));
+    REQUIRE(backend.set_owner(again->id, *first).has_value());
+
     // When the link has gone, the step says so instead of guessing.
     REQUIRE(backend.disconnect(vss::gui::find_link(backend, *again)->id)
                 .has_value());

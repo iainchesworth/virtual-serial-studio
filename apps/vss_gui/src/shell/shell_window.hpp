@@ -110,6 +110,7 @@ private:
     void redo_last();
     void update_undo_actions();
     void remove_port(vss::endpoint_id id);
+    void show_rename(vss::endpoint_id id);
     void show_links_dock(bool shown);
     void connect_from_port(vss::endpoint_id id);
 

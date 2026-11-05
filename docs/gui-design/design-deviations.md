@@ -219,12 +219,12 @@ capability reports the state. No waiting text is shown for Unknown. The design
 now says the same: Open is the normal state, and the two refinements belong to
 `Capabilities::peer_open`.
 
-### No F2 rename
+### F2 rename
 
-`capabilities::rename_port` is false, so the Ports keyboard map implements Up,
-Down, Enter, Delete and Ctrl+Shift+C but not F2. Rename stays hidden rather than
-corrupting the studio's records and saved JSON. The existing placeholder
-`edit.rename` is not registered in WP3.
+WP3 left F2 out because `capabilities::rename_port` was false. It is true for
+the engine backend now (see "Rename" under WP4), so F2 and **Ports → Rename
+port** are registered. A backend without the capability hides the menu item,
+leaves F2 inert and keeps the action disabled in the command palette.
 
 ## WP4
 
@@ -238,13 +238,26 @@ file from the executable, but the new module keeps the nested namespace
 `vss::gui::topology_text` for its copy helpers. No product behaviour depends on
 the namespace; WP9 can flatten it when it deletes the remaining legacy files.
 
-### Rename is hidden, not faked
+### Rename
 
-`Capabilities::rename_port` is false, and `08-engine-gaps.md` says to hide
-Rename until the studio can rename safely. The node context menu therefore
-omits Rename and there is no F2. If a future backend sets the capability the
-menu item appears and emits `rename_requested`; the shell answers "Not
-available in this build." rather than doing nothing.
+`hub::rename_endpoint` changed only the hub's name table. An endpoint kept a
+`const` name, so events, traffic and `endpoint::info()` went on reporting the
+old one, and the studio's records, a saved snapshot and a pseudo terminal's
+stable link all kept it too. That is why Rename was hidden.
+
+Rename is built in three layers. `vss_core`: an endpoint's name is now guarded
+by a mutex, `endpoint::name()` returns a copy, and the hub sets it when it
+renames. This is the one change to `libs/vss_core` in the capability work; it
+fixes the hub's own rename and changes no other behaviour. `vss_studio`:
+`studio::rename_port` renames in the hub and in the studio's records, so
+`snapshot()` and the links in it use the new name, and for a pseudo terminal it
+makes the stable link again under the new name before removing the old one, so
+a refused name leaves the old link in place. Every other kind keeps the path it
+was created with, because a loopback, named pipe or driver path is fixed when
+the port is made. The GUI: `Capabilities::rename_port` is true for the engine
+backend, and the topology node menu, F2 and **Ports → Rename port** open the
+Rename dialog. Rows already written to the traffic log keep the name they had
+when they were written.
 
 ### Remove has confirmation and a limited Undo
 
@@ -429,15 +442,21 @@ Syntax errors come from `QJsonDocument::fromJson` and carry its offset, so
 they always have a line. Schema errors are found by explicit GUI checks that
 name the field (unknown port kind, unknown virtual kind, missing address,
 duplicate names, unknown link mode with a `Did you mean` suggestion, bad
-arity, missing port references and loops); the helpers locate the offending
-token in the text so "Go to line" appears where it can. The check order
-matches the hub: a loop is tested against routes created so far, and a duplex
-link's reverse route is added with it. `vss::config::from_json()` has the
-final word and `Apply` is disabled unless it accepts the document, so an
-invalid document is never applied. A schema error that only the engine can
-name hides "Go to line". `Capabilities::json_positions` stays false because
-the engine still has no positions; the GUI-side checks are best effort and
-the deviation is that they exist at all.
+arity, missing port references and loops). The line of each field comes from
+a path index of the text: one pass over the document records where every
+value starts under a path such as `ports/1/serial/baud_rate`, so a problem in
+the second port is on the second port's line and not the first match of the
+same word. The check order matches the hub: a loop is tested against routes
+created so far, and a duplex link's reverse route is added with it.
+`vss::config::from_json()` has the final word and `Apply` is disabled unless
+it accepts the document, so an invalid document is never applied. It returns
+only an error code, so when the GUI checks pass and the engine still refuses,
+the editor asks the engine again for each port on its own, then for each
+serial setting of the failing port, and reports the line of the smallest piece
+the engine refuses. No engine rule is copied into the GUI and the schema is
+unchanged. "Go to line" is hidden only when the cause is not in a port or a
+link. `Capabilities::json_positions` is true for the engine backend, because
+the editor does the placing.
 
 `Export file` in the JSON editor writes the editor text verbatim when it
 parses; `Apply` always uses the engine's parsed document. `Format` uses the
@@ -523,9 +542,10 @@ path open loses it. A snapshot restore is not exact, so none is used.
 `Capabilities::undo` is true for the engine backend and means something
 narrower: the window keeps a history (`UndoService`, 50 steps) of changes that
 have an exact inverse. Connecting a link is undone by removing it, removing a
-link by making it again with the same shape, ports, options and owner, and an
-owner change by setting the previous owner (the Topology JSON editor, the
-wizards and port changes are not recorded). A link is matched by the ports it
+link by making it again with the same shape, ports, options and owner, an
+owner change by setting the previous owner, and a rename by naming the port as
+it was (the Topology JSON editor, the wizards and adding or removing ports are
+not recorded). A link is matched by the ports it
 joins and not by id, because the engine gives a link that is made again a new
 id. No `QUndoStack` is used, because its commands are objects with their own
 lifetime and the history here is only closures over the backend.
@@ -910,7 +930,8 @@ runs. CTest uses the default (no captures) so CI does not write artifacts.
 ### Remaining limits carried past WP9
 
 The capability-gated features stay visible: peer-open and the editable line
-matrix. Benchmark extraction (see "Benchmark" above) and fault injection (see
+matrix. Rename (see "Rename" above) is no longer one of them. Benchmark
+extraction (see "Benchmark" above) and fault injection (see
 "Fault injection" above) are no longer among them. The network server role is no
 longer one of them: `vss_ports` listens for `tcp-listen://` and
 `udp-listen://` addresses, so the network dialog's server choice works for TCP

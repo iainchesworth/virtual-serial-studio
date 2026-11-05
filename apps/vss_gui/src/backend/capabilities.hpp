@@ -41,8 +41,9 @@ struct capabilities
     /// Observe whether another program opened the advertised path.  False:
     /// `endpoint_info::open` is the studio's own transport state.
     bool peer_open = false;
-    /// Rename a port safely.  False: the hub can rename but the studio's
-    /// records and saved JSON would go out of sync.
+    /// Rename a port.  The engine backend provides it through
+    /// `vss::studio::rename_port`, which keeps the hub, the studio's records
+    /// and a saved setup in step.
     bool rename_port = false;
     /// Undo and redo of changes that have an exact inverse: connecting or
     /// removing a link, and changing an owner.  Never a snapshot restore.
@@ -52,7 +53,9 @@ struct capabilities
     /// Create the diagnostic bundle.  The ZIP writer lives in the GUI layer,
     /// so this is present whenever the GUI is built.
     bool diagnostics = true;
-    /// Report JSON validation errors with a line number.
+    /// Report JSON validation errors with a line number.  The engine's
+    /// `from_json` returns only an error code, so the editor finds the line
+    /// itself (see `json_validation.cpp`); the flag says the editor does it.
     bool json_positions = false;
     /// The setup check can gather driver and device facts.
     bool setup_check = true;

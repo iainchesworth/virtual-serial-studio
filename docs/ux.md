@@ -215,21 +215,19 @@ the setup, log and environment, with traffic contents off unless chosen.
 - Should Simple collapse the topology to a list on very small screens?
 - Should the Connect dialog remember the last relationship per user?
 - Which engine capabilities are worth building next? The disabled ones are
-  undo of port changes, rename, the per-line wiring matrix, observing whether a
-  program opened a port and JSON error
-  positions. Each is a row in
+  undo of port changes, the per-line wiring matrix, observing whether a
+  program opened a port. Each is a row in
   [08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
 
 ## Roadmap
 
 1. Undo and redo for adding and removing ports, once the engine can restore
    endpoint identities exactly. Link and owner changes can be undone now.
-2. Rename a port without leaving the saved setup out of step.
-3. The per-line wiring matrix for mock fixtures. Fault injection is done.
-4. A way to see whether another program has opened a port, which would turn on
+2. The per-line wiring matrix for mock fixtures. Fault injection is done.
+3. A way to see whether another program has opened a port, which would turn on
    the *Waiting* and *Program connected* states.
-5. Reconnect for a port that failed, with the note and button the design
+4. Reconnect for a port that failed, with the note and button the design
    specifies.
-6. Real-device templates that open the attach dialog.
-7. An RFC 2217 server role, so the network endpoint can offer it as it already
+5. Real-device templates that open the attach dialog.
+6. An RFC 2217 server role, so the network endpoint can offer it as it already
    does for TCP and UDP.

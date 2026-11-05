@@ -523,7 +523,7 @@
             <location filename="../src/flows/add_port_dialog.cpp" line="548" />
             <location filename="../src/flows/add_port_dialog.cpp" line="559" />
             <source>Enter a name for the port.</source>
-            <translation>أدخل اسماً للمنفذ.</translation>
+            <translation>أدخل اسمًا للمنفذ.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="582" />
@@ -800,7 +800,7 @@
         <message>
             <location filename="../src/flows/attach_dialog.cpp" line="726" />
             <source>Enter a name for the port.</source>
-            <translation>أدخل اسماً للمنفذ.</translation>
+            <translation>أدخل اسمًا للمنفذ.</translation>
         </message>
         <message>
             <location filename="../src/flows/attach_dialog.cpp" line="736" />
@@ -4084,9 +4084,68 @@
             <translation>قد يكون برنامج آخر يستخدم الجهاز. لم يتغير شيء. أغلق ذلك البرنامج وأعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="107" />
+            <location filename="../src/shell/shell_window.cpp" line="108" />
             <source>untitled</source>
             <translation>بدون عنوان</translation>
+        </message>
+    </context>
+    <context>
+        <name>RenameDialog</name>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="24" />
+            <source>Rename port</source>
+            <translation>إعادة تسمية المنفذ</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="25" />
+            <source>Links and the saved setup use the new name.</source>
+            <translation>تستخدم الروابط والإعدادات المحفوظة الاسم الجديد.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="37" />
+            <location filename="../src/flows/rename_dialog.cpp" line="40" />
+            <source>New name</source>
+            <translation>الاسم الجديد</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="41" />
+            <source>A program that opens this port by its path may need the new path.</source>
+            <translation>قد يحتاج البرنامج الذي يفتح هذا المنفذ عبر مساره إلى المسار الجديد.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="48" />
+            <source>Cancel</source>
+            <translation>إلغاء</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="51" />
+            <source>Rename</source>
+            <translation>إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="81" />
+            <source>Enter a name for the port.</source>
+            <translation>أدخل اسمًا للمنفذ.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="89" />
+            <source>Another port is already called %1.</source>
+            <translation>يوجد منفذ آخر باسم %1 بالفعل.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="118" />
+            <source>rename</source>
+            <translation>إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="121" />
+            <source>Studio could not rename the port. Nothing was changed.</source>
+            <translation>تعذر على Studio إعادة تسمية المنفذ. لم يتغير شيء.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="122" />
+            <source> Try again.</source>
+            <translation> حاول مرة أخرى.</translation>
         </message>
     </context>
     <context>
@@ -5185,857 +5244,872 @@
     <context>
         <name>ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="202" />
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>جديد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="202" />
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>new document setup</source>
             <translation>إعداد جديد مستند</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="205" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>Open</source>
             <translation>مفتوح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="205" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>open file setup</source>
             <translation>فتح ملف إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="208" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>Open recent</source>
             <translation>فتح ملف حديث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="208" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>recent file</source>
             <translation>ملف حديث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="217" />
+            <location filename="../src/shell/shell_window.cpp" line="218" />
             <source>Setups and templates</source>
             <translation>الإعدادات والقوالب</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="218" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>template setup</source>
             <translation>قالب إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="220" />
-            <location filename="../src/shell/shell_window.cpp" line="2193" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="2220" />
             <source>Save</source>
             <translation>حفظ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="220" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
             <source>save file setup</source>
             <translation>حفظ ملف إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="223" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>Save as</source>
             <translation>حفظ باسم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="223" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>save as file</source>
             <translation>حفظ كملف</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="226" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>Export as command</source>
             <translation>تصدير كأمر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="228" />
             <source>cli command</source>
             <translation>أمر سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="229" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Diagnostic bundle</source>
             <translation>حزمة التشخيص</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="231" />
             <source>support zip</source>
             <translation>ملف دعم مضغوط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="232" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Quit</source>
             <translation>إنهاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="232" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>exit</source>
             <translation>خروج إغلاق</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="241" />
-            <location filename="../src/shell/shell_window.cpp" line="1129" />
+            <location filename="../src/shell/shell_window.cpp" line="242" />
+            <location filename="../src/shell/shell_window.cpp" line="1137" />
             <source>Undo</source>
             <translation>تراجع</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="241" />
+            <location filename="../src/shell/shell_window.cpp" line="242" />
             <source>undo stack restore</source>
             <translation>تراجع استعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
-            <location filename="../src/shell/shell_window.cpp" line="1130" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
+            <location filename="../src/shell/shell_window.cpp" line="1138" />
             <source>Redo</source>
             <translation>إعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>redo stack restore</source>
             <translation>إعادة استعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="250" />
             <source>Remove selected</source>
             <translation>إزالة المحدد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="250" />
-            <location filename="../src/shell/shell_window.cpp" line="282" />
+            <location filename="../src/shell/shell_window.cpp" line="251" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>delete remove</source>
             <translation>حذف إزالة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
             <source>Add port</source>
             <translation>إضافة منفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="261" />
             <source>new virtual create</source>
             <translation>جديد افتراضي إنشاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="259" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
             <source>Virtual port</source>
             <translation>منفذ افتراضي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Linked pair</source>
             <translation>زوج مرتبط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="264" />
             <source>pair two null modem</source>
             <translation>زوج اثنان null-modem</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="265" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Attach real device</source>
             <translation>إرفاق جهاز فعلي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>serial device</source>
             <translation>جهاز تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>Network endpoint</source>
             <translation>نقطة نهاية شبكية</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="271" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="274" />
             <source>Mock fixture</source>
             <translation>جهاز محاكاة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="275" />
             <source>fixture mock script</source>
             <translation>جهاز محاكاة وهمي برنامج نصي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="278" />
             <source>Copy port name</source>
             <translation>نسخ اسم المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>clipboard path</source>
             <translation>الحافظة المسار</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="282" />
-            <location filename="../src/shell/shell_window.cpp" line="1233" />
-            <location filename="../src/shell/shell_window.cpp" line="1768" />
-            <location filename="../src/shell/shell_window.cpp" line="1772" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
+            <location filename="../src/shell/shell_window.cpp" line="1812" />
+            <source>Rename port</source>
+            <translation>إعادة تسمية المنفذ</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <source>name change relabel</source>
+            <translation>اسم تغيير إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="1241" />
+            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
             <source>Remove port</source>
             <translation>إزالة المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="288" />
-            <location filename="../src/shell/shell_window.cpp" line="1338" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Connect ports</source>
             <translation>ربط المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
+            <location filename="../src/shell/shell_window.cpp" line="297" />
             <source>link split join redirect monitor</source>
             <translation>ارتباط تقسيم دمج إعادة توجيه مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="294" />
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="302" />
+            <location filename="../src/shell/shell_window.cpp" line="309" />
             <source>Share a device</source>
             <translation>مشاركة جهاز</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="295" />
-            <location filename="../src/shell/shell_window.cpp" line="302" />
+            <location filename="../src/shell/shell_window.cpp" line="303" />
+            <location filename="../src/shell/shell_window.cpp" line="310" />
             <source>split listeners</source>
             <translation>تقسيم مستمعين</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="305" />
+            <location filename="../src/shell/shell_window.cpp" line="313" />
             <source>Watch traffic</source>
             <translation>مراقبة حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="314" />
             <source>monitor copy</source>
             <translation>نسخ مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
-            <location filename="../src/shell/shell_window.cpp" line="1735" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1753" />
+            <location filename="../src/shell/shell_window.cpp" line="317" />
+            <location filename="../src/shell/shell_window.cpp" line="1743" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1761" />
             <source>Remove link</source>
             <translation>إزالة الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="310" />
+            <location filename="../src/shell/shell_window.cpp" line="318" />
             <source>delete disconnect</source>
             <translation>حذف فصل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="313" />
+            <location filename="../src/shell/shell_window.cpp" line="321" />
             <source>Link wiring</source>
             <translation>توصيل الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>line matrix faults</source>
             <translation>مصفوفة الخطوط أعطال</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="316" />
+            <location filename="../src/shell/shell_window.cpp" line="324" />
             <source>Owner</source>
             <translation>المالك</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="316" />
+            <location filename="../src/shell/shell_window.cpp" line="324" />
             <source>policy arbitration</source>
             <translation>سياسة تحكيم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>Fit</source>
             <translation>ملاءمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>zoom</source>
             <translation>تكبير</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="328" />
-            <location filename="../src/shell/shell_window.cpp" line="602" />
-            <location filename="../src/shell/shell_window.cpp" line="603" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="612" />
+            <location filename="../src/shell/shell_window.cpp" line="613" />
             <source>Search actions</source>
             <translation>البحث في الإجراءات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>command palette</source>
             <translation>لوحة الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="332" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Setup check</source>
             <translation>فحص الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="333" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>driver com0com permissions</source>
             <translation>برنامج التشغيل com0com الأذونات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>Benchmark</source>
             <translation>قياس الأداء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="344" />
             <source>throughput speed</source>
             <translation>الإنتاجية السرعة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>Refresh now</source>
             <translation>تحديث الآن</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>reload</source>
             <translation>إعادة تحميل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="353" />
             <source>Refreshed.</source>
             <translation>تم التحديث.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="347" />
+            <location filename="../src/shell/shell_window.cpp" line="355" />
             <source>Settings</source>
             <translation>التفضيلات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="348" />
+            <location filename="../src/shell/shell_window.cpp" line="356" />
             <source>preferences theme density refresh baud</source>
             <translation>التفضيلات السمة الكثافة التحديث الباود</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Advanced mode</source>
             <translation>الوضع المتقدم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>simple expert level</source>
             <translation>بسيط خبير مستوى</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="359" />
-            <location filename="../src/shell/shell_window.cpp" line="732" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="740" />
             <source>Monitor</source>
             <translation>مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="359" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>traffic</source>
             <translation>حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="362" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Show links as a list</source>
             <translation>عرض الارتباطات كقائمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
             <source>links topology list accessible</source>
             <translation>الارتباطات الطوبولوجيا قائمة إتاحة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="366" />
-            <location filename="../src/shell/shell_window.cpp" line="877" />
+            <location filename="../src/shell/shell_window.cpp" line="374" />
+            <location filename="../src/shell/shell_window.cpp" line="885" />
             <source>Log</source>
             <translation>السجل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="366" />
+            <location filename="../src/shell/shell_window.cpp" line="374" />
             <source>events</source>
             <translation>الأحداث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
-            <location filename="../src/shell/shell_window.cpp" line="893" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="901" />
             <source>Topology JSON</source>
             <translation>JSON الطوبولوجيا</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>editor schema</source>
             <translation>محرر مخطط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="372" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>Follow the system</source>
             <translation>اتباع النظام</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="373" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>theme colour scheme</source>
             <translation>السمة مخطط الألوان</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="382" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Light</source>
             <translation>فاتح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="382" />
-            <location filename="../src/shell/shell_window.cpp" line="392" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
+            <location filename="../src/shell/shell_window.cpp" line="400" />
             <source>theme</source>
             <translation>السمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="392" />
+            <location filename="../src/shell/shell_window.cpp" line="400" />
             <source>Dark</source>
             <translation>داكن</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="410" />
             <source>Comfortable</source>
             <translation>مريح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="403" />
-            <location filename="../src/shell/shell_window.cpp" line="413" />
+            <location filename="../src/shell/shell_window.cpp" line="411" />
+            <location filename="../src/shell/shell_window.cpp" line="421" />
             <source>density spacing</source>
             <translation>الكثافة التباعد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="420" />
             <source>Compact</source>
             <translation>مضغوط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="421" />
+            <location filename="../src/shell/shell_window.cpp" line="429" />
             <source>Reset layout</source>
             <translation>إعادة ضبط التخطيط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="422" />
+            <location filename="../src/shell/shell_window.cpp" line="430" />
             <source>docks window</source>
             <translation>اللوحات النافذة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="432" />
             <source>Show launcher</source>
             <translation>إظهار شاشة البداية</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="433" />
             <source>empty start</source>
             <translation>بداية فارغة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="429" />
+            <location filename="../src/shell/shell_window.cpp" line="437" />
             <source>Help contents</source>
             <translation>محتويات التعليمات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="430" />
+            <location filename="../src/shell/shell_window.cpp" line="438" />
             <source>manual help topics</source>
             <translation>دليل مواضيع التعليمات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="432" />
+            <location filename="../src/shell/shell_window.cpp" line="440" />
             <source>Why is nothing arriving?</source>
             <translation>لماذا لا يصل شيء؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="433" />
+            <location filename="../src/shell/shell_window.cpp" line="441" />
             <source>troubleshoot no data</source>
             <translation>استكشاف الأخطاء لا بيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>Keyboard shortcuts</source>
             <translation>اختصارات لوحة المفاتيح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>keys</source>
             <translation>مفاتيح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Copy environment</source>
             <translation>نسخ معلومات البيئة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>build bug report</source>
             <translation>بناء تقرير خلل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="440" />
+            <location filename="../src/shell/shell_window.cpp" line="448" />
             <source>About</source>
             <translation>حول</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="441" />
+            <location filename="../src/shell/shell_window.cpp" line="449" />
             <source>version licence copyright</source>
             <translation>الإصدار الترخيص حقوق النشر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
-            <location filename="../src/shell/shell_window.cpp" line="460" />
-            <location filename="../src/shell/shell_window.cpp" line="1140" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
+            <location filename="../src/shell/shell_window.cpp" line="1148" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="670" />
+            <source>Change owner</source>
+            <translation>تغيير المالك</translation>
         </message>
         <message>
             <source>Undo needs an exact restore, which this build cannot prove.</source>
             <translation type="vanished">يتطلب التراجع استعادة دقيقة، ولا يستطيع هذا الإصدار إثباتها.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="491" />
+            <location filename="../src/shell/shell_window.cpp" line="499" />
             <source>&amp;File</source>
             <translation>&amp;ملف</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="505" />
+            <location filename="../src/shell/shell_window.cpp" line="513" />
             <source>&amp;Edit</source>
             <translation>&amp;تحرير</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="511" />
+            <location filename="../src/shell/shell_window.cpp" line="519" />
             <source>&amp;Ports</source>
             <translation>&amp;المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;Topology</source>
             <translation>&amp;الطوبولوجيا</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="534" />
+            <location filename="../src/shell/shell_window.cpp" line="544" />
             <source>&amp;Tools</source>
             <translation>&amp;أدوات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="542" />
+            <location filename="../src/shell/shell_window.cpp" line="552" />
             <source>&amp;View</source>
             <translation>&amp;عرض</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="550" />
+            <location filename="../src/shell/shell_window.cpp" line="560" />
             <source>Theme</source>
             <translation>السمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="554" />
+            <location filename="../src/shell/shell_window.cpp" line="564" />
             <source>Density</source>
             <translation>الكثافة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="561" />
+            <location filename="../src/shell/shell_window.cpp" line="571" />
             <source>&amp;Help</source>
             <translation>&amp;مساعدة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="571" />
+            <location filename="../src/shell/shell_window.cpp" line="581" />
             <source>Main toolbar</source>
             <translation>شريط الأدوات الرئيسي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="660" />
-            <source>Change owner</source>
-            <translation>تغيير المالك</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="704" />
             <source>Not available in this build.</source>
-            <translation>غير متاح في هذا الإصدار.</translation>
+            <translation type="vanished">غير متاح في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="727" />
+            <location filename="../src/shell/shell_window.cpp" line="735" />
             <source>Ports</source>
             <translation>المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="729" />
-            <location filename="../src/shell/shell_window.cpp" line="1182" />
+            <location filename="../src/shell/shell_window.cpp" line="737" />
+            <location filename="../src/shell/shell_window.cpp" line="1190" />
             <source>Inspector</source>
             <translation>المفتش</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="730" />
+            <location filename="../src/shell/shell_window.cpp" line="738" />
             <source>Send</source>
             <translation>إرسال</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="765" />
-            <location filename="../src/shell/shell_window.cpp" line="1261" />
+            <location filename="../src/shell/shell_window.cpp" line="773" />
+            <location filename="../src/shell/shell_window.cpp" line="1269" />
             <source>Copied %1.</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="781" />
+            <location filename="../src/shell/shell_window.cpp" line="789" />
             <source>Queued %1 bytes to %2.</source>
             <translation>أُدرج %1 بايت في قائمة الإرسال إلى %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="837" />
+            <location filename="../src/shell/shell_window.cpp" line="845" />
             <source>Links</source>
             <translation>الارتباطات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="892" />
+            <location filename="../src/shell/shell_window.cpp" line="900" />
             <source>Applied the topology JSON.</source>
             <translation>تم تطبيق JSON الطوبولوجيا.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1107" />
+            <location filename="../src/shell/shell_window.cpp" line="1115" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1129" />
+            <location filename="../src/shell/shell_window.cpp" line="1137" />
             <source>Undo %1</source>
             <translation>تراجع عن %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1130" />
+            <location filename="../src/shell/shell_window.cpp" line="1138" />
             <source>Redo %1</source>
             <translation>إعادة %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1142" />
-            <source>Reverses connecting or removing a link and changing an owner.</source>
-            <translation>يتراجع عن إنشاء رابط أو إزالته وعن تغيير المالك.</translation>
+            <location filename="../src/shell/shell_window.cpp" line="1150" />
+            <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
+            <translation>يتراجع عن إنشاء رابط أو إزالته وعن تغيير المالك وعن إعادة تسمية منفذ.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1144" />
+            <location filename="../src/shell/shell_window.cpp" line="1152" />
             <source>This build cannot reverse changes.</source>
             <translation>لا يمكن لهذا الإصدار التراجع عن التغييرات.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1152" />
+            <location filename="../src/shell/shell_window.cpp" line="1160" />
             <source>Undid %1.</source>
             <translation>تم التراجع عن %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>تعذر التراجع عن %1. تغيّر الإعداد منذ ذلك الحين.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redid %1.</source>
             <translation>تمت إعادة %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1166" />
+            <location filename="../src/shell/shell_window.cpp" line="1174" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>تعذرت إعادة %1. تغيّر الإعداد منذ ذلك الحين.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="1189" />
             <source>Ports %1</source>
             <translation>المنافذ %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1186" />
+            <location filename="../src/shell/shell_window.cpp" line="1194" />
             <source>Inspector %1</source>
             <translation>المفتش %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1230" />
+            <location filename="../src/shell/shell_window.cpp" line="1238" />
             <source>Remove %1?</source>
             <translation>إزالة %1؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1231" />
+            <location filename="../src/shell/shell_window.cpp" line="1239" />
             <source>The port and its links will be removed. This cannot be undone.</source>
             <translation>سيُزال المنفذ وارتباطاته. لا يمكن التراجع عن ذلك.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1233" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1772" />
-            <location filename="../src/shell/shell_window.cpp" line="2192" />
+            <location filename="../src/shell/shell_window.cpp" line="1241" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="2219" />
             <source>Cancel</source>
             <translation>إلغاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1240" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="1248" />
+            <location filename="../src/shell/shell_window.cpp" line="1788" />
             <source>Could not remove %1</source>
             <translation>تعذرت إزالة %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1249" />
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1257" />
+            <location filename="../src/shell/shell_window.cpp" line="1796" />
             <source>Removed %1.</source>
             <translation>تمت إزالة %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1349" />
+            <location filename="../src/shell/shell_window.cpp" line="1357" />
             <source>Sharing is not available in this build.</source>
             <translation>المشاركة غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1376" />
+            <location filename="../src/shell/shell_window.cpp" line="1384" />
             <source>Networking is not available in this build.</source>
             <translation>الشبكات غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1398" />
+            <location filename="../src/shell/shell_window.cpp" line="1406" />
             <source>Bridge is running on port %1.</source>
             <translation>الجسر يعمل على المنفذ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1399" />
+            <location filename="../src/shell/shell_window.cpp" line="1407" />
             <source>Open monitor</source>
             <translation>فتح المراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1420" />
-            <location filename="../src/shell/shell_window.cpp" line="2104" />
-            <location filename="../src/shell/shell_window.cpp" line="2116" />
+            <location filename="../src/shell/shell_window.cpp" line="1428" />
+            <location filename="../src/shell/shell_window.cpp" line="2131" />
+            <location filename="../src/shell/shell_window.cpp" line="2143" />
             <source>Could not open %1</source>
             <translation>تعذر فتح %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1421" />
+            <location filename="../src/shell/shell_window.cpp" line="1429" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>يحتاج الإعداد إلى جهاز أو نقطة نهاية شبكية غير متاحة على هذا الحاسوب. لم يتغير شيء. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1444" />
-            <location filename="../src/shell/shell_window.cpp" line="2128" />
-            <location filename="../src/shell/shell_window.cpp" line="2156" />
+            <location filename="../src/shell/shell_window.cpp" line="1452" />
+            <location filename="../src/shell/shell_window.cpp" line="2155" />
+            <location filename="../src/shell/shell_window.cpp" line="2183" />
             <source>%1 ports, %2 links</source>
             <translation>%1 من المنافذ، %2 من الارتباطات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1536" />
-            <location filename="../src/shell/shell_window.cpp" line="1559" />
+            <location filename="../src/shell/shell_window.cpp" line="1544" />
+            <location filename="../src/shell/shell_window.cpp" line="1567" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>تم إنشاء الزوج المرتبط. يفتح البرنامج A المنفذ %1؛ ويفتح البرنامج B المنفذ %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1595" />
+            <location filename="../src/shell/shell_window.cpp" line="1603" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>مراقبة %1. المراقِب هو %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1645" />
+            <location filename="../src/shell/shell_window.cpp" line="1653" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 جزء من حزمة عمل لاحقة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1651" />
+            <location filename="../src/shell/shell_window.cpp" line="1659" />
             <source>%1 arrives with %2.</source>
             <translation>يصل %1 مع %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1736" />
+            <location filename="../src/shell/shell_window.cpp" line="1744" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>إزالة هذا الارتباط؟ %1. لا يُحفظ شيء حتى تحفظ الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1755" />
             <source>Could not remove the link</source>
             <translation>تعذرت إزالة الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1756" />
+            <location filename="../src/shell/shell_window.cpp" line="1764" />
             <source>Removed the link.</source>
             <translation>تمت إزالة الارتباط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1769" />
+            <location filename="../src/shell/shell_window.cpp" line="1777" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>إزالة %1 وارتباطاتها؟ لا يُحفظ شيء حتى تحفظ الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1845" />
+            <location filename="../src/shell/shell_window.cpp" line="1815" />
+            <source>Renamed %1 to %2.</source>
+            <translation>تمت إعادة تسمية %1 إلى %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1872" />
             <source>Add a port before opening the line matrix.</source>
             <translation>أضف منفذاً قبل فتح مصفوفة الخطوط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1880" />
+            <location filename="../src/shell/shell_window.cpp" line="1907" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>اختر هدف الدمج ذي سياسة المالك للتحكم في من يكتب.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>وضع الاختبار. تعمل المنافذ الجديدة داخل Virtual Serial Studio فقط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1982" />
+            <location filename="../src/shell/shell_window.cpp" line="2009" />
             <source>Could not restart as administrator</source>
             <translation>تعذرت إعادة التشغيل كمسؤول</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2060" />
+            <location filename="../src/shell/shell_window.cpp" line="2087" />
             <source>Environment copied.</source>
             <translation>تم نسخ معلومات البيئة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2079" />
+            <location filename="../src/shell/shell_window.cpp" line="2106" />
             <source>Started a new setup.</source>
             <translation>بدأ إعداد جديد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2089" />
+            <location filename="../src/shell/shell_window.cpp" line="2116" />
             <source>Open setup</source>
             <translation>فتح إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2090" />
+            <location filename="../src/shell/shell_window.cpp" line="2117" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>إعدادات Virtual Serial Studio (*.json);;كل الملفات (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2131" />
+            <location filename="../src/shell/shell_window.cpp" line="2158" />
             <source>Opened %1.</source>
             <translation>تم فتح %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2147" />
+            <location filename="../src/shell/shell_window.cpp" line="2174" />
             <source>Could not save this setup</source>
             <translation>تعذر حفظ هذا الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2160" />
-            <location filename="../src/shell/shell_window.cpp" line="2161" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
             <source>Saved %1.</source>
             <translation>تم حفظ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2167" />
+            <location filename="../src/shell/shell_window.cpp" line="2194" />
             <source>Save setup</source>
             <translation>حفظ الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2169" />
+            <location filename="../src/shell/shell_window.cpp" line="2196" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>إعدادات Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <location filename="../src/shell/shell_window.cpp" line="2214" />
             <source>Save changes to %1?</source>
             <translation>حفظ التغييرات في %1؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <location filename="../src/shell/shell_window.cpp" line="2215" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>تغيرت منافذك وارتباطاتك منذ آخر حفظ. يمكنك إيقاف هذا التنبيه من التفضيلات.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2218" />
             <source>Don't save</source>
             <translation>عدم الحفظ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2256" />
+            <location filename="../src/shell/shell_window.cpp" line="2283" />
             <source>Layout reset.</source>
             <translation>أُعيد ضبط التخطيط.</translation>
         </message>
@@ -6677,338 +6751,339 @@
     <context>
         <name>TopologyJson</name>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="34" />
+            <location filename="../src/advanced/json_validation.cpp" line="33" />
             <source>1 port, all names unique</source>
             <translation>منفذ واحد، كل الأسماء فريدة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="36" />
+            <location filename="../src/advanced/json_validation.cpp" line="35" />
             <source>%1 ports, all names unique</source>
             <translation>%1 من المنافذ، كل الأسماء فريدة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="41" />
+            <location filename="../src/advanced/json_validation.cpp" line="40" />
             <source>1 port, a name is used twice</source>
             <translation>منفذ واحد، اسم مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="43" />
+            <location filename="../src/advanced/json_validation.cpp" line="42" />
             <source>%1 ports, a name is used twice</source>
             <translation>%1 من المنافذ، اسم مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="52" />
+            <location filename="../src/advanced/json_validation.cpp" line="51" />
             <source>1 link, no loops</source>
             <translation>ارتباط واحد، بلا حلقات</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="54" />
+            <location filename="../src/advanced/json_validation.cpp" line="53" />
             <source>%1 links, no loops</source>
             <translation>%1 من الارتباطات، بلا حلقات</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="58" />
+            <location filename="../src/advanced/json_validation.cpp" line="57" />
             <source>1 link, a loop was found</source>
             <translation>ارتباط واحد، عُثر على حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="60" />
+            <location filename="../src/advanced/json_validation.cpp" line="59" />
             <source>%1 links, a loop was found</source>
             <translation>%1 من الارتباطات، عُثر على حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="199" />
+            <location filename="../src/advanced/json_validation.cpp" line="402" />
             <source>Valid, version 1</source>
             <translation>صالح، الإصدار 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="202" />
+            <location filename="../src/advanced/json_validation.cpp" line="405" />
             <source>Not valid</source>
             <translation>غير صالح</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="217" />
-            <location filename="../src/advanced/json_validation.cpp" line="242" />
-            <location filename="../src/advanced/json_validation.cpp" line="269" />
-            <location filename="../src/advanced/json_validation.cpp" line="302" />
-            <location filename="../src/advanced/json_validation.cpp" line="331" />
-            <location filename="../src/advanced/json_validation.cpp" line="355" />
-            <location filename="../src/advanced/json_validation.cpp" line="394" />
-            <location filename="../src/advanced/json_validation.cpp" line="442" />
-            <location filename="../src/advanced/json_validation.cpp" line="491" />
-            <location filename="../src/advanced/json_validation.cpp" line="526" />
-            <location filename="../src/advanced/json_validation.cpp" line="562" />
-            <location filename="../src/advanced/json_validation.cpp" line="592" />
-            <location filename="../src/advanced/json_validation.cpp" line="627" />
-            <location filename="../src/advanced/json_validation.cpp" line="691" />
-            <location filename="../src/advanced/json_validation.cpp" line="731" />
-            <location filename="../src/advanced/json_validation.cpp" line="765" />
-            <location filename="../src/advanced/json_validation.cpp" line="812" />
-            <location filename="../src/advanced/json_validation.cpp" line="849" />
+            <location filename="../src/advanced/json_validation.cpp" line="420" />
+            <location filename="../src/advanced/json_validation.cpp" line="445" />
+            <location filename="../src/advanced/json_validation.cpp" line="473" />
+            <location filename="../src/advanced/json_validation.cpp" line="506" />
+            <location filename="../src/advanced/json_validation.cpp" line="533" />
+            <location filename="../src/advanced/json_validation.cpp" line="560" />
+            <location filename="../src/advanced/json_validation.cpp" line="588" />
+            <location filename="../src/advanced/json_validation.cpp" line="629" />
+            <location filename="../src/advanced/json_validation.cpp" line="670" />
+            <location filename="../src/advanced/json_validation.cpp" line="705" />
+            <location filename="../src/advanced/json_validation.cpp" line="741" />
+            <location filename="../src/advanced/json_validation.cpp" line="773" />
+            <location filename="../src/advanced/json_validation.cpp" line="808" />
+            <location filename="../src/advanced/json_validation.cpp" line="874" />
+            <location filename="../src/advanced/json_validation.cpp" line="914" />
+            <location filename="../src/advanced/json_validation.cpp" line="948" />
+            <location filename="../src/advanced/json_validation.cpp" line="1004" />
+            <location filename="../src/advanced/json_validation.cpp" line="1041" />
             <source>Valid JSON, version 1</source>
             <translation>JSON صالح، الإصدار 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="220" />
-            <location filename="../src/advanced/json_validation.cpp" line="245" />
-            <location filename="../src/advanced/json_validation.cpp" line="272" />
-            <location filename="../src/advanced/json_validation.cpp" line="305" />
-            <location filename="../src/advanced/json_validation.cpp" line="334" />
-            <location filename="../src/advanced/json_validation.cpp" line="358" />
-            <location filename="../src/advanced/json_validation.cpp" line="397" />
-            <location filename="../src/advanced/json_validation.cpp" line="445" />
-            <location filename="../src/advanced/json_validation.cpp" line="494" />
-            <location filename="../src/advanced/json_validation.cpp" line="529" />
-            <location filename="../src/advanced/json_validation.cpp" line="565" />
-            <location filename="../src/advanced/json_validation.cpp" line="595" />
-            <location filename="../src/advanced/json_validation.cpp" line="630" />
-            <location filename="../src/advanced/json_validation.cpp" line="694" />
-            <location filename="../src/advanced/json_validation.cpp" line="734" />
-            <location filename="../src/advanced/json_validation.cpp" line="768" />
-            <location filename="../src/advanced/json_validation.cpp" line="815" />
+            <location filename="../src/advanced/json_validation.cpp" line="423" />
+            <location filename="../src/advanced/json_validation.cpp" line="448" />
+            <location filename="../src/advanced/json_validation.cpp" line="476" />
+            <location filename="../src/advanced/json_validation.cpp" line="509" />
+            <location filename="../src/advanced/json_validation.cpp" line="536" />
+            <location filename="../src/advanced/json_validation.cpp" line="563" />
+            <location filename="../src/advanced/json_validation.cpp" line="591" />
+            <location filename="../src/advanced/json_validation.cpp" line="632" />
+            <location filename="../src/advanced/json_validation.cpp" line="673" />
+            <location filename="../src/advanced/json_validation.cpp" line="708" />
+            <location filename="../src/advanced/json_validation.cpp" line="744" />
+            <location filename="../src/advanced/json_validation.cpp" line="776" />
+            <location filename="../src/advanced/json_validation.cpp" line="811" />
+            <location filename="../src/advanced/json_validation.cpp" line="877" />
+            <location filename="../src/advanced/json_validation.cpp" line="917" />
+            <location filename="../src/advanced/json_validation.cpp" line="951" />
+            <location filename="../src/advanced/json_validation.cpp" line="1007" />
             <source>Ports, all names unique</source>
             <translation>المنافذ، كل الأسماء فريدة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="223" />
-            <location filename="../src/advanced/json_validation.cpp" line="248" />
-            <location filename="../src/advanced/json_validation.cpp" line="275" />
-            <location filename="../src/advanced/json_validation.cpp" line="308" />
-            <location filename="../src/advanced/json_validation.cpp" line="337" />
-            <location filename="../src/advanced/json_validation.cpp" line="361" />
-            <location filename="../src/advanced/json_validation.cpp" line="400" />
-            <location filename="../src/advanced/json_validation.cpp" line="448" />
-            <location filename="../src/advanced/json_validation.cpp" line="497" />
-            <location filename="../src/advanced/json_validation.cpp" line="532" />
-            <location filename="../src/advanced/json_validation.cpp" line="568" />
-            <location filename="../src/advanced/json_validation.cpp" line="598" />
-            <location filename="../src/advanced/json_validation.cpp" line="633" />
-            <location filename="../src/advanced/json_validation.cpp" line="697" />
-            <location filename="../src/advanced/json_validation.cpp" line="737" />
-            <location filename="../src/advanced/json_validation.cpp" line="771" />
-            <location filename="../src/advanced/json_validation.cpp" line="818" />
+            <location filename="../src/advanced/json_validation.cpp" line="426" />
+            <location filename="../src/advanced/json_validation.cpp" line="451" />
+            <location filename="../src/advanced/json_validation.cpp" line="479" />
+            <location filename="../src/advanced/json_validation.cpp" line="512" />
+            <location filename="../src/advanced/json_validation.cpp" line="539" />
+            <location filename="../src/advanced/json_validation.cpp" line="566" />
+            <location filename="../src/advanced/json_validation.cpp" line="594" />
+            <location filename="../src/advanced/json_validation.cpp" line="635" />
+            <location filename="../src/advanced/json_validation.cpp" line="676" />
+            <location filename="../src/advanced/json_validation.cpp" line="711" />
+            <location filename="../src/advanced/json_validation.cpp" line="747" />
+            <location filename="../src/advanced/json_validation.cpp" line="779" />
+            <location filename="../src/advanced/json_validation.cpp" line="814" />
+            <location filename="../src/advanced/json_validation.cpp" line="880" />
+            <location filename="../src/advanced/json_validation.cpp" line="920" />
+            <location filename="../src/advanced/json_validation.cpp" line="954" />
+            <location filename="../src/advanced/json_validation.cpp" line="1010" />
             <source>Links, no loops</source>
             <translation>الارتباطات، بلا حلقات</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="226" />
+            <location filename="../src/advanced/json_validation.cpp" line="292" />
+            <location filename="../src/advanced/json_validation.cpp" line="429" />
             <source>Line %1: %2</source>
             <translation>السطر %1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="229" />
+            <location filename="../src/advanced/json_validation.cpp" line="432" />
             <source>The line is highlighted and nothing was applied.</source>
             <translation>السطر مميّز ولم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="251" />
+            <location filename="../src/advanced/json_validation.cpp" line="454" />
             <source>Line 1: the document must be a JSON object</source>
             <translation>السطر 1: يجب أن يكون المستند كائن JSON</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="253" />
+            <location filename="../src/advanced/json_validation.cpp" line="456" />
             <source>A setup file starts with a { and ends with a }.</source>
             <translation>يبدأ ملف الإعداد بالرمز { وينتهي بالرمز }.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="280" />
+            <location filename="../src/advanced/json_validation.cpp" line="484" />
             <source>Line %1: version must be 1</source>
             <translation>السطر %1: يجب أن تكون قيمة version هي 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="283" />
+            <location filename="../src/advanced/json_validation.cpp" line="487" />
             <source>The document needs "version": 1</source>
             <translation>يحتاج المستند إلى "version": 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="286" />
-            <location filename="../src/advanced/json_validation.cpp" line="313" />
-            <location filename="../src/advanced/json_validation.cpp" line="342" />
-            <location filename="../src/advanced/json_validation.cpp" line="573" />
-            <location filename="../src/advanced/json_validation.cpp" line="610" />
-            <location filename="../src/advanced/json_validation.cpp" line="786" />
+            <location filename="../src/advanced/json_validation.cpp" line="490" />
+            <location filename="../src/advanced/json_validation.cpp" line="519" />
+            <location filename="../src/advanced/json_validation.cpp" line="547" />
+            <location filename="../src/advanced/json_validation.cpp" line="754" />
+            <location filename="../src/advanced/json_validation.cpp" line="791" />
+            <location filename="../src/advanced/json_validation.cpp" line="978" />
             <source>Nothing was applied.</source>
             <translation>لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="311" />
+            <location filename="../src/advanced/json_validation.cpp" line="517" />
             <source>"ports" must be a list</source>
             <translation>يجب أن تكون "ports" قائمة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="340" />
+            <location filename="../src/advanced/json_validation.cpp" line="545" />
             <source>Each port must be an object</source>
             <translation>يجب أن يكون كل منفذ كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="367" />
+            <location filename="../src/advanced/json_validation.cpp" line="572" />
             <source>Line %1: a port has no name</source>
             <translation>السطر %1: منفذ بلا اسم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="370" />
+            <location filename="../src/advanced/json_validation.cpp" line="575" />
             <source>A port has no name</source>
             <translation>منفذ بلا اسم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="372" />
+            <location filename="../src/advanced/json_validation.cpp" line="577" />
             <source>Every port needs a name so links can refer to it.</source>
             <translation>يحتاج كل منفذ إلى اسم ليمكن للارتباطات الإشارة إليه.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="405" />
+            <location filename="../src/advanced/json_validation.cpp" line="599" />
             <source>Line %1: the name "%2" is used twice</source>
             <translation>السطر %1: الاسم "%2" مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="410" />
+            <location filename="../src/advanced/json_validation.cpp" line="604" />
             <source>The name "%1" is used twice</source>
             <translation>الاسم "%1" مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="413" />
+            <location filename="../src/advanced/json_validation.cpp" line="607" />
             <source>Port names identify ports in links, so each name must be unique. Nothing was applied.</source>
             <translation>تحدد أسماء المنافذ المنافذ في الارتباطات، لذا يجب أن يكون كل اسم فريداً. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="454" />
+            <location filename="../src/advanced/json_validation.cpp" line="641" />
             <source>Line %1: unknown port kind "%2"</source>
             <translation>السطر %1: نوع منفذ غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="458" />
+            <location filename="../src/advanced/json_validation.cpp" line="645" />
             <source>Unknown port kind "%1"</source>
             <translation>نوع منفذ غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="461" />
+            <location filename="../src/advanced/json_validation.cpp" line="648" />
             <source>Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was applied.</source>
             <translation>استخدم virtual أو physical أو tcp أو udp أو rfc2217 أو mock. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="504" />
+            <location filename="../src/advanced/json_validation.cpp" line="683" />
             <source>Line %1: unknown virtual kind "%2"</source>
             <translation>السطر %1: نوع افتراضي غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="509" />
+            <location filename="../src/advanced/json_validation.cpp" line="688" />
             <source>Unknown virtual kind "%1"</source>
             <translation>نوع افتراضي غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="512" />
+            <location filename="../src/advanced/json_validation.cpp" line="691" />
             <source>Use auto, pty, named-pipe, loopback or windows-driver. Nothing was applied.</source>
             <translation>استخدم auto أو pty أو named-pipe أو loopback أو windows-driver. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="539" />
+            <location filename="../src/advanced/json_validation.cpp" line="718" />
             <source>Line %1: port "%2" has no address</source>
             <translation>السطر %1: المنفذ "%2" بلا عنوان</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="544" />
+            <location filename="../src/advanced/json_validation.cpp" line="723" />
             <source>Port "%1" has no address</source>
             <translation>المنفذ "%1" بلا عنوان</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="547" />
+            <location filename="../src/advanced/json_validation.cpp" line="726" />
             <source>A physical or network port needs a uri. Nothing was applied.</source>
             <translation>يحتاج المنفذ الفعلي أو الشبكي إلى uri. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="571" />
+            <location filename="../src/advanced/json_validation.cpp" line="752" />
             <source>"links" must be a list</source>
             <translation>يجب أن تكون "links" قائمة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="604" />
+            <location filename="../src/advanced/json_validation.cpp" line="785" />
             <source>Line %1: each link must be an object</source>
             <translation>السطر %1: يجب أن يكون كل ارتباط كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="608" />
+            <location filename="../src/advanced/json_validation.cpp" line="789" />
             <source>Each link must be an object</source>
             <translation>يجب أن يكون كل ارتباط كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="639" />
+            <location filename="../src/advanced/json_validation.cpp" line="822" />
             <source>Line %1: unknown link mode "%2"</source>
             <translation>السطر %1: وضع ارتباط غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="643" />
+            <location filename="../src/advanced/json_validation.cpp" line="826" />
             <source>Unknown link mode "%1"</source>
             <translation>وضع ارتباط غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="650" />
+            <location filename="../src/advanced/json_validation.cpp" line="833" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
             <translation>هل تقصد "%1"؟ السطر مميّز ولم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="660" />
+            <location filename="../src/advanced/json_validation.cpp" line="843" />
             <source>Use duplex, split, join, redirect or monitor. Nothing was applied.</source>
             <translation>استخدم duplex أو split أو join أو redirect أو monitor. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="703" />
+            <location filename="../src/advanced/json_validation.cpp" line="886" />
             <source>Line %1: a link needs ports on both sides</source>
             <translation>السطر %1: يحتاج الارتباط إلى منافذ على الجانبين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="707" />
+            <location filename="../src/advanced/json_validation.cpp" line="890" />
             <source>A link needs ports on both sides</source>
             <translation>يحتاج الارتباط إلى منافذ على الجانبين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="709" />
+            <location filename="../src/advanced/json_validation.cpp" line="892" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
             <translation>يجب أن تكون sources وtargets قوائم غير فارغة من أسماء المنافذ. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="743" />
+            <location filename="../src/advanced/json_validation.cpp" line="926" />
             <source>Line %1: "%2" has the wrong number of ports</source>
             <translation>السطر %1: "%2" فيه عدد خاطئ من المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="748" />
+            <location filename="../src/advanced/json_validation.cpp" line="931" />
             <source>"%1" has the wrong number of ports</source>
             <translation>"%1" فيه عدد خاطئ من المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="752" />
+            <location filename="../src/advanced/json_validation.cpp" line="935" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
             <translation>يربط ارتباط duplex أو redirect أو monitor منفذاً بمنفذ واحد؛ وللارتباط split مصدر واحد؛ وللارتباط join هدف واحد. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="778" />
+            <location filename="../src/advanced/json_validation.cpp" line="970" />
             <source>Line %1: no port is called "%2"</source>
             <translation>السطر %1: لا يوجد منفذ باسم "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="783" />
+            <location filename="../src/advanced/json_validation.cpp" line="975" />
             <source>No port is called "%1"</source>
             <translation>لا يوجد منفذ باسم "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="824" />
+            <location filename="../src/advanced/json_validation.cpp" line="1016" />
             <source>Line %1: these links create a loop</source>
             <translation>السطر %1: هذه الارتباطات تنشئ حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="827" />
+            <location filename="../src/advanced/json_validation.cpp" line="1019" />
             <source>These links create a loop</source>
             <translation>هذه الارتباطات تنشئ حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="829" />
+            <location filename="../src/advanced/json_validation.cpp" line="1021" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
             <translation>ستدور البايتات إلى الأبد، لذا يرفض المحور الحلقة ولم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="858" />
-            <location filename="../src/advanced/json_validation.cpp" line="862" />
-            <location filename="../src/advanced/json_validation.cpp" line="881" />
+            <location filename="../src/advanced/json_validation.cpp" line="1050" />
+            <location filename="../src/advanced/json_validation.cpp" line="1056" />
+            <location filename="../src/advanced/json_validation.cpp" line="1076" />
             <source>The setup format rejected this document</source>
             <translation>رفض تنسيق الإعداد هذا المستند</translation>
         </message>
@@ -7519,7 +7594,7 @@
             <location filename="../src/flows/watch_dialog.cpp" line="247" />
             <location filename="../src/flows/watch_dialog.cpp" line="265" />
             <source> Try again.</source>
-            <translation> أعد المحاولة.</translation>
+            <translation> حاول مرة أخرى.</translation>
         </message>
         <message>
             <location filename="../src/flows/watch_dialog.cpp" line="263" />
@@ -8372,7 +8447,7 @@
             <location filename="../src/flows/add_port_dialog.cpp" line="548" />
             <location filename="../src/flows/add_port_dialog.cpp" line="559" />
             <source>Enter a name for the port.</source>
-            <translation>أدخل اسماً للمنفذ.</translation>
+            <translation>أدخل اسمًا للمنفذ.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="582" />
@@ -8636,7 +8711,7 @@
         <message>
             <location filename="../src/flows/attach_dialog.cpp" line="726" />
             <source>Enter a name for the port.</source>
-            <translation>أدخل اسماً للمنفذ.</translation>
+            <translation>أدخل اسمًا للمنفذ.</translation>
         </message>
         <message>
             <location filename="../src/flows/attach_dialog.cpp" line="736" />
@@ -11049,6 +11124,65 @@
         </message>
     </context>
     <context>
+        <name>vss::gui::RenameDialog</name>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="24" />
+            <source>Rename port</source>
+            <translation>إعادة تسمية المنفذ</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="25" />
+            <source>Links and the saved setup use the new name.</source>
+            <translation>تستخدم الروابط والإعدادات المحفوظة الاسم الجديد.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="37" />
+            <location filename="../src/flows/rename_dialog.cpp" line="40" />
+            <source>New name</source>
+            <translation>الاسم الجديد</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="41" />
+            <source>A program that opens this port by its path may need the new path.</source>
+            <translation>قد يحتاج البرنامج الذي يفتح هذا المنفذ عبر مساره إلى المسار الجديد.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="48" />
+            <source>Cancel</source>
+            <translation>إلغاء</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="51" />
+            <source>Rename</source>
+            <translation>إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="81" />
+            <source>Enter a name for the port.</source>
+            <translation>أدخل اسمًا للمنفذ.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="89" />
+            <source>Another port is already called %1.</source>
+            <translation>يوجد منفذ آخر باسم %1 بالفعل.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="118" />
+            <source>rename</source>
+            <translation>إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="121" />
+            <source>Studio could not rename the port. Nothing was changed.</source>
+            <translation>تعذر على Studio إعادة تسمية المنفذ. لم يتغير شيء.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/rename_dialog.cpp" line="122" />
+            <source> Try again.</source>
+            <translation> حاول مرة أخرى.</translation>
+        </message>
+    </context>
+    <context>
         <name>vss::gui::SendPanel</name>
         <message>
             <location filename="../src/panes/send_panel.cpp" line="70" />
@@ -11642,857 +11776,872 @@
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="202" />
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>جديد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="202" />
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>new document setup</source>
             <translation>إعداد جديد مستند</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="205" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>Open</source>
             <translation>مفتوح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="205" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>open file setup</source>
             <translation>فتح ملف إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="208" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>Open recent</source>
             <translation>فتح ملف حديث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="208" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>recent file</source>
             <translation>ملف حديث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="217" />
+            <location filename="../src/shell/shell_window.cpp" line="218" />
             <source>Setups and templates</source>
             <translation>الإعدادات والقوالب</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="218" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>template setup</source>
             <translation>قالب إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="220" />
-            <location filename="../src/shell/shell_window.cpp" line="2193" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="2220" />
             <source>Save</source>
             <translation>حفظ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="220" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
             <source>save file setup</source>
             <translation>حفظ ملف إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="223" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>Save as</source>
             <translation>حفظ باسم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="223" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>save as file</source>
             <translation>حفظ كملف</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="226" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>Export as command</source>
             <translation>تصدير كأمر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="228" />
             <source>cli command</source>
             <translation>أمر سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="229" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Diagnostic bundle</source>
             <translation>حزمة التشخيص</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="231" />
             <source>support zip</source>
             <translation>ملف دعم مضغوط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="232" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Quit</source>
             <translation>إنهاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="232" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>exit</source>
             <translation>خروج إغلاق</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="241" />
-            <location filename="../src/shell/shell_window.cpp" line="1129" />
+            <location filename="../src/shell/shell_window.cpp" line="242" />
+            <location filename="../src/shell/shell_window.cpp" line="1137" />
             <source>Undo</source>
             <translation>تراجع</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="241" />
+            <location filename="../src/shell/shell_window.cpp" line="242" />
             <source>undo stack restore</source>
             <translation>تراجع استعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
-            <location filename="../src/shell/shell_window.cpp" line="1130" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
+            <location filename="../src/shell/shell_window.cpp" line="1138" />
             <source>Redo</source>
             <translation>إعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>redo stack restore</source>
             <translation>إعادة استعادة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="250" />
             <source>Remove selected</source>
             <translation>إزالة المحدد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="250" />
-            <location filename="../src/shell/shell_window.cpp" line="282" />
+            <location filename="../src/shell/shell_window.cpp" line="251" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>delete remove</source>
             <translation>حذف إزالة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
             <source>Add port</source>
             <translation>إضافة منفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="261" />
             <source>new virtual create</source>
             <translation>جديد افتراضي إنشاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="259" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
             <source>Virtual port</source>
             <translation>منفذ افتراضي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Linked pair</source>
             <translation>زوج مرتبط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="264" />
             <source>pair two null modem</source>
             <translation>زوج اثنان null-modem</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="265" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Attach real device</source>
             <translation>إرفاق جهاز فعلي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>serial device</source>
             <translation>جهاز تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>Network endpoint</source>
             <translation>نقطة نهاية شبكية</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="271" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="274" />
             <source>Mock fixture</source>
             <translation>جهاز محاكاة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="275" />
             <source>fixture mock script</source>
             <translation>جهاز محاكاة وهمي برنامج نصي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="278" />
             <source>Copy port name</source>
             <translation>نسخ اسم المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>clipboard path</source>
             <translation>الحافظة المسار</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="282" />
-            <location filename="../src/shell/shell_window.cpp" line="1233" />
-            <location filename="../src/shell/shell_window.cpp" line="1768" />
-            <location filename="../src/shell/shell_window.cpp" line="1772" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
+            <location filename="../src/shell/shell_window.cpp" line="1812" />
+            <source>Rename port</source>
+            <translation>إعادة تسمية المنفذ</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <source>name change relabel</source>
+            <translation>اسم تغيير إعادة تسمية</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="1241" />
+            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
             <source>Remove port</source>
             <translation>إزالة المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="288" />
-            <location filename="../src/shell/shell_window.cpp" line="1338" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Connect ports</source>
             <translation>ربط المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
+            <location filename="../src/shell/shell_window.cpp" line="297" />
             <source>link split join redirect monitor</source>
             <translation>ارتباط تقسيم دمج إعادة توجيه مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="294" />
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="302" />
+            <location filename="../src/shell/shell_window.cpp" line="309" />
             <source>Share a device</source>
             <translation>مشاركة جهاز</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="295" />
-            <location filename="../src/shell/shell_window.cpp" line="302" />
+            <location filename="../src/shell/shell_window.cpp" line="303" />
+            <location filename="../src/shell/shell_window.cpp" line="310" />
             <source>split listeners</source>
             <translation>تقسيم مستمعين</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="305" />
+            <location filename="../src/shell/shell_window.cpp" line="313" />
             <source>Watch traffic</source>
             <translation>مراقبة حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="314" />
             <source>monitor copy</source>
             <translation>نسخ مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
-            <location filename="../src/shell/shell_window.cpp" line="1735" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1753" />
+            <location filename="../src/shell/shell_window.cpp" line="317" />
+            <location filename="../src/shell/shell_window.cpp" line="1743" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1761" />
             <source>Remove link</source>
             <translation>إزالة الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="310" />
+            <location filename="../src/shell/shell_window.cpp" line="318" />
             <source>delete disconnect</source>
             <translation>حذف فصل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="313" />
+            <location filename="../src/shell/shell_window.cpp" line="321" />
             <source>Link wiring</source>
             <translation>توصيل الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>line matrix faults</source>
             <translation>مصفوفة الخطوط أعطال</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="316" />
+            <location filename="../src/shell/shell_window.cpp" line="324" />
             <source>Owner</source>
             <translation>المالك</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="316" />
+            <location filename="../src/shell/shell_window.cpp" line="324" />
             <source>policy arbitration</source>
             <translation>سياسة تحكيم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>Fit</source>
             <translation>ملاءمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>zoom</source>
             <translation>تكبير</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="328" />
-            <location filename="../src/shell/shell_window.cpp" line="602" />
-            <location filename="../src/shell/shell_window.cpp" line="603" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="612" />
+            <location filename="../src/shell/shell_window.cpp" line="613" />
             <source>Search actions</source>
             <translation>البحث في الإجراءات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>command palette</source>
             <translation>لوحة الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="332" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Setup check</source>
             <translation>فحص الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="333" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>driver com0com permissions</source>
             <translation>برنامج التشغيل com0com الأذونات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>Benchmark</source>
             <translation>قياس الأداء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="344" />
             <source>throughput speed</source>
             <translation>الإنتاجية السرعة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>Refresh now</source>
             <translation>تحديث الآن</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>reload</source>
             <translation>إعادة تحميل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="353" />
             <source>Refreshed.</source>
             <translation>تم التحديث.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="347" />
+            <location filename="../src/shell/shell_window.cpp" line="355" />
             <source>Settings</source>
             <translation>التفضيلات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="348" />
+            <location filename="../src/shell/shell_window.cpp" line="356" />
             <source>preferences theme density refresh baud</source>
             <translation>التفضيلات السمة الكثافة التحديث الباود</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Advanced mode</source>
             <translation>الوضع المتقدم</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>simple expert level</source>
             <translation>بسيط خبير مستوى</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="359" />
-            <location filename="../src/shell/shell_window.cpp" line="732" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="740" />
             <source>Monitor</source>
             <translation>مراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="359" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>traffic</source>
             <translation>حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="362" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Show links as a list</source>
             <translation>عرض الارتباطات كقائمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
             <source>links topology list accessible</source>
             <translation>الارتباطات الطوبولوجيا قائمة إتاحة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="366" />
-            <location filename="../src/shell/shell_window.cpp" line="877" />
+            <location filename="../src/shell/shell_window.cpp" line="374" />
+            <location filename="../src/shell/shell_window.cpp" line="885" />
             <source>Log</source>
             <translation>السجل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="366" />
+            <location filename="../src/shell/shell_window.cpp" line="374" />
             <source>events</source>
             <translation>الأحداث</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
-            <location filename="../src/shell/shell_window.cpp" line="893" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="901" />
             <source>Topology JSON</source>
             <translation>JSON الطوبولوجيا</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>editor schema</source>
             <translation>محرر مخطط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="372" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>Follow the system</source>
             <translation>اتباع النظام</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="373" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>theme colour scheme</source>
             <translation>السمة مخطط الألوان</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="382" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Light</source>
             <translation>فاتح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="382" />
-            <location filename="../src/shell/shell_window.cpp" line="392" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
+            <location filename="../src/shell/shell_window.cpp" line="400" />
             <source>theme</source>
             <translation>السمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="392" />
+            <location filename="../src/shell/shell_window.cpp" line="400" />
             <source>Dark</source>
             <translation>داكن</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="410" />
             <source>Comfortable</source>
             <translation>مريح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="403" />
-            <location filename="../src/shell/shell_window.cpp" line="413" />
+            <location filename="../src/shell/shell_window.cpp" line="411" />
+            <location filename="../src/shell/shell_window.cpp" line="421" />
             <source>density spacing</source>
             <translation>الكثافة التباعد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="420" />
             <source>Compact</source>
             <translation>مضغوط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="421" />
+            <location filename="../src/shell/shell_window.cpp" line="429" />
             <source>Reset layout</source>
             <translation>إعادة ضبط التخطيط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="422" />
+            <location filename="../src/shell/shell_window.cpp" line="430" />
             <source>docks window</source>
             <translation>اللوحات النافذة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="432" />
             <source>Show launcher</source>
             <translation>إظهار شاشة البداية</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="433" />
             <source>empty start</source>
             <translation>بداية فارغة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="429" />
+            <location filename="../src/shell/shell_window.cpp" line="437" />
             <source>Help contents</source>
             <translation>محتويات التعليمات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="430" />
+            <location filename="../src/shell/shell_window.cpp" line="438" />
             <source>manual help topics</source>
             <translation>دليل مواضيع التعليمات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="432" />
+            <location filename="../src/shell/shell_window.cpp" line="440" />
             <source>Why is nothing arriving?</source>
             <translation>لماذا لا يصل شيء؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="433" />
+            <location filename="../src/shell/shell_window.cpp" line="441" />
             <source>troubleshoot no data</source>
             <translation>استكشاف الأخطاء لا بيانات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>Keyboard shortcuts</source>
             <translation>اختصارات لوحة المفاتيح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>keys</source>
             <translation>مفاتيح</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Copy environment</source>
             <translation>نسخ معلومات البيئة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>build bug report</source>
             <translation>بناء تقرير خلل</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="440" />
+            <location filename="../src/shell/shell_window.cpp" line="448" />
             <source>About</source>
             <translation>حول</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="441" />
+            <location filename="../src/shell/shell_window.cpp" line="449" />
             <source>version licence copyright</source>
             <translation>الإصدار الترخيص حقوق النشر</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
-            <location filename="../src/shell/shell_window.cpp" line="460" />
-            <location filename="../src/shell/shell_window.cpp" line="1140" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
+            <location filename="../src/shell/shell_window.cpp" line="1148" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="670" />
+            <source>Change owner</source>
+            <translation>تغيير المالك</translation>
         </message>
         <message>
             <source>Undo needs an exact restore, which this build cannot prove.</source>
             <translation type="vanished">يتطلب التراجع استعادة دقيقة، ولا يستطيع هذا الإصدار إثباتها.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="491" />
+            <location filename="../src/shell/shell_window.cpp" line="499" />
             <source>&amp;File</source>
             <translation>&amp;ملف</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="505" />
+            <location filename="../src/shell/shell_window.cpp" line="513" />
             <source>&amp;Edit</source>
             <translation>&amp;تحرير</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="511" />
+            <location filename="../src/shell/shell_window.cpp" line="519" />
             <source>&amp;Ports</source>
             <translation>&amp;المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;Topology</source>
             <translation>&amp;الطوبولوجيا</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="534" />
+            <location filename="../src/shell/shell_window.cpp" line="544" />
             <source>&amp;Tools</source>
             <translation>&amp;أدوات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="542" />
+            <location filename="../src/shell/shell_window.cpp" line="552" />
             <source>&amp;View</source>
             <translation>&amp;عرض</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="550" />
+            <location filename="../src/shell/shell_window.cpp" line="560" />
             <source>Theme</source>
             <translation>السمة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="554" />
+            <location filename="../src/shell/shell_window.cpp" line="564" />
             <source>Density</source>
             <translation>الكثافة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="561" />
+            <location filename="../src/shell/shell_window.cpp" line="571" />
             <source>&amp;Help</source>
             <translation>&amp;مساعدة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="571" />
+            <location filename="../src/shell/shell_window.cpp" line="581" />
             <source>Main toolbar</source>
             <translation>شريط الأدوات الرئيسي</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="660" />
-            <source>Change owner</source>
-            <translation>تغيير المالك</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="704" />
             <source>Not available in this build.</source>
-            <translation>غير متاح في هذا الإصدار.</translation>
+            <translation type="vanished">غير متاح في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="727" />
+            <location filename="../src/shell/shell_window.cpp" line="735" />
             <source>Ports</source>
             <translation>المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="729" />
-            <location filename="../src/shell/shell_window.cpp" line="1182" />
+            <location filename="../src/shell/shell_window.cpp" line="737" />
+            <location filename="../src/shell/shell_window.cpp" line="1190" />
             <source>Inspector</source>
             <translation>المفتش</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="730" />
+            <location filename="../src/shell/shell_window.cpp" line="738" />
             <source>Send</source>
             <translation>إرسال</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="765" />
-            <location filename="../src/shell/shell_window.cpp" line="1261" />
+            <location filename="../src/shell/shell_window.cpp" line="773" />
+            <location filename="../src/shell/shell_window.cpp" line="1269" />
             <source>Copied %1.</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="781" />
+            <location filename="../src/shell/shell_window.cpp" line="789" />
             <source>Queued %1 bytes to %2.</source>
             <translation>أُدرج %1 بايت في قائمة الإرسال إلى %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="837" />
+            <location filename="../src/shell/shell_window.cpp" line="845" />
             <source>Links</source>
             <translation>الارتباطات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="892" />
+            <location filename="../src/shell/shell_window.cpp" line="900" />
             <source>Applied the topology JSON.</source>
             <translation>تم تطبيق JSON الطوبولوجيا.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1107" />
+            <location filename="../src/shell/shell_window.cpp" line="1115" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1129" />
+            <location filename="../src/shell/shell_window.cpp" line="1137" />
             <source>Undo %1</source>
             <translation>تراجع عن %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1130" />
+            <location filename="../src/shell/shell_window.cpp" line="1138" />
             <source>Redo %1</source>
             <translation>إعادة %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1142" />
-            <source>Reverses connecting or removing a link and changing an owner.</source>
-            <translation>يتراجع عن إنشاء رابط أو إزالته وعن تغيير المالك.</translation>
+            <location filename="../src/shell/shell_window.cpp" line="1150" />
+            <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
+            <translation>يتراجع عن إنشاء رابط أو إزالته وعن تغيير المالك وعن إعادة تسمية منفذ.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1144" />
+            <location filename="../src/shell/shell_window.cpp" line="1152" />
             <source>This build cannot reverse changes.</source>
             <translation>لا يمكن لهذا الإصدار التراجع عن التغييرات.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1152" />
+            <location filename="../src/shell/shell_window.cpp" line="1160" />
             <source>Undid %1.</source>
             <translation>تم التراجع عن %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>تعذر التراجع عن %1. تغيّر الإعداد منذ ذلك الحين.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redid %1.</source>
             <translation>تمت إعادة %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1166" />
+            <location filename="../src/shell/shell_window.cpp" line="1174" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>تعذرت إعادة %1. تغيّر الإعداد منذ ذلك الحين.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="1189" />
             <source>Ports %1</source>
             <translation>المنافذ %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1186" />
+            <location filename="../src/shell/shell_window.cpp" line="1194" />
             <source>Inspector %1</source>
             <translation>المفتش %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1230" />
+            <location filename="../src/shell/shell_window.cpp" line="1238" />
             <source>Remove %1?</source>
             <translation>إزالة %1؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1231" />
+            <location filename="../src/shell/shell_window.cpp" line="1239" />
             <source>The port and its links will be removed. This cannot be undone.</source>
             <translation>سيُزال المنفذ وارتباطاته. لا يمكن التراجع عن ذلك.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1233" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1772" />
-            <location filename="../src/shell/shell_window.cpp" line="2192" />
+            <location filename="../src/shell/shell_window.cpp" line="1241" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="2219" />
             <source>Cancel</source>
             <translation>إلغاء</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1240" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="1248" />
+            <location filename="../src/shell/shell_window.cpp" line="1788" />
             <source>Could not remove %1</source>
             <translation>تعذرت إزالة %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1249" />
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1257" />
+            <location filename="../src/shell/shell_window.cpp" line="1796" />
             <source>Removed %1.</source>
             <translation>تمت إزالة %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1349" />
+            <location filename="../src/shell/shell_window.cpp" line="1357" />
             <source>Sharing is not available in this build.</source>
             <translation>المشاركة غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1376" />
+            <location filename="../src/shell/shell_window.cpp" line="1384" />
             <source>Networking is not available in this build.</source>
             <translation>الشبكات غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1398" />
+            <location filename="../src/shell/shell_window.cpp" line="1406" />
             <source>Bridge is running on port %1.</source>
             <translation>الجسر يعمل على المنفذ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1399" />
+            <location filename="../src/shell/shell_window.cpp" line="1407" />
             <source>Open monitor</source>
             <translation>فتح المراقبة</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1420" />
-            <location filename="../src/shell/shell_window.cpp" line="2104" />
-            <location filename="../src/shell/shell_window.cpp" line="2116" />
+            <location filename="../src/shell/shell_window.cpp" line="1428" />
+            <location filename="../src/shell/shell_window.cpp" line="2131" />
+            <location filename="../src/shell/shell_window.cpp" line="2143" />
             <source>Could not open %1</source>
             <translation>تعذر فتح %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1421" />
+            <location filename="../src/shell/shell_window.cpp" line="1429" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>يحتاج الإعداد إلى جهاز أو نقطة نهاية شبكية غير متاحة على هذا الحاسوب. لم يتغير شيء. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1444" />
-            <location filename="../src/shell/shell_window.cpp" line="2128" />
-            <location filename="../src/shell/shell_window.cpp" line="2156" />
+            <location filename="../src/shell/shell_window.cpp" line="1452" />
+            <location filename="../src/shell/shell_window.cpp" line="2155" />
+            <location filename="../src/shell/shell_window.cpp" line="2183" />
             <source>%1 ports, %2 links</source>
             <translation>%1 من المنافذ، %2 من الارتباطات</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1536" />
-            <location filename="../src/shell/shell_window.cpp" line="1559" />
+            <location filename="../src/shell/shell_window.cpp" line="1544" />
+            <location filename="../src/shell/shell_window.cpp" line="1567" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>تم إنشاء الزوج المرتبط. يفتح البرنامج A المنفذ %1؛ ويفتح البرنامج B المنفذ %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1595" />
+            <location filename="../src/shell/shell_window.cpp" line="1603" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>مراقبة %1. المراقِب هو %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1645" />
+            <location filename="../src/shell/shell_window.cpp" line="1653" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 جزء من حزمة عمل لاحقة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1651" />
+            <location filename="../src/shell/shell_window.cpp" line="1659" />
             <source>%1 arrives with %2.</source>
             <translation>يصل %1 مع %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1736" />
+            <location filename="../src/shell/shell_window.cpp" line="1744" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>إزالة هذا الارتباط؟ %1. لا يُحفظ شيء حتى تحفظ الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1755" />
             <source>Could not remove the link</source>
             <translation>تعذرت إزالة الارتباط</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1756" />
+            <location filename="../src/shell/shell_window.cpp" line="1764" />
             <source>Removed the link.</source>
             <translation>تمت إزالة الارتباط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1769" />
+            <location filename="../src/shell/shell_window.cpp" line="1777" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>إزالة %1 وارتباطاتها؟ لا يُحفظ شيء حتى تحفظ الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1845" />
+            <location filename="../src/shell/shell_window.cpp" line="1815" />
+            <source>Renamed %1 to %2.</source>
+            <translation>تمت إعادة تسمية %1 إلى %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1872" />
             <source>Add a port before opening the line matrix.</source>
             <translation>أضف منفذاً قبل فتح مصفوفة الخطوط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1880" />
+            <location filename="../src/shell/shell_window.cpp" line="1907" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>اختر هدف الدمج ذي سياسة المالك للتحكم في من يكتب.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>وضع الاختبار. تعمل المنافذ الجديدة داخل Virtual Serial Studio فقط.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1982" />
+            <location filename="../src/shell/shell_window.cpp" line="2009" />
             <source>Could not restart as administrator</source>
             <translation>تعذرت إعادة التشغيل كمسؤول</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2060" />
+            <location filename="../src/shell/shell_window.cpp" line="2087" />
             <source>Environment copied.</source>
             <translation>تم نسخ معلومات البيئة.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2079" />
+            <location filename="../src/shell/shell_window.cpp" line="2106" />
             <source>Started a new setup.</source>
             <translation>بدأ إعداد جديد.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2089" />
+            <location filename="../src/shell/shell_window.cpp" line="2116" />
             <source>Open setup</source>
             <translation>فتح إعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2090" />
+            <location filename="../src/shell/shell_window.cpp" line="2117" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>إعدادات Virtual Serial Studio (*.json);;كل الملفات (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2131" />
+            <location filename="../src/shell/shell_window.cpp" line="2158" />
             <source>Opened %1.</source>
             <translation>تم فتح %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2147" />
+            <location filename="../src/shell/shell_window.cpp" line="2174" />
             <source>Could not save this setup</source>
             <translation>تعذر حفظ هذا الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2160" />
-            <location filename="../src/shell/shell_window.cpp" line="2161" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
             <source>Saved %1.</source>
             <translation>تم حفظ %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2167" />
+            <location filename="../src/shell/shell_window.cpp" line="2194" />
             <source>Save setup</source>
             <translation>حفظ الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2169" />
+            <location filename="../src/shell/shell_window.cpp" line="2196" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>إعدادات Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <location filename="../src/shell/shell_window.cpp" line="2214" />
             <source>Save changes to %1?</source>
             <translation>حفظ التغييرات في %1؟</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <location filename="../src/shell/shell_window.cpp" line="2215" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>تغيرت منافذك وارتباطاتك منذ آخر حفظ. يمكنك إيقاف هذا التنبيه من التفضيلات.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2218" />
             <source>Don't save</source>
             <translation>عدم الحفظ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2256" />
+            <location filename="../src/shell/shell_window.cpp" line="2283" />
             <source>Layout reset.</source>
             <translation>أُعيد ضبط التخطيط.</translation>
         </message>
@@ -13058,7 +13207,7 @@
             <location filename="../src/flows/watch_dialog.cpp" line="247" />
             <location filename="../src/flows/watch_dialog.cpp" line="265" />
             <source> Try again.</source>
-            <translation> أعد المحاولة.</translation>
+            <translation> حاول مرة أخرى.</translation>
         </message>
         <message>
             <location filename="../src/flows/watch_dialog.cpp" line="263" />

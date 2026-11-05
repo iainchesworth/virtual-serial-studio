@@ -71,8 +71,17 @@ appear in the command palette, with a prompt that they need Advanced mode.
 - **Send** (right): write bytes into an open port.
 - **Monitor** (bottom): traffic rows with time, port, direction, bytes and a
   preview. In Advanced it has two more tabs, **Log** and **Topology JSON**.
+  When the JSON has an error, the editor names the line, marks it, and
+  **Go to line** jumps to it. That covers syntax mistakes, bad names, kinds,
+  modes and links, and invalid serial settings.
 - **Status bar**: port and link counts, receive and transmit rates, hub state,
   a readiness chip that opens the setup check, and the Simple/Advanced switch.
+
+To rename a port, select it and press `F2`, or use **Ports → Rename port** or
+the node's context menu. Links and the saved setup use the new name. A
+pseudo terminal on Linux or macOS moves its stable path to the new name, so
+a program that opened it by that path needs the new one. The path of every
+other kind stays as it was made.
 
 The window opens at 1280 by 800 and works down to 960 by 640. Dock sizes are
 remembered; **View → Reset layout** puts them back. **Theme** (follow the
@@ -442,6 +451,7 @@ language. See [i18n.md](i18n.md).
 | `Ctrl+Q` | Quit |
 | `Ctrl+Shift+N` | Add port |
 | `Ctrl+Shift+C` | Copy port name |
+| `F2` | Rename the selected port |
 | `Delete` | Remove the selected port or link |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / Redo the last link or owner change |
 | `Ctrl+L` | Connect ports |
@@ -459,11 +469,9 @@ A control that the engine cannot back is shown disabled, with the tooltip "Not
 available in this build". It never pretends. At the moment:
 
 - **Undo of everything**: Undo and Redo cover connecting a link, removing a
-  link and changing an owner. They do not cover adding or removing a port, a
+  link, changing an owner and renaming a port. They do not cover adding or removing a port, a
   wizard or applying JSON, because a port that is made again is a different
   port. Any of those starts a new history.
-- **Rename a port** (`F2`): the hub can rename, but the saved setup would go out
-  of step.
 - **Reconnect a failed port**: a port that stops shows *Failed* and keeps its
   links, but the engine has no call to reopen it.
 - **Editing a link that exists**: modem-line emulation and the merge policy are
@@ -477,7 +485,6 @@ available in this build". It never pretends. At the moment:
 - **"Waiting for a program" and "Program connected"**: the engine cannot see
   whether another program has opened a port, so a port reads **Open** and no
   more.
-- **Line numbers** in JSON errors in the Topology JSON editor.
 - An **RFC 2217 server**: Studio can connect to one but cannot act as one.
 
 The reasons and the plan for each are in

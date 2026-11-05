@@ -37,6 +37,11 @@ undo_step owner_step(StudioBackend& backend, const link_view& spec,
                      vss::endpoint_id before, vss::endpoint_id after,
                      const QString& text);
 
+/// A port was renamed from `before` to `after`.
+undo_step rename_step(StudioBackend& backend, vss::endpoint_id port,
+                      const QString& before, const QString& after,
+                      const QString& text);
+
 } // namespace vss::gui
 
 #endif // VSS_GUI_SHELL_UNDO_STEPS_HPP
