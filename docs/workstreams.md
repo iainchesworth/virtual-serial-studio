@@ -10,7 +10,7 @@ sub-session protocol used to work on them in parallel.
 |---|---|---|
 | Linux | A pseudo terminal per virtual port (`/dev/pts/N`), advertised by the studio and used by CI on every run | Paths are ephemeral and owned by the process; no stable name and no standalone port command |
 | macOS | Same PTY mechanism (`/dev/ttysN`), exercised by CI | Same as Linux, plus DriverKit is the long-term route for a non-PTY device |
-| Windows | com0com pairs when installed, in-process loopback otherwise, and a seam (`vcom_driver.hpp`) for a first-party driver | No first-party driver: `create_driver_port()` returns `unsupported` and real COM ports need com0com |
+| Windows | com0com pairs when installed, in-process loopback otherwise, and an interface (`vcom_driver.hpp`) for a first-party driver | No first-party driver: `create_driver_port()` returns `unsupported` and real COM ports need com0com |
 
 So Linux and macOS already create real devices; what they lack is a stable,
 scriptable lifetime. Windows genuinely needs the driver.
