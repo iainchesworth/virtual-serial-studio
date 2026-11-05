@@ -4,16 +4,18 @@
 # Removes every vsscom port and the driver package, and checks nothing is left.
 # Run inside a guest, as an administrator.
 #
-#   uninstall-driver.ps1 [-ResultPath <json>]
+#   uninstall-driver.ps1 [-ResultPath <json>] [-Flavour kmdf|umdf]
 #
 # Exit code 0 when no device, no COM name and no driver package remain.
 
 [CmdletBinding()]
 param(
-    [string] $ResultPath
+    [string] $ResultPath,
+    [ValidateSet('kmdf', 'umdf')] [string] $Flavour
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Flavour) { $env:VSS_DRIVER = $Flavour }
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 $tests = @()
@@ -35,7 +37,7 @@ try {
     $listing = (& pnputil.exe /enum-drivers | Out-String) -split "(\r?\n){2,}"
     $published = @()
     foreach ($block in $listing) {
-        if ($block -match 'Original Name:\s+vsscom(ctl)?\.inf' -and $block -match 'Published Name:\s+(oem\d+\.inf)') {
+        if ($block -match 'Original Name:\s+vsscom(ctl|_um)?\.inf' -and $block -match 'Published Name:\s+(oem\d+\.inf)') {
             # The second -match replaced the first, so the group is number 1.
             $published += $Matches[1]
         }
@@ -46,7 +48,7 @@ try {
     }
 
     $left = Get-CimInstance Win32_PnPEntity |
-        Where-Object { @($_.HardwareID | Where-Object { $_ -like 'VSSCOM\*' }).Count -gt 0 }
+        Where-Object { @($_.HardwareID | Where-Object { $_ -like 'VSSCOM\*' -or $_ -like 'VSSCOMUM\*' }).Count -gt 0 }
     $tests += New-TestRecord 'uninstall.devices_gone' 'no vsscom device remains' ($(if (-not $left) { 'pass' } else { 'fail' })) ($left.Name -join ', ')
 
     # The names must be off the legacy list too.

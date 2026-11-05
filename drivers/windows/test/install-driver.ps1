@@ -6,7 +6,11 @@
 # (vsscom.sys, vsscom.inf, vsscomctl.inf and their catalogs) next to this script or
 # in -PackageDir.
 #
-#   install-driver.ps1 [-PackageDir <dir>] [-ResultPath <json>] [-Count <n>]
+#   install-driver.ps1 [-PackageDir <dir>] [-ResultPath <json>] [-Count <n>] [-Flavour kmdf|umdf]
+#
+# With -Flavour umdf it installs the user-mode driver (vsscom_um.dll, vsscom_um.inf
+# and its catalog) and creates its ports, and no control device, which that driver
+# does not have.
 #
 # The package must be signed by something the guest trusts: a catalog signed by
 # a certificate whose root is in LocalMachine\Root, with test signing on. The
@@ -18,26 +22,29 @@
 param(
     [string] $PackageDir = $PSScriptRoot,
     [string] $ResultPath,
-    [ValidateRange(1, 16)] [int] $Count = 2
+    [ValidateRange(1, 16)] [int] $Count = 2,
+    [ValidateSet('kmdf', 'umdf')] [string] $Flavour
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Flavour) { $env:VSS_DRIVER = $Flavour }
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 $tests = @()
 try {
-    $inf = Join-Path $PackageDir 'vsscom.inf'
+    $inf = Join-Path $PackageDir $InfName
     $ctlInf = Join-Path $PackageDir 'vsscomctl.inf'
-    foreach ($file in $inf, $ctlInf) {
+    $packages = if ($Flavour -eq 'umdf' -or $env:VSS_DRIVER -eq 'umdf') { @($inf) } else { @($inf, $ctlInf) }
+    foreach ($file in $packages) {
         if (-not (Test-Path $file)) { throw "$(Split-Path -Leaf $file) is not in $PackageDir" }
     }
 
-    # Put both packages in the driver store first, so a signature problem is
+    # Put the packages in the driver store first, so a signature problem is
     # reported here and not as an unexplained failure to bind, and so that the
     # ports the control device makes later find their driver.
     $store = @()
     $storeOk = $true
-    foreach ($file in $inf, $ctlInf) {
+    foreach ($file in $packages) {
         $store += & pnputil.exe /add-driver $file 2>&1
         if ($LASTEXITCODE -ne 0) { $storeOk = $false }
     }
@@ -50,14 +57,16 @@ try {
     }
     $tests += New-TestRecord 'install.device' "create $Count root devices and bind the driver" 'pass' "restart required: $reboot"
 
-    # The control device, once.
-    if ([VssSetup]::CreateDevice($SystemClassGuid, $ControlHardwareId, (Resolve-Path $ctlInf).Path, 'VSSCOMCTL')) { $reboot = $true }
-    $control = $null
-    for ($i = 0; $i -lt 30 -and -not $control; $i++) {
-        $control = Get-VssControlPath
-        if (-not $control) { Start-Sleep -Milliseconds 500 }
+    # The control device, once. The user-mode driver has none.
+    if ($Flavour -ne 'umdf' -and $env:VSS_DRIVER -ne 'umdf') {
+        if ([VssSetup]::CreateDevice($SystemClassGuid, $ControlHardwareId, (Resolve-Path $ctlInf).Path, 'VSSCOMCTL')) { $reboot = $true }
+        $control = $null
+        for ($i = 0; $i -lt 30 -and -not $control; $i++) {
+            $control = Get-VssControlPath
+            if (-not $control) { Start-Sleep -Milliseconds 500 }
+        }
+        $tests += New-TestRecord 'install.control' 'the control device has an interface' ($(if ($control) { 'pass' } else { 'fail' })) $control
     }
-    $tests += New-TestRecord 'install.control' 'the control device has an interface' ($(if ($control) { 'pass' } else { 'fail' })) $control
 
     $ports = @()
     for ($i = 0; $i -lt 30 -and $ports.Count -lt $Count; $i++) {

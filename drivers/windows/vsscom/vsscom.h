@@ -9,11 +9,11 @@
 #ifndef VSSCOM_H
 #define VSSCOM_H
 
-// ntifs.h for the security routines that tell who opened a handle.
-#include <ntifs.h>
-#include <ntddk.h>
-#include <wdf.h>
-#include <ntstrsafe.h>
+// The operating system and framework headers differ between the kernel-mode and
+// the user-mode driver. Each project puts its own vsscom_platform.h first on the
+// include path: it includes what the framework needs and defines
+// VssComInterruptTime.
+#include <vsscom_platform.h>
 
 // initguid.h first, so that driver.c defines the GUIDs of ntddser.h and
 // public.h and the linker finds them. io.c only declares them.
@@ -26,6 +26,11 @@
 #include "core/vsscom_core.h"
 
 #define VSSCOM_POOL_TAG 'mssv'
+
+// The largest ULONG, and the slot of a port that has none. A constant and not
+// ULONG_MAX or MAXULONG, because the kernel-mode and user-mode headers define
+// different ones.
+static const ULONG VssComMaxUlong = 0xFFFFFFFFul;
 
 // The bytes a port holds in each direction. Rx is what the application reads;
 // Tx is what it has written and the hub has not read yet.
@@ -143,8 +148,13 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_DEVICE_CONTEXT, VssComGetContext)
 
-// driver.c
+// port.c
 NTSTATUS VssComRegisterPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+// Finishes a port: the file object rules, the device, its context, the two
+// interfaces, the COM name and the queues. The caller has set what only its
+// framework has. `OnDemand` and `Slot` say where the port came from (access.c).
+NTSTATUS VssComCreatePort(_Inout_ PWDFDEVICE_INIT DeviceInit,
+                          _In_ BOOLEAN OnDemand, _In_ ULONG Slot);
 
 // control.c: the device that makes ports. A device is the control device when
 // its hardware key holds VssRole = 1, which vsscomctl.inf sets; every other
@@ -155,7 +165,18 @@ NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit);
 // The user who made the port in `Slot`. FALSE when there is no such port.
 BOOLEAN VssComControlOwnerOf(_In_ ULONG Slot, _Out_ PVSSCOM_OPENER Owner);
 
-// access.c: who may open what.
+// Who may open the hub end of a port. The kernel-mode driver decides at once
+// from the token of the create request (access.c); the user-mode driver learns
+// the user from the framework, which may take its time (vsscom_um/um_access.c).
+// Either way it ends by calling VssComHubOpenDecided, which hub.c defines.
+VOID VssComAuthorizeHubOpen(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                            _In_ WDFREQUEST Request,
+                            _In_ WDFFILEOBJECT FileObject);
+VOID VssComHubOpenDecided(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                          _In_ WDFREQUEST Request,
+                          _In_ WDFFILEOBJECT FileObject, _In_ BOOLEAN Allowed);
+
+// access.c (kernel-mode driver only): who opened a handle.
 // Reads who is opening the file object a create request is for.
 NTSTATUS VssComCaptureOpener(_In_ WDFREQUEST Request,
                              _Out_ PVSSCOM_OPENER Opener);

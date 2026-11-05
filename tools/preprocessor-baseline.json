@@ -101,7 +101,7 @@
     "apps/vss_gui/src/widgets/tests/main.cpp": 4,
     "apps/vss_gui/src/widgets/widgets.hpp": 3,
     "drivers/windows/vsscom/core/vsscom_core.h": 21,
-    "drivers/windows/vsscom/driver.c": 5,
+    "drivers/windows/vsscom/driver.c": 2,
     "drivers/windows/vsscom/io.c": 2,
     "drivers/windows/vsscom/public.h": 24,
     "drivers/windows/vsscom/vsscom.h": 12,

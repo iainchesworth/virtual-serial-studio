@@ -24,10 +24,12 @@
 
 [CmdletBinding()]
 param(
-    [string] $ResultPath
+    [string] $ResultPath,
+    [ValidateSet('kmdf', 'umdf')] [string] $Flavour
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Flavour) { $env:VSS_DRIVER = $Flavour }
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 Add-Type -TypeDefinition @'
@@ -519,7 +521,26 @@ $ERROR_ACCESS_DENIED = 5; $ERROR_OPERATION_ABORTED = 995
 $MAX = [uint32]::MaxValue
 
 $tests = @()
+
+# Checks that need what only the kernel-mode driver has so far. The user-mode
+# driver reports them as skipped, with the reason, and the list shrinks as it
+# catches up: the control device that makes ports on demand (D14 to D19) and the
+# rule that only the maker opens a hub end (D21).
+$KmdfOnly = @{
+    D14 = 'the user-mode driver has no control device'
+    D15 = 'the user-mode driver has no control device'
+    D16 = 'the user-mode driver has no control device'
+    D17 = 'the user-mode driver has no control device'
+    D18 = 'the user-mode driver has no control device'
+    D19 = 'the user-mode driver has no control device'
+    D21 = 'the user-mode driver does not check who opens the hub end yet'
+}
+
 function Add-Test([string] $Id, [string] $Name, [scriptblock] $Body) {
+    if ($Flavour -eq 'umdf' -and $KmdfOnly.ContainsKey($Id)) {
+        $script:tests += New-TestRecord $Id $Name 'skip' $KmdfOnly[$Id]
+        return
+    }
     try {
         $detail = & $Body
         $script:tests += New-TestRecord $Id $Name 'pass' ($detail -join '; ')
@@ -1254,6 +1275,53 @@ $lines | Set-Content C:\vss\probe-out.txt
     }
 }
 
+# Opens each path with a restricted token: this user's, with the Administrators
+# group and the powerful privileges taken away (runas /trustlevel:0x20000, the
+# "basic user" level). That is a user who is not an administrator, without making
+# an account. Returns the lines as Invoke-AsSystem does, with the line "admin=..."
+# first. The files are in a folder that every user may write.
+function Invoke-AsBasicUser([string[]] $Paths) {
+    $dir = 'C:\Users\Public\vssprobe'
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    & icacls.exe $dir /grant '*S-1-5-32-545:(OI)(CI)M' | Out-Null
+    if (-not (Test-Path 'C:\vss\probe.dll')) { Invoke-AsSystem @('\\.\NUL') | Out-Null }
+    Copy-Item C:\vss\probe.dll $dir -Force
+    $probe = @'
+$dir = 'C:\Users\Public\vssprobe'
+try {
+    Add-Type -Path "$dir\probe.dll"
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    $lines = @("admin=$isAdmin")
+    $lines += foreach ($path in (Get-Content "$dir\in.txt")) { [ProbeK]::Try($path) }
+} catch {
+    $lines = "probe failed: $($_.Exception.Message)"
+}
+$lines | Set-Content "$dir\out.txt"
+'@
+    Set-Content -Path "$dir\probe.ps1" -Value $probe
+    Set-Content -Path "$dir\in.txt" -Value $Paths
+    Remove-Item "$dir\out.txt" -ErrorAction SilentlyContinue
+    & runas.exe /trustlevel:0x20000 "powershell.exe -NoProfile -ExecutionPolicy Bypass -File $dir\probe.ps1" | Out-Null
+    $until = (Get-Date).AddSeconds(90)
+    while (-not (Test-Path "$dir\out.txt") -and (Get-Date) -lt $until) { Start-Sleep -Milliseconds 500 }
+    if (-not (Test-Path "$dir\out.txt")) { throw 'the probe did not answer within 90 seconds' }
+    Start-Sleep -Milliseconds 300
+    @(Get-Content "$dir\out.txt")
+}
+
+Add-Test 'D22' 'the hub end of a port made by hand opens for an administrator and not for a user who is not one' {
+    $com = '\\.\' + $port
+    # Nobody holds the hub end, so a refusal is the access rule, not a busy port.
+    $answer = Invoke-AsBasicUser @($hubPath, $com)
+    Assert ($answer.Count -eq 3) "the probe answered: $($answer -join ' | ')"
+    Assert ($answer[0] -eq 'admin=False') "the probe was not a plain user: $($answer[0])"
+    Assert ($answer[1] -like "error$ERROR_ACCESS_DENIED *") "a user who is not an administrator opening the hub end: $($answer[1])"
+    Assert ($answer[2] -like 'open *') "a user who is not an administrator opening the COM port: $($answer[2])"
+    $hub = Open-Hub $hubPath
+    $hub.Dispose()
+    "refused for a plain user: $($answer[1]); the COM port opens; an administrator opens the hub end"
+}
+
 Add-Test 'D21' 'the hub end of a port opens for the user who made it, not for another user' {
     $ctl = Open-Ctl
     $p = $null
@@ -1280,5 +1348,5 @@ Add-Test 'D21' 'the hub end of a port opens for the user who made it, not for an
 
 Write-Result -Path $ResultPath -Phase 'test' -Tests $tests
 $tests | ForEach-Object { '{0,-6} {1,-4} {2}' -f $_.status, $_.id, $_.detail }
-if ($tests | Where-Object { $_.status -ne 'pass' }) { exit 1 }
+if ($tests | Where-Object { $_.status -eq 'fail' }) { exit 1 }
 exit 0

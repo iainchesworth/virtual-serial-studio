@@ -29,44 +29,13 @@
 
 // -- Opening and closing ---------------------------------------------------
 
-VOID VssComEvtDeviceFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
-                               _In_ WDFFILEOBJECT FileObject)
+// Takes the end for the file object, if it is free, and completes the create.
+static VOID VssComCompleteOpen(_In_ PVSSCOM_DEVICE_CONTEXT context,
+                               _In_ WDFREQUEST Request,
+                               _In_ WDFFILEOBJECT FileObject, _In_ ULONG kind)
 {
-    PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(Device);
     PVSSCOM_FILE_CONTEXT file = VssComFileContext(FileObject);
-    PUNICODE_STRING name = WdfFileObjectGetFileName(FileObject);
-    DECLARE_CONST_UNICODE_STRING(hubName, VSSCOM_HUB_FILE_NAME);
-    ULONG kind;
     NTSTATUS status = STATUS_SUCCESS;
-
-    if (name == NULL || name->Length == 0 ||
-        (name->Length == sizeof(WCHAR) && name->Buffer[0] == L'\\'))
-    {
-        kind = VSSCOM_FILE_APP;
-    }
-    else if (RtlEqualUnicodeString(name, &hubName, TRUE))
-    {
-        kind = VSSCOM_FILE_HUB;
-    }
-    else
-    {
-        WdfRequestComplete(Request, STATUS_OBJECT_NAME_NOT_FOUND);
-        return;
-    }
-
-    // The hub end is the device side of the port: not everyone who can open the
-    // COM port may take it (access.c).
-    if (kind == VSSCOM_FILE_HUB)
-    {
-        VSSCOM_OPENER opener;
-
-        status = VssComCaptureOpener(Request, &opener);
-        if (!NT_SUCCESS(status) || !VssComHubOpenAllowed(context, &opener))
-        {
-            WdfRequestComplete(Request, STATUS_ACCESS_DENIED);
-            return;
-        }
-    }
 
     WdfSpinLockAcquire(context->Lock);
     if (kind == VSSCOM_FILE_APP)
@@ -107,6 +76,43 @@ VOID VssComEvtDeviceFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
         VssComApplyLines(context);
     VssComBumpState(context);
     WdfRequestComplete(Request, STATUS_SUCCESS);
+}
+
+VOID VssComEvtDeviceFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
+                               _In_ WDFFILEOBJECT FileObject)
+{
+    PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(Device);
+    PUNICODE_STRING name = WdfFileObjectGetFileName(FileObject);
+    DECLARE_CONST_UNICODE_STRING(hubName, VSSCOM_HUB_FILE_NAME);
+
+    if (name == NULL || name->Length == 0 ||
+        (name->Length == sizeof(WCHAR) && name->Buffer[0] == L'\\'))
+    {
+        VssComCompleteOpen(context, Request, FileObject, VSSCOM_FILE_APP);
+    }
+    else if (RtlEqualUnicodeString(name, &hubName, TRUE))
+    {
+        // The hub end is the device side of the port: not everyone who can open
+        // the COM port may take it. The platform decides who (access.c, or
+        // vsscom_um/um_access.c), and may take its time doing it.
+        VssComAuthorizeHubOpen(context, Request, FileObject);
+    }
+    else
+    {
+        WdfRequestComplete(Request, STATUS_OBJECT_NAME_NOT_FOUND);
+    }
+}
+
+VOID VssComHubOpenDecided(_In_ PVSSCOM_DEVICE_CONTEXT context,
+                          _In_ WDFREQUEST Request,
+                          _In_ WDFFILEOBJECT FileObject, _In_ BOOLEAN allowed)
+{
+    if (!allowed)
+    {
+        WdfRequestComplete(Request, STATUS_ACCESS_DENIED);
+        return;
+    }
+    VssComCompleteOpen(context, Request, FileObject, VSSCOM_FILE_HUB);
 }
 
 // A port goes back to quiet when its handle closes. The framework has already
@@ -223,7 +229,7 @@ VOID VssComHubRead(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ WDFREQUEST Request,
         WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, 0);
         return;
     }
-    if (Length > MAXULONG)
+    if (Length > VssComMaxUlong)
     {
         WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
         return;
@@ -251,7 +257,7 @@ VOID VssComHubWrite(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ WDFREQUEST Request
         WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, 0);
         return;
     }
-    if (Length > MAXULONG)
+    if (Length > VssComMaxUlong)
     {
         WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
         return;
@@ -491,11 +497,11 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             pipe->DeadlineSet = TRUE;
             timeout_ms = vsscom_write_timeout_ms(&Context->Timeouts, pipe->Length);
             if (timeout_ms != 0)
-                pipe->Deadline = KeQueryInterruptTime() +
+                pipe->Deadline = VssComInterruptTime() +
                                  (ULONGLONG)timeout_ms * 10000ull;
         }
         timed_out = !finished && pipe->Deadline != 0 &&
-                    KeQueryInterruptTime() >= pipe->Deadline;
+                    VssComInterruptTime() >= pipe->Deadline;
         if (finished || timed_out)
             Context->AppWritesPending--;
         WdfSpinLockRelease(Context->Lock);

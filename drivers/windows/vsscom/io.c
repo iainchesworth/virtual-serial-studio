@@ -29,7 +29,7 @@
 
 static ULONGLONG VssComNow(VOID)
 {
-    return KeQueryInterruptTime();
+    return VssComInterruptTime();
 }
 
 static ULONGLONG VssComDeadline(ULONG Milliseconds)
@@ -458,7 +458,7 @@ static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, 0);
         return;
     }
-    if (Length > MAXULONG)
+    if (Length > VssComMaxUlong)
     {
         WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
         return;
@@ -517,7 +517,7 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, 0);
         return;
     }
-    if (Length > MAXULONG)
+    if (Length > VssComMaxUlong)
     {
         WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
         return;
