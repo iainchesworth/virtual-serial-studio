@@ -20,6 +20,11 @@
 # The kernel-mode package is written to drivers/windows/artifacts/package/<platform>/
 # and the user-mode one to drivers/windows/artifacts/package-um/<platform>/. They
 # are not signed here: see docs/windows-com-driver.md for the signing steps.
+#
+# A catalog holds the hash of the binary, so a package that is signed has to be built
+# in two steps with the signing between them. -Stage build stops before the catalogs;
+# -Stage catalog makes them from the package folder as it then is. CI uses the two
+# stages to sign the user-mode package with the organisation's test certificate.
 
 [CmdletBinding()]
 param(
@@ -28,7 +33,9 @@ param(
     [ValidateSet('Release', 'Debug')]
     [string] $Configuration = 'Release',
     [ValidateSet('all', 'kmdf', 'umdf')]
-    [string] $Driver = 'all'
+    [string] $Driver = 'all',
+    [ValidateSet('all', 'build', 'catalog')]
+    [string] $Stage = 'all'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -65,36 +72,47 @@ function Build-Driver {
         [string] $InfVerifMode = '/w'  # the user-mode driver needs /u, see below
     )
 
-    Write-Host "== Build $Name ($Platform, $Configuration)"
-    & $msbuild $Project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
-    if ($LASTEXITCODE -ne 0) { throw "msbuild failed for $Name with exit code $LASTEXITCODE" }
-
-    $outRelative = if ($OutSubdir) { "artifacts\$OutSubdir\$Platform\$Configuration" } else { "artifacts\$Platform\$Configuration" }
-    $out = Join-Path $root $outRelative
-    $binary = Join-Path $out $Binary
-    if (-not (Test-Path $binary)) { throw "$Binary was not produced in $out" }
     foreach ($tool in $infverif, $inf2cat) {
         if (-not (Test-Path $tool)) { throw "missing $tool" }
     }
-
     $package = Join-Path $root "artifacts\$PackageSubdir\$Platform"
-    if (Test-Path $package) { Remove-Item $package -Recurse -Force }
-    New-Item -ItemType Directory $package | Out-Null
-    Copy-Item $binary $package
-    foreach ($inf in $Infs) { Copy-Item (Join-Path $InfDir $inf) $package }
 
-    Write-Host "== InfVerif $Name"
-    foreach ($inf in $Infs) {
-        & $infverif /v $InfVerifMode (Join-Path $package $inf)
-        if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
+    # The build stage: compile, copy into the package folder and check the INF files.
+    if ($Stage -ne 'catalog') {
+        Write-Host "== Build $Name ($Platform, $Configuration)"
+        & $msbuild $Project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
+        if ($LASTEXITCODE -ne 0) { throw "msbuild failed for $Name with exit code $LASTEXITCODE" }
+
+        $outRelative = if ($OutSubdir) { "artifacts\$OutSubdir\$Platform\$Configuration" } else { "artifacts\$Platform\$Configuration" }
+        $out = Join-Path $root $outRelative
+        $binary = Join-Path $out $Binary
+        if (-not (Test-Path $binary)) { throw "$Binary was not produced in $out" }
+
+        if (Test-Path $package) { Remove-Item $package -Recurse -Force }
+        New-Item -ItemType Directory $package | Out-Null
+        Copy-Item $binary $package
+        foreach ($inf in $Infs) { Copy-Item (Join-Path $InfDir $inf) $package }
+
+        Write-Host "== InfVerif $Name"
+        foreach ($inf in $Infs) {
+            & $infverif /v $InfVerifMode (Join-Path $package $inf)
+            if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
+        }
+    }
+    elseif (-not (Test-Path $package)) {
+        throw "the $Name package is not built yet: run the build stage first ($package)"
     }
 
-    Write-Host "== Inf2Cat $Name"
-    & $inf2cat "/driver:$package" "/os:$os" /verbose
-    if ($LASTEXITCODE -ne 0) { throw "Inf2Cat failed with exit code $LASTEXITCODE" }
+    # The catalog stage: hash what is in the package folder and write the catalogs.
+    # Run it after the binary has been signed, because the catalog holds its hash.
+    if ($Stage -ne 'build') {
+        Write-Host "== Inf2Cat $Name"
+        & $inf2cat "/driver:$package" "/os:$os" /verbose
+        if ($LASTEXITCODE -ne 0) { throw "Inf2Cat failed with exit code $LASTEXITCODE" }
 
-    foreach ($file in $Expected) {
-        if (-not (Test-Path (Join-Path $package $file))) { throw "$file is missing from the $Name package" }
+        foreach ($file in $Expected) {
+            if (-not (Test-Path (Join-Path $package $file))) { throw "$file is missing from the $Name package" }
+        }
     }
     Get-ChildItem $package | Select-Object Name, Length | Format-Table -AutoSize
     Write-Host "Package: $package"

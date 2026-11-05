@@ -58,7 +58,39 @@ The kernel-mode package is written to `drivers/windows/artifacts/package/<platfo
 `drivers/windows/artifacts/package-um/<platform>/`: `vsscom_um.dll`,
 `vsscom_um.inf` and `vsscom_um.cat`. `-Driver kmdf` or `-Driver umdf` builds one of
 them. CI runs the same script and uploads the packages as the artifacts
-`vsscom-<platform>` and `vsscom-um-<platform>`.
+`vsscom-<platform>` and `vsscom-um-<platform>-unsigned` or
+`vsscom-um-<platform>-testsigned`.
+
+## Signing
+
+The user-mode package is signed in CI with the organisation's test certificate, by
+the same `sign-windows` action that signs the studio's programs. The leaf
+certificate and its key are the organisation secrets `WIN_TESTSIGN_PFX_BASE64` and
+`WIN_TESTSIGN_PFX_PASSWORD`; they reach only the CI step, never a developer's
+machine or an assistant. The `SIGN_WINDOWS` repository variable chooses:
+
+| `SIGN_WINDOWS` | The user-mode artifact |
+|---|---|
+| `false` (the default) | `vsscom-um-<platform>-unsigned`: nothing signed |
+| `test` | `vsscom-um-<platform>-testsigned`: `vsscom_um.dll` and `vsscom_um.cat` signed with the leaf certificate and timestamped |
+
+The catalog holds the hash of the DLL, so `build.ps1` runs in two stages with the
+signing between them: `-Stage build`, sign the DLL, `-Stage catalog`, sign the
+catalog.
+
+To use the test-signed package on a machine, install the organisation's test CA
+root there once (it is a public certificate; `docs/test-signing.md` in
+`icl-common-infra` says how), then install the package:
+
+```powershell
+Import-Certificate -FilePath ca.crt -CertStoreLocation Cert:\LocalMachine\Root
+pnputil /add-driver vsscom_um.inf /install
+```
+
+Windows accepts a user-mode driver whose catalog is signed by a CA it trusts, so
+**test signing mode stays off**. The kernel-mode driver does not have that
+freedom: Windows loads kernel code only if Microsoft signed it, or if test signing
+mode is on. The test certificate suffices for the second case only.
 
 ## Layout
 
