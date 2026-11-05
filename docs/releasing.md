@@ -74,6 +74,13 @@ These are not in the repository and an agent does not create them.
   the `check-glibc-floor` action for this reason. The package also relies on the
   system's libstdc++ from GCC 16. Building on an older system, or linking the C++
   runtime statically, would lower the floor; neither is done yet.
+- The Linux package carries the `xcb` Qt platform plugin only, and that plugin needs
+  `libxcb-cursor0` and the other xcb libraries from the system. On Ubuntu:
+  `sudo apt install libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1
+  libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0`.
+  Without them `vss_gui` stops at start with "Could not load the Qt platform plugin
+  xcb". There is no Wayland plugin.
+  The platform matrix (T9) found this on a machine without them.
 - On Windows the GUI keeps a console window, because `vss_gui --selftest` has
   to print to its caller. A double click shows the console beside the window.
 - The GUI package has no installer. Unpack it where you like.
