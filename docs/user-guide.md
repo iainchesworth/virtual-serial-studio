@@ -9,6 +9,11 @@ wires them together, and shows what flows through them. Everything it can do
 can also be scripted with `vss_cli`; the command equivalents are listed near
 the end.
 
+The pictures were taken from Virtual Serial Studio running on Windows 11 and
+Ubuntu 26.04 test machines, in the light theme unless the text says
+otherwise. Port names such as `COM7` and `/dev/pts/1` are examples; yours will
+differ.
+
 ## Simple and Advanced
 
 The window has a **Simple** level and an **Advanced** level. Simple is the
@@ -74,6 +79,14 @@ remembered; **View → Reset layout** puts them back. **Theme** (follow the
 system, light or dark) and **Density** (comfortable or compact) are under
 **View** too.
 
+The launcher in the dark theme:
+
+![The launcher in the dark theme, with the same four job cards on a dark background](images/launcher-dark.png)
+
+The launcher in the compact density at the smallest window size, 960 by 640:
+
+![The launcher in the compact density at 960 by 640, with a toolbar of icons only](images/launcher-compact-light.png)
+
 ## The launcher
 
 When the studio has no ports, the window shows a launcher instead of the docks.
@@ -90,6 +103,8 @@ Below the cards, **Saved setups** shows your most recent file with **Open** and
 **Browse**. The launcher goes away when the first port exists. **View → Show
 launcher** brings it back.
 
+![The launcher on Windows 11: a setup warning strip, four job cards and the Saved setups row](images/launcher-light.png)
+
 ## Quick start
 
 1. Choose **Give my program a serial port** (or **Ports → Add port**,
@@ -101,6 +116,10 @@ launcher** brings it back.
 4. To try the port without another program, use the **Send** panel: pick the
    port, type text, press **Send**, and watch the monitor.
 
+On Linux the **Port ready** dialog looks like this:
+
+![The Port ready dialog on Linux, with /dev/pts/1 in large type and a Copy name button](images/port-ready-linux-light.png)
+
 ## Adding a port
 
 **Ports → Add port** (`Ctrl+Shift+N`) asks what the new port should be:
@@ -110,6 +129,8 @@ launcher** brings it back.
 - **Real device** — a serial device plugged into this PC, so you can share it.
 - In Advanced, **Network endpoint** (a TCP, UDP or RFC 2217 address used as a
   port) and **Mock fixture** (a scriptable pretend device for tests).
+
+![The Add a port dialog with five choices and the Virtual port settings below](images/add-port-light.png)
 
 ### Virtual port
 
@@ -142,6 +163,11 @@ driver pairs, the button is disabled and the dialog points to the setup check;
 the share wizard can create another pair. In Advanced, **More options** offers
 the port kind.
 
+The picture shows a Windows PC with no free com0com pairs: **Create pair** is
+off and the dialog points to the setup check.
+
+![The Connect two programs dialog with Create pair disabled and a warning that there are not enough free driver pairs](images/linked-pair-light.png)
+
 ### Real device
 
 **Attach a real device** lists the serial devices when the dialog opens; press
@@ -161,6 +187,8 @@ the fields.
 Studio opens the device once and keeps it open. Your programs open the port
 that Studio creates, not the device.
 
+![The Attach a real device dialog listing COM3 as available, with the address serial://COM3?baud=115200](images/attach-device-light.png)
+
 ### Network endpoint (Advanced)
 
 A TCP, UDP or RFC 2217 address used as a port. Choose the transport, then
@@ -168,10 +196,14 @@ whether Studio **connects to a server** or **waits for other computers to
 connect (server)**. Waiting works for TCP and UDP; RFC 2217 only connects. See
 [network addresses](#network-addresses).
 
+![The Put a device on the network dialog with TCP chosen, a server address and the equivalent vss_cli bridge command](images/network-endpoint-light.png)
+
 ### Mock fixture (Advanced)
 
 A scripted pretend device with a name, baud rate and target, for tests without
 hardware.
+
+![The Add a mock fixture dialog with a name, baud rate and the port to link it to](images/mock-fixture-light.png)
 
 Select the fixture and choose **Open line matrix and faults** in the Inspector
 to inject a fault: a parity error, a framing error, an overrun, a break, a
@@ -180,6 +212,8 @@ the fixture then stops and shows *Failed*, as a real device would after the
 fault. Add another fixture to inject again. Every fault you inject is listed in
 **Injected so far**. Faults work only on fixtures; the buttons are off for any
 other port.
+
+![The line matrix and faults dialog for a fixture: six Inject buttons, the Injected so far list and the control line state](images/fixture-faults-light.png)
 
 ## Connecting ports
 
@@ -198,6 +232,8 @@ The dialog lists only ports that exist, refuses a port linked to itself, needs
 at least two targets for a split and two publishers for a join, and prints a
 sentence describing the result before you commit. A link that would make a loop
 is refused, with a message naming the pair, and nothing changes.
+
+![The Connect ports dialog with the five relationships on the left and the From and To ports on the right](images/connect-ports-light.png)
 
 Remove a link by selecting its line and pressing `Delete`, or **Topology →
 Remove link**. Removing a port removes its links too, after a confirmation.
@@ -224,6 +260,15 @@ Everything the device receives is copied to all of the ports. Whatever a
 program writes goes back to the device. In Advanced, **Share a device** is also
 on the toolbar.
 
+The three steps of the wizard, on Windows. The second picture shows the case
+where no driver pair is free, so the ports work only inside Studio.
+
+![Share step 1: choose the device, COM3, and review its settings](images/share-device-light.png)
+
+![Share step 2: three programs, the port each will open, and a warning offering Create another pair](images/share-programs-light.png)
+
+![Share step 3: terminal on COM7, test-tool on COM8 and logger as Studio only](images/share-ready-light.png)
+
 ## Watching traffic
 
 **Topology → Watch traffic** makes a read-only copy of a port. Choose the port
@@ -232,6 +277,8 @@ ports list so you can remove it when you have finished, and it never drives
 modem lines. With **Open the monitor when it is ready** ticked, Studio selects
 the watched port and brings the monitor forward. The monitor is not filtered to
 that port; in Advanced you can set the port filter yourself.
+
+![The Watch traffic dialog with the port to watch, the watcher name and Open the monitor when it is ready ticked](images/watch-traffic-light.png)
 
 ## The monitor and the Send panel
 
@@ -295,8 +342,12 @@ A setup is a JSON document that lists the ports and links.
   device on the network, three programs sharing one device, and two programs
   with an owner. A template that needs a real device says "Needs a real device"
   and cannot be used yet.
+
+![The Setups dialog with four templates; two say Needs a real device](images/templates-light.png)
 - **File → Export as command** (Advanced) shows the `vss_cli` command that
   builds the current setup.
+
+![The Export as command dialog showing vss_cli run setup.json --seconds=60](images/export-command-light.png)
 
 The same file can be replayed without the window:
 
@@ -345,6 +396,8 @@ need Advanced mode are listed with a prompt that offers to turn it on.
 **Reset to defaults** restores them. The values are stored with `QSettings` (the
 registry on Windows, a configuration file on Linux and macOS).
 
+![The Settings dialog on the General page, with Advanced mode, Default baud rate and the unsaved setup prompt](images/settings-light.png)
+
 ## Help and diagnostics
 
 - **Tools → Setup check** says what this PC needs so other programs can use
@@ -352,13 +405,22 @@ registry on Windows, a configuration file on Linux and macOS).
   rights will be needed, and the real serial devices. On Linux and macOS it
   looks at pseudo terminals and your serial port group. The status bar chip
   shows "Setup ready" or "Setup needs attention" and opens the same dialog.
+
+![The Setup check dialog on Windows: the driver, administrator rights and real serial devices, each marked OK](images/setup-check-light.png)
+
 - **Help → Why is nothing arriving?** walks the steps between the device and
   your program (the port is open, it is linked, the device is sending) and
   suggests what to try. Studio cannot see whether a program has opened the
   port, so the last two checks read "Not checked yet".
+
+![The Why is nothing arriving dialog: the port is open, it has no link, and the later checks are not yet run](images/troubleshoot-light.png)
+
 - **File → Diagnostic bundle** saves a ZIP with the setup, the event log, the
   environment and the port counters. Traffic contents are left out unless you
   tick them. Nothing is sent anywhere; you choose where to save the file.
+
+![The Create a diagnostic bundle dialog with five choices; Traffic contents is off by default](images/diagnostic-bundle-light.png)
+
 - **Help → Keyboard shortcuts** lists every shortcut; **Help → Copy
   environment** copies the build details for a bug report.
 - **Help → About** has four tabs: About (version and the GPLv3 notice),
