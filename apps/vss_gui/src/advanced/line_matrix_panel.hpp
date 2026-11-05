@@ -77,6 +77,7 @@ private:
     void update_line_state();
     void update_caption();
     void set_line(vss::control_line line, bool state);
+    void inject_fault(std::size_t index);
     QString port_name(vss::endpoint_id id) const;
 
     StudioBackend& backend_;

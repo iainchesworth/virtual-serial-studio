@@ -2205,67 +2205,67 @@
     <context>
         <name>LineMatrix</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="64" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="67" />
             <source>Parity error</source>
             <translation>خطأ التكافؤ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="65" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="68" />
             <source>Byte arrives with bad parity</source>
             <translation>يصل بايت بتكافؤ خاطئ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="66" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="70" />
             <source>Framing error</source>
             <translation>خطأ الإطار</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="67" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="71" />
             <source>Byte arrives with no valid stop bit</source>
             <translation>يصل بايت بدون بت إيقاف صالح</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="69" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="74" />
             <source>Overrun</source>
             <translation>فيض البيانات</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="70" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="75" />
             <source>Incoming data lost, too fast</source>
             <translation>ضياع البيانات الواردة، السرعة عالية جداً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="71" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="77" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="72" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="78" />
             <source>A break is received on the line</source>
             <translation>يُستلَم BREAK على الخط</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="73" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="80" />
             <source>Hang-up</source>
             <translation>إنهاء الاتصال</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="74" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="81" />
             <source>Carrier drops, as a modem does</source>
             <translation>ينقطع الحامل كما يحدث في المودم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="75" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="83" />
             <source>Disconnect</source>
             <translation>فصل الجهاز</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="76" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="84" />
             <source>Device vanishes, as if unplugged</source>
             <translation>يختفي الجهاز كما لو فُصل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="321" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="330" />
             <source>Inject %1</source>
             <translation>حقن %1</translation>
         </message>
@@ -2273,159 +2273,184 @@
     <context>
         <name>LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="119" />
             <source>Line wiring</source>
             <translation>توصيل الخطوط</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>اختر الإشارات التي يتحكم بها هذا المنفذ على المنفذ الآخر.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="131" />
             <source>Line wiring preset</source>
             <translation>إعداد مسبق لتوصيل الخطوط</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="137" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="138" />
             <source>Emulate modem lines</source>
             <translation>محاكاة خطوط المودم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="155" />
             <source>This port drives</source>
             <translation>هذا المنفذ يتحكم في</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="182" />
             <source>%1 to %2</source>
             <translation>%1 إلى %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>Line state now</source>
             <translation>حالة الخط الآن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="235" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="243" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="246" />
             <source>Send a break</source>
             <translation>إرسال BREAK</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="283" />
             <source>Inject a fault</source>
             <translation>حقن عطل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="285" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>محاكاة كبل أو جهاز معيب. يُبلَّغ عن كل عطل كحدث خطأ على المنفذ.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="326" />
             <source>Inject</source>
             <translation>حقن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="345" />
             <source>Injected so far</source>
             <translation>المحقون حتى الآن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Time</source>
             <translation>الوقت</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Fault</source>
             <translation>العطل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Result</source>
             <translation>النتيجة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="358" />
             <source>Injected faults</source>
             <translation>الأعطال المحقونة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="367" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="372" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="512" />
             <source>Create this fixture in code</source>
             <translation>إنشاء جهاز المحاكاة هذا في الشيفرة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="453" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="475" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="673" />
             <source>Link this fixture to another port first.</source>
             <translation>اربط جهاز المحاكاة هذا بمنفذ آخر أولاً.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="482" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>يتحدد تقاطع الخطوط عند إنشاء الارتباط.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="527" />
+            <source>The fixture is not running.</source>
+            <translation>جهاز المحاكاة لا يعمل.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="531" />
+            <source>Faults are only available on fixture ports.</source>
+            <translation>الأعطال متاحة لمنافذ أجهزة المحاكاة فقط.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="589" />
             <source>Port %1</source>
             <translation>المنفذ %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="595" />
             <source>the other port</source>
             <translation>المنفذ الآخر</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="596" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>عناوين الأعمدة هي المدخلات على %1. وينطبق التوصيل نفسه في الاتجاه الآخر.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="679" />
             <source>Could not change the wiring: %1</source>
             <translation>تعذر تغيير التوصيل: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="685" />
             <source>Line wiring updated.</source>
             <translation>تم تحديث توصيل الخطوط.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="699" />
+            <source>Error event reported on %1</source>
+            <translation>تم الإبلاغ عن حدث خطأ على %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="700" />
+            <source>Could not inject the fault: %1</source>
+            <translation>تعذر حقن العطل: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="712" />
+            <source>%1 injected on %2.</source>
+            <translation>تم الحقن على %2: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 on</source>
             <translation>%1 مفعّل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 off</source>
             <translation>%1 معطّل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="752" />
             <source>Could not change a control line: %1</source>
             <translation>تعذر تغيير خط تحكم: %1</translation>
         </message>
@@ -9547,159 +9572,184 @@
     <context>
         <name>vss::gui::LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="119" />
             <source>Line wiring</source>
             <translation>توصيل الخطوط</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>اختر الإشارات التي يتحكم بها هذا المنفذ على المنفذ الآخر.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="131" />
             <source>Line wiring preset</source>
             <translation>إعداد مسبق لتوصيل الخطوط</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="137" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="138" />
             <source>Emulate modem lines</source>
             <translation>محاكاة خطوط المودم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="155" />
             <source>This port drives</source>
             <translation>هذا المنفذ يتحكم في</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="182" />
             <source>%1 to %2</source>
             <translation>%1 إلى %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>Line state now</source>
             <translation>حالة الخط الآن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="235" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="243" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="246" />
             <source>Send a break</source>
             <translation>إرسال BREAK</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="283" />
             <source>Inject a fault</source>
             <translation>حقن عطل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="285" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>محاكاة كبل أو جهاز معيب. يُبلَّغ عن كل عطل كحدث خطأ على المنفذ.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="326" />
             <source>Inject</source>
             <translation>حقن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="345" />
             <source>Injected so far</source>
             <translation>المحقون حتى الآن</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Time</source>
             <translation>الوقت</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Fault</source>
             <translation>العطل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Result</source>
             <translation>النتيجة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="358" />
             <source>Injected faults</source>
             <translation>الأعطال المحقونة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="367" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="372" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="512" />
             <source>Create this fixture in code</source>
             <translation>إنشاء جهاز المحاكاة هذا في الشيفرة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="453" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="475" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="673" />
             <source>Link this fixture to another port first.</source>
             <translation>اربط جهاز المحاكاة هذا بمنفذ آخر أولاً.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="482" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>يتحدد تقاطع الخطوط عند إنشاء الارتباط.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="527" />
+            <source>The fixture is not running.</source>
+            <translation>جهاز المحاكاة لا يعمل.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="531" />
+            <source>Faults are only available on fixture ports.</source>
+            <translation>الأعطال متاحة لمنافذ أجهزة المحاكاة فقط.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="589" />
             <source>Port %1</source>
             <translation>المنفذ %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="595" />
             <source>the other port</source>
             <translation>المنفذ الآخر</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="596" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>عناوين الأعمدة هي المدخلات على %1. وينطبق التوصيل نفسه في الاتجاه الآخر.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="679" />
             <source>Could not change the wiring: %1</source>
             <translation>تعذر تغيير التوصيل: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="685" />
             <source>Line wiring updated.</source>
             <translation>تم تحديث توصيل الخطوط.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="699" />
+            <source>Error event reported on %1</source>
+            <translation>تم الإبلاغ عن حدث خطأ على %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="700" />
+            <source>Could not inject the fault: %1</source>
+            <translation>تعذر حقن العطل: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="712" />
+            <source>%1 injected on %2.</source>
+            <translation>تم الحقن على %2: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 on</source>
             <translation>%1 مفعّل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 off</source>
             <translation>%1 معطّل</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="752" />
             <source>Could not change a control line: %1</source>
             <translation>تعذر تغيير خط تحكم: %1</translation>
         </message>

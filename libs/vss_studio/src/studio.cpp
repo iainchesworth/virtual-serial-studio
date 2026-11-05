@@ -9,6 +9,8 @@
 #include <vss/ports/listen_transport.hpp>
 #include <vss/ports/serial_transport.hpp>
 
+#include <boost/asio/post.hpp>
+
 #include <algorithm>
 #include <filesystem>
 #include <utility>
@@ -424,8 +426,58 @@ studio::create_mock_port(const std::string& name,
     record.advertised = transport->public_path();
     record.serial = settings;
     record.capture = options.capture_traffic;
+    record.fixture = transport;
 
     return register_port(std::move(record), std::move(transport), options);
+}
+
+result<void> studio::inject_fault(endpoint_id id, fault_kind fault)
+{
+    std::shared_ptr<serial_transport> fixture;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        fixture = it->second.fixture.lock();
+    }
+    if (!fixture || fixture->mock() == nullptr)
+        return make_error_code(errc::unsupported);
+
+    const auto target = hub_->find_endpoint(id);
+    if (!target)
+        return make_error_code(errc::not_found);
+
+    // The fixture is not thread safe, and the endpoint reads from it on its
+    // strand, so the injection runs there too.  The lambda holds the
+    // transport, which keeps the fixture alive until it has run.
+    boost::asio::post(target->get_executor(),
+                      [fixture = std::move(fixture), fault]
+                      {
+                          auto* mock = fixture->mock();
+                          switch (fault)
+                          {
+                          case fault_kind::parity:
+                              mock->inject_parity_error();
+                              break;
+                          case fault_kind::framing:
+                              mock->inject_framing_error();
+                              break;
+                          case fault_kind::overrun:
+                              mock->inject_overrun();
+                              break;
+                          case fault_kind::break_condition:
+                              mock->inject_break();
+                              break;
+                          case fault_kind::hangup:
+                              mock->inject_hangup();
+                              break;
+                          case fault_kind::disconnect:
+                              mock->inject_disconnect();
+                              break;
+                          }
+                      });
+    return {};
 }
 
 result<void> studio::remove_port(endpoint_id id)

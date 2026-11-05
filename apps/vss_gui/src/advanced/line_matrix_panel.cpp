@@ -24,6 +24,8 @@
 #include <QPushButton>
 #include <QSignalBlocker>
 #include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QTime>
 #include <QTimer>
 #include <QVBoxLayout>
 
@@ -56,24 +58,31 @@ struct fault_tile
 {
     const char* title;
     const char* description;
+    vss::fault_kind kind;
 };
 
 const std::array<fault_tile, 6>& fault_tiles()
 {
     static const std::array<fault_tile, 6> tiles = {{
         {QT_TRANSLATE_NOOP("LineMatrix", "Parity error"),
-         QT_TRANSLATE_NOOP("LineMatrix", "Byte arrives with bad parity")},
+         QT_TRANSLATE_NOOP("LineMatrix", "Byte arrives with bad parity"),
+         vss::fault_kind::parity},
         {QT_TRANSLATE_NOOP("LineMatrix", "Framing error"),
          QT_TRANSLATE_NOOP("LineMatrix",
-                           "Byte arrives with no valid stop bit")},
+                           "Byte arrives with no valid stop bit"),
+         vss::fault_kind::framing},
         {QT_TRANSLATE_NOOP("LineMatrix", "Overrun"),
-         QT_TRANSLATE_NOOP("LineMatrix", "Incoming data lost, too fast")},
+         QT_TRANSLATE_NOOP("LineMatrix", "Incoming data lost, too fast"),
+         vss::fault_kind::overrun},
         {QT_TRANSLATE_NOOP("LineMatrix", "Break"),
-         QT_TRANSLATE_NOOP("LineMatrix", "A break is received on the line")},
+         QT_TRANSLATE_NOOP("LineMatrix", "A break is received on the line"),
+         vss::fault_kind::break_condition},
         {QT_TRANSLATE_NOOP("LineMatrix", "Hang-up"),
-         QT_TRANSLATE_NOOP("LineMatrix", "Carrier drops, as a modem does")},
+         QT_TRANSLATE_NOOP("LineMatrix", "Carrier drops, as a modem does"),
+         vss::fault_kind::hangup},
         {QT_TRANSLATE_NOOP("LineMatrix", "Disconnect"),
-         QT_TRANSLATE_NOOP("LineMatrix", "Device vanishes, as if unplugged")},
+         QT_TRANSLATE_NOOP("LineMatrix", "Device vanishes, as if unplugged"),
+         vss::fault_kind::disconnect},
     }};
     return tiles;
 }
@@ -320,10 +329,12 @@ QWidget* LineMatrixPanel::build_fault_column()
         inject->setAccessibleName(
             QCoreApplication::translate("LineMatrix", "Inject %1")
                 .arg(tile_title));
-        // There is no injection API on the adapter and the real engine cannot
-        // be reached through it, so every tile stays disabled rather than
-        // pretending to inject.
+        // refresh() enables the button only for a running fixture on a
+        // backend that can inject; otherwise it stays disabled with the
+        // reason rather than pretending to inject.
         degrade(inject);
+        connect(inject, &QPushButton::clicked, this,
+                [this, index] { inject_fault(index); });
         inject_.push_back(inject);
         card_layout->addWidget(inject, 0, Qt::AlignVCenter);
         grid->addWidget(card, static_cast<int>(index / 2),
@@ -500,6 +511,31 @@ void LineMatrixPanel::refresh()
                         .arg(port->name),
                     tr("Create this fixture in code"));
 
+    const bool is_fixture = port->kind == vss::endpoint_kind::mock;
+    const bool running = port->state == vss::endpoint_state::open;
+    const bool can_inject = caps.faults && is_fixture && running;
+    for (QPushButton* button : inject_)
+    {
+        if (can_inject)
+        {
+            button->setEnabled(true);
+            button->setToolTip({});
+            button->setAccessibleDescription({});
+        }
+        else if (caps.faults && is_fixture)
+        {
+            degrade(button, tr("The fixture is not running."));
+        }
+        else if (caps.faults)
+        {
+            degrade(button, tr("Faults are only available on fixture ports."));
+        }
+        else
+        {
+            degrade(button);
+        }
+    }
+
     update_caption();
     update_line_state();
 }
@@ -647,6 +683,35 @@ void LineMatrixPanel::apply_wiring(const line_wiring& wiring)
     }
     refresh();
     Q_EMIT message(tr("Line wiring updated."));
+}
+
+void LineMatrixPanel::inject_fault(std::size_t index)
+{
+    const auto& tiles = fault_tiles();
+    if (index >= tiles.size())
+        return;
+    const QString title =
+        QCoreApplication::translate("LineMatrix", tiles[index].title);
+    const QString port = port_name(endpoint_);
+
+    const auto injected = backend_.inject_fault(endpoint_, tiles[index].kind);
+    const QString outcome =
+        injected ? tr("Error event reported on %1").arg(port)
+                 : tr("Could not inject the fault: %1")
+                       .arg(error_text(injected.error()));
+
+    const int row = history_->rowCount();
+    history_->insertRow(row);
+    history_->setItem(row, 0,
+                      new QTableWidgetItem(QTime::currentTime().toString(
+                          QStringLiteral("HH:mm:ss"))));
+    history_->setItem(row, 1, new QTableWidgetItem(title));
+    history_->setItem(row, 2, new QTableWidgetItem(outcome));
+    history_->scrollToBottom();
+
+    Q_EMIT message(injected ? tr("%1 injected on %2.").arg(title, port)
+                            : outcome);
+    refresh();
 }
 
 void LineMatrixPanel::update_line_state()
