@@ -215,7 +215,9 @@ final compact/200 percent pass.
 observe an external opener. Ports therefore show "Open" and Inspector omits the
 "No program has opened ..." sentence. "Waiting for program" and "Program
 connected" are exercised by the fake in tests and will appear if a later engine
-capability reports the state. No waiting text is shown for Unknown.
+capability reports the state. No waiting text is shown for Unknown. The design
+now says the same: Open is the normal state, and the two refinements belong to
+`Capabilities::peer_open`.
 
 ### No F2 rename
 

@@ -5,7 +5,7 @@ Mockups: Workspace (Simple), Advanced, Compact (960 by 640), Dark. Frame and per
 Header "Ports" with a count. Selection is shared with the Topology and Inspector.
 - Simple: one PortDelegate row per port (3 lines): name (600) with StatusChip at the right; role line (12, ink3); mono path with CopyButton, plus "115200 8N1" for real devices.
 - Role text: "Real device, shared with N programs", "Virtual port, linked to <name>", "In-process port. Only Studio can open it", "Fixture (mock)".
-- States (see states in `docs/04-components.md`): Open, Waiting for program, Program connected, Studio only, Closed, Failed.
+- States (see states in `docs/04-components.md`): Open, Studio only, Closed, Failed. "Open" is the normal state of a port that exists. Where the platform reports whether a program has opened it (`Capabilities::peer_open`), Open is refined into Waiting for program and Program connected.
 - Advanced: filter field "Filter ports" above a table: Port (name over mono path), State (compact chip), RX, TX, Dropped (right aligned, mono). Dropped text is `bad` when above zero.
 - Keyboard: Up and Down select, Enter moves focus to the Inspector, Delete removes (confirm, Undo toast), F2 renames, Ctrl+Shift+C copies the path.
 - Compact window: rows are two lines (name and mono path, then the chip), 240 wide.

@@ -151,6 +151,12 @@ if(TARGET vss_gui_theme_tests)
   set_tests_properties(gui_theme PROPERTIES
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+
+  # The same tests at 200 percent scale, where icons were once clipped.
+  add_test(NAME gui_theme_200 COMMAND vss_gui_theme_tests --verbose)
+  set_tests_properties(gui_theme_200 PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_SCALE_FACTOR=2;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 
 if(TARGET vss_gui_shell_tests)
