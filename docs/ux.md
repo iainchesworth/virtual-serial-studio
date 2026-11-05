@@ -215,7 +215,7 @@ the setup, log and environment, with traffic contents off unless chosen.
 - Should Simple collapse the topology to a list on very small screens?
 - Should the Connect dialog remember the last relationship per user?
 - Which engine capabilities are worth building next? The disabled ones are
-  undo and redo, the per-line wiring matrix, observing whether a
+  undo and redo, observing whether a
   program opened a port. Each is a row in
   [08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
 
@@ -223,7 +223,8 @@ the setup, log and environment, with traffic contents off unless chosen.
 
 1. Undo and redo for topology edits, once the engine can restore endpoint
    identities exactly.
-2. The per-line wiring matrix for mock fixtures. Fault injection is done.
+2. Saving the line wiring in the setup file. The matrix and fault
+   injection are done.
 3. Showing whether another program has opened a port on Windows and macOS.
    Linux shows the *Waiting* and *Program connected* states for a pseudo
    terminal already.

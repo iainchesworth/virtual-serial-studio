@@ -277,3 +277,38 @@ TEST_CASE("engine backend: ports, links and sends go through the adapter")
             }));
     }
 }
+
+TEST_CASE("engine backend: the line wiring of a link can be read and changed")
+{
+    vss::studio studio;
+    vss::gui::EngineStudioBackend backend(studio);
+    REQUIRE(backend.caps().line_matrix);
+
+    const auto first = backend.create_virtual_port(
+        QStringLiteral("a"), vss::virtual_port_kind::loopback, true);
+    const auto second = backend.create_virtual_port(
+        QStringLiteral("b"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+    const auto link =
+        backend.connect_ports(*first, *second, vss::link_options{});
+    REQUIRE(link.has_value());
+
+    // A new link has the null-modem cable.
+    const auto standard = backend.link_wiring(*link);
+    REQUIRE(standard.has_value());
+    REQUIRE(*standard == vss::gui::line_wiring{});
+
+    vss::gui::line_wiring wiring;
+    wiring.dtr_to_dsr = false;
+    wiring.dtr_to_ri = true;
+    wiring.rts_to_cts = false;
+    wiring.rts_to_dcd = true;
+    REQUIRE(backend.set_link_wiring(*link, wiring).has_value());
+    const auto changed = backend.link_wiring(*link);
+    REQUIRE(changed.has_value());
+    REQUIRE(*changed == wiring);
+
+    REQUIRE(!backend.set_link_wiring(vss::link_id{9999}, wiring).has_value());
+    REQUIRE(!backend.link_wiring(vss::link_id{9999}).has_value());
+}

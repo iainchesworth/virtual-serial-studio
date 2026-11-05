@@ -7,6 +7,7 @@
 #ifndef VSS_CORE_LINK_HPP
 #define VSS_CORE_LINK_HPP
 
+#include <vss/core/control_lines.hpp>
 #include <vss/core/stats.hpp>
 #include <vss/core/types.hpp>
 
@@ -21,6 +22,11 @@ struct link_options
     /// cable does.  Disable for a one-way tap that must not disturb the
     /// device.
     bool emulate_modem_lines = true;
+
+    /// Which control line drives which across the link, when
+    /// `emulate_modem_lines` is on.  The default is the null-modem cable.  It
+    /// lives in the running hub only: the saved topology does not store it.
+    modem_wiring wiring;
 
     /// Arbitration between concurrent publishers into the same target.
     merge_policy policy = merge_policy::interleave;
