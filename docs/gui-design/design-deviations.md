@@ -449,17 +449,32 @@ parses; `Apply` always uses the engine's parsed document. `Format` uses the
 engine's canonical serialisation when the document is valid and Qt's
 indented form when only the JSON syntax is valid.
 
-### Benchmark ships the dialog only
+### Benchmark
 
-`implementation-plan.md` records the maintainer default as "no extraction";
-the WP7 prompt allows the UI and requires the linked-port block. The dialog
-has `Capabilities::benchmark` false, so Run is disabled with "Not available in
-this build" and no metric or result is invented. The linked-port refusal is
-real: it is computed from the live links, shown in a warning note and used as
-the Run tooltip, so a future core can keep the same gate. `Copy result` stays
-disabled because there is no result. The primary button reads "Run" rather than
-the mockup's "Run again", because the mockup shows a completed run and this
-dialog has never run. `vss_cli bench` was not modified.
+WP7 shipped the dialog only, with `Capabilities::benchmark` false, because the
+core lived in `vss_cli` and `implementation-plan.md` recorded the maintainer
+default as "no extraction". The design review recommended building it, so the
+core is now extracted and the dialog runs for real.
+
+`vss::run_benchmark` (`libs/vss_studio/include/vss/studio/benchmark.hpp`) writes
+a seeded pattern to one endpoint in chunks and counts what another receives. It
+blocks, reports progress at most every 50 ms and stops when a flag is set.
+`vss_cli bench` calls it and prints the same four lines as before. Bytes that
+reached the receiver before the run are not counted. `StudioBackend` gains
+`run_benchmark`, the engine backend forwards to the function and sets
+`Capabilities::benchmark`, and `FakeStudioBackend` gives tests a run with a set
+loss and duration that touches no port.
+
+The dialog runs the call on a worker thread, so the window stays responsive.
+While a run is going the Run button reads "Cancel" and the choices are locked;
+closing the dialog asks the run to stop, and the destructor joins the thread.
+The result chip reads "Passed" when every byte arrived and "Failed" when some
+did not, and the Lost metric says by how much. A cancelled run shows
+"Cancelled" and cannot be copied. A write that fails or times out shows
+"Failed" with the engine's message. The linked-port refusal is real: it is
+computed from the live links, shown in a warning note and used as the Run
+tooltip. The primary button reads "Run" rather than the mockup's "Run again",
+because the mockup shows a completed run and this dialog starts without one.
 
 ### Add a mock fixture grows a truthful sentence
 
@@ -889,9 +904,9 @@ runs. CTest uses the default (no captures) so CI does not write artifacts.
 
 ### Remaining limits carried past WP9
 
-The capability-gated features stay visible: peer-open, editable line matrix
-and benchmark extraction. Fault injection is no longer one of them (see "Fault
-injection" above). The network server role is no
+The capability-gated features stay visible: peer-open and the editable line
+matrix. Benchmark extraction (see "Benchmark" above) and fault injection (see
+"Fault injection" above) are no longer among them. The network server role is no
 longer one of them: `vss_ports` listens for `tcp-listen://` and
 `udp-listen://` addresses, so the network dialog's server choice works for TCP
 and UDP (RFC 2217 still only connects). The bundle's real

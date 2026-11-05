@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <thread>
 #include <utility>
 
 namespace vss::gui
@@ -421,6 +422,44 @@ vss::result<void> FakeStudioBackend::set_link_wiring(vss::link_id id,
     wiring_.insert(id, wiring);
     refresh();
     return {};
+}
+
+vss::result<vss::benchmark_result> FakeStudioBackend::run_benchmark(
+    vss::endpoint_id /*from*/, vss::endpoint_id /*to*/,
+    const vss::benchmark_options& options,
+    const vss::benchmark_progress_handler& progress,
+    const std::atomic<bool>* cancel)
+{
+    // Runs on a worker thread, so it reads no port or link: the outcome is
+    // whatever `set_benchmark_outcome` said.
+    if (!caps_.benchmark)
+        return vss::make_error_code(vss::errc::unsupported);
+    benchmark_seen_ = options;
+
+    vss::benchmark_result result;
+    result.expected = options.bytes;
+    const std::uint64_t arriving =
+        options.bytes > benchmark_lost_ ? options.bytes - benchmark_lost_ : 0;
+    constexpr int steps = 10;
+    for (int step = 1; step <= steps; ++step)
+    {
+        if (cancel != nullptr && cancel->load())
+        {
+            result.cancelled = true;
+            return result;
+        }
+        std::this_thread::sleep_for(benchmark_duration_ / steps);
+        result.sent = options.bytes * static_cast<std::uint64_t>(step) / steps;
+        result.received =
+            arriving * static_cast<std::uint64_t>(step) / steps;
+        if (progress)
+            progress({result.sent, result.received, options.bytes});
+    }
+    result.elapsed = benchmark_duration_ > std::chrono::milliseconds(0)
+                         ? benchmark_duration_
+                         : std::chrono::milliseconds(1000);
+    result.complete = result.received >= result.sent;
+    return result;
 }
 
 vss::result<void> FakeStudioBackend::inject_fault(vss::endpoint_id id,

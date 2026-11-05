@@ -9,6 +9,7 @@
 // can be scripted, measured and put in CI.
 //
 
+#include <vss/studio/benchmark.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
@@ -112,16 +113,6 @@ void print_usage()
         "Virtual Serial Studio is free software under the GNU General Public\n"
         "License, version 3 or later.  This program comes with ABSOLUTELY NO\n"
         "WARRANTY; see LICENSE for details.\n");
-}
-
-std::string format_rate(std::uint64_t bytes, std::chrono::milliseconds elapsed)
-{
-    if (elapsed.count() <= 0)
-        return "n/a";
-    const double seconds = static_cast<double>(elapsed.count()) / 1000.0;
-    return vss::format_byte_size(static_cast<std::uint64_t>(
-               static_cast<double>(bytes) / seconds))
-        + "/s";
 }
 
 void print_topology(studio& app)
@@ -595,36 +586,29 @@ int command_bench(const arguments& args)
         return 1;
     }
 
-    const vss::byte_buffer payload = vss::testkit::make_pattern(*bytes, 11);
-    const auto started = std::chrono::steady_clock::now();
-
-    for (std::size_t offset = 0; offset < payload.size(); offset += *chunk)
+    vss::benchmark_options options;
+    options.bytes = *bytes;
+    options.chunk = static_cast<std::size_t>(*chunk);
+    const auto ran = vss::run_benchmark(**sender, **receiver, options);
+    if (!ran)
     {
-        const std::size_t size = std::min<std::size_t>(*chunk, payload.size() - offset);
-        const auto written = (*sender)->write_sync(
-            vss::bytes_view(payload.data() + offset, size), 10s);
-        if (!written)
-        {
-            std::fprintf(stderr, "write failed at offset %zu\n", offset);
-            return 1;
-        }
+        std::fprintf(stderr, "write failed: %s\n",
+                     ran.error().message().c_str());
+        return 1;
     }
-
-    const bool complete = vss::testkit::wait_for_rx(**receiver, payload.size(), 60s);
-    const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::steady_clock::now() - started);
 
     // Print sizes through the formatter: uint64_t is `unsigned long long` on
     // macOS and `unsigned long` on Linux, so %zu would not match both.
     std::printf("sent      : %s in %s byte chunks\n",
-                vss::format_byte_size(payload.size()).c_str(),
+                vss::format_byte_size(ran->sent).c_str(),
                 vss::format_byte_size(*chunk).c_str());
-    std::printf("received  : %s\n",
-                vss::format_byte_size((*receiver)->stats().bytes_rx).c_str());
-    std::printf("elapsed   : %lld ms\n", static_cast<long long>(elapsed.count()));
-    std::printf("throughput: %s\n", format_rate((*receiver)->stats().bytes_rx, elapsed).c_str());
+    std::printf("received  : %s\n", vss::format_byte_size(ran->received).c_str());
+    std::printf("elapsed   : %lld ms\n",
+                static_cast<long long>(ran->elapsed.count()));
+    std::printf("throughput: %s\n",
+                vss::format_throughput(ran->received, ran->elapsed).c_str());
 
-    if (!complete || (*receiver)->stats().bytes_rx < payload.size())
+    if (!ran->complete)
     {
         std::fprintf(stderr, "transfer incomplete\n");
         return 1;

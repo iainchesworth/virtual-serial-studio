@@ -38,7 +38,9 @@
 #include <QToolButton>
 
 #include <algorithm>
+#include <chrono>
 #include <cstddef>
+#include <thread>
 
 namespace
 {
@@ -65,6 +67,19 @@ vss::endpoint_id make_fixture(vss::gui::FakeStudioBackend& backend,
                                                   QStringLiteral("scripted"));
     REQUIRE(created.has_value());
     return *created;
+}
+
+/// Pumps the event loop until `done()` or about five seconds have passed.
+template <class Predicate>
+bool wait_for(Predicate done)
+{
+    for (int attempt = 0; attempt < 1000 && !done(); ++attempt)
+    {
+        QApplication::processEvents();
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    QApplication::processEvents();
+    return done();
 }
 
 QString valid_document()
@@ -659,6 +674,111 @@ TEST_CASE("benchmark: capability and link refusal are visible")
     caps.benchmark = true;
     backend.set_capabilities(caps);
     REQUIRE(!dialog.can_run());
+}
+
+TEST_CASE("benchmark: a run reports what arrived")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.benchmark = true;
+    backend.set_capabilities(caps);
+    make_port(backend, QStringLiteral("first"));
+    make_port(backend, QStringLiteral("second"));
+
+    BenchmarkDialog dialog(backend);
+    dialog.show();
+    QApplication::processEvents();
+    REQUIRE(dialog.can_run());
+    REQUIRE(dialog.run_button()->isEnabled());
+    REQUIRE_EQ(dialog.run_button()->text(), QStringLiteral("Run"));
+
+    dialog.run_button()->click();
+    REQUIRE(wait_for([&] { return !dialog.running(); }));
+
+    // The dialog's defaults: 10 MB in 4 KB chunks, between the two ports.
+    REQUIRE(backend.last_benchmark().has_value());
+    REQUIRE_EQ(backend.last_benchmark()->bytes, std::uint64_t{10} << 20);
+    REQUIRE_EQ(backend.last_benchmark()->chunk, std::size_t{4096});
+    REQUIRE_EQ(dialog.result_chip()->text(), QStringLiteral("Passed"));
+    REQUIRE_EQ(dialog.metric_text(0), QStringLiteral("10.0 MB"));
+    REQUIRE_EQ(dialog.metric_text(1), QStringLiteral("10.0 MB"));
+    REQUIRE_EQ(dialog.metric_text(2), QStringLiteral("0 B"));
+    REQUIRE(dialog.finished_text().startsWith(QStringLiteral("Finished at ")));
+    REQUIRE_EQ(dialog.progress_bar()->value(), 100);
+    REQUIRE(dialog.copy_result_button()->isEnabled());
+    REQUIRE(dialog.summary().startsWith(
+        QStringLiteral("Passed: sent 10.0 MB, received 10.0 MB, lost 0 B")));
+}
+
+TEST_CASE("benchmark: a short count fails and says by how much")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.benchmark = true;
+    backend.set_capabilities(caps);
+    backend.set_benchmark_outcome(1024 * 1024, std::chrono::milliseconds(0));
+    make_port(backend, QStringLiteral("first"));
+    make_port(backend, QStringLiteral("second"));
+
+    BenchmarkDialog dialog(backend);
+    dialog.show();
+    dialog.run_button()->click();
+    REQUIRE(wait_for([&] { return !dialog.running(); }));
+
+    REQUIRE_EQ(dialog.result_chip()->text(), QStringLiteral("Failed"));
+    REQUIRE_EQ(dialog.metric_text(1), QStringLiteral("9.0 MB"));
+    REQUIRE_EQ(dialog.metric_text(2), QStringLiteral("1.0 MB"));
+    REQUIRE(dialog.summary().startsWith(QStringLiteral("Failed: sent 10.0 MB")));
+}
+
+TEST_CASE("benchmark: Cancel stops a run that is going")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.benchmark = true;
+    backend.set_capabilities(caps);
+    backend.set_benchmark_outcome(0, std::chrono::milliseconds(3000));
+    make_port(backend, QStringLiteral("first"));
+    make_port(backend, QStringLiteral("second"));
+
+    BenchmarkDialog dialog(backend);
+    dialog.show();
+    dialog.run_button()->click();
+    REQUIRE(dialog.running());
+    REQUIRE_EQ(dialog.run_button()->text(), QStringLiteral("Cancel"));
+    REQUIRE(dialog.run_button()->isEnabled());
+    REQUIRE(!dialog.from_combo()->isEnabled());
+
+    dialog.run_button()->click();
+    REQUIRE(wait_for([&] { return !dialog.running(); }));
+    REQUIRE_EQ(dialog.result_chip()->text(), QStringLiteral("Cancelled"));
+    REQUIRE_EQ(dialog.run_button()->text(), QStringLiteral("Run"));
+    REQUIRE(!dialog.copy_result_button()->isEnabled());
+    REQUIRE(dialog.summary().isEmpty());
+}
+
+TEST_CASE("benchmark: a dialog closed in the middle of a run goes away cleanly")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.benchmark = true;
+    backend.set_capabilities(caps);
+    backend.set_benchmark_outcome(0, std::chrono::milliseconds(3000));
+    make_port(backend, QStringLiteral("first"));
+    make_port(backend, QStringLiteral("second"));
+
+    {
+        BenchmarkDialog dialog(backend);
+        dialog.show();
+        dialog.run_button()->click();
+        REQUIRE(dialog.running());
+        dialog.close();
+    }
+    QApplication::processEvents();
 }
 
 TEST_CASE("export command: uses the real file name")
