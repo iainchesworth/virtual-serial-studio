@@ -277,3 +277,15 @@ function Test-VssSerialComm([string] $Port) {
     if (-not $key) { return $false }
     [bool]($key.PSObject.Properties | Where-Object { $_.Value -eq $Port })
 }
+
+# Waits for the name to leave SERIALCOMM. The driver takes it off when the device
+# object is deleted, which is after the interface is gone and after the last
+# handle on the port has closed.
+function Wait-VssSerialCommGone([string] $Port, [int] $Seconds = 30) {
+    $until = (Get-Date).AddSeconds($Seconds)
+    do {
+        if (-not (Test-VssSerialComm $Port)) { return $true }
+        Start-Sleep -Milliseconds 250
+    } while ((Get-Date) -lt $until)
+    $false
+}

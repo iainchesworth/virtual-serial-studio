@@ -1084,7 +1084,7 @@ Add-Test 'D16' 'closing the handle that made a port removes it, and the port com
         $p = New-DemandPort $ctl
         $ctl.Dispose()
         Assert (Wait-VssDemandPort $p.Slot 60 -Gone) "the port was still there 60 seconds after its handle closed"
-        Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+        Assert (Wait-VssSerialCommGone $p.Port) "$($p.Port) is still in SERIALCOMM"
         $e = 0
         $h = [VssComm]::Open($p.Port, [ref]$e)
         if ($h -ne [IntPtr](-1)) { [VssComm]::Close($h); throw "$($p.Port) still opens" }
@@ -1196,7 +1196,7 @@ Add-Test 'D19' 'a port that is in use when its maker closes ends the use and goe
         $hub.Dispose()
     }
     Assert (Wait-VssDemandPort $p.Slot 60 -Gone) 'the port was still there after every handle closed'
-    Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+    Assert (Wait-VssSerialCommGone $p.Port) "$($p.Port) is still in SERIALCOMM"
     $detail
 }
 
