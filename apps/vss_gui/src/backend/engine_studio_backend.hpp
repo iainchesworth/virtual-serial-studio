@@ -91,6 +91,9 @@ public:
                   const vss::benchmark_options& options,
                   const vss::benchmark_progress_handler& progress,
                   const std::atomic<bool>* cancel) override;
+    std::optional<line_wiring> link_wiring(vss::link_id id) const override;
+    vss::result<void> set_link_wiring(vss::link_id id,
+                                      const line_wiring& wiring) override;
     vss::result<void> inject_fault(vss::endpoint_id id,
                                    vss::fault_kind fault) override;
 
