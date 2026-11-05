@@ -34,11 +34,14 @@ std::string driver_version();
 /// With the control device installed this asks it for a new port and waits,
 /// usually a second or two, while Windows builds it.  The port is the caller's
 /// alone and is removed when the transport closes, or when the process ends.
-/// Without the control device it takes a free port of the ones that exist.
+/// Only the user who made it can open its hub end.  Without the control device
+/// it takes a free port of the ones that exist, which only an administrator can
+/// open.
 ///
 /// Returns `errc::unsupported` when the driver is absent, `errc::device_busy`
 /// when there is no control device and every port is in use,
-/// `errc::port_exhausted` when the control device has no slot left,
+/// `errc::port_exhausted` when the control device has no slot left or the user
+/// already holds 16 ports,
 /// `errc::permission_denied` when the caller may not open it and
 /// `errc::timeout` when the port did not appear.  See
 /// [drivers/windows/README.md](../../../../drivers/windows/README.md) for the

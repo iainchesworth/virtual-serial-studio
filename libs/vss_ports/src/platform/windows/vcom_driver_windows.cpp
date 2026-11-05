@@ -405,7 +405,9 @@ create_port_on_demand(const transport::executor_type& executor,
                          &request, sizeof(request), &made, sizeof(made),
                          error))
     {
-        if (error == ERROR_NO_SYSTEM_RESOURCES)
+        // No slot left on the machine, or this user holds the most they may.
+        if (error == ERROR_NO_SYSTEM_RESOURCES ||
+            error == ERROR_NOT_ENOUGH_QUOTA)
             return make_error_code(errc::port_exhausted);
         return make_error_code(error == ERROR_ACCESS_DENIED
                                    ? errc::permission_denied

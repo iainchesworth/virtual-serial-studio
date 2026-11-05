@@ -4,20 +4,30 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 // The studio's side of the vsscom driver. A hosted runner has no driver, so
-// these cases pin the protocol the guest scripts and the driver share, and what
-// the client reports when the driver is absent. The client against a real
-// driver is exercised in the Windows guests.
+// most of these cases pin the protocol the guest scripts and the driver share,
+// and what the client reports when the driver is absent. One case runs the
+// client against the real driver; it is skipped unless VSS_TEST_DRIVER=1, which
+// the Windows guest script sets.
 //
 
 #include <vss/ports/vcom_driver.hpp>
 
 #include "test_framework.hpp"
 
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/executor_work_guard.hpp>
 #include <boost/asio/io_context.hpp>
 
+#include <chrono>
 #include <cstddef>
+#include <cstdlib>
+#include <cstring>
 #include <cwchar>
+#include <future>
+#include <memory>
 #include <string>
+#include <thread>
+#include <utility>
 
 #include <windows.h>
 #include <winioctl.h>
@@ -70,6 +80,7 @@ TEST_CASE("driver client: the control device has the codes and layout the guest 
     REQUIRE_EQ(sizeof(VSSCOM_CTL_LIST),
                std::size_t{4 + 8 * VSSCOM_CTL_MAX_PORTS});
     REQUIRE_EQ(static_cast<int>(VSSCOM_CTL_MAX_PORTS), 32);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_CTL_MAX_PORTS_PER_USER), 16);
     REQUIRE_EQ(static_cast<int>(VSSCOM_CTL_VERSION), 1);
 }
 
@@ -80,6 +91,157 @@ TEST_CASE("driver client: the instance id of a port made on demand is predictabl
     std::swprintf(suffix, 16, VSSCOM_PORT_INSTANCE_FORMAT, 10ul);
     REQUIRE(std::wstring(suffix) == L"000A");
     REQUIRE(std::wstring(VSSCOM_PORT_HARDWARE_ID) == L"VSSCOM\\PORT");
+}
+
+namespace
+{
+
+using namespace std::chrono_literals;
+
+/// Reads once from a transport and waits for the answer on this thread.
+std::size_t transport_read(transport& port, void* data, std::size_t size)
+{
+    using answer = std::pair<boost::system::error_code, std::size_t>;
+    auto promise = std::make_shared<std::promise<answer>>();
+    auto future = promise->get_future();
+    port.async_read_some(boost::asio::buffer(data, size),
+                         [promise](boost::system::error_code ec, std::size_t n)
+                         { promise->set_value({ec, n}); });
+    REQUIRE(future.wait_for(10s) == std::future_status::ready);
+    const answer got = future.get();
+    REQUIRE(!got.first);
+    return got.second;
+}
+
+void transport_write(transport& port, const char* text)
+{
+    using answer = std::pair<boost::system::error_code, std::size_t>;
+    auto promise = std::make_shared<std::promise<answer>>();
+    auto future = promise->get_future();
+    port.async_write_some(boost::asio::buffer(text, std::strlen(text)),
+                          [promise](boost::system::error_code ec, std::size_t n)
+                          { promise->set_value({ec, n}); });
+    REQUIRE(future.wait_for(10s) == std::future_status::ready);
+    const answer got = future.get();
+    REQUIRE(!got.first);
+    REQUIRE_EQ(got.second, std::strlen(text));
+}
+
+HANDLE open_com(const std::string& name)
+{
+    return ::CreateFileA(("\\\\.\\" + name).c_str(), GENERIC_READ | GENERIC_WRITE,
+                         0, nullptr, OPEN_EXISTING, 0, nullptr);
+}
+
+/// Waits until the COM name cannot be opened any more.
+bool wait_gone(const std::string& name)
+{
+    const auto until = std::chrono::steady_clock::now() + 60s;
+    while (std::chrono::steady_clock::now() < until)
+    {
+        const HANDLE handle = open_com(name);
+        if (handle == INVALID_HANDLE_VALUE)
+            return true;
+        ::CloseHandle(handle);
+        std::this_thread::sleep_for(250ms);
+    }
+    return false;
+}
+
+} // namespace
+
+// The one case that needs the driver. It runs in a Windows guest with the
+// driver installed (drivers/windows/test/test-client.ps1 sets the variable) and
+// is skipped everywhere else.
+TEST_CASE("driver client: against the real driver, a port is made, carries bytes and goes")
+{
+    char enabled[8]{};
+    const DWORD length = ::GetEnvironmentVariableA("VSS_TEST_DRIVER", enabled,
+                                                   sizeof(enabled));
+    if (length != 1 || enabled[0] != '1')
+        VSS_SKIP("needs the driver: set VSS_TEST_DRIVER=1 in a guest that has it");
+
+    REQUIRE(driver_available());
+    REQUIRE(!driver_version().empty());
+
+    boost::asio::io_context io;
+    auto guard = boost::asio::make_work_guard(io);
+    std::thread runner([&io] { io.run(); });
+    auto stop = [&]
+    {
+        guard.reset();
+        io.stop();
+        runner.join();
+    };
+
+    try
+    {
+        auto first = create_driver_port(io.get_executor(), "guest test one");
+        REQUIRE(first.has_value());
+        const std::string name = first->path;
+        REQUIRE(name.rfind("COM", 0) == 0);
+        REQUIRE(first->kind == virtual_port_kind::windows_driver);
+        transport& hub = *first->port;
+        REQUIRE(hub.is_open());
+
+        // A second request makes another port, and the two do not meet.
+        auto second = create_driver_port(io.get_executor(), "guest test two");
+        REQUIRE(second.has_value());
+        REQUIRE(second->path != name);
+
+        const HANDLE app = open_com(name);
+        REQUIRE(app != INVALID_HANDLE_VALUE);
+        COMMTIMEOUTS timeouts{};
+        timeouts.ReadIntervalTimeout = 100;
+        timeouts.ReadTotalTimeoutConstant = 5000;
+        REQUIRE(::SetCommTimeouts(app, &timeouts) != FALSE);
+
+        // Application to hub.
+        DWORD done = 0;
+        REQUIRE(::WriteFile(app, "hello hub", 9, &done, nullptr) != FALSE);
+        REQUIRE_EQ(done, DWORD{9});
+        char buffer[64]{};
+        std::size_t got = 0;
+        while (got < 9)
+            got += transport_read(hub, buffer + got, sizeof(buffer) - got);
+        REQUIRE(std::string(buffer, got) == "hello hub");
+
+        // Hub to application.
+        transport_write(hub, "hello app");
+        char reply[64]{};
+        REQUIRE(::ReadFile(app, reply, 9, &done, nullptr) != FALSE);
+        REQUIRE_EQ(done, DWORD{9});
+        REQUIRE(std::string(reply, done) == "hello app");
+
+        // The lines the application drives reach the hub, and the hub's reach
+        // the application.
+        REQUIRE(hub.supports_control_lines());
+        REQUIRE(::EscapeCommFunction(app, SETDTR) != FALSE);
+        hub.refresh_lines();
+        REQUIRE(hub.lines().dtr());
+        REQUIRE(!hub.lines().rts());
+        hub.set_control_line(control_line::cts, true);
+        DWORD status = 0;
+        REQUIRE(::GetCommModemStatus(app, &status) != FALSE);
+        REQUIRE((status & MS_CTS_ON) != 0);
+
+        // Closing the transport takes its port away.
+        ::CloseHandle(app);
+        hub.close();
+        REQUIRE(wait_gone(name));
+
+        // The other port is untouched.
+        REQUIRE(second->port->is_open());
+        const std::string other = second->path;
+        second->port->close();
+        REQUIRE(wait_gone(other));
+    }
+    catch (...)
+    {
+        stop();
+        throw;
+    }
+    stop();
 }
 
 TEST_CASE("driver client: without the driver it says so and takes nothing")
