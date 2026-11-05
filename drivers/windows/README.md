@@ -13,9 +13,11 @@ replaces the other.
 | | `vsscom` (kernel mode, KMDF) | `vsscom_um` (user mode, UMDF 2) |
 |---|---|---|
 | Runs in | the kernel | a driver host process |
-| Package | `vsscom.sys`, `vsscom.inf`, `vsscomctl.inf`, two catalogs | `vsscom_um.dll`, `vsscom_um.inf`, one catalog |
+| Package | `vsscom.sys`, `vsscom.inf`, `vsscomctl.inf`, two catalogs | `vsscom_um.dll`, `vsscom_um.inf`, one catalog, and the helper service `vsscom_helper.exe` |
 | Signing | needs a Microsoft-trusted kernel signature to load without test signing | a user-mode package: needs a signed catalog that the machine trusts, and no kernel-mode signature |
-| Ports on demand | yes, through the control device | not yet: ports are made by hand |
+| Ports on demand | yes, through the control device | yes, through the helper service, which runs as SYSTEM |
+| Limits for on-demand ports | 16 for a user, 32 in all | the same |
+| On-demand hub end | only the user who made the port | the same |
 | Hand-made hub end | administrators | administrators |
 | The port itself | the same: a COM name, the application end, the hub end, the serial rules | the same |
 
@@ -33,6 +35,7 @@ driver builds in CI from the same sources; its guest results are in the section
 | Piece | State |
 |---|---|
 | Package: `vsscom.sys`, `vsscom.inf` and `vsscomctl.inf` with a catalog each, for x64 and ARM64 | builds in CI; `InfVerif` and `Inf2Cat` pass |
+| User-mode driver with its helper service: tests D1 to D13, D15 to D22, H14, and the studio client (C1) | pass in the Windows 11 guest with test signing off (Windows 10 not yet run with the helper) |
 | COM name: device interface, `\DosDevices` link, `SERIALCOMM` | runs in a Windows 10 and a Windows 11 guest |
 | Loopback port: waiting reads with the `SetCommTimeouts` rules, `WaitCommEvent`, purge and cancel, modem lines, one handle per end | runs in both guests (tests D1 to D7) |
 | Hub end: a second handle on each port that carries its bytes, line settings and lines, with flow control both ways | runs in both guests (tests D8 to D13) |
@@ -56,10 +59,13 @@ The kernel-mode package is written to `drivers/windows/artifacts/package/<platfo
 `vsscom.sys`, `vsscom.inf`, `vsscomctl.inf` and the catalogs `vsscom.cat` and
 `vsscomctl.cat`. The user-mode package is written to
 `drivers/windows/artifacts/package-um/<platform>/`: `vsscom_um.dll`,
-`vsscom_um.inf` and `vsscom_um.cat`. `-Driver kmdf` or `-Driver umdf` builds one of
-them. CI runs the same script and uploads the packages as the artifacts
-`vsscom-<platform>` and `vsscom-um-<platform>-unsigned` or
-`vsscom-um-<platform>-testsigned`.
+`vsscom_um.inf` and `vsscom_um.cat`. The helper service is written to
+`drivers/windows/artifacts/package-helper/<platform>/`: `vsscom_helper.exe` and
+`install-helper.ps1`. `-Driver kmdf`, `-Driver umdf` or `-Driver helper` builds one
+of them. CI runs the same script and uploads the packages as the artifacts
+`vsscom-<platform>`, `vsscom-um-<platform>-unsigned` or
+`vsscom-um-<platform>-testsigned`, and `vsscom-helper-<platform>-unsigned` or
+`vsscom-helper-<platform>-testsigned`.
 
 ## Signing
 
@@ -72,23 +78,33 @@ machine or an assistant. The `SIGN_WINDOWS` repository variable chooses:
 | `SIGN_WINDOWS` | The user-mode artifact |
 |---|---|
 | `false` (the default) | `vsscom-um-<platform>-unsigned`: nothing signed |
-| `test` | `vsscom-um-<platform>-testsigned`: `vsscom_um.dll` and `vsscom_um.cat` signed with the leaf certificate and timestamped |
+| `test` | `vsscom-um-<platform>-testsigned`: `vsscom_um.dll` and `vsscom_um.cat` signed with the leaf certificate and timestamped; `vsscom-helper-<platform>-testsigned`: `vsscom_helper.exe` signed the same way |
 
 The catalog holds the hash of the DLL, so `build.ps1` runs in two stages with the
 signing between them: `-Stage build`, sign the DLL, `-Stage catalog`, sign the
-catalog.
+catalog. The helper has no catalog and is signed once.
 
 To use the test-signed package on a machine, install the organisation's test CA
-root there once (it is a public certificate; `docs/test-signing.md` in
-`icl-common-infra` says how), then install the package:
+certificates there once (they are public; `docs/test-signing.md` in
+`icl-common-infra` says how): the root, the intermediate, and the signer's own
+certificate as a trusted publisher. `pnputil` cannot answer the question "do you
+trust this publisher?", so a driver whose signer is not a trusted publisher is
+refused with "the publisher of an Authenticode signed catalog has not been
+established as trusted". Then install the package:
 
 ```powershell
-Import-Certificate -FilePath ca.crt -CertStoreLocation Cert:\LocalMachine\Root
+Import-Certificate -FilePath root-ca.crt -CertStoreLocation Cert:\LocalMachine\Root
+Import-Certificate -FilePath intermediate-ca.crt -CertStoreLocation Cert:\LocalMachine\CA
+# The signer's public certificate, read from the signature of the catalog:
+$signer = (Get-AuthenticodeSignature .\vsscom_um.cat).SignerCertificate
+Export-Certificate -Cert $signer -FilePath signer.cer
+Import-Certificate -FilePath signer.cer -CertStoreLocation Cert:\LocalMachine\TrustedPublisher
 pnputil /add-driver vsscom_um.inf /install
 ```
 
 Windows accepts a user-mode driver whose catalog is signed by a CA it trusts, so
-**test signing mode stays off**. The kernel-mode driver does not have that
+**test signing mode stays off**. A CI-signed package was checked this way in the
+Windows 11 guest with test signing off. The kernel-mode driver does not have that
 freedom: Windows loads kernel code only if Microsoft signed it, or if test signing
 mode is on. The test certificate suffices for the second case only.
 
@@ -110,8 +126,13 @@ mode is on. The test certificate suffices for the second case only.
 | `vsscom_um/um_access.c` | user mode: who may open a hub end, by impersonating the requestor |
 | `vsscom_um/um/vsscom_platform.h` | user mode: the headers and the clock the shared code uses |
 | `vsscom_um/vsscom_um.inf` | user mode: the ports (class Ports) |
-| `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver or both |
-| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device), `test-driver.ps1` (tests D1 to D22), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
+| `vsscom_um/um/vsscom_um.h` | user mode: how the driver reads the owner of a port the helper made |
+| `vsscom_helper/main.cpp` | the helper service: the pipe, the checks and the software devices |
+| `vsscom_helper/lease_table.hpp` | the helper's slot and quota rules, with nothing of Windows in them; unit-tested |
+| `vsscom_helper/protocol.h` | what the studio, the helper and the user-mode driver share: the pipe, the messages, the owner property |
+| `vsscom_helper/install-helper.ps1` | installs or removes the service |
+| `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver, the helper or all |
+| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D22, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
 
 The two drivers include their own `vsscom_platform.h`, found first on the include
 path of each project, so the shared sources need no preprocessor conditionals.
@@ -169,6 +190,33 @@ above. The control requests and their structures are in `public.h`.
 The slot, and not a name, identifies the port while Windows builds it, because
 the `COMn` name comes from the Ports class installer at the end of the build.
 Programs find the port by its device instance id.
+
+## Ports on demand for the user-mode driver: the helper service
+
+A user-mode driver cannot make child devices, so `vsscom_um` has no control
+device. Its ports are software devices, which only SYSTEM and administrators may
+make. The `vsscom_helper` service runs as SYSTEM and makes them for ordinary
+users, with the same rules as the control device. The studio asks the control
+device first, then the helper, then takes a free port that already exists.
+
+```powershell
+# As an administrator, from the folder that holds the helper package:
+./install-helper.ps1            # copies vsscom_helper.exe to Program Files, starts the service
+./install-helper.ps1 -Uninstall # stops it, removes it and its folder
+```
+
+| Rule | How it is kept |
+|---|---|
+| Any signed-in user may ask; no one on the network may | The pipe `\\.\pipe\vsscom_helper` lets SYSTEM and administrators do everything and signed-in users read and write, and refuses remote clients. |
+| A port lives as long as the pipe that asked for it | The helper holds the device and closes it when the pipe closes, whether the program closed it or died. Stopping the service removes every port it made. |
+| At most 32 ports exist at once, and one user holds at most 16 | The same numbers as the control device. The user is the SID read from the pipe, so an elevated and an unelevated session of one person share the 16. |
+| The lowest free slot, from 0 to 31 | The instance id of the device is the slot, so a port that comes back has the same COM name. |
+| Only the user who asked can open the hub end | The helper puts the SID on the device as a property; the driver compares it with the user of the opener. A port with no owner was made by hand and opens for administrators. |
+| The request is answered when the driver has started on the device | A machine that has the helper and no user-mode driver gets an error at once (`ERROR_DEV_NOT_EXIST`), and the studio falls back to the ports that exist. |
+
+The helper runs `vsscom_helper.exe --console` in the foreground (elevated) for a
+trial. It writes only short lines to the debugger. The protocol is in
+`vsscom_helper/protocol.h`.
 
 ## Try it in a guest
 

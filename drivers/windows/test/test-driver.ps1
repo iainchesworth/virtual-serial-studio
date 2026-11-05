@@ -16,10 +16,13 @@
 #   D7 exclusive       a second CreateFile fails with access denied
 #   D8-D13 hub end     the second handle, bytes both ways, flow control, lines, purge
 #   D14-D21 control    the control device makes ports on demand and removes them again; write timeouts (D20), hub-end access (D21)
+#   H14 helper         the helper service of the user-mode driver answers and refuses what it should
 #
 # D1 to D7 use a port made by hand and run as a loopback: what is written comes
-# back from the next read. D14 to D19 need the control device that install-driver.ps1
-# makes, and make their own ports.
+# back from the next read. D14 to D19 and D21 need something that makes ports on
+# demand, and make their own ports: the control device that install-driver.ps1
+# makes (kernel-mode driver), or the helper service that install-driver.ps1 -Helper
+# installs (user-mode driver). Without the helper they are skipped.
 # Exit code 0 when every test passed.
 
 [CmdletBinding()]
@@ -510,6 +513,102 @@ public sealed class CtlIo : IDisposable
         if (handle != IntPtr.Zero) { CloseHandle(handle); handle = IntPtr.Zero; }
     }
 }
+
+/// The helper service's pipe, which makes the user-mode driver's ports. It has the
+/// calls of CtlIo that the tests share (Create, Destroy, Sddl, Dispose); a port
+/// lives as long as the pipe that asked for it. Protocol:
+/// drivers/windows/vsscom_helper/protocol.h.
+public sealed class HelperIo : IDisposable
+{
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "CreateFileW")]
+    static extern IntPtr CreateFileW(string name, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool SetNamedPipeHandleState(IntPtr h, ref uint mode, IntPtr maxCollect, IntPtr timeout);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool TransactNamedPipe(IntPtr h, IntPtr input, uint inSize, IntPtr output, uint outSize, out uint read, IntPtr overlapped);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool CloseHandle(IntPtr h);
+    [DllImport("kernel32.dll")]
+    static extern IntPtr LocalFree(IntPtr p);
+    [DllImport("advapi32.dll")]
+    static extern uint GetSecurityInfo(IntPtr h, int objectType, uint info, IntPtr owner, IntPtr group, out IntPtr dacl, IntPtr sacl, out IntPtr descriptor);
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern bool ConvertSecurityDescriptorToStringSecurityDescriptorW(IntPtr descriptor, uint revision, uint info, out IntPtr text, out uint length);
+
+    public const int MaxPorts = 32;
+    public const uint OpCreate = 1;
+    public const uint OpDestroy = 2;
+
+    IntPtr handle;
+
+    HelperIo(IntPtr h) { handle = h; }
+
+    /// Opens the pipe the way the studio does: identification level only.
+    public static HelperIo Open(string name, out int error)
+    {
+        // OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION
+        IntPtr h = CreateFileW(@"\\.\pipe\" + name, 0xC0000000, 0, IntPtr.Zero, 3, 0x00100000 | 0x00010000, IntPtr.Zero);
+        error = h == new IntPtr(-1) ? Marshal.GetLastWin32Error() : 0;
+        if (h == new IntPtr(-1)) return null;
+        uint mode = 2; // PIPE_READMODE_MESSAGE
+        if (!SetNamedPipeHandleState(h, ref mode, IntPtr.Zero, IntPtr.Zero))
+        {
+            error = Marshal.GetLastWin32Error();
+            CloseHandle(h);
+            return null;
+        }
+        return new HelperIo(h);
+    }
+
+    /// One exchange. Returns the Win32 error of the exchange itself, or the Status of
+    /// the reply when the exchange worked.
+    public int Raw(uint version, uint op, uint slot, uint reserved, out uint replySlot)
+    {
+        replySlot = 0;
+        IntPtr inp = Marshal.AllocHGlobal(16);
+        IntPtr outp = Marshal.AllocHGlobal(16);
+        try
+        {
+            Marshal.WriteInt32(inp, 0, (int)version);
+            Marshal.WriteInt32(inp, 4, (int)op);
+            Marshal.WriteInt32(inp, 8, (int)slot);
+            Marshal.WriteInt32(inp, 12, (int)reserved);
+            uint read;
+            if (!TransactNamedPipe(handle, inp, 16, outp, 16, out read, IntPtr.Zero)) return Marshal.GetLastWin32Error();
+            if (read != 16) return 13; // ERROR_INVALID_DATA
+            replySlot = (uint)Marshal.ReadInt32(outp, 8);
+            return Marshal.ReadInt32(outp, 4);
+        }
+        finally { Marshal.FreeHGlobal(inp); Marshal.FreeHGlobal(outp); }
+    }
+
+    /// Asks for a port. `flags` must be 0; other values test the refusal.
+    public int Create(uint flags, out uint slot) { return Raw(1, OpCreate, 0, flags, out slot); }
+
+    public int Destroy(uint slot) { uint ignored; return Raw(1, OpDestroy, slot, 0, out ignored); }
+
+    /// The access list of the pipe, as an SDDL string; null when it cannot be read.
+    public string Sddl()
+    {
+        IntPtr dacl, descriptor;
+        // SE_KERNEL_OBJECT = 6, DACL_SECURITY_INFORMATION = 4
+        if (GetSecurityInfo(handle, 6, 4, IntPtr.Zero, IntPtr.Zero, out dacl, IntPtr.Zero, out descriptor) != 0) return null;
+        try
+        {
+            IntPtr text; uint length;
+            if (!ConvertSecurityDescriptorToStringSecurityDescriptorW(descriptor, 1, 4, out text, out length)) return null;
+            string s = Marshal.PtrToStringUni(text);
+            LocalFree(text);
+            return s;
+        }
+        finally { LocalFree(descriptor); }
+    }
+
+    public void Dispose()
+    {
+        if (handle != IntPtr.Zero) { CloseHandle(handle); handle = IntPtr.Zero; }
+    }
+}
 '@
 
 # Win32 constants.
@@ -522,23 +621,32 @@ $MAX = [uint32]::MaxValue
 
 $tests = @()
 
-# Checks that need what only the kernel-mode driver has so far. The user-mode
-# driver reports them as skipped, with the reason, and the list shrinks as it
-# catches up: the control device that makes ports on demand (D14 to D19) and the
-# rule that only the maker opens a hub end (D21).
+# Checks that are about the kernel-mode driver's control device itself. The
+# user-mode driver has none; H14 checks the helper service that stands in for it.
 $KmdfOnly = @{
-    D14 = 'the user-mode driver has no control device'
-    D15 = 'the user-mode driver has no control device'
-    D16 = 'the user-mode driver has no control device'
-    D17 = 'the user-mode driver has no control device'
-    D18 = 'the user-mode driver has no control device'
-    D19 = 'the user-mode driver has no control device'
-    D21 = 'the user-mode driver does not check who opens the hub end yet'
+    D14 = 'the user-mode driver has no control device (H14 checks its helper service)'
+}
+# Checks that make ports on demand. The kernel-mode driver's control device does
+# it; the user-mode driver needs the helper service, installed with
+# install-driver.ps1 -Helper, and these are skipped without it.
+$NeedsDemand = 'D15', 'D16', 'D17', 'D18', 'D19', 'D21'
+$HelperRunning = [bool]([IO.Directory]::GetFiles('\\.\pipe\') -contains "\\.\pipe\$HelperPipeName")
+# Checks of the helper service alone.
+$HelperOnly = @{
+    H14 = 'the kernel-mode driver has no helper service'
 }
 
 function Add-Test([string] $Id, [string] $Name, [scriptblock] $Body) {
     if ($Flavour -eq 'umdf' -and $KmdfOnly.ContainsKey($Id)) {
         $script:tests += New-TestRecord $Id $Name 'skip' $KmdfOnly[$Id]
+        return
+    }
+    if ($Flavour -ne 'umdf' -and $HelperOnly.ContainsKey($Id)) {
+        $script:tests += New-TestRecord $Id $Name 'skip' $HelperOnly[$Id]
+        return
+    }
+    if ($Flavour -eq 'umdf' -and ($Id -in $NeedsDemand -or $Id -eq 'H14') -and -not $HelperRunning) {
+        $script:tests += New-TestRecord $Id $Name 'skip' 'the helper service is not running (install-driver.ps1 -Helper)'
         return
     }
     try {
@@ -1031,16 +1139,24 @@ $ERROR_NOT_FOUND = 1168; $ERROR_INVALID_PARAMETER = 87; $ERROR_NO_SYSTEM_RESOURC
 $ERROR_NOT_ENOUGH_QUOTA = 1816
 $VssCtlPath = Get-VssControlPath
 
+# What asks for ports: the kernel-mode driver's control device, or the user-mode
+# driver's helper service. Both answer Create and Destroy with a Win32 error, and
+# both end the ports they made when the handle is disposed.
 function Open-Ctl {
-    if (-not $VssCtlPath) { throw 'the control device has no interface (run install-driver.ps1)' }
     $e = 0
+    if ($Flavour -eq 'umdf') {
+        $helper = [HelperIo]::Open($HelperPipeName, [ref]$e)
+        if (-not $helper) { throw "opening the helper's pipe failed with error $e (install-driver.ps1 -Helper)" }
+        return $helper
+    }
+    if (-not $VssCtlPath) { throw 'the control device has no interface (run install-driver.ps1)' }
     $ctl = [CtlIo]::Open($VssCtlPath, [ref]$e)
     if (-not $ctl) { throw "opening the control device failed with error $e" }
     $ctl
 }
 
 # Asks for a port and waits for it to appear. Returns its slot, COM name and hub path.
-function New-DemandPort([CtlIo] $Ctl) {
+function New-DemandPort($Ctl) {
     $slot = [uint32]0
     $e = $Ctl.Create(0, [ref]$slot)
     if ($e -ne 0) { throw "CREATE_PORT failed with error $e" }
@@ -1069,6 +1185,35 @@ Add-Test 'D14' 'the control device answers, refuses bad requests and is open to 
         Assert ($sddl -notmatch ';;;(WD|BU|AN|IU)\)') "access for more than signed-in users in $sddl"
         "version $version, $max ports at most; $sddl"
     } finally { $ctl.Dispose() }
+}
+
+$ERROR_NOT_SUPPORTED = 50
+
+Add-Test 'H14' 'the helper service answers, refuses bad requests and is open to signed-in users only' {
+    $service = Get-CimInstance Win32_Service -Filter "Name='$HelperServiceName'"
+    Assert ($service -and $service.State -eq 'Running') 'the helper service is not running'
+    Assert ($service.StartName -eq 'LocalSystem') "the helper runs as '$($service.StartName)', not as SYSTEM"
+
+    $helper = Open-Ctl
+    try {
+        $slot = [uint32]0
+        $e = $helper.Raw(2, [HelperIo]::OpCreate, 0, 0, [ref]$slot)
+        Assert ($e -eq $ERROR_NOT_SUPPORTED) "a request of version 2 gave error $e"
+        $e = $helper.Raw(1, 99, 0, 0, [ref]$slot)
+        Assert ($e -eq $ERROR_NOT_SUPPORTED) "an unknown operation gave error $e"
+        $e = $helper.Create(1, [ref]$slot)
+        Assert ($e -eq $ERROR_NOT_SUPPORTED) "a create request with a reserved field set gave error $e"
+        $e = $helper.Raw(1, [HelperIo]::OpCreate, 5, 0, [ref]$slot)
+        Assert ($e -eq $ERROR_NOT_SUPPORTED) "a create request that names a slot gave error $e"
+        $e = $helper.Destroy(99)
+        Assert ($e -eq $ERROR_NOT_FOUND) "destroying a slot this pipe does not hold gave error $e"
+
+        $sddl = $helper.Sddl()
+        Assert ([bool]$sddl) 'the access list could not be read'
+        Assert ($sddl -match ';;;AU\)') "no access for signed-in users in $sddl"
+        Assert ($sddl -notmatch ';;;(WD|BU|AN|IU)\)') "access for more than signed-in users in $sddl"
+        "runs as SYSTEM; refuses what it does not know; $sddl"
+    } finally { $helper.Dispose() }
 }
 
 Add-Test 'D15' 'a port made on demand appears, has both ends and carries bytes' {
@@ -1130,15 +1275,21 @@ Add-Test 'D17' 'only the handle that made a port can destroy it' {
         $pb = New-DemandPort $b
         Assert ($pa.Slot -ne $pb.Slot) 'two ports share a slot'
 
+        # The control device says the port is not this handle's to destroy; the
+        # helper does not tell one pipe that another pipe holds a slot.
+        $refused = if ($Flavour -eq 'umdf') { $ERROR_NOT_FOUND } else { $ERROR_ACCESS_DENIED }
         $e = $b.Destroy($pa.Slot)
-        Assert ($e -eq $ERROR_ACCESS_DENIED) "another handle destroying the port gave error $e"
+        Assert ($e -eq $refused) "another handle destroying the port gave error $e"
 
-        $pairs = [uint32[]]@()
-        $e = $b.List([ref]$pairs)
-        Assert ($e -eq 0) "LIST_PORTS failed with error $e"
-        $mine = @{}
-        for ($i = 0; $i -lt $pairs.Count; $i += 2) { $mine[[int]$pairs[$i]] = [int]$pairs[$i + 1] }
-        Assert ($mine[[int]$pa.Slot] -eq 0 -and $mine[[int]$pb.Slot] -eq 1) ("the list was " + (($mine.GetEnumerator() | ForEach-Object { "$($_.Key):$($_.Value)" }) -join ' '))
+        if ($Flavour -ne 'umdf') {
+            # Only the control device lists the ports and whose they are.
+            $pairs = [uint32[]]@()
+            $e = $b.List([ref]$pairs)
+            Assert ($e -eq 0) "LIST_PORTS failed with error $e"
+            $mine = @{}
+            for ($i = 0; $i -lt $pairs.Count; $i += 2) { $mine[[int]$pairs[$i]] = [int]$pairs[$i + 1] }
+            Assert ($mine[[int]$pa.Slot] -eq 0 -and $mine[[int]$pb.Slot] -eq 1) ("the list was " + (($mine.GetEnumerator() | ForEach-Object { "$($_.Key):$($_.Value)" }) -join ' '))
+        }
 
         $e = $a.Destroy($pa.Slot)
         Assert ($e -eq 0) "destroying the port gave error $e"

@@ -3,9 +3,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
-// The studio's side of the vsscom driver: asking the control device for a port,
-// finding the ports that exist, and opening the hub end of one.
-// drivers/windows/vsscom/public.h says what the driver expects.
+// The studio's side of the vsscom drivers: asking for a port, finding the ports
+// that exist, and opening the hub end of one.
+// drivers/windows/vsscom/public.h says what the kernel-mode driver expects; its
+// control device makes the ports. The user-mode driver has no control device, and
+// the vsscom_helper service makes its ports (drivers/windows/vsscom_helper/
+// protocol.h). Both kinds of port answer the same hub requests.
 //
 
 #include "../vcom_driver_platform.hpp"
@@ -18,10 +21,12 @@
 #include <winioctl.h>
 #include <setupapi.h>
 #include <cfgmgr32.h> // MAX_DEVICE_ID_LEN
+#include <devpropdef.h>
 // Defines the interface GUID of public.h in this file only.
 #include <initguid.h>
 
 #include <vsscom/public.h>
+#include <vsscom_helper/protocol.h>
 
 #include <atomic>
 #include <chrono>
@@ -373,10 +378,55 @@ private:
     unique_handle control_;
 };
 
-/// Asks the control device for a port and waits for Windows to build it.
+/// Waits for the hub end of a port that was just made, and opens it. `lease` is
+/// what keeps the port alive (the control handle, or the helper's pipe); it goes
+/// to the transport, and closing it removes the port. It is closed on failure.
 ///
 /// Windows installs the driver on the new device before the hub end exists,
 /// which takes a second or two.
+result<virtual_port_result>
+open_made_port(const transport::executor_type& executor,
+               const std::string& name, const std::wstring& instance,
+               unique_handle lease)
+{
+    using clock = std::chrono::steady_clock;
+    const auto deadline = clock::now() + std::chrono::seconds(30);
+    for (;;)
+    {
+        for (const auto& hub : enumerate_hubs())
+        {
+            if (hub.port.empty() ||
+                ::_wcsicmp(hub.instance.c_str(), instance.c_str()) != 0)
+                continue;
+
+            DWORD error = 0;
+            const HANDLE handle = open_hub(hub.path, error);
+            if (handle == INVALID_HANDLE_VALUE)
+                return make_error_code(errc::io_error);
+
+            VSSCOM_VERSION_INFO version{};
+            if (!read_version(handle, version) ||
+                version.Version != VSSCOM_VERSION)
+            {
+                ::CloseHandle(handle);
+                return make_error_code(errc::unsupported);
+            }
+
+            virtual_port_result out;
+            out.path = to_utf8(hub.port);
+            out.kind = virtual_port_kind::windows_driver;
+            out.port = std::make_shared<driver_transport>(
+                executor, handle, out.path, name, std::move(lease));
+            return out;
+        }
+
+        if (clock::now() >= deadline)
+            return make_error_code(errc::timeout);
+        ::Sleep(100);
+    }
+}
+
+/// Asks the control device for a port and waits for Windows to build it.
 result<virtual_port_result>
 create_port_on_demand(const transport::executor_type& executor,
                       const std::string& name, const std::wstring& control_path)
@@ -420,48 +470,113 @@ create_port_on_demand(const transport::executor_type& executor,
                   static_cast<unsigned long>(made.Slot));
     const std::wstring instance =
         std::wstring(VSSCOM_PORT_HARDWARE_ID) + L"\\" + suffix;
+    return open_made_port(executor, name, instance, std::move(control));
+}
 
-    using clock = std::chrono::steady_clock;
-    const auto deadline = clock::now() + std::chrono::seconds(30);
-    for (;;)
+/// Opens the pipe of the helper service. `error` is the Win32 error when it
+/// cannot. A busy pipe is waited for a little: the helper serves a client on
+/// each instance and makes the next at once.
+HANDLE open_helper(DWORD& error)
+{
+    for (int attempt = 0; attempt < 5; ++attempt)
     {
-        for (const auto& hub : enumerate_hubs())
+        // Identification only: the helper needs to know the user and nothing
+        // more, and has no reason to act as the user.
+        const HANDLE handle = ::CreateFileW(
+            VssComHelperPipeName, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+            OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION,
+            nullptr);
+        if (handle != INVALID_HANDLE_VALUE)
         {
-            if (hub.port.empty() ||
-                ::_wcsicmp(hub.instance.c_str(), instance.c_str()) != 0)
-                continue;
-
-            const HANDLE handle = open_hub(hub.path, error);
-            if (handle == INVALID_HANDLE_VALUE)
-                return make_error_code(errc::io_error);
-
-            VSSCOM_VERSION_INFO version{};
-            if (!read_version(handle, version) ||
-                version.Version != VSSCOM_VERSION)
-            {
-                ::CloseHandle(handle);
-                return make_error_code(errc::unsupported);
-            }
-
-            virtual_port_result out;
-            out.path = to_utf8(hub.port);
-            out.kind = virtual_port_kind::windows_driver;
-            out.port = std::make_shared<driver_transport>(
-                executor, handle, out.path, name, std::move(control));
-            return out;
+            error = 0;
+            return handle;
         }
-
-        if (clock::now() >= deadline)
-            return make_error_code(errc::timeout);
-        ::Sleep(100);
+        error = ::GetLastError();
+        if (error != ERROR_PIPE_BUSY)
+            break;
+        ::WaitNamedPipeW(VssComHelperPipeName, 1000);
     }
+    return INVALID_HANDLE_VALUE;
+}
+
+/// Asks the helper service for a port of the user-mode driver. The helper
+/// answers when the driver has started on it. The port lives as long as the pipe
+/// handle, so the handle goes to the transport like the control handle does.
+/// errc::unsupported when there is no helper, or it speaks another version.
+result<virtual_port_result>
+create_port_via_helper(const transport::executor_type& executor,
+                       const std::string& name)
+{
+    DWORD error = 0;
+    unique_handle pipe(open_helper(error));
+    if (pipe.get() == INVALID_HANDLE_VALUE)
+    {
+        if (error == ERROR_ACCESS_DENIED)
+            return make_error_code(errc::permission_denied);
+        return make_error_code(error == ERROR_FILE_NOT_FOUND
+                                   ? errc::unsupported
+                                   : errc::io_error);
+    }
+
+    DWORD mode = PIPE_READMODE_MESSAGE;
+    if (!::SetNamedPipeHandleState(pipe.get(), &mode, nullptr, nullptr))
+        return make_error_code(errc::io_error);
+
+    VSSCOM_HELPER_REQUEST request{};
+    request.Version = VSSCOM_HELPER_VERSION;
+    request.Op = VSSCOM_HELPER_OP_CREATE;
+    VSSCOM_HELPER_REPLY reply{};
+    DWORD returned = 0;
+    // Waits while the helper makes the device and Windows starts the driver.
+    if (!::TransactNamedPipe(pipe.get(), &request, sizeof(request), &reply,
+                             sizeof(reply), &returned, nullptr) ||
+        returned != sizeof(reply) || reply.Version != VSSCOM_HELPER_VERSION)
+        return make_error_code(errc::io_error);
+
+    switch (reply.Status)
+    {
+    case ERROR_SUCCESS:
+        break;
+    case ERROR_NO_SYSTEM_RESOURCES:
+    case ERROR_NOT_ENOUGH_QUOTA:
+        return make_error_code(errc::port_exhausted);
+    case ERROR_ACCESS_DENIED:
+        return make_error_code(errc::permission_denied);
+    case ERROR_NOT_SUPPORTED:
+    case ERROR_DEV_NOT_EXIST: // the helper is there and the driver is not
+        return make_error_code(errc::unsupported);
+    case ERROR_TIMEOUT:
+        return make_error_code(errc::timeout);
+    default:
+        return make_error_code(errc::io_error);
+    }
+
+    wchar_t suffix[16]{};
+    std::swprintf(suffix, 16, VssComUmPortInstanceFormat,
+                  static_cast<unsigned long>(reply.Slot));
+    const std::wstring instance =
+        std::wstring(VssComUmPortInstancePrefix) + suffix;
+    return open_made_port(executor, name, instance, std::move(pipe));
+}
+
+} // namespace
+
+namespace
+{
+
+/// True when the helper service has its pipe. A pipe that is busy is there.
+bool helper_present()
+{
+    return ::WaitNamedPipeW(VssComHelperPipeName, 1) != FALSE ||
+           ::GetLastError() != ERROR_FILE_NOT_FOUND;
 }
 
 } // namespace
 
 bool platform_driver_available()
 {
-    return !find_control_path().empty() || !enumerate_hubs().empty();
+    return !find_control_path().empty() || helper_present() ||
+           !enumerate_hubs().empty();
 }
 
 std::string platform_driver_version()
@@ -512,6 +627,12 @@ platform_create_driver_port(const transport::executor_type& executor,
         if (made || made.error() != make_error_code(errc::unsupported))
             return made;
     }
+
+    // The user-mode driver has no control device: its helper service makes the
+    // port. No helper, or no user-mode driver behind it, falls through as well.
+    auto helped = create_port_via_helper(executor, name);
+    if (helped || helped.error() != make_error_code(errc::unsupported))
+        return helped;
 
     const auto hubs = enumerate_hubs();
     if (hubs.empty())

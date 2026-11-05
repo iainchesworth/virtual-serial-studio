@@ -25,8 +25,17 @@ try {
 
     # The control device first: its ports go with it. Then the entries that
     # absent devices leave behind, which keep their COM names reserved.
+    # The helper service of the user-mode driver goes first, if it is there: the
+    # ports it made go with it.
+    if (Get-Service -Name $HelperServiceName -ErrorAction SilentlyContinue) {
+        & sc.exe stop $HelperServiceName | Out-Null
+        for ($i = 0; $i -lt 60 -and (Get-Service -Name $HelperServiceName).Status -ne 'Stopped'; $i++) { Start-Sleep -Milliseconds 500 }
+        & sc.exe delete $HelperServiceName | Out-Null
+        $tests += New-TestRecord 'uninstall.helper' 'remove the helper service' 'pass' ''
+    }
+
     $removed = [VssSetup]::RemoveDevices($SystemClassGuid, $ControlHardwareId, $true)
-    for ($i = 0; $i -lt 60 -and @([VssSetup]::Interfaces($VssInterfaceGuid) | Where-Object { $_ -like '*\vsscom#port#*' }).Count -gt 0; $i++) {
+    for ($i = 0; $i -lt 60 -and @([VssSetup]::Interfaces($VssInterfaceGuid) | Where-Object { $_ -like '*\vsscom#port#*' -or $_ -like '*\swd#vsscomum#*' }).Count -gt 0; $i++) {
         Start-Sleep -Milliseconds 500
     }
     $removed += [VssSetup]::RemoveDevices($PortsClassGuid, $DemandHardwareId, $true)

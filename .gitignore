@@ -53,6 +53,7 @@ Thumbs.db
 
 # Driver build output
 /drivers/windows/artifacts/
+/drivers/windows/*/obj/
 
 # The driver project is hand-written source, not a generated Visual Studio file
 !drivers/windows/**/*.vcxproj

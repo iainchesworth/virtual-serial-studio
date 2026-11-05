@@ -9,17 +9,24 @@
 #   umdf   vsscom_um.dll, vsscom_um.inf and its catalog: a user-mode driver, which
 #          needs no kernel-mode code signature.
 #
+# The user-mode driver has no control device, so a third piece makes its ports on
+# demand for ordinary users:
+#
+#   helper vsscom_helper.exe, a service that runs as SYSTEM, and install-helper.ps1,
+#          which installs it. It is an ordinary program and has no INF or catalog.
+#
 # It needs Visual Studio 2026 with the C++ desktop workload (the driver build
 # targets ship with it) and NuGet access. The Windows SDK and the WDK come from
 # the NuGet packages named in the project files, so nothing else is installed. CI
 # and a developer run the same script.
 #
 #   ./drivers/windows/build.ps1 [-Platform x64|ARM64] [-Configuration Release|Debug]
-#                               [-Driver all|kmdf|umdf]
+#                               [-Driver all|kmdf|umdf|helper]
 #
-# The kernel-mode package is written to drivers/windows/artifacts/package/<platform>/
-# and the user-mode one to drivers/windows/artifacts/package-um/<platform>/. They
-# are not signed here: see docs/windows-com-driver.md for the signing steps.
+# The kernel-mode package is written to drivers/windows/artifacts/package/<platform>/,
+# the user-mode one to drivers/windows/artifacts/package-um/<platform>/ and the
+# helper to drivers/windows/artifacts/package-helper/<platform>/. They are not
+# signed here: see docs/windows-com-driver.md for the signing steps.
 #
 # A catalog holds the hash of the binary, so a package that is signed has to be built
 # in two steps with the signing between them. -Stage build stops before the catalogs;
@@ -32,7 +39,7 @@ param(
     [string] $Platform = 'x64',
     [ValidateSet('Release', 'Debug')]
     [string] $Configuration = 'Release',
-    [ValidateSet('all', 'kmdf', 'umdf')]
+    [ValidateSet('all', 'kmdf', 'umdf', 'helper')]
     [string] $Driver = 'all',
     [ValidateSet('all', 'build', 'catalog')]
     [string] $Stage = 'all'
@@ -136,6 +143,26 @@ if ($Driver -in 'all', 'umdf') {
         -InfDir (Join-Path $root 'vsscom_um') -Infs 'vsscom_um.inf' -PackageSubdir 'package-um' `
         -Expected 'vsscom_um.dll', 'vsscom_um.inf', 'vsscom_um.cat' `
         -InfVerifMode '/u'
+}
+
+# The helper is a program and not a driver: no INF, no catalog. The build stage
+# does all of it, and the catalog stage has nothing to do. The program is signed
+# on its own after this (the signing step in CI), then it is ready.
+if (($Driver -in 'all', 'helper') -and ($Stage -ne 'catalog')) {
+    Write-Host "== Build helper ($Platform, $Configuration)"
+    $helperProject = Join-Path $root 'vsscom_helper\vsscom_helper.vcxproj'
+    & $msbuild $helperProject -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
+    if ($LASTEXITCODE -ne 0) { throw "msbuild failed for the helper with exit code $LASTEXITCODE" }
+
+    $helperOut = Join-Path $root "artifacts\helper\$Platform\$Configuration"
+    $helperPackage = Join-Path $root "artifacts\package-helper\$Platform"
+    if (-not (Test-Path (Join-Path $helperOut 'vsscom_helper.exe'))) { throw "vsscom_helper.exe was not produced in $helperOut" }
+    if (Test-Path $helperPackage) { Remove-Item $helperPackage -Recurse -Force }
+    New-Item -ItemType Directory $helperPackage | Out-Null
+    Copy-Item (Join-Path $helperOut 'vsscom_helper.exe') $helperPackage
+    Copy-Item (Join-Path $root 'vsscom_helper\install-helper.ps1') $helperPackage
+    Get-ChildItem $helperPackage | Select-Object Name, Length | Format-Table -AutoSize
+    Write-Host "Package: $helperPackage"
 }
 
 # The user-mode INF names the Windows-supplied reflector (WUDFRd.sys) as a service

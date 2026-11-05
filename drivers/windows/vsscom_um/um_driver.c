@@ -9,7 +9,8 @@
 // io.c, hub.c, core/): a COM name, the application end and the hub end. It runs
 // in a driver host process and needs no kernel-mode code signing. What it lacks
 // is the control device that makes ports on demand: a user-mode driver cannot
-// be a bus, so its ports are devices that were created.
+// be a bus, so its ports are devices that were created: by hand, or by the
+// vsscom_helper service (drivers/windows/vsscom_helper/protocol.h).
 //
 
 // initguid.h after the platform headers and before the rest, so that this file
@@ -17,7 +18,7 @@
 // other files only declare them.
 #include <vsscom_platform.h>
 #include <initguid.h>
-#include "vsscom.h"
+#include "vsscom_um.h"
 
 DRIVER_INITIALIZE DriverEntry;
 EVT_WDF_DRIVER_DEVICE_ADD VssComEvtDeviceAdd;
@@ -37,6 +38,8 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
 {
     UNREFERENCED_PARAMETER(Driver);
 
-    // A port made by hand: no control device, so no owner to check.
-    return VssComCreatePort(DeviceInit, FALSE, VssComMaxUlong);
+    // A port the helper made has its owner on the device, and only that user may
+    // open its hub end. One made by hand has none, and only administrators may.
+    return VssComCreatePort(DeviceInit, VssComUmDeviceInitHasOwner(DeviceInit),
+                            VssComMaxUlong);
 }
