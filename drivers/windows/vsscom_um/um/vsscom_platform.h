@@ -9,10 +9,14 @@
 
 #pragma once
 
-// The status codes come from ntstatus.h and not from windows.h.
-#define WIN32_NO_STATUS
+// windows.h and ntstatus.h both define the STATUS_* codes, with the same values
+// and different types; the one included second wins, and a driver wants the
+// NTSTATUS ones of ntstatus.h. winioctl.h and ntddser.h (included by vsscom.h)
+// likewise both define the SERIAL_LSRMST_* and SERIAL_IOC_* macros with the same
+// values. The repeats are harmless, so the warning is off for the whole driver.
+#pragma warning(disable : 4005)
+
 #include <windows.h>
-#undef WIN32_NO_STATUS
 #include <ntstatus.h>
 #include <winioctl.h>
 #include <wdf.h>
@@ -25,9 +29,3 @@ static FORCEINLINE ULONGLONG VssComInterruptTime(VOID)
     (void)QueryUnbiasedInterruptTime(&now);
     return now;
 }
-
-// winioctl.h of the Windows SDK and ntddser.h both define the SERIAL_LSRMST_*
-// and SERIAL_IOC_* macros, with the same values and different spelling. The
-// serial control codes and structures come from ntddser.h (vsscom.h), so the
-// repeat is harmless.
-#pragma warning(disable : 4005)

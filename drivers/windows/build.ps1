@@ -68,7 +68,8 @@ function Build-Driver {
     & $msbuild $Project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
     if ($LASTEXITCODE -ne 0) { throw "msbuild failed for $Name with exit code $LASTEXITCODE" }
 
-    $out = Join-Path $root (Join-Path 'artifacts' (Join-Path $OutSubdir "$Platform\$Configuration"))
+    $outRelative = if ($OutSubdir) { "artifacts\$OutSubdir\$Platform\$Configuration" } else { "artifacts\$Platform\$Configuration" }
+    $out = Join-Path $root $outRelative
     $binary = Join-Path $out $Binary
     if (-not (Test-Path $binary)) { throw "$Binary was not produced in $out" }
     foreach ($tool in $infverif, $inf2cat) {

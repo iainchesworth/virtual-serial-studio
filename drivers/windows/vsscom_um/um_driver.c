@@ -12,7 +12,11 @@
 // be a bus, so its ports are devices that were created.
 //
 
-#define VSSCOM_DEFINE_GUIDS
+// initguid.h after the platform headers and before the rest, so that this file
+// defines the GUIDs of ntddser.h and public.h and the linker finds them. The
+// other files only declare them.
+#include <vsscom_platform.h>
+#include <initguid.h>
 #include "vsscom.h"
 
 DRIVER_INITIALIZE DriverEntry;

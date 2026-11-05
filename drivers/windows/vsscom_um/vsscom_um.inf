@@ -48,7 +48,12 @@ Needs=WUDFRD.NT
 vsscom_um.dll
 
 ; The reflector, the kernel-mode half of the framework, is installed by the
-; inbox WUDFRD.inf.
+; inbox WUDFRD.inf, which asks an including INF to reference its three sections
+; (install, hardware and services) whether or not it adds anything of its own.
+[VssComUm_Install.NT.HW]
+Include=WUDFRD.inf
+Needs=WUDFRD.NT.HW
+
 [VssComUm_Install.NT.Services]
 Include=WUDFRD.inf
 Needs=WUDFRD.NT.Services

@@ -71,6 +71,8 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <!-- vsscom_platform.h of the user-mode driver, then the shared headers. -->
       <AdditionalIncludeDirectories>$(ProjectDir)um;$(ProjectDir)..\vsscom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- The framework headers use the NTSTATUS codes of ntstatus.h. -->
+      <PreprocessorDefinitions>UMDF_USING_NTSTATUS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
 
