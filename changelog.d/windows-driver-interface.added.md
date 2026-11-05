@@ -1,4 +1,4 @@
-Added the seam for a first-party Windows COM port driver, so Virtual Serial
+Added the interface for a first-party Windows COM port driver, so Virtual Serial
 Studio can eventually replace com0com rather than depend on it.
 
 `vss::virtual_port_kind::windows_driver`, `vss::driver_available()`,

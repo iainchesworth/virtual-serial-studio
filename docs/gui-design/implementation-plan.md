@@ -71,7 +71,7 @@ missing. **Missing** = not reachable without an engine change.
 
 | Capability | Status | Evidence | GUI behaviour |
 |---|---|---|---|
-| Create, list, remove virtual ports (auto, pty, loopback, named pipe, driver seam) | Present | `studio::create_virtual_port`, `remove_port`, `endpoint_infos`; `virtual_port.hpp:19-31` | Use directly. |
+| Create, list, remove virtual ports (auto, pty, loopback, named pipe, driver interface) | Present | `studio::create_virtual_port`, `remove_port`, `endpoint_infos`; `virtual_port.hpp:19-31` | Use directly. |
 | Enumerate serial devices and com0com pairs | Present | `studio::serial_devices`, `detect_com0com` | Use directly. |
 | Links: connect, split, join, redirect, monitor interleave or owner | Present | `hub::connect/split/join/redirect/monitor`; `link_options` | Use hub methods through the adapter so options are not lost. |
 | Owner arbitration | Partial | `hub::set_owner/release_owner` exist; `studio` has no facade | Adapter exposes it via `studio::engine()`. Record the missing facade in the PR. |

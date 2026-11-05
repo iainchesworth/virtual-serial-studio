@@ -22,11 +22,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Bundle", text);
-}
-
 QString csv_field(const QString& value)
 {
     if (!value.contains(QLatin1Char(',')) &&
@@ -63,7 +58,8 @@ QByteArray setup_json(const StudioBackend& backend)
     if (!document)
     {
         return redact_secrets(
-                   t("The setup could not be written: %1")
+                   QCoreApplication::translate(
+                       "Bundle", "The setup could not be written: %1")
                        .arg(QString::fromStdString(document.error().message())))
             .toUtf8();
     }
@@ -105,24 +101,25 @@ QString port_state_label(vss::endpoint_state state)
     switch (state)
     {
     case vss::endpoint_state::created:
-        return t("Created");
+        return QCoreApplication::translate("Bundle", "Created");
     case vss::endpoint_state::opening:
-        return t("Opening");
+        return QCoreApplication::translate("Bundle", "Opening");
     case vss::endpoint_state::open:
-        return t("Open");
+        return QCoreApplication::translate("Bundle", "Open");
     case vss::endpoint_state::closed:
-        return t("Closed");
+        return QCoreApplication::translate("Bundle", "Closed");
     case vss::endpoint_state::failed:
-        return t("Failed");
+        return QCoreApplication::translate("Bundle", "Failed");
     }
-    return t("Unknown");
+    return QCoreApplication::translate("Bundle", "Unknown");
 }
 
 QString render_traffic(const std::vector<traffic_view>& traffic)
 {
-    QString out =
-        t("# Traffic contents from Virtual Serial Studio. These bytes may "
-          "include passwords or personal data.\n");
+    QString out = QCoreApplication::translate(
+        "Bundle",
+        "# Traffic contents from Virtual Serial Studio. These bytes may "
+        "include passwords or personal data.\n");
     int index = 0;
     for (const traffic_view& record : traffic)
     {
@@ -154,7 +151,7 @@ QString render_traffic(const std::vector<traffic_view>& traffic)
         }
     }
     if (index == 0)
-        out += t("No traffic recorded.\n");
+        out += QCoreApplication::translate("Bundle", "No traffic recorded.\n");
     return redact_secrets(out);
 }
 
@@ -168,7 +165,9 @@ QVector<bundle_file> build_bundle_files(const StudioBackend& backend,
     if (selection.event_log)
     {
         const QString text =
-            log.size() == 0 ? t("No events recorded.\n") : log.text();
+            log.size() == 0
+                ? QCoreApplication::translate("Bundle", "No events recorded.\n")
+                : log.text();
         files.push_back(
             {QStringLiteral("log.txt"), redact_secrets(text).toUtf8()});
     }

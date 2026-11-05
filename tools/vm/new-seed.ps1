@@ -63,6 +63,28 @@ if ($user -notmatch '^[a-z][a-z0-9_-]{0,30}$') {
 
 function Protect-Xml([string] $Text) { return [System.Security.SecurityElement]::Escape($Text) }
 
+function Get-PasswordHash {
+    # SHA-512 crypt of the password, made by openssl in WSL. The password goes to openssl on
+    # standard input, never on a command line, and ends in a line feed only: a carriage return
+    # from the pipeline would be part of the password and the hash would not match it.
+    param([string] $Password, [string] $Distro)
+
+    $info = New-Object Diagnostics.ProcessStartInfo
+    $info.FileName = 'wsl.exe'
+    foreach ($argument in '-d', $Distro, '--', 'openssl', 'passwd', '-6', '-stdin') { $info.ArgumentList.Add($argument) }
+    $info.RedirectStandardInput = $true
+    $info.RedirectStandardOutput = $true
+    $info.UseShellExecute = $false
+    $process = [Diagnostics.Process]::Start($info)
+    $process.StandardInput.NewLine = "`n"
+    $process.StandardInput.WriteLine($Password)
+    $process.StandardInput.Close()
+    $hash = $process.StandardOutput.ReadToEnd().Trim()
+    $process.WaitForExit()
+    if ($process.ExitCode -ne 0 -or $hash -notmatch '^\$6\$') { throw 'openssl could not hash the password in WSL' }
+    return $hash
+}
+
 function Get-Template([string] $Name) {
     return Get-Content (Join-Path $here "templates/$Name") -Raw
 }
@@ -188,6 +210,7 @@ try {
         $xml = (Get-Template 'autounattend.xml.in')
         $xml = $xml.Replace('@LABCONFIG@', $lab).Replace('@DISKCONFIG@', $disk)
         $xml = $xml.Replace('@EDITION@', (Protect-Xml $edition))
+        $xml = $xml.Replace('@LANGUAGE@', (Protect-Xml $entry.language))
         $xml = $xml.Replace('@HOSTNAME@', (Protect-Xml $hostname))
         $xml = $xml.Replace('@USER@', (Protect-Xml $user))
         $xml = $xml.Replace('@PASSWORD@', (Protect-Xml $password))
@@ -202,9 +225,7 @@ try {
             if (-not (Test-Path $PublicKeyFile)) { throw "no public key at $PublicKeyFile" }
             $key = (Get-Content $PublicKeyFile -Raw).Trim()
             if ($key -notmatch '^ssh-(ed25519|rsa) ') { throw "$PublicKeyFile does not hold a public key" }
-            # The password goes to openssl on standard input, never on a command line.
-            $hash = ($password | & wsl.exe -d $WslDistro -- openssl passwd -6 -stdin).Trim()
-            if ($LASTEXITCODE -ne 0 -or $hash -notmatch '^\$6\$') { throw 'openssl could not hash the password in WSL' }
+            $hash = Get-PasswordHash -Password $password -Distro $WslDistro
         }
         $data = Get-Template 'user-data.in'
         $data = $data.Replace('@HOSTNAME@', $hostname).Replace('@USER@', $user)

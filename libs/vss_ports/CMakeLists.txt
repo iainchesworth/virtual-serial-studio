@@ -23,8 +23,21 @@ target_compile_features(vss_ports PUBLIC cxx_std_23)
 target_link_libraries(vss_ports PUBLIC vss_core Vss::VirtualSerial)
 icl_platform_sources(vss_ports)
 
+# Linux and macOS share these. Windows has its own files in src/platform/windows.
+if(UNIX)
+  target_sources(vss_ports PRIVATE
+    src/platform/posix/com0com_posix.cpp
+    src/platform/posix/native_lines_posix.cpp
+    src/platform/posix/serial_enumeration_posix.cpp
+    src/platform/posix/vcom_driver_posix.cpp
+    src/platform/posix/virtual_port_posix.cpp)
+endif()
+
 if(WIN32)
   target_link_libraries(vss_ports PRIVATE setupapi shell32 advapi32 ws2_32 mswsock)
+  # public.h of the driver: the interface GUID, control codes and the hub state.
+  target_include_directories(vss_ports PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/windows)
 endif()
 
 vss_set_warnings(vss_ports)

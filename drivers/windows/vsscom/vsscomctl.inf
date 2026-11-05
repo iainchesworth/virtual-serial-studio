@@ -1,0 +1,81 @@
+; Copyright (c) 2026 Virtual Serial Studio contributors
+; SPDX-License-Identifier: GPL-3.0-or-later
+;
+; The control device that makes virtual serial ports on demand. It is a bus: a
+; handle on its interface asks for a port, and the port appears as a child
+; device that vsscom.inf drives. Install this once, with vsscom.inf in the same
+; driver store; it makes no port by itself. It uses the same vsscom.sys, which
+; finds out that it is the control device from the VssRole value below.
+;
+; The ports that the control device makes belong to the Ports class
+; (vsscom.inf), but this device is not a port and must not get a COM name, so it
+; lives in the System class.
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=vsscomctl.cat
+DriverVer=01/01/2026,1.0.0.0
+PnpLockdown=1
+
+[Manufacturer]
+%ManufacturerName%=VssComCtl,NTamd64.10.0...17134,NTarm64.10.0...17134
+
+[VssComCtl.NTamd64.10.0...17134]
+%VssComCtl.DeviceDesc%=VssComCtl_Install,VSSCOM\CONTROL
+
+[VssComCtl.NTarm64.10.0...17134]
+%VssComCtl.DeviceDesc%=VssComCtl_Install,VSSCOM\CONTROL
+
+[SourceDisksNames]
+1=%DiskName%
+
+[SourceDisksFiles]
+vsscom.sys=1
+
+[DestinationDirs]
+DefaultDestDir=13
+
+; --- The device -------------------------------------------------------------
+
+[VssComCtl_Install.NT]
+CopyFiles=VssComCtl_CopyFiles
+
+[VssComCtl_CopyFiles]
+vsscom.sys
+
+[VssComCtl_Install.NT.HW]
+AddReg=VssComCtl_HW_AddReg
+
+[VssComCtl_HW_AddReg]
+; The driver acts as the control device when this is 1.
+HKR,,VssRole,0x10001,1
+; 0x100 is FILE_DEVICE_SECURE_OPEN, so the access list covers the interface path.
+HKR,,DeviceCharacteristics,0x10001,0x00000100
+; SYSTEM and administrators have full access; any signed-in user may open the
+; control device and make ports.
+HKR,,Security,,"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GRGW;;;AU)"
+
+[VssComCtl_Install.NT.Services]
+AddService=vsscom,0x00000002,VssCom_Service
+
+[VssCom_Service]
+DisplayName=%VssCom.ServiceDesc%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%13%\vsscom.sys
+
+[VssComCtl_Install.NT.Wdf]
+KmdfService=vsscom,VssCom_Wdf
+
+[VssCom_Wdf]
+KmdfLibraryVersion=1.27
+
+[Strings]
+ManufacturerName="Virtual Serial Studio"
+DiskName="Virtual Serial Studio driver"
+VssComCtl.DeviceDesc="Virtual Serial Studio Port Control"
+VssCom.ServiceDesc="Virtual Serial Studio COM Port Driver"

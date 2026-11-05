@@ -12,8 +12,10 @@
 #include <filesystem>
 #include <utility>
 
-namespace vss {
-namespace {
+namespace vss
+{
+namespace
+{
 
 std::string label_for_uri(const std::string& uri)
 {
@@ -29,8 +31,8 @@ std::string label_for_uri(const std::string& uri)
                 target.erase(query);
             for (char& character : target)
             {
-                if (character == ':' || character == '/' || character == '\\'
-                    || character == '.')
+                if (character == ':' || character == '/' || character == '\\' ||
+                    character == '.')
                     character = '-';
             }
             if (!target.empty())
@@ -83,9 +85,8 @@ config::port_entry record_to_entry(const std::string& name,
 
 } // namespace
 
-studio::studio(studio_options options)
-    : options_(options)
-    , hub_(std::make_shared<vss::hub>(options_.hub))
+studio::studio(const studio_options& options)
+    : options_(options), hub_(std::make_shared<vss::hub>(options_.hub))
 {
     if (options_.start_hub)
         hub_->start();
@@ -145,7 +146,8 @@ bool studio::path_in_use(const std::string& path) const
     return claimed_paths_.find(path) != claimed_paths_.end();
 }
 
-void studio::claim_paths(const std::string& target, const std::string& advertised)
+void studio::claim_paths(const std::string& target,
+                         const std::string& advertised)
 {
     std::lock_guard lock(record_mutex_);
     if (!target.empty())
@@ -178,9 +180,9 @@ result<void> studio::link_pty(port_record& record)
     return {};
 }
 
-result<std::shared_ptr<endpoint>> studio::register_port(
-    port_record record, std::shared_ptr<transport> transport,
-    endpoint_options options)
+result<std::shared_ptr<endpoint>>
+studio::register_port(port_record record, std::shared_ptr<transport> transport,
+                      endpoint_options options)
 {
     if (!transport)
         return make_error_code(errc::invalid_argument);
@@ -209,8 +211,9 @@ result<std::shared_ptr<endpoint>> studio::register_port(
     return *created;
 }
 
-result<std::shared_ptr<endpoint>> studio::create_virtual_port(
-    const std::string& name, virtual_port_kind kind, endpoint_options options)
+result<std::shared_ptr<endpoint>>
+studio::create_virtual_port(const std::string& name, virtual_port_kind kind,
+                            endpoint_options options)
 {
     if (kind == virtual_port_kind::pty && !supports(virtual_port_kind::pty))
         return create_auto_virtual_port(name, options);
@@ -232,8 +235,9 @@ result<std::shared_ptr<endpoint>> studio::create_virtual_port(
     return register_port(std::move(record), std::move(created->port), options);
 }
 
-result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
-    const std::string& name, endpoint_options options)
+result<std::shared_ptr<endpoint>>
+studio::create_auto_virtual_port(const std::string& name,
+                                 endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
@@ -259,7 +263,8 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
         }
     }
 
-#if defined(_WIN32)
+    // Where com0com does not exist the installation reports no pairs and the
+    // loop below does nothing.
     const auto installation = detect_com0com();
     for (const auto& pair : installation.pairs)
     {
@@ -268,8 +273,8 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
         if (path_in_use(pair.a) || path_in_use(pair.b))
             continue;
 
-        const std::pair<std::string, std::string> ends[] = {
-            {pair.a, pair.b}, {pair.b, pair.a}};
+        const std::pair<std::string, std::string> ends[] = {{pair.a, pair.b},
+                                                            {pair.b, pair.a}};
         for (const auto& [attach, advertise] : ends)
         {
             auto opened = attach_serial(
@@ -289,7 +294,6 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
             return opened;
         }
     }
-#endif
 
     // Beyond Windows the best virtual port is a pseudo terminal, which is a
     // real tty an application can open; loopback is only the last resort.
@@ -308,13 +312,15 @@ result<std::shared_ptr<endpoint>> studio::create_auto_virtual_port(
     return register_port(std::move(record), std::move(created->port), options);
 }
 
-result<std::shared_ptr<endpoint>> studio::attach_serial(
-    const std::string& name, const std::string& uri, endpoint_options options)
+result<std::shared_ptr<endpoint>>
+studio::attach_serial(const std::string& name, const std::string& uri,
+                      endpoint_options options)
 {
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
-    auto transport = std::make_shared<serial_transport>(hub_->executor(), uri, ec);
+    auto transport =
+        std::make_shared<serial_transport>(hub_->executor(), uri, ec);
     if (ec)
         return ec;
 
@@ -333,10 +339,9 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
     return register_port(std::move(record), std::move(transport), options);
 }
 
-result<std::shared_ptr<endpoint>> studio::attach_serial(
-    const std::string& name, const std::string& uri,
-    const serial_settings& settings,
-    endpoint_options options)
+result<std::shared_ptr<endpoint>>
+studio::attach_serial(const std::string& name, const std::string& uri,
+                      const serial_settings& settings, endpoint_options options)
 {
     if (const error_code invalid = validate(settings))
         return invalid;
@@ -365,15 +370,16 @@ result<std::shared_ptr<endpoint>> studio::attach_serial(
     return register_port(std::move(record), std::move(transport), options);
 }
 
-result<std::shared_ptr<endpoint>> studio::create_mock_port(
-    const std::string& name, const serial_settings& settings,
-    const std::string& target)
+result<std::shared_ptr<endpoint>>
+studio::create_mock_port(const std::string& name,
+                         const serial_settings& settings,
+                         const std::string& target)
 {
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
-    auto transport = serial_transport::make_mock(hub_->executor(), settings,
-                                                 target, ec);
+    auto transport =
+        serial_transport::make_mock(hub_->executor(), settings, target, ec);
     if (ec)
         return ec;
     if (!transport)
@@ -411,9 +417,11 @@ result<void> studio::remove_port(endpoint_id id)
         return removed.error();
 
     std::lock_guard lock(record_mutex_);
-    if (const auto it = records_.find(id);
-        it != records_.end() && it->second.link)
-        remove_stable_link(*it->second.link);
+    if (const auto it = records_.find(id); it != records_.end())
+    {
+        if (const auto& link = it->second.link; link.has_value())
+            remove_stable_link(*link);
+    }
     records_.erase(id);
     if (!target.empty())
         claimed_paths_.erase(target);
@@ -463,8 +471,8 @@ std::vector<link_info> studio::link_infos() const
     return hub_->links();
 }
 
-std::vector<endpoint_id> studio::resolve_all(
-    const std::vector<std::string>& names, error_code& ec) const
+std::vector<endpoint_id>
+studio::resolve_all(const std::vector<std::string>& names, error_code& ec) const
 {
     std::vector<endpoint_id> ids;
     ids.reserve(names.size());
@@ -591,8 +599,8 @@ result<link_id> studio::join_ports(const std::vector<std::string>& source_uris,
     std::vector<std::string> sources;
     for (std::size_t index = 0; index < source_uris.size(); ++index)
     {
-        auto attached = attach_serial(
-            "publisher-" + std::to_string(index + 1), source_uris[index]);
+        auto attached = attach_serial("publisher-" + std::to_string(index + 1),
+                                      source_uris[index]);
         if (!attached)
             return attached.error();
         sources.push_back((*attached)->name());
@@ -628,7 +636,8 @@ result<link_id> studio::bridge(const std::string& from_uri,
     return *link;
 }
 
-result<void> studio::apply(const config::document& value, bool rollback_on_error)
+result<void> studio::apply(const config::document& value,
+                           bool rollback_on_error)
 {
     if (const error_code invalid = config::validate(value))
         return invalid;
@@ -636,7 +645,8 @@ result<void> studio::apply(const config::document& value, bool rollback_on_error
     std::vector<endpoint_id> created;
     std::unordered_map<std::string, endpoint_id> ids;
 
-    const auto rollback = [&]() {
+    const auto rollback = [&]()
+    {
         if (!rollback_on_error)
             return;
         for (const endpoint_id id : created)
@@ -657,19 +667,17 @@ result<void> studio::apply(const config::document& value, bool rollback_on_error
             if (port.virtual_kind == "auto")
                 added = create_auto_virtual_port(port.name, options);
             else if (port.virtual_kind == "loopback")
-                added = create_virtual_port(port.name,
-                                            virtual_port_kind::loopback, options);
+                added = create_virtual_port(
+                    port.name, virtual_port_kind::loopback, options);
             else if (port.virtual_kind == "pty")
                 added = create_virtual_port(port.name, virtual_port_kind::pty,
                                             options);
             else if (port.virtual_kind == "named-pipe")
-                added = create_virtual_port(port.name,
-                                            virtual_port_kind::named_pipe,
-                                            options);
+                added = create_virtual_port(
+                    port.name, virtual_port_kind::named_pipe, options);
             else if (port.virtual_kind == "windows-driver")
-                added = create_virtual_port(port.name,
-                                            virtual_port_kind::windows_driver,
-                                            options);
+                added = create_virtual_port(
+                    port.name, virtual_port_kind::windows_driver, options);
         }
         else if (port.kind == "mock")
         {
@@ -751,9 +759,9 @@ config::document studio::snapshot() const
         switch (link.mode)
         {
         case link_mode::duplex:
-            entry.mode =
-                link.sources.size() == 1 && link.targets.size() == 1 ? "duplex"
-                                                                     : "split";
+            entry.mode = link.sources.size() == 1 && link.targets.size() == 1
+                             ? "duplex"
+                             : "split";
             break;
         case link_mode::one_way:
             if (!link.options.emulate_modem_lines)

@@ -12,6 +12,7 @@
 #include <QColor>
 #include <QDirIterator>
 #include <QFile>
+#include <QImage>
 #include <QRegularExpression>
 #include <QStringList>
 
@@ -199,6 +200,44 @@ TEST_CASE("theme: icon cache flushes on a theme change")
         icons.icon(QStringLiteral("add"), vss::gui::colour_role::ink, 16);
     REQUIRE(!dark.isNull());
     REQUIRE(icons.cache_size() > 0);
+}
+
+TEST_CASE("theme: an icon keeps its padding at any display scale")
+{
+    // At 200 percent the pixmap has twice the pixels. An icon drawn at device
+    // pixels instead of logical ones is magnified and cropped, so its strokes
+    // run off the edge of the pixmap. This is what clipped the toolbar icons
+    // and emptied the launcher tiles. Every icon has padding in its design, so
+    // the outer ring of pixels of a correct render is transparent.
+    auto& icons = vss::gui::IconProvider::instance();
+    icons.flush();
+    for (const char* name : {"add", "device", "connect", "save", "search"})
+    {
+        const QIcon icon = icons.icon(QString::fromLatin1(name),
+                                      vss::gui::colour_role::ink, 24);
+        REQUIRE(!icon.isNull());
+        const QImage image = icon.pixmap(24, 24).toImage();
+        int drawn = 0;
+        int on_the_edge = 0;
+        for (int y = 0; y < image.height(); ++y)
+        {
+            for (int x = 0; x < image.width(); ++x)
+            {
+                if (qAlpha(image.pixel(x, y)) <= 32)
+                    continue;
+                ++drawn;
+                if (x == 0 || y == 0 || x == image.width() - 1 ||
+                    y == image.height() - 1)
+                    ++on_the_edge;
+            }
+        }
+        if (drawn == 0)
+            throw vss_test::failure((std::string(name) + " is empty").c_str());
+        if (on_the_edge != 0)
+            throw vss_test::failure(
+                (std::string(name) + " runs off the edge of its pixmap")
+                    .c_str());
+    }
 }
 
 TEST_CASE("theme: fonts, metrics, spacing and density")

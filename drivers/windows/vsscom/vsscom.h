@@ -25,8 +25,33 @@
 
 #define VSSCOM_POOL_TAG 'mssv'
 
-// The bytes a port holds between a write and the read that returns them.
+// The bytes a port holds in each direction. Rx is what the application reads;
+// Tx is what it has written and the hub has not read yet.
 #define VSSCOM_RX_SIZE (64 * 1024)
+#define VSSCOM_TX_SIZE (64 * 1024)
+
+// Which end a file object is.
+#define VSSCOM_FILE_APP 1
+#define VSSCOM_FILE_HUB 2
+
+typedef struct _VSSCOM_FILE_CONTEXT
+{
+    ULONG Kind;
+    // Set once the open was accepted, so cleanup counts only handles that count.
+    BOOLEAN Granted;
+} VSSCOM_FILE_CONTEXT, *PVSSCOM_FILE_CONTEXT;
+
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_FILE_CONTEXT, VssComFileContext)
+
+// A read or write that waits for the other end to make room or send bytes.
+typedef struct _VSSCOM_PIPE_CONTEXT
+{
+    PUCHAR Buffer;
+    ULONG Length;
+    ULONG Done;
+} VSSCOM_PIPE_CONTEXT, *PVSSCOM_PIPE_CONTEXT;
+
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_PIPE_CONTEXT, VssComPipeContext)
 
 // What one read request remembers while it waits in the read queue.
 typedef struct _VSSCOM_READ_CONTEXT
@@ -53,6 +78,13 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
     WDFQUEUE ReadQueue;
     // At most one WaitCommEvent request waits here.
     WDFQUEUE WaitQueue;
+    // The hub end: reads wait for bytes the application wrote, writes wait for
+    // room in Rx, and state requests wait for the application to change
+    // something. The application's writes wait here when Tx is full.
+    WDFQUEUE HubReadQueue;
+    WDFQUEUE HubWriteQueue;
+    WDFQUEUE StateQueue;
+    WDFQUEUE AppWriteQueue;
     WDFTIMER ReadTotalTimer;
     WDFTIMER ReadIntervalTimer;
 
@@ -60,6 +92,16 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
     WDFSPINLOCK Lock;
     vsscom_u8 RxStorage[VSSCOM_RX_SIZE];
     vsscom_ring Rx;
+    vsscom_u8 TxStorage[VSSCOM_TX_SIZE];
+    vsscom_ring Tx;
+    BOOLEAN AppOpen;
+    BOOLEAN HubOpen;
+    BOOLEAN Break;
+    ULONG Generation;      // one more for each change the hub can see
+    ULONG HubLines;        // the input lines the hub set
+    ULONG AppWritesPending; // writes waiting in AppWriteQueue
+    BOOLEAN PumpBusy;      // one thread is moving bytes between the ends
+    BOOLEAN PumpAgain;     // something changed while it was
     vsscom_timeouts Timeouts;
     vsscom_events Events;
     ULONG BaudRate;
@@ -81,8 +123,55 @@ WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_DEVICE_CONTEXT, VssComGetContext)
 // driver.c
 NTSTATUS VssComRegisterPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);
 
+// control.c: the device that makes ports. A device is the control device when
+// its hardware key holds VssRole = 1, which vsscomctl.inf sets; every other
+// device is a port.
+#define VSSCOM_ROLE_VALUE L"VssRole"
+#define VSSCOM_ROLE_CONTROL 1
+NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit);
+
 // io.c
 NTSTATUS VssComCreateQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context);
 VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+VOID VssComCompleteWithData(_In_ WDFREQUEST Request,
+                            _In_reads_bytes_(Length) const VOID* Data,
+                            _In_ size_t Length);
+BOOLEAN VssComFetchInput(_In_ WDFREQUEST Request,
+                         _Out_writes_bytes_(Length) PVOID Data,
+                         _In_ size_t Length);
+// Moves bytes between the ends and serves whatever is waiting. Call it after
+// anything that could let a waiting request go on.
+VOID VssComPump(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events);
+// Recomputes the input lines from the mode (hub or loopback) and raises what
+// changed. Call with the lock free.
+VOID VssComApplyLines(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+
+// hub.c
+NTSTATUS VssComCreateHubQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+// The file object callbacks and the requests of the hub end.
+VOID VssComEvtDeviceFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
+                               _In_ WDFFILEOBJECT FileObject);
+VOID VssComEvtFileCleanup(_In_ WDFFILEOBJECT FileObject);
+VOID VssComHubRead(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ WDFREQUEST Request,
+                   _In_ size_t Length);
+VOID VssComHubWrite(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ WDFREQUEST Request,
+                    _In_ size_t Length);
+VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                        _In_ WDFREQUEST Request, _In_ ULONG IoControlCode);
+// An application write in hub mode: waits in AppWriteQueue until Tx has room.
+VOID VssComAppWriteToHub(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                         _In_ WDFREQUEST Request, _In_ size_t Length);
+// Each returns TRUE when it moved bytes.
+BOOLEAN VssComServiceHubWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+BOOLEAN VssComServiceHubReads(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+// Completes the application's waiting writes with `Status`.
+VOID VssComAbortAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                          _In_ NTSTATUS Status);
+// Adds one to Generation and answers the hub's waiting state requests.
+VOID VssComBumpState(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+// The queue callbacks for writes that were cancelled while they waited.
+VOID VssComEvtAppWriteCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request);
 
 #endif // VSSCOM_H

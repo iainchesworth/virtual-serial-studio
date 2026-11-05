@@ -23,12 +23,27 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)
 
+# Cases that need a platform API or expect platform-specific results live in
+# unit/platform/<os>/ and are compiled only there.
+if(WIN32)
+  list(APPEND VSS_UNIT_TEST_SOURCES
+    unit/platform/windows/test_driver_client_windows.cpp
+    unit/platform/windows/test_ports_windows.cpp)
+elseif(UNIX)
+  list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)
+endif()
+
 add_executable(vss_unit_tests ${VSS_UNIT_TEST_SOURCES})
 target_include_directories(vss_unit_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/framework
   ${CMAKE_CURRENT_SOURCE_DIR}/support)
 target_link_libraries(vss_unit_tests PRIVATE vss_studio vss_testkit vsscom_core)
+if(WIN32)
+  # public.h of the driver, for the protocol test.
+  target_include_directories(vss_unit_tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/windows)
+endif()
 vss_set_warnings(vss_unit_tests)
 vss_enable_coverage(vss_unit_tests)
 
@@ -152,6 +167,12 @@ if(TARGET vss_gui_theme_tests)
   set_tests_properties(gui_theme PROPERTIES
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+
+  # The same tests at 200 percent scale, where icons were once clipped.
+  add_test(NAME gui_theme_200 COMMAND vss_gui_theme_tests --verbose)
+  set_tests_properties(gui_theme_200 PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_SCALE_FACTOR=2;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 
 if(TARGET vss_gui_shell_tests)
@@ -203,4 +224,13 @@ if(TARGET vss_gui_flows_tests)
   set_tests_properties(gui_flows PROPERTIES
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# The matrix tools are checked without a built program; Python is optional.
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_FOUND)
+  add_test(NAME matrix_tools
+    COMMAND ${Python3_EXECUTABLE} -m unittest discover
+            -s ${PROJECT_SOURCE_DIR}/tools/matrix -p "test_*.py")
+  set_tests_properties(matrix_tools PROPERTIES TIMEOUT 120)
 endif()

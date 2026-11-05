@@ -6,28 +6,19 @@
 
 #include <vss/testkit/harness.hpp>
 
+#include "platform/environment_platform.hpp"
+
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/serial_enumeration.hpp>
 
-#include <cstdlib>
 #include <thread>
 
-namespace vss::testkit {
+namespace vss::testkit
+{
 
 std::string environment(const char* name)
 {
-#if defined(_MSC_VER)
-    char* buffer = nullptr;
-    std::size_t size = 0;
-    if (_dupenv_s(&buffer, &size, name) != 0 || buffer == nullptr)
-        return {};
-    std::string value(buffer);
-    std::free(buffer);
-    return value;
-#else
-    const char* value = std::getenv(name);
-    return value ? std::string(value) : std::string();
-#endif
+    return detail::platform_environment(name);
 }
 
 std::optional<serial_pair> find_loopback_pair()
@@ -67,9 +58,8 @@ bool wait_until(const std::function<bool()>& predicate,
 bool wait_for_rx(const endpoint& endpoint, std::size_t bytes,
                  std::chrono::milliseconds timeout)
 {
-    return wait_until(
-        [&endpoint, bytes] { return endpoint.stats().bytes_rx >= bytes; },
-        timeout);
+    return wait_until([&endpoint, bytes]
+                      { return endpoint.stats().bytes_rx >= bytes; }, timeout);
 }
 
 byte_buffer make_pattern(std::size_t size, unsigned seed)

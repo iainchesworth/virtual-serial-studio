@@ -15,10 +15,11 @@
 #include <vss/core/profile.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/studio/studio.hpp>
+#include <vss/testkit/harness.hpp>
 
+#include <boost/asio/executor_work_guard.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/post.hpp>
-#include <boost/asio/executor_work_guard.hpp>
 #include <boost/asio/write.hpp>
 
 #include <algorithm>
@@ -27,15 +28,16 @@
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
 #include <functional>
 #include <future>
-#include <fstream>
 #include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
 
-namespace {
+namespace
+{
 
 using namespace std::chrono_literals;
 using vss::byte;
@@ -47,15 +49,15 @@ using vss::bytes_view;
 class sink_transport final : public vss::transport
 {
 public:
-    explicit sink_transport(const executor_type& executor)
-        : executor_(executor)
+    explicit sink_transport(const executor_type& executor) : executor_(executor)
     {
     }
 
     std::string describe() const override { return "sink"; }
     bool is_open() const override { return open_; }
 
-    void async_read_some(boost::asio::mutable_buffer, io_handler handler) override
+    void async_read_some(boost::asio::mutable_buffer,
+                         io_handler handler) override
     {
         std::lock_guard lock(mutex_);
         pending_read_ = std::move(handler);
@@ -78,9 +80,9 @@ public:
         }
         if (pending)
         {
-            boost::asio::post(executor_, [pending] {
-                pending(boost::asio::error::operation_aborted, 0);
-            });
+            boost::asio::post(
+                executor_, [pending]
+                { pending(boost::asio::error::operation_aborted, 0); });
         }
     }
 
@@ -103,26 +105,9 @@ struct measurement
 
 double seconds_since(std::chrono::steady_clock::time_point start)
 {
-    return std::chrono::duration<double>(std::chrono::steady_clock::now() - start)
+    return std::chrono::duration<double>(std::chrono::steady_clock::now() -
+                                         start)
         .count();
-}
-
-std::string environment(const char* name)
-{
-#if defined(_MSC_VER)
-    char* buffer = nullptr;
-    std::size_t length = 0;
-    if (_dupenv_s(&buffer, &length, name) == 0 && buffer != nullptr)
-    {
-        std::string value(buffer);
-        std::free(buffer);
-        return value;
-    }
-    return {};
-#else
-    const char* value = std::getenv(name);
-    return value != nullptr ? std::string(value) : std::string();
-#endif
 }
 
 /// A one-connection echo server, so the benchmark can cross a real socket
@@ -160,22 +145,26 @@ public:
 private:
     void accept()
     {
-        acceptor_.async_accept(socket_, [this](boost::system::error_code error) {
-            if (!error)
-                read();
-        });
+        acceptor_.async_accept(socket_,
+                               [this](boost::system::error_code error)
+                               {
+                                   if (!error)
+                                       read();
+                               });
     }
 
     void read()
     {
         socket_.async_read_some(
             boost::asio::buffer(buffer_),
-            [this](boost::system::error_code error, std::size_t count) {
+            [this](boost::system::error_code error, std::size_t count)
+            {
                 if (error)
                     return;
                 boost::asio::async_write(
                     socket_, boost::asio::buffer(buffer_, count),
-                    [this](boost::system::error_code written, std::size_t) {
+                    [this](boost::system::error_code written, std::size_t)
+                    {
                         if (!written)
                             read();
                     });
@@ -223,8 +212,9 @@ measurement bench_route_throughput(vss::hub& hub, vss::endpoint_id source)
     }
 
     const double elapsed = seconds_since(start);
-    return {"hub_route", static_cast<double>(total) / elapsed / (1024.0 * 1024.0),
-            "MB/s", "routing into a sink endpoint"};
+    return {"hub_route",
+            static_cast<double>(total) / elapsed / (1024.0 * 1024.0), "MB/s",
+            "routing into a sink endpoint"};
 }
 
 measurement bench_event_dispatch(vss::hub& hub)
@@ -234,10 +224,12 @@ measurement bench_event_dispatch(vss::hub& hub)
     constexpr std::size_t count = 20'000;
     std::atomic<std::size_t> received{0};
 
-    hub.subscribe({}, [&](const vss::endpoint_event& event) {
-        if (event.kind == vss::event_kind::log_message)
-            received.fetch_add(1);
-    });
+    hub.subscribe({},
+                  [&](const vss::endpoint_event& event)
+                  {
+                      if (event.kind == vss::event_kind::log_message)
+                          received.fetch_add(1);
+                  });
 
     const auto start = std::chrono::steady_clock::now();
     for (std::size_t index = 0; index < count; ++index)
@@ -250,9 +242,7 @@ measurement bench_event_dispatch(vss::hub& hub)
 
     const bool drained = wait_until([&] { return received.load() >= count; });
     const double elapsed = seconds_since(start);
-    const double rate = drained
-        ? static_cast<double>(count) / elapsed
-        : 0.0;
+    const double rate = drained ? static_cast<double>(count) / elapsed : 0.0;
     return {"event_dispatch", rate, "events/s", "publish to subscriber"};
 }
 
@@ -319,12 +309,14 @@ measurement bench_mock_write()
     {
         std::promise<std::size_t> done;
         auto future = done.get_future();
-        transport->async_write_some(boost::asio::buffer(payload),
-                                    [&](boost::system::error_code ec, std::size_t n) {
-                                        if (ec)
-                                            return;
-                                        done.set_value(n);
-                                    });
+        transport->async_write_some(
+            boost::asio::buffer(payload),
+            [&](boost::system::error_code ec, std::size_t n)
+            {
+                if (ec)
+                    return;
+                done.set_value(n);
+            });
         if (future.wait_for(30s) != std::future_status::ready)
             break;
         written_total += future.get();
@@ -380,14 +372,14 @@ measurement bench_e2e_tcp()
 
     // Wait for the echo to come back through the hub before stopping the
     // clock; the writes themselves only prove they reached the socket.
-    const bool drained = sent != 0
-        && wait_until([&] { return (*port)->stats().bytes_rx >= sent; }, 15s);
+    const bool drained =
+        sent != 0 &&
+        wait_until([&] { return (*port)->stats().bytes_rx >= sent; }, 15s);
 
     const double elapsed = seconds_since(start);
     return {"e2e_tcp",
-            drained
-                ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
-                : 0.0,
+            drained ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
+                    : 0.0,
             "MB/s", "socket echo through the hub"};
 }
 
@@ -395,16 +387,16 @@ measurement bench_e2e_pty()
 {
     VSS_PROFILE_ZONE("perf.e2e.pty");
 
-    const std::string left_path = environment("VSS_LOOPBACK_A");
-    const std::string right_path = environment("VSS_LOOPBACK_B");
+    const std::string left_path = vss::testkit::environment("VSS_LOOPBACK_A");
+    const std::string right_path = vss::testkit::environment("VSS_LOOPBACK_B");
     if (left_path.empty() || right_path.empty())
         return {"e2e_pty", 0.0, "MB/s", "no loopback pair in the environment"};
 
     vss::studio app;
-    const auto left = app.attach_serial(
-        "left", "serial://" + left_path + "?baud=115200");
-    const auto right = app.attach_serial(
-        "right", "serial://" + right_path + "?baud=115200");
+    const auto left =
+        app.attach_serial("left", "serial://" + left_path + "?baud=115200");
+    const auto right =
+        app.attach_serial("right", "serial://" + right_path + "?baud=115200");
     if (!left || !right)
         return {"e2e_pty", 0.0, "MB/s", "cannot open the loopback pair"};
 
@@ -423,14 +415,14 @@ measurement bench_e2e_pty()
         sent += chunk;
     }
 
-    const bool drained = sent != 0
-        && wait_until([&] { return (*right)->stats().bytes_rx >= sent; }, 20s);
+    const bool drained =
+        sent != 0 &&
+        wait_until([&] { return (*right)->stats().bytes_rx >= sent; }, 20s);
 
     const double elapsed = seconds_since(start);
     return {"e2e_pty",
-            drained
-                ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
-                : 0.0,
+            drained ? static_cast<double>(sent) / elapsed / (1024.0 * 1024.0)
+                    : 0.0,
             "MB/s", "pseudo terminal pair"};
 }
 
@@ -471,7 +463,8 @@ int main(int argc, char** argv)
     auto hub = std::make_shared<vss::hub>(options);
     hub->start();
 
-    const auto add_sink = [&](const std::string& name) {
+    const auto add_sink = [&](const std::string& name)
+    {
         return hub->add_endpoint(
             name, vss::endpoint_kind::mock,
             std::make_shared<sink_transport>(hub->executor()),
@@ -488,7 +481,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    if (const auto linked = hub->redirect((*source)->id(), (*target)->id()); !linked)
+    if (const auto linked = hub->redirect((*source)->id(), (*target)->id());
+        !linked)
     {
         std::fprintf(stderr, "cannot link benchmark endpoints\n");
         return 1;
@@ -510,12 +504,13 @@ int main(int argc, char** argv)
     hub->stop();
     hub->join();
 
-    std::printf("\n%-20s %14s  %-10s %s\n", "benchmark", "value", "unit", "note");
+    std::printf("\n%-20s %14s  %-10s %s\n", "benchmark", "value", "unit",
+                "note");
     std::printf("%s\n", std::string(74, '-').c_str());
     for (const auto& result : results)
     {
-        std::printf("%-20s %14.1f  %-10s %s\n", result.name.c_str(), result.value,
-                    result.unit.c_str(), result.note.c_str());
+        std::printf("%-20s %14.1f  %-10s %s\n", result.name.c_str(),
+                    result.value, result.unit.c_str(), result.note.c_str());
     }
 
     if (!output.empty())
@@ -530,9 +525,9 @@ int main(int argc, char** argv)
         for (std::size_t index = 0; index < results.size(); ++index)
         {
             const auto& result = results[index];
-            stream << "  {\"name\": \"" << result.name << "\", \"value\": "
-                   << result.value << ", \"unit\": \"" << result.unit
-                   << "\", \"note\": \"" << result.note << "\"}"
+            stream << "  {\"name\": \"" << result.name
+                   << "\", \"value\": " << result.value << ", \"unit\": \""
+                   << result.unit << "\", \"note\": \"" << result.note << "\"}"
                    << (index + 1 < results.size() ? "," : "") << "\n";
         }
         stream << "]\n";

@@ -245,7 +245,8 @@ switch ($Action) {
     'wait-tools' {
         $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
         do {
-            $state = (Invoke-Vmrun 'checkToolsState' @($Vm) -Guest) -join ''
+            # No credentials here: with them vmrun keeps answering "installed" while Tools are running.
+            $state = (Invoke-Vmrun 'checkToolsState' @($Vm)) -join ''
             if ($DryRun -or $state -match 'running') { exit 0 }
             Start-Sleep -Seconds 5
         } while ((Get-Date) -lt $deadline)
@@ -255,15 +256,17 @@ switch ($Action) {
     'run' {
         if (-not $CommandLine) { throw '-CommandLine is required for run' }
 
-        # vmrun reports only whether the guest program started, so the exit code
-        # goes through a marker file. Delayed expansion (cmd) and a separate
-        # statement (bash) read the code after the command has run.
+        # vmrun reports only whether the guest program started, so the exit code goes through a marker
+        # file. A Windows guest runs the command in PowerShell (cmd.exe returns 1 under vmrun in these
+        # guests whatever it is asked to do), so on Windows the command line is PowerShell syntax; a
+        # native program in it sets $LASTEXITCODE. A Linux guest runs it in bash.
         $family = Get-GuestKind
         if ($family -eq 'windows') {
-            $marker = 'C:\vss-exit.txt'
-            $program = 'C:\Windows\System32\cmd.exe'
-            $arguments = @('/v:on', '/c',
-                "del `"$marker`" 2>nul & $CommandLine & echo !ERRORLEVEL! > `"$marker`"")
+            # Not the root of C:, which an ordinary user cannot write.
+            $marker = 'C:\Users\Public\vss-exit.txt'
+            $program = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+            $script = "$CommandLine; `$code = `$LASTEXITCODE; if (`$null -eq `$code) { `$code = if (`$?) { 0 } else { 1 } }; Set-Content -Path '$marker' -Value `$code"
+            $arguments = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $script)
         } else {
             $marker = '/tmp/vss-exit.txt'
             $program = '/bin/bash'

@@ -19,11 +19,6 @@ namespace
 
 constexpr auto kOneMinute = std::chrono::minutes(1);
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Troubleshoot", text);
-}
-
 const port_view* find_port(const QVector<port_view>& ports, vss::endpoint_id id)
 {
     const auto it =
@@ -41,7 +36,8 @@ QStringList names_for(const QVector<port_view>& ports,
         if (const port_view* port = find_port(ports, id))
             names.push_back(port->name);
         else
-            names.push_back(t("port %1").arg(id));
+            names.push_back(
+                QCoreApplication::translate("Troubleshoot", "port %1").arg(id));
     }
     return names;
 }
@@ -49,11 +45,12 @@ QStringList names_for(const QVector<port_view>& ports,
 QString joined(const QStringList& names)
 {
     if (names.isEmpty())
-        return t("another port");
+        return QCoreApplication::translate("Troubleshoot", "another port");
     if (names.size() == 1)
         return names.first();
     QStringList head = names.mid(0, names.size() - 1);
-    return t("%1 and %2").arg(head.join(QStringLiteral(", ")), names.last());
+    return QCoreApplication::translate("Troubleshoot", "%1 and %2")
+        .arg(head.join(QStringLiteral(", ")), names.last());
 }
 
 /// The endpoint on the other side of a link, preferring a real or mock device
@@ -95,7 +92,7 @@ check_row passed(const QString& title, const QString& sentence)
             QStringLiteral("done"),
             title,
             sentence,
-            t("Passed"),
+            QCoreApplication::translate("Troubleshoot", "Passed"),
             false};
 }
 
@@ -106,7 +103,7 @@ check_row attention(const QString& title, const QString& sentence,
             QStringLiteral("warning"),
             title,
             sentence,
-            t("Needs attention"),
+            QCoreApplication::translate("Troubleshoot", "Needs attention"),
             highlight};
 }
 
@@ -116,7 +113,7 @@ check_row not_checked(const QString& title, const QString& sentence)
             QStringLiteral("info"),
             title,
             sentence,
-            t("Not checked yet"),
+            QCoreApplication::translate("Troubleshoot", "Not checked yet"),
             false};
 }
 
@@ -130,31 +127,40 @@ QString link_sentence(const port_view& port, const link_view& link,
     case link_shape::split:
         if (link.targets.contains(port.id))
         {
-            return t("%1 is in a split link from %2.")
+            return QCoreApplication::translate("Troubleshoot",
+                                               "%1 is in a split link from %2.")
                 .arg(port.name, joined(sources));
         }
-        return t("%1 is in a split link to %2.")
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is in a split link to %2.")
             .arg(port.name, joined(targets));
     case link_shape::two_way:
-        return t("%1 is in a two-way link with %2.")
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is in a two-way link with %2.")
             .arg(port.name, joined(sources + targets));
     case link_shape::join:
         if (link.targets.contains(port.id))
         {
-            return t("%1 is joined from %2.").arg(port.name, joined(sources));
+            return QCoreApplication::translate("Troubleshoot",
+                                               "%1 is joined from %2.")
+                .arg(port.name, joined(sources));
         }
-        return t("%1 is in a join link into %2.")
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is in a join link into %2.")
             .arg(port.name, joined(targets));
     case link_shape::monitor:
-        return t("%1 is in a monitor link with %2.")
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is in a monitor link with %2.")
             .arg(port.name, joined(sources + targets));
     case link_shape::one_way:
         if (link.sources.contains(port.id))
         {
-            return t("%1 is in a one-way link to %2.")
+            return QCoreApplication::translate("Troubleshoot",
+                                               "%1 is in a one-way link to %2.")
                 .arg(port.name, joined(targets));
         }
-        return t("%1 is in a one-way link from %2.")
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is in a one-way link from %2.")
             .arg(port.name, joined(sources));
     }
     return {};
@@ -172,25 +178,36 @@ troubleshoot_report build_troubleshoot_report(const troubleshoot_facts& facts)
     troubleshoot_report report;
     const port_view* port = find_port(facts.ports, facts.port);
     const QString path = port != nullptr ? port_display_path(*port) : QString();
-    const QString port_title = path.isEmpty() ? t("this port") : path;
+    const QString port_title =
+        path.isEmpty()
+            ? QCoreApplication::translate("Troubleshoot", "this port")
+            : path;
 
     // 1. The port exists and is open.
     if (port == nullptr)
     {
-        report.rows.push_back(not_checked(t("The port exists and is open"),
-                                          t("Studio has no port to check.")));
+        report.rows.push_back(not_checked(
+            QCoreApplication::translate("Troubleshoot",
+                                        "The port exists and is open"),
+            QCoreApplication::translate("Troubleshoot",
+                                        "Studio has no port to check.")));
     }
     else if (port->open && port->state == vss::endpoint_state::open)
     {
-        report.rows.push_back(
-            passed(t("The port exists and is open"),
-                   t("%1 is open on %2.").arg(port->name, path)));
+        report.rows.push_back(passed(
+            QCoreApplication::translate("Troubleshoot",
+                                        "The port exists and is open"),
+            QCoreApplication::translate("Troubleshoot", "%1 is open on %2.")
+                .arg(port->name, path)));
     }
     else
     {
-        report.rows.push_back(attention(t("The port exists and is open"),
-                                        t("%1 is not open.").arg(port->name),
-                                        false));
+        report.rows.push_back(attention(
+            QCoreApplication::translate("Troubleshoot",
+                                        "The port exists and is open"),
+            QCoreApplication::translate("Troubleshoot", "%1 is not open.")
+                .arg(port->name),
+            false));
     }
 
     // 2. The port is linked to the device.
@@ -209,88 +226,120 @@ troubleshoot_report build_troubleshoot_report(const troubleshoot_facts& facts)
     }
     if (port == nullptr)
     {
-        report.rows.push_back(not_checked(t("The port is linked to the device"),
-                                          t("Studio has no port to check.")));
+        report.rows.push_back(not_checked(
+            QCoreApplication::translate("Troubleshoot",
+                                        "The port is linked to the device"),
+            QCoreApplication::translate("Troubleshoot",
+                                        "Studio has no port to check.")));
     }
     else if (link == nullptr)
     {
-        report.rows.push_back(attention(
-            t("The port is linked to the device"),
-            t("This port has no link. Connect it to a device."), false));
+        report.rows.push_back(
+            attention(QCoreApplication::translate(
+                          "Troubleshoot", "The port is linked to the device"),
+                      QCoreApplication::translate(
+                          "Troubleshoot",
+                          "This port has no link. Connect it to a device."),
+                      false));
     }
     else
     {
-        report.rows.push_back(passed(t("The port is linked to the device"),
-                                     link_sentence(*port, *link, facts.ports)));
+        report.rows.push_back(
+            passed(QCoreApplication::translate(
+                       "Troubleshoot", "The port is linked to the device"),
+                   link_sentence(*port, *link, facts.ports)));
     }
 
     // 3. The device is sending.
     const port_view* device = (port != nullptr && link != nullptr)
                                   ? linked_device(facts.ports, *link, port->id)
                                   : nullptr;
-    const QString device_title = t("The device is sending");
+    const QString device_title =
+        QCoreApplication::translate("Troubleshoot", "The device is sending");
     if (device == nullptr)
     {
         report.rows.push_back(not_checked(
-            device_title, t("Connect the port to a device first.")));
+            device_title,
+            QCoreApplication::translate(
+                "Troubleshoot", "Connect the port to a device first.")));
     }
     else if (device->stats.last_activity == vss::time_point{})
     {
         report.rows.push_back(not_checked(
             device_title,
-            t("Studio cannot tell when %1 last sent data.").arg(device->name)));
+            QCoreApplication::translate(
+                "Troubleshoot", "Studio cannot tell when %1 last sent data.")
+                .arg(device->name)));
     }
     else if (facts.now - device->stats.last_activity <= kOneMinute &&
              device->stats.bytes_rx > 0)
     {
-        report.rows.push_back(passed(
-            device_title,
-            t("%1 received data in the last minute.").arg(device->name)));
+        report.rows.push_back(
+            passed(device_title,
+                   QCoreApplication::translate(
+                       "Troubleshoot", "%1 received data in the last minute.")
+                       .arg(device->name)));
     }
     else if (device->stats.started != vss::time_point{} &&
              device->stats.bytes_rx == 0 &&
              facts.now - device->stats.started < kOneMinute)
     {
-        report.rows.push_back(not_checked(
-            device_title, t("Studio is still listening for the first bytes.")));
+        report.rows.push_back(
+            not_checked(device_title,
+                        QCoreApplication::translate(
+                            "Troubleshoot",
+                            "Studio is still listening for the first bytes.")));
     }
     else
     {
         report.rows.push_back(attention(
             device_title,
-            t("%1 has not sent anything in the last minute. Check the cable "
-              "and the device's power.")
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "%1 has not sent anything in the last minute. Check the cable "
+                "and the device's power.")
                 .arg(device->name),
             false));
     }
 
     // 4. A program has opened the advertised path.
-    const QString program_title = t("A program has opened %1").arg(port_title);
+    const QString program_title =
+        QCoreApplication::translate("Troubleshoot", "A program has opened %1")
+            .arg(port_title);
     if (port == nullptr)
     {
-        report.rows.push_back(not_checked(t("A program has opened the port"),
-                                          t("Studio has no port to check.")));
+        report.rows.push_back(not_checked(
+            QCoreApplication::translate("Troubleshoot",
+                                        "A program has opened the port"),
+            QCoreApplication::translate("Troubleshoot",
+                                        "Studio has no port to check.")));
     }
     else if (!facts.peer_open_known || port->peer == peer_state::unknown)
     {
         report.rows.push_back(not_checked(
             program_title,
-            t("Studio cannot tell whether a program has opened %1 in this "
-              "build.")
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "Studio cannot tell whether a program has opened %1 in this "
+                "build.")
                 .arg(port_title)));
     }
     else if (port->peer == peer_state::open)
     {
         report.rows.push_back(passed(
-            program_title, t("A program has opened %1.").arg(port_title)));
+            program_title, QCoreApplication::translate(
+                               "Troubleshoot", "A program has opened %1.")
+                               .arg(port_title)));
     }
     else
     {
-        report.rows.push_back(
-            attention(program_title,
-                      t("No program has opened %1 yet, so nothing can arrive.")
-                          .arg(port_title),
-                      true));
+        report.rows.push_back(attention(
+            program_title,
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "No program has opened %1 yet, so nothing can arrive.")
+                .arg(port_title),
+            true));
     }
 
     // 5. Data reaches the program.  The engine has no visibility inside the
@@ -299,14 +348,19 @@ troubleshoot_report build_troubleshoot_report(const troubleshoot_facts& facts)
         port->peer == peer_state::open)
     {
         report.rows.push_back(not_checked(
-            t("Data reaches the program"),
-            t("Studio cannot see whether the program read the data.")));
+            QCoreApplication::translate("Troubleshoot",
+                                        "Data reaches the program"),
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "Studio cannot see whether the program read the data.")));
     }
     else
     {
-        report.rows.push_back(
-            not_checked(t("Data reaches the program"),
-                        t("Checked once a program connects.")));
+        report.rows.push_back(not_checked(
+            QCoreApplication::translate("Troubleshoot",
+                                        "Data reaches the program"),
+            QCoreApplication::translate("Troubleshoot",
+                                        "Checked once a program connects.")));
     }
 
     return report;

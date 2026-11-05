@@ -182,7 +182,7 @@ take weeks, and Windows 10+ will not load an unsigned kernel driver.
 
 | Phase | Scope | Estimate |
 |---|---|---|
-| 0 | Application seam, detection, configuration, docs (done) | — |
+| 0 | Application interface, detection, configuration, docs (done) | — |
 | 1 | ABI header, shared rings, stub driver creating a port that echoes bytes | 2–3 weeks |
 | 2 | Full serial contract: timeouts, purge, wait mask, line control, cancellation, power | 3–5 weeks |
 | 3 | INF, installer, upgrade/uninstall, version handshake | 1–2 weeks |
@@ -192,15 +192,50 @@ Driver development also needs a machine where test signing is enabled and a
 reboot is acceptable. GitHub-hosted runners cannot reboot mid-job, so driver
 smoke tests want a self-hosted Windows VM.
 
+## What the first driver builds
+
+The first driver is simpler than the architecture above and keeps its shape. It
+has no shared memory. Each port has two ends on one device object: the COM port,
+and a second handle that the studio opens through a device interface with the
+reference string `hub`. Bytes cross through two 64 KB queues inside the driver,
+with flow control, so `ReadFile` and `WriteFile` on the hub handle replace the
+shared rings. See `drivers/windows/README.md` for the table of the two ends.
+
+The control device is a second, small device that the same `vsscom.sys` serves,
+installed once from its own INF (`vsscomctl.inf`, class System, because it is
+not a port and must not get a COM name). It differs from the sketch above in
+three ways, each with a reason:
+
+* It is a **bus**, not a named control object. A request to create a port
+  reports a child device to the Plug and Play manager, which installs
+  `vsscom.inf` on it and starts the port like any other. The COM name then comes
+  from the Ports class installer, and the port shows in Device Manager and
+  `SERIALCOMM` as every serial port does.
+* A port lives as long as **the file handle that made it**, with no
+  configuration. The process ending is the usual way a port goes, so the driver
+  does not rely on a program to clean up.
+* The **slot** is the lowest free number and is the device's instance id, so a
+  port that returns gets the device node and COM name it had. There is no
+  requested COM number yet; the request has a field for it that must be zero.
+
+The shared-memory data path remains a later step, if the queues turn out to be
+too slow.
+
 ## What is already in place
 
 * `vss::virtual_port_kind::windows_driver` and
   `vss::supports(...)`, so the GUI, the CLI and stored topologies already
   understand the kind.
-* `vss::driver_available()` / `driver_version()` — a registry probe of
-  `HKLM\SOFTWARE\Virtual Serial Studio\Driver`, which the INF will write.
-* `vss::create_driver_port()` — the single place the client will be
-  implemented; today it reports `errc::unsupported` rather than failing late.
+* `vss::driver_available()` / `driver_version()` — a list of the driver's
+  device interfaces, which opens nothing, and the interface version.
+* `vss::create_driver_port()` — asks the control device for a port of its own
+  (or, without one, takes a free port that exists), opens its hub end for
+  overlapped I/O and returns the transport that carries its bytes and control
+  lines. Closing the transport removes a port it made. It reports
+  `errc::unsupported` with no driver, `errc::device_busy` when there is no
+  control device and every port is taken, `errc::port_exhausted` when the
+  control device has no slot left, `errc::permission_denied` and
+  `errc::timeout`.
 * Auto-selection order is already: **driver → com0com → loopback** on Windows,
   and **pty** elsewhere. When the driver installs, it wins without a code
   change elsewhere.

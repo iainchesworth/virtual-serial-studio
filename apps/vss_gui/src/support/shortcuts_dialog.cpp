@@ -28,11 +28,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Shortcuts", text);
-}
-
 QStringList key_parts(const QKeySequence& shortcut)
 {
     return shortcut.toString(QKeySequence::PortableText)
@@ -102,8 +97,10 @@ QString ShortcutsDialog::macos_text(const QKeySequence& shortcut)
 
 void ShortcutsDialog::build()
 {
-    setWindowTitle(t("Keyboard shortcuts"));
-    setAccessibleName(t("Keyboard shortcuts"));
+    setWindowTitle(
+        QCoreApplication::translate("Shortcuts", "Keyboard shortcuts"));
+    setAccessibleName(
+        QCoreApplication::translate("Shortcuts", "Keyboard shortcuts"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(Theme::instance().metric(QStringLiteral("layout.dialogWidths.wide")),
@@ -123,14 +120,19 @@ void ShortcutsDialog::build()
     heading->setContentsMargins(0, 0, 0, 0);
     heading->setSpacing(4);
     add_dialog_heading(
-        heading, t("Keyboard shortcuts"),
-        t("Every action has a menu item. These are the quick ways."), header);
+        heading, QCoreApplication::translate("Shortcuts", "Keyboard shortcuts"),
+        QCoreApplication::translate(
+            "Shortcuts",
+            "Every action has a menu item. These are the quick ways."),
+        header);
     header_layout->addLayout(heading, 1);
 
     filter_ = new QLineEdit(header);
     filter_->setObjectName(QStringLiteral("shortcutFilter"));
-    filter_->setPlaceholderText(t("Filter shortcuts"));
-    filter_->setAccessibleName(t("Filter shortcuts"));
+    filter_->setPlaceholderText(
+        QCoreApplication::translate("Shortcuts", "Filter shortcuts"));
+    filter_->setAccessibleName(
+        QCoreApplication::translate("Shortcuts", "Filter shortcuts"));
     filter_->setClearButtonEnabled(true);
     filter_->setFixedWidth(240);
     filter_->addAction(IconProvider::instance().icon(QStringLiteral("search"),
@@ -145,7 +147,8 @@ void ShortcutsDialog::build()
     auto* body_layout = new QVBoxLayout(body);
     body_layout->setContentsMargins(24, 4, 24, 16);
     body_layout->setSpacing(8);
-    auto* eyebrow = new QLabel(t("Available today"), body);
+    auto* eyebrow = new QLabel(
+        QCoreApplication::translate("Shortcuts", "Available today"), body);
     eyebrow->setFont(Theme::instance().font(text_style::caption));
     QFont bold = eyebrow->font();
     bold.setWeight(QFont::DemiBold);
@@ -154,9 +157,12 @@ void ShortcutsDialog::build()
 
     table_ = new QTableWidget(0, 3, body);
     table_->setObjectName(QStringLiteral("shortcutTable"));
-    table_->setAccessibleName(t("Keyboard shortcuts"));
+    table_->setAccessibleName(
+        QCoreApplication::translate("Shortcuts", "Keyboard shortcuts"));
     table_->setHorizontalHeaderLabels(
-        {t("Action"), t("Windows and Linux"), t("macOS")});
+        {QCoreApplication::translate("Shortcuts", "Action"),
+         QCoreApplication::translate("Shortcuts", "Windows and Linux"),
+         QCoreApplication::translate("Shortcuts", "macOS")});
     table_->verticalHeader()->setVisible(false);
     table_->horizontalHeader()->setStretchLastSection(false);
     table_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -178,8 +184,10 @@ void ShortcutsDialog::build()
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
     auto* note = new QLabel(
-        t("Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and "
-          "tooltips. Open this list with Help, Keyboard shortcuts."),
+        QCoreApplication::translate(
+            "Shortcuts",
+            "Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and "
+            "tooltips. Open this list with Help, Keyboard shortcuts."),
         footer);
     note->setFont(Theme::instance().font(text_style::caption));
     note->setProperty("muted", true);
@@ -187,7 +195,8 @@ void ShortcutsDialog::build()
     note->setMaximumWidth(620);
     polish(note);
     footer_layout->insertWidget(0, note);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("Shortcuts", "Close"), "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);

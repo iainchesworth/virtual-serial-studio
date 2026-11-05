@@ -194,9 +194,9 @@ void pretty_write(std::string& out, const json::value& value, int depth)
             out += ": ";
             pretty_write(out, entry.value(), depth + 1);
         }
-        out += "\n";
+        out += '\n';
         out += pad;
-        out += "}";
+        out += '}';
         return;
     }
 
@@ -217,9 +217,9 @@ void pretty_write(std::string& out, const json::value& value, int depth)
             out += "  ";
             pretty_write(out, array[index], depth + 1);
         }
-        out += "\n";
+        out += '\n';
         out += pad;
-        out += "]";
+        out += ']';
         return;
     }
 

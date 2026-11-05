@@ -37,11 +37,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Settings", text);
-}
-
 QLabel* section_title(const QString& text, QWidget* parent)
 {
     auto* label = new QLabel(text, parent);
@@ -82,8 +77,8 @@ SettingsDialog::SettingsDialog(StudioBackend& backend,
 
 void SettingsDialog::build()
 {
-    setWindowTitle(t("Settings"));
-    setAccessibleName(t("Settings"));
+    setWindowTitle(QCoreApplication::translate("Settings", "Settings"));
+    setAccessibleName(QCoreApplication::translate("Settings", "Settings"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(Theme::instance().metric(QStringLiteral("layout.dialogWidths.wide")),
@@ -98,7 +93,8 @@ void SettingsDialog::build()
     auto* header = new QWidget(this);
     auto* header_layout = new QHBoxLayout(header);
     header_layout->setContentsMargins(24, 20, 24, 14);
-    auto* title = new QLabel(t("Settings"), header);
+    auto* title =
+        new QLabel(QCoreApplication::translate("Settings", "Settings"), header);
     title->setFont(Theme::instance().font(text_style::title));
     header_layout->addWidget(title, 1);
     auto* shortcut = new QLabel(QStringLiteral("Ctrl+,"), header);
@@ -157,8 +153,10 @@ void SettingsDialog::build()
     nav_layout->setSpacing(2);
     auto* group = new QButtonGroup(this);
     group->setExclusive(true);
-    const QStringList sections = {t("General"), t("Appearance"),
-                                  t("Performance")};
+    const QStringList sections = {
+        QCoreApplication::translate("Settings", "General"),
+        QCoreApplication::translate("Settings", "Appearance"),
+        QCoreApplication::translate("Settings", "Performance")};
     for (int index = 0; index < sections.size(); ++index)
     {
         auto* button = new QPushButton(sections.at(index), nav);
@@ -180,15 +178,19 @@ void SettingsDialog::build()
     auto* general_layout = new QVBoxLayout(general);
     general_layout->setContentsMargins(22, 22, 28, 22);
     general_layout->setSpacing(14);
-    general_layout->addWidget(section_title(t("General"), general));
+    general_layout->addWidget(section_title(
+        QCoreApplication::translate("Settings", "General"), general));
 
-    advanced_ = new Switch(t("Advanced mode"), general);
+    advanced_ = new Switch(
+        QCoreApplication::translate("Settings", "Advanced mode"), general);
     advanced_->setObjectName(QStringLiteral("advancedSwitch"));
     advanced_->setChecked(settings_.advanced);
     general_layout->addWidget(advanced_);
     auto* advanced_hint = hint_label(
-        t("Adds panels, options and tools to the same window. Nothing you "
-          "have built changes."),
+        QCoreApplication::translate(
+            "Settings",
+            "Adds panels, options and tools to the same window. Nothing you "
+            "have built changes."),
         general);
     general_layout->addWidget(advanced_hint);
 
@@ -204,14 +206,18 @@ void SettingsDialog::build()
         baud_->findText(QString::number(settings_.default_baud));
     if (baud_index >= 0)
         baud_->setCurrentIndex(baud_index);
-    auto* baud_row =
-        new FormRow(t("Default baud rate"), baud_,
-                    t("Offered first when you attach a device."), baud_holder);
+    auto* baud_row = new FormRow(
+        QCoreApplication::translate("Settings", "Default baud rate"), baud_,
+        QCoreApplication::translate("Settings",
+                                    "Offered first when you attach a device."),
+        baud_holder);
     baud_layout->addWidget(baud_row);
     general_layout->addWidget(baud_holder);
 
     ask_on_discard_ =
-        new QCheckBox(t("Ask before discarding an unsaved setup"), general);
+        new QCheckBox(QCoreApplication::translate(
+                          "Settings", "Ask before discarding an unsaved setup"),
+                      general);
     ask_on_discard_->setObjectName(QStringLiteral("askOnDiscard"));
     ask_on_discard_->setChecked(settings_.ask_on_discard);
     general_layout->addWidget(ask_on_discard_);
@@ -223,9 +229,11 @@ void SettingsDialog::build()
     auto* appearance_layout = new QVBoxLayout(appearance);
     appearance_layout->setContentsMargins(22, 22, 28, 22);
     appearance_layout->setSpacing(14);
-    appearance_layout->addWidget(section_title(t("Appearance"), appearance));
+    appearance_layout->addWidget(section_title(
+        QCoreApplication::translate("Settings", "Appearance"), appearance));
 
-    auto* theme_label = new QLabel(t("Theme"), appearance);
+    auto* theme_label = new QLabel(
+        QCoreApplication::translate("Settings", "Theme"), appearance);
     theme_label->setFont(Theme::instance().font(text_style::caption));
     QFont theme_bold = theme_label->font();
     theme_bold.setWeight(QFont::DemiBold);
@@ -251,22 +259,27 @@ void SettingsDialog::build()
                 });
         return radio;
     };
-    theme_system_ = add_theme(t("Follow the system"), theme_mode::system,
-                              settings_.theme == theme_mode::system);
-    theme_light_ = add_theme(t("Light"), theme_mode::light,
-                             settings_.theme == theme_mode::light);
-    theme_dark_ = add_theme(t("Dark"), theme_mode::dark,
-                            settings_.theme == theme_mode::dark);
+    theme_system_ =
+        add_theme(QCoreApplication::translate("Settings", "Follow the system"),
+                  theme_mode::system, settings_.theme == theme_mode::system);
+    theme_light_ =
+        add_theme(QCoreApplication::translate("Settings", "Light"),
+                  theme_mode::light, settings_.theme == theme_mode::light);
+    theme_dark_ =
+        add_theme(QCoreApplication::translate("Settings", "Dark"),
+                  theme_mode::dark, settings_.theme == theme_mode::dark);
     for (QRadioButton* radio : {theme_system_, theme_light_, theme_dark_})
         appearance_layout->addWidget(radio);
 
-    auto* density_label = new QLabel(t("Density"), appearance);
+    auto* density_label = new QLabel(
+        QCoreApplication::translate("Settings", "Density"), appearance);
     density_label->setFont(theme_bold);
     appearance_layout->addWidget(density_label);
     density_ = new SegmentedControl(appearance);
     density_->setObjectName(QStringLiteral("densityControl"));
-    density_->add_item(t("Comfortable"), 0);
-    density_->add_item(t("Compact"), 1);
+    density_->add_item(QCoreApplication::translate("Settings", "Comfortable"),
+                       0);
+    density_->add_item(QCoreApplication::translate("Settings", "Compact"), 1);
     density_->set_current(settings_.density == density_mode::compact ? 1 : 0);
     connect(density_, &SegmentedControl::current_changed, this,
             [this](int id)
@@ -284,23 +297,28 @@ void SettingsDialog::build()
 
     auto* display_note = new NoteBanner(
         NoteBanner::kind::info,
-        t("Text size, display scale, high contrast and reduced motion follow "
-          "your operating system."),
+        QCoreApplication::translate(
+            "Settings",
+            "Text size, display scale, high contrast and reduced motion follow "
+            "your operating system."),
         appearance);
-    display_note->set_action(t("Open system settings"),
-                             [this]
-                             {
-                                 if (!open_system_accessibility_settings())
-                                 {
-                                     ErrorDialog dialog(
-                                         t("Could not open system settings"),
-                                         t("Open your operating system's "
-                                           "display or accessibility settings "
-                                           "yourself."),
-                                         {}, this);
-                                     dialog.exec();
-                                 }
-                             });
+    display_note->set_action(
+        QCoreApplication::translate("Settings", "Open system settings"),
+        [this]
+        {
+            if (!open_system_accessibility_settings())
+            {
+                ErrorDialog dialog(
+                    QCoreApplication::translate(
+                        "Settings", "Could not open system settings"),
+                    QCoreApplication::translate(
+                        "Settings", "Open your operating system's "
+                                    "display or accessibility settings "
+                                    "yourself."),
+                    {}, this);
+                dialog.exec();
+            }
+        });
     appearance_layout->addWidget(display_note);
     appearance_layout->addStretch(1);
     pages_->addWidget(scroll_page(appearance, pages_));
@@ -310,7 +328,8 @@ void SettingsDialog::build()
     auto* performance_layout = new QVBoxLayout(performance);
     performance_layout->setContentsMargins(22, 22, 28, 22);
     performance_layout->setSpacing(14);
-    performance_layout->addWidget(section_title(t("Performance"), performance));
+    performance_layout->addWidget(section_title(
+        QCoreApplication::translate("Settings", "Performance"), performance));
 
     auto* refresh_holder = new QWidget(performance);
     refresh_holder->setMaximumWidth(460);
@@ -319,7 +338,9 @@ void SettingsDialog::build()
     refresh_layout->setSpacing(4);
     auto* refresh_heading = new QHBoxLayout();
     refresh_heading->setContentsMargins(0, 0, 0, 0);
-    auto* refresh_label = new QLabel(t("Refresh interval"), refresh_holder);
+    auto* refresh_label =
+        new QLabel(QCoreApplication::translate("Settings", "Refresh interval"),
+                   refresh_holder);
     refresh_label->setFont(theme_bold);
     refresh_heading->addWidget(refresh_label);
     refresh_heading->addStretch(1);
@@ -331,24 +352,30 @@ void SettingsDialog::build()
 
     refresh_ = new QSlider(Qt::Horizontal, refresh_holder);
     refresh_->setObjectName(QStringLiteral("refreshSlider"));
-    refresh_->setAccessibleName(t("Refresh interval"));
+    refresh_->setAccessibleName(
+        QCoreApplication::translate("Settings", "Refresh interval"));
     refresh_->setRange(kRefreshMinMs, kRefreshMaxMs);
     refresh_->setSingleStep(10);
     refresh_->setPageStep(250);
     refresh_->setValue(settings_.refresh_ms);
     refresh_layout->addWidget(refresh_);
-    refresh_value_->setText(t("%1 ms").arg(settings_.refresh_ms));
+    refresh_value_->setText(QCoreApplication::translate("Settings", "%1 ms")
+                                .arg(settings_.refresh_ms));
 
     auto* ends = new QWidget(refresh_holder);
     auto* ends_layout = new QHBoxLayout(ends);
     ends_layout->setContentsMargins(0, 0, 0, 0);
-    ends_layout->addWidget(hint_label(t("50 ms, live"), ends));
+    ends_layout->addWidget(hint_label(
+        QCoreApplication::translate("Settings", "50 ms, live"), ends));
     ends_layout->addStretch(1);
-    ends_layout->addWidget(hint_label(t("5000 ms, light"), ends));
+    ends_layout->addWidget(hint_label(
+        QCoreApplication::translate("Settings", "5000 ms, light"), ends));
     refresh_layout->addWidget(ends);
     refresh_layout->addWidget(hint_label(
-        t("How often counters and states are read. Shorter feels live. Longer "
-          "is lighter on a busy machine."),
+        QCoreApplication::translate("Settings",
+                                    "How often counters and states are read. "
+                                    "Shorter feels live. Longer "
+                                    "is lighter on a busy machine."),
         refresh_holder));
     performance_layout->addWidget(refresh_holder);
     performance_layout->addStretch(1);
@@ -386,18 +413,23 @@ void SettingsDialog::build()
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* immediate = new QLabel(t("Changes apply immediately."), footer);
+    auto* immediate = new QLabel(
+        QCoreApplication::translate("Settings", "Changes apply immediately."),
+        footer);
     immediate->setFont(Theme::instance().font(text_style::caption));
     immediate->setProperty("muted", true);
     polish(immediate);
     const int stretch_index = 0;
     footer_layout->insertWidget(stretch_index, immediate);
-    auto* reset = make_dialog_button(t("Reset to defaults"), "quiet", footer);
+    auto* reset = make_dialog_button(
+        QCoreApplication::translate("Settings", "Reset to defaults"), "quiet",
+        footer);
     reset->setAutoDefault(false);
     connect(reset, &QPushButton::clicked, this,
             &SettingsDialog::reset_to_defaults);
     footer_layout->addWidget(reset);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("Settings", "Close"), "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -432,7 +464,8 @@ void SettingsDialog::apply_refresh()
         std::clamp(settings_.refresh_ms, kRefreshMinMs, kRefreshMaxMs);
     backend_.set_refresh_interval(settings_.refresh_ms);
     if (refresh_value_ != nullptr)
-        refresh_value_->setText(t("%1 ms").arg(settings_.refresh_ms));
+        refresh_value_->setText(QCoreApplication::translate("Settings", "%1 ms")
+                                    .arg(settings_.refresh_ms));
     persist();
 }
 
@@ -469,7 +502,8 @@ void SettingsDialog::reset_to_defaults()
     Theme::instance().set_density(settings_.density);
     backend_.set_refresh_interval(settings_.refresh_ms);
     if (refresh_value_ != nullptr)
-        refresh_value_->setText(t("%1 ms").arg(settings_.refresh_ms));
+        refresh_value_->setText(QCoreApplication::translate("Settings", "%1 ms")
+                                    .arg(settings_.refresh_ms));
     persist();
     Q_EMIT advanced_changed(false);
 }

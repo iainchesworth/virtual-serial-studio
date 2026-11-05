@@ -3,7 +3,7 @@
 The data path is profiled with [Tracy](https://github.com/wolfpld/tracy),
 pulled from [vcpkg](https://vcpkg.io). Instrumentation is compiled in only when
 `VSS_TRACY` is on; without it every macro in
-[`profile.hpp`](../libs/vss_core/include/vss/core/profile.hpp) is a no-op.
+[`profile.hpp`](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/libs/vss_core/include/vss/core/profile.hpp) is a no-op.
 
 ## When it is on
 
@@ -58,7 +58,7 @@ cmake --preset linux-tracy
 cmake --build --preset linux-tracy
 ```
 
-The manifest ([`vcpkg.json`](../vcpkg.json)) pins `tracy` and the vcpkg
+The manifest ([`vcpkg.json`](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/vcpkg.json)) pins `tracy` and the vcpkg
 baseline. `vcpkg` installs the client; CMake finds it and defines `VSS_TRACY`
 and `TRACY_ENABLE` for the whole tree. A Release tree without vcpkg simply has
 the option off; asking for it there is a configuration error with a message

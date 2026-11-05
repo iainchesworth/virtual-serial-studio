@@ -23,11 +23,13 @@ QString translated(const char* text)
 const std::array<wiring_preset_entry, 3>& wiring_presets()
 {
     static const std::array<wiring_preset_entry, 3> table = {{
-        {wiring_preset::standard_null_modem, "Standard null-modem",
+        {wiring_preset::standard_null_modem,
+         QT_TRANSLATE_NOOP("LineWiring", "Standard null-modem"),
          line_wiring{true, false, true, false, false, true, false, false}},
-        {wiring_preset::loopback, "Loopback",
+        {wiring_preset::loopback, QT_TRANSLATE_NOOP("LineWiring", "Loopback"),
          line_wiring{true, false, false, false, false, true, false, false}},
-        {wiring_preset::custom, "Custom", line_wiring{}},
+        {wiring_preset::custom, QT_TRANSLATE_NOOP("LineWiring", "Custom"),
+         line_wiring{}},
     }};
     return table;
 }

@@ -1,7 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<!-- Translation origin: machine translation, not yet reviewed by a speaker of the language -->
 <TS version="2.1" language="fr">
+    <context>
+        <name>About</name>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="98" />
+            <location filename="../src/support/about_dialog.cpp" line="100" />
+            <source>About Virtual Serial Studio</source>
+            <translation>À propos de Virtual Serial Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="142" />
+            <source>Virtual Serial Studio</source>
+            <translation>Virtual Serial Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="147" />
+            <source>Version %1. Free software under the GNU General Public License, version 3 or later.</source>
+            <translation>Version %1. Logiciel libre sous licence GNU General Public License, version 3 ou ultérieure.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="163" />
+            <source>About details</source>
+            <translation>Détails de À propos</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="170" />
+            <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</source>
+            <translation>Ce programme est un logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la GNU General Public License publiée par la Free Software Foundation, soit la version 3 de la licence, soit (à votre choix) toute version ultérieure.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="179" />
+            <source>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
+            <translation>Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de QUALITÉ MARCHANDE ou d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la GNU General Public License pour plus de détails.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="187" />
+            <source>You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.</source>
+            <translation>Vous devriez avoir reçu un exemplaire de la GNU General Public License avec ce programme. Si ce n'est pas le cas, consultez https://www.gnu.org/licenses/.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="194" />
+            <source>About</source>
+            <translation>À propos</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="200" />
+            <source>Copy this into a bug report. It answers "which build is this?"</source>
+            <translation>Copiez ceci dans un rapport de bogue. Cela répond à « quelle version est-ce ? »</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="231" />
+            <source>Environment</source>
+            <translation>Environnement</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="237" />
+            <source>Virtual Serial Studio is free software under the GNU General Public License, version 3 or later. It uses these components:</source>
+            <translation>Virtual Serial Studio est un logiciel libre sous licence GNU General Public License, version 3 ou ultérieure. Il utilise ces composants :</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="242" />
+            <source>Qt 6</source>
+            <translation>Qt 6</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="243" />
+            <source>GNU Lesser General Public License, version 3, or the GNU General Public License, version 3.</source>
+            <translation>GNU Lesser General Public License, version 3, ou GNU General Public License, version 3.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="247" />
+            <source>Linked dynamically as installed on this PC.</source>
+            <translation>Liée dynamiquement, telle qu'installée sur ce PC.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="250" />
+            <source>Boost</source>
+            <translation>Boost</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="251" />
+            <location filename="../src/support/about_dialog.cpp" line="256" />
+            <source>Boost Software License, version 1.0.</source>
+            <translation>Boost Software License, version 1.0.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="255" />
+            <source>Boost.VirtualSerial</source>
+            <translation>Boost.VirtualSerial</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="260" />
+            <source>Tracy</source>
+            <translation>Tracy</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="261" />
+            <source>BSD 3-Clause License.</source>
+            <translation>Licence BSD à 3 clauses.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="262" />
+            <source>Only present when profiling support is built in.</source>
+            <translation>Présent uniquement si la prise en charge du profilage est intégrée.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="266" />
+            <source>com0com</source>
+            <translation>com0com</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="267" />
+            <source>GNU General Public License, version 3.</source>
+            <translation>GNU General Public License, version 3.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="269" />
+            <source>An optional driver for Windows, installed separately by you.</source>
+            <translation>Un pilote facultatif pour Windows, que vous installez séparément.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="275" />
+            <source>Licences</source>
+            <translation>Licences</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="281" />
+            <source>No fonts are bundled. Studio uses your system's UI font.</source>
+            <translation>Aucune police n'est incluse. Studio utilise la police d'interface de votre système.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="288" />
+            <source>Interface font: %1.</source>
+            <translation>Police d'interface : %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="292" />
+            <source>Fixed font: %1.</source>
+            <translation>Police à chasse fixe : %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="296" />
+            <source>Fonts</source>
+            <translation>Polices</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="303" />
+            <source>Create diagnostic bundle</source>
+            <translation>Créer une archive de diagnostic</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="310" />
+            <source>Copy environment</source>
+            <translation>Copier l'environnement</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="316" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+        <message>
+            <location filename="../src/support/about_dialog.cpp" line="336" />
+            <source>Environment copied.</source>
+            <translation>Environnement copié.</translation>
+        </message>
+    </context>
     <context>
         <name>AddFixtureDialog</name>
         <message>
@@ -692,134 +856,349 @@
         </message>
     </context>
     <context>
+        <name>Benchmark</name>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="38" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+    </context>
+    <context>
         <name>BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="57" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
             <source>Benchmark a connection</source>
             <translation>Tester les performances d'une connexion</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="71" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>Envoie des données d'un port à un autre et compte ce qui arrive.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
             <source>Send from</source>
             <translation>Envoyer depuis</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="85" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
             <source>Receive on</source>
             <translation>Recevoir sur</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="88" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Amount of data</source>
             <translation>Quantité de données</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="97" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <source>Chunk size</source>
             <translation>Taille des blocs</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>Ne liez pas ces deux ports dans Studio. Les données doivent passer par le câble ou la paire de pilotes, pour que le compte ait un sens.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="113" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="300" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>Ces deux ports sont liés dans Studio. Déconnectez-les d'abord.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="128" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
             <source>Not run yet</source>
             <translation>Pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="130" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Benchmark result: not run yet</source>
             <translation>Résultat du test : pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="133" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
             <source>Not started</source>
             <translation>Non démarré</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="140" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
             <source>Benchmark progress</source>
             <translation>Progression du test</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="162" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Not run</source>
             <translation>Non lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="164" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
             <source>%1: not run yet</source>
             <translation>%1 : pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="172" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>Un test échoue quand le nombre d'octets reçus est insuffisant, et le résultat indique de combien.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
             <source>Same thing from the command line</source>
             <translation>La même chose en ligne de commande</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="187" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="355" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
             <source>Command</source>
             <translation>Commande</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="193" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="194" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
             <source>Copy result</source>
             <translation>Copier le résultat</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
             <source>Copied the result.</source>
             <translation>Résultat copié.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Close</source>
             <translation>Fermer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="208" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="209" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
             <source>Run</source>
             <translation>Lancer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="292" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>Ajoutez deux ports pour tester les performances d'une connexion.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="298" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
             <source>Choose two different ports.</source>
             <translation>Choisissez deux ports différents.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="377" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
             <source>The benchmark command is not available in this build.</source>
             <translation>La commande de test de performances n'est pas disponible dans cette version.</translation>
+        </message>
+    </context>
+    <context>
+        <name>Bundle</name>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="61" />
+            <source>The setup could not be written: %1</source>
+            <translation>Impossible d'écrire la configuration : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="104" />
+            <source>Created</source>
+            <translation>Créé</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="106" />
+            <source>Opening</source>
+            <translation>Ouverture</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="108" />
+            <source>Open</source>
+            <translation>Ouvert</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="110" />
+            <source>Closed</source>
+            <translation>Fermé</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="112" />
+            <source>Failed</source>
+            <translation>Échec</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="114" />
+            <source>Unknown</source>
+            <translation>Inconnu</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="119" />
+            <source># Traffic contents from Virtual Serial Studio. These bytes may include passwords or personal data.
+</source>
+            <translation># Contenu du trafic de Virtual Serial Studio. Ces octets peuvent contenir des mots de passe ou des données personnelles.
+</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="154" />
+            <source>No traffic recorded.
+</source>
+            <translation>Aucun trafic enregistré.
+</translation>
+        </message>
+        <message>
+            <location filename="../src/support/bundle.cpp" line="169" />
+            <source>No events recorded.
+</source>
+            <translation>Aucun événement enregistré.
+</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="107" />
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="109" />
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="128" />
+            <source>Create a diagnostic bundle</source>
+            <translation>Créer une archive de diagnostic</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="129" />
+            <source>Gathers what a helper needs to understand your setup. Nothing is sent anywhere. You choose where to save it.</source>
+            <translation>Rassemble ce dont un assistant a besoin pour comprendre votre configuration. Rien n'est envoyé nulle part. Vous choisissez où l'enregistrer.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="145" />
+            <source>Creating a diagnostic bundle is not available in this build.</source>
+            <translation>La création d'une archive de diagnostic n'est pas disponible dans cette version.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="153" />
+            <source>Include</source>
+            <translation>Inclure</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="168" />
+            <source>Setup</source>
+            <translation>Configuration</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="169" />
+            <source>Ports, links and their settings, as a topology file.</source>
+            <translation>Les ports, les liens et leurs paramètres, sous forme de fichier de topologie.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="173" />
+            <source>Event log</source>
+            <translation>Journal des événements</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="174" />
+            <source>State changes and errors since the setup was opened.</source>
+            <translation>Changements d'état et erreurs depuis l'ouverture de la configuration.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="179" />
+            <source>Environment</source>
+            <translation>Environnement</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="180" />
+            <source>Build, compiler, Qt version, operating system and architecture.</source>
+            <translation>Version, compilateur, version de Qt, système d'exploitation et architecture.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="185" />
+            <source>Port counters</source>
+            <translation>Compteurs des ports</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="186" />
+            <source>State, bytes in and out, and bytes dropped for each port.</source>
+            <translation>État, octets reçus et envoyés, et octets perdus pour chaque port.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="192" />
+            <source>Traffic contents</source>
+            <translation>Contenu du trafic</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="193" />
+            <source>The actual bytes sent and received. They may include passwords or personal data.</source>
+            <translation>Les octets réellement envoyés et reçus. Ils peuvent contenir des mots de passe ou des données personnelles.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="197" />
+            <source>Off by default</source>
+            <translation>Désactivé par défaut</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="202" />
+            <source>Nothing leaves this PC until you share the file yourself. Look inside the bundle first if you want to check it.</source>
+            <translation>Rien ne quitte ce PC tant que vous ne partagez pas le fichier vous-même. Regardez d'abord dans l'archive si vous voulez la vérifier.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="210" />
+            <source>The bundle will be one file</source>
+            <translation>L'archive sera un seul fichier</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="268" />
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="294" />
+            <source>Not available in this build</source>
+            <translation>Non disponible dans cette version</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="276" />
+            <source>Copy environment only</source>
+            <translation>Copier l'environnement seulement</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="283" />
+            <source>Cancel</source>
+            <translation>Annuler</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="288" />
+            <source>Save bundle</source>
+            <translation>Enregistrer l'archive</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="332" />
+            <source>1 file</source>
+            <translation>1 fichier</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="333" />
+            <source>%1 files</source>
+            <translation>%1 fichiers</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="347" />
+            <source>The bundle has too many files.</source>
+            <translation>L'archive contient trop de fichiers.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="380" />
+            <source>Save diagnostic bundle</source>
+            <translation>Enregistrer l'archive de diagnostic</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="382" />
+            <source>ZIP archives (*.zip)</source>
+            <translation>Archives ZIP (*.zip)</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="392" />
+            <source>Could not save the bundle</source>
+            <translation>Impossible d'enregistrer l'archive</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="398" />
+            <source>Bundle saved to %1.</source>
+            <translation>Archive enregistrée dans %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="407" />
+            <source>Environment copied.</source>
+            <translation>Environnement copié.</translation>
         </message>
     </context>
     <context>
@@ -1303,60 +1682,99 @@
         </message>
     </context>
     <context>
+        <name>EventLog</name>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="35" />
+            <source>Started</source>
+            <translation>Démarré</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="37" />
+            <source>Stopped</source>
+            <translation>Arrêté</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="39" />
+            <source>Control lines</source>
+            <translation>Lignes de contrôle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="41" />
+            <source>Error</source>
+            <translation>Erreur</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="43" />
+            <source>Counters</source>
+            <translation>Compteurs</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="45" />
+            <location filename="../src/advanced/event_log.cpp" line="49" />
+            <source>Message</source>
+            <translation>Message</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/event_log.cpp" line="47" />
+            <source>Traffic</source>
+            <translation>Trafic</translation>
+        </message>
+    </context>
+    <context>
         <name>EventLogPanel</name>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="69" />
-            <location filename="../src/advanced/event_log.cpp" line="89" />
+            <location filename="../src/advanced/event_log.cpp" line="64" />
+            <location filename="../src/advanced/event_log.cpp" line="84" />
             <source>Event log</source>
             <translation>Journal des événements</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="75" />
+            <location filename="../src/advanced/event_log.cpp" line="70" />
             <source>State changes and errors since the setup was opened.</source>
             <translation>Changements d'état et erreurs depuis l'ouverture de la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="80" />
+            <location filename="../src/advanced/event_log.cpp" line="75" />
             <source>Clear</source>
             <translation>Effacer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="83" />
+            <location filename="../src/advanced/event_log.cpp" line="78" />
             <source>Clear the event log</source>
             <translation>Effacer le journal des événements</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Time</source>
             <translation>Heure</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Port</source>
             <translation>Port</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Event</source>
             <translation>Événement</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Detail</source>
             <translation>Détail</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="103" />
+            <location filename="../src/advanced/event_log.cpp" line="98" />
             <source>No events yet. Start or stop a port, or apply a change.</source>
             <translation>Aucun événement pour l'instant. Démarrez ou arrêtez un port, ou appliquez une modification.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="126" />
+            <location filename="../src/advanced/event_log.cpp" line="121" />
             <source>No details.</source>
             <translation>Aucun détail.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="135" />
+            <location filename="../src/advanced/event_log.cpp" line="130" />
             <source>Studio</source>
             <translation>Studio</translation>
         </message>
@@ -1429,9 +1847,75 @@
         </message>
     </context>
     <context>
+        <name>Help</name>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="40" />
+            <location filename="../src/support/help_contents_dialog.cpp" line="41" />
+            <location filename="../src/support/help_contents_dialog.cpp" line="59" />
+            <source>Help contents</source>
+            <translation>Sommaire de l'aide</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="60" />
+            <source>Every action is in the menus. Start with these.</source>
+            <translation>Chaque action est dans les menus. Commencez par celles-ci.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="77" />
+            <source>Setup check</source>
+            <translation>Vérification de la configuration</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="78" />
+            <source>Check the driver, permissions and devices this PC needs.</source>
+            <translation>Vérifiez le pilote, les autorisations et les appareils dont ce PC a besoin.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="82" />
+            <source>Why is nothing arriving?</source>
+            <translation>Pourquoi rien n'arrive ?</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="83" />
+            <source>Follow the five steps between the device and your program.</source>
+            <translation>Suivez les cinq étapes entre l'appareil et votre programme.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="86" />
+            <source>Keyboard shortcuts</source>
+            <translation>Raccourcis clavier</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="87" />
+            <source>See every action's shortcut in one list.</source>
+            <translation>Voyez le raccourci de chaque action dans une seule liste.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="89" />
+            <source>About Virtual Serial Studio</source>
+            <translation>À propos de Virtual Serial Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="90" />
+            <source>Version, environment, licences and fonts.</source>
+            <translation>Version, environnement, licences et polices.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="118" />
+            <location filename="../src/support/help_contents_dialog.cpp" line="121" />
+            <source>Open</source>
+            <translation>Ouvert</translation>
+        </message>
+        <message>
+            <location filename="../src/support/help_contents_dialog.cpp" line="133" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+    </context>
+    <context>
         <name>HelpContentsDialog</name>
         <message>
-            <location filename="../src/support/help_contents_dialog.cpp" line="110" />
+            <location filename="../src/support/help_contents_dialog.cpp" line="120" />
             <source>%1: %2</source>
             <translation>%1 : %2</translation>
         </message>
@@ -1721,7 +2205,67 @@
     <context>
         <name>LineMatrix</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="314" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="64" />
+            <source>Parity error</source>
+            <translation>Erreur de parité</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="65" />
+            <source>Byte arrives with bad parity</source>
+            <translation>L'octet arrive avec une parité incorrecte</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="66" />
+            <source>Framing error</source>
+            <translation>Erreur de trame</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="67" />
+            <source>Byte arrives with no valid stop bit</source>
+            <translation>L'octet arrive sans bit d'arrêt valide</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="69" />
+            <source>Overrun</source>
+            <translation>Dépassement</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="70" />
+            <source>Incoming data lost, too fast</source>
+            <translation>Données entrantes perdues, trop rapides</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="71" />
+            <source>Break</source>
+            <translation>Break</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="72" />
+            <source>A break is received on the line</source>
+            <translation>Un BREAK est reçu sur la ligne</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="73" />
+            <source>Hang-up</source>
+            <translation>Raccrochage</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="74" />
+            <source>Carrier drops, as a modem does</source>
+            <translation>La porteuse tombe, comme avec un modem</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="75" />
+            <source>Disconnect</source>
+            <translation>Déconnexion</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="76" />
+            <source>Device vanishes, as if unplugged</source>
+            <translation>L'appareil disparaît, comme s'il était débranché</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="321" />
             <source>Inject %1</source>
             <translation>Injecter %1</translation>
         </message>
@@ -1729,159 +2273,159 @@
     <context>
         <name>LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="103" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
             <source>Line wiring</source>
             <translation>Câblage des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="105" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>Choisissez quels signaux ce port pilote sur l'autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="115" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
             <source>Line wiring preset</source>
             <translation>Préréglage de câblage des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
             <source>Emulate modem lines</source>
             <translation>Émuler les lignes modem</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="139" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
             <source>This port drives</source>
             <translation>Ce port pilote</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="166" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
             <source>%1 to %2</source>
             <translation>%1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="201" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
             <source>Line state now</source>
             <translation>État actuel des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="209" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="210" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="218" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="219" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="227" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="230" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
             <source>Send a break</source>
             <translation>Envoyer un break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="267" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
             <source>Inject a fault</source>
             <translation>Injecter un défaut</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="269" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>Simulez un mauvais câble ou appareil. Chaque défaut est signalé comme un événement d'erreur sur le port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="310" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
             <source>Inject</source>
             <translation>Injecter</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="327" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
             <source>Injected so far</source>
             <translation>Injectés jusqu'ici</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Time</source>
             <translation>Heure</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Fault</source>
             <translation>Défaut</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Result</source>
             <translation>Résultat</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="340" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
             <source>Injected faults</source>
             <translation>Défauts injectés</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="349" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="354" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="494" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
             <source>Create this fixture in code</source>
             <translation>Créer cette fixture dans le code</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="435" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="457" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="630" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
             <source>Link this fixture to another port first.</source>
             <translation>Liez d'abord cette fixture à un autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>Le croisement des lignes est fixé à la création du lien.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="546" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
             <source>Port %1</source>
             <translation>Port %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="552" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
             <source>the other port</source>
             <translation>l'autre port</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>Les titres de colonnes sont les entrées de %1. Le même câblage s'applique dans l'autre sens.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="636" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
             <source>Could not change the wiring: %1</source>
             <translation>Impossible de modifier le câblage : %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="642" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
             <source>Line wiring updated.</source>
             <translation>Câblage des lignes mis à jour.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="667" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
             <source>%1 on</source>
             <translation>%1 activé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="667" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
             <source>%1 off</source>
             <translation>%1 désactivé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="680" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
             <source>Could not change a control line: %1</source>
             <translation>Impossible de modifier une ligne de contrôle : %1</translation>
         </message>
@@ -1889,27 +2433,42 @@
     <context>
         <name>LineWiring</name>
         <message>
-            <location filename="../src/advanced/line_presets.cpp" line="68" />
+            <location filename="../src/advanced/line_presets.cpp" line="27" />
+            <source>Standard null-modem</source>
+            <translation>Null-modem standard</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_presets.cpp" line="29" />
+            <source>Loopback</source>
+            <translation>Bouclage</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_presets.cpp" line="31" />
+            <source>Custom</source>
+            <translation>Personnalisé</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_presets.cpp" line="70" />
             <source>%1 and %2</source>
             <translation>%1 et %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_presets.cpp" line="100" />
+            <location filename="../src/advanced/line_presets.cpp" line="102" />
             <source>With this wiring, raising DTR on %1 raises %2 on %3. Raising RTS raises %4.</source>
             <translation>Avec ce câblage, activer DTR sur %1 active %2 sur %3. Activer RTS active %4.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_presets.cpp" line="108" />
+            <location filename="../src/advanced/line_presets.cpp" line="110" />
             <source>With this wiring, raising DTR on %1 raises %2 on %3.</source>
             <translation>Avec ce câblage, activer DTR sur %1 active %2 sur %3.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_presets.cpp" line="115" />
+            <location filename="../src/advanced/line_presets.cpp" line="117" />
             <source>With this wiring, raising RTS on %1 raises %2 on %3.</source>
             <translation>Avec ce câblage, activer RTS sur %1 active %2 sur %3.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_presets.cpp" line="120" />
+            <location filename="../src/advanced/line_presets.cpp" line="122" />
             <source>With this wiring, no output lines are connected.</source>
             <translation>Avec ce câblage, aucune ligne de sortie n'est connectée.</translation>
         </message>
@@ -3487,17 +4046,493 @@
         </message>
     </context>
     <context>
+        <name>Settings</name>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="80" />
+            <location filename="../src/support/settings_dialog.cpp" line="81" />
+            <location filename="../src/support/settings_dialog.cpp" line="97" />
+            <source>Settings</source>
+            <translation>Paramètres</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="157" />
+            <location filename="../src/support/settings_dialog.cpp" line="182" />
+            <source>General</source>
+            <translation>Général</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="158" />
+            <location filename="../src/support/settings_dialog.cpp" line="233" />
+            <source>Appearance</source>
+            <translation>Apparence</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="159" />
+            <location filename="../src/support/settings_dialog.cpp" line="332" />
+            <source>Performance</source>
+            <translation>Performances</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="185" />
+            <source>Advanced mode</source>
+            <translation>Mode Avancé</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="190" />
+            <source>Adds panels, options and tools to the same window. Nothing you have built changes.</source>
+            <translation>Ajoute des panneaux, des options et des outils à la même fenêtre. Rien de ce que vous avez construit ne change.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="210" />
+            <source>Default baud rate</source>
+            <translation>Débit en bauds par défaut</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="211" />
+            <source>Offered first when you attach a device.</source>
+            <translation>Proposé en premier quand vous branchez un appareil.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="218" />
+            <source>Ask before discarding an unsaved setup</source>
+            <translation>Demander avant d'abandonner une configuration non enregistrée</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="236" />
+            <source>Theme</source>
+            <translation>Thème</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="263" />
+            <source>Follow the system</source>
+            <translation>Suivre le système</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="266" />
+            <source>Light</source>
+            <translation>Clair</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="269" />
+            <source>Dark</source>
+            <translation>Sombre</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="275" />
+            <source>Density</source>
+            <translation>Densité</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="280" />
+            <source>Comfortable</source>
+            <translation>Confortable</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="282" />
+            <source>Compact</source>
+            <translation>Compact</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="300" />
+            <source>Text size, display scale, high contrast and reduced motion follow your operating system.</source>
+            <translation>La taille du texte, l'échelle d'affichage, le contraste élevé et la réduction des animations suivent votre système d'exploitation.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="306" />
+            <source>Open system settings</source>
+            <translation>Ouvrir les paramètres système</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="312" />
+            <source>Could not open system settings</source>
+            <translation>Impossible d'ouvrir les paramètres système</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="314" />
+            <source>Open your operating system's display or accessibility settings yourself.</source>
+            <translation>Ouvrez vous-même les paramètres d'affichage ou d'accessibilité de votre système d'exploitation.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="342" />
+            <location filename="../src/support/settings_dialog.cpp" line="356" />
+            <source>Refresh interval</source>
+            <translation>Intervalle d'actualisation</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="362" />
+            <location filename="../src/support/settings_dialog.cpp" line="467" />
+            <location filename="../src/support/settings_dialog.cpp" line="505" />
+            <source>%1 ms</source>
+            <translation>%1 ms</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="369" />
+            <source>50 ms, live</source>
+            <translation>50 ms, en direct</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="372" />
+            <source>5000 ms, light</source>
+            <translation>5000 ms, léger</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="375" />
+            <source>How often counters and states are read. Shorter feels live. Longer is lighter on a busy machine.</source>
+            <translation>Fréquence de lecture des compteurs et des états. Plus court donne une impression de direct. Plus long ménage une machine chargée.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="417" />
+            <source>Changes apply immediately.</source>
+            <translation>Les changements s'appliquent immédiatement.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="425" />
+            <source>Reset to defaults</source>
+            <translation>Rétablir les valeurs par défaut</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="432" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+    </context>
+    <context>
         <name>SetupCheck</name>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="402" />
+            <location filename="../src/support/setup_facts.cpp" line="46" />
+            <source>No serial devices are visible to Virtual Serial Studio. You can still use virtual ports.</source>
+            <translation>Aucun appareil série n'est visible par Virtual Serial Studio. Vous pouvez quand même utiliser des ports virtuels.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="51" />
+            <source>%n serial device(s) are visible to Virtual Serial Studio.</source>
+            <translation>%n appareil(s) série visible(s) par Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="60" />
+            <source>%1 and %2 more are visible to Virtual Serial Studio.</source>
+            <translation>%1 et %2 autres sont visibles par Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="67" />
+            <source>%1 is visible to Virtual Serial Studio.</source>
+            <translation>%1 est visible par Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="71" />
+            <source>%1 and %2 are visible to Virtual Serial Studio.</source>
+            <translation>%1 et %2 sont visibles par Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="82" />
+            <location filename="../src/support/setup_facts.cpp" line="117" />
+            <source>OK</source>
+            <translation>OK</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="94" />
+            <location filename="../src/support/setup_facts.cpp" line="415" />
+            <location filename="../src/support/setup_facts.cpp" line="426" />
+            <source>Not checked yet</source>
+            <translation>Pas encore vérifié</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="105" />
+            <source>Real serial devices</source>
+            <translation>Appareils série réels</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="107" />
+            <source>Refresh</source>
+            <translation>Actualiser</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="113" />
+            <source>Studio did not check the serial devices.</source>
+            <translation>Studio n'a pas vérifié les appareils série.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="128" />
+            <source>Virtual port driver</source>
+            <translation>Pilote de port virtuel</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="134" />
+            <source>Studio did not check for the virtual port driver.</source>
+            <translation>Studio n'a pas vérifié la présence du pilote de port virtuel.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="142" />
+            <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
+            <translation>com0com est installé avec %n paire(s), donc d'autres programmes voient les ports virtuels comme des ports COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="147" />
+            <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
+            <translation>com0com est installé, donc d'autres programmes voient les ports virtuels comme des ports COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="156" />
+            <source>com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
+            <translation>com0com est introuvable. Windows a besoin d'un pilote pour que d'autres programmes voient les ports virtuels comme des ports COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="161" />
+            <location filename="../src/support/setup_facts.cpp" line="255" />
+            <location filename="../src/support/setup_facts.cpp" line="295" />
+            <source>Needs attention</source>
+            <translation>Demande de l'attention</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="163" />
+            <source>Install com0com</source>
+            <translation>Installer com0com</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="171" />
+            <source>Administrator rights</source>
+            <translation>Droits d'administrateur</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="177" />
+            <source>Studio could not check for administrator rights.</source>
+            <translation>Studio n'a pas pu vérifier les droits d'administrateur.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <source>Studio is running as administrator, so it can create linked pairs.</source>
+            <translation>Studio s'exécute en administrateur, donc il peut créer des paires liées.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
+            <translation>Créer une nouvelle paire liée demande les droits d'administrateur, une fois par paire. Tout le reste fonctionne sans eux.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="198" />
+            <source>Needed later</source>
+            <translation>Nécessaire plus tard</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="199" />
+            <source>Restart as administrator</source>
+            <translation>Redémarrer en administrateur</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="211" />
+            <source>Carry on without a driver</source>
+            <translation>Continuer sans pilote</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="212" />
+            <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
+            <translation>Vous pouvez quand même utiliser les ports internes au processus, le moniteur et le panneau Envoi pour essayer.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="216" />
+            <source>Continue in test mode</source>
+            <translation>Continuer en mode test</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="229" />
+            <source>Pseudo terminals</source>
+            <translation>Pseudo-terminaux</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="235" />
+            <source>Studio did not check whether pseudo terminals are available.</source>
+            <translation>Studio n'a pas vérifié si les pseudo-terminaux sont disponibles.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="242" />
+            <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
+            <translation>Les pseudo-terminaux sont disponibles, donc d'autres programmes peuvent ouvrir de nouveaux ports virtuels.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="250" />
+            <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
+            <translation>Les pseudo-terminaux ne sont pas disponibles. D'autres programmes ne pourront pas ouvrir de nouveaux ports virtuels.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="262" />
+            <source>Serial port access</source>
+            <translation>Accès aux ports série</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="263" />
+            <source>Serial port group membership</source>
+            <translation>Appartenance au groupe des ports série</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="270" />
+            <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
+            <translation>Studio n'a pas de vérification de groupe pour macOS. Si un appareil ne peut pas être ouvert, vérifiez ses autorisations dans /dev.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="274" />
+            <source>Studio did not check your membership of the dialout group.</source>
+            <translation>Studio n'a pas vérifié si vous appartenez au groupe dialout.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="283" />
+            <source>You are in the dialout group, so programs can open serial devices.</source>
+            <translation>Vous appartenez au groupe dialout, donc les programmes peuvent ouvrir les appareils série.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="291" />
+            <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
+            <translation>Votre compte n'appartient pas au groupe dialout, donc les programmes risquent de ne pas pouvoir ouvrir les appareils série.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="297" />
+            <source>How to add me</source>
+            <translation>Comment m'ajouter</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="420" />
+            <source>1 thing to fix</source>
+            <translation>1 point à corriger</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="421" />
+            <source>%n things to fix</source>
+            <translation>%n points à corriger</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="433" />
+            <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
+            <translation>Tant qu'un pilote n'est pas installé, les nouveaux ports ne fonctionnent qu'à l'intérieur de Virtual Serial Studio. Les autres programmes ne les verront pas.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="453" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>Sous Linux et macOS, cette vérification examine plutôt les pseudo-terminaux et votre appartenance au groupe des ports série.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="516" />
+            <source>The application path is not known.</source>
+            <translation>Le chemin de l'application est inconnu.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="529" />
+            <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
+            <translation>Windows n'a pas autorisé le redémarrage avec élévation. Réessayez depuis le menu Démarrer.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="533" />
+            <source>Windows could not restart Virtual Serial Studio as administrator.</source>
+            <translation>Windows n'a pas pu redémarrer Virtual Serial Studio en administrateur.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="541" />
+            <source>Restarting as administrator is only available on Windows.</source>
+            <translation>Le redémarrage en administrateur n'est disponible que sous Windows.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="49" />
+            <source>Could not open the project page</source>
+            <translation>Impossible d'ouvrir la page du projet</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="51" />
+            <source>Your browser did not open. Copy the link and open it yourself.</source>
+            <translation>Votre navigateur ne s'est pas ouvert. Copiez le lien et ouvrez-le vous-même.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="63" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="65" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="77" />
+            <source>Install the com0com driver</source>
+            <translation>Installer le pilote com0com</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="78" />
+            <source>Virtual Serial Studio does not install drivers for you.</source>
+            <translation>Virtual Serial Studio n'installe pas de pilotes pour vous.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="84" />
+            <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
+            <translation>Les autres programmes ne peuvent pas voir un port virtuel tant qu'un pilote n'a pas créé un port COM. Sous Windows, ce pilote est com0com.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="94" />
+            <source>1. Open the com0com project page.
+2. Download the latest setup program.
+3. Run it as administrator and keep the default options.
+4. Come back to Setup check and choose Re-check.</source>
+            <translation>1. Ouvrez la page du projet com0com.
+2. Téléchargez le dernier programme d'installation.
+3. Exécutez-le en administrateur et gardez les options par défaut.
+4. Revenez à la vérification de la configuration et choisissez Revérifier.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="109" />
+            <source>com0com project page</source>
+            <translation>Page du projet com0com</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="116" />
+            <source>Open project page</source>
+            <translation>Ouvrir la page du projet</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="127" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="170" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="271" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="140" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="142" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="154" />
+            <source>Add me to the dialout group</source>
+            <translation>M'ajouter au groupe dialout</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="156" />
+            <source>Run this command in a terminal, then sign out and back in.</source>
+            <translation>Exécutez cette commande dans un terminal, puis fermez votre session et rouvrez-la.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="163" />
+            <source>Command</source>
+            <translation>Commande</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="192" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="193" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="214" />
+            <source>Setup check</source>
+            <translation>Vérification de la configuration</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="215" />
+            <source>What this PC needs so other programs can use your virtual ports.</source>
+            <translation>Ce dont ce PC a besoin pour que d'autres programmes puissent utiliser vos ports virtuels.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="221" />
+            <location filename="../src/support/setup_facts.cpp" line="429" />
+            <source>All set</source>
+            <translation>Tout est prêt</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="258" />
+            <source>Why is a driver needed?</source>
+            <translation>Pourquoi un pilote est-il nécessaire ?</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_check_dialog.cpp" line="266" />
+            <source>Re-check</source>
+            <translation>Revérifier</translation>
         </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="293" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -4832,10 +5867,62 @@
         </message>
     </context>
     <context>
+        <name>Shortcuts</name>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="101" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="103" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="123" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="161" />
+            <source>Keyboard shortcuts</source>
+            <translation>Raccourcis clavier</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="124" />
+            <source>Every action has a menu item. These are the quick ways.</source>
+            <translation>Chaque action a un élément de menu. Voici les moyens rapides.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="133" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="135" />
+            <source>Filter shortcuts</source>
+            <translation>Filtrer les raccourcis</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="151" />
+            <source>Available today</source>
+            <translation>Disponibles aujourd'hui</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="163" />
+            <source>Action</source>
+            <translation>Action</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="164" />
+            <source>Windows and Linux</source>
+            <translation>Windows et Linux</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="165" />
+            <source>macOS</source>
+            <translation>macOS</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="187" />
+            <source>Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and tooltips. Open this list with Help, Keyboard shortcuts.</source>
+            <translation>Qt associe Ctrl à Cmd sur macOS. Les raccourcis apparaissent aussi dans les menus et les infobulles. Ouvrez cette liste avec Aide, Raccourcis clavier.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/shortcuts_dialog.cpp" line="199" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+    </context>
+    <context>
         <name>ShortcutsDialog</name>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="85" />
-            <location filename="../src/support/shortcuts_dialog.cpp" line="98" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="80" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="93" />
             <source>Delete</source>
             <translation>Delete</translation>
         </message>
@@ -5157,6 +6244,602 @@
         </message>
     </context>
     <context>
+        <name>Topology</name>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="46" />
+            <location filename="../src/topology/topology_text.cpp" line="231" />
+            <location filename="../src/topology/topology_text.cpp" line="247" />
+            <source>two-way</source>
+            <translation>bidirectionnel</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="49" />
+            <location filename="../src/topology/topology_text.cpp" line="243" />
+            <source>owner</source>
+            <translation>propriétaire</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="52" />
+            <source>%1, %2</source>
+            <translation>%1, %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="55" />
+            <source>%1, %2, %3</source>
+            <translation>%1, %2, %3</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="64" />
+            <source>Topology</source>
+            <translation>Topologie</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="69" />
+            <source>Links</source>
+            <translation>Liens</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="74" />
+            <source>Add a port to see it here.</source>
+            <translation>Ajoutez un port pour le voir ici.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="80" />
+            <source>Click a box to inspect it. Click a line to select the link.</source>
+            <translation>Cliquez sur une case pour l'inspecter. Cliquez sur une ligne pour sélectionner le lien.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="87" />
+            <source>That link would create a loop. Data would travel from device to terminal and back to device forever. Nothing was changed. Remove a link first, or choose different ports.</source>
+            <translation>Ce lien créerait une boucle. Les données iraient de l'appareil au terminal, puis reviendraient à l'appareil indéfiniment. Rien n'a été modifié. Supprimez d'abord un lien, ou choisissez d'autres ports.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="96" />
+            <source>Show the loop</source>
+            <translation>Afficher la boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="101" />
+            <source>Owner</source>
+            <translation>Propriétaire</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="106" />
+            <source>Dropped</source>
+            <translation>Perdus</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="111" />
+            <source>not linked</source>
+            <translation>non lié</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="116" />
+            <source>No links yet.</source>
+            <translation>Aucun lien pour l'instant.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="121" />
+            <source>Inspect</source>
+            <translation>Inspecter</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="126" />
+            <source>Copy name</source>
+            <translation>Copier le nom</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="131" />
+            <source>Rename</source>
+            <translation>Renommer</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="136" />
+            <source>Connect from here</source>
+            <translation>Connecter depuis ici</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="141" />
+            <source>Connect ports needs at least two ports.</source>
+            <translation>Connecter des ports demande au moins deux ports.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="147" />
+            <source>Remove</source>
+            <translation>Supprimer</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="152" />
+            <source>Remove link</source>
+            <translation>Supprimer le lien</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="158" />
+            <source>1 port</source>
+            <translation>1 port</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="159" />
+            <source>%1 ports</source>
+            <translation>%1 ports</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="165" />
+            <source>1 link</source>
+            <translation>1 lien</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="166" />
+            <source>%1 links</source>
+            <translation>%1 liens</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="176" />
+            <location filename="../src/topology/topology_text.cpp" line="178" />
+            <source>%1 and %2</source>
+            <translation>%1 et %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="188" />
+            <source>Real device, %1</source>
+            <translation>Appareil réel, %1</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="191" />
+            <source>Fixture (mock)</source>
+            <translation>Fixture (simulée)</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="199" />
+            <source>Studio only</source>
+            <translation>Studio uniquement</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="217" />
+            <source>Not linked to another port.</source>
+            <translation>Non lié à un autre port.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="227" />
+            <source>Split</source>
+            <translation>Répartir</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="229" />
+            <source>Join</source>
+            <translation>Fusion</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="233" />
+            <source>monitor</source>
+            <translation>moniteur</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="256" />
+            <source>No ports yet. Add a port to see it here.</source>
+            <translation>Aucun port pour l'instant. Ajoutez un port pour le voir ici.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="265" />
+            <source>%1, no links</source>
+            <translation>%1, aucun lien</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="271" />
+            <source>%1, %2: %3</source>
+            <translation>%1, %2 : %3</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="288" />
+            <source>Split link, %1 to %2 ports</source>
+            <translation>Lien de répartition, %1 vers %2 ports</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="296" />
+            <source>Split link, %1 to %2</source>
+            <translation>Lien de répartition, %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="303" />
+            <source>Join link, %1 ports into %2</source>
+            <translation>Lien de fusion, %1 ports dans %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="311" />
+            <source>Join link, %1 into %2</source>
+            <translation>Lien de fusion, %1 dans %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="316" />
+            <source>Two-way link, %1 to %2</source>
+            <translation>Lien bidirectionnel, %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="320" />
+            <source>One-way link, %1 to %2</source>
+            <translation>Lien unidirectionnel, %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="324" />
+            <source>Monitor link, %1 to %2</source>
+            <translation>Lien de moniteur, %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="340" />
+            <source>split from %1 to %2</source>
+            <translation>répartition de %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="343" />
+            <source>join from %1 into %2</source>
+            <translation>fusion de %1 dans %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="346" />
+            <source>two-way between %1 and %2</source>
+            <translation>bidirectionnel entre %1 et %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="350" />
+            <source>one-way from %1 to %2</source>
+            <translation>unidirectionnel de %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="353" />
+            <source>monitor from %1 to %2</source>
+            <translation>moniteur de %1 vers %2</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="361" />
+            <source>Copied %1.</source>
+            <translation>%1 copié.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="366" />
+            <source>Selected %1.</source>
+            <translation>%1 sélectionné.</translation>
+        </message>
+    </context>
+    <context>
+        <name>TopologyJson</name>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="34" />
+            <source>1 port, all names unique</source>
+            <translation>1 port, tous les noms sont uniques</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="36" />
+            <source>%1 ports, all names unique</source>
+            <translation>%1 ports, tous les noms sont uniques</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="41" />
+            <source>1 port, a name is used twice</source>
+            <translation>1 port, un nom est utilisé deux fois</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="43" />
+            <source>%1 ports, a name is used twice</source>
+            <translation>%1 ports, un nom est utilisé deux fois</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="52" />
+            <source>1 link, no loops</source>
+            <translation>1 lien, aucune boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="54" />
+            <source>%1 links, no loops</source>
+            <translation>%1 liens, aucune boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="58" />
+            <source>1 link, a loop was found</source>
+            <translation>1 lien, une boucle a été trouvée</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="60" />
+            <source>%1 links, a loop was found</source>
+            <translation>%1 liens, une boucle a été trouvée</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="199" />
+            <source>Valid, version 1</source>
+            <translation>Valide, version 1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="202" />
+            <source>Not valid</source>
+            <translation>Non valide</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="217" />
+            <location filename="../src/advanced/json_validation.cpp" line="242" />
+            <location filename="../src/advanced/json_validation.cpp" line="269" />
+            <location filename="../src/advanced/json_validation.cpp" line="302" />
+            <location filename="../src/advanced/json_validation.cpp" line="331" />
+            <location filename="../src/advanced/json_validation.cpp" line="355" />
+            <location filename="../src/advanced/json_validation.cpp" line="394" />
+            <location filename="../src/advanced/json_validation.cpp" line="442" />
+            <location filename="../src/advanced/json_validation.cpp" line="491" />
+            <location filename="../src/advanced/json_validation.cpp" line="526" />
+            <location filename="../src/advanced/json_validation.cpp" line="562" />
+            <location filename="../src/advanced/json_validation.cpp" line="592" />
+            <location filename="../src/advanced/json_validation.cpp" line="627" />
+            <location filename="../src/advanced/json_validation.cpp" line="691" />
+            <location filename="../src/advanced/json_validation.cpp" line="731" />
+            <location filename="../src/advanced/json_validation.cpp" line="765" />
+            <location filename="../src/advanced/json_validation.cpp" line="812" />
+            <location filename="../src/advanced/json_validation.cpp" line="849" />
+            <source>Valid JSON, version 1</source>
+            <translation>JSON valide, version 1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="220" />
+            <location filename="../src/advanced/json_validation.cpp" line="245" />
+            <location filename="../src/advanced/json_validation.cpp" line="272" />
+            <location filename="../src/advanced/json_validation.cpp" line="305" />
+            <location filename="../src/advanced/json_validation.cpp" line="334" />
+            <location filename="../src/advanced/json_validation.cpp" line="358" />
+            <location filename="../src/advanced/json_validation.cpp" line="397" />
+            <location filename="../src/advanced/json_validation.cpp" line="445" />
+            <location filename="../src/advanced/json_validation.cpp" line="494" />
+            <location filename="../src/advanced/json_validation.cpp" line="529" />
+            <location filename="../src/advanced/json_validation.cpp" line="565" />
+            <location filename="../src/advanced/json_validation.cpp" line="595" />
+            <location filename="../src/advanced/json_validation.cpp" line="630" />
+            <location filename="../src/advanced/json_validation.cpp" line="694" />
+            <location filename="../src/advanced/json_validation.cpp" line="734" />
+            <location filename="../src/advanced/json_validation.cpp" line="768" />
+            <location filename="../src/advanced/json_validation.cpp" line="815" />
+            <source>Ports, all names unique</source>
+            <translation>Ports, tous les noms sont uniques</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="223" />
+            <location filename="../src/advanced/json_validation.cpp" line="248" />
+            <location filename="../src/advanced/json_validation.cpp" line="275" />
+            <location filename="../src/advanced/json_validation.cpp" line="308" />
+            <location filename="../src/advanced/json_validation.cpp" line="337" />
+            <location filename="../src/advanced/json_validation.cpp" line="361" />
+            <location filename="../src/advanced/json_validation.cpp" line="400" />
+            <location filename="../src/advanced/json_validation.cpp" line="448" />
+            <location filename="../src/advanced/json_validation.cpp" line="497" />
+            <location filename="../src/advanced/json_validation.cpp" line="532" />
+            <location filename="../src/advanced/json_validation.cpp" line="568" />
+            <location filename="../src/advanced/json_validation.cpp" line="598" />
+            <location filename="../src/advanced/json_validation.cpp" line="633" />
+            <location filename="../src/advanced/json_validation.cpp" line="697" />
+            <location filename="../src/advanced/json_validation.cpp" line="737" />
+            <location filename="../src/advanced/json_validation.cpp" line="771" />
+            <location filename="../src/advanced/json_validation.cpp" line="818" />
+            <source>Links, no loops</source>
+            <translation>Liens, aucune boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="226" />
+            <source>Line %1: %2</source>
+            <translation>Ligne %1 : %2</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="229" />
+            <source>The line is highlighted and nothing was applied.</source>
+            <translation>La ligne est surlignée et rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="251" />
+            <source>Line 1: the document must be a JSON object</source>
+            <translation>Ligne 1 : le document doit être un objet JSON</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="253" />
+            <source>A setup file starts with a { and ends with a }.</source>
+            <translation>Un fichier de configuration commence par { et se termine par }.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="280" />
+            <source>Line %1: version must be 1</source>
+            <translation>Ligne %1 : version doit valoir 1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="283" />
+            <source>The document needs "version": 1</source>
+            <translation>Le document a besoin de "version": 1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="286" />
+            <location filename="../src/advanced/json_validation.cpp" line="313" />
+            <location filename="../src/advanced/json_validation.cpp" line="342" />
+            <location filename="../src/advanced/json_validation.cpp" line="573" />
+            <location filename="../src/advanced/json_validation.cpp" line="610" />
+            <location filename="../src/advanced/json_validation.cpp" line="786" />
+            <source>Nothing was applied.</source>
+            <translation>Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="311" />
+            <source>"ports" must be a list</source>
+            <translation>"ports" doit être une liste</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="340" />
+            <source>Each port must be an object</source>
+            <translation>Chaque port doit être un objet</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="367" />
+            <source>Line %1: a port has no name</source>
+            <translation>Ligne %1 : un port n'a pas de nom</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="370" />
+            <source>A port has no name</source>
+            <translation>Un port n'a pas de nom</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="372" />
+            <source>Every port needs a name so links can refer to it.</source>
+            <translation>Chaque port a besoin d'un nom pour que les liens puissent le désigner.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="405" />
+            <source>Line %1: the name "%2" is used twice</source>
+            <translation>Ligne %1 : le nom « %2 » est utilisé deux fois</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="410" />
+            <source>The name "%1" is used twice</source>
+            <translation>Le nom « %1 » est utilisé deux fois</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="413" />
+            <source>Port names identify ports in links, so each name must be unique. Nothing was applied.</source>
+            <translation>Les noms de ports identifient les ports dans les liens, donc chaque nom doit être unique. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="454" />
+            <source>Line %1: unknown port kind "%2"</source>
+            <translation>Ligne %1 : type de port inconnu « %2 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="458" />
+            <source>Unknown port kind "%1"</source>
+            <translation>Type de port inconnu « %1 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="461" />
+            <source>Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was applied.</source>
+            <translation>Utilisez virtual, physical, tcp, udp, rfc2217 ou mock. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="504" />
+            <source>Line %1: unknown virtual kind "%2"</source>
+            <translation>Ligne %1 : type virtuel inconnu « %2 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="509" />
+            <source>Unknown virtual kind "%1"</source>
+            <translation>Type virtuel inconnu « %1 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="512" />
+            <source>Use auto, pty, named-pipe, loopback or windows-driver. Nothing was applied.</source>
+            <translation>Utilisez auto, pty, named-pipe, loopback ou windows-driver. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="539" />
+            <source>Line %1: port "%2" has no address</source>
+            <translation>Ligne %1 : le port « %2 » n'a pas d'adresse</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="544" />
+            <source>Port "%1" has no address</source>
+            <translation>Le port « %1 » n'a pas d'adresse</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="547" />
+            <source>A physical or network port needs a uri. Nothing was applied.</source>
+            <translation>Un port physique ou réseau a besoin d'un uri. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="571" />
+            <source>"links" must be a list</source>
+            <translation>"links" doit être une liste</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="604" />
+            <source>Line %1: each link must be an object</source>
+            <translation>Ligne %1 : chaque lien doit être un objet</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="608" />
+            <source>Each link must be an object</source>
+            <translation>Chaque lien doit être un objet</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="639" />
+            <source>Line %1: unknown link mode "%2"</source>
+            <translation>Ligne %1 : mode de lien inconnu « %2 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="643" />
+            <source>Unknown link mode "%1"</source>
+            <translation>Mode de lien inconnu « %1 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="650" />
+            <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
+            <translation>Vouliez-vous dire « %1 » ? La ligne est surlignée et rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="660" />
+            <source>Use duplex, split, join, redirect or monitor. Nothing was applied.</source>
+            <translation>Utilisez duplex, split, join, redirect ou monitor. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="703" />
+            <source>Line %1: a link needs ports on both sides</source>
+            <translation>Ligne %1 : un lien a besoin de ports des deux côtés</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="707" />
+            <source>A link needs ports on both sides</source>
+            <translation>Un lien a besoin de ports des deux côtés</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="709" />
+            <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
+            <translation>sources et targets doivent être des listes non vides de noms de ports. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="743" />
+            <source>Line %1: "%2" has the wrong number of ports</source>
+            <translation>Ligne %1 : « %2 » a un nombre de ports incorrect</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="748" />
+            <source>"%1" has the wrong number of ports</source>
+            <translation>« %1 » a un nombre de ports incorrect</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="752" />
+            <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
+            <translation>Un lien duplex, redirect ou monitor relie un port à un port ; un split a une source ; un join a une cible. Rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="778" />
+            <source>Line %1: no port is called "%2"</source>
+            <translation>Ligne %1 : aucun port ne s'appelle « %2 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="783" />
+            <source>No port is called "%1"</source>
+            <translation>Aucun port ne s'appelle « %1 »</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="824" />
+            <source>Line %1: these links create a loop</source>
+            <translation>Ligne %1 : ces liens créent une boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="827" />
+            <source>These links create a loop</source>
+            <translation>Ces liens créent une boucle</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="829" />
+            <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
+            <translation>Les octets tourneraient indéfiniment, donc le hub refuse une boucle et rien n'a été appliqué.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="858" />
+            <location filename="../src/advanced/json_validation.cpp" line="862" />
+            <location filename="../src/advanced/json_validation.cpp" line="881" />
+            <source>The setup format rejected this document</source>
+            <translation>Le format de configuration a rejeté ce document</translation>
+        </message>
+    </context>
+    <context>
         <name>TopologyJsonEditor</name>
         <message>
             <location filename="../src/advanced/json_editor.cpp" line="210" />
@@ -5277,9 +6960,262 @@
         </message>
     </context>
     <context>
+        <name>Troubleshoot</name>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="40" />
+            <source>port %1</source>
+            <translation>port %1</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="48" />
+            <source>another port</source>
+            <translation>un autre port</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="52" />
+            <source>%1 and %2</source>
+            <translation>%1 et %2</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="95" />
+            <source>Passed</source>
+            <translation>Réussi</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="106" />
+            <source>Needs attention</source>
+            <translation>Demande de l'attention</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="116" />
+            <source>Not checked yet</source>
+            <translation>Pas encore vérifié</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="130" />
+            <source>%1 is in a split link from %2.</source>
+            <translation>%1 fait partie d'un lien de répartition depuis %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="134" />
+            <source>%1 is in a split link to %2.</source>
+            <translation>%1 fait partie d'un lien de répartition vers %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="138" />
+            <source>%1 is in a two-way link with %2.</source>
+            <translation>%1 fait partie d'un lien bidirectionnel avec %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="144" />
+            <source>%1 is joined from %2.</source>
+            <translation>%1 est fusionné depuis %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="148" />
+            <source>%1 is in a join link into %2.</source>
+            <translation>%1 fait partie d'un lien de fusion dans %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="152" />
+            <source>%1 is in a monitor link with %2.</source>
+            <translation>%1 fait partie d'un lien de moniteur avec %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="158" />
+            <source>%1 is in a one-way link to %2.</source>
+            <translation>%1 fait partie d'un lien unidirectionnel vers %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="162" />
+            <source>%1 is in a one-way link from %2.</source>
+            <translation>%1 fait partie d'un lien unidirectionnel depuis %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="183" />
+            <source>this port</source>
+            <translation>ce port</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="190" />
+            <location filename="../src/support/troubleshoot.cpp" line="198" />
+            <location filename="../src/support/troubleshoot.cpp" line="206" />
+            <source>The port exists and is open</source>
+            <translation>Le port existe et est ouvert</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="192" />
+            <location filename="../src/support/troubleshoot.cpp" line="232" />
+            <location filename="../src/support/troubleshoot.cpp" line="314" />
+            <source>Studio has no port to check.</source>
+            <translation>Studio n'a aucun port à vérifier.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="200" />
+            <source>%1 is open on %2.</source>
+            <translation>%1 est ouvert sur %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="208" />
+            <source>%1 is not open.</source>
+            <translation>%1 n'est pas ouvert.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="230" />
+            <location filename="../src/support/troubleshoot.cpp" line="238" />
+            <location filename="../src/support/troubleshoot.cpp" line="248" />
+            <source>The port is linked to the device</source>
+            <translation>Le port est lié à l'appareil</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="240" />
+            <source>This port has no link. Connect it to a device.</source>
+            <translation>Ce port n'a aucun lien. Connectez-le à un appareil.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="258" />
+            <source>The device is sending</source>
+            <translation>L'appareil envoie des données</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="263" />
+            <source>Connect the port to a device first.</source>
+            <translation>Connectez d'abord le port à un appareil.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="270" />
+            <source>Studio cannot tell when %1 last sent data.</source>
+            <translation>Studio ne peut pas savoir quand %1 a envoyé des données pour la dernière fois.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="279" />
+            <source>%1 received data in the last minute.</source>
+            <translation>%1 a reçu des données dans la dernière minute.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="289" />
+            <source>Studio is still listening for the first bytes.</source>
+            <translation>Studio attend toujours les premiers octets.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="297" />
+            <source>%1 has not sent anything in the last minute. Check the cable and the device's power.</source>
+            <translation>%1 n'a rien envoyé dans la dernière minute. Vérifiez le câble et l'alimentation de l'appareil.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="307" />
+            <source>A program has opened %1</source>
+            <translation>Un programme a ouvert %1</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="312" />
+            <source>A program has opened the port</source>
+            <translation>Un programme a ouvert le port</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="321" />
+            <source>Studio cannot tell whether a program has opened %1 in this build.</source>
+            <translation>Studio ne peut pas savoir si un programme a ouvert %1 dans cette version.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="330" />
+            <source>A program has opened %1.</source>
+            <translation>Un programme a ouvert %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="338" />
+            <source>No program has opened %1 yet, so nothing can arrive.</source>
+            <translation>Aucun programme n'a encore ouvert %1, donc rien ne peut arriver.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="351" />
+            <location filename="../src/support/troubleshoot.cpp" line="360" />
+            <source>Data reaches the program</source>
+            <translation>Les données parviennent au programme</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="353" />
+            <source>Studio cannot see whether the program read the data.</source>
+            <translation>Studio ne peut pas voir si le programme a lu les données.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="362" />
+            <source>Checked once a program connects.</source>
+            <translation>Vérifié une fois qu'un programme se connecte.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="99" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="101" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="257" />
+            <source>Why is nothing arriving?</source>
+            <translation>Pourquoi rien n'arrive ?</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="124" />
+            <source>Studio checked each step between the device and your program.</source>
+            <translation>Studio a vérifié chaque étape entre l'appareil et votre programme.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="162" />
+            <source>Try this</source>
+            <translation>Essayez ceci</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="180" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="269" />
+            <source>Copy port path</source>
+            <translation>Copier le chemin du port</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="188" />
+            <source>Check again</source>
+            <translation>Vérifier à nouveau</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="201" />
+            <source>Still stuck? A diagnostic bundle gathers the setup, the log and the environment for whoever helps you. Traffic contents are left out unless you choose to include them.</source>
+            <translation>Toujours bloqué ? Une archive de diagnostic rassemble la configuration, le journal et l'environnement pour la personne qui vous aide. Le contenu du trafic est exclu, sauf si vous choisissez de l'inclure.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="219" />
+            <source>Create diagnostic bundle</source>
+            <translation>Créer une archive de diagnostic</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="226" />
+            <source>Close</source>
+            <translation>Fermer</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="259" />
+            <source>Why is nothing arriving on %1?</source>
+            <translation>Pourquoi rien n'arrive sur %1 ?</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="270" />
+            <source>Copy %1</source>
+            <translation>Copier %1</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="282" />
+            <source>1. In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port.&lt;br&gt;2. If the program shows an error, another program may be using %1. Close it, then try again.&lt;br&gt;3. Some programs only list ports when they start. Restart the program after creating the port.</source>
+            <translation>1. Dans votre programme, choisissez &lt;b&gt;%1&lt;/b&gt; comme port série.&lt;br&gt;2. Si le programme affiche une erreur, un autre programme utilise peut-être %1. Fermez-le, puis réessayez.&lt;br&gt;3. Certains programmes ne listent les ports qu'à leur démarrage. Redémarrez le programme après avoir créé le port.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="292" />
+            <source>1. In your program, choose %1 as the serial port. 2. If the program shows an error, another program may be using %1. Close it, then try again. 3. Some programs only list ports when they start. Restart the program after creating the port.</source>
+            <translation>1. Dans votre programme, choisissez %1 comme port série. 2. Si le programme affiche une erreur, un autre programme utilise peut-être %1. Fermez-le, puis réessayez. 3. Certains programmes ne listent les ports qu'à leur démarrage. Redémarrez le programme après avoir créé le port.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="364" />
+            <source>%1 copied.</source>
+            <translation>%1 copié.</translation>
+        </message>
+    </context>
+    <context>
         <name>TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="311" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -5420,49 +7356,65 @@
     <context>
         <name>WiringDialog</name>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="69" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="31" />
+            <source>Open</source>
+            <translation>Ouvert</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/wiring_dialog.cpp" line="33" />
+            <source>Failed</source>
+            <translation>Échec</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/wiring_dialog.cpp" line="37" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="39" />
+            <source>Closed</source>
+            <translation>Fermé</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/wiring_dialog.cpp" line="64" />
             <source>Port %1</source>
             <translation>Port %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="70" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="65" />
             <source>Inspector: %1</source>
             <translation>Inspecteur : %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="110" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="105" />
             <source>That port is no longer open.</source>
             <translation>Ce port n'est plus ouvert.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="115" />
-            <location filename="../src/advanced/wiring_dialog.cpp" line="178" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="110" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="173" />
             <source>Close</source>
             <translation>Fermer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="127" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="122" />
             <source>Fixture (mock)</source>
             <translation>Fixture (simulée)</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="145" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="140" />
             <source>Linked two-way to &lt;b&gt;%1&lt;/b&gt;. Wiring changes apply to that link only.</source>
             <translation>Lié dans les deux sens à &lt;b&gt;%1&lt;/b&gt;. Les changements de câblage s'appliquent à ce lien uniquement.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="149" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="144" />
             <source>Linked two-way to %1. Wiring changes apply to that link only.</source>
             <translation>Lié dans les deux sens à %1. Les changements de câblage s'appliquent à ce lien uniquement.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="154" />
-            <location filename="../src/advanced/wiring_dialog.cpp" line="155" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="149" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="150" />
             <source>Not linked to another port yet.</source>
             <translation>Pas encore lié à un autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="174" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="169" />
             <source>Faults are only available on fixture ports.</source>
             <translation>Les défauts ne sont disponibles que sur les ports de fixture.</translation>
         </message>
@@ -5470,400 +7422,275 @@
     <context>
         <name>json_validation</name>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="190" />
             <source>Valid, version 1</source>
-            <translation>Valide, version 1</translation>
+            <translation type="vanished">Valide, version 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="193" />
             <source>Not valid</source>
-            <translation>Non valide</translation>
+            <translation type="vanished">Non valide</translation>
         </message>
     </context>
     <context>
         <name>vss::gui</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="43" />
             <source>%1 (%2)</source>
-            <translation>%1 (%2)</translation>
+            <translation type="vanished">%1 (%2)</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="40" />
             <source>Started</source>
-            <translation>Démarré</translation>
+            <translation type="vanished">Démarré</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="42" />
             <source>Stopped</source>
-            <translation>Arrêté</translation>
+            <translation type="vanished">Arrêté</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="44" />
             <source>Control lines</source>
-            <translation>Lignes de contrôle</translation>
+            <translation type="vanished">Lignes de contrôle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="46" />
             <source>Error</source>
-            <translation>Erreur</translation>
+            <translation type="vanished">Erreur</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="48" />
             <source>Counters</source>
-            <translation>Compteurs</translation>
+            <translation type="vanished">Compteurs</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="50" />
-            <location filename="../src/advanced/event_log.cpp" line="54" />
             <source>Message</source>
-            <translation>Message</translation>
+            <translation type="vanished">Message</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="52" />
             <source>Traffic</source>
-            <translation>Trafic</translation>
+            <translation type="vanished">Trafic</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="38" />
             <source>1 port, all names unique</source>
-            <translation>1 port, tous les noms sont uniques</translation>
+            <translation type="vanished">1 port, tous les noms sont uniques</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="39" />
             <source>%1 ports, all names unique</source>
-            <translation>%1 ports, tous les noms sont uniques</translation>
+            <translation type="vanished">%1 ports, tous les noms sont uniques</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="41" />
             <source>1 port, a name is used twice</source>
-            <translation>1 port, un nom est utilisé deux fois</translation>
+            <translation type="vanished">1 port, un nom est utilisé deux fois</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="42" />
             <source>%1 ports, a name is used twice</source>
-            <translation>%1 ports, un nom est utilisé deux fois</translation>
+            <translation type="vanished">%1 ports, un nom est utilisé deux fois</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="49" />
             <source>1 link, no loops</source>
-            <translation>1 lien, aucune boucle</translation>
+            <translation type="vanished">1 lien, aucune boucle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="50" />
             <source>%1 links, no loops</source>
-            <translation>%1 liens, aucune boucle</translation>
+            <translation type="vanished">%1 liens, aucune boucle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="52" />
             <source>1 link, a loop was found</source>
-            <translation>1 lien, une boucle a été trouvée</translation>
+            <translation type="vanished">1 lien, une boucle a été trouvée</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="53" />
             <source>%1 links, a loop was found</source>
-            <translation>%1 liens, une boucle a été trouvée</translation>
+            <translation type="vanished">%1 liens, une boucle a été trouvée</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="207" />
-            <location filename="../src/advanced/json_validation.cpp" line="222" />
-            <location filename="../src/advanced/json_validation.cpp" line="240" />
-            <location filename="../src/advanced/json_validation.cpp" line="262" />
-            <location filename="../src/advanced/json_validation.cpp" line="283" />
-            <location filename="../src/advanced/json_validation.cpp" line="298" />
-            <location filename="../src/advanced/json_validation.cpp" line="327" />
-            <location filename="../src/advanced/json_validation.cpp" line="364" />
-            <location filename="../src/advanced/json_validation.cpp" line="404" />
-            <location filename="../src/advanced/json_validation.cpp" line="429" />
-            <location filename="../src/advanced/json_validation.cpp" line="453" />
-            <location filename="../src/advanced/json_validation.cpp" line="475" />
-            <location filename="../src/advanced/json_validation.cpp" line="499" />
-            <location filename="../src/advanced/json_validation.cpp" line="550" />
-            <location filename="../src/advanced/json_validation.cpp" line="579" />
-            <location filename="../src/advanced/json_validation.cpp" line="603" />
-            <location filename="../src/advanced/json_validation.cpp" line="637" />
-            <location filename="../src/advanced/json_validation.cpp" line="664" />
             <source>Valid JSON, version 1</source>
-            <translation>JSON valide, version 1</translation>
+            <translation type="vanished">JSON valide, version 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="208" />
-            <location filename="../src/advanced/json_validation.cpp" line="223" />
-            <location filename="../src/advanced/json_validation.cpp" line="241" />
-            <location filename="../src/advanced/json_validation.cpp" line="263" />
-            <location filename="../src/advanced/json_validation.cpp" line="284" />
-            <location filename="../src/advanced/json_validation.cpp" line="299" />
-            <location filename="../src/advanced/json_validation.cpp" line="328" />
-            <location filename="../src/advanced/json_validation.cpp" line="365" />
-            <location filename="../src/advanced/json_validation.cpp" line="405" />
-            <location filename="../src/advanced/json_validation.cpp" line="430" />
-            <location filename="../src/advanced/json_validation.cpp" line="454" />
-            <location filename="../src/advanced/json_validation.cpp" line="476" />
-            <location filename="../src/advanced/json_validation.cpp" line="500" />
-            <location filename="../src/advanced/json_validation.cpp" line="551" />
-            <location filename="../src/advanced/json_validation.cpp" line="580" />
-            <location filename="../src/advanced/json_validation.cpp" line="604" />
-            <location filename="../src/advanced/json_validation.cpp" line="638" />
             <source>Ports, all names unique</source>
-            <translation>Ports, tous les noms sont uniques</translation>
+            <translation type="vanished">Ports, tous les noms sont uniques</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="209" />
-            <location filename="../src/advanced/json_validation.cpp" line="224" />
-            <location filename="../src/advanced/json_validation.cpp" line="242" />
-            <location filename="../src/advanced/json_validation.cpp" line="264" />
-            <location filename="../src/advanced/json_validation.cpp" line="285" />
-            <location filename="../src/advanced/json_validation.cpp" line="300" />
-            <location filename="../src/advanced/json_validation.cpp" line="329" />
-            <location filename="../src/advanced/json_validation.cpp" line="366" />
-            <location filename="../src/advanced/json_validation.cpp" line="406" />
-            <location filename="../src/advanced/json_validation.cpp" line="431" />
-            <location filename="../src/advanced/json_validation.cpp" line="455" />
-            <location filename="../src/advanced/json_validation.cpp" line="477" />
-            <location filename="../src/advanced/json_validation.cpp" line="501" />
-            <location filename="../src/advanced/json_validation.cpp" line="552" />
-            <location filename="../src/advanced/json_validation.cpp" line="581" />
-            <location filename="../src/advanced/json_validation.cpp" line="605" />
-            <location filename="../src/advanced/json_validation.cpp" line="639" />
             <source>Links, no loops</source>
-            <translation>Liens, aucune boucle</translation>
+            <translation type="vanished">Liens, aucune boucle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="211" />
             <source>Line %1: %2</source>
-            <translation>Ligne %1 : %2</translation>
+            <translation type="vanished">Ligne %1 : %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="212" />
             <source>The line is highlighted and nothing was applied.</source>
-            <translation>La ligne est surlignée et rien n'a été appliqué.</translation>
+            <translation type="vanished">La ligne est surlignée et rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="226" />
             <source>Line 1: the document must be a JSON object</source>
-            <translation>Ligne 1 : le document doit être un objet JSON</translation>
+            <translation type="vanished">Ligne 1 : le document doit être un objet JSON</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="227" />
             <source>A setup file starts with a { and ends with a }.</source>
-            <translation>Un fichier de configuration commence par { et se termine par }.</translation>
+            <translation type="vanished">Un fichier de configuration commence par { et se termine par }.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="245" />
             <source>Line %1: version must be 1</source>
-            <translation>Ligne %1 : version doit valoir 1</translation>
+            <translation type="vanished">Ligne %1 : version doit valoir 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="246" />
             <source>The document needs "version": 1</source>
-            <translation>Le document a besoin de "version": 1</translation>
+            <translation type="vanished">Le document a besoin de "version": 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="247" />
-            <location filename="../src/advanced/json_validation.cpp" line="266" />
-            <location filename="../src/advanced/json_validation.cpp" line="287" />
-            <location filename="../src/advanced/json_validation.cpp" line="457" />
-            <location filename="../src/advanced/json_validation.cpp" line="484" />
-            <location filename="../src/advanced/json_validation.cpp" line="613" />
             <source>Nothing was applied.</source>
-            <translation>Rien n'a été appliqué.</translation>
+            <translation type="vanished">Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="265" />
             <source>"ports" must be a list</source>
-            <translation>"ports" doit être une liste</translation>
+            <translation type="vanished">"ports" doit être une liste</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="286" />
             <source>Each port must be an object</source>
-            <translation>Chaque port doit être un objet</translation>
+            <translation type="vanished">Chaque port doit être un objet</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="305" />
             <source>Line %1: a port has no name</source>
-            <translation>Ligne %1 : un port n'a pas de nom</translation>
+            <translation type="vanished">Ligne %1 : un port n'a pas de nom</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="306" />
             <source>A port has no name</source>
-            <translation>Un port n'a pas de nom</translation>
+            <translation type="vanished">Un port n'a pas de nom</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="308" />
             <source>Every port needs a name so links can refer to it.</source>
-            <translation>Chaque port a besoin d'un nom pour que les liens puissent le désigner.</translation>
+            <translation type="vanished">Chaque port a besoin d'un nom pour que les liens puissent le désigner.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="333" />
             <source>Line %1: the name "%2" is used twice</source>
-            <translation>Ligne %1 : le nom « %2 » est utilisé deux fois</translation>
+            <translation type="vanished">Ligne %1 : le nom « %2 » est utilisé deux fois</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="336" />
             <source>The name "%1" is used twice</source>
-            <translation>Le nom « %1 » est utilisé deux fois</translation>
+            <translation type="vanished">Le nom « %1 » est utilisé deux fois</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="338" />
             <source>Port names identify ports in links, so each name must be unique. Nothing was applied.</source>
-            <translation>Les noms de ports identifient les ports dans les liens, donc chaque nom doit être unique. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Les noms de ports identifient les ports dans les liens, donc chaque nom doit être unique. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="370" />
             <source>Line %1: unknown port kind "%2"</source>
-            <translation>Ligne %1 : type de port inconnu « %2 »</translation>
+            <translation type="vanished">Ligne %1 : type de port inconnu « %2 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="373" />
             <source>Unknown port kind "%1"</source>
-            <translation>Type de port inconnu « %1 »</translation>
+            <translation type="vanished">Type de port inconnu « %1 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="374" />
             <source>Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was applied.</source>
-            <translation>Utilisez virtual, physical, tcp, udp, rfc2217 ou mock. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Utilisez virtual, physical, tcp, udp, rfc2217 ou mock. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="411" />
             <source>Line %1: unknown virtual kind "%2"</source>
-            <translation>Ligne %1 : type virtuel inconnu « %2 »</translation>
+            <translation type="vanished">Ligne %1 : type virtuel inconnu « %2 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="414" />
             <source>Unknown virtual kind "%1"</source>
-            <translation>Type virtuel inconnu « %1 »</translation>
+            <translation type="vanished">Type virtuel inconnu « %1 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="416" />
             <source>Use auto, pty, named-pipe, loopback or windows-driver. Nothing was applied.</source>
-            <translation>Utilisez auto, pty, named-pipe, loopback ou windows-driver. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Utilisez auto, pty, named-pipe, loopback ou windows-driver. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="436" />
             <source>Line %1: port "%2" has no address</source>
-            <translation>Ligne %1 : le port « %2 » n'a pas d'adresse</translation>
+            <translation type="vanished">Ligne %1 : le port « %2 » n'a pas d'adresse</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="439" />
             <source>Port "%1" has no address</source>
-            <translation>Le port « %1 » n'a pas d'adresse</translation>
+            <translation type="vanished">Le port « %1 » n'a pas d'adresse</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="441" />
             <source>A physical or network port needs a uri. Nothing was applied.</source>
-            <translation>Un port physique ou réseau a besoin d'un uri. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Un port physique ou réseau a besoin d'un uri. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="456" />
             <source>"links" must be a list</source>
-            <translation>"links" doit être une liste</translation>
+            <translation type="vanished">"links" doit être une liste</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="482" />
             <source>Line %1: each link must be an object</source>
-            <translation>Ligne %1 : chaque lien doit être un objet</translation>
+            <translation type="vanished">Ligne %1 : chaque lien doit être un objet</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="483" />
             <source>Each link must be an object</source>
-            <translation>Chaque lien doit être un objet</translation>
+            <translation type="vanished">Chaque lien doit être un objet</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="505" />
             <source>Line %1: unknown link mode "%2"</source>
-            <translation>Ligne %1 : mode de lien inconnu « %2 »</translation>
+            <translation type="vanished">Ligne %1 : mode de lien inconnu « %2 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="508" />
             <source>Unknown link mode "%1"</source>
-            <translation>Mode de lien inconnu « %1 »</translation>
+            <translation type="vanished">Mode de lien inconnu « %1 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="513" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
-            <translation>Vouliez-vous dire « %1 » ? La ligne est surlignée et rien n'a été appliqué.</translation>
+            <translation type="vanished">Vouliez-vous dire « %1 » ? La ligne est surlignée et rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="521" />
             <source>Use duplex, split, join, redirect or monitor. Nothing was applied.</source>
-            <translation>Utilisez duplex, split, join, redirect ou monitor. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Utilisez duplex, split, join, redirect ou monitor. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="556" />
             <source>Line %1: a link needs ports on both sides</source>
-            <translation>Ligne %1 : un lien a besoin de ports des deux côtés</translation>
+            <translation type="vanished">Ligne %1 : un lien a besoin de ports des deux côtés</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="558" />
             <source>A link needs ports on both sides</source>
-            <translation>Un lien a besoin de ports des deux côtés</translation>
+            <translation type="vanished">Un lien a besoin de ports des deux côtés</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="560" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
-            <translation>sources et targets doivent être des listes non vides de noms de ports. Rien n'a été appliqué.</translation>
+            <translation type="vanished">sources et targets doivent être des listes non vides de noms de ports. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="586" />
             <source>Line %1: "%2" has the wrong number of ports</source>
-            <translation>Ligne %1 : « %2 » a un nombre de ports incorrect</translation>
+            <translation type="vanished">Ligne %1 : « %2 » a un nombre de ports incorrect</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="589" />
             <source>"%1" has the wrong number of ports</source>
-            <translation>« %1 » a un nombre de ports incorrect</translation>
+            <translation type="vanished">« %1 » a un nombre de ports incorrect</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="590" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
-            <translation>Un lien duplex, redirect ou monitor relie un port à un port ; un split a une source ; un join a une cible. Rien n'a été appliqué.</translation>
+            <translation type="vanished">Un lien duplex, redirect ou monitor relie un port à un port ; un split a une source ; un join a une cible. Rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="609" />
             <source>Line %1: no port is called "%2"</source>
-            <translation>Ligne %1 : aucun port ne s'appelle « %2 »</translation>
+            <translation type="vanished">Ligne %1 : aucun port ne s'appelle « %2 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="612" />
             <source>No port is called "%1"</source>
-            <translation>Aucun port ne s'appelle « %1 »</translation>
+            <translation type="vanished">Aucun port ne s'appelle « %1 »</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="644" />
             <source>Line %1: these links create a loop</source>
-            <translation>Ligne %1 : ces liens créent une boucle</translation>
+            <translation type="vanished">Ligne %1 : ces liens créent une boucle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="645" />
             <source>These links create a loop</source>
-            <translation>Ces liens créent une boucle</translation>
+            <translation type="vanished">Ces liens créent une boucle</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="646" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
-            <translation>Les octets tourneraient indéfiniment, donc le hub refuse une boucle et rien n'a été appliqué.</translation>
+            <translation type="vanished">Les octets tourneraient indéfiniment, donc le hub refuse une boucle et rien n'a été appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="671" />
-            <location filename="../src/advanced/json_validation.cpp" line="674" />
-            <location filename="../src/advanced/json_validation.cpp" line="692" />
             <source>The setup format rejected this document</source>
-            <translation>Le format de configuration a rejeté ce document</translation>
+            <translation type="vanished">Le format de configuration a rejeté ce document</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="36" />
             <source>Open</source>
-            <translation>Ouvert</translation>
+            <translation type="vanished">Ouvert</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="38" />
             <source>Failed</source>
-            <translation>Échec</translation>
+            <translation type="vanished">Échec</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="42" />
-            <location filename="../src/advanced/wiring_dialog.cpp" line="44" />
             <source>Closed</source>
-            <translation>Fermé</translation>
+            <translation type="vanished">Fermé</translation>
         </message>
     </context>
     <context>
@@ -6530,130 +8357,130 @@
     <context>
         <name>vss::gui::BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="57" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
             <source>Benchmark a connection</source>
             <translation>Tester les performances d'une connexion</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="71" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>Envoie des données d'un port à un autre et compte ce qui arrive.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
             <source>Send from</source>
             <translation>Envoyer depuis</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="85" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
             <source>Receive on</source>
             <translation>Recevoir sur</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="88" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Amount of data</source>
             <translation>Quantité de données</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="97" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <source>Chunk size</source>
             <translation>Taille des blocs</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>Ne liez pas ces deux ports dans Studio. Les données doivent passer par le câble ou la paire de pilotes, pour que le compte ait un sens.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="113" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="300" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>Ces deux ports sont liés dans Studio. Déconnectez-les d'abord.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="128" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
             <source>Not run yet</source>
             <translation>Pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="130" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Benchmark result: not run yet</source>
             <translation>Résultat du test : pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="133" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
             <source>Not started</source>
             <translation>Non démarré</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="140" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
             <source>Benchmark progress</source>
             <translation>Progression du test</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="162" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Not run</source>
             <translation>Non lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="164" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
             <source>%1: not run yet</source>
             <translation>%1 : pas encore lancé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="172" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>Un test échoue quand le nombre d'octets reçus est insuffisant, et le résultat indique de combien.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
             <source>Same thing from the command line</source>
             <translation>La même chose en ligne de commande</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="187" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="355" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
             <source>Command</source>
             <translation>Commande</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="193" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="194" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
             <source>Copy result</source>
             <translation>Copier le résultat</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
             <source>Copied the result.</source>
             <translation>Résultat copié.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Close</source>
             <translation>Fermer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="208" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="209" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
             <source>Run</source>
             <translation>Lancer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="292" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>Ajoutez deux ports pour tester les performances d'une connexion.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="298" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
             <source>Choose two different ports.</source>
             <translation>Choisissez deux ports différents.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="377" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
             <source>The benchmark command is not available in this build.</source>
             <translation>La commande de test de performances n'est pas disponible dans cette version.</translation>
         </message>
@@ -7141,58 +8968,58 @@
     <context>
         <name>vss::gui::EventLogPanel</name>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="69" />
-            <location filename="../src/advanced/event_log.cpp" line="89" />
+            <location filename="../src/advanced/event_log.cpp" line="64" />
+            <location filename="../src/advanced/event_log.cpp" line="84" />
             <source>Event log</source>
             <translation>Journal des événements</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="75" />
+            <location filename="../src/advanced/event_log.cpp" line="70" />
             <source>State changes and errors since the setup was opened.</source>
             <translation>Changements d'état et erreurs depuis l'ouverture de la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="80" />
+            <location filename="../src/advanced/event_log.cpp" line="75" />
             <source>Clear</source>
             <translation>Effacer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="83" />
+            <location filename="../src/advanced/event_log.cpp" line="78" />
             <source>Clear the event log</source>
             <translation>Effacer le journal des événements</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Time</source>
             <translation>Heure</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Port</source>
             <translation>Port</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Event</source>
             <translation>Événement</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="91" />
+            <location filename="../src/advanced/event_log.cpp" line="86" />
             <source>Detail</source>
             <translation>Détail</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="103" />
+            <location filename="../src/advanced/event_log.cpp" line="98" />
             <source>No events yet. Start or stop a port, or apply a change.</source>
             <translation>Aucun événement pour l'instant. Démarrez ou arrêtez un port, ou appliquez une modification.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="126" />
+            <location filename="../src/advanced/event_log.cpp" line="121" />
             <source>No details.</source>
             <translation>Aucun détail.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/event_log.cpp" line="135" />
+            <location filename="../src/advanced/event_log.cpp" line="130" />
             <source>Studio</source>
             <translation>Studio</translation>
         </message>
@@ -7549,159 +9376,159 @@
     <context>
         <name>vss::gui::LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="103" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
             <source>Line wiring</source>
             <translation>Câblage des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="105" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>Choisissez quels signaux ce port pilote sur l'autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="115" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
             <source>Line wiring preset</source>
             <translation>Préréglage de câblage des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
             <source>Emulate modem lines</source>
             <translation>Émuler les lignes modem</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="139" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
             <source>This port drives</source>
             <translation>Ce port pilote</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="166" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
             <source>%1 to %2</source>
             <translation>%1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="201" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
             <source>Line state now</source>
             <translation>État actuel des lignes</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="209" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="210" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="218" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="219" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="227" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="230" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
             <source>Send a break</source>
             <translation>Envoyer un break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="267" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
             <source>Inject a fault</source>
             <translation>Injecter un défaut</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="269" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>Simulez un mauvais câble ou appareil. Chaque défaut est signalé comme un événement d'erreur sur le port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="310" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
             <source>Inject</source>
             <translation>Injecter</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="327" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
             <source>Injected so far</source>
             <translation>Injectés jusqu'ici</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Time</source>
             <translation>Heure</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Fault</source>
             <translation>Défaut</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="339" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
             <source>Result</source>
             <translation>Résultat</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="340" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
             <source>Injected faults</source>
             <translation>Défauts injectés</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="349" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="354" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="494" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
             <source>Create this fixture in code</source>
             <translation>Créer cette fixture dans le code</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="435" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="457" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="630" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
             <source>Link this fixture to another port first.</source>
             <translation>Liez d'abord cette fixture à un autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>Le croisement des lignes est fixé à la création du lien.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="546" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
             <source>Port %1</source>
             <translation>Port %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="552" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
             <source>the other port</source>
             <translation>l'autre port</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>Les titres de colonnes sont les entrées de %1. Le même câblage s'applique dans l'autre sens.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="636" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
             <source>Could not change the wiring: %1</source>
             <translation>Impossible de modifier le câblage : %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="642" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
             <source>Line wiring updated.</source>
             <translation>Câblage des lignes mis à jour.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="667" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
             <source>%1 on</source>
             <translation>%1 activé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="667" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
             <source>%1 off</source>
             <translation>%1 désactivé</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="680" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
             <source>Could not change a control line: %1</source>
             <translation>Impossible de modifier une ligne de contrôle : %1</translation>
         </message>
@@ -10731,49 +12558,49 @@
     <context>
         <name>vss::gui::WiringDialog</name>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="69" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="64" />
             <source>Port %1</source>
             <translation>Port %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="70" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="65" />
             <source>Inspector: %1</source>
             <translation>Inspecteur : %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="110" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="105" />
             <source>That port is no longer open.</source>
             <translation>Ce port n'est plus ouvert.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="115" />
-            <location filename="../src/advanced/wiring_dialog.cpp" line="178" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="110" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="173" />
             <source>Close</source>
             <translation>Fermer</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="127" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="122" />
             <source>Fixture (mock)</source>
             <translation>Fixture (simulée)</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="145" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="140" />
             <source>Linked two-way to &lt;b&gt;%1&lt;/b&gt;. Wiring changes apply to that link only.</source>
             <translation>Lié dans les deux sens à &lt;b&gt;%1&lt;/b&gt;. Les changements de câblage s'appliquent à ce lien uniquement.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="149" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="144" />
             <source>Linked two-way to %1. Wiring changes apply to that link only.</source>
             <translation>Lié dans les deux sens à %1. Les changements de câblage s'appliquent à ce lien uniquement.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="154" />
-            <location filename="../src/advanced/wiring_dialog.cpp" line="155" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="149" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="150" />
             <source>Not linked to another port yet.</source>
             <translation>Pas encore lié à un autre port.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/wiring_dialog.cpp" line="174" />
+            <location filename="../src/advanced/wiring_dialog.cpp" line="169" />
             <source>Faults are only available on fixture ports.</source>
             <translation>Les défauts ne sont disponibles que sur les ports de fixture.</translation>
         </message>
@@ -10781,20 +12608,18 @@
     <context>
         <name>vss::gui::json_validation</name>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="190" />
             <source>Valid, version 1</source>
-            <translation>Valide, version 1</translation>
+            <translation type="vanished">Valide, version 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="193" />
             <source>Not valid</source>
-            <translation>Non valide</translation>
+            <translation type="vanished">Non valide</translation>
         </message>
     </context>
     <context>
         <name>vss::gui::support::HelpContentsDialog</name>
         <message>
-            <location filename="../src/support/help_contents_dialog.cpp" line="110" />
+            <location filename="../src/support/help_contents_dialog.cpp" line="120" />
             <source>%1: %2</source>
             <translation>%1 : %2</translation>
         </message>
@@ -10802,7 +12627,7 @@
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="293" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -10810,8 +12635,8 @@
     <context>
         <name>vss::gui::support::ShortcutsDialog</name>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="85" />
-            <location filename="../src/support/shortcuts_dialog.cpp" line="98" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="80" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="93" />
             <source>Delete</source>
             <translation>Delete</translation>
         </message>
@@ -10819,7 +12644,7 @@
     <context>
         <name>vss::gui::support::TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="311" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>

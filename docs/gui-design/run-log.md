@@ -269,7 +269,7 @@ gates pass.
   validation, Format/Revert/Apply, command block, export), `CommandPanel`,
   `ExportCommandDialog`, `EventLogPanel`, `BenchmarkDialog`, the shared
   `chrome` footer/header helpers and `line_presets`.
-- Backend seam: `line_wiring` in `view_types.hpp`; `link_wiring()` and
+- Backend interface: `line_wiring` in `view_types.hpp`; `link_wiring()` and
   `set_link_wiring()` on `StudioBackend` default to unsupported, the real
   adapter keeps `Capabilities::line_matrix` false, and the fake stores one for
   the editable-path test. No `libs/vss_core` or JSON schema change.

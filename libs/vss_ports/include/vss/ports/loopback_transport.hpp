@@ -24,6 +24,7 @@ namespace vss {
 /// used by the demo scenarios, by the GUI before a real port is selected and
 /// by the unit tests, and it behaves like a null-modem cable plugged into
 /// itself.
+// NOLINTNEXTLINE(misc-multiple-inheritance): shared_from_this is a mixin.
 class loopback_transport final : public transport,
                                  public std::enable_shared_from_this<loopback_transport>
 {

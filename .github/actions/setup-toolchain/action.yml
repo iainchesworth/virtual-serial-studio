@@ -11,6 +11,12 @@ inputs:
   qt:
     description: true to install the pinned Qt kit.
     default: "false"
+  gcc-version:
+    description: GCC major version. Empty uses the `gcc` pin; the nightly newest-compiler leg passes `gcc_newest`.
+    default: ""
+  llvm-version:
+    description: LLVM major version. Empty uses the `llvm` pin; the nightly newest-compiler leg passes `llvm_newest`.
+    default: ""
 
 runs:
   using: composite
@@ -19,11 +25,14 @@ runs:
       if: inputs.compiler == 'gcc' || inputs.compiler == 'clang'
       uses: iainchesworthlabs/icl-common-infra/actions/setup-gcc@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
       with:
+        version: ${{ inputs.gcc-version }}
         export-compiler: ${{ inputs.compiler == 'gcc' && 'true' || 'false' }}
 
     - name: Set up Clang
       if: inputs.compiler == 'clang'
       uses: iainchesworthlabs/icl-common-infra/actions/setup-llvm@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+      with:
+        version: ${{ inputs.llvm-version }}
 
     - name: Set up MSVC
       if: inputs.compiler == 'msvc'

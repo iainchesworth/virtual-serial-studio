@@ -85,7 +85,7 @@ public:
     std::string description() const;
     const endpoint_options& options() const noexcept { return options_; }
 
-    boost::asio::any_io_executor get_executor() const noexcept;
+    boost::asio::any_io_executor get_executor() const;
 
     /// Begins the read loop.  Idempotent.
     void start();

@@ -215,7 +215,9 @@ final compact/200 percent pass.
 observe an external opener. Ports therefore show "Open" and Inspector omits the
 "No program has opened ..." sentence. "Waiting for program" and "Program
 connected" are exercised by the fake in tests and will appear if a later engine
-capability reports the state. No waiting text is shown for Unknown.
+capability reports the state. No waiting text is shown for Unknown. The design
+now says the same: Open is the normal state, and the two refinements belong to
+`Capabilities::peer_open`.
 
 ### No F2 rename
 
@@ -357,7 +359,7 @@ follow-up outside this package; the tiles are already laid out for it.
 ### Per-link wiring is a read-only Standard preset
 
 `StudioBackend` gained `link_wiring()` and `set_link_wiring()` with
-`unsupported`/`nullopt` defaults so the dialog has one adapter seam, but the
+`unsupported`/`nullopt` defaults so the dialog has one adapter interface, but the
 real backend keeps `Capabilities::line_matrix` false. The matrix therefore
 shows the Standard null-modem preset and is read-only. `FakeStudioBackend`
 stores a wiring for tests so the editable path is exercised without faking a

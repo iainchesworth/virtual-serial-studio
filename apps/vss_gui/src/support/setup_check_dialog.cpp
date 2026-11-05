@@ -27,11 +27,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("SetupCheck", text);
-}
-
 row_tone tone_for(setup_state state)
 {
     switch (state)
@@ -51,9 +46,12 @@ row_tone tone_for(setup_state state)
 void show_link_failure(QWidget* parent)
 {
     ErrorDialog dialog(
-        t("Could not open the project page"),
-        t("Your browser did not open. Copy the link and open it yourself."), {},
-        parent);
+        QCoreApplication::translate("SetupCheck",
+                                    "Could not open the project page"),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "Your browser did not open. Copy the link and open it yourself."),
+        {}, parent);
     dialog.exec();
 }
 
@@ -62,8 +60,10 @@ void show_link_failure(QWidget* parent)
 void show_driver_instructions(QWidget* parent)
 {
     QDialog dialog(parent);
-    dialog.setWindowTitle(t("Install the com0com driver"));
-    dialog.setAccessibleName(t("Install the com0com driver"));
+    dialog.setWindowTitle(QCoreApplication::translate(
+        "SetupCheck", "Install the com0com driver"));
+    dialog.setAccessibleName(QCoreApplication::translate(
+        "SetupCheck", "Install the com0com driver"));
     dialog.setProperty("surface", QStringLiteral("panel"));
     polish(&dialog);
     dialog.setMinimumWidth(
@@ -73,22 +73,30 @@ void show_driver_instructions(QWidget* parent)
     layout->setContentsMargins(20, 20, 20, 0);
     layout->setSpacing(12);
     add_dialog_heading(
-        layout, t("Install the com0com driver"),
-        t("Virtual Serial Studio does not install drivers for you."), &dialog);
+        layout,
+        QCoreApplication::translate("SetupCheck", "Install the com0com driver"),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "Virtual Serial Studio does not install drivers for you."),
+        &dialog);
 
     auto* why = new QLabel(
-        t("Other programs cannot see a virtual port until a driver creates a "
-          "COM port. On Windows that driver is com0com."),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "Other programs cannot see a virtual port until a driver creates a "
+            "COM port. On Windows that driver is com0com."),
         &dialog);
     why->setFont(Theme::instance().font(text_style::body));
     why->setWordWrap(true);
     layout->addWidget(why);
 
     auto* steps = new QLabel(
-        t("1. Open the com0com project page.\n"
-          "2. Download the latest setup program.\n"
-          "3. Run it as administrator and keep the default options.\n"
-          "4. Come back to Setup check and choose Re-check."),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "1. Open the com0com project page.\n"
+            "2. Download the latest setup program.\n"
+            "3. Run it as administrator and keep the default options.\n"
+            "4. Come back to Setup check and choose Re-check."),
         &dialog);
     steps->setFont(Theme::instance().font(text_style::body));
     steps->setWordWrap(true);
@@ -96,13 +104,17 @@ void show_driver_instructions(QWidget* parent)
     layout->addWidget(steps);
 
     auto* link = new CodeBlock(&dialog);
-    link->set_text(com0com_project_url(), t("com0com project page"));
+    link->set_text(
+        com0com_project_url(),
+        QCoreApplication::translate("SetupCheck", "com0com project page"));
     layout->addWidget(link);
     layout->addStretch(1);
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(&dialog, footer_layout);
-    auto* open = make_dialog_button(t("Open project page"), "primary", footer);
+    auto* open = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Open project page"),
+        "primary", footer);
     open->setAutoDefault(false);
     QObject::connect(open, &QPushButton::clicked, &dialog,
                      [&dialog]
@@ -111,7 +123,8 @@ void show_driver_instructions(QWidget* parent)
                              show_link_failure(&dialog);
                      });
     footer_layout->addWidget(open);
-    auto* close = make_dialog_button(t("Close"), nullptr, footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Close"), nullptr, footer);
     close->setDefault(true);
     QObject::connect(close, &QPushButton::clicked, &dialog, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -124,8 +137,10 @@ void show_driver_instructions(QWidget* parent)
 void show_dialout_help(QWidget* parent)
 {
     QDialog dialog(parent);
-    dialog.setWindowTitle(t("Add me to the dialout group"));
-    dialog.setAccessibleName(t("Add me to the dialout group"));
+    dialog.setWindowTitle(QCoreApplication::translate(
+        "SetupCheck", "Add me to the dialout group"));
+    dialog.setAccessibleName(QCoreApplication::translate(
+        "SetupCheck", "Add me to the dialout group"));
     dialog.setProperty("surface", QStringLiteral("panel"));
     polish(&dialog);
     dialog.setMinimumWidth(
@@ -135,18 +150,24 @@ void show_dialout_help(QWidget* parent)
     layout->setContentsMargins(20, 20, 20, 0);
     layout->setSpacing(12);
     add_dialog_heading(
-        layout, t("Add me to the dialout group"),
-        t("Run this command in a terminal, then sign out and back in."),
+        layout,
+        QCoreApplication::translate("SetupCheck",
+                                    "Add me to the dialout group"),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "Run this command in a terminal, then sign out and back in."),
         &dialog);
 
     auto* command = new CodeBlock(&dialog);
-    command->set_text(dialout_add_command(), t("Command"));
+    command->set_text(dialout_add_command(),
+                      QCoreApplication::translate("SetupCheck", "Command"));
     layout->addWidget(command);
     layout->addStretch(1);
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(&dialog, footer_layout);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Close"), "primary", footer);
     close->setDefault(true);
     QObject::connect(close, &QPushButton::clicked, &dialog, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -168,8 +189,8 @@ SetupCheckDialog::SetupCheckDialog(StudioBackend& backend, QWidget* parent)
 
 void SetupCheckDialog::build()
 {
-    setWindowTitle(t("Setup check"));
-    setAccessibleName(t("Setup check"));
+    setWindowTitle(QCoreApplication::translate("SetupCheck", "Setup check"));
+    setAccessibleName(QCoreApplication::translate("SetupCheck", "Setup check"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     const int width = Theme::instance().metric(
@@ -190,12 +211,15 @@ void SetupCheckDialog::build()
     heading->setContentsMargins(0, 0, 0, 0);
     heading->setSpacing(4);
     add_dialog_heading(
-        heading, t("Setup check"),
-        t("What this PC needs so other programs can use your virtual ports."),
+        heading, QCoreApplication::translate("SetupCheck", "Setup check"),
+        QCoreApplication::translate(
+            "SetupCheck",
+            "What this PC needs so other programs can use your virtual ports."),
         header);
     header_layout->addLayout(heading, 1);
     header_chip_ =
-        new StatusChip(t("All set"), StatusChip::kind::healthy, header);
+        new StatusChip(QCoreApplication::translate("SetupCheck", "All set"),
+                       StatusChip::kind::healthy, header);
     header_layout->addWidget(header_chip_, 0, Qt::AlignTop);
     outer->addWidget(header);
 
@@ -230,18 +254,21 @@ void SetupCheckDialog::build()
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* why =
-        make_dialog_button(t("Why is a driver needed?"), "quiet", footer);
+    auto* why = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Why is a driver needed?"),
+        "quiet", footer);
     why->setAutoDefault(false);
     connect(why, &QPushButton::clicked, this,
             [this] { show_driver_instructions(this); });
     why->setVisible(host_platform() == QLatin1String("windows"));
     footer_layout->addWidget(why);
-    auto* recheck = make_dialog_button(t("Re-check"), nullptr, footer);
+    auto* recheck = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Re-check"), nullptr, footer);
     recheck->setAutoDefault(false);
     connect(recheck, &QPushButton::clicked, this, &SetupCheckDialog::recheck);
     footer_layout->addWidget(recheck);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("SetupCheck", "Close"), "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);

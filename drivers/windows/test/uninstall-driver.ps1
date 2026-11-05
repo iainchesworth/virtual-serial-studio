@@ -18,15 +18,25 @@ $ErrorActionPreference = 'Stop'
 
 $tests = @()
 try {
-    $port = Get-VssComPort
-    $removed = [VssSetup]::RemoveDevices($PortsClassGuid, $HardwareId)
+    # Every COM name the driver has, to check afterwards that none is left.
+    $names = @((Get-VssHubPaths).Keys)
+
+    # The control device first: its ports go with it. Then the entries that
+    # absent devices leave behind, which keep their COM names reserved.
+    $removed = [VssSetup]::RemoveDevices($SystemClassGuid, $ControlHardwareId, $true)
+    for ($i = 0; $i -lt 60 -and @([VssSetup]::Interfaces($VssInterfaceGuid) | Where-Object { $_ -like '*\vsscom#port#*' }).Count -gt 0; $i++) {
+        Start-Sleep -Milliseconds 500
+    }
+    $removed += [VssSetup]::RemoveDevices($PortsClassGuid, $DemandHardwareId, $true)
+    $removed += [VssSetup]::RemoveDevices($PortsClassGuid, $HardwareId, $true)
     $tests += New-TestRecord 'uninstall.device' 'remove the devices' 'pass' "removed $removed"
 
-    # Find the package in the driver store by its original name.
+    # Find the packages in the driver store by their original names.
     $listing = (& pnputil.exe /enum-drivers | Out-String) -split "(\r?\n){2,}"
     $published = @()
     foreach ($block in $listing) {
-        if ($block -match 'Original Name:\s+vsscom\.inf' -and $block -match 'Published Name:\s+(oem\d+\.inf)') {
+        if ($block -match 'Original Name:\s+vsscom(ctl)?\.inf' -and $block -match 'Published Name:\s+(oem\d+\.inf)') {
+            # The second -match replaced the first, so the group is number 1.
             $published += $Matches[1]
         }
     }
@@ -35,19 +45,13 @@ try {
         $tests += New-TestRecord 'uninstall.package' "pnputil /delete-driver $name" ($(if ($LASTEXITCODE -eq 0) { 'pass' } else { 'fail' })) (($out | Out-String).Trim())
     }
 
-    $left = Get-CimInstance Win32_PnPEntity | Where-Object { $_.HardwareID -contains $HardwareId }
+    $left = Get-CimInstance Win32_PnPEntity |
+        Where-Object { @($_.HardwareID | Where-Object { $_ -like 'VSSCOM\*' }).Count -gt 0 }
     $tests += New-TestRecord 'uninstall.devices_gone' 'no vsscom device remains' ($(if (-not $left) { 'pass' } else { 'fail' })) ($left.Name -join ', ')
 
-    # The port's name must be off the legacy list too.
-    if ($port) {
-        $listed = @()
-        $serialComm = Get-ItemProperty 'HKLM:\HARDWARE\DEVICEMAP\SERIALCOMM' -ErrorAction SilentlyContinue
-        if ($serialComm) {
-            $listed = $serialComm.PSObject.Properties |
-                Where-Object { $_.Value -eq $port } | ForEach-Object { $_.Name }
-        }
-        $tests += New-TestRecord 'uninstall.serialcomm' "$port is not in SERIALCOMM" ($(if (-not $listed) { 'pass' } else { 'fail' })) ($listed -join ', ')
-    }
+    # The names must be off the legacy list too.
+    $listed = @($names | Where-Object { Test-VssSerialComm $_ })
+    $tests += New-TestRecord 'uninstall.serialcomm' "no COM name is left in SERIALCOMM ($($names -join ', '))" ($(if ($listed.Count -eq 0) { 'pass' } else { 'fail' })) ($listed -join ', ')
 } catch {
     $tests += New-TestRecord 'uninstall.error' 'uninstall' 'fail' $_.Exception.Message
 }

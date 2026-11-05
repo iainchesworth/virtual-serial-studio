@@ -74,7 +74,9 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <ClCompile Include="control.c" />
     <ClCompile Include="driver.c" />
+    <ClCompile Include="hub.c" />
     <ClCompile Include="io.c" />
     <ClCompile Include="core\vsscom_core.c" />
   </ItemGroup>

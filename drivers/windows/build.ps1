@@ -1,7 +1,8 @@
 # Copyright (c) 2026 Virtual Serial Studio contributors
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Builds the vsscom driver package: vsscom.sys, vsscom.inf and the catalog.
+# Builds the vsscom driver package: vsscom.sys, the two INF files (vsscom.inf for
+# the ports, vsscomctl.inf for the control device) and a catalog for each.
 #
 # It needs Visual Studio 2026 with the C++ desktop workload (the driver build
 # targets ship with it) and NuGet access. The Windows SDK and the WDK come from
@@ -54,18 +55,21 @@ $package = Join-Path $root "artifacts\package\$Platform"
 if (Test-Path $package) { Remove-Item $package -Recurse -Force }
 New-Item -ItemType Directory $package | Out-Null
 Copy-Item $sys $package
-Copy-Item (Join-Path $root 'vsscom\vsscom.inf') $package
+$infs = 'vsscom.inf', 'vsscomctl.inf'
+foreach ($inf in $infs) { Copy-Item (Join-Path $root "vsscom\$inf") $package }
 
 Write-Host '== InfVerif'
-& $infverif /v /w (Join-Path $package 'vsscom.inf')
-if ($LASTEXITCODE -ne 0) { throw "InfVerif failed with exit code $LASTEXITCODE" }
+foreach ($inf in $infs) {
+    & $infverif /v /w (Join-Path $package $inf)
+    if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
+}
 
 Write-Host '== Inf2Cat'
 $os = if ($Platform -eq 'ARM64') { '10_RS4_ARM64' } else { '10_RS4_X64' }
 & $inf2cat "/driver:$package" "/os:$os" /verbose
 if ($LASTEXITCODE -ne 0) { throw "Inf2Cat failed with exit code $LASTEXITCODE" }
 
-foreach ($file in 'vsscom.sys', 'vsscom.inf', 'vsscom.cat') {
+foreach ($file in 'vsscom.sys', 'vsscom.inf', 'vsscom.cat', 'vsscomctl.inf', 'vsscomctl.cat') {
     if (-not (Test-Path (Join-Path $package $file))) { throw "$file is missing from the package" }
 }
 Get-ChildItem $package | Select-Object Name, Length | Format-Table -AutoSize
