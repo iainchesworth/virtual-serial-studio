@@ -7,11 +7,14 @@ name: Static Analysis
 # but take longer. It builds first, because clang-tidy reads the compile database and the
 # generated files. A finding fails the job and opens or updates one `nightly-analysis` issue.
 #
-# Three checks are left out on purpose:
+# Four checks are left out on purpose:
 #   misc-const-correctness       asks for const on almost every local; it is style, not a defect.
 #   performance-enum-size        asks for narrower enum bases; the saving is a few bytes.
 #   bugprone-unused-return-value flags the error_code out-parameter calls that ignore a result
 #                                on purpose (`non_blocking(true, ignored)`).
+#   bugprone-signed-bitwise      flags the POSIX flag macros (`O_RDWR | O_NOCTTY`, termios bits) and
+#                                byte arithmetic that C++ promotes to int. Neither can be written
+#                                another way.
 
 on:
   schedule:
@@ -38,6 +41,7 @@ jobs:
         -*,
         bugprone-*,
         -bugprone-easily-swappable-parameters,
+        -bugprone-signed-bitwise,
         -bugprone-unused-return-value,
         concurrency-*,
         -concurrency-mt-unsafe,

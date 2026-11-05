@@ -50,7 +50,7 @@ struct studio_options
 class studio
 {
 public:
-    explicit studio(studio_options options = {});
+    explicit studio(const studio_options& options = {});
     ~studio();
 
     studio(const studio&) = delete;

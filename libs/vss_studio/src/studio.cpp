@@ -85,7 +85,7 @@ config::port_entry record_to_entry(const std::string& name,
 
 } // namespace
 
-studio::studio(studio_options options)
+studio::studio(const studio_options& options)
     : options_(options), hub_(std::make_shared<vss::hub>(options_.hub))
 {
     if (options_.start_hub)
@@ -417,9 +417,11 @@ result<void> studio::remove_port(endpoint_id id)
         return removed.error();
 
     std::lock_guard lock(record_mutex_);
-    if (const auto it = records_.find(id);
-        it != records_.end() && it->second.link)
-        remove_stable_link(*it->second.link);
+    if (const auto it = records_.find(id); it != records_.end())
+    {
+        if (const auto& link = it->second.link; link.has_value())
+            remove_stable_link(*link);
+    }
     records_.erase(id);
     if (!target.empty())
         claimed_paths_.erase(target);
