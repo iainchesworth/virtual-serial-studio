@@ -31,10 +31,10 @@ $env:VSS_VM_PASSWORD = 'placeholder-not-a-credential'
 foreach ($guest in 'windows10', 'windows11', 'ubuntu2604') {
     $r = Invoke-Cell @('-Guest', $guest, '-Bundle', 'nowhere', '-Package', 'package.bin', '-Commit', 'abc1234')
     $lines = @($r.Output -split "`r?`n" | Where-Object { $_ -match '^vmrun ' })
-    $verbs = @($lines | ForEach-Object { if ($_ -match ' (revertToSnapshot|start|checkToolsState|copyFileFromHostToGuest|runProgramInGuest|copyFileFromGuestToHost|stop) ') { $Matches[1] } })
+    $verbs = @($lines | ForEach-Object { if ($_ -match ' (revertToSnapshot|start|listProcessesInGuest|copyFileFromHostToGuest|runProgramInGuest|copyFileFromGuestToHost|stop) ') { $Matches[1] } })
     Assert-That "${guest}: a dry run succeeds" ($r.Code -eq 0) $r.Output
     Assert-That "${guest}: reverts first, then starts, waits and stops last" (
-        $verbs[0] -eq 'revertToSnapshot' -and $verbs[1] -eq 'start' -and $verbs[2] -eq 'checkToolsState' -and $verbs[-1] -eq 'stop') ($verbs -join ' ')
+        $verbs[0] -eq 'revertToSnapshot' -and $verbs[1] -eq 'start' -and $verbs[2] -eq 'listProcessesInGuest' -and $verbs[-1] -eq 'stop') ($verbs -join ' ')
     Assert-That "${guest}: copies in, runs and copies out" (
         ($verbs -contains 'copyFileFromHostToGuest') -and ($verbs -contains 'runProgramInGuest') -and ($verbs -contains 'copyFileFromGuestToHost'))
     Assert-That "${guest}: reverts to clean" ($r.Output -match 'revertToSnapshot .*clean')

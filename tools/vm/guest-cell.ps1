@@ -80,8 +80,9 @@ $evidence = Join-Path $destination 'cell-out'
 try {
     Step 'revert' @{ Name = $snapshot }
     Step 'start'
-    Step 'wait-tools' @{ TimeoutSeconds = 900 }
-    Step 'wait-guest' @{ TimeoutSeconds = 600 }
+    # wait-guest, not wait-tools: checkToolsState can say "installed" for minutes after the guest
+    # is up, until something asks the guest a question with the credentials.
+    Step 'wait-guest' @{ TimeoutSeconds = 900 }
 
     if ($windows) {
         $folder = 'C:\vss'
