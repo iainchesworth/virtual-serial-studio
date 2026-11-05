@@ -144,6 +144,10 @@ public:
                   const vss::benchmark_options& /*options*/,
                   const vss::benchmark_progress_handler& /*progress*/,
                   const std::atomic<bool>* /*cancel*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     // -- fault injection (capability: faults) ------------------------------
 
     /// Makes a mock fixture report `fault`.  The default is `unsupported`: a
