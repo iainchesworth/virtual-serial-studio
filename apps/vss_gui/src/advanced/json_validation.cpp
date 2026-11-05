@@ -14,7 +14,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <QRegularExpression>
 #include <QSet>
 #include <QStringList>
 
@@ -102,53 +101,257 @@ QString closest_mode(const QString& candidate)
     return best;
 }
 
-struct string_match
+/// Where every value of a syntactically valid document starts, by path.
+///
+/// A path joins object keys and array positions with `/`, for example
+/// `ports/1/serial/baud_rate`.  The index lets a schema error point at the
+/// exact line of the field that caused it, without changing the schema.  The
+/// text has already passed `QJsonDocument`, so the scanner only has to follow
+/// the structure; it still stops on anything unexpected rather than loop.
+class path_index
 {
-    int line = 0;
-    QString value;
+public:
+    explicit path_index(const QString& text) : text_(text)
+    {
+        value(QString(), 0);
+    }
+
+    /// The 1-based line of `path`, or of its nearest enclosing value, or 0.
+    int line(const QString& path) const
+    {
+        QString current = path;
+        while (!current.isEmpty())
+        {
+            const auto found = lines_.constFind(current);
+            if (found != lines_.constEnd())
+                return found.value();
+            const qsizetype cut = current.lastIndexOf(QLatin1Char('/'));
+            if (cut < 0)
+                return 0;
+            current.truncate(cut);
+        }
+        return 0;
+    }
+
+private:
+    static constexpr int max_depth = 256;
+
+    bool at_end() const { return pos_ >= text_.size(); }
+
+    void skip_space()
+    {
+        while (!at_end())
+        {
+            const QChar c = text_.at(pos_);
+            if (c == QLatin1Char('\n'))
+                ++line_;
+            else if (!c.isSpace())
+                return;
+            ++pos_;
+        }
+    }
+
+    QString read_string()
+    {
+        QString out;
+        ++pos_;
+        while (!at_end())
+        {
+            const QChar c = text_.at(pos_++);
+            if (c == QLatin1Char('"'))
+                break;
+            if (c != QLatin1Char('\\') || at_end())
+            {
+                out += c;
+                continue;
+            }
+            const QChar escape = text_.at(pos_++);
+            if (escape == QLatin1Char('n'))
+                out += QLatin1Char('\n');
+            else if (escape == QLatin1Char('t'))
+                out += QLatin1Char('\t');
+            else if (escape == QLatin1Char('r'))
+                out += QLatin1Char('\r');
+            else if (escape == QLatin1Char('b'))
+                out += QLatin1Char('\b');
+            else if (escape == QLatin1Char('f'))
+                out += QLatin1Char('\f');
+            else if (escape == QLatin1Char('u'))
+            {
+                bool ok = false;
+                const unsigned code = text_.mid(pos_, 4).toUInt(&ok, 16);
+                if (ok)
+                {
+                    out += QChar(static_cast<char16_t>(code));
+                    pos_ += 4;
+                }
+            }
+            else
+                out += escape;
+        }
+        return out;
+    }
+
+    void value(const QString& path, int depth)
+    {
+        skip_space();
+        if (!path.isEmpty())
+            lines_.insert(path, line_);
+        if (at_end() || depth > max_depth)
+            return;
+
+        const QChar first = text_.at(pos_);
+        if (first == QLatin1Char('{'))
+        {
+            ++pos_;
+            for (;;)
+            {
+                skip_space();
+                if (at_end())
+                    return;
+                const QChar c = text_.at(pos_);
+                if (c == QLatin1Char('}'))
+                {
+                    ++pos_;
+                    return;
+                }
+                if (c == QLatin1Char(','))
+                {
+                    ++pos_;
+                    continue;
+                }
+                if (c != QLatin1Char('"'))
+                    return;
+                const int key_line = line_;
+                const QString key = read_string();
+                skip_space();
+                if (!at_end() && text_.at(pos_) == QLatin1Char(':'))
+                    ++pos_;
+                const QString child =
+                    path.isEmpty() ? key : path + QLatin1Char('/') + key;
+                value(child, depth + 1);
+                lines_.insert(child, key_line);
+            }
+        }
+        if (first == QLatin1Char('['))
+        {
+            ++pos_;
+            int position = 0;
+            for (;;)
+            {
+                skip_space();
+                if (at_end())
+                    return;
+                const QChar c = text_.at(pos_);
+                if (c == QLatin1Char(']'))
+                {
+                    ++pos_;
+                    return;
+                }
+                if (c == QLatin1Char(','))
+                {
+                    ++pos_;
+                    continue;
+                }
+                const qsizetype before = pos_;
+                const QString child = (path.isEmpty() ? QString() : path +
+                                       QLatin1Char('/')) +
+                                      QString::number(position);
+                value(child, depth + 1);
+                if (pos_ == before)
+                    return;
+                ++position;
+            }
+        }
+        if (first == QLatin1Char('"'))
+        {
+            read_string();
+            return;
+        }
+        while (!at_end())
+        {
+            const QChar c = text_.at(pos_);
+            if (c.isSpace() || c == QLatin1Char(',') || c == QLatin1Char(']') ||
+                c == QLatin1Char('}'))
+                return;
+            ++pos_;
+        }
+    }
+
+    const QString& text_;
+    qsizetype pos_ = 0;
+    int line_ = 1;
+    QHash<QString, int> lines_;
 };
 
-/// Every `"key": "value"` occurrence with its 1-based line.  Used to put a
-/// schema error on the line the user can see, without changing the schema.
-QVector<string_match> string_matches(const QString& text, const QString& key)
+/// `Line N: text`, or `text` alone when there is no line to name.
+QString with_line(int line, const QString& text)
 {
-    QVector<string_match> out;
-    const QString pattern = QLatin1Char('"') + QRegularExpression::escape(key) +
-                            QLatin1String("\"\\s*:\\s*\"([^\"]*)\"");
-    const QRegularExpression expression(pattern);
-    auto matches = expression.globalMatch(text);
-    while (matches.hasNext())
-    {
-        const QRegularExpressionMatch match = matches.next();
-        out.push_back(
-            {line_for_offset(text, static_cast<int>(match.capturedStart())),
-             match.captured(1)});
-    }
-    return out;
+    if (line <= 0)
+        return text;
+    return QCoreApplication::translate("TopologyJson", "Line %1: %2")
+        .arg(line)
+        .arg(text);
 }
 
-int nth_line(const QVector<string_match>& matches, int index)
+bool engine_rejects_port(const QJsonObject& port)
 {
-    if (index < 0 || index >= matches.size())
-        return 0;
-    return matches.at(index).line;
+    QJsonObject document;
+    document.insert(QStringLiteral("version"), 1);
+    document.insert(QStringLiteral("name"), QStringLiteral("check"));
+    QJsonArray ports;
+    ports.append(port);
+    document.insert(QStringLiteral("ports"), ports);
+    const QByteArray text =
+        QJsonDocument(document).toJson(QJsonDocument::Compact);
+    return !vss::config::from_json(text.toStdString());
 }
 
-/// The line of a key regardless of its value type, for `"version": 1`.
-int key_line(const QString& text, const QString& key, int occurrence = 0)
+/// The line of the field the engine refused, found by asking the engine.
+///
+/// `vss::config::from_json` returns only an error code.  To place it, each
+/// port is checked on its own, then each serial setting of the failing port,
+/// so the line comes from the engine's own rules and none of them is copied
+/// here.  Returns 0 when the cause is not in a port.
+int engine_problem_line(const QJsonObject& root, const path_index& index)
 {
-    const QRegularExpression expression(QLatin1Char('"') +
-                                        QRegularExpression::escape(key) +
-                                        QLatin1String("\"\\s*:"));
-    auto matches = expression.globalMatch(text);
-    int seen = 0;
-    while (matches.hasNext())
+    const QJsonValue name = root.value(QStringLiteral("name"));
+    if (name.isString() && name.toString().isEmpty())
+        return index.line(QStringLiteral("name"));
+
+    const QJsonArray ports = root.value(QStringLiteral("ports")).toArray();
+    for (int position = 0; position < ports.size(); ++position)
     {
-        const QRegularExpressionMatch match = matches.next();
-        if (seen == occurrence)
-            return line_for_offset(text,
-                                   static_cast<int>(match.capturedStart()));
-        ++seen;
+        const QJsonObject port = ports.at(position).toObject();
+        if (!engine_rejects_port(port))
+            continue;
+
+        const QString base = QStringLiteral("ports/%1").arg(position);
+        QJsonObject without_serial = port;
+        without_serial.remove(QStringLiteral("serial"));
+        if (!engine_rejects_port(without_serial))
+        {
+            const QJsonValue serial = port.value(QStringLiteral("serial"));
+            if (serial.isObject())
+            {
+                const QJsonObject settings = serial.toObject();
+                for (auto it = settings.constBegin(); it != settings.constEnd();
+                     ++it)
+                {
+                    QJsonObject only;
+                    only.insert(it.key(), it.value());
+                    QJsonObject trial = port;
+                    trial.insert(QStringLiteral("serial"), only);
+                    if (engine_rejects_port(trial))
+                        return index.line(base + QStringLiteral("/serial/") +
+                                          it.key());
+                }
+            }
+            return index.line(base + QStringLiteral("/serial"));
+        }
+        if (port.contains(QStringLiteral("uri")))
+            return index.line(base + QStringLiteral("/uri"));
+        return index.line(base);
     }
     return 0;
 }
@@ -260,11 +463,12 @@ json_validation validate_json_document(const QString& text)
     }
 
     const QJsonObject root = document.object();
+    const path_index lines(text);
     const QJsonValue version_value = root.value(QStringLiteral("version"));
     out.version = version_value.isDouble() ? version_value.toInt() : 0;
     if (out.version != 1)
     {
-        const int line = key_line(text, QStringLiteral("version"));
+        const int line = lines.line(QStringLiteral("version"));
         out.checks = {
             {QCoreApplication::translate("TopologyJson",
                                          "Valid JSON, version 1"),
@@ -307,21 +511,19 @@ json_validation validate_json_document(const QString& text)
              check_state::failed},
             {QCoreApplication::translate("TopologyJson", "Links, no loops"),
              check_state::not_checked}};
+        const int ports_line = lines.line(QStringLiteral("ports"));
         out.problem = json_problem{
-            QCoreApplication::translate("TopologyJson",
-                                        "\"ports\" must be a list"),
+            with_line(ports_line,
+                      QCoreApplication::translate("TopologyJson",
+                                                  "\"ports\" must be a list")),
             QCoreApplication::translate("TopologyJson", "Nothing was applied."),
             {},
             {},
-            0};
+            ports_line};
         return out;
     }
 
     const QJsonArray ports = ports_value.toArray();
-    const auto name_lines = string_matches(text, QStringLiteral("name"));
-    const auto kind_lines = string_matches(text, QStringLiteral("kind"));
-    const auto virtual_lines =
-        string_matches(text, QStringLiteral("virtual_kind"));
     for (int index = 0; index < ports.size(); ++index)
     {
         const QJsonValue value = ports.at(index);
@@ -336,14 +538,17 @@ json_validation validate_json_document(const QString& text)
                  check_state::failed},
                 {QCoreApplication::translate("TopologyJson", "Links, no loops"),
                  check_state::not_checked}};
-            out.problem =
-                json_problem{QCoreApplication::translate(
-                                 "TopologyJson", "Each port must be an object"),
-                             QCoreApplication::translate(
-                                 "TopologyJson", "Nothing was applied."),
-                             {},
-                             {},
-                             0};
+            const int port_line =
+                lines.line(QStringLiteral("ports/%1").arg(index));
+            out.problem = json_problem{
+                with_line(port_line,
+                          QCoreApplication::translate(
+                              "TopologyJson", "Each port must be an object")),
+                QCoreApplication::translate("TopologyJson",
+                                            "Nothing was applied."),
+                {},
+                {},
+                port_line};
             return out;
         }
         const QJsonObject port = value.toObject();
@@ -361,7 +566,7 @@ json_validation validate_json_document(const QString& text)
                 {QCoreApplication::translate("TopologyJson", "Links, no loops"),
                  check_state::not_checked}};
             json_problem problem;
-            problem.line = nth_line(kind_lines, index);
+            problem.line = lines.line(QStringLiteral("ports/%1").arg(index));
             problem.summary =
                 problem.has_line()
                     ? QCoreApplication::translate("TopologyJson",
@@ -377,19 +582,8 @@ json_validation validate_json_document(const QString& text)
         }
         if (port_names.contains(name))
         {
-            int line = 0;
-            int seen = 0;
-            for (const auto& match : name_lines)
-            {
-                if (match.value != name)
-                    continue;
-                ++seen;
-                if (seen == 2)
-                {
-                    line = match.line;
-                    break;
-                }
-            }
+            const int line =
+                lines.line(QStringLiteral("ports/%1/name").arg(index));
             out.checks = {
                 {QCoreApplication::translate("TopologyJson",
                                              "Valid JSON, version 1"),
@@ -429,15 +623,8 @@ json_validation validate_json_document(const QString& text)
         }
         if (!kind_known)
         {
-            int line = 0;
-            for (int position = 0; position < kind_lines.size(); ++position)
-            {
-                if (kind_lines.at(position).value == kind)
-                {
-                    line = kind_lines.at(position).line;
-                    break;
-                }
-            }
+            const int line =
+                lines.line(QStringLiteral("ports/%1/kind").arg(index));
             out.checks = {
                 {QCoreApplication::translate("TopologyJson",
                                              "Valid JSON, version 1"),
@@ -478,16 +665,8 @@ json_validation validate_json_document(const QString& text)
             }
             if (!virtual_known)
             {
-                int line = 0;
-                for (int position = 0; position < virtual_lines.size();
-                     ++position)
-                {
-                    if (virtual_lines.at(position).value == virtual_kind)
-                    {
-                        line = virtual_lines.at(position).line;
-                        break;
-                    }
-                }
+                const int line = lines.line(
+                    QStringLiteral("ports/%1/virtual_kind").arg(index));
                 out.checks = {{QCoreApplication::translate(
                                    "TopologyJson", "Valid JSON, version 1"),
                                check_state::passed},
@@ -533,7 +712,7 @@ json_validation validate_json_document(const QString& text)
                                                            "Links, no loops"),
                                check_state::not_checked}};
                 json_problem problem;
-                problem.line = nth_line(kind_lines, index);
+                problem.line = lines.line(QStringLiteral("ports/%1").arg(index));
                 problem.summary =
                     problem.has_line()
                         ? QCoreApplication::translate(
@@ -567,25 +746,27 @@ json_validation validate_json_document(const QString& text)
              check_state::passed},
             {QCoreApplication::translate("TopologyJson", "Links, no loops"),
              check_state::failed}};
+        const int links_line = lines.line(QStringLiteral("links"));
         out.problem = json_problem{
-            QCoreApplication::translate("TopologyJson",
-                                        "\"links\" must be a list"),
+            with_line(links_line,
+                      QCoreApplication::translate("TopologyJson",
+                                                  "\"links\" must be a list")),
             QCoreApplication::translate("TopologyJson", "Nothing was applied."),
             {},
             {},
-            0};
+            links_line};
         return out;
     }
 
     const QJsonArray links = links_value.toArray();
     out.ports = static_cast<int>(ports.size());
     out.links = static_cast<int>(links.size());
-    const auto mode_lines = string_matches(text, QStringLiteral("mode"));
     QHash<QString, QSet<QString>> edges;
     for (int index = 0; index < links.size(); ++index)
     {
         const QJsonValue value = links.at(index);
-        const int link_line = nth_line(mode_lines, index);
+        const int link_line =
+            lines.line(QStringLiteral("links/%1").arg(index));
         if (!value.isObject())
         {
             out.checks = {
@@ -632,13 +813,15 @@ json_validation validate_json_document(const QString& text)
                  check_state::passed},
                 {QCoreApplication::translate("TopologyJson", "Links, no loops"),
                  check_state::failed}};
+            const int mode_line =
+                lines.line(QStringLiteral("links/%1/mode").arg(index));
             json_problem problem;
-            problem.line = link_line;
+            problem.line = mode_line;
             problem.summary =
-                link_line > 0
+                mode_line > 0
                     ? QCoreApplication::translate(
                           "TopologyJson", "Line %1: unknown link mode \"%2\"")
-                          .arg(link_line)
+                          .arg(mode_line)
                           .arg(mode)
                     : QCoreApplication::translate("TopologyJson",
                                                   "Unknown link mode \"%1\"")
@@ -771,14 +954,23 @@ json_validation validate_json_document(const QString& text)
                               {QCoreApplication::translate("TopologyJson",
                                                            "Links, no loops"),
                                check_state::failed}};
+                const qsizetype source_at = sources.indexOf(name);
+                const int reference_line = lines.line(
+                    source_at >= 0
+                        ? QStringLiteral("links/%1/sources/%2")
+                              .arg(index)
+                              .arg(source_at)
+                        : QStringLiteral("links/%1/targets/%2")
+                              .arg(index)
+                              .arg(targets.indexOf(name)));
                 json_problem problem;
-                problem.line = link_line;
+                problem.line = reference_line;
                 problem.summary =
-                    link_line > 0
+                    reference_line > 0
                         ? QCoreApplication::translate(
                               "TopologyJson",
                               "Line %1: no port is called \"%2\"")
-                              .arg(link_line)
+                              .arg(reference_line)
                               .arg(name)
                         : QCoreApplication::translate(
                               "TopologyJson", "No port is called \"%1\"")
@@ -858,13 +1050,16 @@ json_validation validate_json_document(const QString& text)
             {QCoreApplication::translate(
                  "TopologyJson", "The setup format rejected this document"),
              check_state::failed});
+        const int engine_line = engine_problem_line(root, lines);
         out.problem = json_problem{
-            QCoreApplication::translate(
-                "TopologyJson", "The setup format rejected this document"),
+            with_line(engine_line,
+                      QCoreApplication::translate(
+                          "TopologyJson",
+                          "The setup format rejected this document")),
             error_text(parsed.error()),
             {},
             {},
-            0};
+            engine_line};
         return out;
     }
     out.document = *parsed;
