@@ -74,7 +74,7 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 ./tools/vm/vmrun.ps1 stop -Vm $vm
 ```
 
-`run` exits with the exit code of the guest command, and fails if the guest does not report one. On a Windows guest the command line is PowerShell syntax; on Linux it is bash. `snapshot` creates a
+`run` returns no output from the guest, so write it to a file in the guest and bring it back with `copy-from`. `wait-tools` asks without credentials, because with them `vmrun` keeps answering "installed" while Tools are running. `run` exits with the exit code of the guest command, and fails if the guest does not report one. On a Windows guest the command line is PowerShell syntax; on Linux it is bash. `snapshot` creates a
 snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
 lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and `test-vm.ps1` and `test-seed.ps1` check the guest builders with placeholders. All three run in CI.
 
