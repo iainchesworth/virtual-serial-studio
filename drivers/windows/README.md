@@ -120,9 +120,9 @@ install then proves nothing about the trust. `-WhatIf` shows what it would chang
 trusting everything that CA signs, for every program on the machine**, so use it
 only on machines you own. ARM64 is untried: Windows may insist on a Microsoft
 signature for the catalog there. The script was run against the CI-signed package
-in the Windows 11 guest with test signing off: `pnputil` refused the package
-before it, and the driver and helper installed and passed the suite after it
-(Windows 10 is not yet run).
+in the Windows 11 and Windows 10 22H2 guests with test signing off: `pnputil`
+refused the package before it, and the driver and helper installed and passed the
+suite after it.
 
 Windows accepts a user-mode driver whose catalog is signed by a CA it trusts, so
 **test signing mode stays off**. A CI-signed package was checked this way in the
