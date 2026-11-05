@@ -26,6 +26,7 @@ set(VSS_UNIT_TEST_SOURCES
 # unit/platform/<os>/ and are compiled only there.
 if(WIN32)
   list(APPEND VSS_UNIT_TEST_SOURCES
+    unit/platform/windows/test_driver_client_windows.cpp
     unit/platform/windows/test_ports_windows.cpp)
 elseif(UNIX)
   list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)
@@ -37,6 +38,11 @@ target_include_directories(vss_unit_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/framework
   ${CMAKE_CURRENT_SOURCE_DIR}/support)
 target_link_libraries(vss_unit_tests PRIVATE vss_studio vss_testkit vsscom_core)
+if(WIN32)
+  # public.h of the driver, for the protocol test.
+  target_include_directories(vss_unit_tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/windows)
+endif()
 vss_set_warnings(vss_unit_tests)
 vss_enable_coverage(vss_unit_tests)
 

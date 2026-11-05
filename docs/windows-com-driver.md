@@ -209,10 +209,12 @@ demand and the shared-memory data path remain the later phases.
 * `vss::virtual_port_kind::windows_driver` and
   `vss::supports(...)`, so the GUI, the CLI and stored topologies already
   understand the kind.
-* `vss::driver_available()` / `driver_version()` — a registry probe of
-  `HKLM\SOFTWARE\Virtual Serial Studio\Driver`, which the INF will write.
-* `vss::create_driver_port()` — the single place the client will be
-  implemented; today it reports `errc::unsupported` rather than failing late.
+* `vss::driver_available()` / `driver_version()` — a list of the driver's
+  device interfaces, which opens nothing, and the interface version.
+* `vss::create_driver_port()` — takes a free port of the driver, opens its hub
+  end for overlapped I/O and returns the transport that carries its bytes and
+  control lines. It reports `errc::unsupported` with no driver and
+  `errc::device_busy` when every port is taken.
 * Auto-selection order is already: **driver → com0com → loopback** on Windows,
   and **pty** elsewhere. When the driver installs, it wins without a code
   change elsewhere.

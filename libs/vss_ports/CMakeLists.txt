@@ -34,6 +34,9 @@ endif()
 
 if(WIN32)
   target_link_libraries(vss_ports PRIVATE setupapi shell32 advapi32 ws2_32 mswsock)
+  # public.h of the driver: the interface GUID, control codes and the hub state.
+  target_include_directories(vss_ports PRIVATE
+    ${PROJECT_SOURCE_DIR}/drivers/windows)
 endif()
 
 vss_set_warnings(vss_ports)
