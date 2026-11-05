@@ -12,7 +12,8 @@
       "cpus": 2,
       "memory_mb": 4096,
       "disk_gb": 60,
-      "noprompt_iso": true
+      "noprompt_iso": true,
+      "language": "en-GB"
     },
     {
       "id": "windows11",
@@ -23,7 +24,8 @@
       "firmware": "efi",
       "cpus": 4,
       "memory_mb": 8192,
-      "disk_gb": 64
+      "disk_gb": 64,
+      "language": "en-US"
     },
     {
       "id": "ubuntu2604",

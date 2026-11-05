@@ -116,7 +116,7 @@ exit 0
     # 4. The shell follows the guest family.
     Reset-Log
     $null = Invoke-Script @('run', '-Vm', $vm, '-CommandLine', 'ver')
-    Assert-That 'a Windows guest runs cmd with delayed expansion' ((Get-Content $log -Raw) -match 'cmd\.exe /v:on /c')
+    Assert-That 'a Windows guest runs PowerShell and writes the marker' ((Get-Content $log -Raw) -match 'powershell\.exe -NoProfile -ExecutionPolicy Bypass -Command .*Set-Content')
     Reset-Log
     $null = Invoke-Script @('run', '-Vm', $linuxVm, '-CommandLine', 'uname')
     Assert-That 'a Linux guest runs bash' ((Get-Content $log -Raw) -match '/bin/bash -c')

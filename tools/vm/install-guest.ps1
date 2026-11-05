@@ -143,7 +143,7 @@ for ($i = 0; $i -lt 60; $i++) {
 }
 if (-not $toolsReady) { throw 'VMware Tools did not start in the finished guest' }
 
-$check = if ($entry.kind -eq 'windows') { 'if exist C:\vss\ready.txt (cmd /c exit 0) else (cmd /c exit 3)' }
+$check = if ($entry.kind -eq 'windows') { 'powershell.exe -NoProfile -Command "if (Test-Path C:\vss\ready.txt) { exit 0 } else { exit 3 }"' }
          else { "python3 -c 'import serial' && command -v socat picocom minicom screen && sudo -n true" }
 & pwsh -NoProfile -File $harness run -Vm $vm -CommandLine $check
 $code = $LASTEXITCODE

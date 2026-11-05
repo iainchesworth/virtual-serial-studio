@@ -4,16 +4,18 @@
   Answer file for an unattended Windows install. tools/vm/new-seed.ps1 fills the fields between two at signs.
   The result holds the guest password, so it is written outside every repository.
 -->
+<!-- The language must be one the install media carries (sources/lang.ini): the Windows 10 ISO has only en-GB, the
+     Windows 11 ISO only en-US. Setup falls back to its language page for any other. -->
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
   <settings pass="windowsPE">
     <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
       <SetupUILanguage>
-        <UILanguage>en-US</UILanguage>
+        <UILanguage>@LANGUAGE@</UILanguage>
       </SetupUILanguage>
-      <InputLocale>en-US</InputLocale>
-      <SystemLocale>en-US</SystemLocale>
-      <UILanguage>en-US</UILanguage>
-      <UserLocale>en-US</UserLocale>
+      <InputLocale>@LANGUAGE@</InputLocale>
+      <SystemLocale>@LANGUAGE@</SystemLocale>
+      <UILanguage>@LANGUAGE@</UILanguage>
+      <UserLocale>@LANGUAGE@</UserLocale>
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
 @LABCONFIG@
@@ -37,10 +39,10 @@
   </settings>
   <settings pass="oobeSystem">
     <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
-      <InputLocale>en-US</InputLocale>
-      <SystemLocale>en-US</SystemLocale>
-      <UILanguage>en-US</UILanguage>
-      <UserLocale>en-US</UserLocale>
+      <InputLocale>@LANGUAGE@</InputLocale>
+      <SystemLocale>@LANGUAGE@</SystemLocale>
+      <UILanguage>@LANGUAGE@</UILanguage>
+      <UserLocale>@LANGUAGE@</UserLocale>
     </component>
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
       <OOBE>

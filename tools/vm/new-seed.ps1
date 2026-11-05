@@ -210,6 +210,7 @@ try {
         $xml = (Get-Template 'autounattend.xml.in')
         $xml = $xml.Replace('@LABCONFIG@', $lab).Replace('@DISKCONFIG@', $disk)
         $xml = $xml.Replace('@EDITION@', (Protect-Xml $edition))
+        $xml = $xml.Replace('@LANGUAGE@', (Protect-Xml $entry.language))
         $xml = $xml.Replace('@HOSTNAME@', (Protect-Xml $hostname))
         $xml = $xml.Replace('@USER@', (Protect-Xml $user))
         $xml = $xml.Replace('@PASSWORD@', (Protect-Xml $password))
