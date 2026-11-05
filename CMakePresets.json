@@ -194,6 +194,15 @@
       }
     },
     {
+      "name": "windows-msvc-asan",
+      "displayName": "Windows, MSVC, AddressSanitizer, /O1",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ICL_SANITIZERS": "address"
+      }
+    },
+    {
       "name": "linux-fuzz",
       "displayName": "Linux, libFuzzer with AddressSanitizer and UBSan, -O1 (Clang)",
       "inherits": "linux-base",
@@ -322,6 +331,10 @@
     {
       "name": "linux-tsan",
       "configurePreset": "linux-tsan"
+    },
+    {
+      "name": "windows-msvc-asan",
+      "configurePreset": "windows-msvc-asan"
     },
     {
       "name": "linux-fuzz",
@@ -492,6 +505,16 @@
     {
       "name": "linux-tsan",
       "configurePreset": "linux-tsan",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "windows-msvc-asan",
+      "configurePreset": "windows-msvc-asan",
       "output": {
         "outputOnFailure": true
       },
