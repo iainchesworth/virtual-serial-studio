@@ -1,0 +1,36 @@
+site_name: Virtual Serial Studio
+site_description: A playground for real, virtual and networked serial ports
+repo_url: https://github.com/iainchesworthlabs/virtual-serial-studio
+docs_dir: docs
+strict: true
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+# The design bundle (specifications, tokens and HTML mockups) is reference
+# material for the people building the GUI, not part of the site.
+exclude_docs: |
+  gui-design/
+nav:
+  - Home: index.md
+  - Using the studio:
+      - User guide: user-guide.md
+      - Scenarios: scenarios.md
+      - Interface design: ux.md
+  - Building and testing:
+      - Building: building.md
+      - Testing: testing.md
+      - Fuzzing: fuzzing.md
+      - Continuous integration: ci.md
+      - Profiling: profiling.md
+      - Releasing: releasing.md
+      - Languages: i18n.md
+      - Contributing: contributing.md
+  - How it works:
+      - Architecture: architecture.md
+      - POSIX virtual ports: posix-virtual-ports.md
+      - Windows COM port driver: windows-com-driver.md
+      - Virtual machine testing: vm-testing.md
+      - Workstreams: workstreams.md
+      - Migration: migration.md
