@@ -1,0 +1,179 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Nightly
+
+# The legs of the nightly tier (standard 11.2) that the pull request gate does not run:
+#
+#   newest compilers  GCC and Clang at the `gcc_newest` and `llvm_newest` pins, in the release
+#                     preset. The gate builds the floor versions (`gcc`, `llvm`). Raise a newest
+#                     pin when a newer major is released and the floor pin follows later.
+#   GCC sanitizers    AddressSanitizer and UBSan with GCC. The gate runs them with Clang.
+#   TSan              ThreadSanitizer with Clang, once more on the day's merged tree.
+#   MSVC ASan         AddressSanitizer with MSVC. MSVC has no UBSan or TSan.
+#
+# Nothing here gates a merge. A failure opens or updates one `nightly-analysis` issue per leg. A pull
+# request that changes this file, the toolchain set-up or the pins runs it too, so a change is
+# proven before it merges; only a run on develop reports to an issue.
+
+on:
+  schedule:
+    - cron: "11 3 * * *"
+  workflow_dispatch:
+  pull_request:
+    branches: [develop]
+    paths:
+      - ".github/workflows/nightly.yml"
+      - ".github/actions/setup-toolchain/**"
+      - ".github/toolchain-versions.json"
+
+permissions: {}
+
+concurrency:
+  group: nightly-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  newest-compilers:
+    name: Newest ${{ matrix.name }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: gcc,   compiler: gcc,   pin: gcc_newest }
+          - { name: clang, compiler: clang, pin: llvm_newest }
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the pin
+        id: pin
+        env:
+          PIN: ${{ matrix.pin }}
+        run: |
+          set -euo pipefail
+          echo "version=$(python3 -c "import json, os; print(json.load(open('.github/toolchain-versions.json'))[os.environ['PIN']])")" >> "$GITHUB_OUTPUT"
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: ${{ matrix.compiler }}
+          gcc-version: ${{ matrix.compiler == 'gcc' && steps.pin.outputs.version || '' }}
+          llvm-version: ${{ matrix.compiler == 'clang' && steps.pin.outputs.version || '' }}
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Show the compiler
+        run: ${CXX:-c++} --version
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: linux-release
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: newest-${{ matrix.name }}
+          detail: The release build or the tests failed with the newest ${{ matrix.name }} (pin ${{ matrix.pin }} in .github/toolchain-versions.json). The run log has the compiler and the first error.
+
+  gcc-asan-ubsan:
+    name: AddressSanitizer and UBSan (GCC)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      ASAN_OPTIONS: detect_leaks=1:strict_string_checks=1
+      UBSAN_OPTIONS: print_stacktrace=1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: gcc
+
+      - uses: ./.github/actions/prepare-deps
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: linux-asan-ubsan
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: asan-ubsan-gcc
+          detail: AddressSanitizer or UBSan reported a finding with GCC, or the sanitizer build failed. The pull request gate runs the same preset with Clang.
+
+  tsan:
+    name: ThreadSanitizer
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+
+      - uses: ./.github/actions/prepare-deps
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: linux-tsan
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: tsan
+          detail: ThreadSanitizer reported a data race or a lock-order problem, or the build failed. Races depend on timing, so a failure here may not repeat on the next run.
+
+  msvc-asan:
+    name: AddressSanitizer (MSVC)
+    runs-on: windows-2025
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      issues: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: msvc
+
+      - uses: ./.github/actions/prepare-deps
+
+      - uses: ./.github/actions/build-and-test
+        with:
+          preset: windows-msvc-asan
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: asan-msvc
+          detail: AddressSanitizer reported a finding with MSVC, or the sanitizer build failed. MSVC has no UBSan or TSan.

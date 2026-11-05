@@ -41,7 +41,8 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | `linux-debug`, `linux-release`, `macos-debug`, `macos-release`, `windows-msvc-debug`, `windows-msvc-release` | Tests and tools, no GUI. The release presets also build the performance suite |
 | the same names with `-gui` | The same plus the GUI; **fails** if Qt is missing |
 | `linux-coverage`, `macos-coverage`, `windows-llvm-coverage` | Instrumented libraries (Clang, LLVM profiles), no GUI |
-| `linux-asan-ubsan`, `linux-tsan` | Clang with AddressSanitizer and UBSan, or ThreadSanitizer, at -O1 (`ICL_SANITIZERS`); no GUI |
+| `linux-asan-ubsan`, `linux-tsan` | AddressSanitizer and UBSan, or ThreadSanitizer, at -O1 (`ICL_SANITIZERS`); no GUI. The pull request gate builds them with Clang, and the nightly run builds `linux-asan-ubsan` with GCC as well |
+| `windows-msvc-asan` | MSVC with AddressSanitizer at /O1; no GUI. MSVC has no UBSan or TSan |
 | `linux-fuzz` | The libFuzzer targets with AddressSanitizer and UBSan at -O1 (Clang); see [Fuzzing](fuzzing.md) |
 | `linux-tracy`, `windows-msvc-tracy` | Performance suite with Tracy, no GUI; needs `VCPKG_ROOT` |
 
