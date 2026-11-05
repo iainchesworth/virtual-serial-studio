@@ -10,18 +10,26 @@ name: Nightly
 #   TSan              ThreadSanitizer with Clang, once more on the day's merged tree.
 #   MSVC ASan         AddressSanitizer with MSVC. MSVC has no UBSan or TSan.
 #
-# Nothing here gates a merge. A failure opens or updates one `nightly-analysis` issue per leg.
+# Nothing here gates a merge. A failure opens or updates one `nightly-analysis` issue per leg. A pull
+# request that changes this file, the toolchain set-up or the pins runs it too, so a change is
+# proven before it merges; only a run on develop reports to an issue.
 
 on:
   schedule:
     - cron: "11 3 * * *"
   workflow_dispatch:
+  pull_request:
+    branches: [develop]
+    paths:
+      - ".github/workflows/nightly.yml"
+      - ".github/actions/setup-toolchain/**"
+      - ".github/toolchain-versions.json"
 
 permissions: {}
 
 concurrency:
-  group: nightly-${{ github.ref_name }}
-  cancel-in-progress: false
+  group: nightly-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   newest-compilers:
