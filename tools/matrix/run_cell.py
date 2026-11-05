@@ -24,6 +24,7 @@ import os
 import platform
 import queue
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -68,7 +69,10 @@ class Recorder:
 
 def find_program(build_dir: Path, name: str) -> Path | None:
     suffix = ".exe" if os.name == "nt" else ""
-    for folder in (build_dir / "bin", build_dir / "bin" / "Release", build_dir):
+    folders = [build_dir / "bin", build_dir / "bin" / "Release", build_dir]
+    # On macOS the GUI is an application bundle, so the program is inside it.
+    folders += [folder / f"{name}.app" / "Contents" / "MacOS" for folder in list(folders)]
+    for folder in folders:
         candidate = folder / (name + suffix)
         if candidate.is_file():
             return candidate
@@ -263,10 +267,11 @@ def test_t1(rec: Recorder, args, out: Path) -> None:
     evidence = None
     if args.t1_log and Path(args.t1_log).is_file():
         evidence = write_evidence(out, "t1.log", Path(args.t1_log).read_text(errors="replace"))
+    note = f" ({args.t1_note})" if args.t1_note else ""
     if args.t1_exit == 0:
-        rec.add("T1", "pass", "ctest passed", evidence)
+        rec.add("T1", "pass", "ctest passed" + note, evidence)
     else:
-        rec.add("T1", "fail", "the build or the ctest suite failed; the job log has the output", evidence)
+        rec.add("T1", "fail", "the build or the ctest suite failed" + note + "; the job log has the output", evidence)
 
 
 def test_t4(rec: Recorder, cli: Path | None, out: Path) -> None:
@@ -569,10 +574,311 @@ def test_t10(rec: Recorder, cli: Path | None, out: Path) -> None:
         pty_child.stop()
 
 
-def not_applicable(rec: Recorder, args) -> None:
-    rec.add("T8", "skip", "vport is not implemented yet")
-    rec.add("T9", "skip", "the package artifact does not exist yet")
-    rec.add("T11", "skip", "an experiment for the Ubuntu guest only")
+def link_target(link: Path) -> str | None:
+    """Where a stable link points, or None when it is not a symbolic link."""
+    return os.readlink(link) if link.is_symlink() else None
+
+
+def link_is_live(link: Path) -> bool:
+    import stat
+
+    try:
+        return stat.S_ISCHR(os.stat(link).st_mode)
+    except OSError:
+        return False
+
+
+def exchange_through_links(first: Path, second: Path) -> str | None:
+    """Sends 1 KB each way across a linked pair. Returns the problem, or None."""
+    a = b = -1
+    try:
+        a, b = open_raw(str(first)), open_raw(str(second))
+        for source, sink, label in ((a, b, "first to second"), (b, a, "second to first")):
+            data = sequence(b"0123456789abcdef", 1024)
+            write_all(source, data)
+            got = read_at_least(sink, len(data), 10)
+            if got != data:
+                return f"{label}: sent {len(data)} bytes and read {len(got)}"
+        return None
+    except (OSError, TimeoutError) as error:
+        return f"could not open or use the links: {error}"
+    finally:
+        for descriptor in (a, b):
+            if descriptor >= 0:
+                os.close(descriptor)
+
+
+def test_t8(rec: Recorder, cli: Path | None, out: Path, work: Path) -> None:
+    """The stable link of vport appears, holds its names, is replaced when stale and is removed on exit."""
+    import signal
+
+    if not POSIX:
+        rec.add("T8", "skip", "vport is for pseudo terminals; on Windows the driver owns the COM names")
+        return
+    if cli is None:
+        rec.add("T8", "not_run", "vss_cli was not built")
+        return
+
+    directory = work / "stable"
+    directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+    os.chmod(directory, 0o700)
+    one, two = directory / "ttyVSS0", directory / "ttyVSS1"
+    command = [str(cli), "vport", "--name=ttyVSS0,ttyVSS1", "--link=ttyVSS0:ttyVSS1", f"--stable-dir={directory}"]
+    log: list[str] = []
+    steps: list[str] = []
+
+    def fail(reason: str) -> None:
+        rec.add("T8", "fail", reason, write_evidence(out, "t8.log", "\n".join(log)))
+
+    first = Child(command)
+    second: Child | None = None
+    third: Child | None = None
+    try:
+        if not first.reader.wait_for(r"^linked ttyVSS0:ttyVSS1", 20):
+            log.append(first.text())
+            return fail("vport did not report the link within 20 s")
+        for link in (one, two):
+            if link_target(link) is None or not link_is_live(link):
+                log.append(first.text())
+                return fail(f"{link.name} is not a symbolic link to a pseudo terminal")
+        if os.path.realpath(one) == os.path.realpath(two):
+            return fail("the two links point at the same terminal")
+        steps.append("links appear")
+        problem = exchange_through_links(one, two)
+        if problem:
+            log.append(first.text())
+            return fail(problem)
+        steps.append("1 KB each way")
+
+        # A running process holds its names: a second vport must refuse them.
+        second = Child(command)
+        try:
+            refused = second.process.wait(timeout=20)
+        except subprocess.TimeoutExpired:
+            log.append(second.text())
+            return fail("a second vport with the same names did not refuse them")
+        log.append("second vport output:\n" + second.text())
+        if refused == 0:
+            return fail("a second vport with the same names exited 0")
+        if not link_is_live(one):
+            return fail("the refused vport damaged the running vport's link")
+        steps.append("held names refused")
+
+        # A killed process cannot clean up. The next one replaces what it left.
+        first.process.kill()
+        first.process.wait()
+        if link_target(one) is None:
+            return fail("the link was gone after kill -9, so no stale link was left to replace")
+        third = Child(command)
+        if not third.reader.wait_for(r"^linked ttyVSS0:ttyVSS1", 20):
+            log.append("after kill -9:\n" + third.text())
+            return fail("a vport started over a stale link did not come up")
+        if not (link_is_live(one) and link_is_live(two)):
+            return fail("the stale links were not replaced by live ones")
+        problem = exchange_through_links(one, two)
+        if problem:
+            return fail("after replacing stale links: " + problem)
+        steps.append("stale links replaced")
+
+        # A clean stop removes the links.
+        third.process.send_signal(signal.SIGTERM)
+        try:
+            code = third.process.wait(timeout=20)
+        except subprocess.TimeoutExpired:
+            return fail("vport did not stop on SIGTERM within 20 s")
+        left = [link.name for link in (one, two) if os.path.lexists(link)]
+        log.append("after SIGTERM:\n" + third.text())
+        if left:
+            return fail(f"links left after SIGTERM: {', '.join(left)}")
+        if code != 0:
+            return fail(f"vport exited {code} on SIGTERM; 0 was expected")
+        steps.append("removed on SIGTERM")
+        rec.add("T8", "pass", "; ".join(steps), write_evidence(out, "t8.log", "\n".join(log)))
+    finally:
+        for child in (first, second, third):
+            if child is not None:
+                child.stop()
+
+
+def unpack_package(package: Path, target: Path) -> Path:
+    """Extracts an archive into target and returns the folder that holds bin/. A folder is used as it is."""
+    import tarfile
+    import zipfile
+
+    if package.is_dir():
+        return package
+    target.mkdir(parents=True, exist_ok=True)
+    if package.name.endswith((".tar.gz", ".tgz")):
+        with tarfile.open(package) as archive:
+            try:
+                archive.extractall(target, filter="data")
+            except TypeError:  # Python before 3.12 has no extraction filter
+                archive.extractall(target)
+    elif package.suffix == ".zip":
+        with zipfile.ZipFile(package) as archive:
+            archive.extractall(target)
+    else:
+        raise ValueError(f"unknown package type: {package.name}")
+    for candidate in [target, *sorted(p for p in target.iterdir() if p.is_dir())]:
+        if (candidate / "bin").is_dir():
+            return candidate
+    raise ValueError("the package holds no bin folder")
+
+
+def test_t9(rec: Recorder, args, out: Path, work: Path) -> None:
+    """The package artifact installs and runs as a user would run it."""
+    if args.package is None:
+        rec.add("T9", "skip", "no package was given to this cell (--package)")
+        return
+    if not args.package.exists():
+        rec.add("T9", "not_run", f"the package {args.package.name} was not found")
+        return
+    log: list[str] = []
+    try:
+        root = unpack_package(args.package, work / "package")
+    except (ValueError, OSError) as error:
+        rec.add("T9", "fail", f"cannot unpack {args.package.name}: {error}")
+        return
+
+    # A user has no build tree and no Qt on the path: nothing from the build may leak in.
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("QT_", "LD_LIBRARY_PATH", "DYLD_"))}
+    suffix = ".exe" if os.name == "nt" else ""
+    cli = root / "bin" / f"vss_cli{suffix}"
+    if sys.platform == "darwin":
+        gui = root / "vss_gui.app" / "Contents" / "MacOS" / "vss_gui"
+    else:
+        gui = root / "bin" / f"vss_gui{suffix}"
+    missing = [str(p.relative_to(root)) for p in (cli, gui) if not p.is_file()]
+    if missing:
+        rec.add("T9", "fail", f"the package lacks {', '.join(missing)}")
+        return
+
+    problems: list[str] = []
+    code, text = run_to_end([str(cli), "selftest"], 120, env)
+    log.append(f"vss_cli selftest -> {code}\n{text}")
+    if code != 0 or "selftest ok" not in text:
+        problems.append(f"vss_cli selftest exited {code}")
+    # The GUI needs a display to start, even to print its version. A Linux machine without one
+    # gets a virtual X server when xvfb-run is there; with neither, the GUI is not started.
+    gui_command = [str(gui), "--version"]
+    gui_where = "vss_gui --version"
+    start_gui = True
+    if sys.platform.startswith("linux") and not (env.get("DISPLAY") or env.get("WAYLAND_DISPLAY")):
+        xvfb = shutil.which("xvfb-run")
+        if xvfb:
+            gui_command = [xvfb, "-a", *gui_command]
+            gui_where += " under Xvfb"
+        else:
+            start_gui = False
+    if start_gui:
+        code, text = run_to_end(gui_command, 120, env)
+        log.append(f"{' '.join(gui_command)} -> {code}\n{text}")
+        if code != 0 or not re.search(r"\d+\.\d+\.\d+", text):
+            problems.append(f"{gui_where} exited {code}")
+    else:
+        gui_where = "no display and no xvfb-run, so the GUI was not started"
+        rec.observations["package_gui"] = gui_where
+    if sys.platform.startswith("linux"):
+        code, text = run_to_end(["ldd", str(gui)], 60, env)
+        log.append(f"ldd vss_gui -> {code}\n{text}")
+        absent = [line.split()[0] for line in text.splitlines() if "not found" in line]
+        if absent:
+            problems.append("vss_gui needs " + ", ".join(absent))
+    evidence = write_evidence(out, "t9.log", "\n".join(log))
+    if problems:
+        rec.add("T9", "fail", "; ".join(problems), evidence)
+    else:
+        rec.add(
+            "T9",
+            "pass",
+            f"{args.package.name} unpacked with no build environment: vss_cli selftest ok, {gui_where}",
+            evidence,
+        )
+
+
+def sudo(command: list[str], timeout: float = 60) -> tuple[int | None, str]:
+    return run_to_end(["sudo", "-n", *command], timeout)
+
+
+def new_tty(prefix: str, before: set[str]) -> str | None:
+    found = sorted(name for name in os.listdir("/sys/class/tty") if name.startswith(prefix)) if os.path.isdir("/sys/class/tty") else []
+    fresh = [name for name in found if name not in before]
+    return f"/dev/{fresh[0]}" if fresh else None
+
+
+def test_t11(rec: Recorder, args, cli: Path | None, out: Path) -> None:
+    """A kernel serial pair in a Linux guest: a USB serial gadget on a virtual device controller, seen from the host side as ttyACM."""
+    if args.kind != "vm" or not sys.platform.startswith("linux"):
+        rec.add("T11", "skip", "an experiment for the Linux guests only: it loads kernel modules")
+        return
+    if cli is None:
+        rec.add("T11", "not_run", "vss_cli was not built")
+        return
+    usbip, usbipd = shutil.which("usbip"), shutil.which("usbipd")
+    if not (usbip and usbipd):
+        rec.add("T11", "skip", "the usbip tools are not installed in this guest")
+        return
+    log: list[str] = []
+    before = {name for name in os.listdir("/sys/class/tty")}
+    daemon: Child | None = None
+    attached = False
+    try:
+        for module in ("usbip-vudc", "vhci-hcd", "g_serial"):
+            code, text = sudo(["modprobe", module])
+            log.append(f"modprobe {module} -> {code} {text.strip()}")
+            if code != 0:
+                rec.add("T11", "skip", f"the kernel has no {module} module, so there is no virtual USB device controller", write_evidence(out, "t11.log", "\n".join(log)))
+                return
+        daemon = Child(["sudo", "-n", usbipd, "--device"])
+        time.sleep(2)
+        code, text = sudo([usbip, "attach", "-r", "127.0.0.1", "-b", "usbip-vudc.0"])
+        log.append(f"usbip attach -> {code} {text.strip()}")
+        attached = code == 0
+        if not attached:
+            rec.add("T11", "fail", f"usbip attach exited {code}", write_evidence(out, "t11.log", "\n".join(log)))
+            return
+        acm = gadget = None
+        deadline = time.monotonic() + 20
+        while time.monotonic() < deadline and not (acm and gadget):
+            acm, gadget = new_tty("ttyACM", before), new_tty("ttyGS", before)
+            time.sleep(0.5)
+        if not (acm and gadget):
+            rec.add("T11", "fail", "the gadget attached but no ttyACM and ttyGS pair appeared", write_evidence(out, "t11.log", "\n".join(log)))
+            return
+        sudo(["chmod", "a+rw", acm, gadget])
+        log.append(f"pair: {acm} (host side) <-> {gadget} (gadget side)")
+
+        problem = exchange_through_links(Path(acm), Path(gadget))
+        if problem:
+            rec.add("T11", "fail", f"the kernel pair {acm}/{gadget} did not carry bytes: {problem}", write_evidence(out, "t11.log", "\n".join(log)))
+            return
+        code, text = run_to_end(
+            [str(cli), "bench", f"--from=serial://{acm}?baud=115200", f"--to=serial://{gadget}?baud=115200", "--bytes=1MB"], 120
+        )
+        log.append(f"vss_cli bench -> {code}\n{text}")
+        throughput = re.search(r"throughput:\s*(.+)", text)
+        code_stty, stty = run_to_end(["stty", "-F", acm, "-a"], 20)
+        observed: dict = {"pair": [acm, gadget], "bench": throughput.group(1).strip() if throughput else None, "stty_acm": stty.strip().splitlines()[:2]}
+        try:
+            from serial.tools import list_ports  # type: ignore
+
+            observed["pyserial_lists_acm"] = any(p.device == acm for p in list_ports.comports())
+        except ImportError:
+            observed["pyserial_lists_acm"] = "pyserial not installed"
+        rec.observations["kernel_serial_pair"] = observed
+        evidence = write_evidence(out, "t11.log", "\n".join(log))
+        if code == 0 and throughput:
+            rec.add("T11", "pass", f"{acm} <-> {gadget} (USB serial gadget on usbip-vudc): 1 KB each way, and vss_cli moved 1 MB between them at {throughput.group(1).strip()}", evidence)
+        else:
+            rec.add("T11", "fail", f"vss_cli bench between the kernel pair exited {code}", evidence)
+    finally:
+        if attached:
+            sudo([usbip, "detach", "-p", "0"])
+        if daemon is not None:
+            sudo(["pkill", "-x", "usbipd"])
+            daemon.stop()
+        for module in ("g_serial", "vhci-hcd", "usbip-vudc"):
+            sudo(["modprobe", "-r", module])
 
 
 # ------------------------------------------------------------------- the main
@@ -590,6 +896,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--snapshot", default="")
     parser.add_argument("--t1-exit", type=int, default=None)
     parser.add_argument("--t1-log", default="")
+    parser.add_argument("--t1-note", default="", help="what happened on the way to the ctest result, such as a rerun of failed suites")
+    parser.add_argument("--package", type=Path, default=None, help="a release archive (.tar.gz or .zip) or an installed folder, for T9")
     args = parser.parse_args(argv)
 
     out: Path = args.out
@@ -609,8 +917,10 @@ def main(argv: list[str] | None = None) -> int:
         test_t5(rec, gui, out)
         test_t6(rec, gui, out, args.cell)
         test_t7(rec, cli, out)
-        not_applicable(rec, args)
+        test_t8(rec, cli, out, work)
+        test_t9(rec, args, out, work)
         test_t10(rec, cli, out)
+        test_t11(rec, args, cli, out)
 
     result = {
         "schema": SCHEMA,

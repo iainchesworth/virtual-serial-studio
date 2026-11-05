@@ -66,7 +66,7 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 
 ./tools/vm/vmrun.ps1 revert -Vm $vm            # always start from the prepared state
 ./tools/vm/vmrun.ps1 start  -Vm $vm
-./tools/vm/vmrun.ps1 wait-tools -Vm $vm
+./tools/vm/vmrun.ps1 wait-guest -Vm $vm
 ./tools/vm/vmrun.ps1 copy-to -Vm $vm -Local build\package.zip -Guest 'C:\vss\package.zip'
 ./tools/vm/vmrun.ps1 run -Vm $vm -CommandLine 'powershell -File C:\vss\test.ps1'
 "guest exit code: $LASTEXITCODE"
@@ -74,9 +74,27 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 ./tools/vm/vmrun.ps1 stop -Vm $vm
 ```
 
-`run` returns no output from the guest, so write it to a file in the guest and bring it back with `copy-from`. `wait-tools` asks without credentials, because with them `vmrun` keeps answering "installed" while Tools are running. `run` exits with the exit code of the guest command, and fails if the guest does not report one. On a Windows guest the command line is PowerShell syntax; on Linux it is bash. `snapshot` creates a
+`run` returns no output from the guest, so write it to a file in the guest and bring it back with `copy-from`. `wait-guest` is the check that a guest is ready: it asks the guest a question with the credentials until it answers, and it takes about 30 seconds after a revert. `wait-tools` only reads the Tools state, asks without credentials (with them `vmrun` kept answering "installed" while Tools were running), and can report "installed" for minutes after the guest is up, so use `wait-guest` before copying or running anything. `run` exits with the exit code of the guest command, and fails if the guest does not report one. On a Windows guest the command line is PowerShell syntax; on Linux it is bash. `snapshot` creates a
 snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
 lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and `test-vm.ps1` and `test-seed.ps1` check the guest builders with placeholders. All three run in CI.
+
+## Running a cell in a guest
+
+The guests have no compiler, so the programs are built outside them and copied in. Two scripts build what a guest needs, and a third runs the cell:
+
+```powershell
+# Windows guests: needs Visual Studio, Qt (ICL_QT_ROOT) and Boost (BOOST_ROOT) on this machine.
+./tools/vm/make-bundle.ps1 -Repository . -Out D:\bundle-win
+./tools/vm/guest-cell.ps1 -Guest windows11 -Bundle D:\bundle-win -Commit (git rev-parse --short HEAD)
+
+# Ubuntu guest: run the first line on Linux or in WSL, with Qt (VSS_QT_ROOT) and Boost (BOOST_ROOT).
+tools/vm/make-bundle.sh . /mnt/d/bundle-ubuntu
+./tools/vm/guest-cell.ps1 -Guest ubuntu2604 -Bundle D:\bundle-ubuntu -Package virtual-serial-studio-dry-run-linux-x86_64.tar.gz
+```
+
+`guest-cell.ps1` reverts to `clean`, starts the guest, copies in the bundle and `tools/vm/guest/win-cell.ps1` or `linux-cell.sh`, runs `ctest` and `tools/matrix/run_cell.py` in the guest, brings back `<Out>\<guest>\cell-out` (the result JSON, the logs and the screenshots) and stops the guest. It exits with 1 when a test failed or did not run. `-Package` is for T9: the archive from the Release workflow's dry run, for that system. The script refuses a guest that is already running, because starting or stopping a guest cuts off whoever is using it; `-Force` overrides that.
+
+The guest scripts install what the program needs on Ubuntu (cmake for `ctest`, the OpenGL, EGL and fontconfig libraries Qt loads, and Xvfb with the xcb libraries for T9). On Windows the bundle carries a Python, PowerShell 7 for the `vm_*` suites, the Visual C++ runtime and the Qt offscreen plugin. `tools/vm/test-guest-cell.ps1` checks the order of the `vmrun` calls with `-DryRun`.
 
 ## Safety
 

@@ -173,6 +173,14 @@ connect (server)**. Waiting works for TCP and UDP; RFC 2217 only connects. See
 A scripted pretend device with a name, baud rate and target, for tests without
 hardware.
 
+Select the fixture and choose **Open line matrix and faults** in the Inspector
+to inject a fault: a parity error, a framing error, an overrun, a break, a
+hang-up or a disconnect. Each one is reported as an error event on the port, and
+the fixture then stops and shows *Failed*, as a real device would after the
+fault. Add another fixture to inject again. Every fault you inject is listed in
+**Injected so far**. Faults work only on fixtures; the buttons are off for any
+other port.
+
 ## Connecting ports
 
 **Topology → Connect ports…** (`Ctrl+L`, enabled once two ports exist) creates a
@@ -398,8 +406,8 @@ available in this build". It never pretends. At the moment:
   cannot, so a busy device fails when you attach it.
 - **Real-device templates**: they need the attach dialog to open from a
   template.
-- **Fault injection** and the **per-line wiring matrix**: the engine has only a
-  yes/no null-modem crossing.
+- The **per-line wiring matrix**: the engine has only a yes/no null-modem
+  crossing, so the matrix shows the Standard preset and cannot be edited.
 - **"Waiting for a program" and "Program connected"**: the engine cannot see
   whether another program has opened a port, so a port reads **Open** and no
   more.

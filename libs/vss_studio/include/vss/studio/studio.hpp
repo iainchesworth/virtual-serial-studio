@@ -12,6 +12,7 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/serial_enumeration.hpp>
+#include <vss/ports/serial_transport.hpp>
 #include <vss/ports/stable_link.hpp>
 #include <vss/ports/virtual_port.hpp>
 
@@ -25,6 +26,18 @@
 #include <vector>
 
 namespace vss {
+
+/// A fault a mock fixture can raise.  Each one is reported as an error on the
+/// fixture's next read, which stops the endpoint and emits an error event.
+enum class fault_kind
+{
+    parity,
+    framing,
+    overrun,
+    break_condition,
+    hangup,
+    disconnect,
+};
 
 struct studio_options
 {
@@ -86,6 +99,13 @@ public:
     result<std::shared_ptr<endpoint>> create_mock_port(
         const std::string& name, const serial_settings& settings = {},
         const std::string& target = "scripted");
+
+    /// Makes a mock fixture report `fault` on its next read.  The call is
+    /// queued on the endpoint's strand, so it is safe from any thread and
+    /// returns before the fault is delivered.  `errc::not_found` for an
+    /// unknown endpoint and `errc::unsupported` for a port that is not a
+    /// fixture.
+    result<void> inject_fault(endpoint_id id, fault_kind fault);
 
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
@@ -156,6 +176,8 @@ private:
         std::optional<stable_link> link;
         serial_settings serial;
         bool capture = true;
+        /// The fixture behind a mock port, or empty for every other kind.
+        std::weak_ptr<serial_transport> fixture;
     };
 
     result<std::shared_ptr<endpoint>> register_port(

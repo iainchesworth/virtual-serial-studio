@@ -162,6 +162,8 @@ capabilities EngineStudioBackend::caps() const
     // `vss::run_benchmark` is the core `vss_cli bench` uses, shared with the
     // GUI.
     caps.benchmark = true;
+    // `vss::studio::inject_fault` reaches the mock fixture behind a port.
+    caps.faults = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;
@@ -180,6 +182,12 @@ vss::result<vss::benchmark_result> EngineStudioBackend::run_benchmark(
     if (!sender || !receiver)
         return vss::make_error_code(vss::errc::not_found);
     return vss::run_benchmark(*sender, *receiver, options, progress, cancel);
+}
+
+vss::result<void> EngineStudioBackend::inject_fault(vss::endpoint_id id,
+                                                    vss::fault_kind fault)
+{
+    return studio_.inject_fault(id, fault);
 }
 
 vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(

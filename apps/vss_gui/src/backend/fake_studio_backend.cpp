@@ -462,6 +462,24 @@ vss::result<vss::benchmark_result> FakeStudioBackend::run_benchmark(
     return result;
 }
 
+vss::result<void> FakeStudioBackend::inject_fault(vss::endpoint_id id,
+                                                  vss::fault_kind fault)
+{
+    if (const auto error = take_error())
+        return *error;
+    port_view* view = find_port(id);
+    if (view == nullptr)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!caps_.faults || view->kind != vss::endpoint_kind::mock)
+        return vss::make_error_code(vss::errc::unsupported);
+    // The engine stops the endpoint on the next read; the fake does so at once.
+    injected_.push_back(fault);
+    view->state = vss::endpoint_state::failed;
+    view->open = false;
+    refresh();
+    return {};
+}
+
 vss::result<void> FakeStudioBackend::send(vss::endpoint_id id,
                                           const QByteArray& data)
 {

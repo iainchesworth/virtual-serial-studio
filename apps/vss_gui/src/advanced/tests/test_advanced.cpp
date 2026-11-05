@@ -320,6 +320,65 @@ TEST_CASE("line matrix: read-only standard preset and gated faults")
                        "and DCD on terminal. Raising RTS raises CTS."));
 }
 
+TEST_CASE("line matrix: faults are injected into a running fixture")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.faults = true;
+    backend.set_capabilities(caps);
+    const vss::endpoint_id modem =
+        make_fixture(backend, QStringLiteral("modem"));
+
+    LineMatrixPanel panel(backend, modem);
+    for (int index = 0; index < panel.inject_count(); ++index)
+    {
+        REQUIRE(panel.inject_button(index)->isEnabled());
+        REQUIRE_EQ(panel.inject_button(index)->toolTip(), QString());
+    }
+
+    panel.inject_button(3)->click();
+    REQUIRE_EQ(backend.injected().size(), std::size_t{1});
+    REQUIRE(backend.injected().front() == vss::fault_kind::break_condition);
+    REQUIRE_EQ(panel.history_table()->rowCount(), 1);
+    REQUIRE_EQ(panel.history_table()->item(0, 1)->text(),
+               QStringLiteral("Break"));
+    REQUIRE_EQ(panel.history_table()->item(0, 2)->text(),
+               QStringLiteral("Error event reported on modem"));
+
+    // The engine stops the fixture on the fault, so the tiles go off with the
+    // reason and the history stays.
+    for (int index = 0; index < panel.inject_count(); ++index)
+    {
+        REQUIRE(!panel.inject_button(index)->isEnabled());
+        REQUIRE_EQ(panel.inject_button(index)->toolTip(),
+                   QStringLiteral("The fixture is not running."));
+    }
+    REQUIRE_EQ(panel.history_table()->rowCount(), 1);
+}
+
+TEST_CASE("line matrix: faults are refused for a port that is not a fixture")
+{
+    using namespace vss::gui;
+    FakeStudioBackend backend;
+    capabilities caps;
+    caps.faults = true;
+    backend.set_capabilities(caps);
+    const vss::endpoint_id terminal =
+        make_port(backend, QStringLiteral("terminal"));
+
+    LineMatrixPanel panel(backend, terminal);
+    for (int index = 0; index < panel.inject_count(); ++index)
+    {
+        REQUIRE(!panel.inject_button(index)->isEnabled());
+        REQUIRE_EQ(panel.inject_button(index)->toolTip(),
+                   QStringLiteral("Faults are only available on fixture ports."));
+    }
+    REQUIRE(
+        backend.inject_fault(terminal, vss::fault_kind::parity).has_error());
+    REQUIRE(backend.injected().empty());
+}
+
 TEST_CASE("line matrix: capability on applies a wiring change")
 {
     using namespace vss::gui;

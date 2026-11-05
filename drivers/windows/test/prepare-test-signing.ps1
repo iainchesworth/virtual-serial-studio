@@ -4,7 +4,11 @@
 # Signs the vsscom package with a throwaway certificate made in this guest, and
 # makes this guest trust it. For disposable test guests only.
 #
-#   prepare-test-signing.ps1 -ConfirmDisposableGuest [-PackageDir <dir>] [-EnableTestSigning]
+#   prepare-test-signing.ps1 -ConfirmDisposableGuest [-PackageDir <dir>]
+#       [-EnableTestSigning | -DisableTestSigning] [-Flavour kmdf|umdf]
+#
+# -Flavour umdf signs the user-mode driver (vsscom_um.dll and vsscom_um.cat).
+# That package needs no test signing: it is the case -DisableTestSigning is for.
 #
 # Run it only in a VSS test guest that reverts to a clean snapshot. It changes
 # the guest's trust stores and, with -EnableTestSigning, its boot settings, so
@@ -32,10 +36,17 @@
 param(
     [switch] $ConfirmDisposableGuest,
     [string] $PackageDir = $PSScriptRoot,
-    [switch] $EnableTestSigning
+    [switch] $EnableTestSigning,
+    [switch] $DisableTestSigning,
+    [ValidateSet('kmdf', 'umdf')] [string] $Flavour = 'kmdf'
 )
 
 $ErrorActionPreference = 'Stop'
+
+if ($EnableTestSigning -and $DisableTestSigning) {
+    Write-Error 'pass -EnableTestSigning or -DisableTestSigning, not both'
+    exit 2
+}
 
 if (-not $ConfirmDisposableGuest) {
     Write-Error 'pass -ConfirmDisposableGuest to say this is a disposable VSS test guest'
@@ -49,7 +60,9 @@ if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrat
 }
 
 try {
-    foreach ($name in 'vsscom.sys', 'vsscom.cat', 'vsscom.inf', 'vsscomctl.cat', 'vsscomctl.inf') {
+    $files = if ($Flavour -eq 'umdf') { 'vsscom_um.dll', 'vsscom_um.cat', 'vsscom_um.inf' } else { 'vsscom.sys', 'vsscom.cat', 'vsscom.inf', 'vsscomctl.cat', 'vsscomctl.inf' }
+    $signed = if ($Flavour -eq 'umdf') { 'vsscom_um.dll', 'vsscom_um.cat' } else { 'vsscom.sys', 'vsscom.cat', 'vsscomctl.cat' }
+    foreach ($name in $files) {
         if (-not (Test-Path (Join-Path $PackageDir $name))) { throw "$name is not in $PackageDir" }
     }
 
@@ -67,7 +80,7 @@ try {
     }
     Remove-Item $public
 
-    foreach ($name in 'vsscom.sys', 'vsscom.cat', 'vsscomctl.cat') {
+    foreach ($name in $signed) {
         $result = Set-AuthenticodeSignature -FilePath (Join-Path $PackageDir $name) -Certificate $cert `
             -HashAlgorithm SHA256
         if ($result.Status -ne 'Valid') { throw "signing $name gave $($result.Status): $($result.StatusMessage)" }
@@ -76,6 +89,16 @@ try {
 
     $options = (& bcdedit.exe /enum '{current}' | Out-String)
     $testSigning = $options -match 'testsigning\s+Yes'
+    if ($DisableTestSigning) {
+        if ($testSigning) {
+            & bcdedit.exe /set testsigning off | Out-Null
+            if ($LASTEXITCODE -ne 0) { throw 'bcdedit /set testsigning off failed' }
+            Write-Host 'test signing is now off: restart the guest, then run install-driver.ps1'
+            exit 1
+        }
+        Write-Host 'the package is signed and test signing is off'
+        exit 0
+    }
     if (-not $testSigning -and $EnableTestSigning) {
         & bcdedit.exe /set testsigning on | Out-Null
         if ($LASTEXITCODE -ne 0) {

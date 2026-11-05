@@ -346,15 +346,26 @@ placeholder is a status-bar sentence, never a fabricated result.
 
 ## WP7
 
-### Fault injection stays gated; no `vss_studio` forwarding method
+### Fault injection
 
-The engine's mock transport exposes `serial_transport::mock()`, but the
-endpoint keeps its transport private and `vss_studio` has no accessor. WP7 was
-instructed to keep `Capabilities::faults` false and not to change
-`libs/vss_core`, so the six fault tiles, their buttons and the history table
-are built and disabled with "Not available in this build". No fault state is
-simulated in the GUI. Adding the thin forwarding method remains an approved
-follow-up outside this package; the tiles are already laid out for it.
+WP7 built the six fault tiles, their buttons and the history table disabled
+with "Not available in this build", because the endpoint keeps its transport
+private and `vss_studio` had no accessor.
+
+That follow-up is done. `vss::studio::inject_fault(endpoint_id, fault_kind)` is
+the thin forwarding method (nothing in `libs/vss_core` changed). The studio
+remembers the fixture behind each mock port and posts the injection to the
+endpoint's strand, so the call is safe from the GUI thread and runs where the
+endpoint reads. `EngineStudioBackend` sets `Capabilities::faults` and forwards
+to it, and `FakeStudioBackend` stands in for tests.
+
+The tiles are enabled only for a fixture that is running. The engine stops an
+endpoint on a read failure, so after any fault the fixture shows *Failed* and
+the tiles go off with "The fixture is not running."; for any other port they say
+"Faults are only available on fixture ports." The history row reads "Error event
+reported on <port>" because the call has succeeded when the fault is queued and
+the engine emits the error event on the fixture's next read. A failure from the
+call shows its message in that row instead.
 
 ### Per-link wiring is a read-only Standard preset
 
@@ -887,9 +898,9 @@ runs. CTest uses the default (no captures) so CI does not write artifacts.
 
 ### Remaining limits carried past WP9
 
-The capability-gated features stay visible: peer-open, fault injection and
-editable line matrix. Benchmark extraction is no longer one of them (see
-"Benchmark" above). The network server role is no
+The capability-gated features stay visible: peer-open and the editable line
+matrix. Benchmark extraction (see "Benchmark" above) and fault injection (see
+"Fault injection" above) are no longer among them. The network server role is no
 longer one of them: `vss_ports` listens for `tcp-listen://` and
 `udp-listen://` addresses, so the network dialog's server choice works for TCP
 and UDP (RFC 2217 still only connects). The bundle's real

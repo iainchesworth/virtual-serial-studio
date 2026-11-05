@@ -1,0 +1,81 @@
+; Copyright (c) 2026 Virtual Serial Studio contributors
+; SPDX-License-Identifier: GPL-3.0-or-later
+;
+; A virtual serial port as a user-mode driver (UMDF 2). The same port as
+; vsscom.inf, in a driver host process instead of the kernel, so the package
+; needs no kernel-mode signature. VSSCOMUM\VSSCOM0 is a root-enumerated port made
+; by hand; VSSCOMUM\PORT is a software device that a program makes on demand. It
+; can be installed beside the kernel-mode driver: the two use different hardware
+; IDs and the same interface for the hub end.
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+CatalogFile=vsscom_um.cat
+DriverVer=01/01/2026,1.0.0.0
+PnpLockdown=1
+
+[Manufacturer]
+%ManufacturerName%=VssComUm,NTamd64.10.0...17134,NTarm64.10.0...17134
+
+[VssComUm.NTamd64.10.0...17134]
+%VssComUm.DeviceDesc%=VssComUm_Install,VSSCOMUM\VSSCOM0
+%VssComUm.DeviceDesc%=VssComUm_Install,VSSCOMUM\PORT
+
+[VssComUm.NTarm64.10.0...17134]
+%VssComUm.DeviceDesc%=VssComUm_Install,VSSCOMUM\VSSCOM0
+%VssComUm.DeviceDesc%=VssComUm_Install,VSSCOMUM\PORT
+
+[SourceDisksNames]
+1=%DiskName%
+
+[SourceDisksFiles]
+vsscom_um.dll=1
+
+[DestinationDirs]
+DefaultDestDir=13
+
+; --- The device -------------------------------------------------------------
+
+[VssComUm_Install.NT]
+CopyFiles=VssComUm_CopyFiles
+
+[VssComUm_CopyFiles]
+vsscom_um.dll
+
+; The reflector, the kernel-mode half of the framework, ships with Windows. It
+; is added here by name and not through the inbox WUDFRD.inf, which Windows 10
+; version 22H2 does not have.
+[VssComUm_Install.NT.Services]
+AddService=WUDFRd,0x000001fa,VssComUm_Reflector
+
+[VssComUm_Reflector]
+DisplayName=%WudfRdDisplayName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\WUDFRd.sys
+
+[VssComUm_Install.NT.Wdf]
+UmdfService=vsscom_um,VssComUm_UmdfService
+UmdfServiceOrder=vsscom_um
+; The driver reads which user opens the hub end by impersonating the requestor
+; (um_access.c). Identification lets it ask who the user is and which groups it is
+; in, and no more. Without a level, WdfRequestImpersonate is refused.
+UmdfImpersonationLevel=Identification
+UmdfHostProcessSharing=ProcessSharingDisabled
+UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
+UmdfMethodNeitherAction=Copy
+UmdfFsContextUsePolicy=CanUseFsContext2
+
+[VssComUm_UmdfService]
+UmdfLibraryVersion=2.25.0
+ServiceBinary=%13%\vsscom_um.dll
+
+[Strings]
+ManufacturerName="Virtual Serial Studio"
+DiskName="Virtual Serial Studio user-mode driver"
+VssComUm.DeviceDesc="Virtual Serial Studio COM Port (user mode)"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"

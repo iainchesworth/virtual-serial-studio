@@ -89,6 +89,8 @@ public:
                   const vss::benchmark_options& options,
                   const vss::benchmark_progress_handler& progress,
                   const std::atomic<bool>* cancel) override;
+    vss::result<void> inject_fault(vss::endpoint_id id,
+                                   vss::fault_kind fault) override;
 
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,

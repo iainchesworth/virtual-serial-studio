@@ -7,10 +7,14 @@
 #include <vss/ports/loopback_transport.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
+#include <vss/testkit/harness.hpp>
 
 #include "test_framework.hpp"
 
+#include <chrono>
+
 using namespace vss;
+using namespace vss::testkit;
 
 TEST_CASE("studio: loopback virtual ports advertise their path")
 {
@@ -51,6 +55,49 @@ TEST_CASE("studio: mock ports are scriptable")
     REQUIRE(created);
     REQUIRE_EQ((*created)->kind(), endpoint_kind::mock);
     REQUIRE_EQ((*created)->stats().bytes_rx, std::uint64_t{0});
+}
+
+TEST_CASE("studio: every fault stops a fixture with an error")
+{
+    using namespace std::chrono_literals;
+
+    const fault_kind faults[] = {
+        fault_kind::parity,          fault_kind::framing,
+        fault_kind::overrun,         fault_kind::break_condition,
+        fault_kind::hangup,          fault_kind::disconnect,
+    };
+    for (const fault_kind fault : faults)
+    {
+        studio app;
+        const auto created = app.create_mock_port("device");
+        REQUIRE(created);
+        const auto endpoint = *created;
+        REQUIRE_EQ(endpoint->state(), endpoint_state::open);
+
+        REQUIRE(app.inject_fault(endpoint->id(), fault));
+        REQUIRE(wait_until(
+            [&] { return endpoint->state() != endpoint_state::open; }, 2000ms));
+    }
+}
+
+TEST_CASE("studio: faults are refused for other ports")
+{
+    studio app;
+    const auto loopback =
+        app.create_virtual_port("v", virtual_port_kind::loopback);
+    REQUIRE(loopback);
+
+    REQUIRE_EQ(app.inject_fault((*loopback)->id(), fault_kind::parity),
+               make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.inject_fault(endpoint_id{4242}, fault_kind::parity),
+               make_error_code(errc::not_found));
+    REQUIRE_EQ((*loopback)->state(), endpoint_state::open);
+
+    const auto fixture = app.create_mock_port("device");
+    REQUIRE(fixture);
+    REQUIRE(app.remove_port((*fixture)->id()));
+    REQUIRE_EQ(app.inject_fault((*fixture)->id(), fault_kind::parity),
+               make_error_code(errc::not_found));
 }
 
 TEST_CASE("studio: removal by id and by name")

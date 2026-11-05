@@ -89,3 +89,15 @@ BOOLEAN VssComHubOpenAllowed(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         return FALSE;
     return RtlEqualSid((PSID)owner.Sid, (PSID)Opener->Sid) ? TRUE : FALSE;
 }
+
+VOID VssComAuthorizeHubOpen(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                            _In_ WDFREQUEST Request,
+                            _In_ WDFFILEOBJECT FileObject)
+{
+    VSSCOM_OPENER opener;
+    NTSTATUS status = VssComCaptureOpener(Request, &opener);
+
+    VssComHubOpenDecided(Context, Request, FileObject,
+                         NT_SUCCESS(status) &&
+                             VssComHubOpenAllowed(Context, &opener));
+}

@@ -31,8 +31,9 @@ struct capabilities
     bool control_lines = true;
     /// Create a scriptable mock fixture.
     bool fixtures = true;
-    /// Inject faults into a mock fixture.  False: the adapter cannot reach
-    /// the fixture through `vss::studio` today.
+    /// Inject faults into a mock fixture.  The engine backend provides it
+    /// through `vss::studio::inject_fault`; a backend that cannot reach the
+    /// fixture leaves it false.
     bool faults = false;
     /// Per-line wiring matrix.  False: the engine only has a boolean
     /// null-modem crossing.

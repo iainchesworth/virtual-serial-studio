@@ -41,7 +41,7 @@ try {
     Set-Content -LiteralPath $stub -Value @'
 param()
 Add-Content -LiteralPath $env:FAKE_LOG -Value ($args -join ' ')
-$command = $args | Where-Object { $_ -in 'list','listSnapshots','snapshot','revertToSnapshot','start','stop','copyFileFromGuestToHost','copyFileFromHostToGuest','runProgramInGuest','checkToolsState','getGuestIPAddress','captureScreen' } | Select-Object -First 1
+$command = $args | Where-Object { $_ -in 'list','listSnapshots','snapshot','revertToSnapshot','start','stop','copyFileFromGuestToHost','copyFileFromHostToGuest','runProgramInGuest','checkToolsState','getGuestIPAddress','captureScreen','listProcessesInGuest' } | Select-Object -First 1
 switch ($command) {
     'list' { 'Total running VMs: 0' }
     'listSnapshots' {
@@ -139,6 +139,12 @@ exit 0
     $r = Invoke-Script @('wait-tools', '-Vm', $vm, '-TimeoutSeconds', '10')
     Assert-That 'wait-tools succeeds' ($r.Code -eq 0)
     Assert-That 'wait-tools sends no credentials' ((Get-Content $log -Raw) -match 'checkToolsState' -and (Get-Content $log -Raw) -notmatch '-gu ')
+
+    # 6b. wait-guest asks the guest something, with the credentials, until it answers.
+    Reset-Log
+    $r = Invoke-Script @('wait-guest', '-Vm', $vm, '-TimeoutSeconds', '10')
+    Assert-That 'wait-guest succeeds' ($r.Code -eq 0)
+    Assert-That 'wait-guest asks the guest with the credentials' ((Get-Content $log -Raw) -match '-gu placeholder-user -gp placeholder-not-a-credential listProcessesInGuest')
 
     # 7. Guest actions need the credentials.
     Remove-Item Env:VSS_VM_PASSWORD

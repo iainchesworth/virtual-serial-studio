@@ -7,6 +7,7 @@
 #include "backend/engine_studio_backend.hpp"
 #include "backend/event_bridge.hpp"
 
+#include "qt_wait.hpp"
 #include "test_framework.hpp"
 
 #include <vss/core/hub.hpp>
@@ -14,12 +15,11 @@
 
 #include <QByteArray>
 #include <QCoreApplication>
-#include <QEventLoop>
 #include <QThread>
-#include <QTimer>
 
 #include <atomic>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
@@ -38,12 +38,8 @@ vss::endpoint_event make_event(int sequence)
     return event;
 }
 
-void spin(int milliseconds)
-{
-    QEventLoop loop;
-    QTimer::singleShot(milliseconds, &loop, &QEventLoop::quit);
-    loop.exec();
-}
+using vss_test::spin;
+using vss_test::wait_until;
 
 vss::hub_options make_hub_options()
 {
@@ -82,8 +78,7 @@ TEST_CASE("event bridge: batches hub events on the GUI thread")
         for (int index = 0; index < 40; ++index)
             hub.publish(make_event(index));
 
-        for (int index = 0; index < 500 && bridge.delivered() < 40; ++index)
-            spin(2);
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 40; }));
 
         REQUIRE_EQ(bridge.delivered(), std::uint64_t{40});
         REQUIRE_EQ(batches, 0);
@@ -122,8 +117,7 @@ TEST_CASE("event bridge: caps the queue and counts dropped events")
         bridge.start();
         for (int index = 0; index < 50; ++index)
             hub.publish(make_event(index));
-        for (int index = 0; index < 500 && bridge.delivered() < 50; ++index)
-            spin(2);
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 50; }));
 
         REQUIRE_EQ(bridge.delivered(), std::uint64_t{50});
         REQUIRE_EQ(bridge.dropped(), std::uint64_t{40});
@@ -147,18 +141,28 @@ TEST_CASE("event bridge: stop unsubscribes but keeps the shared queue alive")
 
     {
         vss::gui::EventBridge bridge(hub, options);
+        // A second subscriber sees every event the hub dispatches. Sinks run
+        // in publish order on one strand, so once it has seen the last event
+        // the hub has finished dispatching all the earlier ones.
+        auto seen = std::make_shared<std::atomic<int>>(0);
+        const auto probe =
+            hub.subscribe({}, [seen](const vss::endpoint_event&)
+                          { seen->fetch_add(1, std::memory_order_relaxed); });
+
         bridge.start();
         for (int index = 0; index < 5; ++index)
             hub.publish(make_event(index));
-        for (int index = 0; index < 500 && bridge.delivered() < 5; ++index)
-            spin(2);
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 5; }));
         REQUIRE_EQ(bridge.delivered(), std::uint64_t{5});
 
         bridge.stop();
         for (int index = 0; index < 5; ++index)
             hub.publish(make_event(index));
-        spin(10);
+        // Plus one more, so the dispatch of the fifth is also finished.
+        hub.publish(make_event(5));
+        REQUIRE(wait_until([&seen] { return seen->load() >= 11; }));
         REQUIRE_EQ(bridge.delivered(), std::uint64_t{5});
+        hub.unsubscribe(probe);
     }
 
     hub.stop();
@@ -183,8 +187,7 @@ TEST_CASE("event bridge: restart drops events queued before stop")
         bridge.start();
         for (int index = 0; index < 3; ++index)
             hub.publish(make_event(index));
-        for (int index = 0; index < 500 && bridge.delivered() < 3; ++index)
-            spin(2);
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 3; }));
         REQUIRE_EQ(bridge.delivered(), std::uint64_t{3});
 
         bridge.stop();
@@ -193,8 +196,7 @@ TEST_CASE("event bridge: restart drops events queued before stop")
         REQUIRE_EQ(batches, 0);
 
         hub.publish(make_event(99));
-        for (int index = 0; index < 500 && bridge.delivered() < 4; ++index)
-            spin(2);
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 4; }));
         bridge.flush();
         REQUIRE_EQ(batches, 1);
     }
@@ -222,9 +224,7 @@ TEST_CASE("event bridge: survives a publisher during shutdown")
             }
         });
 
-    for (int index = 0; index < 500 && published.load() == 0; ++index)
-        spin(1);
-    REQUIRE(published.load() > 0);
+    REQUIRE(wait_until([&published] { return published.load() > 0; }));
 
     vss::gui::EventBridge::options options;
     options.interval_ms = 1;
@@ -264,8 +264,13 @@ TEST_CASE("engine backend: ports, links and sends go through the adapter")
         REQUIRE_EQ(backend.links()[0].shape, vss::gui::link_shape::two_way);
 
         REQUIRE(backend.send(*first, QByteArrayLiteral("hello")).has_value());
-        spin(20);
-        backend.refresh();
-        REQUIRE(backend.port(*first)->stats.bytes_tx >= 5);
+        // The send is written on the endpoint's own strand, so the counter
+        // moves some time later. Poll the view until it does.
+        REQUIRE(wait_until(
+            [&backend, &first]
+            {
+                backend.refresh();
+                return backend.port(*first)->stats.bytes_tx >= 5;
+            }));
     }
 }

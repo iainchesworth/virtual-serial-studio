@@ -17,6 +17,7 @@
 #include <vss/core/types.hpp>
 #include <vss/ports/virtual_port.hpp>
 #include <vss/studio/benchmark.hpp>
+#include <vss/studio/studio.hpp>
 
 #include <QByteArray>
 #include <QObject>
@@ -143,6 +144,12 @@ public:
                   const vss::benchmark_options& /*options*/,
                   const vss::benchmark_progress_handler& /*progress*/,
                   const std::atomic<bool>* /*cancel*/)
+    // -- fault injection (capability: faults) ------------------------------
+
+    /// Makes a mock fixture report `fault`.  The default is `unsupported`: a
+    /// build without `Capabilities::faults` must never fake an injection.
+    virtual vss::result<void> inject_fault(vss::endpoint_id /*id*/,
+                                           vss::fault_kind /*fault*/)
     {
         return vss::make_error_code(vss::errc::unsupported);
     }

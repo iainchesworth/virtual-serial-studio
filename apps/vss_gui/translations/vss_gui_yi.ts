@@ -2298,67 +2298,67 @@
     <context>
         <name>LineMatrix</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="64" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="67" />
             <source>Parity error</source>
             <translation>פּאַריטעט־טעות</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="65" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="68" />
             <source>Byte arrives with bad parity</source>
             <translation>בײַט קומט אָן מיט שלעכטן פּאַריטעט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="66" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="70" />
             <source>Framing error</source>
             <translation>פֿרײַמינג־טעות</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="67" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="71" />
             <source>Byte arrives with no valid stop bit</source>
             <translation>בײַט קומט אָן אָן אַ גילטיקן סטאָפּ־ביט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="69" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="74" />
             <source>Overrun</source>
             <translation>אָווערראַן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="70" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="75" />
             <source>Incoming data lost, too fast</source>
             <translation>אײַנקומענדיקע דאַטן פֿאַרלוירן, צו שנעל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="71" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="77" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="72" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="78" />
             <source>A break is received on the line</source>
             <translation>אַ ברעכונג ווערט באַקומען אויף דער ליניע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="73" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="80" />
             <source>Hang-up</source>
             <translation>אויפֿהענגען</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="74" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="81" />
             <source>Carrier drops, as a modem does</source>
             <translation>דער טרעגער פֿאַלט אַראָפּ, ווי בײַ אַ מאָדעם</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="75" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="83" />
             <source>Disconnect</source>
             <translation>אָפּשנידונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="76" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="84" />
             <source>Device vanishes, as if unplugged</source>
             <translation>דער אַפּאַראַט פֿאַרשווינדט, ווי אויב ער וואָלט אַרויסגעצויגן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="321" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="330" />
             <source>Inject %1</source>
             <translation>אײַנשפּריצן %1</translation>
         </message>
@@ -2366,159 +2366,184 @@
     <context>
         <name>LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="119" />
             <source>Line wiring</source>
             <translation>ליניע־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>קלײַבט אויס וועלכע סיגנאַלן דער פּאָרט טרײַבט אויפֿן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="131" />
             <source>Line wiring preset</source>
             <translation>פּרעסעט פֿון ליניע־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="137" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="138" />
             <source>Emulate modem lines</source>
             <translation>אימיטירן מאָדעם־ליניעס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="155" />
             <source>This port drives</source>
             <translation>דער פּאָרט טרײַבט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="182" />
             <source>%1 to %2</source>
             <translation>%1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>Line state now</source>
             <translation>ליניע־צושטאַנד איצט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="235" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="243" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="246" />
             <source>Send a break</source>
             <translation>שיקן BREAK</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="283" />
             <source>Inject a fault</source>
             <translation>אײַנשפּריצן אַ דעפֿעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="285" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>סימולירט אַ שלעכטן קאַבל אָדער אַפּאַראַט. יעדער דעפֿעקט ווערט געמאָלדן ווי אַ טעות־געשעעניש אויפֿן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="326" />
             <source>Inject</source>
             <translation>אײַנשפּריצן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="345" />
             <source>Injected so far</source>
             <translation>ביז איצט אײַנגעשפּריצט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Time</source>
             <translation>צײַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Fault</source>
             <translation>דעפֿעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Result</source>
             <translation>רעזולטאַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="358" />
             <source>Injected faults</source>
             <translation>אײַנגעשפּריצטע דעפֿעקטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="367" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="372" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="512" />
             <source>Create this fixture in code</source>
             <translation>באַשאַפֿן די פֿיקסטור אין קאָד</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="453" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="475" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="673" />
             <source>Link this fixture to another port first.</source>
             <translation>פֿאַרבינדט פֿריִער די פֿיקסטור מיט אַן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="482" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>די ליניע־קרייַצונג ווערט פֿעסטגעלייגט ווען די פֿאַרבינדונג ווערט באַשאַפֿן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="527" />
+            <source>The fixture is not running.</source>
+            <translation>דער פֿיקסטור לויפֿט נישט.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="531" />
+            <source>Faults are only available on fixture ports.</source>
+            <translation>דעפֿעקטן זענען נאָר פֿאַראַנען אויף פֿיקסטור־פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="589" />
             <source>Port %1</source>
             <translation>פּאָרט %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="595" />
             <source>the other port</source>
             <translation>דער אַנדערער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="596" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>די קאָלומען־קעפּ זענען די אײַנגאַנגען אויף %1. די זעלבע פֿאַרדראָטונג גילט אין דער אַנדערער ריכטונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="679" />
             <source>Could not change the wiring: %1</source>
             <translation>נישט געקענט טוישן די פֿאַרדראָטונג: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="685" />
             <source>Line wiring updated.</source>
             <translation>ליניע־פֿאַרדראָטונג אַקטואַליזירט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="699" />
+            <source>Error event reported on %1</source>
+            <translation>טעות־געשעעניש געמעלדט אויף %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="700" />
+            <source>Could not inject the fault: %1</source>
+            <translation>נישט געקענט אײַנשפּריצן דעם דעפֿעקט: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="712" />
+            <source>%1 injected on %2.</source>
+            <translation>אײַנגעשפּריצט אויף %2: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 on</source>
             <translation>%1 אָן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 off</source>
             <translation>%1 אָפּ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="752" />
             <source>Could not change a control line: %1</source>
             <translation>נישט געקענט טוישן אַ קאָנטראָל־ליניע: %1</translation>
         </message>
@@ -9725,159 +9750,184 @@
     <context>
         <name>vss::gui::LineMatrixPanel</name>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="110" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="119" />
             <source>Line wiring</source>
             <translation>ליניע־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="112" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="121" />
             <source>Choose which signals this port drives on the other port.</source>
             <translation>קלײַבט אויס וועלכע סיגנאַלן דער פּאָרט טרײַבט אויפֿן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="122" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="131" />
             <source>Line wiring preset</source>
             <translation>פּרעסעט פֿון ליניע־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="128" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="129" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="137" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="138" />
             <source>Emulate modem lines</source>
             <translation>אימיטירן מאָדעם־ליניעס</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="146" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="155" />
             <source>This port drives</source>
             <translation>דער פּאָרט טרײַבט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="173" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="182" />
             <source>%1 to %2</source>
             <translation>%1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="208" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
             <source>Line state now</source>
             <translation>ליניע־צושטאַנד איצט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="216" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="217" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="225" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="226" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="235" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="234" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="243" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="237" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="246" />
             <source>Send a break</source>
             <translation>שיקן BREAK</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="274" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="283" />
             <source>Inject a fault</source>
             <translation>אײַנשפּריצן אַ דעפֿעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="276" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="285" />
             <source>Simulate a bad cable or device. Each fault is reported as an error event on the port.</source>
             <translation>סימולירט אַ שלעכטן קאַבל אָדער אַפּאַראַט. יעדער דעפֿעקט ווערט געמאָלדן ווי אַ טעות־געשעעניש אויפֿן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="317" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="326" />
             <source>Inject</source>
             <translation>אײַנשפּריצן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="334" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="345" />
             <source>Injected so far</source>
             <translation>ביז איצט אײַנגעשפּריצט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Time</source>
             <translation>צײַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Fault</source>
             <translation>דעפֿעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="346" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="357" />
             <source>Result</source>
             <translation>רעזולטאַט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="347" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="358" />
             <source>Injected faults</source>
             <translation>אײַנגעשפּריצטע דעפֿעקטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="356" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="361" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="501" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="367" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="372" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="512" />
             <source>Create this fixture in code</source>
             <translation>באַשאַפֿן די פֿיקסטור אין קאָד</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="442" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="464" />
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="637" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="453" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="475" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="673" />
             <source>Link this fixture to another port first.</source>
             <translation>פֿאַרבינדט פֿריִער די פֿיקסטור מיט אַן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="471" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="482" />
             <source>The line crossing is fixed when the link is created.</source>
             <translation>די ליניע־קרייַצונג ווערט פֿעסטגעלייגט ווען די פֿאַרבינדונג ווערט באַשאַפֿן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="553" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="527" />
+            <source>The fixture is not running.</source>
+            <translation>דער פֿיקסטור לויפֿט נישט.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="531" />
+            <source>Faults are only available on fixture ports.</source>
+            <translation>דעפֿעקטן זענען נאָר פֿאַראַנען אויף פֿיקסטור־פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="589" />
             <source>Port %1</source>
             <translation>פּאָרט %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="559" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="595" />
             <source>the other port</source>
             <translation>דער אַנדערער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="560" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="596" />
             <source>Column headings are the inputs on %1. The same wiring applies in the other direction.</source>
             <translation>די קאָלומען־קעפּ זענען די אײַנגאַנגען אויף %1. די זעלבע פֿאַרדראָטונג גילט אין דער אַנדערער ריכטונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="643" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="679" />
             <source>Could not change the wiring: %1</source>
             <translation>נישט געקענט טוישן די פֿאַרדראָטונג: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="649" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="685" />
             <source>Line wiring updated.</source>
             <translation>ליניע־פֿאַרדראָטונג אַקטואַליזירט.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="699" />
+            <source>Error event reported on %1</source>
+            <translation>טעות־געשעעניש געמעלדט אויף %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="700" />
+            <source>Could not inject the fault: %1</source>
+            <translation>נישט געקענט אײַנשפּריצן דעם דעפֿעקט: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="712" />
+            <source>%1 injected on %2.</source>
+            <translation>אײַנגעשפּריצט אויף %2: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 on</source>
             <translation>%1 אָן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="674" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="739" />
             <source>%1 off</source>
             <translation>%1 אָפּ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/line_matrix_panel.cpp" line="687" />
+            <location filename="../src/advanced/line_matrix_panel.cpp" line="752" />
             <source>Could not change a control line: %1</source>
             <translation>נישט געקענט טוישן אַ קאָנטראָל־ליניע: %1</translation>
         </message>

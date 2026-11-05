@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!--
+  The vsscom_um driver: the same port as vsscom, as a UMDF 2 driver. It builds
+  from the sources the two share (../vsscom/port.c, io.c, hub.c and core/) and
+  the few that only it has. Like vsscom.vcxproj it builds with Visual Studio 2026
+  and the NuGet packages below. drivers/windows/build.ps1 runs both builds.
+-->
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6D2C9E4A-31B7-4F58-A0C3-8E1D5B7F9A24}</ProjectGuid>
+    <RootNamespace>vsscom_um</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.28000.0</WindowsTargetPlatformVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <UMDF_VERSION_MAJOR>2</UMDF_VERSION_MAJOR>
+    <UMDF_VERSION_MINOR>25</UMDF_VERSION_MINOR>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <DriverType>UMDF</DriverType>
+    <PlatformToolset>WindowsUserModeDriver10.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)..\artifacts\um\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\artifacts\obj-um\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>vsscom_um</TargetName>
+    <!-- The package is signed by build.ps1 or the release job, not here. -->
+    <SignMode>Off</SignMode>
+    <EnableInf2cat>false</EnableInf2cat>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <!-- vsscom_platform.h of the user-mode driver, then the shared headers. -->
+      <AdditionalIncludeDirectories>$(ProjectDir)um;$(ProjectDir)..\vsscom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- The framework headers use the NTSTATUS codes of ntstatus.h. -->
+      <PreprocessorDefinitions>UMDF_USING_NTSTATUS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="um_driver.c" />
+    <ClCompile Include="um_access.c" />
+    <ClCompile Include="..\vsscom\port.c" />
+    <ClCompile Include="..\vsscom\io.c" />
+    <ClCompile Include="..\vsscom\hub.c" />
+    <ClCompile Include="..\vsscom\core\vsscom_core.c" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="um\vsscom_platform.h" />
+    <ClInclude Include="..\vsscom\public.h" />
+    <ClInclude Include="..\vsscom\vsscom.h" />
+    <ClInclude Include="..\vsscom\core\vsscom_core.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.CPP" Version="10.0.28000.1721" />
+    <PackageReference Include="Microsoft.Windows.WDK.x64" Version="10.0.28000.2526" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.x64" Version="10.0.28000.1721" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='ARM64'">
+    <PackageReference Include="Microsoft.Windows.SDK.CPP.arm64" Version="10.0.28000.1721" />
+    <PackageReference Include="Microsoft.Windows.WDK.ARM64" Version="10.0.28000.2526" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
