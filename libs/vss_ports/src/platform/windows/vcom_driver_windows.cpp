@@ -161,7 +161,7 @@ bool control(HANDLE handle, DWORD code, void* input, DWORD input_size,
 bool read_state(HANDLE handle, VSSCOM_HUB_STATE& state)
 {
     DWORD returned = 0;
-    return control(handle, IOCTL_VSSCOM_HUB_GET_STATE, nullptr, 0, &state,
+    return control(handle, static_cast<DWORD>(IOCTL_VSSCOM_HUB_GET_STATE), nullptr, 0, &state,
                    sizeof(state), &returned) &&
            returned == sizeof(state);
 }
@@ -169,7 +169,7 @@ bool read_state(HANDLE handle, VSSCOM_HUB_STATE& state)
 bool read_version(HANDLE handle, VSSCOM_VERSION_INFO& version)
 {
     DWORD returned = 0;
-    return control(handle, IOCTL_VSSCOM_GET_VERSION, nullptr, 0, &version,
+    return control(handle, static_cast<DWORD>(IOCTL_VSSCOM_GET_VERSION), nullptr, 0, &version,
                    sizeof(version), &returned) &&
            returned == sizeof(version);
 }
@@ -252,7 +252,7 @@ public:
         else
             next &= ~bit;
         if (!open_.load() ||
-            !control(raw_, IOCTL_VSSCOM_HUB_SET_LINES, &next, sizeof(next),
+            !control(raw_, static_cast<DWORD>(IOCTL_VSSCOM_HUB_SET_LINES), &next, sizeof(next),
                      nullptr, 0))
             return;
         hub_lines_ = next;
