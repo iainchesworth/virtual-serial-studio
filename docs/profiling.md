@@ -97,7 +97,12 @@ pipeline. `--markdown` and `--json` write the same data to files.
 The `End-to-end profiling (Tracy)` job:
 
 1. installs vcpkg at the pinned baseline and resolves the manifest,
-2. builds `tracy-capture` and `tracy-csvexport` from Tracy v0.14.1,
+2. builds `tracy-capture` and `tracy-csvexport` from Tracy v0.14.1, or restores
+   them from the cache. Building them downloads CPM.cmake and sources from
+   GitHub, so a build retries up to three times, and the finished tools are
+   cached under a key that names the Tracy version. The cache fills on pushes
+   to `develop`, which pull requests can read. Change `TRACY_VERSION` in
+   `ci.yml` to move to another release,
 3. configures with `VSS_TRACY=ON`, builds `vss_perf`,
 4. creates a pseudo-terminal pair so the serial phase runs too,
 5. captures `vss_perf --tracy`, exports the CSV, requires
