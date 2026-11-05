@@ -41,36 +41,41 @@ DefaultDestDir=13
 
 [VssComUm_Install.NT]
 CopyFiles=VssComUm_CopyFiles
-Include=WUDFRD.inf
-Needs=WUDFRD.NT
 
 [VssComUm_CopyFiles]
 vsscom_um.dll
 
-; The reflector, the kernel-mode half of the framework, is installed by the
-; inbox WUDFRD.inf, which asks an including INF to reference its three sections
-; (install, hardware and services) whether or not it adds anything of its own.
-[VssComUm_Install.NT.HW]
-Include=WUDFRD.inf
-Needs=WUDFRD.NT.HW
-
+; The reflector, the kernel-mode half of the framework, ships with Windows. It
+; is added here by name and not through the inbox WUDFRD.inf, which Windows 10
+; version 22H2 does not have.
 [VssComUm_Install.NT.Services]
-Include=WUDFRD.inf
-Needs=WUDFRD.NT.Services
+AddService=WUDFRd,0x000001fa,VssComUm_Reflector
+
+[VssComUm_Reflector]
+DisplayName=%WudfRdDisplayName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\WUDFRd.sys
 
 [VssComUm_Install.NT.Wdf]
 UmdfService=vsscom_um,VssComUm_UmdfService
 UmdfServiceOrder=vsscom_um
+; The driver reads which user opens the hub end by impersonating the requestor
+; (um_access.c). Identification lets it ask who the user is and which groups it is
+; in, and no more. Without a level, WdfRequestImpersonate is refused.
+UmdfImpersonationLevel=Identification
 UmdfHostProcessSharing=ProcessSharingDisabled
 UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
 UmdfMethodNeitherAction=Copy
 UmdfFsContextUsePolicy=CanUseFsContext2
 
 [VssComUm_UmdfService]
-UmdfLibraryVersion=2.33.0
+UmdfLibraryVersion=2.25.0
 ServiceBinary=%13%\vsscom_um.dll
 
 [Strings]
 ManufacturerName="Virtual Serial Studio"
 DiskName="Virtual Serial Studio user-mode driver"
 VssComUm.DeviceDesc="Virtual Serial Studio COM Port (user mode)"
+WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"

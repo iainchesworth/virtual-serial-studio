@@ -61,7 +61,8 @@ function Build-Driver {
         [string] $InfDir,       # the folder of the INF files
         [string[]] $Infs,
         [string] $PackageSubdir,
-        [string[]] $Expected
+        [string[]] $Expected,
+        [string] $InfVerifMode = '/w'  # the user-mode driver needs /u, see below
     )
 
     Write-Host "== Build $Name ($Platform, $Configuration)"
@@ -84,7 +85,7 @@ function Build-Driver {
 
     Write-Host "== InfVerif $Name"
     foreach ($inf in $Infs) {
-        & $infverif /v /w (Join-Path $package $inf)
+        & $infverif /v $InfVerifMode (Join-Path $package $inf)
         if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
     }
 
@@ -108,5 +109,11 @@ if ($Driver -in 'all', 'kmdf') {
 if ($Driver -in 'all', 'umdf') {
     Build-Driver -Name 'user-mode driver' -Project (Join-Path $root 'vsscom_um\vsscom_um.vcxproj') -OutSubdir 'um' -Binary 'vsscom_um.dll' `
         -InfDir (Join-Path $root 'vsscom_um') -Infs 'vsscom_um.inf' -PackageSubdir 'package-um' `
-        -Expected 'vsscom_um.dll', 'vsscom_um.inf', 'vsscom_um.cat'
+        -Expected 'vsscom_um.dll', 'vsscom_um.inf', 'vsscom_um.cat' `
+        -InfVerifMode '/u'
 }
+
+# The user-mode INF names the Windows-supplied reflector (WUDFRd.sys) as a service
+# binary that it does not copy. InfVerif's Windows mode (/w) calls that an error;
+# its universal mode (/u) calls it a warning and checks the rest. The inbox
+# WUDFRD.inf would avoid it, but Windows 10 version 22H2 does not have that file.

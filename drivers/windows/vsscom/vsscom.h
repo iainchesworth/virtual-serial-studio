@@ -117,7 +117,7 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
     WDFTIMER WriteTimer;
 
     // Everything below is guarded by Lock.
-    WDFSPINLOCK Lock;
+    VSSCOM_LOCK Lock;
     vsscom_u8 RxStorage[VSSCOM_RX_SIZE];
     vsscom_ring Rx;
     vsscom_u8 TxStorage[VSSCOM_TX_SIZE];

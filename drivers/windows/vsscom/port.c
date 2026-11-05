@@ -155,7 +155,7 @@ NTSTATUS VssComCreatePort(_Inout_ PWDFDEVICE_INIT DeviceInit,
     // and go while the driver stays loaded.
     WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
     attributes.ParentObject = device;
-    status = WdfSpinLockCreate(&attributes, &context->Lock);
+    status = VssComLockCreate(&attributes, &context->Lock);
     if (!NT_SUCCESS(status))
         return status;
 

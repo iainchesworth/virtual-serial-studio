@@ -29,3 +29,23 @@ static FORCEINLINE ULONGLONG VssComInterruptTime(VOID)
     (void)QueryUnbiasedInterruptTime(&now);
     return now;
 }
+
+// The lock that guards a port's state. A user-mode driver has no spin locks:
+// everything runs at passive level, so it is a wait lock.
+typedef WDFWAITLOCK VSSCOM_LOCK;
+
+static FORCEINLINE NTSTATUS VssComLockCreate(
+    _In_opt_ PWDF_OBJECT_ATTRIBUTES Attributes, _Out_ VSSCOM_LOCK* Lock)
+{
+    return WdfWaitLockCreate(Attributes, Lock);
+}
+
+static FORCEINLINE VOID VssComLockAcquire(_In_ VSSCOM_LOCK Lock)
+{
+    (void)WdfWaitLockAcquire(Lock, NULL);
+}
+
+static FORCEINLINE VOID VssComLockRelease(_In_ VSSCOM_LOCK Lock)
+{
+    WdfWaitLockRelease(Lock);
+}

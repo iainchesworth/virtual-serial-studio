@@ -21,3 +21,22 @@ static FORCEINLINE ULONGLONG VssComInterruptTime(VOID)
     return KeQueryInterruptTime();
 }
 
+// The lock that guards a port's state. The ends run at DISPATCH_LEVEL here, so
+// it is a spin lock.
+typedef WDFSPINLOCK VSSCOM_LOCK;
+
+static FORCEINLINE NTSTATUS VssComLockCreate(
+    _In_opt_ PWDF_OBJECT_ATTRIBUTES Attributes, _Out_ VSSCOM_LOCK* Lock)
+{
+    return WdfSpinLockCreate(Attributes, Lock);
+}
+
+static FORCEINLINE VOID VssComLockAcquire(_In_ VSSCOM_LOCK Lock)
+{
+    WdfSpinLockAcquire(Lock);
+}
+
+static FORCEINLINE VOID VssComLockRelease(_In_ VSSCOM_LOCK Lock)
+{
+    WdfSpinLockRelease(Lock);
+}

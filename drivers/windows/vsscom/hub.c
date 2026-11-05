@@ -37,7 +37,7 @@ static VOID VssComCompleteOpen(_In_ PVSSCOM_DEVICE_CONTEXT context,
     PVSSCOM_FILE_CONTEXT file = VssComFileContext(FileObject);
     NTSTATUS status = STATUS_SUCCESS;
 
-    WdfSpinLockAcquire(context->Lock);
+    VssComLockAcquire(context->Lock);
     if (kind == VSSCOM_FILE_APP)
     {
         if (context->AppOpen)
@@ -61,7 +61,7 @@ static VOID VssComCompleteOpen(_In_ PVSSCOM_DEVICE_CONTEXT context,
             vsscom_ring_clear(&context->Tx);
         }
     }
-    WdfSpinLockRelease(context->Lock);
+    VssComLockRelease(context->Lock);
 
     if (!NT_SUCCESS(status))
     {
@@ -129,19 +129,19 @@ VOID VssComEvtFileCleanup(_In_ WDFFILEOBJECT FileObject)
     if (file->Kind == VSSCOM_FILE_APP)
     {
         VssComResetPort(context);
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->AppOpen = FALSE;
         context->Break = FALSE;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
     }
     else
     {
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->HubOpen = FALSE;
         context->HubLines = 0;
         vsscom_ring_clear(&context->Rx);
         vsscom_ring_clear(&context->Tx);
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComApplyLines(context);
     }
 
@@ -157,7 +157,7 @@ static VOID VssComFillState(_In_ PVSSCOM_DEVICE_CONTEXT Context,
                             _Out_ PVSSCOM_HUB_STATE State)
 {
     RtlZeroMemory(State, sizeof(*State));
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     State->Generation = Context->Generation;
     State->AppOpen = Context->AppOpen ? 1 : 0;
     State->BaudRate = Context->BaudRate;
@@ -169,7 +169,7 @@ static VOID VssComFillState(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     State->Break = Context->Break ? 1 : 0;
     State->Lines = Context->HubLines;
     State->TxQueued = vsscom_ring_count(&Context->Tx);
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 }
 
 static VOID VssComCompleteStateWaiters(_In_ PVSSCOM_DEVICE_CONTEXT Context)
@@ -186,9 +186,9 @@ static VOID VssComCompleteStateWaiters(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 
 VOID VssComBumpState(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     Context->Generation++;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
     VssComCompleteStateWaiters(Context);
 }
 
@@ -282,17 +282,17 @@ VOID VssComAppWriteToHub(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 
     if (NT_SUCCESS(status))
     {
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         Context->AppWritesPending++;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         status = VssComParkPipe(Request, Context->AppWriteQueue, buffer,
                                 (ULONG)Length);
         if (!NT_SUCCESS(status))
         {
-            WdfSpinLockAcquire(Context->Lock);
+            VssComLockAcquire(Context->Lock);
             Context->AppWritesPending--;
-            WdfSpinLockRelease(Context->Lock);
+            VssComLockRelease(Context->Lock);
         }
     }
     if (!NT_SUCCESS(status))
@@ -328,9 +328,9 @@ VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
             return;
         }
 
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         now = Context->Generation;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         if (now != known)
         {
             VSSCOM_HUB_STATE state;
@@ -348,9 +348,9 @@ VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 
         // A change between the check and the parking found no request to
         // answer, so look again.
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         now = Context->Generation;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         if (now != known)
             VssComCompleteStateWaiters(Context);
         return;
@@ -364,9 +364,9 @@ VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         Context->HubLines = lines & VSSCOM_LINE_MASK;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         VssComApplyLines(Context);
         VssComBumpState(Context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
@@ -398,11 +398,11 @@ BOOLEAN VssComServiceHubWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             return moved;
 
         pipe = VssComPipeContext(request);
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         stored = vsscom_ring_write(&Context->Rx, pipe->Buffer + pipe->Done,
                                    pipe->Length - pipe->Done);
         pipe->Done += stored;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         if (stored != 0)
         {
@@ -437,11 +437,11 @@ BOOLEAN VssComServiceHubReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             return moved;
 
         pipe = VssComPipeContext(request);
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         got = vsscom_ring_read(&Context->Tx, pipe->Buffer, pipe->Length);
         empty = vsscom_ring_count(&Context->Tx) == 0;
         pending = Context->AppWritesPending;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         if (got == 0)
         {
@@ -480,7 +480,7 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             return moved;
 
         pipe = VssComPipeContext(request);
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         hub = Context->HubOpen;
         if (hub)
         {
@@ -504,7 +504,7 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
                     VssComInterruptTime() >= pipe->Deadline;
         if (finished || timed_out)
             Context->AppWritesPending--;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         if (stored != 0)
             moved = TRUE;
@@ -540,9 +540,9 @@ VOID VssComAbortAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     while (NT_SUCCESS(WdfIoQueueRetrieveNextRequest(Context->AppWriteQueue,
                                                     &request)))
     {
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         Context->AppWritesPending--;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         VssComFinishPipe(request, Status);
     }
 }
@@ -557,9 +557,9 @@ VOID VssComEvtAppWriteCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
 {
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
 
-    WdfSpinLockAcquire(context->Lock);
+    VssComLockAcquire(context->Lock);
     context->AppWritesPending--;
-    WdfSpinLockRelease(context->Lock);
+    VssComLockRelease(context->Lock);
     VssComFinishPipe(Request, STATUS_CANCELLED);
 }
 

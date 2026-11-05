@@ -88,10 +88,10 @@ static VOID VssComArmReadTimers(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     ULONGLONG total;
     ULONGLONG interval;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     total = Read->TotalDeadline;
     interval = Read->IntervalDeadline;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     if (total != 0)
         VssComStartTimer(Context->ReadTotalTimer, total);
@@ -128,9 +128,9 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         if (!NT_SUCCESS(WdfIoQueueRetrieveNextRequest(Context->ReadQueue,
                                                       &request)))
         {
-            WdfSpinLockAcquire(Context->Lock);
+            VssComLockAcquire(Context->Lock);
             Context->AbortHead = FALSE;
-            WdfSpinLockRelease(Context->Lock);
+            VssComLockRelease(Context->Lock);
             VssComStopReadTimers(Context);
             return;
         }
@@ -138,7 +138,7 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         read = VssComReadContext(request);
         now = VssComNow();
 
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         if (!read->Started)
         {
             read->Plan = vsscom_plan_read(&Context->Timeouts, read->Requested);
@@ -184,7 +184,7 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
                      now + VSSCOM_TIMER_SLACK >= read->IntervalDeadline);
             }
         }
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         if (abort)
         {
@@ -221,29 +221,29 @@ static BOOLEAN VssComServiceReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     BOOLEAN again;
     BOOLEAN moved = FALSE;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     if (Context->ServiceBusy)
     {
         Context->ServiceAgain = TRUE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         return FALSE;
     }
     Context->ServiceBusy = TRUE;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     do
     {
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         Context->ServiceAgain = FALSE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         VssComServiceOnce(Context, &moved);
 
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         again = Context->ServiceAgain;
         if (!again)
             Context->ServiceBusy = FALSE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
     } while (again);
     return moved;
 }
@@ -256,23 +256,23 @@ VOID VssComPump(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     BOOLEAN again;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     if (Context->PumpBusy)
     {
         Context->PumpAgain = TRUE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
         return;
     }
     Context->PumpBusy = TRUE;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     do
     {
         BOOLEAN moved;
 
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         Context->PumpAgain = FALSE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
 
         do
         {
@@ -287,11 +287,11 @@ VOID VssComPump(_In_ PVSSCOM_DEVICE_CONTEXT Context)
                 moved = TRUE;
         } while (moved);
 
-        WdfSpinLockAcquire(Context->Lock);
+        VssComLockAcquire(Context->Lock);
         again = Context->PumpAgain;
         if (!again)
             Context->PumpBusy = FALSE;
-        WdfSpinLockRelease(Context->Lock);
+        VssComLockRelease(Context->Lock);
     } while (again);
 }
 
@@ -326,9 +326,9 @@ static VOID VssComFinishWait(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     if (!NT_SUCCESS(WdfIoQueueRetrieveNextRequest(Context->WaitQueue, &request)))
         return;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     Context->WaitQueued = FALSE;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     VssComCompleteWithData(request, &Events, sizeof(Events));
 }
@@ -339,9 +339,9 @@ VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events)
     vsscom_u32 fired = 0;
     BOOLEAN complete;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     complete = vsscom_events_raise(&Context->Events, Events, &fired);
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     if (complete)
         VssComFinishWait(Context, fired);
@@ -351,10 +351,10 @@ VOID VssComEvtWaitCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
 {
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
 
-    WdfSpinLockAcquire(context->Lock);
+    VssComLockAcquire(context->Lock);
     context->Events.waiting = 0;
     context->WaitQueued = FALSE;
-    WdfSpinLockRelease(context->Lock);
+    VssComLockRelease(context->Lock);
 
     WdfRequestComplete(Request, STATUS_CANCELLED);
 }
@@ -366,7 +366,7 @@ VOID VssComApplyLines(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     ULONG events;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     {
         const vsscom_u32 levels =
             Context->HubOpen
@@ -377,7 +377,7 @@ VOID VssComApplyLines(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         Context->ModemDeltas |= vsscom_modem_deltas(Context->ModemLevels, levels);
         Context->ModemLevels = levels;
     }
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     if (events != 0)
         VssComRaise(Context, events);
@@ -389,11 +389,11 @@ static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 {
     BOOLEAN changed;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     changed = (Context->Dtr != Dtr) || (Context->Rts != Rts);
     Context->Dtr = Dtr;
     Context->Rts = Rts;
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     VssComApplyLines(Context);
     if (changed)
@@ -408,7 +408,7 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     BOOLEAN release;
 
-    WdfSpinLockAcquire(Context->Lock);
+    VssComLockAcquire(Context->Lock);
     vsscom_ring_clear(&Context->Rx);
     Context->Dtr = FALSE;
     Context->Rts = FALSE;
@@ -416,7 +416,7 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     Context->ModemLevels = Context->HubOpen ? (Context->HubLines & VSSCOM_LINE_MASK) : 0;
     Context->ModemDeltas = 0;
     release = vsscom_events_set_mask(&Context->Events, 0);
-    WdfSpinLockRelease(Context->Lock);
+    VssComLockRelease(Context->Lock);
 
     if (release)
         VssComFinishWait(Context, 0);
@@ -524,9 +524,9 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     }
 
     // With a hub attached the bytes go to it, and the write waits for room.
-    WdfSpinLockAcquire(context->Lock);
+    VssComLockAcquire(context->Lock);
     hub = context->HubOpen;
-    WdfSpinLockRelease(context->Lock);
+    VssComLockRelease(context->Lock);
     if (hub)
     {
         VssComAppWriteToHub(context, Request, Length);
@@ -540,10 +540,10 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         return;
     }
 
-    WdfSpinLockAcquire(context->Lock);
+    VssComLockAcquire(context->Lock);
     written = vsscom_ring_write(&context->Rx, (const vsscom_u8*)buffer,
                                 (vsscom_u32)Length);
-    WdfSpinLockRelease(context->Lock);
+    VssComLockRelease(context->Lock);
 
     WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, written);
 
@@ -626,9 +626,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_BAUD_RATE:
     {
         SERIAL_BAUD_RATE baud = {0};
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         baud.BaudRate = context->BaudRate;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &baud, sizeof(baud));
         return;
     }
@@ -641,9 +641,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->BaudRate = baud.BaudRate;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComBumpState(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
@@ -652,9 +652,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_LINE_CONTROL:
     {
         SERIAL_LINE_CONTROL control;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         control = context->LineControl;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &control, sizeof(control));
         return;
     }
@@ -667,9 +667,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->LineControl = control;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComBumpState(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
@@ -678,7 +678,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_TIMEOUTS:
     {
         SERIAL_TIMEOUTS timeouts;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         timeouts.ReadIntervalTimeout = context->Timeouts.read_interval;
         timeouts.ReadTotalTimeoutMultiplier =
             context->Timeouts.read_total_multiplier;
@@ -687,7 +687,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             context->Timeouts.write_total_multiplier;
         timeouts.WriteTotalTimeoutConstant =
             context->Timeouts.write_total_constant;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &timeouts, sizeof(timeouts));
         return;
     }
@@ -711,9 +711,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->Timeouts = next;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -721,9 +721,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_HANDFLOW:
     {
         SERIAL_HANDFLOW handflow;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         handflow = context->HandFlow;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &handflow, sizeof(handflow));
         return;
     }
@@ -736,9 +736,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->HandFlow = handflow;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -746,9 +746,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_CHARS:
     {
         SERIAL_CHARS chars;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         chars = context->Chars;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &chars, sizeof(chars));
         return;
     }
@@ -761,9 +761,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         context->Chars = chars;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -792,10 +792,10 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_COMMSTATUS:
     {
         SERIAL_STATUS status = {0};
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         status.AmountInInQueue = vsscom_ring_count(&context->Rx);
         status.AmountInOutQueue = vsscom_ring_count(&context->Tx);
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &status, sizeof(status));
         return;
     }
@@ -807,10 +807,10 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     {
         BOOLEAN dtr;
         BOOLEAN rts;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         dtr = context->Dtr;
         rts = context->Rts;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
 
         if (IoControlCode == IOCTL_SERIAL_SET_DTR)
             dtr = TRUE;
@@ -829,12 +829,12 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_DTRRTS:
     {
         ULONG lines = 0;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         if (context->Dtr)
             lines |= SERIAL_DTR_STATE;
         if (context->Rts)
             lines |= SERIAL_RTS_STATE;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &lines, sizeof(lines));
         return;
     }
@@ -842,10 +842,10 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_MODEMSTATUS:
     {
         ULONG modem;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         modem = context->ModemLevels | context->ModemDeltas;
         context->ModemDeltas = 0;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &modem, sizeof(modem));
         return;
     }
@@ -855,10 +855,10 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     {
         BOOLEAN changed;
         const BOOLEAN on = IoControlCode == IOCTL_SERIAL_SET_BREAK_ON;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         changed = context->Break != on;
         context->Break = on;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         if (changed)
             VssComBumpState(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
@@ -887,9 +887,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         release = vsscom_events_set_mask(&context->Events, mask);
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
 
         // A wait that was pending ends with no events, as a new mask replaces
         // the old one.
@@ -902,9 +902,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_GET_WAIT_MASK:
     {
         ULONG mask;
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         mask = context->Events.mask;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         VssComCompleteWithData(Request, &mask, sizeof(mask));
         return;
     }
@@ -915,31 +915,31 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         BOOLEAN ready;
         NTSTATUS status;
 
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         if (context->WaitQueued)
         {
-            WdfSpinLockRelease(context->Lock);
+            VssComLockRelease(context->Lock);
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
         context->WaitQueued = TRUE;
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
 
         // The request is parked before the event state says "waiting", so an
         // event that arrives in between finds a request to complete.
         status = WdfRequestForwardToIoQueue(Request, context->WaitQueue);
         if (!NT_SUCCESS(status))
         {
-            WdfSpinLockAcquire(context->Lock);
+            VssComLockAcquire(context->Lock);
             context->WaitQueued = FALSE;
-            WdfSpinLockRelease(context->Lock);
+            VssComLockRelease(context->Lock);
             WdfRequestComplete(Request, status);
             return;
         }
 
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         ready = vsscom_events_wait(&context->Events, &fired);
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
 
         // Events were already waiting in the history: take the request back
         // and finish it now.
@@ -961,15 +961,15 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         abort_read = (flags & SERIAL_PURGE_RXABORT) != 0;
         if ((flags & (SERIAL_PURGE_RXCLEAR | SERIAL_PURGE_RXABORT)) != 0)
         {
-            WdfSpinLockAcquire(context->Lock);
+            VssComLockAcquire(context->Lock);
             vsscom_ring_clear(&context->Rx);
-            WdfSpinLockRelease(context->Lock);
+            VssComLockRelease(context->Lock);
         }
         if ((flags & (SERIAL_PURGE_TXCLEAR | SERIAL_PURGE_TXABORT)) != 0)
         {
-            WdfSpinLockAcquire(context->Lock);
+            VssComLockAcquire(context->Lock);
             vsscom_ring_clear(&context->Tx);
-            WdfSpinLockRelease(context->Lock);
+            VssComLockRelease(context->Lock);
         }
         // Aborting writes ends those that are waiting for the hub.
         if ((flags & SERIAL_PURGE_TXABORT) != 0)
@@ -978,9 +978,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         // Aborting reads ends the one that is waiting with what it holds.
         if (abort_read)
         {
-            WdfSpinLockAcquire(context->Lock);
+            VssComLockAcquire(context->Lock);
             context->AbortHead = TRUE;
-            WdfSpinLockRelease(context->Lock);
+            VssComLockRelease(context->Lock);
         }
         // Clearing made room, and an abort needs the read queue served.
         VssComPump(context);
@@ -999,10 +999,10 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             return;
         }
         // The byte goes to the hub when there is one, and loops back if not.
-        WdfSpinLockAcquire(context->Lock);
+        VssComLockAcquire(context->Lock);
         hub = context->HubOpen;
         stored = vsscom_ring_write(hub ? &context->Tx : &context->Rx, &byte, 1);
-        WdfSpinLockRelease(context->Lock);
+        VssComLockRelease(context->Lock);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         if (stored != 0)
         {
