@@ -22,6 +22,7 @@
 #include <charconv>
 #include <cstring>
 #include <deque>
+#include <mutex>
 #include <optional>
 #include <vector>
 
@@ -195,19 +196,26 @@ public:
                    [self = shared_from_this(), buffer,
                     handler = std::move(handler)]() mutable
                    {
-                       if (self->closed_)
+                       if (self->closed_ || !self->open_.load())
                        {
                            self->complete(std::move(handler),
                                           asio::error::operation_aborted, 0);
                            return;
                        }
-                       if (self->pending_read_)
+                       bool busy = false;
+                       {
+                           std::lock_guard lock(self->read_mutex_);
+                           busy = self->pending_read_.has_value();
+                           if (!busy)
+                               self->pending_read_ =
+                                   pending{buffer, std::move(handler)};
+                       }
+                       if (busy)
                        {
                            self->complete(std::move(handler),
                                           asio::error::already_started, 0);
                            return;
                        }
-                       self->pending_read_ = pending{buffer, std::move(handler)};
                        self->deliver();
                    });
     }
@@ -225,25 +233,24 @@ public:
                    });
     }
 
+    // close() and cancel() end a parked read at once, on the caller's thread,
+    // and do not wait for the strand. The parked handler holds the endpoint,
+    // the endpoint holds this transport and this state holds the handler: if
+    // the strand never ran again (the hub stops its io_context when every
+    // endpoint has closed), the cycle would never be broken.
     void close()
     {
         open_.store(false);
+        abort_pending_read();
         asio::post(strand_, [self = shared_from_this()] { self->shut_down(); });
     }
 
     void cancel()
     {
+        abort_pending_read();
+        // A read posted before this call has not reached the strand yet.
         asio::post(strand_,
-                   [self = shared_from_this()]
-                   {
-                       if (self->pending_read_)
-                       {
-                           auto taken = std::move(*self->pending_read_);
-                           self->pending_read_.reset();
-                           self->complete(std::move(taken.handler),
-                                          asio::error::operation_aborted, 0);
-                       }
-                   });
+                   [self = shared_from_this()] { self->abort_pending_read(); });
     }
 
     bool is_open() const noexcept { return open_.load(); }
@@ -269,6 +276,22 @@ private:
         std::array<char, chunk_size> buffer{};
         bool reading = false;
     };
+
+    /// The parked read, removed from the state; empty when none is waiting.
+    std::optional<pending> take_pending_read()
+    {
+        std::lock_guard lock(read_mutex_);
+        std::optional<pending> taken = std::move(pending_read_);
+        pending_read_.reset(); // a moved-from optional still holds a value
+        return taken;
+    }
+
+    void abort_pending_read()
+    {
+        if (auto taken = take_pending_read())
+            complete(std::move(taken->handler), asio::error::operation_aborted,
+                     0);
+    }
 
     void complete(io_handler handler, error_code ec, std::size_t count)
     {
@@ -378,18 +401,25 @@ private:
 
     void deliver()
     {
-        if (pending_read_ && !received_.empty())
+        std::optional<pending> taken;
         {
-            auto taken = std::move(*pending_read_);
-            pending_read_.reset();
+            std::lock_guard lock(read_mutex_);
+            if (pending_read_ && !received_.empty())
+            {
+                taken = std::move(pending_read_);
+                pending_read_.reset();
+            }
+        }
+        if (taken)
+        {
             const std::size_t count =
-                std::min(taken.buffer.size(), received_.size());
+                std::min(taken->buffer.size(), received_.size());
             std::copy_n(received_.begin(), count,
-                        static_cast<char*>(taken.buffer.data()));
+                        static_cast<char*>(taken->buffer.data()));
             received_.erase(received_.begin(),
                             received_.begin() +
                                 static_cast<std::ptrdiff_t>(count));
-            complete(std::move(taken.handler), {}, count);
+            complete(std::move(taken->handler), {}, count);
         }
         if (received_.size() < receive_limit)
         {
@@ -477,13 +507,7 @@ private:
             peer->socket.close(ignored);
         clients_.clear();
         peers_.store(0);
-        if (pending_read_)
-        {
-            auto taken = std::move(*pending_read_);
-            pending_read_.reset();
-            complete(std::move(taken.handler), asio::error::operation_aborted,
-                     0);
-        }
+        abort_pending_read();
     }
 
     executor_type executor_;
@@ -499,6 +523,8 @@ private:
     bool receiving_ = false;
 
     std::deque<char> received_;
+    /// Guarded by read_mutex_: close() and cancel() take it from any thread.
+    std::mutex read_mutex_;
     std::optional<pending> pending_read_;
     bool closed_ = false;
 

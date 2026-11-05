@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_PORTS_LISTEN_SOCKET_POSIX_HPP
-#define VSS_PORTS_LISTEN_SOCKET_POSIX_HPP
+#pragma once
 
 #include <vss/core/error.hpp>
 
@@ -29,5 +28,3 @@ inline error_code posix_prepare_listening_socket(std::uintptr_t native_handle)
 }
 
 } // namespace vss::detail
-
-#endif // VSS_PORTS_LISTEN_SOCKET_POSIX_HPP

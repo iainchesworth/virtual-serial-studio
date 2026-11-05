@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_PORTS_LISTEN_TRANSPORT_HPP
-#define VSS_PORTS_LISTEN_TRANSPORT_HPP
+#pragma once
 
 #include <vss/core/error.hpp>
 #include <vss/core/transport.hpp>
@@ -94,5 +93,3 @@ private:
 };
 
 } // namespace vss
-
-#endif // VSS_PORTS_LISTEN_TRANSPORT_HPP

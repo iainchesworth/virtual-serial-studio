@@ -253,6 +253,64 @@ TEST_CASE("listen: closing aborts a read that is waiting")
     REQUIRE(!transport->is_open());
 }
 
+TEST_CASE("listen: close frees a parked read even if the loop never runs again")
+{
+    // The hub stops its io_context once every endpoint has closed, so the
+    // strand may never run another handler. An endpoint's read handler holds
+    // the endpoint, which holds the transport: if close() left that handler
+    // parked, the transport and the handler would keep each other alive.
+    std::weak_ptr<listen_transport> weak;
+    {
+        asio::io_context io;
+        listen_address address;
+        address.host = "127.0.0.1";
+        error_code ec;
+        auto transport =
+            std::make_shared<listen_transport>(io.get_executor(), address, ec);
+        REQUIRE(!ec);
+        weak = transport;
+
+        auto buffer = std::make_shared<std::array<char, 16>>();
+        transport->async_read_some(
+            asio::buffer(*buffer),
+            [transport, buffer](boost::system::error_code, std::size_t) {});
+        io.poll(); // the strand parks the read
+
+        transport->close();
+        transport.reset();
+        // io is not run again; destroying it drops what is still queued.
+    }
+    REQUIRE(weak.expired());
+}
+
+TEST_CASE("listen: cancel completes a parked read at once")
+{
+    asio::io_context io;
+    listen_address address;
+    address.host = "127.0.0.1";
+    error_code ec;
+    listen_transport transport(io.get_executor(), address, ec);
+    REQUIRE(!ec);
+
+    bool done = false;
+    boost::system::error_code result;
+    std::array<char, 16> buffer{};
+    transport.async_read_some(asio::buffer(buffer),
+                              [&](boost::system::error_code error, std::size_t)
+                              {
+                                  done = true;
+                                  result = error;
+                              });
+    io.poll();
+    REQUIRE(!done);
+
+    transport.cancel();
+    io.poll();
+    REQUIRE(done);
+    REQUIRE(result == asio::error::operation_aborted);
+    REQUIRE(transport.is_open());
+}
+
 TEST_CASE("listen: datagrams are read and answered")
 {
     loop running;
