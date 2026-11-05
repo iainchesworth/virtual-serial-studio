@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include "qt_wait.hpp"
 #include "test_framework.hpp"
 
 #include "backend/fake_studio_backend.hpp"
@@ -208,7 +209,10 @@ TEST_CASE("dialogs: Escape cancels and Enter runs the primary action")
         vss::gui::ConnectPortsDialog dialog(backend);
         dialog.show();
         QApplication::processEvents();
-        REQUIRE(QApplication::focusWidget() != nullptr);
+        // Focus moves once the window system activates the window, which
+        // happens after show() returns and can be slow on a busy machine.
+        REQUIRE(vss_test::wait_until(
+            [] { return QApplication::focusWidget() != nullptr; }));
         QKeyEvent escape(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
         QApplication::sendEvent(&dialog, &escape);
         REQUIRE_EQ(static_cast<QDialog&>(dialog).result(), QDialog::Rejected);

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include "qt_wait.hpp"
 #include "test_framework.hpp"
 
 #include "backend/engine_studio_backend.hpp"
@@ -106,15 +107,24 @@ struct modal_probe
     bool error_dialog = false;
 };
 
-void close_next_modal(modal_probe* probe = nullptr, int delay_ms = 10)
+/// Closes the next modal dialog that opens. The closer cannot know when the
+/// dialog will be up, so it looks again until one is, or the deadline passes.
+/// A single look after a fixed delay misses the dialog on a slow machine, and
+/// the test then waits in the dialog's event loop for ever.
+void close_next_modal(modal_probe* probe = nullptr, int delay_ms = 10,
+                      int remaining_ms = 30000)
 {
     QTimer::singleShot(
         delay_ms,
-        [probe]
+        [probe, delay_ms, remaining_ms]
         {
             auto* modal = QApplication::activeModalWidget();
             if (modal == nullptr)
+            {
+                if (remaining_ms > delay_ms)
+                    close_next_modal(probe, delay_ms, remaining_ms - delay_ms);
                 return;
+            }
             if (probe != nullptr)
             {
                 probe->widget = modal;
@@ -263,6 +273,10 @@ TEST_CASE("flows: add port exposes names, target sizes and keyboard dismissal")
                                    vss::gui::platform_kind::windows);
     dialog.show();
     settle();
+    // Focus lands after the window system activates the window.
+    static_cast<void>(vss_test::wait_until(
+        [&dialog]
+        { return QApplication::focusWidget() == dialog.name_edit(); }));
     REQUIRE_EQ(QApplication::focusWidget(), dialog.name_edit());
 
     for (auto* button : dialog.findChildren<QAbstractButton*>())
@@ -328,6 +342,10 @@ TEST_CASE("flows: enter triggers the primary action")
     dialog.name_edit()->setText(QStringLiteral("enter-test"));
     dialog.show();
     settle();
+    // Focus lands after the window system activates the window.
+    static_cast<void>(vss_test::wait_until(
+        [&dialog]
+        { return QApplication::focusWidget() == dialog.name_edit(); }));
     REQUIRE_EQ(QApplication::focusWidget(), dialog.name_edit());
 
     QKeyEvent enter(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
