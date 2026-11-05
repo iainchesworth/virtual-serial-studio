@@ -9,6 +9,8 @@
 #ifndef VSSCOM_H
 #define VSSCOM_H
 
+// ntifs.h for the security routines that tell who opened a handle.
+#include <ntifs.h>
 #include <ntddk.h>
 #include <wdf.h>
 #include <ntstrsafe.h>
@@ -30,6 +32,16 @@
 #define VSSCOM_RX_SIZE (64 * 1024)
 #define VSSCOM_TX_SIZE (64 * 1024)
 
+// Who opened a handle, taken when the handle is created: the user of the
+// token that opens it, which is the thread's token when it impersonates.
+typedef struct _VSSCOM_OPENER
+{
+    BOOLEAN Kernel; // opened from kernel mode
+    BOOLEAN Admin;  // the token is in the Administrators group
+    BOOLEAN Valid;  // Sid holds the user
+    UCHAR Sid[SECURITY_MAX_SID_SIZE];
+} VSSCOM_OPENER, *PVSSCOM_OPENER;
+
 // Which end a file object is.
 #define VSSCOM_FILE_APP 1
 #define VSSCOM_FILE_HUB 2
@@ -49,6 +61,11 @@ typedef struct _VSSCOM_PIPE_CONTEXT
     PUCHAR Buffer;
     ULONG Length;
     ULONG Done;
+    // For an application write that waits for the hub: when the write timeout
+    // ends it, in interrupt time (100 ns units); 0 until the write stalls at
+    // the head of the queue, and 0 again if it has no timeout.
+    ULONGLONG Deadline;
+    BOOLEAN DeadlineSet;
 } VSSCOM_PIPE_CONTEXT, *PVSSCOM_PIPE_CONTEXT;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_PIPE_CONTEXT, VssComPipeContext)
@@ -72,6 +89,9 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
     WDFDEVICE Device;
     PWSTR PdoName;
     BOOLEAN CreatedSerialCommValue;
+    // Made by the control device (and then Slot is its slot), or made by hand.
+    BOOLEAN OnDemand;
+    ULONG Slot;
 
     // Reads wait here in arrival order; only the first is served. Manual, so
     // the framework cancels a request that is waiting here without our help.
@@ -87,6 +107,9 @@ typedef struct _VSSCOM_DEVICE_CONTEXT
     WDFQUEUE AppWriteQueue;
     WDFTIMER ReadTotalTimer;
     WDFTIMER ReadIntervalTimer;
+    // Ends the head application write that waits for the hub, when its write
+    // timeout is up. It only runs the pump, which looks at the deadline.
+    WDFTIMER WriteTimer;
 
     // Everything below is guarded by Lock.
     WDFSPINLOCK Lock;
@@ -129,6 +152,18 @@ NTSTATUS VssComRegisterPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);
 #define VSSCOM_ROLE_VALUE L"VssRole"
 #define VSSCOM_ROLE_CONTROL 1
 NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit);
+// The user who made the port in `Slot`. FALSE when there is no such port.
+BOOLEAN VssComControlOwnerOf(_In_ ULONG Slot, _Out_ PVSSCOM_OPENER Owner);
+
+// access.c: who may open what.
+// Reads who is opening the file object a create request is for.
+NTSTATUS VssComCaptureOpener(_In_ WDFREQUEST Request,
+                             _Out_ PVSSCOM_OPENER Opener);
+// The hub end of a port made on demand opens only for the user who made it. The
+// hub end of a port made by hand opens only for administrators. Kernel mode
+// may open either.
+BOOLEAN VssComHubOpenAllowed(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                             _In_ const VSSCOM_OPENER* Opener);
 
 // io.c
 NTSTATUS VssComCreateQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context);
@@ -171,6 +206,8 @@ VOID VssComAbortAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context,
                           _In_ NTSTATUS Status);
 // Adds one to Generation and answers the hub's waiting state requests.
 VOID VssComBumpState(_In_ PVSSCOM_DEVICE_CONTEXT Context);
+// The write timeout timer: runs the pump, which ends a write that is past due.
+VOID VssComEvtWriteTimer(_In_ WDFTIMER Timer);
 // The queue callbacks for writes that were cancelled while they waited.
 VOID VssComEvtAppWriteCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request);
 

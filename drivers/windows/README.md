@@ -12,8 +12,10 @@ no com0com and no hardware. The design and the reasons for it are in
 | COM name: device interface, `\DosDevices` link, `SERIALCOMM` | runs in a Windows 10 and a Windows 11 guest |
 | Loopback port: waiting reads with the `SetCommTimeouts` rules, `WaitCommEvent`, purge and cancel, modem lines, one handle per end | runs in both guests (tests D1 to D7) |
 | Hub end: a second handle on each port that carries its bytes, line settings and lines, with flow control both ways | runs in both guests (tests D8 to D13) |
-| Control device: ports on demand, removed with the handle that made them | tests D14 to D19 |
-| The studio opening a port (`create_driver_port`) | in the studio; not yet run against a driver in a guest |
+| Control device: ports on demand, removed with the handle that made them | runs in both guests (tests D14 to D19) |
+| Write timeouts, and who may open the hub end and make how many ports | tests D18, D20 and D21 |
+| Driver Verifier (standard settings) on `vsscom.sys` | the whole suite passes with it on in the Windows 11 guest |
+| The studio opening a port (`create_driver_port`) | runs in a guest with `test-client.ps1` (test C1) |
 | Signing | not done: the package is unsigned |
 
 ## Build
@@ -39,13 +41,14 @@ The package is written to `drivers/windows/artifacts/package/<platform>/`:
 | `vsscom/io.c` | the application end: reads, writes and the serial control requests, and the pump that moves bytes between the ends |
 | `vsscom/hub.c` | the hub end: opening, reading, writing, the state the hub watches |
 | `vsscom/control.c` | the control device: the bus that makes ports on demand |
+| `vsscom/access.c` | who opened a handle, and who may open a hub end |
 | `vsscom/vsscom.h` | the device context shared by the four |
 | `vsscom/public.h` | what user mode sees: interface GUIDs, control codes, the hub state, the control requests |
 | `vsscom/vsscom.inf` | the ports (class Ports) |
 | `vsscom/vsscomctl.inf` | the control device (class System) |
 | `vsscom/core/` | the serial rules in plain C; built for the host and unit-tested |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat` |
-| `test/` | guest scripts: `install-driver.ps1` (the control device and two ports made by hand, `-Count` for more), `test-driver.ps1` (tests D1 to D19), `uninstall-driver.ps1` |
+| `test/` | guest scripts: `install-driver.ps1` (the control device and two ports made by hand, `-Count` for more), `test-driver.ps1` (tests D1 to D21), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
 
 ## The two ends of a port
 
@@ -65,9 +68,18 @@ would any serial port. The studio opens the hub end through the device interface
 the hub never polls. While no hub handle is open the port loops back, so a port
 that nothing has attached still behaves like a port with a loopback plug.
 
-The hub end has the same access rights as the COM port, so any process that can
-open the port can take the hub end while nobody has it. Narrowing that is part of
-the hardening phase.
+The COM port opens for anyone the Ports class lets in, as any serial port does.
+The hub end is the device side of the port, so it is narrower: a port made on
+demand opens its hub end only for the user who made it, and a port made by hand
+opens it only for administrators. Another user is refused with access denied,
+whether or not the hub end is taken. The driver reads the user from the token
+that opens the handle, with impersonation applied (`access.c`).
+
+A write that waits for the hub obeys the write timeouts of `SetCommTimeouts`:
+the total timeout (multiplier times the bytes, plus the constant) starts when
+the write stalls at the head of the queue, and a write that runs out completes
+with the bytes it had taken, which stay queued for the hub. With no write
+timeout set, a write waits for the hub for as long as it takes.
 
 ## Ports on demand
 
@@ -84,8 +96,9 @@ above. The control requests and their structures are in `public.h`.
 | A port lives as long as the handle that made it | A studio that crashes leaves no port behind. Closing the handle, or the process ending, removes the port. |
 | `IOCTL_VSSCOM_CTL_DESTROY_PORT` works on the caller's own ports only | One program cannot remove another's port. |
 | A slot is the lowest free number, from 0 to 31 | A port that comes back gets the same device node, so the same COM name. |
-| At most 32 ports exist at once | A limit for the whole machine. A slot is free again only when Windows has removed the device. |
-| The control device is open to SYSTEM, administrators and signed-in users | A normal user can make a port without elevation. Any signed-in user can use up the 32 slots; the hardening phase decides whether to narrow this. |
+| At most 32 ports exist at once, and one user holds at most 16 | The first is a limit for the whole machine, the second stops one user taking every slot. A slot is free again only when Windows has removed the device. |
+| Only the user who made a port can open its hub end | Another user cannot take the device side of the port. |
+| The control device is open to SYSTEM, administrators and signed-in users | A normal user can make a port without elevation. |
 
 The slot, and not a name, identifies the port while Windows builds it, because
 the `COMn` name comes from the Ports class installer at the end of the build.

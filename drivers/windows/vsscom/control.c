@@ -7,8 +7,9 @@
 //
 // It is a root-enumerated device (vsscomctl.inf) that the driver recognises by
 // the VssRole value in its hardware key. It exposes the interface
-// GUID_DEVINTERFACE_VSSCOMCTL. A handle on that interface can ask for a port. The driver answers by
-// reporting a child device, VSSCOM\PORT\<slot>, to the Plug and Play manager.
+// GUID_DEVINTERFACE_VSSCOMCTL. A handle on that interface can ask for a port.
+// The driver answers by reporting a child device, VSSCOM\PORT\<slot>, to the
+// Plug and Play manager.
 // The manager installs vsscom.inf on it, which loads this same driver as the
 // function driver of the child, and that is a port like any other (driver.c).
 //
@@ -43,11 +44,28 @@ typedef struct _VSSCOM_CONTROL_CONTEXT
     BOOLEAN Dying[VSSCOM_CTL_MAX_PORTS];
     // The handle that made the port; NULL once it is dying.
     WDFFILEOBJECT Owner[VSSCOM_CTL_MAX_PORTS];
+    // The user who made it, for as long as the slot is in use: the hub end
+    // opens for that user only (access.c).
+    VSSCOM_OPENER Maker[VSSCOM_CTL_MAX_PORTS];
     ULONG Token[VSSCOM_CTL_MAX_PORTS];
 } VSSCOM_CONTROL_CONTEXT, *PVSSCOM_CONTROL_CONTEXT;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_CONTROL_CONTEXT,
                                    VssComGetControlContext)
+
+// What a handle on the control device remembers: who opened it.
+typedef struct _VSSCOM_CTL_FILE_CONTEXT
+{
+    VSSCOM_OPENER Opener;
+} VSSCOM_CTL_FILE_CONTEXT, *PVSSCOM_CTL_FILE_CONTEXT;
+
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_CTL_FILE_CONTEXT,
+                                   VssComCtlFileContext)
+
+// The one control device, for the ports to ask who made them. Set while it is
+// started. Its ports are removed before it is, so a port that reads this has a
+// control device behind it.
+static volatile PVSSCOM_CONTROL_CONTEXT g_Control = NULL;
 
 static EVT_WDF_CHILD_LIST_CREATE_DEVICE VssComCtlCreateChild;
 static EVT_WDF_CHILD_LIST_IDENTIFICATION_DESCRIPTION_COMPARE VssComCtlCompare;
@@ -81,8 +99,28 @@ static VOID VssComCtlFreeSlot(_In_ PVSSCOM_CONTROL_CONTEXT Context,
         Context->InUse[Slot] = FALSE;
         Context->Dying[Slot] = FALSE;
         Context->Owner[Slot] = NULL;
+        RtlZeroMemory(&Context->Maker[Slot], sizeof(Context->Maker[Slot]));
     }
     WdfSpinLockRelease(Context->Lock);
+}
+
+BOOLEAN VssComControlOwnerOf(_In_ ULONG Slot, _Out_ PVSSCOM_OPENER Owner)
+{
+    PVSSCOM_CONTROL_CONTEXT context = g_Control;
+    BOOLEAN found = FALSE;
+
+    RtlZeroMemory(Owner, sizeof(*Owner));
+    if (context == NULL || Slot >= VSSCOM_CTL_MAX_PORTS)
+        return FALSE;
+
+    WdfSpinLockAcquire(context->Lock);
+    if (context->InUse[Slot])
+    {
+        *Owner = context->Maker[Slot];
+        found = TRUE;
+    }
+    WdfSpinLockRelease(context->Lock);
+    return found;
 }
 
 static VOID VssComCtlCleanup(
@@ -166,6 +204,7 @@ static VOID VssComCtlFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
                                 _In_ WDFFILEOBJECT FileObject)
 {
     PUNICODE_STRING name = WdfFileObjectGetFileName(FileObject);
+    NTSTATUS status;
     UNREFERENCED_PARAMETER(Device);
 
     if (name != NULL && name->Length != 0 &&
@@ -174,7 +213,11 @@ static VOID VssComCtlFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
         WdfRequestComplete(Request, STATUS_OBJECT_NAME_NOT_FOUND);
         return;
     }
-    WdfRequestComplete(Request, STATUS_SUCCESS);
+
+    // Remember who opened it: the ports it makes belong to that user.
+    status = VssComCaptureOpener(Request,
+                                 &VssComCtlFileContext(FileObject)->Opener);
+    WdfRequestComplete(Request, status);
 }
 
 // The handle is closed, by its owner or by the system when the process ends:
@@ -218,6 +261,8 @@ static VOID VssComCtlCreatePort(_In_ PVSSCOM_CONTROL_CONTEXT Context,
     ULONG slot;
     ULONG token = 0;
     BOOLEAN found = FALSE;
+    BOOLEAN over_quota = FALSE;
+    const VSSCOM_OPENER* maker;
     NTSTATUS status;
 
     if (!VssComFetchInput(Request, &input, sizeof(input)))
@@ -231,20 +276,42 @@ static VOID VssComCtlCreatePort(_In_ PVSSCOM_CONTROL_CONTEXT Context,
         return;
     }
 
+    maker = &VssComCtlFileContext(File)->Opener;
+
     WdfSpinLockAcquire(Context->Lock);
-    for (slot = 0; slot < VSSCOM_CTL_MAX_PORTS; ++slot)
+    // One user cannot take every slot: a user holds at most
+    // VSSCOM_CTL_MAX_PORTS_PER_USER ports that are not on their way out.
+    if (maker->Valid)
+    {
+        ULONG held = 0;
+        for (slot = 0; slot < VSSCOM_CTL_MAX_PORTS; ++slot)
+        {
+            if (Context->InUse[slot] && !Context->Dying[slot] &&
+                Context->Maker[slot].Valid &&
+                RtlEqualSid((PSID)Context->Maker[slot].Sid, (PSID)maker->Sid))
+                ++held;
+        }
+        over_quota = held >= VSSCOM_CTL_MAX_PORTS_PER_USER;
+    }
+    for (slot = 0; !over_quota && slot < VSSCOM_CTL_MAX_PORTS; ++slot)
     {
         if (!Context->InUse[slot])
         {
             Context->InUse[slot] = TRUE;
             Context->Dying[slot] = FALSE;
             Context->Owner[slot] = File;
+            Context->Maker[slot] = *maker;
             token = ++Context->Token[slot];
             found = TRUE;
             break;
         }
     }
     WdfSpinLockRelease(Context->Lock);
+    if (over_quota)
+    {
+        WdfRequestComplete(Request, STATUS_QUOTA_EXCEEDED);
+        return;
+    }
     if (!found)
     {
         WdfRequestComplete(Request, STATUS_INSUFFICIENT_RESOURCES);
@@ -368,10 +435,21 @@ static VOID VssComCtlIoControl(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
 
 // -- The device -------------------------------------------------------------
 
+// The control device is going: ports stop asking it who made them.
+static VOID VssComCtlDeviceCleanup(_In_ WDFOBJECT Object)
+{
+    PVSSCOM_CONTROL_CONTEXT context =
+        VssComGetControlContext((WDFDEVICE)Object);
+
+    if (g_Control == context)
+        g_Control = NULL;
+}
+
 NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
 {
     WDF_CHILD_LIST_CONFIG childConfig;
     WDF_FILEOBJECT_CONFIG fileConfig;
+    WDF_OBJECT_ATTRIBUTES fileAttributes;
     WDF_OBJECT_ATTRIBUTES attributes;
     WDF_OBJECT_ATTRIBUTES lockAttributes;
     WDF_IO_QUEUE_CONFIG queueConfig;
@@ -392,11 +470,13 @@ NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
     WDF_FILEOBJECT_CONFIG_INIT(&fileConfig, VssComCtlFileCreate,
                                WDF_NO_EVENT_CALLBACK, VssComCtlFileCleanup);
     fileConfig.FileObjectClass = WdfFileObjectWdfCanUseFsContext2;
-    WdfDeviceInitSetFileObjectConfig(DeviceInit, &fileConfig,
-                                     WDF_NO_OBJECT_ATTRIBUTES);
+    WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&fileAttributes,
+                                            VSSCOM_CTL_FILE_CONTEXT);
+    WdfDeviceInitSetFileObjectConfig(DeviceInit, &fileConfig, &fileAttributes);
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes,
                                             VSSCOM_CONTROL_CONTEXT);
+    attributes.EvtCleanupCallback = VssComCtlDeviceCleanup;
     status = WdfDeviceCreate(&DeviceInit, &attributes, &device);
     if (!NT_SUCCESS(status))
         return status;
@@ -409,6 +489,7 @@ NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
     status = WdfSpinLockCreate(&lockAttributes, &context->Lock);
     if (!NT_SUCCESS(status))
         return status;
+    g_Control = context;
 
     WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&queueConfig,
                                            WdfIoQueueDispatchParallel);

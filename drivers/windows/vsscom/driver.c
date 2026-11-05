@@ -157,6 +157,46 @@ static BOOLEAN VssComIsControlDevice(_In_ PWDFDEVICE_INIT DeviceInit)
     return role == VSSCOM_ROLE_CONTROL;
 }
 
+// Where a port came from. A port that the control device made has the hardware
+// ID VSSCOM\PORT, and its slot is the address the control device gave it. A port
+// made by hand has another ID. The hub end opens by a different rule for each
+// (access.c). When the ID cannot be read the port counts as made on demand, with
+// no slot, so nobody is its owner and the hub end stays shut.
+static VOID VssComFindOrigin(_In_ PWDFDEVICE_INIT DeviceInit,
+                             _Out_ PBOOLEAN OnDemand, _Out_ PULONG Slot)
+{
+    WDFMEMORY memory = NULL;
+    size_t size = 0;
+    ULONG addressLength = 0;
+    UNICODE_STRING first;
+    DECLARE_CONST_UNICODE_STRING(portId, VSSCOM_PORT_HARDWARE_ID);
+
+    *OnDemand = TRUE;
+    *Slot = MAXULONG;
+
+    if (!NT_SUCCESS(WdfFdoInitAllocAndQueryProperty(
+            DeviceInit, DevicePropertyHardwareID, NonPagedPoolNx,
+            WDF_NO_OBJECT_ATTRIBUTES, &memory)))
+        return;
+
+    // The first string of the multi-string list is the device's own ID.
+    {
+        PCWSTR ids = (PCWSTR)WdfMemoryGetBuffer(memory, &size);
+        if (ids != NULL && size >= sizeof(WCHAR))
+        {
+            RtlInitUnicodeString(&first, ids);
+            *OnDemand = RtlEqualUnicodeString(&first, &portId, TRUE);
+        }
+    }
+    WdfObjectDelete(memory);
+
+    if (*OnDemand &&
+        !NT_SUCCESS(WdfFdoInitQueryProperty(DeviceInit, DevicePropertyAddress,
+                                            sizeof(*Slot), Slot,
+                                            &addressLength)))
+        *Slot = MAXULONG;
+}
+
 static NTSTATUS VssComPortAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
 {
     static volatile LONG instance = 0;
@@ -168,7 +208,11 @@ static NTSTATUS VssComPortAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
     DECLARE_CONST_UNICODE_STRING(hubReference, VSSCOM_HUB_REFERENCE);
     WDFDEVICE device;
     PVSSCOM_DEVICE_CONTEXT context;
+    ULONG slot = MAXULONG;
+    BOOLEAN onDemand = FALSE;
     NTSTATUS status;
+
+    VssComFindOrigin(DeviceInit, &onDemand, &slot);
 
     // A name for the device object, so that the symbolic link has a target.
     RtlInitEmptyUnicodeString(&deviceName, nameBuffer, sizeof(nameBuffer));
@@ -204,6 +248,8 @@ static NTSTATUS VssComPortAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
 
     context = VssComGetContext(device);
     context->Device = device;
+    context->OnDemand = onDemand;
+    context->Slot = slot;
     context->BaudRate = 115200;
     context->LineControl.StopBits = STOP_BIT_1;
     context->LineControl.Parity = NO_PARITY;

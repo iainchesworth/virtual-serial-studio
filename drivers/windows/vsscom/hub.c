@@ -54,6 +54,20 @@ VOID VssComEvtDeviceFileCreate(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request,
         return;
     }
 
+    // The hub end is the device side of the port: not everyone who can open the
+    // COM port may take it (access.c).
+    if (kind == VSSCOM_FILE_HUB)
+    {
+        VSSCOM_OPENER opener;
+
+        status = VssComCaptureOpener(Request, &opener);
+        if (!NT_SUCCESS(status) || !VssComHubOpenAllowed(context, &opener))
+        {
+            WdfRequestComplete(Request, STATUS_ACCESS_DENIED);
+            return;
+        }
+    }
+
     WdfSpinLockAcquire(context->Lock);
     if (kind == VSSCOM_FILE_APP)
     {
@@ -450,8 +464,10 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         WDFREQUEST request;
         PVSSCOM_PIPE_CONTEXT pipe;
         ULONG stored = 0;
+        ULONG timeout_ms;
         BOOLEAN hub;
         BOOLEAN finished;
+        BOOLEAN timed_out;
 
         if (!NT_SUCCESS(WdfIoQueueRetrieveNextRequest(Context->AppWriteQueue,
                                                       &request)))
@@ -467,7 +483,20 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             pipe->Done += stored;
         }
         finished = !hub || pipe->Done == pipe->Length;
-        if (finished)
+        timeout_ms = 0;
+        if (!finished && !pipe->DeadlineSet)
+        {
+            // The write has stalled at the head of the queue: its timeout
+            // starts now, as it does for a write that begins on a real port.
+            pipe->DeadlineSet = TRUE;
+            timeout_ms = vsscom_write_timeout_ms(&Context->Timeouts, pipe->Length);
+            if (timeout_ms != 0)
+                pipe->Deadline = KeQueryInterruptTime() +
+                                 (ULONGLONG)timeout_ms * 10000ull;
+        }
+        timed_out = !finished && pipe->Deadline != 0 &&
+                    KeQueryInterruptTime() >= pipe->Deadline;
+        if (finished || timed_out)
             Context->AppWritesPending--;
         WdfSpinLockRelease(Context->Lock);
 
@@ -477,6 +506,20 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         {
             VssComFinishPipe(request, STATUS_SUCCESS);
             continue;
+        }
+        if (timed_out)
+        {
+            // The bytes taken so far stay queued for the hub.
+            VssComFinishPipe(request, STATUS_TIMEOUT);
+            moved = TRUE;
+            continue;
+        }
+        if (timeout_ms != 0)
+        {
+            // Restarting a timer that is queued does not move its due time, so
+            // stop it first: it may be left from a write that has finished.
+            WdfTimerStop(Context->WriteTimer, FALSE);
+            WdfTimerStart(Context->WriteTimer, WDF_REL_TIMEOUT_IN_MS(timeout_ms));
         }
         WdfRequestRequeue(request);
         return moved;
@@ -498,6 +541,12 @@ VOID VssComAbortAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     }
 }
 
+// The write timeout of the head application write may be up: the pump looks.
+VOID VssComEvtWriteTimer(_In_ WDFTIMER Timer)
+{
+    VssComPump(VssComGetContext(WdfTimerGetParentObject(Timer)));
+}
+
 VOID VssComEvtAppWriteCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
 {
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
@@ -514,6 +563,8 @@ NTSTATUS VssComCreateHubQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     WDFDEVICE device = Context->Device;
     WDF_IO_QUEUE_CONFIG config;
+    WDF_TIMER_CONFIG timer;
+    WDF_OBJECT_ATTRIBUTES attributes;
     NTSTATUS status;
 
     // Without a cancel callback the framework completes a cancelled request
@@ -540,6 +591,16 @@ NTSTATUS VssComCreateHubQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     // had taken, and the pending count.
     WDF_IO_QUEUE_CONFIG_INIT(&config, WdfIoQueueDispatchManual);
     config.EvtIoCanceledOnQueue = VssComEvtAppWriteCanceled;
-    return WdfIoQueueCreate(device, &config, WDF_NO_OBJECT_ATTRIBUTES,
-                            &Context->AppWriteQueue);
+    status = WdfIoQueueCreate(device, &config, WDF_NO_OBJECT_ATTRIBUTES,
+                              &Context->AppWriteQueue);
+    if (!NT_SUCCESS(status))
+        return status;
+
+    // Like the read timers, it takes the lock itself through the pump, so the
+    // framework does not serialise its callback with the device.
+    WDF_TIMER_CONFIG_INIT(&timer, VssComEvtWriteTimer);
+    timer.AutomaticSerialization = FALSE;
+    WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+    attributes.ParentObject = device;
+    return WdfTimerCreate(&timer, &attributes, &Context->WriteTimer);
 }

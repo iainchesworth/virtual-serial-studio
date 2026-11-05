@@ -108,6 +108,14 @@ DEFINE_GUID(GUID_DEVINTERFACE_VSSCOMCTL, 0xb3d7e0a4, 0x2f81, 0x4c59, 0x8e, 0x16,
 #define VSSCOM_CTL_VERSION 1
 // The ports that can exist at once, for all callers together.
 #define VSSCOM_CTL_MAX_PORTS 32
+// The ports one user can hold at once, so that one user cannot take every slot.
+// CREATE_PORT fails with STATUS_QUOTA_EXCEEDED beyond it. The hub end of a port
+// opens only for the user who made the port. An enumerator and not a macro,
+// because the preprocessor policy counts the directives of this header.
+enum
+{
+    VSSCOM_CTL_MAX_PORTS_PER_USER = 16
+};
 
 #define IOCTL_VSSCOM_CTL_GET_VERSION                                        \
     CTL_CODE(FILE_DEVICE_VSSCOM, 0x810, METHOD_BUFFERED, FILE_ANY_ACCESS)

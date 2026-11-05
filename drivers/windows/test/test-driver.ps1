@@ -15,7 +15,7 @@
 #   D6 lines           DTR and RTS come back as DSR, DCD and CTS
 #   D7 exclusive       a second CreateFile fails with access denied
 #   D8-D13 hub end     the second handle, bytes both ways, flow control, lines, purge
-#   D14-D19 control    the control device makes ports on demand and removes them again
+#   D14-D21 control    the control device makes ports on demand and removes them again; write timeouts (D20), hub-end access (D21)
 #
 # D1 to D7 use a port made by hand and run as a loopback: what is written comes
 # back from the next read. D14 to D19 need the control device that install-driver.ps1
@@ -971,9 +971,43 @@ Add-Test 'D13' 'PurgeComm ends the writes that wait for the hub' {
     } finally { [VssComm]::Close($app); $hub.Dispose() }
 }
 
+Add-Test 'D20' 'a write that waits for the hub ends when the write timeout is up' {
+    $hub = Open-Hub $hubPath
+    $app = Open-Port $port
+    try {
+        # No multiplier, 500 ms in all. The hub reads nothing, so Tx fills.
+        Assert ([VssComm]::SetTimeouts($app, 0, 0, 0, 0, 500)) 'SetCommTimeouts failed'
+        $size = 300000
+        $watch = [Diagnostics.Stopwatch]::StartNew()
+        $written = [VssComm]::Write($app, (New-Pattern $size))
+        $ms = $watch.ElapsedMilliseconds
+        Assert ($written -ge 0 -and $written -lt $size) "the write returned $written of $size bytes"
+        Assert ($ms -ge 400 -and $ms -lt 5000) "the write took $ms ms for a 500 ms timeout"
+
+        # What was taken before the timeout is still there for the hub, in order.
+        $got = Read-Hub $hub $written
+        $want = New-Pattern $written
+        for ($i = 0; $i -lt $written; $i++) { if ($got[$i] -ne $want[$i]) { throw "byte $i differs" } }
+
+        # With the queue empty a write that fits goes straight through.
+        Assert ([VssComm]::Write($app, [Text.Encoding]::ASCII.GetBytes('after')) -eq 5) 'a write after the timeout was short'
+        Assert ([Text.Encoding]::ASCII.GetString((Read-Hub $hub 5)) -eq 'after') 'the hub read other bytes'
+
+        # And a timeout of 0 means wait: the write is still waiting after a second.
+        Assert ([VssComm]::SetTimeouts($app, 0, 0, 0, 0, 0)) 'SetCommTimeouts failed'
+        $task = [HubIo]::WriteAsync($app, (New-Pattern $size))
+        Start-Sleep -Milliseconds 1000
+        Assert (-not $task.IsCompleted) 'a write with no timeout ended by itself'
+        [VssComm]::Purge($app, $PURGE_TXABORT -bor $PURGE_TXCLEAR) | Out-Null
+        Assert ($task.Wait(10000)) 'the purge did not end the write'
+        "took $written of $size bytes in $ms ms; later writes unaffected; 0 means wait"
+    } finally { [VssComm]::Close($app); $hub.Dispose() }
+}
+
 # -- The control device ------------------------------------------------------
 
 $ERROR_NOT_FOUND = 1168; $ERROR_INVALID_PARAMETER = 87; $ERROR_NO_SYSTEM_RESOURCES = 1450
+$ERROR_NOT_ENOUGH_QUOTA = 1816
 $VssCtlPath = Get-VssControlPath
 
 function Open-Ctl {
@@ -1050,7 +1084,7 @@ Add-Test 'D16' 'closing the handle that made a port removes it, and the port com
         $p = New-DemandPort $ctl
         $ctl.Dispose()
         Assert (Wait-VssDemandPort $p.Slot 60 -Gone) "the port was still there 60 seconds after its handle closed"
-        Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+        Assert (Wait-VssSerialCommGone $p.Port) "$($p.Port) is still in SERIALCOMM"
         $e = 0
         $h = [VssComm]::Open($p.Port, [ref]$e)
         if ($h -ne [IntPtr](-1)) { [VssComm]::Close($h); throw "$($p.Port) still opens" }
@@ -1098,20 +1132,27 @@ Add-Test 'D17' 'only the handle that made a port can destroy it' {
     }
 }
 
-Add-Test 'D18' 'every slot can be used, the next request is refused, and closing frees them all' {
+Add-Test 'D18' 'a user can hold 16 ports, the next request is refused, and closing frees them all' {
     $ctl = Open-Ctl
     $slots = @()
     try {
-        for ($n = 0; $n -lt 32; $n++) {
+        for ($n = 0; $n -lt 16; $n++) {
             $slot = [uint32]0
             $e = $ctl.Create(0, [ref]$slot)
             Assert ($e -eq 0) "CREATE_PORT number $n failed with error $e"
             $slots += $slot
         }
-        Assert ((@($slots | Sort-Object -Unique)).Count -eq 32) 'two requests shared a slot'
+        Assert ((@($slots | Sort-Object -Unique)).Count -eq 16) 'two requests shared a slot'
+        # The limit is per user, not per handle: another handle of the same user is refused too.
+        $other = Open-Ctl
+        try {
+            $extra = [uint32]0
+            $e = $other.Create(0, [ref]$extra)
+            Assert ($e -eq $ERROR_NOT_ENOUGH_QUOTA) "the 17th request, on another handle, gave error $e"
+        } finally { $other.Dispose() }
         $extra = [uint32]0
         $e = $ctl.Create(0, [ref]$extra)
-        Assert ($e -eq $ERROR_NO_SYSTEM_RESOURCES) "the 33rd request gave error $e"
+        Assert ($e -eq $ERROR_NOT_ENOUGH_QUOTA) "the 17th request gave error $e"
     } finally {
         # Closed at once, while Windows is still building the ports.
         $ctl.Dispose()
@@ -1133,7 +1174,7 @@ Add-Test 'D18' 'every slot can be used, the next request is refused, and closing
     Assert ($e -eq 0) "slots did not become free again (error $e)"
     Assert ($again -eq 0) "the lowest free slot was $again, not 0"
     Wait-VssDemandPort $again 60 -Gone | Out-Null
-    '32 ports at most; all slots free after the handle closed'
+    '16 ports per user; all slots free after the handle closed'
 }
 
 Add-Test 'D19' 'a port that is in use when its maker closes ends the use and goes away' {
@@ -1155,8 +1196,86 @@ Add-Test 'D19' 'a port that is in use when its maker closes ends the use and goe
         $hub.Dispose()
     }
     Assert (Wait-VssDemandPort $p.Slot 60 -Gone) 'the port was still there after every handle closed'
-    Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+    Assert (Wait-VssSerialCommGone $p.Port) "$($p.Port) is still in SERIALCOMM"
     $detail
+}
+
+# Opens each path as the SYSTEM account, through a scheduled task, and returns
+# one line each: "open <path>" or "error<n> <path>". SYSTEM is another user than
+# the one running this script, and needs no password.
+function Invoke-AsSystem([string[]] $Paths) {
+    # The helper is compiled here, by the user, because the SYSTEM account
+    # cannot compile in a scheduled task; the probe only loads it.
+    $dll = 'C:\vss\probe.dll'
+    if (-not (Test-Path $dll)) {
+        Add-Type -OutputAssembly $dll -OutputType Library -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class ProbeK
+{
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern IntPtr CreateFileW(string name, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
+    [DllImport("kernel32.dll")]
+    static extern bool CloseHandle(IntPtr h);
+    public static string Try(string path)
+    {
+        IntPtr h = CreateFileW(path, 0xC0000000, 0, IntPtr.Zero, 3, 0x40000000, IntPtr.Zero);
+        int e = Marshal.GetLastWin32Error();
+        if (h == new IntPtr(-1)) return "error" + e + " " + path;
+        CloseHandle(h);
+        return "open " + path;
+    }
+}
+'@
+    }
+    $probe = @'
+try {
+    Add-Type -Path C:\vss\probe.dll
+    (whoami) | Set-Content C:\vss\probe-who.txt
+    $lines = foreach ($path in (Get-Content C:\vss\probe-in.txt)) { [ProbeK]::Try($path) }
+} catch {
+    $lines = "probe failed: $($_.Exception.Message)"
+}
+$lines | Set-Content C:\vss\probe-out.txt
+'@
+    Set-Content -Path C:\vss\probe.ps1 -Value $probe
+    Set-Content -Path C:\vss\probe-in.txt -Value $Paths
+    Remove-Item C:\vss\probe-out.txt, C:\vss\probe-who.txt -ErrorAction SilentlyContinue
+    & schtasks.exe /create /tn VssProbe /tr 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\vss\probe.ps1' /sc once /st 23:59 /ru SYSTEM /f | Out-Null
+    try {
+        & schtasks.exe /run /tn VssProbe | Out-Null
+        $until = (Get-Date).AddSeconds(90)
+        while (-not (Test-Path C:\vss\probe-out.txt) -and (Get-Date) -lt $until) { Start-Sleep -Milliseconds 500 }
+        if (-not (Test-Path C:\vss\probe-out.txt)) { throw 'the probe did not answer within 90 seconds' }
+        Start-Sleep -Milliseconds 300
+        @(Get-Content C:\vss\probe-out.txt)
+    } finally {
+        & schtasks.exe /delete /tn VssProbe /f | Out-Null
+    }
+}
+
+Add-Test 'D21' 'the hub end of a port opens for the user who made it, not for another user' {
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        $com = '\\.\' + $p.Port
+        # Nobody holds the hub end, so a refusal is the access rule, not a busy port.
+        $answer = Invoke-AsSystem @($p.Path, $com, $hubPath)
+        Assert ($answer.Count -eq 3) "the probe answered: $($answer -join ' | ')"
+        $who = (Get-Content C:\vss\probe-who.txt) -join ''
+        Assert ($who -eq 'nt authority\system') "the probe ran as '$who'"
+        Assert ($answer[0] -like "error$ERROR_ACCESS_DENIED *") "another user opening the hub end of a made port: $($answer[0])"
+        Assert ($answer[1] -like 'open *') "another user opening the COM port: $($answer[1])"
+        Assert ($answer[2] -like 'open *') "an administrator opening the hub end of a port made by hand: $($answer[2])"
+
+        $hub = Open-Hub $p.Path
+        $hub.Dispose()
+        "refused for another user: $($answer[0]); COM port and the hand-made hub end open"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
 }
 
 Write-Result -Path $ResultPath -Phase 'test' -Tests $tests
