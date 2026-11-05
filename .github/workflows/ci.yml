@@ -336,13 +336,14 @@ jobs:
       # Tracy's tools fetch CPM.cmake and their own sources from GitHub when they are
       # configured, and a refused download fails the job before any of this project builds.
       # The built tools are kept in the cache, so a run normally downloads nothing, and the
-      # build is retried when it does have to download.
+      # build is retried when it does have to download. Tracy builds for the CPU it runs on
+      # unless NO_ISA_EXTENSIONS is set, and the runners differ, so the tools are built generic.
       - name: Restore the Tracy command line tools
         id: tracy-tools
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: tracy-tools
-          key: tracy-tools-${{ runner.os }}-${{ runner.arch }}-${{ env.TRACY_VERSION }}
+          key: tracy-tools-generic-${{ runner.os }}-${{ runner.arch }}-${{ env.TRACY_VERSION }}
 
       - name: Build the Tracy command line tools
         if: steps.tracy-tools.outputs.cache-hit != 'true'
@@ -352,9 +353,9 @@ jobs:
             rm -rf tracy-src.tar.gz "$source_dir" tracy-tools &&
             curl -fsSL --retry 3 --retry-all-errors --retry-delay 5               "https://github.com/wolfpld/tracy/archive/refs/tags/${TRACY_VERSION}.tar.gz"               -o tracy-src.tar.gz &&
             tar xzf tracy-src.tar.gz &&
-            cmake -S "$source_dir/capture" -B tracy-tools/capture -DCMAKE_BUILD_TYPE=Release &&
+            cmake -S "$source_dir/capture" -B tracy-tools/capture -DCMAKE_BUILD_TYPE=Release -DNO_ISA_EXTENSIONS=ON &&
             cmake --build tracy-tools/capture --parallel &&
-            cmake -S "$source_dir/csvexport" -B tracy-tools/csvexport -DCMAKE_BUILD_TYPE=Release &&
+            cmake -S "$source_dir/csvexport" -B tracy-tools/csvexport -DCMAKE_BUILD_TYPE=Release -DNO_ISA_EXTENSIONS=ON &&
             cmake --build tracy-tools/csvexport --parallel
           }
           for attempt in 1 2 3; do
