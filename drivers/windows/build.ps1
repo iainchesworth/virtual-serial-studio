@@ -72,9 +72,6 @@ function Build-Driver {
         [string] $InfVerifMode = '/w'  # the user-mode driver needs /u, see below
     )
 
-    foreach ($tool in $infverif, $inf2cat) {
-        if (-not (Test-Path $tool)) { throw "missing $tool" }
-    }
     $package = Join-Path $root "artifacts\$PackageSubdir\$Platform"
 
     # The build stage: compile, copy into the package folder and check the INF files.
@@ -82,6 +79,10 @@ function Build-Driver {
         Write-Host "== Build $Name ($Platform, $Configuration)"
         & $msbuild $Project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
         if ($LASTEXITCODE -ne 0) { throw "msbuild failed for $Name with exit code $LASTEXITCODE" }
+        # The tools come with the packages that the restore has just fetched.
+        foreach ($tool in $infverif, $inf2cat) {
+            if (-not (Test-Path $tool)) { throw "missing $tool" }
+        }
 
         $outRelative = if ($OutSubdir) { "artifacts\$OutSubdir\$Platform\$Configuration" } else { "artifacts\$Platform\$Configuration" }
         $out = Join-Path $root $outRelative
@@ -99,8 +100,14 @@ function Build-Driver {
             if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
         }
     }
-    elseif (-not (Test-Path $package)) {
-        throw "the $Name package is not built yet: run the build stage first ($package)"
+    else {
+        # The catalog stage on its own: the build stage ran before, so the tools are there.
+        if (-not (Test-Path $package)) {
+            throw "the $Name package is not built yet: run the build stage first ($package)"
+        }
+        foreach ($tool in $infverif, $inf2cat) {
+            if (-not (Test-Path $tool)) { throw "missing $tool" }
+        }
     }
 
     # The catalog stage: hash what is in the package folder and write the catalogs.
