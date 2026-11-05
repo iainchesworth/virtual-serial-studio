@@ -18,6 +18,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
+  unit/test_benchmark.cpp
   unit/test_studio.cpp
   unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp

@@ -13,6 +13,8 @@
 #include <QHash>
 #include <QString>
 
+#include <chrono>
+#include <cstdint>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -47,6 +49,22 @@ public:
     }
     /// The next fallible call returns this error and consumes it.
     void fail_next(vss::error_code error) { next_error_ = error; }
+
+    /// How the next benchmark ends, for tests.  `lost` bytes never arrive and
+    /// the run takes about `duration` in ten steps, so a test can cancel it.
+    /// Set these before a run starts: the run reads them from a worker thread
+    /// and the fake does not look at any port.
+    void set_benchmark_outcome(std::uint64_t lost,
+                               std::chrono::milliseconds duration)
+    {
+        benchmark_lost_ = lost;
+        benchmark_duration_ = duration;
+    }
+    /// The options of the most recent benchmark, or none.
+    const std::optional<vss::benchmark_options>& last_benchmark() const
+    {
+        return benchmark_seen_;
+    }
 
     const std::vector<QByteArray>& sent() const noexcept { return sent_; }
     int refresh_interval_ms() const noexcept { return refresh_interval_ms_; }
@@ -103,6 +121,12 @@ public:
                                bool state) override;
     void refresh_lines(vss::endpoint_id id) override;
 
+    vss::result<vss::benchmark_result>
+    run_benchmark(vss::endpoint_id from, vss::endpoint_id to,
+                  const vss::benchmark_options& options,
+                  const vss::benchmark_progress_handler& progress,
+                  const std::atomic<bool>* cancel) override;
+
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,
                             bool rollback_on_error) override;
@@ -128,6 +152,9 @@ private:
                           const vss::link_options& options);
 
     capabilities caps_;
+    std::uint64_t benchmark_lost_ = 0;
+    std::chrono::milliseconds benchmark_duration_{0};
+    std::optional<vss::benchmark_options> benchmark_seen_;
     std::vector<port_view> ports_;
     std::vector<link_view> links_;
     std::vector<device_view> devices_;

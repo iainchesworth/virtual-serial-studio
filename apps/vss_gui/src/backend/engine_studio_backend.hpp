@@ -84,6 +84,12 @@ public:
                                bool state) override;
     void refresh_lines(vss::endpoint_id id) override;
 
+    vss::result<vss::benchmark_result>
+    run_benchmark(vss::endpoint_id from, vss::endpoint_id to,
+                  const vss::benchmark_options& options,
+                  const vss::benchmark_progress_handler& progress,
+                  const std::atomic<bool>* cancel) override;
+
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,
                             bool rollback_on_error) override;

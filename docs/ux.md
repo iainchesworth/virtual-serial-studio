@@ -216,7 +216,7 @@ the setup, log and environment, with traffic contents off unless chosen.
 - Should the Connect dialog remember the last relationship per user?
 - Which engine capabilities are worth building next? The disabled ones are
   undo and redo, rename, fault injection, the per-line wiring matrix, observing
-  whether a program opened a port, the benchmark from the window and JSON error
+  whether a program opened a port and JSON error
   positions. Each is a row in
   [08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
 

@@ -858,7 +858,7 @@
     <context>
         <name>Benchmark</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="38" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="44" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
@@ -866,132 +866,225 @@
     <context>
         <name>BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
             <source>Benchmark a connection</source>
             <translation>Verbindung testen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>Sendet Daten von einem Port zu einem anderen und zählt, was ankommt.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
             <source>Send from</source>
             <translation>Senden von</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Receive on</source>
             <translation>Empfangen auf</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
             <source>Amount of data</source>
             <translation>Datenmenge</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
             <source>Chunk size</source>
             <translation>Blockgröße</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>Verknüpfen Sie diese beiden Ports nicht in Studio. Die Daten müssen über das Kabel oder das Treiberpaar laufen, damit die Zählung aussagekräftig ist.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>Diese beiden Ports sind in Studio verknüpft. Trennen Sie sie zuerst.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
             <source>Not run yet</source>
             <translation>Noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
             <source>Benchmark result: not run yet</source>
             <translation>Testergebnis: noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
             <source>Not started</source>
             <translation>Nicht gestartet</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Benchmark progress</source>
             <translation>Testfortschritt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Sent</source>
+            <translation>Gesendet</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Received</source>
+            <translation>Empfangen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Lost</source>
+            <translation>Verloren</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <source>Throughput</source>
+            <translation>Durchsatz</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
             <source>Not run</source>
             <translation>Nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
             <source>%1: not run yet</source>
             <translation>%1: noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>Ein Lauf schlägt fehl, wenn weniger empfangen wird, und das Ergebnis nennt die Differenz.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Same thing from the command line</source>
             <translation>Dasselbe über die Befehlszeile</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
             <source>Command</source>
             <translation>Befehl</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
             <source>Copy result</source>
             <translation>Ergebnis kopieren</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
             <source>Copied the result.</source>
             <translation>Ergebnis kopiert.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
             <source>Close</source>
             <translation>Schließen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
             <source>Run</source>
             <translation>Ausführen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>Fügen Sie zwei Ports hinzu, um eine Verbindung zu testen.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Choose two different ports.</source>
             <translation>Wählen Sie zwei verschiedene Ports.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <source>Cancel</source>
+            <translation>Abbrechen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <source>Running</source>
+            <translation>Läuft</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <source>Benchmark result: %1</source>
+            <translation>Testergebnis: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <source>%1 of %2 received</source>
+            <translation>%1 von %2 empfangen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Failed</source>
+            <translation>Fehlgeschlagen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <source>Could not finish: %1</source>
+            <translation>Konnte nicht abgeschlossen werden: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <source>Cancelled</source>
+            <translation>Abgebrochen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Passed</source>
+            <translation>Bestanden</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <source>Finished at %1</source>
+            <translation>Beendet um %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
+            <translation>%1: gesendet %2, empfangen %3, verloren %4, Durchsatz %5.</translation>
+        </message>
+        <message>
             <source>The benchmark command is not available in this build.</source>
-            <translation>Der Testbefehl ist in diesem Build nicht verfügbar.</translation>
+            <translation type="vanished">Der Testbefehl ist in diesem Build nicht verfügbar.</translation>
         </message>
     </context>
     <context>
@@ -8520,132 +8613,225 @@
     <context>
         <name>vss::gui::BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="53" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
             <source>Benchmark a connection</source>
             <translation>Verbindung testen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="67" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>Sendet Daten von einem Port zu einem anderen und zählt, was ankommt.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="77" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
             <source>Send from</source>
             <translation>Senden von</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="80" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="81" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
             <source>Receive on</source>
             <translation>Empfangen auf</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="84" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
             <source>Amount of data</source>
             <translation>Datenmenge</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="93" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
             <source>Chunk size</source>
             <translation>Blockgröße</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>Verknüpfen Sie diese beiden Ports nicht in Studio. Die Daten müssen über das Kabel oder das Treiberpaar laufen, damit die Zählung aussagekräftig ist.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="109" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="296" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>Diese beiden Ports sind in Studio verknüpft. Trennen Sie sie zuerst.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="124" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
             <source>Not run yet</source>
             <translation>Noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
             <source>Benchmark result: not run yet</source>
             <translation>Testergebnis: noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="129" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
             <source>Not started</source>
             <translation>Nicht gestartet</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="136" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
             <source>Benchmark progress</source>
             <translation>Testfortschritt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Sent</source>
+            <translation>Gesendet</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Received</source>
+            <translation>Empfangen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <source>Lost</source>
+            <translation>Verloren</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <source>Throughput</source>
+            <translation>Durchsatz</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
             <source>Not run</source>
             <translation>Nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="160" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
             <source>%1: not run yet</source>
             <translation>%1: noch nicht ausgeführt</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>Ein Lauf schlägt fehl, wenn weniger empfangen wird, und das Ergebnis nennt die Differenz.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="178" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
             <source>Same thing from the command line</source>
             <translation>Dasselbe über die Befehlszeile</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="351" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
             <source>Command</source>
             <translation>Befehl</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="189" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="190" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
             <source>Copy result</source>
             <translation>Ergebnis kopieren</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="198" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
             <source>Copied the result.</source>
             <translation>Ergebnis kopiert.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
             <source>Close</source>
             <translation>Schließen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="204" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="205" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
             <source>Run</source>
             <translation>Ausführen</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="288" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>Fügen Sie zwei Ports hinzu, um eine Verbindung zu testen.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="294" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Choose two different ports.</source>
             <translation>Wählen Sie zwei verschiedene Ports.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="373" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <source>Cancel</source>
+            <translation>Abbrechen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <source>Running</source>
+            <translation>Läuft</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <source>Benchmark result: %1</source>
+            <translation>Testergebnis: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <source>%1 of %2 received</source>
+            <translation>%1 von %2 empfangen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Failed</source>
+            <translation>Fehlgeschlagen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <source>Could not finish: %1</source>
+            <translation>Konnte nicht abgeschlossen werden: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <source>Cancelled</source>
+            <translation>Abgebrochen</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <source>Passed</source>
+            <translation>Bestanden</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <source>Finished at %1</source>
+            <translation>Beendet um %1</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
+            <translation>%1: gesendet %2, empfangen %3, verloren %4, Durchsatz %5.</translation>
+        </message>
+        <message>
             <source>The benchmark command is not available in this build.</source>
-            <translation>Der Testbefehl ist in diesem Build nicht verfügbar.</translation>
+            <translation type="vanished">Der Testbefehl ist in diesem Build nicht verfügbar.</translation>
         </message>
     </context>
     <context>
