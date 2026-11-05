@@ -65,7 +65,7 @@ result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup)
 
     if (const auto chosen = non_empty(lookup, "VSS_VPORT_DIR"))
     {
-        const std::filesystem::path directory(*chosen);
+        std::filesystem::path directory(*chosen);
         if (const auto ec =
                 detail::platform_ensure_private_directory(directory))
             return ec;
@@ -74,7 +74,7 @@ result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup)
 
     if (const auto runtime = non_empty(lookup, "XDG_RUNTIME_DIR"))
     {
-        const std::filesystem::path directory =
+        std::filesystem::path directory =
             std::filesystem::path(*runtime) / "vss";
         if (const auto ec =
                 detail::platform_ensure_private_directory(directory))

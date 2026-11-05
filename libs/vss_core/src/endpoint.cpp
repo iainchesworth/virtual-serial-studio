@@ -63,7 +63,7 @@ std::string endpoint::description() const
     return transport_ ? transport_->describe() : std::string();
 }
 
-boost::asio::any_io_executor endpoint::get_executor() const noexcept
+boost::asio::any_io_executor endpoint::get_executor() const
 {
     return strand_;
 }
