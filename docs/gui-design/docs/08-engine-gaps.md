@@ -29,7 +29,7 @@ Put one narrow interface between the GUI and the engine, for example `StudioBack
 | JSON topology load, save, validate | Known (`vss_config`) | Use directly. |
 | JSON validation errors with line and column | Unknown | Use `QJsonDocument::fromJson` offsets for syntax. For schema errors without positions, show the message and hide "Go to line". |
 | Rename port | Unknown (names are link identity) | Ship Rename only if the engine supports it. Otherwise hide the menu item and F2. |
-| Undo and redo | Not in the engine | GUI `QUndoStack`. Snapshot before each mutating action and restore via the studio apply path. Verify restore is exact. If it cannot be made reliable, drop the Undo toast and keep confirmations. |
+| Undo and redo | Not in the engine; a snapshot restore is not exact | The GUI keeps a history of changes with an exact inverse (connect and remove a link, change an owner) and clears it when the set of ports changes. No snapshot is restored and there is no Undo toast; confirmations stay. |
 | Benchmark | CLI only (`vss_cli bench`) | Extract the core into a shared library function with progress and cancel callbacks, used by both CLI and GUI. Needs maintainer approval, do it in its own PR. |
 | Diagnostic bundle zip | None | No new dependency. Write a small stored (uncompressed) ZIP writer in the GUI layer, with tests. |
 | Event log tab | None | GUI-side `EventLog` fed from hub events. |

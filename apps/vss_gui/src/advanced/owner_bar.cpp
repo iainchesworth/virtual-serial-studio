@@ -282,6 +282,7 @@ void OwnerBar::release_owner()
                            .arg(error_text(released.error())));
         return;
     }
+    Q_EMIT owner_changed(link_->id, link_->owner, 0);
     Q_EMIT message(QCoreApplication::translate(
         "OwnerBar", "The owner was released. Any port can write now."));
 }
@@ -301,6 +302,7 @@ void OwnerBar::give_owner()
                            .arg(error_text(changed.error())));
         return;
     }
+    Q_EMIT owner_changed(link_->id, link_->owner, target);
     Q_EMIT message(
         QCoreApplication::translate("OwnerBar", "The owner is now %1.")
             .arg(port_name(target)));

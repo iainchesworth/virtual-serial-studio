@@ -11,10 +11,13 @@
 #include "panes/selection_service.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/level_service.hpp"
+#include "shell/undo_service.hpp"
 #include "support/event_log.hpp"
 
 #include <QMainWindow>
 #include <QString>
+
+#include <vector>
 
 class QAction;
 class QDockWidget;
@@ -103,6 +106,9 @@ private:
     void remove_selection();
     void remove_selected_link();
     void remove_link(vss::link_id id);
+    void undo_last();
+    void redo_last();
+    void update_undo_actions();
     void remove_port(vss::endpoint_id id);
     void show_links_dock(bool shown);
     void connect_from_port(vss::endpoint_id id);
@@ -192,6 +198,10 @@ private:
     QString title_override_;
     bool dirty_ = false;
     bool loading_ = false;
+    UndoService undo_;
+    /// The ports the history was recorded against; a change to the set
+    /// clears the history.
+    std::vector<vss::endpoint_id> history_ports_;
     bool launcher_forced_ = false;
     bool compact_ = false;
     bool layout_sized_ = false;

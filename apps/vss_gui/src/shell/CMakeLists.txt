@@ -19,7 +19,11 @@ add_library(vss_gui_shell STATIC
   shell_window.cpp
   shell_window.hpp
   status_bar.cpp
-  status_bar.hpp)
+  status_bar.hpp
+  undo_service.cpp
+  undo_service.hpp
+  undo_steps.cpp
+  undo_steps.hpp)
 
 target_link_libraries(vss_gui_shell PUBLIC
   vss_gui_panes

@@ -164,6 +164,9 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // The window's Undo history reverses changes with exact inverse
+    // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
+    caps.undo = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;

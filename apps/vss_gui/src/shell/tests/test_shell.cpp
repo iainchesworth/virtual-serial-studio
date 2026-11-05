@@ -16,6 +16,8 @@
 #include "shell/launcher.hpp"
 #include "shell/level_service.hpp"
 #include "shell/shell_window.hpp"
+#include "shell/undo_service.hpp"
+#include "shell/undo_steps.hpp"
 #include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
@@ -338,8 +340,151 @@ TEST_CASE("shell: undo and redo are capability gated")
     backend.set_capabilities(caps);
     vss::gui::ShellWindow window(backend);
     QAction* undo = window.findChild<QAction*>(QStringLiteral("edit.undo"));
+    QAction* redo = window.findChild<QAction*>(QStringLiteral("edit.redo"));
     REQUIRE(undo != nullptr);
-    REQUIRE(undo->isEnabled());
+    // Supported, but there is no change to reverse yet.
+    REQUIRE(!undo->isEnabled());
+    REQUIRE(!redo->isEnabled());
+    REQUIRE_EQ(undo->text(), QStringLiteral("Undo"));
+    REQUIRE(undo->toolTip() != QStringLiteral("Not available in this build"));
+}
+
+TEST_CASE("undo: the history reverses and repeats steps in order")
+{
+    vss::gui::UndoService history;
+    int changes = 0;
+    int value = 0;
+    QObject::connect(&history, &vss::gui::UndoService::changed,
+                     [&changes] { ++changes; });
+    REQUIRE(!history.can_undo());
+    REQUIRE(!history.undo());
+    REQUIRE(!history.redo());
+
+    const auto step = [&value](const QString& text, int amount)
+    {
+        return vss::gui::undo_step{text,
+                                   [&value, amount]
+                                   {
+                                       value -= amount;
+                                       return true;
+                                   },
+                                   [&value, amount]
+                                   {
+                                       value += amount;
+                                       return true;
+                                   }};
+    };
+    value += 1;
+    history.push(step(QStringLiteral("one"), 1));
+    value += 10;
+    history.push(step(QStringLiteral("ten"), 10));
+    REQUIRE_EQ(value, 11);
+    REQUIRE_EQ(history.undo_text(), QStringLiteral("ten"));
+
+    REQUIRE(history.undo());
+    REQUIRE_EQ(value, 1);
+    REQUIRE_EQ(history.redo_text(), QStringLiteral("ten"));
+    REQUIRE_EQ(history.undo_text(), QStringLiteral("one"));
+    REQUIRE(history.redo());
+    REQUIRE_EQ(value, 11);
+
+    // A new change drops what could have been redone.
+    REQUIRE(history.undo());
+    value += 100;
+    history.push(step(QStringLiteral("hundred"), 100));
+    REQUIRE(!history.can_redo());
+    REQUIRE(history.redo_text().isEmpty());
+    REQUIRE(changes > 0);
+}
+
+TEST_CASE("undo: a step that cannot be applied clears the history")
+{
+    vss::gui::UndoService history;
+    history.push({QStringLiteral("first"), [] { return true; },
+                  [] { return true; }});
+    history.push({QStringLiteral("second"), [] { return false; },
+                  [] { return true; }});
+    REQUIRE(!history.undo());
+    // The step after the failure assumed it, so nothing is left.
+    REQUIRE(!history.can_undo());
+    REQUIRE(!history.can_redo());
+
+    for (std::size_t count = 0; count < vss::gui::UndoService::max_depth + 5;
+         ++count)
+        history.push({QStringLiteral("step"), [] { return true; },
+                      [] { return true; }});
+    std::size_t undone = 0;
+    while (history.undo())
+        ++undone;
+    REQUIRE_EQ(undone, vss::gui::UndoService::max_depth);
+}
+
+TEST_CASE("undo: link steps use exact inverse operations")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto first = backend.create_auto_port(QStringLiteral("a"), true);
+    const auto second = backend.create_auto_port(QStringLiteral("b"), true);
+    const auto third = backend.create_auto_port(QStringLiteral("c"), true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+    REQUIRE(third.has_value());
+
+    vss::gui::UndoService history;
+    const auto linked = backend.connect_ports(*first, *second, {});
+    REQUIRE(linked.has_value());
+    const auto made = backend.link(*linked);
+    REQUIRE(made.has_value());
+    history.push(
+        vss::gui::connect_step(backend, *made, QStringLiteral("Connect")));
+
+    REQUIRE(history.undo());
+    REQUIRE(backend.links().empty());
+    REQUIRE(history.redo());
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+    REQUIRE(vss::gui::find_link(backend, *made).has_value());
+
+    // Removing a link and undoing it makes the same link again, with its
+    // options.
+    vss::link_options options;
+    options.policy = vss::merge_policy::owner;
+    options.emulate_modem_lines = false;
+    const auto joined = backend.join({*first, *second}, *third, options);
+    REQUIRE(joined.has_value());
+    const auto join_view = backend.link(*joined);
+    REQUIRE(join_view.has_value());
+    REQUIRE(backend.set_owner(*joined, *second).has_value());
+    const auto owned = backend.link(*joined);
+    REQUIRE(owned.has_value());
+
+    history.clear();
+    REQUIRE(backend.disconnect(*joined).has_value());
+    history.push(vss::gui::remove_link_step(backend, *owned,
+                                            QStringLiteral("Remove link")));
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+    REQUIRE(history.undo());
+    REQUIRE_EQ(backend.links().size(), std::size_t{2});
+    const auto again = vss::gui::find_link(backend, *owned);
+    REQUIRE(again.has_value());
+    REQUIRE_EQ(again->owner, *second);
+    REQUIRE(!again->options.emulate_modem_lines);
+    REQUIRE(again->options.policy == vss::merge_policy::owner);
+
+    // An owner change is reversed and repeated on whatever link has these
+    // ports now.
+    history.clear();
+    history.push(vss::gui::owner_step(backend, *again, *second, *first,
+                                      QStringLiteral("Change owner")));
+    REQUIRE(backend.set_owner(again->id, *first).has_value());
+    REQUIRE(history.undo());
+    REQUIRE_EQ(vss::gui::find_link(backend, *again)->owner, *second);
+    REQUIRE(history.redo());
+    REQUIRE_EQ(vss::gui::find_link(backend, *again)->owner, *first);
+
+    // When the link has gone, the step says so instead of guessing.
+    REQUIRE(backend.disconnect(vss::gui::find_link(backend, *again)->id)
+                .has_value());
+    REQUIRE(!history.undo());
+    REQUIRE(!history.can_undo());
 }
 
 TEST_CASE("shell: the shortcuts dialog is generated from the registry")

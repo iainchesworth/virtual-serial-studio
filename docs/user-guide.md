@@ -443,6 +443,7 @@ language. See [i18n.md](i18n.md).
 | `Ctrl+Shift+N` | Add port |
 | `Ctrl+Shift+C` | Copy port name |
 | `Delete` | Remove the selected port or link |
+| `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / Redo the last link or owner change |
 | `Ctrl+L` | Connect ports |
 | `Ctrl+K` | Search actions |
 | `Ctrl+,` | Settings |
@@ -457,7 +458,10 @@ language. See [i18n.md](i18n.md).
 A control that the engine cannot back is shown disabled, with the tooltip "Not
 available in this build". It never pretends. At the moment:
 
-- **Undo and Redo**: they need an exact restore that the engine cannot prove.
+- **Undo of everything**: Undo and Redo cover connecting a link, removing a
+  link and changing an owner. They do not cover adding or removing a port, a
+  wizard or applying JSON, because a port that is made again is a different
+  port. Any of those starts a new history.
 - **Rename a port** (`F2`): the hub can rename, but the saved setup would go out
   of step.
 - **Reconnect a failed port**: a port that stops shows *Failed* and keeps its

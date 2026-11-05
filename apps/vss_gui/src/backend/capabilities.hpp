@@ -44,7 +44,8 @@ struct capabilities
     /// Rename a port safely.  False: the hub can rename but the studio's
     /// records and saved JSON would go out of sync.
     bool rename_port = false;
-    /// Undo/redo restored from an exact snapshot.
+    /// Undo and redo of changes that have an exact inverse: connecting or
+    /// removing a link, and changing an owner.  Never a snapshot restore.
     bool undo = false;
     /// Run the benchmark from the GUI.
     bool benchmark = false;
