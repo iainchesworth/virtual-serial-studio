@@ -69,7 +69,10 @@ class Recorder:
 
 def find_program(build_dir: Path, name: str) -> Path | None:
     suffix = ".exe" if os.name == "nt" else ""
-    for folder in (build_dir / "bin", build_dir / "bin" / "Release", build_dir):
+    folders = [build_dir / "bin", build_dir / "bin" / "Release", build_dir]
+    # On macOS the GUI is an application bundle, so the program is inside it.
+    folders += [folder / f"{name}.app" / "Contents" / "MacOS" for folder in list(folders)]
+    for folder in folders:
         candidate = folder / (name + suffix)
         if candidate.is_file():
             return candidate

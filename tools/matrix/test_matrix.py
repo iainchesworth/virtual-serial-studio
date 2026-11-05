@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -90,7 +91,9 @@ class PackageAndLinkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as scratch:
             package = Path(scratch, "package")
             (package / "bin").mkdir(parents=True)
-            cli, gui = package / "bin" / "vss_cli", package / "bin" / "vss_gui"
+            gui_folder = package / "vss_gui.app" / "Contents" / "MacOS" if sys.platform == "darwin" else package / "bin"
+            gui_folder.mkdir(parents=True, exist_ok=True)
+            cli, gui = package / "bin" / "vss_cli", gui_folder / "vss_gui"
             cli.write_text("#!/bin/sh\necho selftest ok\n")
             gui.write_text('#!/bin/sh\ncase "$1" in --version) echo 1.2.3;; *) exit 3;; esac\n')
             for program in (cli, gui):
@@ -98,6 +101,13 @@ class PackageAndLinkTests(unittest.TestCase):
             self.assertEqual(self.statuses(["--package", str(package)])["T9"], "pass")
             cli.write_text("#!/bin/sh\nexit 1\n")
             self.assertEqual(self.statuses(["--package", str(package)])["T9"], "fail")
+
+    def test_the_macos_app_bundle_is_found(self) -> None:
+        with tempfile.TemporaryDirectory() as scratch:
+            program = Path(scratch, "bin", "vss_gui.app", "Contents", "MacOS", "vss_gui" + (".exe" if run_cell.os.name == "nt" else ""))
+            program.parent.mkdir(parents=True)
+            program.write_text("")
+            self.assertEqual(run_cell.find_program(Path(scratch), "vss_gui"), program)
 
     def test_the_kernel_experiment_is_a_skip_outside_a_guest(self) -> None:
         self.assertEqual(self.statuses([])["T11"], "skip")

@@ -136,7 +136,8 @@ function Invoke-Vmrun {
 }
 
 function Assert-VssGuest {
-    $leaf = Split-Path -Leaf $Vm
+    # Either separator: a Windows path given on another system has no '/' to split on.
+    $leaf = ($Vm -split '[\\/]')[-1]
     if ($leaf -notmatch '^VSS[ -].*\.vmx$') {
         throw "refusing '$leaf': this script works on VSS guests only (file name starts with 'VSS ' or 'VSS-')"
     }

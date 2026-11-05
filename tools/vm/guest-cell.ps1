@@ -52,7 +52,8 @@ $here = $PSScriptRoot
 $vmrun = Join-Path $here 'vmrun.ps1'
 $matrix = Get-Content -LiteralPath (Join-Path $here 'matrix.json') -Raw | ConvertFrom-Json
 $entry = $matrix.guests | Where-Object { $_.id -eq $Guest }
-$vm = Join-Path $matrix.root "$($entry.name)\$($entry.name).vmx"
+# Not Join-Path: the root is a Windows path, and on another system Join-Path refuses its drive letter.
+$vm = "$($matrix.root)\$($entry.name)\$($entry.name).vmx"
 $cell = $entry.name -replace ' - ', '-' -replace ' ', '-'
 $snapshot = $matrix.snapshot
 $windows = $entry.kind -eq 'windows'
