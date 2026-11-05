@@ -1,7 +1,8 @@
 ; Copyright (c) 2026 Virtual Serial Studio contributors
 ; SPDX-License-Identifier: GPL-3.0-or-later
 ;
-; A virtual serial port, root-enumerated with the hardware ID VSSCOM\VSSCOM0.
+; A virtual serial port. VSSCOM\VSSCOM0 is a root-enumerated port made by hand;
+; VSSCOM\PORT is a port that the control device (vsscomctl.inf) made on demand.
 ; The Ports class installer names it COM<n>; vsscom.sys (KMDF) is the driver
 ; behind it. The DIRID 13 file placement needs Windows 10 version 1803.
 
@@ -19,9 +20,11 @@ PnpLockdown=1
 
 [VssCom.NTamd64.10.0...17134]
 %VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\PORT
 
 [VssCom.NTarm64.10.0...17134]
 %VssCom.DeviceDesc%=VssCom_Install,VSSCOM\VSSCOM0
+%VssCom.DeviceDesc%=VssCom_Install,VSSCOM\PORT
 
 [SourceDisksNames]
 1=%DiskName%

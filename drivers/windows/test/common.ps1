@@ -4,8 +4,11 @@
 # Shared by install-driver.ps1, uninstall-driver.ps1 and test-driver.ps1. Run
 # inside a Windows guest, as an administrator. Dot-source it:  . $PSScriptRoot\common.ps1
 
-$HardwareId = 'VSSCOM\VSSCOM0'
+$HardwareId = 'VSSCOM\VSSCOM0'       # a port made by hand (install-driver.ps1 -Count)
+$DemandHardwareId = 'VSSCOM\PORT'    # a port that the control device made
+$ControlHardwareId = 'VSSCOM\CONTROL'
 $PortsClassGuid = [guid]'4D36E978-E325-11CE-BFC1-08002BE10318'
+$SystemClassGuid = [guid]'4D36E97D-E325-11CE-BFC1-08002BE10318'
 
 Add-Type -TypeDefinition @'
 using System;
@@ -87,14 +90,14 @@ public static class VssSetup
 
     /// Creates the root-enumerated device and binds the driver in infPath to it.
     /// Returns true when Windows asks for a restart.
-    public static bool CreateDevice(Guid classGuid, string hardwareId, string infPath)
+    public static bool CreateDevice(Guid classGuid, string hardwareId, string infPath, string deviceName)
     {
         IntPtr set = SetupDiCreateDeviceInfoList(ref classGuid, IntPtr.Zero);
         if (set == InvalidHandle) throw new Win32Exception(Marshal.GetLastWin32Error(), "SetupDiCreateDeviceInfoList");
         try
         {
             var data = new SP_DEVINFO_DATA { cbSize = (uint)Marshal.SizeOf(typeof(SP_DEVINFO_DATA)) };
-            if (!SetupDiCreateDeviceInfo(set, "Ports", ref classGuid, null, IntPtr.Zero, DICD_GENERATE_ID, ref data))
+            if (!SetupDiCreateDeviceInfo(set, deviceName, ref classGuid, null, IntPtr.Zero, DICD_GENERATE_ID, ref data))
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "SetupDiCreateDeviceInfo");
             byte[] id = MultiSz(hardwareId);
             if (!SetupDiSetDeviceRegistryProperty(set, ref data, SPDRP_HARDWAREID, id, (uint)id.Length))
@@ -156,10 +159,12 @@ public static class VssSetup
         return found.ToArray();
     }
 
-    /// Removes every present device with the hardware id. Returns how many.
-    public static int RemoveDevices(Guid classGuid, string hardwareId)
+    /// Removes every device with the hardware id: the present ones, and with includeAbsent
+    /// the ones that have gone but left their registry entries (and their COM names)
+    /// behind. Returns how many.
+    public static int RemoveDevices(Guid classGuid, string hardwareId, bool includeAbsent)
     {
-        IntPtr set = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF_PRESENT);
+        IntPtr set = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, includeAbsent ? 0u : DIGCF_PRESENT);
         if (set == InvalidHandle) throw new Win32Exception(Marshal.GetLastWin32Error(), "SetupDiGetClassDevs");
         int removed = 0;
         try
@@ -231,4 +236,44 @@ function Get-VssHubPaths {
         if ($name) { $table[$name] = $path }
     }
     $table
+}
+
+# The path of the control device's interface, or $null when it is not installed.
+$VssControlGuid = [guid]'b3d7e0a4-2f81-4c59-8e16-7a5d9c3f0b62'
+function Get-VssControlPath {
+    foreach ($line in [VssSetup]::Interfaces($VssControlGuid)) {
+        return ($line -split '\|', 2)[1]
+    }
+    $null
+}
+
+# The port the control device made in `$Slot`, as @{ Port; Path }, or $null while it is
+# not there. Its hub path holds the device instance id: \\?\vsscom#port#<slot>#{guid}\hub
+function Find-VssDemandPort([uint32] $Slot) {
+    $pattern = '*\vsscom#port#{0:x4}#*' -f $Slot
+    foreach ($line in [VssSetup]::Interfaces($VssInterfaceGuid)) {
+        $name, $path = $line -split '\|', 2
+        if ($path -like $pattern) { return @{ Port = $name; Path = $path } }
+    }
+    $null
+}
+
+# Waits until a port made on demand is there (or, with -Gone, until it has gone).
+function Wait-VssDemandPort([uint32] $Slot, [int] $Seconds = 40, [switch] $Gone) {
+    $until = (Get-Date).AddSeconds($Seconds)
+    do {
+        $found = Find-VssDemandPort $Slot
+        if ($Gone -and -not $found) { return $true }
+        if (-not $Gone -and $found) { return $found }
+        Start-Sleep -Milliseconds 250
+    } while ((Get-Date) -lt $until)
+    if ($Gone) { return $false }
+    $null
+}
+
+# True while HARDWARE\DEVICEMAP\SERIALCOMM lists the COM name.
+function Test-VssSerialComm([string] $Port) {
+    $key = Get-ItemProperty 'HKLM:\HARDWARE\DEVICEMAP\SERIALCOMM' -ErrorAction SilentlyContinue
+    if (-not $key) { return $false }
+    [bool]($key.PSObject.Properties | Where-Object { $_.Value -eq $Port })
 }

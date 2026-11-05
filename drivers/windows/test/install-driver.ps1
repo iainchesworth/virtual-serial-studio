@@ -1,9 +1,10 @@
 # Copyright (c) 2026 Virtual Serial Studio contributors
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Installs the vsscom package and creates -Count ports (two by default). Run inside a guest, as an
-# administrator, with the package (vsscom.sys, vsscom.inf, vsscom.cat) next to
-# this script or in -PackageDir.
+# Installs the vsscom package, creates the control device and -Count ports made by
+# hand (two by default). Run inside a guest, as an administrator, with the package
+# (vsscom.sys, vsscom.inf, vsscomctl.inf and their catalogs) next to this script or
+# in -PackageDir.
 #
 #   install-driver.ps1 [-PackageDir <dir>] [-ResultPath <json>] [-Count <n>]
 #
@@ -26,19 +27,37 @@ $ErrorActionPreference = 'Stop'
 $tests = @()
 try {
     $inf = Join-Path $PackageDir 'vsscom.inf'
-    if (-not (Test-Path $inf)) { throw "vsscom.inf is not in $PackageDir" }
+    $ctlInf = Join-Path $PackageDir 'vsscomctl.inf'
+    foreach ($file in $inf, $ctlInf) {
+        if (-not (Test-Path $file)) { throw "$(Split-Path -Leaf $file) is not in $PackageDir" }
+    }
 
-    # Put the package in the driver store first, so a signature problem is
-    # reported here and not as an unexplained failure to bind.
-    $store = & pnputil.exe /add-driver $inf 2>&1
-    $tests += New-TestRecord 'install.store' 'pnputil /add-driver' ($(if ($LASTEXITCODE -eq 0) { 'pass' } else { 'fail' })) (($store | Out-String).Trim())
-    if ($LASTEXITCODE -ne 0) { throw 'the package was not added to the driver store' }
+    # Put both packages in the driver store first, so a signature problem is
+    # reported here and not as an unexplained failure to bind, and so that the
+    # ports the control device makes later find their driver.
+    $store = @()
+    $storeOk = $true
+    foreach ($file in $inf, $ctlInf) {
+        $store += & pnputil.exe /add-driver $file 2>&1
+        if ($LASTEXITCODE -ne 0) { $storeOk = $false }
+    }
+    $tests += New-TestRecord 'install.store' 'pnputil /add-driver' ($(if ($storeOk) { 'pass' } else { 'fail' })) (($store | Out-String).Trim())
+    if (-not $storeOk) { throw 'the package was not added to the driver store' }
 
     $reboot = $false
     for ($n = 0; $n -lt $Count; $n++) {
-        if ([VssSetup]::CreateDevice($PortsClassGuid, $HardwareId, (Resolve-Path $inf).Path)) { $reboot = $true }
+        if ([VssSetup]::CreateDevice($PortsClassGuid, $HardwareId, (Resolve-Path $inf).Path, 'Ports')) { $reboot = $true }
     }
     $tests += New-TestRecord 'install.device' "create $Count root devices and bind the driver" 'pass' "restart required: $reboot"
+
+    # The control device, once.
+    if ([VssSetup]::CreateDevice($SystemClassGuid, $ControlHardwareId, (Resolve-Path $ctlInf).Path, 'VSSCOMCTL')) { $reboot = $true }
+    $control = $null
+    for ($i = 0; $i -lt 30 -and -not $control; $i++) {
+        $control = Get-VssControlPath
+        if (-not $control) { Start-Sleep -Milliseconds 500 }
+    }
+    $tests += New-TestRecord 'install.control' 'the control device has an interface' ($(if ($control) { 'pass' } else { 'fail' })) $control
 
     $ports = @()
     for ($i = 0; $i -lt 30 -and $ports.Count -lt $Count; $i++) {

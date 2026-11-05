@@ -14,8 +14,12 @@
 #   D5 events          SetCommMask and WaitCommEvent
 #   D6 lines           DTR and RTS come back as DSR, DCD and CTS
 #   D7 exclusive       a second CreateFile fails with access denied
+#   D8-D13 hub end     the second handle, bytes both ways, flow control, lines, purge
+#   D14-D19 control    the control device makes ports on demand and removes them again
 #
-# The port is a loopback: what is written comes back from the next read.
+# D1 to D7 use a port made by hand and run as a loopback: what is written comes
+# back from the next read. D14 to D19 need the control device that install-driver.ps1
+# makes, and make their own ports.
 # Exit code 0 when every test passed.
 
 [CmdletBinding()]
@@ -398,6 +402,110 @@ public sealed class HubIo : IDisposable
     public static System.Threading.Tasks.Task<int> WriteAsync(IntPtr appHandle, byte[] data)
     {
         return System.Threading.Tasks.Task.Factory.StartNew<int>(delegate { return VssComm.Write(appHandle, data); });
+    }
+}
+
+/// A handle on the control device. Every call returns the Win32 error, 0 for success.
+public sealed class CtlIo : IDisposable
+{
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "CreateFileW")]
+    static extern IntPtr CreateFileW(string name, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool DeviceIoControl(IntPtr h, uint code, IntPtr input, uint inSize, IntPtr output, uint outSize, out uint returned, IntPtr overlapped);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool CloseHandle(IntPtr h);
+    [DllImport("kernel32.dll")]
+    static extern IntPtr LocalFree(IntPtr p);
+    [DllImport("advapi32.dll")]
+    static extern uint GetSecurityInfo(IntPtr h, int objectType, uint info, IntPtr owner, IntPtr group, out IntPtr dacl, IntPtr sacl, out IntPtr descriptor);
+    [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern bool ConvertSecurityDescriptorToStringSecurityDescriptorW(IntPtr descriptor, uint revision, uint info, out IntPtr text, out uint length);
+
+    const uint IOCTL_GET_VERSION = 0x80002040;
+    const uint IOCTL_CREATE_PORT = 0x80002044;
+    const uint IOCTL_DESTROY_PORT = 0x80002048;
+    const uint IOCTL_LIST_PORTS = 0x8000204C;
+    public const int MaxPorts = 32;
+
+    IntPtr handle;
+
+    CtlIo(IntPtr h) { handle = h; }
+
+    public static CtlIo Open(string path, out int error)
+    {
+        IntPtr h = CreateFileW(path, 0xC0000000, 3, IntPtr.Zero, 3, 0, IntPtr.Zero);
+        error = h == new IntPtr(-1) ? Marshal.GetLastWin32Error() : 0;
+        return h == new IntPtr(-1) ? null : new CtlIo(h);
+    }
+
+    int Call(uint code, uint[] input, uint[] output)
+    {
+        int inBytes = input == null ? 0 : input.Length * 4;
+        int outBytes = output == null ? 0 : output.Length * 4;
+        IntPtr inp = Marshal.AllocHGlobal(Math.Max(inBytes, 1));
+        IntPtr outp = Marshal.AllocHGlobal(Math.Max(outBytes, 1));
+        try
+        {
+            for (int i = 0; i < inBytes / 4; i++) Marshal.WriteInt32(inp, i * 4, (int)input[i]);
+            uint returned;
+            if (!DeviceIoControl(handle, code, inp, (uint)inBytes, outp, (uint)outBytes, out returned, IntPtr.Zero))
+                return Marshal.GetLastWin32Error();
+            for (int i = 0; i < Math.Min(returned, (uint)outBytes) / 4; i++) output[i] = (uint)Marshal.ReadInt32(outp, i * 4);
+            return 0;
+        }
+        finally { Marshal.FreeHGlobal(inp); Marshal.FreeHGlobal(outp); }
+    }
+
+    public int GetVersion(out uint version, out uint maxPorts)
+    {
+        var o = new uint[2];
+        int e = Call(IOCTL_GET_VERSION, null, o);
+        version = o[0]; maxPorts = o[1];
+        return e;
+    }
+
+    /// Asks for a port. `flags` must be 0; other values test the refusal.
+    public int Create(uint flags, out uint slot)
+    {
+        var o = new uint[1];
+        int e = Call(IOCTL_CREATE_PORT, new uint[] { flags, 0 }, o);
+        slot = o[0];
+        return e;
+    }
+
+    public int Destroy(uint slot) { return Call(IOCTL_DESTROY_PORT, new uint[] { slot }, null); }
+
+    /// The ports in use as slot, mine pairs.
+    public int List(out uint[] slotAndMine)
+    {
+        var o = new uint[1 + 2 * MaxPorts];
+        int e = Call(IOCTL_LIST_PORTS, null, o);
+        var pairs = new uint[e == 0 ? o[0] * 2 : 0];
+        for (int i = 0; i < pairs.Length; i++) pairs[i] = o[1 + i];
+        slotAndMine = pairs;
+        return e;
+    }
+
+    /// The access list of the handle's device, as an SDDL string; null when it cannot be read.
+    public string Sddl()
+    {
+        IntPtr dacl, descriptor;
+        // SE_KERNEL_OBJECT = 6, DACL_SECURITY_INFORMATION = 4
+        if (GetSecurityInfo(handle, 6, 4, IntPtr.Zero, IntPtr.Zero, out dacl, IntPtr.Zero, out descriptor) != 0) return null;
+        try
+        {
+            IntPtr text; uint length;
+            if (!ConvertSecurityDescriptorToStringSecurityDescriptorW(descriptor, 1, 4, out text, out length)) return null;
+            string s = Marshal.PtrToStringUni(text);
+            LocalFree(text);
+            return s;
+        }
+        finally { LocalFree(descriptor); }
+    }
+
+    public void Dispose()
+    {
+        if (handle != IntPtr.Zero) { CloseHandle(handle); handle = IntPtr.Zero; }
     }
 }
 '@
@@ -861,6 +969,194 @@ Add-Test 'D13' 'PurgeComm ends the writes that wait for the hub' {
         Assert ($null -eq $left -and $e -eq [HubIo]::TimedOut) 'the purge left bytes for the hub'
         'purge ended the write and emptied the queue'
     } finally { [VssComm]::Close($app); $hub.Dispose() }
+}
+
+# -- The control device ------------------------------------------------------
+
+$ERROR_NOT_FOUND = 1168; $ERROR_INVALID_PARAMETER = 87; $ERROR_NO_SYSTEM_RESOURCES = 1450
+$VssCtlPath = Get-VssControlPath
+
+function Open-Ctl {
+    if (-not $VssCtlPath) { throw 'the control device has no interface (run install-driver.ps1)' }
+    $e = 0
+    $ctl = [CtlIo]::Open($VssCtlPath, [ref]$e)
+    if (-not $ctl) { throw "opening the control device failed with error $e" }
+    $ctl
+}
+
+# Asks for a port and waits for it to appear. Returns its slot, COM name and hub path.
+function New-DemandPort([CtlIo] $Ctl) {
+    $slot = [uint32]0
+    $e = $Ctl.Create(0, [ref]$slot)
+    if ($e -ne 0) { throw "CREATE_PORT failed with error $e" }
+    $found = Wait-VssDemandPort $slot 60
+    if (-not $found) { throw "the port in slot $slot did not appear within 60 seconds" }
+    [pscustomobject]@{ Slot = $slot; Port = $found.Port; Path = $found.Path }
+}
+
+Add-Test 'D14' 'the control device answers, refuses bad requests and is open to signed-in users only' {
+    $ctl = Open-Ctl
+    try {
+        $version = [uint32]0; $max = [uint32]0
+        $e = $ctl.GetVersion([ref]$version, [ref]$max)
+        Assert ($e -eq 0) "GET_VERSION failed with error $e"
+        Assert ($version -eq 1 -and $max -eq 32) "version $version with room for $max ports"
+
+        $slot = [uint32]0
+        $e = $ctl.Create(1, [ref]$slot)
+        Assert ($e -eq $ERROR_INVALID_PARAMETER) "CREATE_PORT with unknown flags gave error $e"
+        $e = $ctl.Destroy(99)
+        Assert ($e -eq $ERROR_INVALID_PARAMETER) "DESTROY_PORT of slot 99 gave error $e"
+
+        $sddl = $ctl.Sddl()
+        Assert ([bool]$sddl) 'the access list could not be read'
+        Assert ($sddl -match ';;;AU\)') "no access for signed-in users in $sddl"
+        Assert ($sddl -notmatch ';;;(WD|BU|AN|IU)\)') "access for more than signed-in users in $sddl"
+        "version $version, $max ports at most; $sddl"
+    } finally { $ctl.Dispose() }
+}
+
+Add-Test 'D15' 'a port made on demand appears, has both ends and carries bytes' {
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        Assert ($p.Port -match '^COM\d+$') "the port is called '$($p.Port)'"
+        Assert (Test-VssSerialComm $p.Port) "$($p.Port) is not in SERIALCOMM"
+
+        $hub = Open-Hub $p.Path
+        $app = Open-Port $p.Port
+        try {
+            $e = 0
+            Assert ([VssComm]::Write($app, [Text.Encoding]::ASCII.GetBytes('on demand')) -eq 9) 'the application write was short'
+            $got = [Text.Encoding]::ASCII.GetString((Read-Hub $hub 9))
+            Assert ($got -eq 'on demand') "the hub read '$got'"
+            Assert ($hub.Write([Text.Encoding]::ASCII.GetBytes('answer'), 5000, [ref]$e) -eq 6) "the hub write failed ($e)"
+            $r = Read-App $app 6
+            Assert ([Text.Encoding]::ASCII.GetString($r.Bytes) -eq 'answer') 'the application read other bytes'
+        } finally { [VssComm]::Close($app); $hub.Dispose() }
+        "slot $($p.Slot) is $($p.Port); bytes cross both ways"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D16' 'closing the handle that made a port removes it, and the port comes back under the same name' {
+    $ctl = Open-Ctl
+    $again = $null
+    $q = $null
+    try {
+        $p = New-DemandPort $ctl
+        $ctl.Dispose()
+        Assert (Wait-VssDemandPort $p.Slot 60 -Gone) "the port was still there 60 seconds after its handle closed"
+        Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+        $e = 0
+        $h = [VssComm]::Open($p.Port, [ref]$e)
+        if ($h -ne [IntPtr](-1)) { [VssComm]::Close($h); throw "$($p.Port) still opens" }
+
+        $again = Open-Ctl
+        $q = New-DemandPort $again
+        Assert ($q.Slot -eq $p.Slot -and $q.Port -eq $p.Port) "the port came back as slot $($q.Slot), $($q.Port), not slot $($p.Slot), $($p.Port)"
+        "slot $($p.Slot) went and came back as $($p.Port)"
+    } finally {
+        $ctl.Dispose()
+        if ($again) { $again.Dispose() }
+        if ($q) { Wait-VssDemandPort $q.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D17' 'only the handle that made a port can destroy it' {
+    $a = Open-Ctl
+    $b = Open-Ctl
+    $pb = $null
+    try {
+        $pa = New-DemandPort $a
+        $pb = New-DemandPort $b
+        Assert ($pa.Slot -ne $pb.Slot) 'two ports share a slot'
+
+        $e = $b.Destroy($pa.Slot)
+        Assert ($e -eq $ERROR_ACCESS_DENIED) "another handle destroying the port gave error $e"
+
+        $pairs = [uint32[]]@()
+        $e = $b.List([ref]$pairs)
+        Assert ($e -eq 0) "LIST_PORTS failed with error $e"
+        $mine = @{}
+        for ($i = 0; $i -lt $pairs.Count; $i += 2) { $mine[[int]$pairs[$i]] = [int]$pairs[$i + 1] }
+        Assert ($mine[[int]$pa.Slot] -eq 0 -and $mine[[int]$pb.Slot] -eq 1) ("the list was " + (($mine.GetEnumerator() | ForEach-Object { "$($_.Key):$($_.Value)" }) -join ' '))
+
+        $e = $a.Destroy($pa.Slot)
+        Assert ($e -eq 0) "destroying the port gave error $e"
+        Assert (Wait-VssDemandPort $pa.Slot 60 -Gone) 'the destroyed port stayed'
+        Assert ($null -ne (Find-VssDemandPort $pb.Slot)) 'the other port went too'
+        $e = $a.Destroy($pa.Slot)
+        Assert ($e -eq $ERROR_NOT_FOUND) "destroying a destroyed port gave error $e"
+        "slot $($pa.Slot) destroyed by its maker only; slot $($pb.Slot) stayed"
+    } finally {
+        $a.Dispose(); $b.Dispose()
+        if ($pb) { Wait-VssDemandPort $pb.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D18' 'every slot can be used, the next request is refused, and closing frees them all' {
+    $ctl = Open-Ctl
+    $slots = @()
+    try {
+        for ($n = 0; $n -lt 32; $n++) {
+            $slot = [uint32]0
+            $e = $ctl.Create(0, [ref]$slot)
+            Assert ($e -eq 0) "CREATE_PORT number $n failed with error $e"
+            $slots += $slot
+        }
+        Assert ((@($slots | Sort-Object -Unique)).Count -eq 32) 'two requests shared a slot'
+        $extra = [uint32]0
+        $e = $ctl.Create(0, [ref]$extra)
+        Assert ($e -eq $ERROR_NO_SYSTEM_RESOURCES) "the 33rd request gave error $e"
+    } finally {
+        # Closed at once, while Windows is still building the ports.
+        $ctl.Dispose()
+    }
+    foreach ($slot in $slots) {
+        Assert (Wait-VssDemandPort $slot 120 -Gone) "the port in slot $slot did not go"
+    }
+    # Every slot must be free again, however far each port had come.
+    $deadline = (Get-Date).AddSeconds(120)
+    $again = $null
+    do {
+        $ctl = Open-Ctl
+        $slot = [uint32]0
+        $e = $ctl.Create(0, [ref]$slot)
+        if ($e -eq 0) { $again = $slot }
+        $ctl.Dispose()
+        if ($e -ne 0) { Start-Sleep -Milliseconds 500 }
+    } while ($e -ne 0 -and (Get-Date) -lt $deadline)
+    Assert ($e -eq 0) "slots did not become free again (error $e)"
+    Assert ($again -eq 0) "the lowest free slot was $again, not 0"
+    Wait-VssDemandPort $again 60 -Gone | Out-Null
+    '32 ports at most; all slots free after the handle closed'
+}
+
+Add-Test 'D19' 'a port that is in use when its maker closes ends the use and goes away' {
+    $ctl = Open-Ctl
+    $p = New-DemandPort $ctl
+    $hub = Open-Hub $p.Path
+    $app = Open-Port $p.Port
+    try {
+        $task = [HubIo]::WriteAsync($app, (New-Pattern 300000))
+        Start-Sleep -Milliseconds 300
+        Assert (-not $task.IsCompleted) 'the write did not wait for the hub'
+        $ctl.Dispose()
+        Assert ($task.Wait(20000)) 'a waiting write hung after the port was removed'
+        Assert (-not (Find-VssDemandPort $p.Slot)) 'the port is still listed while the application holds it'
+        $detail = "the waiting write ended with $($task.Result) bytes"
+    } finally {
+        $ctl.Dispose()
+        [VssComm]::Close($app)
+        $hub.Dispose()
+    }
+    Assert (Wait-VssDemandPort $p.Slot 60 -Gone) 'the port was still there after every handle closed'
+    Assert (-not (Test-VssSerialComm $p.Port)) "$($p.Port) is still in SERIALCOMM"
+    $detail
 }
 
 Write-Result -Path $ResultPath -Phase 'test' -Tests $tests
