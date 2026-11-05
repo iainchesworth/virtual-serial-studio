@@ -33,6 +33,7 @@
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
 #include "shell/status_bar.hpp"
+#include "shell/undo_steps.hpp"
 #include "support/about_dialog.hpp"
 #include "support/build_info.hpp"
 #include "support/diagnostic_bundle_dialog.hpp"
@@ -88,6 +89,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
+#include <algorithm>
 #include <cstdio>
 #include <functional>
 #include <optional>
@@ -232,18 +234,18 @@ void ShellWindow::build_actions()
         QKeySequence::Quit, action_level::simple, [this] { close(); });
 
     // Edit
-    // The engine has no stable per-endpoint identity for a restored snapshot:
-    // a re-applied document gets new endpoint ids and, for auto/pty ports, a
-    // new advertised path.  Because exact restore cannot be proven, Undo and
-    // Redo stay visible but disabled; see design-deviations.md (WP8).
+    // The engine cannot restore a snapshot exactly: a restored port gets a new
+    // identity and, for a pseudo terminal, a new path.  Undo and Redo therefore
+    // reverse only changes that have an exact inverse (connecting and removing
+    // a link, changing an owner); see design-deviations.md.
     add(
         QStringLiteral("edit.undo"), tr("Undo"), tr("undo stack restore"), {},
-        QKeySequence::Undo, action_level::simple, [] {}, false,
-        [this] { return backend_.caps().undo; });
+        QKeySequence::Undo, action_level::simple, [this] { undo_last(); },
+        false, [this] { return backend_.caps().undo && undo_.can_undo(); });
     add(
         QStringLiteral("edit.redo"), tr("Redo"), tr("redo stack restore"), {},
-        QKeySequence::Redo, action_level::simple, [] {}, false,
-        [this] { return backend_.caps().undo; });
+        QKeySequence::Redo, action_level::simple, [this] { redo_last(); },
+        false, [this] { return backend_.caps().undo && undo_.can_redo(); });
     add(
         QStringLiteral("edit.remove"), tr("Remove selected"),
         tr("delete remove"), QStringLiteral("remove"),
@@ -447,20 +449,8 @@ void ShellWindow::build_actions()
         tr("version licence copyright"), {}, {}, action_level::simple,
         [this] { open_about(); });
 
-    // Undo and Redo are present so the shortcuts and the menu match the IA,
-    // but the engine cannot restore a snapshot exactly (see the comment where
-    // they are registered).  They are disabled with a reason.
-    for (const QString& id :
-         {QStringLiteral("edit.undo"), QStringLiteral("edit.redo")})
-    {
-        if (QAction* action = registry_.action(id))
-        {
-            action->setToolTip(tr("Not available in this build"));
-            action->setStatusTip(
-                tr("Undo needs an exact restore, which this build "
-                   "cannot prove."));
-        }
-    }
+    connect(&undo_, &UndoService::changed, this,
+            [this] { update_actions(); });
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
@@ -670,6 +660,14 @@ void ShellWindow::build_central()
             {
                 status_->showMessage(text, 6000);
                 log_local(text);
+            });
+    connect(owner_bar_, &OwnerBar::owner_changed, this,
+            [this](vss::link_id id, vss::endpoint_id before,
+                   vss::endpoint_id after)
+            {
+                if (const auto link = backend_.link(id))
+                    undo_.push(owner_step(backend_, *link, before, after,
+                                          tr("Change owner")));
             });
     layout->addWidget(owner_bar_);
     central_->addWidget(workspace_);
@@ -1000,6 +998,17 @@ void ShellWindow::connect_backend()
 
 void ShellWindow::on_backend_changed()
 {
+    // A port that is added or removed has an identity the history cannot
+    // restore, so the history only ever describes the ports it was made on.
+    std::vector<vss::endpoint_id> ports;
+    for (const auto& port : backend_.ports())
+        ports.push_back(port.id);
+    std::sort(ports.begin(), ports.end());
+    if (ports != history_ports_)
+    {
+        history_ports_ = std::move(ports);
+        undo_.clear();
+    }
     if (!backend_.ports().empty())
         launcher_forced_ = false;
     const QString signature = document_signature();
@@ -1111,7 +1120,59 @@ void ShellWindow::update_title()
 void ShellWindow::update_actions()
 {
     registry_.refresh();
+    update_undo_actions();
     update_title();
+}
+
+void ShellWindow::update_undo_actions()
+{
+    const bool supported = backend_.caps().undo;
+    const struct
+    {
+        const char* id;
+        QString plain;
+        QString with_step;
+        QString step;
+    } labels[] = {
+        {"edit.undo", tr("Undo"), tr("Undo %1"), undo_.undo_text()},
+        {"edit.redo", tr("Redo"), tr("Redo %1"), undo_.redo_text()}};
+    for (const auto& label : labels)
+    {
+        QAction* action =
+            registry_.action(QString::fromLatin1(label.id));
+        if (action == nullptr)
+            continue;
+        action->setText(label.step.isEmpty() ? label.plain
+                                             : label.with_step.arg(label.step));
+        action->setToolTip(supported ? action->text()
+                                     : tr("Not available in this build"));
+        action->setStatusTip(
+            supported ? tr("Reverses connecting or removing a link, "
+                           "changing an owner and renaming a port.")
+                      : tr("This build cannot reverse changes."));
+    }
+}
+
+void ShellWindow::undo_last()
+{
+    const QString text = undo_.undo_text();
+    if (undo_.undo())
+        status_->showMessage(tr("Undid %1.").arg(text), 4000);
+    else if (!text.isEmpty())
+        status_->showMessage(
+            tr("Could not undo %1. The setup has changed since.").arg(text),
+            6000);
+}
+
+void ShellWindow::redo_last()
+{
+    const QString text = undo_.redo_text();
+    if (undo_.redo())
+        status_->showMessage(tr("Redid %1.").arg(text), 4000);
+    else if (!text.isEmpty())
+        status_->showMessage(
+            tr("Could not redo %1. The setup has changed since.").arg(text),
+            6000);
 }
 
 void ShellWindow::update_status()
@@ -1279,6 +1340,11 @@ void ShellWindow::open_connect_ports()
             });
     if (dialog.exec() != QDialog::Accepted)
         return;
+    if (dialog.result())
+    {
+        if (const auto made = backend_.link(*dialog.result()))
+            undo_.push(connect_step(backend_, *made, tr("Connect ports")));
+    }
     status_->refresh();
     if (!dialog.result_summary().isEmpty())
         ToastManager::instance().show(this, dialog.result_summary());
@@ -1692,6 +1758,7 @@ void ShellWindow::remove_link(vss::link_id id)
         return;
     }
 
+    undo_.push(remove_link_step(backend_, *link, tr("Remove link")));
     selection_.select_link(0);
     backend_.refresh();
     status_->showMessage(tr("Removed the link."), 3000);
@@ -1741,6 +1808,8 @@ void ShellWindow::show_rename(vss::endpoint_id id)
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    undo_.push(rename_step(backend_, id, port->name, dialog.new_name(),
+                           tr("Rename port")));
     selection_.select_port(id);
     status_->showMessage(
         tr("Renamed %1 to %2.").arg(port->name, dialog.new_name()), 3000);

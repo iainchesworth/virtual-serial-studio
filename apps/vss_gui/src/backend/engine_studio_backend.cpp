@@ -164,6 +164,9 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // The window's Undo history reverses changes with exact inverse
+    // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
+    caps.undo = true;
     // `vss::hub::set_link_wiring` holds the wires of every link.
     caps.line_matrix = true;
     // The JSON editor places a schema error on its line with a path index of
