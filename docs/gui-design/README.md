@@ -33,7 +33,7 @@ tools/gen_qss.py               renders the QSS template for both themes and chec
 
 ## Things to know before you start
 - The design was made from the project's README and docs, not from the Qt source. `docs/08-engine-gaps.md` is a hypothesis that WP0 must verify. Where the engine lacks a capability, the GUI degrades visibly rather than faking it.
-- Some designs make claims the engine may not be able to support, notably "Waiting for program" (needs peer-open detection), the per-link line matrix, undo, and rename. Each has a fallback in the specs.
+- Some designs make claims the engine may not be able to support, notably the "Waiting for program" refinement of Open (needs peer-open detection; Open is the normal state without it), the per-link line matrix, undo, and rename. Each has a fallback in the specs.
 - The mockups are static. Numbers, port names and byte counts in them are samples. Placeholders such as `<version>` are filled at runtime.
 - The project docs disagree about whether a standard null-modem preset also wires DTR to DCD. The specs include it. Confirm with the maintainer.
 - `tools/check_contrast.py` currently reports `FAILURES: 0` for both themes.

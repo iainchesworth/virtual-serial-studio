@@ -23,7 +23,7 @@ Screen-specific strings are in `docs/screens/`. Take them exactly. This page hol
 | Advanced mode | The same window with more tools. Not a separate edition. |
 
 ## State words
-Open, Waiting for program, Program connected, Studio only, Closed, Failed, Fixture, Setup ready, Needs attention, Passed, Not checked yet. Direction badges: RX, TX, DROP. Switch labels include the state: "DTR on", "RTS off".
+Open, Studio only, Closed, Failed, Fixture, Setup ready, Needs attention, Passed, Not checked yet. Direction badges: RX, TX, DROP. Switch labels include the state: "DTR on", "RTS off".
 
 ## Error template
 Title: "Could not <verb> <thing>" (for example "Could not open COM3"). Body: one sentence of likely cause, one sentence of what to do. Buttons: the fix, an alternative, "Copy details". Engine text lives only behind Copy details.

@@ -100,7 +100,9 @@ QIcon IconProvider::render(const QString& name, const QColor& colour,
 
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    renderer.render(&painter);
+    // An explicit rectangle in logical units: without it the renderer draws at
+    // device pixels and, above 100% scale, fills only a corner of the pixmap.
+    renderer.render(&painter, QRectF(0.0, 0.0, logical_size, logical_size));
     painter.end();
 
     return QIcon(pixmap);
