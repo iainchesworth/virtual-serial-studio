@@ -102,6 +102,28 @@ Import-Certificate -FilePath signer.cer -CertStoreLocation Cert:\LocalMachine\Tr
 pnputil /add-driver vsscom_um.inf /install
 ```
 
+`trust/install-trust.ps1` does the three imports in one step, from an elevated
+PowerShell, with the public certificates of the CA (it never handles a private key):
+
+```powershell
+./trust/install-trust.ps1 -RootCertificate root-ca.pem -IntermediateCertificate intermediate-ca.pem `
+    -Package . -ExpectedRootSha256 <fingerprint you hold>
+pnputil /add-driver vsscom_um.inf /install
+./install-helper.ps1     # the helper service, from its own folder
+```
+
+It reads the signer from the signature of the package, checks that it chains to the
+root you named, and only then adds it to Trusted Publishers, so a package signed by
+anyone else adds nothing. It refuses to run while test signing is on, because an
+install then proves nothing about the trust. `-WhatIf` shows what it would change;
+`-Uninstall` takes the three certificates out again. **Trusting a root means
+trusting everything that CA signs, for every program on the machine**, so use it
+only on machines you own. ARM64 is untried: Windows may insist on a Microsoft
+signature for the catalog there. The script was run against the CI-signed package
+in the Windows 11 and Windows 10 22H2 guests with test signing off: `pnputil`
+refused the package before it, and the driver and helper installed and passed the
+suite after it.
+
 Windows accepts a user-mode driver whose catalog is signed by a CA it trusts, so
 **test signing mode stays off**. A CI-signed package was checked this way in the
 Windows 11 guest with test signing off. The kernel-mode driver does not have that
@@ -131,6 +153,7 @@ mode is on. The test certificate suffices for the second case only.
 | `vsscom_helper/lease_table.hpp` | the helper's slot and quota rules, with nothing of Windows in them; unit-tested |
 | `vsscom_helper/protocol.h` | what the studio, the helper and the user-mode driver share: the pipe, the messages, the owner property |
 | `vsscom_helper/install-helper.ps1` | installs or removes the service |
+| `trust/install-trust.ps1` | makes a machine trust the owner's CA and the signer of a package, so a test-signed package installs with test signing off |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver, the helper or all |
 | `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D22, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
 
