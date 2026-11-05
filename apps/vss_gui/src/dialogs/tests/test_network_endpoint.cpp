@@ -75,6 +75,41 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
     REQUIRE(ipv6.has_value());
     REQUIRE_EQ(ipv6->host, QStringLiteral("::1"));
 
+    // The server role waits for others, so it has its own schemes.
+    using vss::gui::network_role;
+    using vss::gui::network_transport;
+    REQUIRE_EQ(vss::gui::build_network_uri(network_transport::tcp,
+                                           network_role::server,
+                                           QStringLiteral("0.0.0.0"), 4001),
+               QStringLiteral("tcp-listen://0.0.0.0:4001"));
+    REQUIRE_EQ(vss::gui::build_network_uri(network_transport::udp,
+                                           network_role::server,
+                                           QStringLiteral("::1"), 4002),
+               QStringLiteral("udp-listen://[::1]:4002"));
+    REQUIRE_EQ(vss::gui::build_network_uri(network_transport::tcp,
+                                           network_role::client,
+                                           QStringLiteral("lab"), 4001),
+               QStringLiteral("tcp://lab:4001"));
+    // RFC 2217 has no server role.
+    REQUIRE_EQ(vss::gui::build_network_uri(network_transport::rfc2217,
+                                           network_role::server,
+                                           QStringLiteral("lab"), 7001),
+               QStringLiteral("rfc2217://lab:7001"));
+
+    const auto listening = vss::gui::parse_network_uri(
+        QStringLiteral("tcp-listen://127.0.0.1:4001"));
+    REQUIRE(listening.has_value());
+    REQUIRE_EQ(listening->transport, network_transport::tcp);
+    REQUIRE_EQ(listening->role, network_role::server);
+    REQUIRE_EQ(listening->host, QStringLiteral("127.0.0.1"));
+    REQUIRE_EQ(listening->port, 4001);
+    REQUIRE_EQ(vss::gui::parse_network_uri(QStringLiteral("udp-listen://[::1]:5"))
+                   ->role,
+               network_role::server);
+    REQUIRE_EQ(parsed->role, network_role::client);
+    REQUIRE(!vss::gui::parse_network_uri(QStringLiteral("rfc2217-listen://h:1"))
+                 .has_value());
+
     REQUIRE(!vss::gui::valid_port(0));
     REQUIRE(!vss::gui::valid_port(65536));
     REQUIRE(vss::gui::valid_port(1));
@@ -182,11 +217,11 @@ TEST_CASE("network dialog: server role appears only with the capability")
     dialog.test_button()->click();
     QApplication::processEvents();
     REQUIRE_EQ(dialog.listen_address(), QStringLiteral("127.0.0.1"));
-    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp://127.0.0.1:4001"));
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp-listen://127.0.0.1:4001"));
 
     dialog.set_listen_address(QStringLiteral("0.0.0.0"));
     dialog.set_port(4010);
-    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp://0.0.0.0:4010"));
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("tcp-listen://0.0.0.0:4010"));
     REQUIRE(dialog.submit());
     REQUIRE_EQ(dialog.result_port(), 4010);
 }

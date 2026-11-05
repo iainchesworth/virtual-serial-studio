@@ -22,6 +22,12 @@ TEST_CASE("serial transport: URI classification")
     REQUIRE_EQ(*classify_uri("udp://127.0.0.1:4002"), endpoint_kind::udp);
     REQUIRE_EQ(*classify_uri("rfc2217://lab:7001"), endpoint_kind::rfc2217);
 
+    // Listening endpoints are network endpoints too.
+    REQUIRE_EQ(*classify_uri("tcp-listen://127.0.0.1:4001"), endpoint_kind::tcp);
+    REQUIRE_EQ(*classify_uri("udp-listen://:4002"), endpoint_kind::udp);
+    REQUIRE(!classify_uri("tcp-listen://127.0.0.1"));
+    REQUIRE(!classify_uri("udp-listen://host.example:4002"));
+
     // A bare device path is the serial library's shorthand for a local port.
     REQUIRE_EQ(*classify_uri("COM3"), endpoint_kind::physical);
     REQUIRE_EQ(*classify_uri("/dev/ttyUSB0"), endpoint_kind::physical);

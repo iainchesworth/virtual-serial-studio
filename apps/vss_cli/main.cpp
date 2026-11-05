@@ -78,6 +78,8 @@ void print_usage()
         "\n"
         "  vss_cli bridge <uri> <uri>\n"
         "      Join two transports back to back (for example serial to tcp).\n"
+        "      tcp-listen://host:port and udp-listen://host:port wait for other\n"
+        "      computers to connect instead of connecting out.\n"
         "\n"
         "  vss_cli loopback [--seconds=N]\n"
         "      A virtual port, a redirect and a monitor: no hardware needed.\n"

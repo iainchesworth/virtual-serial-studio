@@ -53,6 +53,7 @@ set_tests_properties(unit PROPERTIES TIMEOUT 300)
 
 set(VSS_SYSTEM_TEST_SOURCES
   framework/main.cpp
+  system/test_system_listen.cpp
   system/test_system_serial.cpp
   system/test_system_tcp.cpp
   system/test_system_udp.cpp)

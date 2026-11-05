@@ -39,16 +39,24 @@ struct network_endpoint
 QString network_scheme(network_transport transport);
 QString network_transport_name(network_transport transport);
 
-/// `tcp://0.0.0.0:4001`.  IPv6 literals are bracketed.
+/// The address of an endpoint that connects: `tcp://192.168.1.50:4001`.  IPv6
+/// literals are bracketed.
 QString build_network_uri(network_transport transport, const QString& host,
                           int port);
+
+/// As above, and for the server role `tcp-listen://0.0.0.0:4001` or
+/// `udp-listen://0.0.0.0:4001`.  RFC 2217 has no server role, so it always
+/// connects.
+QString build_network_uri(network_transport transport, network_role role,
+                          const QString& host, int port);
 
 /// True for 1 to 65535 inclusive.
 bool valid_port(int port);
 bool parse_port(const QString& text, int& port);
 
-/// Parses the three schemes the engine's `attach_serial` accepts for a
-/// network endpoint.  The URI does not carry the server/client role.
+/// Parses the schemes the engine's `attach_serial` accepts for a network
+/// endpoint: `tcp`, `udp` and `rfc2217` connect (the client role), and
+/// `tcp-listen` and `udp-listen` wait for others (the server role).
 std::optional<network_endpoint> parse_network_uri(const QString& text,
                                                   QString* error = nullptr);
 
