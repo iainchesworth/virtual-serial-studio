@@ -94,6 +94,29 @@ if (-not $DryRun) {
     }
 }
 
+# Two installers wait for a key that nobody can press at a test guest's console. Subiquity asks
+# "Continue with autoinstall?" unless the boot line says so, and the Windows 10 media ask "Press any key
+# to boot from CD". A patched copy of the ISO answers each. The copies are large, so they go next to
+# the VMs, outside the repository.
+$isoCache = [IO.Path]::Combine($Root, '_iso')
+function Get-PatchedIso([string] $Suffix, [string] $Script) {
+    $patched = [IO.Path]::Combine($isoCache, [IO.Path]::GetFileNameWithoutExtension($entry.iso) + $Suffix)
+    if (-not $DryRun -and -not (Test-Path -LiteralPath $patched)) {
+        New-Item -ItemType Directory -Force -Path $isoCache | Out-Null
+        $python = (Get-Command python3, python -ErrorAction SilentlyContinue | Select-Object -First 1).Source
+        if (-not $python) { throw "python is needed to patch $($entry.iso)" }
+        & $python (Join-Path $here $Script) --iso $iso --out $patched
+        if ($LASTEXITCODE -ne 0) { throw "patching $($entry.iso) failed: $LASTEXITCODE" }
+    }
+    return $patched
+}
+if ($entry.PSObject.Properties['autoinstall_iso'] -and $entry.autoinstall_iso) {
+    $iso = Get-PatchedIso '-autoinstall.iso' 'patch_ubuntu_iso.py'
+}
+if ($entry.PSObject.Properties['noprompt_iso'] -and $entry.noprompt_iso) {
+    $iso = Get-PatchedIso '-noprompt.iso' 'patch_windows_iso.py'
+}
+
 $windows = $entry.kind -eq 'windows'
 $efi = $entry.firmware -eq 'efi'
 $guestOs = switch ($Guest) { 'windows10' { 'windows9-64' } 'windows11' { 'windows11-64' } default { 'ubuntu-64' } }
@@ -133,11 +156,9 @@ if ($efi) {
 }
 if ($windows) {
     $lines += 'ethernet0.virtualDev = "e1000e"'
-    if ($efi) {
-        $lines += 'nvme0.present = "TRUE"', 'nvme0:0.present = "TRUE"', "nvme0:0.fileName = `"$diskFile`""
-    } else {
-        $lines += 'sata0:0.present = "TRUE"', "sata0:0.fileName = `"$diskFile`""
-    }
+    # SATA for both Windows guests. The virtual NVMe disk stalled Windows Setup at 65 percent of the
+    # image apply, with the controller reset in the VMware log, on every try.
+    $lines += 'sata0:0.present = "TRUE"', "sata0:0.fileName = `"$diskFile`""
     $lines += 'sata0.present = "TRUE"'
     $lines += 'sata0:1.present = "TRUE"', 'sata0:1.deviceType = "cdrom-image"', "sata0:1.fileName = `"$iso`"", 'sata0:1.startConnected = "TRUE"'
     $lines += 'sata0:2.present = "TRUE"', 'sata0:2.deviceType = "cdrom-image"', "sata0:2.fileName = `"$seed`"", 'sata0:2.startConnected = "TRUE"'

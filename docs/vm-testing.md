@@ -9,7 +9,7 @@ The guests are being rebuilt from the install media; this page describes the res
 
 | Guest | System | Used for |
 |---|---|---|
-| `VSS - Windows 10` | Windows 10 22H2, BIOS | The Windows virtual COM driver on a down-level stack, the installed package, a screenshot |
+| `VSS - Windows 10` | Windows 10 22H2, UEFI, Secure Boot off | The Windows virtual COM driver on a down-level stack, the installed package, a screenshot |
 | `VSS - Windows 11` | Windows 11 25H2, UEFI, Secure Boot off, no vTPM | The same on the newest stack |
 | `VSS - Ubuntu 26.04` | Ubuntu 26.04.1 LTS | Pseudo-terminal ports, `vport`, what third-party serial programs see |
 
@@ -46,19 +46,18 @@ The install media are in `E:\ISOs`. `tools/vm/iso-hashes.json` holds the SHA-256
 # 2. The disk and the VMX. This does not start the guest, and it never overwrites one.
 ./tools/vm/new-vm.ps1 -Guest windows11
 
-# 3. Start it. The guest installs, sets itself up and powers off.
-vmrun -T ws start 'D:\Virtual Machines\VSS - Windows 11\VSS - Windows 11.vmx' gui
-
-# 4. Disconnect the install media and take the snapshot.
-./tools/vm/new-vm.ps1 -Guest windows11 -DetachMedia
-./tools/vm/vmrun.ps1 snapshot -Vm 'D:\Virtual Machines\VSS - Windows 11\VSS - Windows 11.vmx' -Name clean
+# 3. Install it, verify it and take the snapshot, with nobody at the console. This needs the credentials
+#    in the environment (credentials.ps1) and takes between half an hour and two hours.
+./tools/vm/install-guest.ps1 -Guest windows11
 ```
 
 The guest ids are `windows10`, `windows11` and `ubuntu2604`. For Ubuntu, `new-seed.ps1` hashes the password with `openssl passwd -6`
 in WSL Debian, from standard input, and reads your SSH public key from `%USERPROFILE%\.vss`. The Windows answer file skips the TPM,
 Secure Boot, RAM and CPU checks of Windows 11 setup, so the guest needs no virtual TPM and no encryption password. After the first
 logon, `tools/vm/guest/setup-guest.ps1` installs VMware Tools, turns on test signing, creates `C:\vss` and powers the guest off.
-Creating a guest and taking its first snapshot are deliberate steps: nothing in the harness does either for you.
+`install-guest.ps1` runs the whole unattended install. Windows Setup restarts the machine once, and the install ISO would then boot again and start over, so the script stops the guest at that moment, disconnects the install ISO and starts it from the disk. When the guest has powered itself off, the script starts it, waits for VMware Tools, runs a check in it with the credentials, and only then takes the `clean` snapshot. Any other result takes no snapshot.
+
+Two installers wait for a key that nobody can press: Subiquity asks "Continue with autoinstall?", and the Windows 10 media ask "Press any key to boot from CD". `new-vm.ps1` boots patched copies of those two ISOs, made by `patch_ubuntu_iso.py` and `patch_windows_iso.py` (they need `pycdlib`) and kept in `_iso` next to the VMs. The originals are never modified. The Windows disks are SATA, because the virtual NVMe disk stalled Setup.
 
 ## The loop
 
@@ -75,7 +74,7 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 ./tools/vm/vmrun.ps1 stop -Vm $vm
 ```
 
-`run` exits with the exit code of the guest command, and fails if the guest does not report one. `snapshot` creates a
+`run` exits with the exit code of the guest command, and fails if the guest does not report one. On a Windows guest the command line is PowerShell syntax; on Linux it is bash. `snapshot` creates a
 snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
 lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and `test-vm.ps1` and `test-seed.ps1` check the guest builders with placeholders. All three run in CI.
 
