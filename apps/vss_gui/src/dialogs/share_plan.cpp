@@ -90,18 +90,44 @@ share_plan make_share_plan(int programs, int free_pairs, bool windows)
 
 QString ordinal_word(int value)
 {
+    // Each word is its own catalogue entry, so a language can inflect it to fit
+    // the sentence around it. The context is "ordinal".
     static const char* const words[] = {
-        "first",        "second",        "third",          "fourth",
-        "fifth",        "sixth",         "seventh",        "eighth",
-        "ninth",        "tenth",         "eleventh",       "twelfth",
-        "thirteenth",   "fourteenth",    "fifteenth",      "sixteenth",
-        "seventeenth",  "eighteenth",    "nineteenth",     "twentieth",
-        "twenty-first", "twenty-second", "twenty-third",   "twenty-fourth",
-        "twenty-fifth", "twenty-sixth",  "twenty-seventh", "twenty-eighth",
-        "twenty-ninth", "thirtieth",     "thirty-first",   "thirty-second"};
+        QT_TRANSLATE_NOOP("ordinal", "first"),
+        QT_TRANSLATE_NOOP("ordinal", "second"),
+        QT_TRANSLATE_NOOP("ordinal", "third"),
+        QT_TRANSLATE_NOOP("ordinal", "fourth"),
+        QT_TRANSLATE_NOOP("ordinal", "fifth"),
+        QT_TRANSLATE_NOOP("ordinal", "sixth"),
+        QT_TRANSLATE_NOOP("ordinal", "seventh"),
+        QT_TRANSLATE_NOOP("ordinal", "eighth"),
+        QT_TRANSLATE_NOOP("ordinal", "ninth"),
+        QT_TRANSLATE_NOOP("ordinal", "tenth"),
+        QT_TRANSLATE_NOOP("ordinal", "eleventh"),
+        QT_TRANSLATE_NOOP("ordinal", "twelfth"),
+        QT_TRANSLATE_NOOP("ordinal", "thirteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "fourteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "fifteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "sixteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "seventeenth"),
+        QT_TRANSLATE_NOOP("ordinal", "eighteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "nineteenth"),
+        QT_TRANSLATE_NOOP("ordinal", "twentieth"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-first"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-second"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-third"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-fourth"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-fifth"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-sixth"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-seventh"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-eighth"),
+        QT_TRANSLATE_NOOP("ordinal", "twenty-ninth"),
+        QT_TRANSLATE_NOOP("ordinal", "thirtieth"),
+        QT_TRANSLATE_NOOP("ordinal", "thirty-first"),
+        QT_TRANSLATE_NOOP("ordinal", "thirty-second")};
     if (value < 1 || value > 32)
         return QString::number(value);
-    return QString::fromLatin1(words[value - 1]);
+    return QCoreApplication::translate("ordinal", words[value - 1]);
 }
 
 QString share_warning_rich(const share_plan& plan)

@@ -2698,12 +2698,12 @@
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="169" />
+            <location filename="../src/dialogs/network_uri.cpp" line="189" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>Introduzca una dirección como tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="175" />
+            <location filename="../src/dialogs/network_uri.cpp" line="195" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>Elija un puerto del 1 al 65535.</translation>
         </message>
@@ -3856,37 +3856,37 @@
             <translation>%1 y %2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>Studio no puede crear un puerto que otro programa pueda abrir.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="147" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>Solo %1 de los %2 programas pueden abrir su puerto.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="129" />
+            <location filename="../src/dialogs/share_plan.cpp" line="155" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio encontró 1 par libre.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="134" />
+            <location filename="../src/dialogs/share_plan.cpp" line="160" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio no encontró ningún par libre.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="139" />
+            <location filename="../src/dialogs/share_plan.cpp" line="165" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio encontró %1 pares libres.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="154" />
+            <location filename="../src/dialogs/share_plan.cpp" line="180" />
             <source>The %1 port works only inside Studio.</source>
-            <translation>El puerto %1 funciona solo dentro de Studio.</translation>
+            <translation>El %1 puerto funciona solo dentro de Studio.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="186" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>Los %1 puertos restantes funcionan solo dentro de Studio.</translation>
         </message>
@@ -4540,12 +4540,12 @@
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="187" />
+            <location filename="../src/dialogs/share_plan.cpp" line="213" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="196" />
+            <location filename="../src/dialogs/share_plan.cpp" line="222" />
             <source>A free port</source>
             <translation>Un puerto libre</translation>
         </message>
@@ -4947,7 +4947,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
             <source>Keep the %1 as Studio only</source>
-            <translation>Mantener %1 solo en Studio</translation>
+            <translation>Mantener el %1 puerto solo en Studio</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
@@ -7428,6 +7428,169 @@
         <message>
             <source>Not valid</source>
             <translation type="vanished">No válido</translation>
+        </message>
+    </context>
+    <context>
+        <name>ordinal</name>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <source>first</source>
+            <translation>primer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <source>second</source>
+            <translation>segundo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <source>third</source>
+            <translation>tercer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <source>fourth</source>
+            <translation>cuarto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <source>fifth</source>
+            <translation>quinto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <source>sixth</source>
+            <translation>sexto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <source>seventh</source>
+            <translation>séptimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <source>eighth</source>
+            <translation>octavo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <source>ninth</source>
+            <translation>noveno</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <source>tenth</source>
+            <translation>décimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <source>eleventh</source>
+            <translation>undécimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <source>twelfth</source>
+            <translation>duodécimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <source>thirteenth</source>
+            <translation>decimotercer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <source>fourteenth</source>
+            <translation>decimocuarto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <source>fifteenth</source>
+            <translation>decimoquinto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <source>sixteenth</source>
+            <translation>decimosexto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <source>seventeenth</source>
+            <translation>decimoséptimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <source>eighteenth</source>
+            <translation>decimoctavo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <source>nineteenth</source>
+            <translation>decimonoveno</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <source>twentieth</source>
+            <translation>vigésimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <source>twenty-first</source>
+            <translation>vigésimo primer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <source>twenty-second</source>
+            <translation>vigésimo segundo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <source>twenty-third</source>
+            <translation>vigésimo tercer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <source>twenty-fourth</source>
+            <translation>vigésimo cuarto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <source>twenty-fifth</source>
+            <translation>vigésimo quinto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <source>twenty-sixth</source>
+            <translation>vigésimo sexto</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <source>twenty-seventh</source>
+            <translation>vigésimo séptimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <source>twenty-eighth</source>
+            <translation>vigésimo octavo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <source>twenty-ninth</source>
+            <translation>vigésimo noveno</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <source>thirtieth</source>
+            <translation>trigésimo</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <source>thirty-first</source>
+            <translation>trigésimo primer</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <source>thirty-second</source>
+            <translation>trigésimo segundo</translation>
         </message>
     </context>
     <context>
@@ -11067,7 +11230,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
             <source>Keep the %1 as Studio only</source>
-            <translation>Mantener %1 solo en Studio</translation>
+            <translation>Mantener el %1 puerto solo en Studio</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1176" />

@@ -2698,12 +2698,12 @@
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="169" />
+            <location filename="../src/dialogs/network_uri.cpp" line="189" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>أدخل عنواناً مثل tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="175" />
+            <location filename="../src/dialogs/network_uri.cpp" line="195" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>اختر منفذاً من 1 إلى 65535.</translation>
         </message>
@@ -3860,37 +3860,37 @@
             <translation>%1 و%2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>لا يستطيع Studio إنشاء منفذ يمكن لبرنامج آخر فتحه.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="147" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>يمكن لـ %1 فقط من %2 برامج فتح منافذها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="129" />
+            <location filename="../src/dialogs/share_plan.cpp" line="155" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، وقد وجد Studio زوجاً حراً واحداً.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="134" />
+            <location filename="../src/dialogs/share_plan.cpp" line="160" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، ولم يجد Studio أي زوج حر.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="139" />
+            <location filename="../src/dialogs/share_plan.cpp" line="165" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، وقد وجد Studio %1 من الأزواج الحرة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="154" />
+            <location filename="../src/dialogs/share_plan.cpp" line="180" />
             <source>The %1 port works only inside Studio.</source>
             <translation>المنفذ %1 يعمل داخل Studio فقط.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="186" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>المنافذ الـ %1 المتبقية تعمل داخل Studio فقط.</translation>
         </message>
@@ -4548,12 +4548,12 @@
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="187" />
+            <location filename="../src/dialogs/share_plan.cpp" line="213" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="196" />
+            <location filename="../src/dialogs/share_plan.cpp" line="222" />
             <source>A free port</source>
             <translation>منفذ حر</translation>
         </message>
@@ -7436,6 +7436,169 @@
         <message>
             <source>Not valid</source>
             <translation type="vanished">غير صالح</translation>
+        </message>
+    </context>
+    <context>
+        <name>ordinal</name>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <source>first</source>
+            <translation>الأول</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <source>second</source>
+            <translation>الثاني</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <source>third</source>
+            <translation>الثالث</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <source>fourth</source>
+            <translation>الرابع</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <source>fifth</source>
+            <translation>الخامس</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <source>sixth</source>
+            <translation>السادس</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <source>seventh</source>
+            <translation>السابع</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <source>eighth</source>
+            <translation>الثامن</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <source>ninth</source>
+            <translation>التاسع</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <source>tenth</source>
+            <translation>العاشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <source>eleventh</source>
+            <translation>الحادي عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <source>twelfth</source>
+            <translation>الثاني عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <source>thirteenth</source>
+            <translation>الثالث عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <source>fourteenth</source>
+            <translation>الرابع عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <source>fifteenth</source>
+            <translation>الخامس عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <source>sixteenth</source>
+            <translation>السادس عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <source>seventeenth</source>
+            <translation>السابع عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <source>eighteenth</source>
+            <translation>الثامن عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <source>nineteenth</source>
+            <translation>التاسع عشر</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <source>twentieth</source>
+            <translation>العشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <source>twenty-first</source>
+            <translation>الحادي والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <source>twenty-second</source>
+            <translation>الثاني والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <source>twenty-third</source>
+            <translation>الثالث والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <source>twenty-fourth</source>
+            <translation>الرابع والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <source>twenty-fifth</source>
+            <translation>الخامس والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <source>twenty-sixth</source>
+            <translation>السادس والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <source>twenty-seventh</source>
+            <translation>السابع والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <source>twenty-eighth</source>
+            <translation>الثامن والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <source>twenty-ninth</source>
+            <translation>التاسع والعشرون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <source>thirtieth</source>
+            <translation>الثلاثون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <source>thirty-first</source>
+            <translation>الحادي والثلاثون</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <source>thirty-second</source>
+            <translation>الثاني والثلاثون</translation>
         </message>
     </context>
     <context>

@@ -63,11 +63,13 @@ ctest --preset linux-release
 vss_gui
 ```
 
-`Ports -> Add virtual port` creates a port and tells you the path another
-application should open. `Ports -> Attach serial port` opens a real device,
-an RFC 2217 server or a TCP/UDP bridge. `Topology` links ports, `Scenarios`
-builds the common shapes in one click, and the monitor shows the traffic as it
-flows. `File -> Save` stores the topology as JSON.
+An empty window offers four jobs: give my program a serial port, connect two
+programs, share one device, and watch traffic. `Ports -> Add port` creates a
+virtual port, a linked pair or a real device and tells you the path another
+application should open. `Topology` links ports and shares a device with
+several programs, and the monitor shows the traffic as it flows. Advanced mode
+adds network endpoints, fixtures and the expert panels to the same window.
+`File -> Save` stores the topology as JSON.
 
 The GUI can also prove itself without a display or a user:
 
