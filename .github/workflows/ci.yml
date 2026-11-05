@@ -318,6 +318,7 @@ jobs:
       contents: read
     env:
       BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      TRACY_VERSION: v0.14.1
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -332,14 +333,43 @@ jobs:
       - name: Set up vcpkg
         uses: iainchesworthlabs/icl-common-infra/actions/setup-vcpkg@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
 
+      # Tracy's tools fetch CPM.cmake and their own sources from GitHub when they are
+      # configured, and a refused download fails the job before any of this project builds.
+      # The built tools are kept in the cache, so a run normally downloads nothing, and the
+      # build is retried when it does have to download.
+      - name: Restore the Tracy command line tools
+        id: tracy-tools
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: tracy-tools
+          key: tracy-tools-${{ runner.os }}-${{ runner.arch }}-${{ env.TRACY_VERSION }}
+
       - name: Build the Tracy command line tools
+        if: steps.tracy-tools.outputs.cache-hit != 'true'
         run: |
-          curl -fsSL https://github.com/wolfpld/tracy/archive/refs/tags/v0.14.1.tar.gz -o tracy-src.tar.gz
-          tar xzf tracy-src.tar.gz
-          cmake -S tracy-0.14.1/capture -B tracy-tools/capture -DCMAKE_BUILD_TYPE=Release
-          cmake --build tracy-tools/capture --parallel
-          cmake -S tracy-0.14.1/csvexport -B tracy-tools/csvexport -DCMAKE_BUILD_TYPE=Release
-          cmake --build tracy-tools/csvexport --parallel
+          source_dir="tracy-${TRACY_VERSION#v}"
+          build_tools() {
+            rm -rf tracy-src.tar.gz "$source_dir" tracy-tools &&
+            curl -fsSL --retry 3 --retry-all-errors --retry-delay 5               "https://github.com/wolfpld/tracy/archive/refs/tags/${TRACY_VERSION}.tar.gz"               -o tracy-src.tar.gz &&
+            tar xzf tracy-src.tar.gz &&
+            cmake -S "$source_dir/capture" -B tracy-tools/capture -DCMAKE_BUILD_TYPE=Release &&
+            cmake --build tracy-tools/capture --parallel &&
+            cmake -S "$source_dir/csvexport" -B tracy-tools/csvexport -DCMAKE_BUILD_TYPE=Release &&
+            cmake --build tracy-tools/csvexport --parallel
+          }
+          for attempt in 1 2 3; do
+            build_tools && exit 0
+            echo "Building the Tracy tools failed (attempt $attempt of 3)." >&2
+            sleep $((attempt * 20))
+          done
+          exit 1
+
+      - name: Keep the Tracy command line tools
+        if: steps.tracy-tools.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: tracy-tools
+          key: ${{ steps.tracy-tools.outputs.cache-primary-key }}
 
       - name: Configure with instrumentation
         run: cmake --preset linux-tracy
