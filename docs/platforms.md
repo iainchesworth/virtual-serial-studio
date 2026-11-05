@@ -29,12 +29,12 @@ that system. It does not prove that anyone has seen the program on a real displa
 | T5 | `vss_gui --selftest` passes on the offscreen platform. |
 | T6 | The main window renders in the light and the dark theme (`vss_gui --screenshot`). The images are artifacts for a person to look at; they are never committed. |
 | T7 | What the system and common tools show for a virtual port: the device node and its mode, `stty`, `/proc/tty/drivers` or `ioreg`, and pyserial's port list. These are recorded observations. |
-| T8 | The stable link of `vport` appears, is replaced when stale and is removed on exit. Not yet implemented. |
-| T9 | The package artifact installs and runs as a user would run it. Not yet built. |
+| T8 | `vss_cli vport` makes two stable links that carry 1 KB each way, a second `vport` is refused the names a running one holds, links left by a killed process are replaced, and SIGTERM removes them and exits 0. |
+| T9 | A release archive (`--package`) is unpacked with no build environment, and `vss_cli selftest` and `vss_gui --version` run from it. On Linux every library the GUI is linked to must be found, and the GUI starts under Xvfb when the machine has no display. A cell given no package skips T9. |
 | T10 | `vss_cli bench` moves 4 MB over a pseudo terminal pair. The throughput is recorded; the floor is set after three runs agree. |
 | T11 | An experiment with a kernel serial gadget in the Ubuntu guest. |
 
-Windows cells skip T2, T3, T7 and T10, which need pseudo terminals. The Windows guests run them against the driver once it
+Windows cells skip T2, T3, T7, T8 and T10, which need pseudo terminals. The Windows guests run them against the driver once it
 exists.
 
 ## Running a cell

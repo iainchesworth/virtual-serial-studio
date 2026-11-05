@@ -57,7 +57,11 @@ jobs:
 
       - name: Install GUI system libraries
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+        run: |
+          sudo apt-get update
+          # Xvfb and the xcb libraries are what T9 needs to start the packaged GUI without a display.
+          sudo apt-get install -y libgl1-mesa-dev xvfb xauth libxcb-cursor0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0
 
       # T1. A failure here does not stop the cell tests: they report what they find.
       - name: Build and run the suite
@@ -77,6 +81,19 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/probe"
           "$RUNNER_TEMP/probe/bin/pip" install --quiet pyserial==3.5
 
+      # T9 runs the installed programs from an archive, the way the Release workflow packs them. If the
+      # install fails there is no archive and T9 reports not_run.
+      - name: Install and pack the runtime component
+        if: ${{ !cancelled() }}
+        shell: bash
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: |
+          set -uo pipefail
+          rm -rf "$RUNNER_TEMP/stage" "$RUNNER_TEMP/package.tar.gz"
+          cmake --install "build/$PRESET" --component runtime --prefix "$RUNNER_TEMP/stage" &&
+            (cd "$RUNNER_TEMP/stage" && cmake -E tar czf "$RUNNER_TEMP/package.tar.gz" .) || true
+
       - name: Run the cell tests
         if: ${{ !cancelled() }}
         shell: bash
@@ -95,7 +112,8 @@ jobs:
           suite=1
           [ "$SUITE_OUTCOME" = success ] && suite=0
           "$PY" tools/matrix/run_cell.py --cell "$CELL" --build-dir "build/$PRESET" --out out \
-            --commit "$COMMIT" --runner-label "$RUNNER_LABEL" --workflow-run "$RUN_ID" --t1-exit "$suite"
+            --commit "$COMMIT" --runner-label "$RUNNER_LABEL" --workflow-run "$RUN_ID" --t1-exit "$suite" \
+            --package "$RUNNER_TEMP/package.tar.gz"
 
       - name: Keep the results
         if: ${{ !cancelled() }}

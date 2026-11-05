@@ -78,6 +78,24 @@ $vm = 'D:\Virtual Machines\VSS - Windows 10\VSS - Windows 10.vmx'
 snapshot once and fails if the name exists. `revert` fails if the snapshot is missing. `-DryRun` prints the `vmrun` command
 lines without running them. `tools/vm/test-vmrun.ps1` checks all of this against a stand-in for `vmrun`, and `test-vm.ps1` and `test-seed.ps1` check the guest builders with placeholders. All three run in CI.
 
+## Running a cell in a guest
+
+The guests have no compiler, so the programs are built outside them and copied in. Two scripts build what a guest needs, and a third runs the cell:
+
+```powershell
+# Windows guests: needs Visual Studio, Qt (ICL_QT_ROOT) and Boost (BOOST_ROOT) on this machine.
+./tools/vm/make-bundle.ps1 -Repository . -Out D:\bundle-win
+./tools/vm/guest-cell.ps1 -Guest windows11 -Bundle D:\bundle-win -Commit (git rev-parse --short HEAD)
+
+# Ubuntu guest: run the first line on Linux or in WSL, with Qt (VSS_QT_ROOT) and Boost (BOOST_ROOT).
+tools/vm/make-bundle.sh . /mnt/d/bundle-ubuntu
+./tools/vm/guest-cell.ps1 -Guest ubuntu2604 -Bundle D:\bundle-ubuntu -Package virtual-serial-studio-dry-run-linux-x86_64.tar.gz
+```
+
+`guest-cell.ps1` reverts to `clean`, starts the guest, copies in the bundle and `tools/vm/guest/win-cell.ps1` or `linux-cell.sh`, runs `ctest` and `tools/matrix/run_cell.py` in the guest, brings back `<Out>\<guest>\cell-out` (the result JSON, the logs and the screenshots) and stops the guest. It exits with 1 when a test failed or did not run. `-Package` is for T9: the archive from the Release workflow's dry run, for that system. The script refuses a guest that is already running, because starting or stopping a guest cuts off whoever is using it; `-Force` overrides that.
+
+The guest scripts install what the program needs on Ubuntu (cmake for `ctest`, the OpenGL, EGL and fontconfig libraries Qt loads, and Xvfb with the xcb libraries for T9). On Windows the bundle carries a Python, PowerShell 7 for the `vm_*` suites, the Visual C++ runtime and the Qt offscreen plugin. `tools/vm/test-guest-cell.ps1` checks the order of the `vmrun` calls with `-DryRun`.
+
 ## Safety
 
 - Never load a driver or turn on test signing on the development machine.

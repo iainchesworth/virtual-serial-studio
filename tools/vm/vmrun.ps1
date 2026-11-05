@@ -26,7 +26,7 @@
 
 .PARAMETER Action
     list | status | start | stop | snapshots | snapshot | revert | copy-to |
-    copy-from | run | screenshot | ip | wait-tools
+    copy-from | run | screenshot | ip | wait-tools | wait-guest
 
 .PARAMETER Kind
     The guest family, used by the run action to choose the shell. The default
@@ -47,7 +47,7 @@ param(
     [Parameter(Mandatory, Position = 0)]
     [ValidateSet('list', 'status', 'start', 'stop', 'snapshots', 'snapshot',
                  'revert', 'copy-to', 'copy-from', 'run', 'screenshot', 'ip',
-                 'wait-tools')]
+                 'wait-tools', 'wait-guest')]
     [string] $Action,
 
     [string] $Vm,
@@ -251,6 +251,24 @@ switch ($Action) {
             Start-Sleep -Seconds 5
         } while ((Get-Date) -lt $deadline)
         throw "VMware Tools did not report 'running' within $TimeoutSeconds seconds (last state: $state)"
+    }
+
+    'wait-guest' {
+        # Tools can report "running" before the guest accepts operations (the logon is still
+        # under way), and copy-to then fails with "VMware Tools are not running in the guest".
+        # Ask for something that needs the guest's answer, with the credentials.
+        $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+        do {
+            try {
+                Invoke-Vmrun 'listProcessesInGuest' @($Vm) -Guest | Out-Null
+                exit 0
+            } catch {
+                if ($DryRun) { exit 0 }
+                $last = $_.Exception.Message
+            }
+            Start-Sleep -Seconds 5
+        } while ((Get-Date) -lt $deadline)
+        throw "the guest did not accept operations within $TimeoutSeconds seconds (last error: $last)"
     }
 
     'run' {

@@ -104,6 +104,10 @@ if(VSS_PWSH)
     COMMAND ${VSS_PWSH} -NoProfile -File
             ${PROJECT_SOURCE_DIR}/tools/vm/test-vm.ps1)
   set_tests_properties(vm_builder PROPERTIES TIMEOUT 120)
+  add_test(NAME vm_guest_cell
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-guest-cell.ps1)
+  set_tests_properties(vm_guest_cell PROPERTIES TIMEOUT 180)
   add_test(NAME vm_credentials
     COMMAND ${VSS_PWSH} -NoProfile -File
             ${PROJECT_SOURCE_DIR}/tools/vm/test-credentials.ps1)

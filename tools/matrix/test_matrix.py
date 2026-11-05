@@ -62,6 +62,51 @@ class RunCellTests(unittest.TestCase):
         self.assertEqual(result["results"][0]["status"], "fail")
 
 
+class PackageAndLinkTests(unittest.TestCase):
+    def statuses(self, extra: list[str]) -> dict[str, str]:
+        with tempfile.TemporaryDirectory() as scratch:
+            build, out = Path(scratch, "build"), Path(scratch, "out")
+            build.mkdir()
+            with redirect_stdout(io.StringIO()):
+                run_cell.main(["--cell", "empty", "--build-dir", str(build), "--out", str(out)] + extra)
+            result = json.loads((out / "result-empty.json").read_text())
+            return {r["id"]: r["status"] for r in result["results"]}
+
+    def test_no_package_is_a_skip_with_a_reason(self) -> None:
+        self.assertEqual(self.statuses([])["T9"], "skip")
+
+    def test_a_package_that_is_not_there_is_not_run(self) -> None:
+        self.assertEqual(self.statuses(["--package", "no-such-package.tar.gz"])["T9"], "not_run")
+
+    def test_a_package_without_programs_is_a_fail(self) -> None:
+        with tempfile.TemporaryDirectory() as scratch:
+            (Path(scratch) / "bin").mkdir()
+            self.assertEqual(self.statuses(["--package", scratch])["T9"], "fail")
+
+    @unittest.skipUnless(run_cell.POSIX, "the stand-in programs are shell scripts")
+    def test_a_package_whose_programs_run_passes_and_a_broken_one_fails(self) -> None:
+        import stat
+
+        with tempfile.TemporaryDirectory() as scratch:
+            package = Path(scratch, "package")
+            (package / "bin").mkdir(parents=True)
+            cli, gui = package / "bin" / "vss_cli", package / "bin" / "vss_gui"
+            cli.write_text("#!/bin/sh\necho selftest ok\n")
+            gui.write_text('#!/bin/sh\ncase "$1" in --version) echo 1.2.3;; *) exit 3;; esac\n')
+            for program in (cli, gui):
+                program.chmod(program.stat().st_mode | stat.S_IXUSR)
+            self.assertEqual(self.statuses(["--package", str(package)])["T9"], "pass")
+            cli.write_text("#!/bin/sh\nexit 1\n")
+            self.assertEqual(self.statuses(["--package", str(package)])["T9"], "fail")
+
+    def test_the_kernel_experiment_is_a_skip_outside_a_guest(self) -> None:
+        self.assertEqual(self.statuses([])["T11"], "skip")
+
+    @unittest.skipUnless(run_cell.POSIX, "vport needs pseudo terminals")
+    def test_vport_not_built_is_not_run(self) -> None:
+        self.assertEqual(self.statuses([])["T8"], "not_run")
+
+
 class MergeTests(unittest.TestCase):
     def write(self, directory: Path, data: dict) -> None:
         (directory / f"result-{data['cell']}.json").write_text(json.dumps(data))
