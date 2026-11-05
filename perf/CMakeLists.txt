@@ -6,7 +6,7 @@
 
 add_executable(vss_perf perf_main.cpp)
 target_compile_features(vss_perf PRIVATE cxx_std_23)
-target_link_libraries(vss_perf PRIVATE Vss::studio Vss::ports)
+target_link_libraries(vss_perf PRIVATE Vss::studio Vss::ports Vss::testkit)
 vss_set_warnings(vss_perf)
 
 add_custom_target(vss_perf_run

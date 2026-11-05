@@ -8,7 +8,11 @@
 // tested here on every platform.
 //
 
+// The core is plain C and declares no linkage of its own.
+extern "C"
+{
 #include "vsscom_core.h"
+}
 
 #include "test_framework.hpp"
 

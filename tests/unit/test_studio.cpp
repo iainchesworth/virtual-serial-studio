@@ -33,8 +33,10 @@ TEST_CASE("studio: loopback virtual ports advertise their path")
 TEST_CASE("studio: duplicate names are made unique")
 {
     studio app;
-    const auto first = app.create_virtual_port("port", virtual_port_kind::loopback);
-    const auto second = app.create_virtual_port("port", virtual_port_kind::loopback);
+    const auto first =
+        app.create_virtual_port("port", virtual_port_kind::loopback);
+    const auto second =
+        app.create_virtual_port("port", virtual_port_kind::loopback);
     REQUIRE(first);
     REQUIRE(second);
     REQUIRE_EQ((*first)->name(), std::string("port"));
@@ -54,14 +56,16 @@ TEST_CASE("studio: mock ports are scriptable")
 TEST_CASE("studio: removal by id and by name")
 {
     studio app;
-    const auto created = app.create_virtual_port("v", virtual_port_kind::loopback);
+    const auto created =
+        app.create_virtual_port("v", virtual_port_kind::loopback);
     REQUIRE(created);
 
     REQUIRE(app.remove_port("v"));
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
     REQUIRE_EQ(app.remove_port("v"), make_error_code(errc::not_found));
 
-    const auto again = app.create_virtual_port("v", virtual_port_kind::loopback);
+    const auto again =
+        app.create_virtual_port("v", virtual_port_kind::loopback);
     REQUIRE(again);
     REQUIRE(app.remove_port((*again)->id()));
     REQUIRE_EQ(app.remove_port(endpoint_id{4242}),
@@ -210,7 +214,8 @@ TEST_CASE("studio: environment queries are safe")
 TEST_CASE("studio: join_ports reports a bad source")
 {
     studio app;
-    REQUIRE(!app.join_ports({"serial://no-such-source"}, "serial://no-such-target"));
+    REQUIRE(!app.join_ports({"serial://no-such-source"},
+                            "serial://no-such-target"));
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
 
     REQUIRE(!app.join_ports({}, "serial://no-such-target"));
@@ -264,7 +269,8 @@ TEST_CASE("studio: applying a mock and an automatic virtual port")
 
 TEST_CASE("studio: apply understands every link shape")
 {
-    const auto make_port = [](const std::string& name) {
+    const auto make_port = [](const std::string& name)
+    {
         config::port_entry port;
         port.name = name;
         port.kind = "virtual";
@@ -334,13 +340,9 @@ TEST_CASE("studio: apply reports unsupported port kinds")
 
     studio app;
     const auto applied = app.apply(document);
-#if defined(_WIN32)
-    REQUIRE(!applied);
-    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
-#else
     // Named pipes are not implemented on any platform yet.
     REQUIRE(!applied);
-#endif
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
 }
 
 TEST_CASE("studio: a driver topology fails cleanly without the driver")
@@ -372,14 +374,16 @@ TEST_CASE("studio: virtual port kinds round trip through the snapshot")
 
     const auto snapshot = app.snapshot();
     REQUIRE_EQ(snapshot.ports.size(), std::size_t{1});
-#if defined(_WIN32)
-    // No pseudo terminals on Windows: the request falls back to auto.
-    if (snapshot.ports[0].virtual_kind == "auto")
+    if (supports(virtual_port_kind::pty))
+    {
+        REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("pty"));
+    }
+    else if (snapshot.ports[0].virtual_kind == "auto")
+    {
+        // No pseudo terminals here: the request falls back to auto.
         REQUIRE_EQ(app.advertised_path((*created)->id()).find("loopback"),
                    std::string::npos);
-#else
-    REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("pty"));
-#endif
+    }
 }
 
 TEST_CASE("studio: removing a port releases its advertised path")

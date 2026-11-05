@@ -12,9 +12,7 @@
 #include <QSysInfo>
 #include <QtGlobal>
 
-#if __has_include(<boost/version.hpp>)
 #include <boost/version.hpp>
-#endif
 
 namespace vss::gui::support
 {
@@ -42,14 +40,10 @@ namespace
 
 QString boost_version()
 {
-#ifdef BOOST_VERSION
     return QStringLiteral("%1.%2.%3")
         .arg(BOOST_VERSION / 100000)
         .arg((BOOST_VERSION / 100) % 1000)
         .arg(BOOST_VERSION % 100);
-#else
-    return QStringLiteral("unknown");
-#endif
 }
 
 } // namespace
