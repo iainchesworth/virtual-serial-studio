@@ -30,11 +30,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Troubleshoot", text);
-}
-
 row_tone tone_for(check_state state)
 {
     switch (state)
@@ -101,8 +96,10 @@ TroubleshootDialog::TroubleshootDialog(StudioBackend& backend,
 
 void TroubleshootDialog::build()
 {
-    setWindowTitle(t("Why is nothing arriving?"));
-    setAccessibleName(t("Why is nothing arriving?"));
+    setWindowTitle(QCoreApplication::translate("Troubleshoot",
+                                               "Why is nothing arriving?"));
+    setAccessibleName(QCoreApplication::translate("Troubleshoot",
+                                                  "Why is nothing arriving?"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(
@@ -124,7 +121,9 @@ void TroubleshootDialog::build()
     title_->setWordWrap(true);
     header_layout->addWidget(title_);
     sub_ = new QLabel(
-        t("Studio checked each step between the device and your program."),
+        QCoreApplication::translate(
+            "Troubleshoot",
+            "Studio checked each step between the device and your program."),
         header);
     sub_->setFont(Theme::instance().font(text_style::body));
     sub_->setProperty("muted", true);
@@ -159,7 +158,8 @@ void TroubleshootDialog::build()
     auto* try_layout = new QVBoxLayout(try_card);
     try_layout->setContentsMargins(16, 14, 16, 14);
     try_layout->setSpacing(8);
-    auto* eyebrow = new QLabel(t("Try this"), try_card);
+    auto* eyebrow = new QLabel(
+        QCoreApplication::translate("Troubleshoot", "Try this"), try_card);
     eyebrow->setFont(Theme::instance().font(text_style::caption));
     QFont bold = eyebrow->font();
     bold.setWeight(QFont::DemiBold);
@@ -176,13 +176,17 @@ void TroubleshootDialog::build()
     auto* buttons = new QHBoxLayout();
     buttons->setContentsMargins(0, 0, 0, 0);
     buttons->setSpacing(8);
-    copy_ = make_dialog_button(t("Copy port path"), nullptr, try_card);
+    copy_ = make_dialog_button(
+        QCoreApplication::translate("Troubleshoot", "Copy port path"), nullptr,
+        try_card);
     copy_->setProperty("size", QStringLiteral("small"));
     polish(copy_);
     copy_->setAutoDefault(false);
     connect(copy_, &QPushButton::clicked, this, &TroubleshootDialog::copy_path);
     buttons->addWidget(copy_);
-    auto* again = make_dialog_button(t("Check again"), nullptr, try_card);
+    auto* again = make_dialog_button(
+        QCoreApplication::translate("Troubleshoot", "Check again"), nullptr,
+        try_card);
     again->setProperty("size", QStringLiteral("small"));
     polish(again);
     again->setAutoDefault(false);
@@ -194,9 +198,11 @@ void TroubleshootDialog::build()
     body_layout->addWidget(try_card);
 
     auto* muted = new QLabel(
-        t("Still stuck? A diagnostic bundle gathers the setup, the log and "
-          "the environment for whoever helps you. Traffic contents are left "
-          "out unless you choose to include them."),
+        QCoreApplication::translate(
+            "Troubleshoot",
+            "Still stuck? A diagnostic bundle gathers the setup, the log and "
+            "the environment for whoever helps you. Traffic contents are left "
+            "out unless you choose to include them."),
         body);
     muted->setFont(Theme::instance().font(text_style::caption));
     muted->setProperty("muted", true);
@@ -209,13 +215,16 @@ void TroubleshootDialog::build()
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* bundle =
-        make_dialog_button(t("Create diagnostic bundle"), "quiet", footer);
+    auto* bundle = make_dialog_button(
+        QCoreApplication::translate("Troubleshoot", "Create diagnostic bundle"),
+        "quiet", footer);
     bundle->setAutoDefault(false);
     connect(bundle, &QPushButton::clicked, this,
             &TroubleshootDialog::bundle_requested);
     footer_layout->addWidget(bundle);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close =
+        make_dialog_button(QCoreApplication::translate("Troubleshoot", "Close"),
+                           "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -243,16 +252,23 @@ void TroubleshootDialog::rebuild()
     }
     path_ = selected != nullptr ? port_display_path(*selected) : QString();
 
-    const QString title = path_.isEmpty()
-                              ? t("Why is nothing arriving?")
-                              : t("Why is nothing arriving on %1?").arg(path_);
+    const QString title =
+        path_.isEmpty()
+            ? QCoreApplication::translate("Troubleshoot",
+                                          "Why is nothing arriving?")
+            : QCoreApplication::translate("Troubleshoot",
+                                          "Why is nothing arriving on %1?")
+                  .arg(path_);
     title_->setText(title);
     setWindowTitle(title);
     setAccessibleName(title);
     if (copy_ != nullptr)
     {
-        copy_->setText(path_.isEmpty() ? t("Copy port path")
-                                       : t("Copy %1").arg(path_));
+        copy_->setText(
+            path_.isEmpty()
+                ? QCoreApplication::translate("Troubleshoot", "Copy port path")
+                : QCoreApplication::translate("Troubleshoot", "Copy %1")
+                      .arg(path_));
         copy_->setAccessibleName(copy_->text());
         copy_->setToolTip(copy_->text());
         copy_->setVisible(!path_.isEmpty());
@@ -263,17 +279,24 @@ void TroubleshootDialog::rebuild()
     {
         const QString shown = escape(path_);
         steps_->setText(
-            t("1. In your program, choose <b>%1</b> as the serial port.<br>"
-              "2. If the program shows an error, another program may be using "
-              "%1. Close it, then try again.<br>"
-              "3. Some programs only list ports when they start. Restart the "
-              "program after creating the port.")
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "1. In your program, choose <b>%1</b> as the serial port.<br>"
+                "2. If the program shows an error, another program may be "
+                "using "
+                "%1. Close it, then try again.<br>"
+                "3. Some programs only list ports when they start. Restart the "
+                "program after creating the port.")
                 .arg(shown));
         steps_->setAccessibleName(
-            t("1. In your program, choose %1 as the serial port. 2. If the "
-              "program shows an error, another program may be using %1. Close "
-              "it, then try again. 3. Some programs only list ports when they "
-              "start. Restart the program after creating the port.")
+            QCoreApplication::translate(
+                "Troubleshoot",
+                "1. In your program, choose %1 as the serial port. 2. If the "
+                "program shows an error, another program may be using %1. "
+                "Close "
+                "it, then try again. 3. Some programs only list ports when "
+                "they "
+                "start. Restart the program after creating the port.")
                 .arg(path_));
     }
 
@@ -336,7 +359,9 @@ void TroubleshootDialog::copy_path()
     if (path_.isEmpty())
         return;
     QGuiApplication::clipboard()->setText(path_);
-    ToastManager::instance().show(this, t("%1 copied.").arg(path_));
+    ToastManager::instance().show(
+        this,
+        QCoreApplication::translate("Troubleshoot", "%1 copied.").arg(path_));
 }
 
 } // namespace vss::gui::support

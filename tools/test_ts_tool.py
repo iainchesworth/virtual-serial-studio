@@ -118,6 +118,34 @@ class Groups(unittest.TestCase):
         self.assertEqual(text.count("%1 entfernen?"), 2)
 
 
+class Fill(unittest.TestCase):
+    def test_a_new_context_takes_the_translation_of_the_same_text(self):
+        path = Path(tempfile.mkdtemp()) / "vss_gui_de.ts"
+        path.write_text(
+            CATALOGUE.replace(
+                "</context>",
+                """</context>
+<context>
+    <name>Other</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Something new</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>""",
+            ),
+            encoding="utf-8",
+        )
+        self.assertEqual(tool.fill(path), 1)
+        text = path.read_text(encoding="utf-8")
+        self.assertEqual(text.count("Abbrechen"), 2)
+        self.assertEqual([item["source"] for item in tool.export(path)],
+                         ["Remove %1?", "Shared with %n programs", "Something new"])
+
+
 class Check(unittest.TestCase):
     def test_an_unfinished_catalogue_fails(self):
         self.assertEqual(len(tool.check(catalogue())), 2)

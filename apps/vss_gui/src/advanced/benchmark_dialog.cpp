@@ -31,16 +31,12 @@ namespace vss::gui
 namespace
 {
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("Benchmark", text);
-}
-
 QString port_label(const port_view& port)
 {
     if (port.path.isEmpty())
         return port.name;
-    return tr("%1 (%2)").arg(port.name, port.path);
+    return QCoreApplication::translate("Benchmark", "%1 (%2)")
+        .arg(port.name, port.path);
 }
 
 } // namespace

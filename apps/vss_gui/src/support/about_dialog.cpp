@@ -32,11 +32,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("About", text);
-}
-
 QFont semibold(QFont font)
 {
     font.setWeight(QFont::DemiBold);
@@ -99,8 +94,10 @@ AboutDialog::AboutDialog(QWidget* parent)
 
 void AboutDialog::build()
 {
-    setWindowTitle(t("About Virtual Serial Studio"));
-    setAccessibleName(t("About Virtual Serial Studio"));
+    setWindowTitle(
+        QCoreApplication::translate("About", "About Virtual Serial Studio"));
+    setAccessibleName(
+        QCoreApplication::translate("About", "About Virtual Serial Studio"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(Theme::instance().metric(
@@ -141,13 +138,16 @@ void AboutDialog::build()
     auto* heading = new QVBoxLayout();
     heading->setContentsMargins(0, 0, 0, 0);
     heading->setSpacing(4);
-    auto* title = new QLabel(t("Virtual Serial Studio"), header);
+    auto* title = new QLabel(
+        QCoreApplication::translate("About", "Virtual Serial Studio"), header);
     title->setFont(Theme::instance().font(text_style::title));
     title->setWordWrap(true);
     heading->addWidget(title);
     auto* sub = new QLabel(
-        t("Version %1. Free software under the GNU General Public License, "
-          "version 3 or later.")
+        QCoreApplication::translate(
+            "About",
+            "Version %1. Free software under the GNU General Public License, "
+            "version 3 or later.")
             .arg(info_.version),
         header);
     sub->setFont(Theme::instance().font(text_style::body));
@@ -159,37 +159,47 @@ void AboutDialog::build()
     outer->addWidget(header);
 
     tabs_ = new QTabWidget(this);
-    tabs_->setAccessibleName(t("About details"));
+    tabs_->setAccessibleName(
+        QCoreApplication::translate("About", "About details"));
     tabs_->setDocumentMode(true);
 
     // About tab.
     QVBoxLayout* about_layout = nullptr;
     QWidget* about_page = page(tabs_, about_layout);
     about_layout->addWidget(body_label(
-        t("This program is free software: you can redistribute it and/or "
-          "modify it under the terms of the GNU General Public License as "
-          "published by the Free Software Foundation, either version 3 of the "
-          "License, or (at your option) any later version."),
+        QCoreApplication::translate(
+            "About",
+            "This program is free software: you can redistribute it and/or "
+            "modify it under the terms of the GNU General Public License as "
+            "published by the Free Software Foundation, either version 3 of "
+            "the "
+            "License, or (at your option) any later version."),
         about_page));
     about_layout->addWidget(body_label(
-        t("This program is distributed in the hope that it will be useful, "
-          "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-          "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU "
-          "General Public License for more details."),
+        QCoreApplication::translate(
+            "About",
+            "This program is distributed in the hope that it will be useful, "
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU "
+            "General Public License for more details."),
         about_page));
     about_layout->addWidget(body_label(
-        t("You should have received a copy of the GNU General Public License "
-          "along with this program. If not, see "
-          "https://www.gnu.org/licenses/."),
+        QCoreApplication::translate(
+            "About",
+            "You should have received a copy of the GNU General Public License "
+            "along with this program. If not, see "
+            "https://www.gnu.org/licenses/."),
         about_page));
     about_layout->addStretch(1);
-    tabs_->addTab(about_page, t("About"));
+    tabs_->addTab(about_page, QCoreApplication::translate("About", "About"));
 
     // Environment tab.
     QVBoxLayout* environment_layout = nullptr;
     QWidget* environment_page = page(tabs_, environment_layout);
     environment_layout->addWidget(body_label(
-        t("Copy this into a bug report. It answers \"which build is this?\""),
+        QCoreApplication::translate(
+            "About",
+            "Copy this into a bug report. It answers \"which build is this?\""),
         environment_page));
     auto* card = new QFrame(environment_page);
     card->setProperty("card", true);
@@ -217,65 +227,93 @@ void AboutDialog::build()
     grid->setColumnStretch(1, 1);
     environment_layout->addWidget(card);
     environment_layout->addStretch(1);
-    tabs_->addTab(environment_page, t("Environment"));
+    tabs_->addTab(environment_page,
+                  QCoreApplication::translate("About", "Environment"));
 
     // Licences tab.
     QVBoxLayout* licences_layout = nullptr;
     QWidget* licences_page = page(tabs_, licences_layout);
     licences_layout->addWidget(body_label(
-        t("Virtual Serial Studio is free software under the GNU General "
-          "Public License, version 3 or later. It uses these components:"),
+        QCoreApplication::translate(
+            "About",
+            "Virtual Serial Studio is free software under the GNU General "
+            "Public License, version 3 or later. It uses these components:"),
         licences_page));
-    add_licence(licences_layout, t("Qt 6"),
-                t("GNU Lesser General Public License, version 3, or the GNU "
-                  "General Public License, version 3."),
-                t("Linked dynamically as installed on this PC."),
+    add_licence(licences_layout, QCoreApplication::translate("About", "Qt 6"),
+                QCoreApplication::translate(
+                    "About",
+                    "GNU Lesser General Public License, version 3, or the GNU "
+                    "General Public License, version 3."),
+                QCoreApplication::translate(
+                    "About", "Linked dynamically as installed on this PC."),
                 licences_page);
-    add_licence(licences_layout, t("Boost"),
-                t("Boost Software License, version 1.0."), {}, licences_page);
-    add_licence(licences_layout, t("Boost.VirtualSerial"),
-                t("Boost Software License, version 1.0."), {}, licences_page);
-    add_licence(licences_layout, t("Tracy"), t("BSD 3-Clause License."),
-                t("Only present when profiling support is built in."),
-                licences_page);
+    add_licence(licences_layout, QCoreApplication::translate("About", "Boost"),
+                QCoreApplication::translate(
+                    "About", "Boost Software License, version 1.0."),
+                {}, licences_page);
+    add_licence(licences_layout,
+                QCoreApplication::translate("About", "Boost.VirtualSerial"),
+                QCoreApplication::translate(
+                    "About", "Boost Software License, version 1.0."),
+                {}, licences_page);
     add_licence(
-        licences_layout, t("com0com"),
-        t("GNU General Public License, version 3."),
-        t("An optional driver for Windows, installed separately by you."),
+        licences_layout, QCoreApplication::translate("About", "Tracy"),
+        QCoreApplication::translate("About", "BSD 3-Clause License."),
+        QCoreApplication::translate(
+            "About", "Only present when profiling support is built in."),
+        licences_page);
+    add_licence(
+        licences_layout, QCoreApplication::translate("About", "com0com"),
+        QCoreApplication::translate("About",
+                                    "GNU General Public License, version 3."),
+        QCoreApplication::translate(
+            "About",
+            "An optional driver for Windows, installed separately by you."),
         licences_page);
     licences_layout->addStretch(1);
-    tabs_->addTab(licences_page, t("Licences"));
+    tabs_->addTab(licences_page,
+                  QCoreApplication::translate("About", "Licences"));
 
     // Fonts tab.
     QVBoxLayout* fonts_layout = nullptr;
     QWidget* fonts_page = page(tabs_, fonts_layout);
     fonts_layout->addWidget(body_label(
-        t("No fonts are bundled. Studio uses your system's UI font."),
+        QCoreApplication::translate(
+            "About",
+            "No fonts are bundled. Studio uses your system's UI font."),
         fonts_page));
     const QFont ui = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     const QFont fixed = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     fonts_layout->addWidget(
-        body_label(t("Interface font: %1.").arg(ui.family()), fonts_page));
+        body_label(QCoreApplication::translate("About", "Interface font: %1.")
+                       .arg(ui.family()),
+                   fonts_page));
     fonts_layout->addWidget(
-        body_label(t("Fixed font: %1.").arg(fixed.family()), fonts_page));
+        body_label(QCoreApplication::translate("About", "Fixed font: %1.")
+                       .arg(fixed.family()),
+                   fonts_page));
     fonts_layout->addStretch(1);
-    tabs_->addTab(fonts_page, t("Fonts"));
+    tabs_->addTab(fonts_page, QCoreApplication::translate("About", "Fonts"));
 
     outer->addWidget(tabs_, 1);
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* bundle =
-        make_dialog_button(t("Create diagnostic bundle"), "quiet", footer);
+    auto* bundle = make_dialog_button(
+        QCoreApplication::translate("About", "Create diagnostic bundle"),
+        "quiet", footer);
     bundle->setAutoDefault(false);
     connect(bundle, &QPushButton::clicked, this,
             &AboutDialog::bundle_requested);
     footer_layout->addWidget(bundle);
-    auto* copy = make_dialog_button(t("Copy environment"), nullptr, footer);
+    auto* copy = make_dialog_button(
+        QCoreApplication::translate("About", "Copy environment"), nullptr,
+        footer);
     copy->setAutoDefault(false);
     connect(copy, &QPushButton::clicked, this, &AboutDialog::copy_environment);
     footer_layout->addWidget(copy);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("About", "Close"), "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -294,7 +332,8 @@ QString AboutDialog::environment_text() const
 void AboutDialog::copy_environment()
 {
     QGuiApplication::clipboard()->setText(environment_text());
-    ToastManager::instance().show(this, t("Environment copied."));
+    ToastManager::instance().show(
+        this, QCoreApplication::translate("About", "Environment copied."));
 }
 
 } // namespace vss::gui::support

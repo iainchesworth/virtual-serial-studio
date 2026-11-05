@@ -26,31 +26,40 @@ namespace vss::gui
 namespace
 {
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("TopologyJson", text);
-}
-
 QString ports_check_text(int count, bool unique)
 {
     if (unique)
     {
-        return count == 1 ? tr("1 port, all names unique")
-                          : tr("%1 ports, all names unique").arg(count);
+        return count == 1
+                   ? QCoreApplication::translate("TopologyJson",
+                                                 "1 port, all names unique")
+                   : QCoreApplication::translate("TopologyJson",
+                                                 "%1 ports, all names unique")
+                         .arg(count);
     }
-    return count == 1 ? tr("1 port, a name is used twice")
-                      : tr("%1 ports, a name is used twice").arg(count);
+    return count == 1
+               ? QCoreApplication::translate("TopologyJson",
+                                             "1 port, a name is used twice")
+               : QCoreApplication::translate("TopologyJson",
+                                             "%1 ports, a name is used twice")
+                     .arg(count);
 }
 
 QString links_check_text(int count, bool no_loops)
 {
     if (no_loops)
     {
-        return count == 1 ? tr("1 link, no loops")
-                          : tr("%1 links, no loops").arg(count);
+        return count == 1 ? QCoreApplication::translate("TopologyJson",
+                                                        "1 link, no loops")
+                          : QCoreApplication::translate("TopologyJson",
+                                                        "%1 links, no loops")
+                                .arg(count);
     }
-    return count == 1 ? tr("1 link, a loop was found")
-                      : tr("%1 links, a loop was found").arg(count);
+    return count == 1 ? QCoreApplication::translate("TopologyJson",
+                                                    "1 link, a loop was found")
+                      : QCoreApplication::translate(
+                            "TopologyJson", "%1 links, a loop was found")
+                            .arg(count);
 }
 
 int edit_distance(const QString& left, const QString& right)
@@ -187,10 +196,10 @@ int line_for_offset(const QString& text, int offset)
 QString json_validation::status_text() const
 {
     if (valid())
-        return tr("Valid, version 1");
+        return QCoreApplication::translate("TopologyJson", "Valid, version 1");
     if (problem)
         return problem->summary;
-    return tr("Not valid");
+    return QCoreApplication::translate("TopologyJson", "Not valid");
 }
 
 json_validation validate_json_document(const QString& text)
@@ -204,12 +213,22 @@ json_validation validate_json_document(const QString& text)
     {
         const int line =
             line_for_offset(text, static_cast<int>(parse_error.offset));
-        out.checks = {{tr("Valid JSON, version 1"), check_state::failed},
-                      {tr("Ports, all names unique"), check_state::not_checked},
-                      {tr("Links, no loops"), check_state::not_checked}};
+        out.checks = {
+            {QCoreApplication::translate("TopologyJson",
+                                         "Valid JSON, version 1"),
+             check_state::failed},
+            {QCoreApplication::translate("TopologyJson",
+                                         "Ports, all names unique"),
+             check_state::not_checked},
+            {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+             check_state::not_checked}};
         out.problem = json_problem{
-            tr("Line %1: %2").arg(line).arg(parse_error.errorString()),
-            tr("The line is highlighted and nothing was applied."),
+            QCoreApplication::translate("TopologyJson", "Line %1: %2")
+                .arg(line)
+                .arg(parse_error.errorString()),
+            QCoreApplication::translate(
+                "TopologyJson",
+                "The line is highlighted and nothing was applied."),
             {},
             {},
             line};
@@ -219,15 +238,24 @@ json_validation validate_json_document(const QString& text)
 
     if (!document.isObject())
     {
-        out.checks = {{tr("Valid JSON, version 1"), check_state::failed},
-                      {tr("Ports, all names unique"), check_state::not_checked},
-                      {tr("Links, no loops"), check_state::not_checked}};
-        out.problem =
-            json_problem{tr("Line 1: the document must be a JSON object"),
-                         tr("A setup file starts with a { and ends with a }."),
-                         {},
-                         {},
-                         1};
+        out.checks = {
+            {QCoreApplication::translate("TopologyJson",
+                                         "Valid JSON, version 1"),
+             check_state::failed},
+            {QCoreApplication::translate("TopologyJson",
+                                         "Ports, all names unique"),
+             check_state::not_checked},
+            {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+             check_state::not_checked}};
+        out.problem = json_problem{
+            QCoreApplication::translate(
+                "TopologyJson", "Line 1: the document must be a JSON object"),
+            QCoreApplication::translate(
+                "TopologyJson",
+                "A setup file starts with a { and ends with a }."),
+            {},
+            {},
+            1};
         return out;
     }
 
@@ -237,14 +265,25 @@ json_validation validate_json_document(const QString& text)
     if (out.version != 1)
     {
         const int line = key_line(text, QStringLiteral("version"));
-        out.checks = {{tr("Valid JSON, version 1"), check_state::failed},
-                      {tr("Ports, all names unique"), check_state::not_checked},
-                      {tr("Links, no loops"), check_state::not_checked}};
+        out.checks = {
+            {QCoreApplication::translate("TopologyJson",
+                                         "Valid JSON, version 1"),
+             check_state::failed},
+            {QCoreApplication::translate("TopologyJson",
+                                         "Ports, all names unique"),
+             check_state::not_checked},
+            {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+             check_state::not_checked}};
         json_problem problem;
         problem.line = line;
-        problem.summary = line > 0 ? tr("Line %1: version must be 1").arg(line)
-                                   : tr("The document needs \"version\": 1");
-        problem.detail = tr("Nothing was applied.");
+        problem.summary =
+            line > 0 ? QCoreApplication::translate("TopologyJson",
+                                                   "Line %1: version must be 1")
+                           .arg(line)
+                     : QCoreApplication::translate(
+                           "TopologyJson", "The document needs \"version\": 1");
+        problem.detail =
+            QCoreApplication::translate("TopologyJson", "Nothing was applied.");
         out.problem = problem;
         return out;
     }
@@ -259,14 +298,22 @@ json_validation validate_json_document(const QString& text)
     const QJsonValue ports_value = root.value(QStringLiteral("ports"));
     if (!ports_value.isUndefined() && !ports_value.isArray())
     {
-        out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                      {tr("Ports, all names unique"), check_state::failed},
-                      {tr("Links, no loops"), check_state::not_checked}};
-        out.problem = json_problem{tr("\"ports\" must be a list"),
-                                   tr("Nothing was applied."),
-                                   {},
-                                   {},
-                                   0};
+        out.checks = {
+            {QCoreApplication::translate("TopologyJson",
+                                         "Valid JSON, version 1"),
+             check_state::passed},
+            {QCoreApplication::translate("TopologyJson",
+                                         "Ports, all names unique"),
+             check_state::failed},
+            {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+             check_state::not_checked}};
+        out.problem = json_problem{
+            QCoreApplication::translate("TopologyJson",
+                                        "\"ports\" must be a list"),
+            QCoreApplication::translate("TopologyJson", "Nothing was applied."),
+            {},
+            {},
+            0};
         return out;
     }
 
@@ -280,14 +327,23 @@ json_validation validate_json_document(const QString& text)
         const QJsonValue value = ports.at(index);
         if (!value.isObject())
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::failed},
-                          {tr("Links, no loops"), check_state::not_checked}};
-            out.problem = json_problem{tr("Each port must be an object"),
-                                       tr("Nothing was applied."),
-                                       {},
-                                       {},
-                                       0};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::failed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::not_checked}};
+            out.problem =
+                json_problem{QCoreApplication::translate(
+                                 "TopologyJson", "Each port must be an object"),
+                             QCoreApplication::translate(
+                                 "TopologyJson", "Nothing was applied."),
+                             {},
+                             {},
+                             0};
             return out;
         }
         const QJsonObject port = value.toObject();
@@ -295,17 +351,27 @@ json_validation validate_json_document(const QString& text)
         const QString name = name_value.toString();
         if (!name_value.isString() || name.isEmpty())
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::failed},
-                          {tr("Links, no loops"), check_state::not_checked}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::failed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::not_checked}};
             json_problem problem;
             problem.line = nth_line(kind_lines, index);
             problem.summary =
                 problem.has_line()
-                    ? tr("Line %1: a port has no name").arg(problem.line)
-                    : tr("A port has no name");
-            problem.detail =
-                tr("Every port needs a name so links can refer to it.");
+                    ? QCoreApplication::translate("TopologyJson",
+                                                  "Line %1: a port has no name")
+                          .arg(problem.line)
+                    : QCoreApplication::translate("TopologyJson",
+                                                  "A port has no name");
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
+                "Every port needs a name so links can refer to it.");
             out.problem = problem;
             return out;
         }
@@ -324,19 +390,30 @@ json_validation validate_json_document(const QString& text)
                     break;
                 }
             }
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::failed},
-                          {tr("Links, no loops"), check_state::not_checked}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::failed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::not_checked}};
             json_problem problem;
             problem.line = line;
             problem.summary =
-                line > 0 ? tr("Line %1: the name \"%2\" is used twice")
+                line > 0 ? QCoreApplication::translate(
+                               "TopologyJson",
+                               "Line %1: the name \"%2\" is used twice")
                                .arg(line)
                                .arg(name)
-                         : tr("The name \"%1\" is used twice").arg(name);
-            problem.detail =
-                tr("Port names identify ports in links, so each name must be "
-                   "unique. Nothing was applied.");
+                         : QCoreApplication::translate(
+                               "TopologyJson", "The name \"%1\" is used twice")
+                               .arg(name);
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
+                "Port names identify ports in links, so each name must be "
+                "unique. Nothing was applied.");
             out.problem = problem;
             return out;
         }
@@ -361,17 +438,28 @@ json_validation validate_json_document(const QString& text)
                     break;
                 }
             }
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::failed},
-                          {tr("Links, no loops"), check_state::not_checked}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::failed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::not_checked}};
             json_problem problem;
             problem.line = line;
-            problem.summary = line > 0
-                                  ? tr("Line %1: unknown port kind \"%2\"")
-                                        .arg(line)
-                                        .arg(kind)
-                                  : tr("Unknown port kind \"%1\"").arg(kind);
-            problem.detail = tr(
+            problem.summary =
+                line > 0
+                    ? QCoreApplication::translate(
+                          "TopologyJson", "Line %1: unknown port kind \"%2\"")
+                          .arg(line)
+                          .arg(kind)
+                    : QCoreApplication::translate("TopologyJson",
+                                                  "Unknown port kind \"%1\"")
+                          .arg(kind);
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
                 "Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was "
                 "applied.");
             out.problem = problem;
@@ -400,21 +488,31 @@ json_validation validate_json_document(const QString& text)
                         break;
                     }
                 }
-                out.checks = {
-                    {tr("Valid JSON, version 1"), check_state::passed},
-                    {tr("Ports, all names unique"), check_state::failed},
-                    {tr("Links, no loops"), check_state::not_checked}};
+                out.checks = {{QCoreApplication::translate(
+                                   "TopologyJson", "Valid JSON, version 1"),
+                               check_state::passed},
+                              {QCoreApplication::translate(
+                                   "TopologyJson", "Ports, all names unique"),
+                               check_state::failed},
+                              {QCoreApplication::translate("TopologyJson",
+                                                           "Links, no loops"),
+                               check_state::not_checked}};
                 json_problem problem;
                 problem.line = line;
                 problem.summary =
                     line > 0
-                        ? tr("Line %1: unknown virtual kind \"%2\"")
+                        ? QCoreApplication::translate(
+                              "TopologyJson",
+                              "Line %1: unknown virtual kind \"%2\"")
                               .arg(line)
                               .arg(virtual_kind)
-                        : tr("Unknown virtual kind \"%1\"").arg(virtual_kind);
-                problem.detail =
-                    tr("Use auto, pty, named-pipe, loopback or windows-driver. "
-                       "Nothing was applied.");
+                        : QCoreApplication::translate(
+                              "TopologyJson", "Unknown virtual kind \"%1\"")
+                              .arg(virtual_kind);
+                problem.detail = QCoreApplication::translate(
+                    "TopologyJson",
+                    "Use auto, pty, named-pipe, loopback or windows-driver. "
+                    "Nothing was applied.");
                 out.problem = problem;
                 return out;
             }
@@ -425,21 +523,31 @@ json_validation validate_json_document(const QString& text)
             const QString uri = port.value(QStringLiteral("uri")).toString();
             if (uri.isEmpty())
             {
-                out.checks = {
-                    {tr("Valid JSON, version 1"), check_state::passed},
-                    {tr("Ports, all names unique"), check_state::failed},
-                    {tr("Links, no loops"), check_state::not_checked}};
+                out.checks = {{QCoreApplication::translate(
+                                   "TopologyJson", "Valid JSON, version 1"),
+                               check_state::passed},
+                              {QCoreApplication::translate(
+                                   "TopologyJson", "Ports, all names unique"),
+                               check_state::failed},
+                              {QCoreApplication::translate("TopologyJson",
+                                                           "Links, no loops"),
+                               check_state::not_checked}};
                 json_problem problem;
                 problem.line = nth_line(kind_lines, index);
                 problem.summary =
                     problem.has_line()
-                        ? tr("Line %1: port \"%2\" has no address")
+                        ? QCoreApplication::translate(
+                              "TopologyJson",
+                              "Line %1: port \"%2\" has no address")
                               .arg(problem.line)
                               .arg(name)
-                        : tr("Port \"%1\" has no address").arg(name);
-                problem.detail =
-                    tr("A physical or network port needs a uri. Nothing was "
-                       "applied.");
+                        : QCoreApplication::translate(
+                              "TopologyJson", "Port \"%1\" has no address")
+                              .arg(name);
+                problem.detail = QCoreApplication::translate(
+                    "TopologyJson",
+                    "A physical or network port needs a uri. Nothing was "
+                    "applied.");
                 out.problem = problem;
                 return out;
             }
@@ -450,14 +558,22 @@ json_validation validate_json_document(const QString& text)
     const QJsonValue links_value = root.value(QStringLiteral("links"));
     if (!links_value.isUndefined() && !links_value.isArray())
     {
-        out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                      {tr("Ports, all names unique"), check_state::passed},
-                      {tr("Links, no loops"), check_state::failed}};
-        out.problem = json_problem{tr("\"links\" must be a list"),
-                                   tr("Nothing was applied."),
-                                   {},
-                                   {},
-                                   0};
+        out.checks = {
+            {QCoreApplication::translate("TopologyJson",
+                                         "Valid JSON, version 1"),
+             check_state::passed},
+            {QCoreApplication::translate("TopologyJson",
+                                         "Ports, all names unique"),
+             check_state::passed},
+            {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+             check_state::failed}};
+        out.problem = json_problem{
+            QCoreApplication::translate("TopologyJson",
+                                        "\"links\" must be a list"),
+            QCoreApplication::translate("TopologyJson", "Nothing was applied."),
+            {},
+            {},
+            0};
         return out;
     }
 
@@ -472,16 +588,27 @@ json_validation validate_json_document(const QString& text)
         const int link_line = nth_line(mode_lines, index);
         if (!value.isObject())
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::passed},
-                          {tr("Links, no loops"), check_state::failed}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::failed}};
             json_problem problem;
             problem.line = link_line;
             problem.summary =
                 link_line > 0
-                    ? tr("Line %1: each link must be an object").arg(link_line)
-                    : tr("Each link must be an object");
-            problem.detail = tr("Nothing was applied.");
+                    ? QCoreApplication::translate(
+                          "TopologyJson",
+                          "Line %1: each link must be an object")
+                          .arg(link_line)
+                    : QCoreApplication::translate(
+                          "TopologyJson", "Each link must be an object");
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson", "Nothing was applied.");
             out.problem = problem;
             return out;
         }
@@ -496,29 +623,42 @@ json_validation validate_json_document(const QString& text)
         }
         if (!mode_known)
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::passed},
-                          {tr("Links, no loops"), check_state::failed}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::failed}};
             json_problem problem;
             problem.line = link_line;
-            problem.summary = link_line > 0
-                                  ? tr("Line %1: unknown link mode \"%2\"")
-                                        .arg(link_line)
-                                        .arg(mode)
-                                  : tr("Unknown link mode \"%1\"").arg(mode);
+            problem.summary =
+                link_line > 0
+                    ? QCoreApplication::translate(
+                          "TopologyJson", "Line %1: unknown link mode \"%2\"")
+                          .arg(link_line)
+                          .arg(mode)
+                    : QCoreApplication::translate("TopologyJson",
+                                                  "Unknown link mode \"%1\"")
+                          .arg(mode);
             const QString suggestion = closest_mode(mode);
             if (!suggestion.isEmpty() && suggestion != mode)
             {
                 problem.detail =
-                    tr("Did you mean \"%1\"? The line is highlighted and "
-                       "nothing was applied.")
+                    QCoreApplication::translate(
+                        "TopologyJson",
+                        "Did you mean \"%1\"? The line is highlighted and "
+                        "nothing was applied.")
                         .arg(suggestion);
                 problem.fix_from = mode;
                 problem.fix_to = suggestion;
             }
             else
             {
-                problem.detail = tr(
+                problem.detail = QCoreApplication::translate(
+                    "TopologyJson",
                     "Use duplex, split, join, redirect or monitor. Nothing was "
                     "applied.");
             }
@@ -547,18 +687,29 @@ json_validation validate_json_document(const QString& text)
         if (!read_names(link, "sources", sources) ||
             !read_names(link, "targets", targets))
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::passed},
-                          {tr("Links, no loops"), check_state::failed}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::failed}};
             json_problem problem;
             problem.line = link_line;
             problem.summary =
-                link_line > 0 ? tr("Line %1: a link needs ports on both sides")
-                                    .arg(link_line)
-                              : tr("A link needs ports on both sides");
-            problem.detail =
-                tr("sources and targets must be non-empty lists of port names. "
-                   "Nothing was applied.");
+                link_line > 0
+                    ? QCoreApplication::translate(
+                          "TopologyJson",
+                          "Line %1: a link needs ports on both sides")
+                          .arg(link_line)
+                    : QCoreApplication::translate(
+                          "TopologyJson", "A link needs ports on both sides");
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
+                "sources and targets must be non-empty lists of port names. "
+                "Nothing was applied.");
             out.problem = problem;
             return out;
         }
@@ -576,18 +727,30 @@ json_validation validate_json_document(const QString& text)
             arity_ok = one_target;
         if (!arity_ok)
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::passed},
-                          {tr("Links, no loops"), check_state::failed}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::failed}};
             json_problem problem;
             problem.line = link_line;
             problem.summary =
                 link_line > 0
-                    ? tr("Line %1: \"%2\" has the wrong number of ports")
+                    ? QCoreApplication::translate(
+                          "TopologyJson",
+                          "Line %1: \"%2\" has the wrong number of ports")
                           .arg(link_line)
                           .arg(mode)
-                    : tr("\"%1\" has the wrong number of ports").arg(mode);
-            problem.detail = tr(
+                    : QCoreApplication::translate(
+                          "TopologyJson",
+                          "\"%1\" has the wrong number of ports")
+                          .arg(mode);
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
                 "A duplex, redirect or monitor link joins one port to one "
                 "port; a split has one source; a join has one target. Nothing "
                 "was applied.");
@@ -599,18 +762,29 @@ json_validation validate_json_document(const QString& text)
         {
             if (!port_names.contains(name))
             {
-                out.checks = {
-                    {tr("Valid JSON, version 1"), check_state::passed},
-                    {tr("Ports, all names unique"), check_state::passed},
-                    {tr("Links, no loops"), check_state::failed}};
+                out.checks = {{QCoreApplication::translate(
+                                   "TopologyJson", "Valid JSON, version 1"),
+                               check_state::passed},
+                              {QCoreApplication::translate(
+                                   "TopologyJson", "Ports, all names unique"),
+                               check_state::passed},
+                              {QCoreApplication::translate("TopologyJson",
+                                                           "Links, no loops"),
+                               check_state::failed}};
                 json_problem problem;
                 problem.line = link_line;
                 problem.summary =
-                    link_line > 0 ? tr("Line %1: no port is called \"%2\"")
-                                        .arg(link_line)
-                                        .arg(name)
-                                  : tr("No port is called \"%1\"").arg(name);
-                problem.detail = tr("Nothing was applied.");
+                    link_line > 0
+                        ? QCoreApplication::translate(
+                              "TopologyJson",
+                              "Line %1: no port is called \"%2\"")
+                              .arg(link_line)
+                              .arg(name)
+                        : QCoreApplication::translate(
+                              "TopologyJson", "No port is called \"%1\"")
+                              .arg(name);
+                problem.detail = QCoreApplication::translate(
+                    "TopologyJson", "Nothing was applied.");
                 out.problem = problem;
                 return out;
             }
@@ -634,16 +808,26 @@ json_validation validate_json_document(const QString& text)
         }
         if (loop)
         {
-            out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                          {tr("Ports, all names unique"), check_state::passed},
-                          {tr("Links, no loops"), check_state::failed}};
+            out.checks = {
+                {QCoreApplication::translate("TopologyJson",
+                                             "Valid JSON, version 1"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson",
+                                             "Ports, all names unique"),
+                 check_state::passed},
+                {QCoreApplication::translate("TopologyJson", "Links, no loops"),
+                 check_state::failed}};
             json_problem problem;
             problem.line = link_line;
             problem.summary =
                 link_line > 0
-                    ? tr("Line %1: these links create a loop").arg(link_line)
-                    : tr("These links create a loop");
-            problem.detail = tr(
+                    ? QCoreApplication::translate(
+                          "TopologyJson", "Line %1: these links create a loop")
+                          .arg(link_line)
+                    : QCoreApplication::translate("TopologyJson",
+                                                  "These links create a loop");
+            problem.detail = QCoreApplication::translate(
+                "TopologyJson",
                 "Bytes would go round forever, so the hub refuses a loop and "
                 "nothing was applied.");
             out.problem = problem;
@@ -661,21 +845,26 @@ json_validation validate_json_document(const QString& text)
     }
 
     // -- the engine has the final word ------------------------------------
-    out.checks = {{tr("Valid JSON, version 1"), check_state::passed},
-                  {ports_check_text(out.ports, true), check_state::passed},
-                  {links_check_text(out.links, true), check_state::passed}};
+    out.checks = {
+        {QCoreApplication::translate("TopologyJson", "Valid JSON, version 1"),
+         check_state::passed},
+        {ports_check_text(out.ports, true), check_state::passed},
+        {links_check_text(out.links, true), check_state::passed}};
     const auto parsed = vss::config::from_json(text.toStdString());
     if (!parsed)
     {
         out.schema_valid = false;
-        out.checks.push_back({tr("The setup format rejected this document"),
-                              check_state::failed});
-        out.problem =
-            json_problem{tr("The setup format rejected this document"),
-                         error_text(parsed.error()),
-                         {},
-                         {},
-                         0};
+        out.checks.push_back(
+            {QCoreApplication::translate(
+                 "TopologyJson", "The setup format rejected this document"),
+             check_state::failed});
+        out.problem = json_problem{
+            QCoreApplication::translate(
+                "TopologyJson", "The setup format rejected this document"),
+            error_text(parsed.error()),
+            {},
+            {},
+            0};
         return out;
     }
     out.document = *parsed;
@@ -688,12 +877,13 @@ json_validation validate_json_document(const QString& text)
     if (!formatted)
     {
         out.schema_valid = false;
-        out.problem =
-            json_problem{tr("The setup format rejected this document"),
-                         error_text(formatted.error()),
-                         {},
-                         {},
-                         0};
+        out.problem = json_problem{
+            QCoreApplication::translate(
+                "TopologyJson", "The setup format rejected this document"),
+            error_text(formatted.error()),
+            {},
+            {},
+            0};
         return out;
     }
     out.formatted = QString::fromStdString(*formatted).trimmed();

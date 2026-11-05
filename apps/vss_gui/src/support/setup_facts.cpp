@@ -35,11 +35,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("SetupCheck", text);
-}
-
 QString plural(const char* single, int count)
 {
     return QCoreApplication::translate("SetupCheck", single, nullptr, count);
@@ -48,24 +43,33 @@ QString plural(const char* single, int count)
 QString device_sentence(const QStringList& paths, int count)
 {
     if (count <= 0)
-        return t("No serial devices are visible to Virtual Serial Studio. "
-                 "You can still use virtual ports.");
+        return QCoreApplication::translate(
+            "SetupCheck",
+            "No serial devices are visible to Virtual Serial Studio. "
+            "You can still use virtual ports.");
     if (paths.isEmpty())
-        return plural("%n serial device(s) are visible to Virtual Serial "
-                      "Studio.",
+        return plural(QT_TRANSLATE_NOOP(
+                          "SetupCheck",
+                          "%n serial device(s) are visible to Virtual Serial "
+                          "Studio."),
                       count);
 
     QStringList shown = paths.mid(0, 3);
     if (count > shown.size())
     {
-        return t("%1 and %2 more are visible to Virtual Serial Studio.")
+        return QCoreApplication::translate(
+                   "SetupCheck",
+                   "%1 and %2 more are visible to Virtual Serial Studio.")
             .arg(shown.join(QStringLiteral(", ")))
             .arg(count - shown.size());
     }
     if (shown.size() == 1)
-        return t("%1 is visible to Virtual Serial Studio.").arg(shown.first());
+        return QCoreApplication::translate(
+                   "SetupCheck", "%1 is visible to Virtual Serial Studio.")
+            .arg(shown.first());
     const QString last = shown.takeLast();
-    return t("%1 and %2 are visible to Virtual Serial Studio.")
+    return QCoreApplication::translate(
+               "SetupCheck", "%1 and %2 are visible to Virtual Serial Studio.")
         .arg(shown.join(QStringLiteral(", ")), last);
 }
 
@@ -75,7 +79,7 @@ setup_row ok_row(const QString& title, const QString& sentence)
             QStringLiteral("done"),
             title,
             sentence,
-            t("OK"),
+            QCoreApplication::translate("SetupCheck", "OK"),
             {},
             setup_action::none,
             false};
@@ -87,7 +91,7 @@ setup_row not_checked_row(const QString& title, const QString& sentence)
             QStringLiteral("info"),
             title,
             sentence,
-            t("Not checked yet"),
+            QCoreApplication::translate("SetupCheck", "Not checked yet"),
             {},
             setup_action::none,
             false};
@@ -97,17 +101,20 @@ setup_row devices_row(const setup_facts& facts, const QStringList& paths,
                       bool checks_available)
 {
     setup_row row;
-    row.title = t("Real serial devices");
+    row.title =
+        QCoreApplication::translate("SetupCheck", "Real serial devices");
     row.icon = QStringLiteral("device");
-    row.action_text = t("Refresh");
+    row.action_text = QCoreApplication::translate("SetupCheck", "Refresh");
     row.action = setup_action::refresh_devices;
     if (!checks_available)
     {
-        return not_checked_row(row.title,
-                               t("Studio did not check the serial devices."));
+        return not_checked_row(
+            row.title,
+            QCoreApplication::translate(
+                "SetupCheck", "Studio did not check the serial devices."));
     }
     row.state = setup_state::ok;
-    row.chip = t("OK");
+    row.chip = QCoreApplication::translate("SetupCheck", "OK");
     row.sentence = device_sentence(paths, facts.serial_devices);
     return row;
 }
@@ -117,62 +124,80 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
                       const QStringList& paths)
 {
     setup_row driver;
-    driver.title = t("Virtual port driver");
+    driver.title =
+        QCoreApplication::translate("SetupCheck", "Virtual port driver");
     driver.icon = QStringLiteral("warning");
     if (!checks_available)
     {
         rows.push_back(not_checked_row(
-            driver.title, t("Studio did not check for the virtual port "
-                            "driver.")));
+            driver.title,
+            QCoreApplication::translate(
+                "SetupCheck", "Studio did not check for the virtual port "
+                              "driver.")));
     }
     else if (facts.com0com_found)
     {
         const QString sentence =
             facts.com0com_pairs > 0
-                ? plural("com0com is installed with %n pair(s), so other "
-                         "programs can see virtual ports as COM ports.",
+                ? plural(QT_TRANSLATE_NOOP(
+                             "SetupCheck",
+                             "com0com is installed with %n pair(s), so other "
+                             "programs can see virtual ports as COM ports."),
                          facts.com0com_pairs)
-                : t("com0com is installed, so other programs can see virtual "
-                    "ports as COM ports.");
+                : QCoreApplication::translate(
+                      "SetupCheck",
+                      "com0com is installed, so other programs can see virtual "
+                      "ports as COM ports.");
         rows.push_back(ok_row(driver.title, sentence));
     }
     else
     {
         driver.state = setup_state::attention;
-        driver.sentence = t("com0com was not found. Windows needs a driver "
-                            "before other programs can see virtual ports as "
-                            "COM ports.");
-        driver.chip = t("Needs attention");
-        driver.action_text = t("Install com0com");
+        driver.sentence = QCoreApplication::translate(
+            "SetupCheck", "com0com was not found. Windows needs a driver "
+                          "before other programs can see virtual ports as "
+                          "COM ports.");
+        driver.chip =
+            QCoreApplication::translate("SetupCheck", "Needs attention");
+        driver.action_text =
+            QCoreApplication::translate("SetupCheck", "Install com0com");
         driver.action = setup_action::install_driver;
         driver.highlight = true;
         rows.push_back(driver);
     }
 
     setup_row administrator;
-    administrator.title = t("Administrator rights");
+    administrator.title =
+        QCoreApplication::translate("SetupCheck", "Administrator rights");
     administrator.icon = QStringLiteral("info");
     if (!checks_available || !platform.elevation_known)
     {
         rows.push_back(not_checked_row(
             administrator.title,
-            t("Studio could not check for administrator rights.")));
+            QCoreApplication::translate(
+                "SetupCheck",
+                "Studio could not check for administrator rights.")));
     }
     else if (platform.elevated)
     {
         rows.push_back(ok_row(
             administrator.title,
-            t("Studio is running as administrator, so it can create linked "
-              "pairs.")));
+            QCoreApplication::translate(
+                "SetupCheck",
+                "Studio is running as administrator, so it can create linked "
+                "pairs.")));
     }
     else
     {
         administrator.state = setup_state::info;
-        administrator.sentence =
-            t("Creating a new linked pair needs administrator rights, once "
-              "per pair. Everything else runs without them.");
-        administrator.chip = t("Needed later");
-        administrator.action_text = t("Restart as administrator");
+        administrator.sentence = QCoreApplication::translate(
+            "SetupCheck",
+            "Creating a new linked pair needs administrator rights, once "
+            "per pair. Everything else runs without them.");
+        administrator.chip =
+            QCoreApplication::translate("SetupCheck", "Needed later");
+        administrator.action_text = QCoreApplication::translate(
+            "SetupCheck", "Restart as administrator");
         administrator.action = setup_action::restart_elevated;
         rows.push_back(administrator);
     }
@@ -182,10 +207,13 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
     setup_row carry_on;
     carry_on.state = setup_state::info;
     carry_on.icon = QStringLiteral("run");
-    carry_on.title = t("Carry on without a driver");
-    carry_on.sentence = t("You can still use in-process ports, the monitor "
-                          "and the Send panel to try things out.");
-    carry_on.action_text = t("Continue in test mode");
+    carry_on.title =
+        QCoreApplication::translate("SetupCheck", "Carry on without a driver");
+    carry_on.sentence = QCoreApplication::translate(
+        "SetupCheck", "You can still use in-process ports, the monitor "
+                      "and the Send panel to try things out.");
+    carry_on.action_text =
+        QCoreApplication::translate("SetupCheck", "Continue in test mode");
     carry_on.action = setup_action::continue_test;
     rows.push_back(carry_on);
 }
@@ -197,59 +225,76 @@ void add_unix_rows(QVector<setup_row>& rows, const setup_facts& facts,
     const bool mac = facts.platform == QLatin1String("macos");
 
     setup_row pseudo;
-    pseudo.title = t("Pseudo terminals");
+    pseudo.title =
+        QCoreApplication::translate("SetupCheck", "Pseudo terminals");
     pseudo.icon = QStringLiteral("device");
     if (!checks_available || !platform.pty_known)
     {
         rows.push_back(not_checked_row(
             pseudo.title,
-            t("Studio did not check whether pseudo terminals are available.")));
+            QCoreApplication::translate("SetupCheck",
+                                        "Studio did not check whether pseudo "
+                                        "terminals are available.")));
     }
     else if (platform.pty_available)
     {
         rows.push_back(ok_row(
-            pseudo.title,
-            t("Pseudo terminals are available, so other programs can open new "
-              "virtual ports.")));
+            pseudo.title, QCoreApplication::translate(
+                              "SetupCheck", "Pseudo terminals are available, "
+                                            "so other programs can open new "
+                                            "virtual ports.")));
     }
     else
     {
         pseudo.state = setup_state::attention;
-        pseudo.sentence = t("Pseudo terminals are not available. Other "
-                            "programs will not be able to open new virtual "
-                            "ports.");
-        pseudo.chip = t("Needs attention");
+        pseudo.sentence = QCoreApplication::translate(
+            "SetupCheck", "Pseudo terminals are not available. Other "
+                          "programs will not be able to open new virtual "
+                          "ports.");
+        pseudo.chip =
+            QCoreApplication::translate("SetupCheck", "Needs attention");
         pseudo.highlight = true;
         rows.push_back(pseudo);
     }
 
     setup_row group;
     group.title =
-        mac ? t("Serial port access") : t("Serial port group membership");
+        mac ? QCoreApplication::translate("SetupCheck", "Serial port access")
+            : QCoreApplication::translate("SetupCheck",
+                                          "Serial port group membership");
     group.icon = QStringLiteral("info");
     if (mac || !checks_available || !platform.dialout_known)
     {
         rows.push_back(not_checked_row(
             group.title,
-            mac ? t("Studio has no group check for macOS. If a device cannot "
-                    "be opened, check its permissions in /dev.")
-                : t("Studio did not check your membership of the dialout "
-                    "group.")));
+            mac ? QCoreApplication::translate(
+                      "SetupCheck",
+                      "Studio has no group check for macOS. If a device cannot "
+                      "be opened, check its permissions in /dev.")
+                : QCoreApplication::translate(
+                      "SetupCheck",
+                      "Studio did not check your membership of the dialout "
+                      "group.")));
     }
     else if (platform.dialout_member)
     {
         rows.push_back(ok_row(
             group.title,
-            t("You are in the dialout group, so programs can open serial "
-              "devices.")));
+            QCoreApplication::translate(
+                "SetupCheck",
+                "You are in the dialout group, so programs can open serial "
+                "devices.")));
     }
     else
     {
         group.state = setup_state::attention;
-        group.sentence = t("Your account is not in the dialout group, so "
-                           "programs may not be able to open serial devices.");
-        group.chip = t("Needs attention");
-        group.action_text = t("How to add me");
+        group.sentence = QCoreApplication::translate(
+            "SetupCheck", "Your account is not in the dialout group, so "
+                          "programs may not be able to open serial devices.");
+        group.chip =
+            QCoreApplication::translate("SetupCheck", "Needs attention");
+        group.action_text =
+            QCoreApplication::translate("SetupCheck", "How to add me");
         group.action = setup_action::dialout_help;
         group.highlight = true;
         rows.push_back(group);
@@ -366,23 +411,29 @@ setup_report build_setup_report(const setup_facts& facts,
             ++not_checked;
     }
     if (!checks_available)
-        report.header_chip = t("Not checked yet");
+        report.header_chip =
+            QCoreApplication::translate("SetupCheck", "Not checked yet");
     else if (attention > 0)
     {
-        report.header_chip = attention == 1
-                                 ? t("1 thing to fix")
-                                 : plural("%n things to fix", attention);
+        report.header_chip =
+            attention == 1
+                ? QCoreApplication::translate("SetupCheck", "1 thing to fix")
+                : plural(QT_TRANSLATE_NOOP("SetupCheck", "%n things to fix"),
+                         attention);
     }
     else if (not_checked > 0)
-        report.header_chip = t("Not checked yet");
+        report.header_chip =
+            QCoreApplication::translate("SetupCheck", "Not checked yet");
     else
-        report.header_chip = t("All set");
+        report.header_chip =
+            QCoreApplication::translate("SetupCheck", "All set");
 
     if (windows && checks_available && !normalised.com0com_found)
     {
-        report.driver_note =
-            t("Until a driver is installed, new ports only work inside "
-              "Virtual Serial Studio. Other programs will not see them.");
+        report.driver_note = QCoreApplication::translate(
+            "SetupCheck",
+            "Until a driver is installed, new ports only work inside "
+            "Virtual Serial Studio. Other programs will not see them.");
     }
 
     if (!checks_available || (not_checked > 0 && attention == 0))
@@ -462,7 +513,8 @@ bool relaunch_as_administrator(QString* error)
     if (executable.isEmpty())
     {
         if (error != nullptr)
-            *error = t("The application path is not known.");
+            *error = QCoreApplication::translate(
+                "SetupCheck", "The application path is not known.");
         return false;
     }
     const std::wstring path =
@@ -474,16 +526,21 @@ bool relaunch_as_administrator(QString* error)
     if (error != nullptr)
     {
         *error = result == SE_ERR_ACCESSDENIED || result == ERROR_CANCELLED
-                     ? t("Windows did not allow the elevated restart. Try "
-                         "again from the Start menu.")
-                     : t("Windows could not restart Virtual Serial Studio as "
-                         "administrator.");
+                     ? QCoreApplication::translate(
+                           "SetupCheck",
+                           "Windows did not allow the elevated restart. Try "
+                           "again from the Start menu.")
+                     : QCoreApplication::translate(
+                           "SetupCheck",
+                           "Windows could not restart Virtual Serial Studio as "
+                           "administrator.");
     }
     return false;
 #else
     if (error != nullptr)
-        *error = t("Restarting as administrator is only available on "
-                   "Windows.");
+        *error = QCoreApplication::translate(
+            "SetupCheck", "Restarting as administrator is only available on "
+                          "Windows.");
     return false;
 #endif
 }

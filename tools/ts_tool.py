@@ -4,6 +4,7 @@
 
     python3 tools/ts_tool.py export apps/vss_gui/translations/vss_gui_de.ts todo.json
     python3 tools/ts_tool.py apply  apps/vss_gui/translations/vss_gui_de.ts done.json --origin "..."
+    python3 tools/ts_tool.py fill   apps/vss_gui/translations/vss_gui_de.ts
     python3 tools/ts_tool.py check  apps/vss_gui/translations/vss_gui_de.ts
 
 `export` writes every group of messages with the same source text that has an
@@ -12,7 +13,9 @@ a JSON object that maps each id to the translation: a string, or for a message
 with "numerus" a list of "forms" strings, one for each plural form of the
 language. `apply` writes the answers into the catalogue, refuses an answer whose
 placeholders (%1, %2, %n, %L1) differ from the source, and marks the message
-finished. `check` fails when any message is unfinished or empty or has different
+finished. `fill` copies a finished translation to every unfinished message with the same source
+text, which is what `update_translations` leaves when a text moves to another context.
+`check` fails when any message is unfinished or empty or has different
 placeholders from its source.
 
 Only the translation elements are touched: the file keeps its layout, the
@@ -168,6 +171,36 @@ def apply(path: Path, answers: dict[str, str | list[str]], origin: str | None) -
     return problems
 
 
+def fill(path: Path) -> int:
+    """Copy a finished translation to every unfinished message with the same
+    source and comment. Returns how many messages were filled."""
+    tree = load(path)
+    root = tree.getroot()
+    everything = list(messages(root))
+    filled = 0
+    for members in groups(root).values():
+        done = [index for index in members if not is_unfinished(everything[index][1])]
+        if not done:
+            continue
+        source = everything[done[0]][1].find("translation")
+        for index in members:
+            message = everything[index][1]
+            if not is_unfinished(message):
+                continue
+            translation = message.find("translation")
+            if translation is None:
+                translation = ElementTree.SubElement(message, "translation")
+            translation.attrib.pop("type", None)
+            for child in list(translation):
+                translation.remove(child)
+            translation.text = source.text
+            for form in source.findall("numerusform"):
+                ElementTree.SubElement(translation, "numerusform").text = form.text
+            filled += 1
+    write(path, tree, None)
+    return filled
+
+
 def write(path: Path, tree: ElementTree.ElementTree, origin: str | None) -> None:
     root = tree.getroot()
     ElementTree.indent(tree, space="    ")
@@ -213,6 +246,8 @@ def main(argv: list[str] | None = None) -> int:
     two.add_argument("ts", type=Path)
     two.add_argument("json", type=Path)
     two.add_argument("--origin", help="where the translation came from, kept as a comment in the file")
+    four = sub.add_parser("fill")
+    four.add_argument("ts", type=Path)
     three = sub.add_parser("check")
     three.add_argument("ts", type=Path)
     args = parser.parse_args(argv)
@@ -229,6 +264,9 @@ def main(argv: list[str] | None = None) -> int:
             print(problem, file=sys.stderr)
         print(f"{len(answers) - len(problems)} applied, {len(problems)} refused")
         return 1 if problems else 0
+    if args.command == "fill":
+        print(f"{fill(args.ts)} messages filled from a translation of the same text")
+        return 0
     problems = check(args.ts)
     for problem in problems[:50]:
         print(problem, file=sys.stderr)
