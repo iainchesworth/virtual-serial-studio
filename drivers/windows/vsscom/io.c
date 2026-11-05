@@ -9,10 +9,11 @@
 // are in core/vsscom_core.c, which the unit tests cover on the host. This file
 // carries them out against Windows requests.
 //
-// This slice is a loopback: bytes written come back from the next read. A
-// write that does not fit in the receive ring completes with the bytes that
-// did; the paired-port version, with flow control against the hub end, replaces
-// that.
+// Without a hub handle the port is a loopback: bytes written come back from the
+// next read, and a write that does not fit in the receive ring completes with
+// the bytes that did. With a hub handle open (hub.c) the application's writes go
+// to the hub and its reads come from the hub, with flow control both ways, and
+// the input lines are the ones the hub sets.
 //
 // Locks and completion: Lock guards the context and is never held while a
 // request is completed or while another queue is called.
@@ -45,9 +46,9 @@ static VOID VssComStartTimer(WDFTIMER Timer, ULONGLONG Deadline)
 
 // -- Small request helpers -------------------------------------------------
 
-static VOID VssComCompleteWithData(_In_ WDFREQUEST Request,
-                                   _In_reads_bytes_(Length) const VOID* Data,
-                                   _In_ size_t Length)
+VOID VssComCompleteWithData(_In_ WDFREQUEST Request,
+                            _In_reads_bytes_(Length) const VOID* Data,
+                            _In_ size_t Length)
 {
     PVOID output = NULL;
     NTSTATUS status =
@@ -61,9 +62,9 @@ static VOID VssComCompleteWithData(_In_ WDFREQUEST Request,
     WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, Length);
 }
 
-static BOOLEAN VssComFetchInput(_In_ WDFREQUEST Request,
-                                _Out_writes_bytes_(Length) PVOID Data,
-                                _In_ size_t Length)
+BOOLEAN VssComFetchInput(_In_ WDFREQUEST Request,
+                         _Out_writes_bytes_(Length) PVOID Data,
+                         _In_ size_t Length)
 {
     PVOID input = NULL;
     if (!NT_SUCCESS(WdfRequestRetrieveInputBuffer(Request, Length, &input, NULL)))
@@ -112,7 +113,8 @@ static VOID VssComFinishRead(_In_ WDFREQUEST Request, _In_ NTSTATUS Status)
 // Serves the read at the head of the queue from the receive ring. A read that
 // is complete leaves, and the next one gets its turn; one that still waits goes
 // back to the head with its timers set.
-static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context)
+static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                              _Inout_ BOOLEAN* Moved)
 {
     for (;;)
     {
@@ -156,6 +158,8 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context)
                 vsscom_ring_read(&Context->Rx, read->Buffer + read->Received,
                                  read->Requested - read->Received);
             read->Received += got;
+            if (got != 0)
+                *Moved = TRUE;
 
             done = read->Plan.return_now ||
                    vsscom_read_satisfied(&read->Plan, read->Requested,
@@ -212,16 +216,17 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 // Runs VssComServiceOnce on one thread at a time, and again if something
 // changed while it ran. Two threads at the head of the queue would hand the
 // reads out of order.
-static VOID VssComServiceReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
+static BOOLEAN VssComServiceReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     BOOLEAN again;
+    BOOLEAN moved = FALSE;
 
     WdfSpinLockAcquire(Context->Lock);
     if (Context->ServiceBusy)
     {
         Context->ServiceAgain = TRUE;
         WdfSpinLockRelease(Context->Lock);
-        return;
+        return FALSE;
     }
     Context->ServiceBusy = TRUE;
     WdfSpinLockRelease(Context->Lock);
@@ -232,7 +237,7 @@ static VOID VssComServiceReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         Context->ServiceAgain = FALSE;
         WdfSpinLockRelease(Context->Lock);
 
-        VssComServiceOnce(Context);
+        VssComServiceOnce(Context, &moved);
 
         WdfSpinLockAcquire(Context->Lock);
         again = Context->ServiceAgain;
@@ -240,17 +245,65 @@ static VOID VssComServiceReads(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             Context->ServiceBusy = FALSE;
         WdfSpinLockRelease(Context->Lock);
     } while (again);
+    return moved;
+}
+
+// Moves bytes between the two ends and serves every request that can go on.
+// One thread does it at a time, and again if something changed meanwhile.
+// Reading from Rx makes room for the hub's writes, and the hub reading Tx makes
+// room for the application's, so the four steps repeat until none moves bytes.
+VOID VssComPump(_In_ PVSSCOM_DEVICE_CONTEXT Context)
+{
+    BOOLEAN again;
+
+    WdfSpinLockAcquire(Context->Lock);
+    if (Context->PumpBusy)
+    {
+        Context->PumpAgain = TRUE;
+        WdfSpinLockRelease(Context->Lock);
+        return;
+    }
+    Context->PumpBusy = TRUE;
+    WdfSpinLockRelease(Context->Lock);
+
+    do
+    {
+        BOOLEAN moved;
+
+        WdfSpinLockAcquire(Context->Lock);
+        Context->PumpAgain = FALSE;
+        WdfSpinLockRelease(Context->Lock);
+
+        do
+        {
+            moved = FALSE;
+            if (VssComServiceHubWrites(Context))
+                moved = TRUE;
+            if (VssComServiceReads(Context))
+                moved = TRUE;
+            if (VssComServiceHubReads(Context))
+                moved = TRUE;
+            if (VssComServiceAppWrites(Context))
+                moved = TRUE;
+        } while (moved);
+
+        WdfSpinLockAcquire(Context->Lock);
+        again = Context->PumpAgain;
+        if (!again)
+            Context->PumpBusy = FALSE;
+        WdfSpinLockRelease(Context->Lock);
+    } while (again);
 }
 
 // A timer fired: the head read may be due.
 VOID VssComEvtReadTotalTimer(_In_ WDFTIMER Timer)
 {
-    VssComServiceReads(VssComGetContext(WdfTimerGetParentObject(Timer)));
+    VssComPump(VssComGetContext(WdfTimerGetParentObject(Timer)));
 }
 
 VOID VssComEvtReadIntervalTimer(_In_ WDFTIMER Timer)
 {
-    VssComServiceReads(VssComGetContext(WdfTimerGetParentObject(Timer)));
+    VssComPump(VssComGetContext(WdfTimerGetParentObject(Timer)));
 }
 
 // The framework calls this for a read that was cancelled while it waited.
@@ -259,7 +312,7 @@ VOID VssComEvtReadCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
 
     VssComFinishRead(Request, STATUS_CANCELLED);
-    VssComServiceReads(context);
+    VssComPump(context);
 }
 
 // -- Events ----------------------------------------------------------------
@@ -281,7 +334,7 @@ static VOID VssComFinishWait(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 }
 
 // Something happened that an application can wait for.
-static VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events)
+VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events)
 {
     vsscom_u32 fired = 0;
     BOOLEAN complete;
@@ -306,17 +359,20 @@ VOID VssComEvtWaitCanceled(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
     WdfRequestComplete(Request, STATUS_CANCELLED);
 }
 
-// Updates the modem lines from DTR and RTS and raises what changed.
-static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
-                              _In_ BOOLEAN Dtr, _In_ BOOLEAN Rts)
+// Takes the input lines from where they come from now: the hub's lines while a
+// hub handle is open, otherwise the loopback of DTR and RTS. Raises what
+// changed.
+VOID VssComApplyLines(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 {
     ULONG events;
 
     WdfSpinLockAcquire(Context->Lock);
-    Context->Dtr = Dtr;
-    Context->Rts = Rts;
     {
-        const vsscom_u32 levels = vsscom_loopback_lines(Dtr != FALSE, Rts != FALSE);
+        const vsscom_u32 levels =
+            Context->HubOpen
+                ? (Context->HubLines & VSSCOM_LINE_MASK)
+                : vsscom_loopback_lines(Context->Dtr != FALSE,
+                                        Context->Rts != FALSE);
         events = vsscom_modem_events(Context->ModemLevels, levels);
         Context->ModemDeltas |= vsscom_modem_deltas(Context->ModemLevels, levels);
         Context->ModemLevels = levels;
@@ -325,6 +381,23 @@ static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 
     if (events != 0)
         VssComRaise(Context, events);
+}
+
+// The application set DTR and RTS.
+static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                              _In_ BOOLEAN Dtr, _In_ BOOLEAN Rts)
+{
+    BOOLEAN changed;
+
+    WdfSpinLockAcquire(Context->Lock);
+    changed = (Context->Dtr != Dtr) || (Context->Rts != Rts);
+    Context->Dtr = Dtr;
+    Context->Rts = Rts;
+    WdfSpinLockRelease(Context->Lock);
+
+    VssComApplyLines(Context);
+    if (changed)
+        VssComBumpState(Context);
 }
 
 // -- Reset on close --------------------------------------------------------
@@ -339,7 +412,8 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     vsscom_ring_clear(&Context->Rx);
     Context->Dtr = FALSE;
     Context->Rts = FALSE;
-    Context->ModemLevels = 0;
+    // With a hub attached its lines stay as they are, as a real device's would.
+    Context->ModemLevels = Context->HubOpen ? (Context->HubLines & VSSCOM_LINE_MASK) : 0;
     Context->ModemDeltas = 0;
     release = vsscom_events_set_mask(&Context->Events, 0);
     WdfSpinLockRelease(Context->Lock);
@@ -350,6 +424,14 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 
 // -- Read and write --------------------------------------------------------
 
+// Which end sent a request: VSSCOM_FILE_APP, VSSCOM_FILE_HUB, or 0 for a
+// request with no file object.
+static ULONG VssComRequestKind(_In_ WDFREQUEST Request)
+{
+    WDFFILEOBJECT file = WdfRequestGetFileObject(Request);
+    return file == NULL ? 0 : VssComFileContext(file)->Kind;
+}
+
 static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
                             _In_ size_t Length)
 {
@@ -358,6 +440,18 @@ static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     WDF_OBJECT_ATTRIBUTES attributes;
     PVOID buffer = NULL;
     NTSTATUS status;
+    const ULONG kind = VssComRequestKind(Request);
+
+    if (kind == VSSCOM_FILE_HUB)
+    {
+        VssComHubRead(context, Request, Length);
+        return;
+    }
+    if (kind != VSSCOM_FILE_APP)
+    {
+        WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);
+        return;
+    }
 
     if (Length == 0)
     {
@@ -394,7 +488,7 @@ static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         return;
     }
 
-    VssComServiceReads(context);
+    VssComPump(context);
 }
 
 static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
@@ -404,6 +498,19 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     PVOID buffer = NULL;
     ULONG written;
     NTSTATUS status;
+    BOOLEAN hub;
+    const ULONG kind = VssComRequestKind(Request);
+
+    if (kind == VSSCOM_FILE_HUB)
+    {
+        VssComHubWrite(context, Request, Length);
+        return;
+    }
+    if (kind != VSSCOM_FILE_APP)
+    {
+        WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);
+        return;
+    }
 
     if (Length == 0)
     {
@@ -413,6 +520,16 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     if (Length > MAXULONG)
     {
         WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
+        return;
+    }
+
+    // With a hub attached the bytes go to it, and the write waits for room.
+    WdfSpinLockAcquire(context->Lock);
+    hub = context->HubOpen;
+    WdfSpinLockRelease(context->Lock);
+    if (hub)
+    {
+        VssComAppWriteToHub(context, Request, Length);
         return;
     }
 
@@ -432,7 +549,7 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
 
     if (written != 0)
     {
-        VssComServiceReads(context);
+        VssComPump(context);
         VssComRaise(context, VSSCOM_EV_RXCHAR);
     }
     VssComRaise(context, VSSCOM_EV_TXEMPTY);
@@ -470,6 +587,9 @@ static VOID VssComProperties(_Out_ PSERIAL_COMMPROP Properties)
         SERIAL_STOPBITS_10 | SERIAL_STOPBITS_15 | SERIAL_STOPBITS_20 |
         SERIAL_PARITY_NONE | SERIAL_PARITY_ODD | SERIAL_PARITY_EVEN |
         SERIAL_PARITY_MARK | SERIAL_PARITY_SPACE;
+    Properties->MaxTxQueue = VSSCOM_TX_SIZE;
+    Properties->MaxRxQueue = VSSCOM_RX_SIZE;
+    Properties->CurrentTxQueue = VSSCOM_TX_SIZE;
     Properties->CurrentRxQueue = VSSCOM_RX_SIZE;
 }
 
@@ -480,18 +600,29 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
                                      _In_ ULONG IoControlCode)
 {
     PVSSCOM_DEVICE_CONTEXT context = VssComGetContext(WdfIoQueueGetDevice(Queue));
+    const ULONG kind = VssComRequestKind(Request);
     UNREFERENCED_PARAMETER(OutputBufferLength);
     UNREFERENCED_PARAMETER(InputBufferLength);
 
-    switch (IoControlCode)
-    {
-    case IOCTL_VSSCOM_GET_VERSION:
+    if (IoControlCode == IOCTL_VSSCOM_GET_VERSION)
     {
         VSSCOM_VERSION_INFO info = {VSSCOM_VERSION, VSSCOM_RX_SIZE};
         VssComCompleteWithData(Request, &info, sizeof(info));
         return;
     }
+    if (kind == VSSCOM_FILE_HUB)
+    {
+        VssComHubIoControl(context, Request, IoControlCode);
+        return;
+    }
+    if (kind != VSSCOM_FILE_APP)
+    {
+        WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);
+        return;
+    }
 
+    switch (IoControlCode)
+    {
     case IOCTL_SERIAL_GET_BAUD_RATE:
     {
         SERIAL_BAUD_RATE baud = {0};
@@ -513,6 +644,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         WdfSpinLockAcquire(context->Lock);
         context->BaudRate = baud.BaudRate;
         WdfSpinLockRelease(context->Lock);
+        VssComBumpState(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -538,6 +670,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         WdfSpinLockAcquire(context->Lock);
         context->LineControl = control;
         WdfSpinLockRelease(context->Lock);
+        VssComBumpState(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -661,6 +794,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         SERIAL_STATUS status = {0};
         WdfSpinLockAcquire(context->Lock);
         status.AmountInInQueue = vsscom_ring_count(&context->Rx);
+        status.AmountInOutQueue = vsscom_ring_count(&context->Tx);
         WdfSpinLockRelease(context->Lock);
         VssComCompleteWithData(Request, &status, sizeof(status));
         return;
@@ -718,6 +852,19 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
 
     case IOCTL_SERIAL_SET_BREAK_ON:
     case IOCTL_SERIAL_SET_BREAK_OFF:
+    {
+        BOOLEAN changed;
+        const BOOLEAN on = IoControlCode == IOCTL_SERIAL_SET_BREAK_ON;
+        WdfSpinLockAcquire(context->Lock);
+        changed = context->Break != on;
+        context->Break = on;
+        WdfSpinLockRelease(context->Lock);
+        if (changed)
+            VssComBumpState(context);
+        WdfRequestComplete(Request, STATUS_SUCCESS);
+        return;
+    }
+
     case IOCTL_SERIAL_SET_XOFF:
     case IOCTL_SERIAL_SET_XON:
     case IOCTL_SERIAL_RESET_DEVICE:
@@ -818,6 +965,15 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             vsscom_ring_clear(&context->Rx);
             WdfSpinLockRelease(context->Lock);
         }
+        if ((flags & (SERIAL_PURGE_TXCLEAR | SERIAL_PURGE_TXABORT)) != 0)
+        {
+            WdfSpinLockAcquire(context->Lock);
+            vsscom_ring_clear(&context->Tx);
+            WdfSpinLockRelease(context->Lock);
+        }
+        // Aborting writes ends those that are waiting for the hub.
+        if ((flags & SERIAL_PURGE_TXABORT) != 0)
+            VssComAbortAppWrites(context, STATUS_CANCELLED);
 
         // Aborting reads ends the one that is waiting with what it holds.
         if (abort_read)
@@ -825,8 +981,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             WdfSpinLockAcquire(context->Lock);
             context->AbortHead = TRUE;
             WdfSpinLockRelease(context->Lock);
-            VssComServiceReads(context);
         }
+        // Clearing made room, and an abort needs the read queue served.
+        VssComPump(context);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -835,19 +992,23 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     {
         UCHAR byte = 0;
         ULONG stored;
+        BOOLEAN hub;
         if (!VssComFetchInput(Request, &byte, sizeof(byte)))
         {
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
         }
+        // The byte goes to the hub when there is one, and loops back if not.
         WdfSpinLockAcquire(context->Lock);
-        stored = vsscom_ring_write(&context->Rx, &byte, 1);
+        hub = context->HubOpen;
+        stored = vsscom_ring_write(hub ? &context->Tx : &context->Rx, &byte, 1);
         WdfSpinLockRelease(context->Lock);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         if (stored != 0)
         {
-            VssComServiceReads(context);
-            VssComRaise(context, VSSCOM_EV_RXCHAR);
+            VssComPump(context);
+            if (!hub)
+                VssComRaise(context, VSSCOM_EV_RXCHAR);
         }
         return;
     }
@@ -903,6 +1064,10 @@ NTSTATUS VssComCreateQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     config.EvtIoCanceledOnQueue = VssComEvtWaitCanceled;
     status = WdfIoQueueCreate(device, &config, WDF_NO_OBJECT_ATTRIBUTES,
                               &Context->WaitQueue);
+    if (!NT_SUCCESS(status))
+        return status;
+
+    status = VssComCreateHubQueues(Context);
     if (!NT_SUCCESS(status))
         return status;
 

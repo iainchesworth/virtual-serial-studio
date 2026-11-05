@@ -11,9 +11,9 @@
 // and the serial control requests; core/vsscom_core.c holds the rules they
 // follow and is unit-tested on the host.
 //
-// This slice is a loopback port: bytes written are returned by the next read.
-// A paired port with a hub end replaces the loopback; see
-// docs/windows-com-driver.md.
+// Each port has an application end, the COM port, and a hub end that the studio
+// opens through a second device interface (hub.c). Until a hub opens, the port
+// loops back: bytes written are returned by the next read.
 //
 
 #define VSSCOM_DEFINE_GUIDS
@@ -28,6 +28,7 @@
 DRIVER_INITIALIZE DriverEntry;
 EVT_WDF_DRIVER_DEVICE_ADD VssComEvtDeviceAdd;
 EVT_WDF_OBJECT_CONTEXT_CLEANUP VssComEvtDeviceCleanup;
+EVT_WDF_DEVICE_FILE_CREATE VssComEvtDeviceFileCreate;
 EVT_WDF_FILE_CLEANUP VssComEvtFileCleanup;
 
 NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT DriverObject,
@@ -136,12 +137,6 @@ VOID VssComEvtDeviceCleanup(_In_ WDFOBJECT Object)
     }
 }
 
-// A port goes back to quiet when its handle closes.
-VOID VssComEvtFileCleanup(_In_ WDFFILEOBJECT FileObject)
-{
-    VssComResetPort(VssComGetContext(WdfFileObjectGetDevice(FileObject)));
-}
-
 NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
                             _Inout_ PWDFDEVICE_INIT DeviceInit)
 {
@@ -149,7 +144,9 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
     WCHAR nameBuffer[40];
     UNICODE_STRING deviceName;
     WDF_FILEOBJECT_CONFIG fileConfig;
+    WDF_OBJECT_ATTRIBUTES fileAttributes;
     WDF_OBJECT_ATTRIBUTES attributes;
+    DECLARE_CONST_UNICODE_STRING(hubReference, VSSCOM_HUB_REFERENCE);
     WDFDEVICE device;
     PVSSCOM_DEVICE_CONTEXT context;
     NTSTATUS status;
@@ -170,13 +167,15 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
     WdfDeviceInitSetCharacteristics(DeviceInit, FILE_DEVICE_SECURE_OPEN, FALSE);
     // Buffered I/O: a waiting read can be filled later from another thread.
     WdfDeviceInitSetIoType(DeviceInit, WdfDeviceIoBuffered);
-    // A serial port has one user at a time: a second CreateFile fails.
-    WdfDeviceInitSetExclusive(DeviceInit, TRUE);
-
-    WDF_FILEOBJECT_CONFIG_INIT(&fileConfig, WDF_NO_EVENT_CALLBACK,
+    // Each end has one handle at a time. The device is not marked exclusive,
+    // because that would shut the hub out while an application has the port;
+    // VssComEvtDeviceFileCreate refuses a second handle on an end itself.
+    // The file name tells the ends apart, so the framework must keep it.
+    WDF_FILEOBJECT_CONFIG_INIT(&fileConfig, VssComEvtDeviceFileCreate,
                                WDF_NO_EVENT_CALLBACK, VssComEvtFileCleanup);
-    WdfDeviceInitSetFileObjectConfig(DeviceInit, &fileConfig,
-                                     WDF_NO_OBJECT_ATTRIBUTES);
+    fileConfig.FileObjectClass = WdfFileObjectWdfCanUseFsContext2;
+    WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&fileAttributes, VSSCOM_FILE_CONTEXT);
+    WdfDeviceInitSetFileObjectConfig(DeviceInit, &fileConfig, &fileAttributes);
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, VSSCOM_DEVICE_CONTEXT);
     attributes.EvtCleanupCallback = VssComEvtDeviceCleanup;
@@ -192,14 +191,16 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
     context->LineControl.Parity = NO_PARITY;
     context->LineControl.WordLength = 8;
     vsscom_ring_init(&context->Rx, context->RxStorage, VSSCOM_RX_SIZE);
+    vsscom_ring_init(&context->Tx, context->TxStorage, VSSCOM_TX_SIZE);
     vsscom_events_init(&context->Events);
 
     status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &context->Lock);
     if (!NT_SUCCESS(status))
         return status;
 
+    // The hub end: <interface path>\hub.
     status = WdfDeviceCreateDeviceInterface(device, &GUID_DEVINTERFACE_VSSCOM,
-                                            NULL);
+                                            &hubReference);
     if (!NT_SUCCESS(status))
         return status;
 

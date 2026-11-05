@@ -21,13 +21,11 @@ std::string driver_version()
     return detail::platform_driver_version();
 }
 
-result<virtual_port_result> create_driver_port(const transport::executor_type&,
-                                               const std::string&)
+result<virtual_port_result>
+create_driver_port(const transport::executor_type& executor,
+                   const std::string& name)
 {
-    // The driver client (control device IOCTL + shared ring transport) is the
-    // next milestone.  Reporting unsupported rather than failing later keeps
-    // the auto-selection path honest.
-    return make_error_code(errc::unsupported);
+    return detail::platform_create_driver_port(executor, name);
 }
 
 } // namespace vss

@@ -21,4 +21,11 @@ std::string platform_driver_version()
     return {};
 }
 
+result<virtual_port_result>
+platform_create_driver_port(const transport::executor_type&,
+                            const std::string&)
+{
+    return make_error_code(errc::unsupported);
+}
+
 } // namespace vss::detail
