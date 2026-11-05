@@ -37,8 +37,8 @@ HelpContentsDialog::HelpContentsDialog(QWidget* parent) : QDialog(parent)
 
 void HelpContentsDialog::build()
 {
-    setWindowTitle(t("Help contents"));
-    setAccessibleName(t("Help contents"));
+    setWindowTitle(QCoreApplication::translate("Help", "Help contents"));
+    setAccessibleName(QCoreApplication::translate("Help", "Help contents"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(
@@ -55,9 +55,11 @@ void HelpContentsDialog::build()
     auto* header_layout = new QVBoxLayout(header);
     header_layout->setContentsMargins(24, 20, 24, 14);
     header_layout->setSpacing(4);
-    add_dialog_heading(header_layout, t("Help contents"),
-                       t("Every action is in the menus. Start with these."),
-                       header);
+    add_dialog_heading(
+        header_layout, QCoreApplication::translate("Help", "Help contents"),
+        QCoreApplication::translate(
+            "Help", "Every action is in the menus. Start with these."),
+        header);
     outer->addWidget(header);
 
     auto* body = new QWidget(this);
@@ -72,14 +74,21 @@ void HelpContentsDialog::build()
         const char* description;
     };
     const topic topics[] = {
-        {help_topic::setup_check, "Setup check",
-         "Check the driver, permissions and devices this PC needs."},
-        {help_topic::troubleshoot, "Why is nothing arriving?",
-         "Follow the five steps between the device and your program."},
-        {help_topic::shortcuts, "Keyboard shortcuts",
-         "See every action's shortcut in one list."},
-        {help_topic::about, "About Virtual Serial Studio",
-         "Version, environment, licences and fonts."},
+        {help_topic::setup_check, QT_TRANSLATE_NOOP("Help", "Setup check"),
+         QT_TRANSLATE_NOOP(
+             "Help",
+             "Check the driver, permissions and devices this PC needs.")},
+        {help_topic::troubleshoot,
+         QT_TRANSLATE_NOOP("Help", "Why is nothing arriving?"),
+         QT_TRANSLATE_NOOP(
+             "Help",
+             "Follow the five steps between the device and your program.")},
+        {help_topic::shortcuts, QT_TRANSLATE_NOOP("Help", "Keyboard shortcuts"),
+         QT_TRANSLATE_NOOP("Help", "See every action's shortcut in one list.")},
+        {help_topic::about,
+         QT_TRANSLATE_NOOP("Help", "About Virtual Serial Studio"),
+         QT_TRANSLATE_NOOP("Help",
+                           "Version, environment, licences and fonts.")},
     };
 
     for (const topic& item : topics)
@@ -105,9 +114,11 @@ void HelpContentsDialog::build()
         polish(description);
         column->addWidget(description);
         card_layout->addLayout(column, 1);
-        auto* open = make_dialog_button(t("Open"), nullptr, card);
+        auto* open = make_dialog_button(
+            QCoreApplication::translate("Help", "Open"), nullptr, card);
         open->setAutoDefault(false);
-        open->setAccessibleName(tr("%1: %2").arg(t("Open"), t(item.title)));
+        open->setAccessibleName(tr("%1: %2").arg(
+            QCoreApplication::translate("Help", "Open"), t(item.title)));
         connect(open, &QPushButton::clicked, this,
                 [this, value = item.value] { choose(value); });
         card_layout->addWidget(open, 0, Qt::AlignVCenter);
@@ -118,7 +129,8 @@ void HelpContentsDialog::build()
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* close = make_dialog_button(t("Close"), "primary", footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("Help", "Close"), "primary", footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);

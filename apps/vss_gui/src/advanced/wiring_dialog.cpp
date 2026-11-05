@@ -23,25 +23,20 @@ namespace vss::gui
 namespace
 {
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("WiringDialog", text);
-}
-
 QString endpoint_state_word(vss::endpoint_state state)
 {
     switch (state)
     {
     case vss::endpoint_state::open:
-        return tr("Open");
+        return QCoreApplication::translate("WiringDialog", "Open");
     case vss::endpoint_state::failed:
-        return tr("Failed");
+        return QCoreApplication::translate("WiringDialog", "Failed");
     case vss::endpoint_state::created:
     case vss::endpoint_state::opening:
     case vss::endpoint_state::closed:
-        return tr("Closed");
+        return QCoreApplication::translate("WiringDialog", "Closed");
     }
-    return tr("Closed");
+    return QCoreApplication::translate("WiringDialog", "Closed");
 }
 
 StatusChip::kind endpoint_state_kind(vss::endpoint_state state)

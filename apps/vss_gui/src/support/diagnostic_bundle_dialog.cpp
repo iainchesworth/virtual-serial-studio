@@ -35,11 +35,6 @@ namespace vss::gui::support
 namespace
 {
 
-QString t(const char* text)
-{
-    return QCoreApplication::translate("Bundle", text);
-}
-
 QFrame* include_row(QWidget* parent, QCheckBox*& check, const QString& title,
                     const QString& description, const QString& tag,
                     bool highlight = false, const QString& chip = {})
@@ -108,8 +103,10 @@ DiagnosticBundleDialog::DiagnosticBundleDialog(StudioBackend& backend,
 
 void DiagnosticBundleDialog::build()
 {
-    setWindowTitle(t("Create a diagnostic bundle"));
-    setAccessibleName(t("Create a diagnostic bundle"));
+    setWindowTitle(
+        QCoreApplication::translate("Bundle", "Create a diagnostic bundle"));
+    setAccessibleName(
+        QCoreApplication::translate("Bundle", "Create a diagnostic bundle"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     resize(Theme::instance().metric(
@@ -127,9 +124,12 @@ void DiagnosticBundleDialog::build()
     header_layout->setContentsMargins(24, 20, 24, 14);
     header_layout->setSpacing(4);
     add_dialog_heading(
-        header_layout, t("Create a diagnostic bundle"),
-        t("Gathers what a helper needs to understand your setup. Nothing is "
-          "sent anywhere. You choose where to save it."),
+        header_layout,
+        QCoreApplication::translate("Bundle", "Create a diagnostic bundle"),
+        QCoreApplication::translate(
+            "Bundle",
+            "Gathers what a helper needs to understand your setup. Nothing is "
+            "sent anywhere. You choose where to save it."),
         header);
     outer->addWidget(header);
 
@@ -142,12 +142,15 @@ void DiagnosticBundleDialog::build()
     {
         auto* note = new NoteBanner(
             NoteBanner::kind::warn,
-            t("Creating a diagnostic bundle is not available in this build."),
+            QCoreApplication::translate(
+                "Bundle",
+                "Creating a diagnostic bundle is not available in this build."),
             body);
         body_layout->addWidget(note);
     }
 
-    auto* include_label = new QLabel(t("Include"), body);
+    auto* include_label =
+        new QLabel(QCoreApplication::translate("Bundle", "Include"), body);
     include_label->setFont(Theme::instance().font(text_style::caption));
     QFont label_font = include_label->font();
     label_font.setWeight(QFont::DemiBold);
@@ -161,37 +164,51 @@ void DiagnosticBundleDialog::build()
     list_layout->setContentsMargins(0, 0, 0, 0);
     list_layout->setSpacing(0);
 
-    list_layout->addWidget(
-        include_row(list, setup_, t("Setup"),
-                    t("Ports, links and their settings, as a topology file."),
-                    QStringLiteral("setup.json")));
-    list_layout->addWidget(
-        include_row(list, event_log_, t("Event log"),
-                    t("State changes and errors since the setup was opened."),
-                    QStringLiteral("log.txt")));
     list_layout->addWidget(include_row(
-        list, environment_, t("Environment"),
-        t("Build, compiler, Qt version, operating system and architecture."),
+        list, setup_, QCoreApplication::translate("Bundle", "Setup"),
+        QCoreApplication::translate(
+            "Bundle", "Ports, links and their settings, as a topology file."),
+        QStringLiteral("setup.json")));
+    list_layout->addWidget(include_row(
+        list, event_log_, QCoreApplication::translate("Bundle", "Event log"),
+        QCoreApplication::translate(
+            "Bundle", "State changes and errors since the setup was opened."),
+        QStringLiteral("log.txt")));
+    list_layout->addWidget(include_row(
+        list, environment_,
+        QCoreApplication::translate("Bundle", "Environment"),
+        QCoreApplication::translate(
+            "Bundle",
+            "Build, compiler, Qt version, operating system and architecture."),
         QStringLiteral("environment.txt")));
     list_layout->addWidget(include_row(
-        list, counters_, t("Port counters"),
-        t("State, bytes in and out, and bytes dropped for each port."),
+        list, counters_, QCoreApplication::translate("Bundle", "Port counters"),
+        QCoreApplication::translate(
+            "Bundle",
+            "State, bytes in and out, and bytes dropped for each port."),
         QStringLiteral("counters.csv")));
     list_layout->addWidget(include_row(
-        list, traffic_, t("Traffic contents"),
-        t("The actual bytes sent and received. They may include passwords or "
-          "personal data."),
-        {}, true, t("Off by default")));
+        list, traffic_,
+        QCoreApplication::translate("Bundle", "Traffic contents"),
+        QCoreApplication::translate(
+            "Bundle",
+            "The actual bytes sent and received. They may include passwords or "
+            "personal data."),
+        {}, true, QCoreApplication::translate("Bundle", "Off by default")));
     body_layout->addWidget(list);
 
     auto* privacy = new NoteBanner(
         NoteBanner::kind::info,
-        t("Nothing leaves this PC until you share the file yourself. Look "
-          "inside the bundle first if you want to check it."),
+        QCoreApplication::translate(
+            "Bundle",
+            "Nothing leaves this PC until you share the file yourself. Look "
+            "inside the bundle first if you want to check it."),
         body);
     body_layout->addWidget(privacy);
 
-    auto* name_label = new QLabel(t("The bundle will be one file"), body);
+    auto* name_label = new QLabel(
+        QCoreApplication::translate("Bundle", "The bundle will be one file"),
+        body);
     name_label->setFont(Theme::instance().font(text_style::caption));
     QFont name_font = name_label->font();
     name_font.setWeight(QFont::DemiBold);
@@ -248,28 +265,34 @@ void DiagnosticBundleDialog::build()
              {setup_, event_log_, environment_, counters_, traffic_})
         {
             check->setEnabled(false);
-            check->setToolTip(t("Not available in this build"));
+            check->setToolTip(QCoreApplication::translate(
+                "Bundle", "Not available in this build"));
         }
     }
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    auto* copy =
-        make_dialog_button(t("Copy environment only"), "quiet", footer);
+    auto* copy = make_dialog_button(
+        QCoreApplication::translate("Bundle", "Copy environment only"), "quiet",
+        footer);
     copy->setAutoDefault(false);
     connect(copy, &QPushButton::clicked, this,
             &DiagnosticBundleDialog::copy_environment);
     footer_layout->addWidget(copy);
-    auto* cancel = make_dialog_button(t("Cancel"), nullptr, footer);
+    auto* cancel = make_dialog_button(
+        QCoreApplication::translate("Bundle", "Cancel"), nullptr, footer);
     cancel->setAutoDefault(false);
     connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
     footer_layout->addWidget(cancel);
-    auto* save = make_dialog_button(t("Save bundle"), "primary", footer);
+    auto* save =
+        make_dialog_button(QCoreApplication::translate("Bundle", "Save bundle"),
+                           "primary", footer);
     save->setObjectName(QStringLiteral("saveBundle"));
     save->setDefault(true);
     save->setEnabled(available_);
     if (!available_)
-        save->setToolTip(t("Not available in this build"));
+        save->setToolTip(QCoreApplication::translate(
+            "Bundle", "Not available in this build"));
     connect(save, &QPushButton::clicked, this, &DiagnosticBundleDialog::save);
     footer_layout->addWidget(save);
     outer->addWidget(footer);
@@ -304,7 +327,10 @@ void DiagnosticBundleDialog::update_counts()
     if (count_ == nullptr)
         return;
     const int files = selected_file_count();
-    count_->setText(files == 1 ? t("1 file") : t("%1 files").arg(files));
+    count_->setText(
+        files == 1
+            ? QCoreApplication::translate("Bundle", "1 file")
+            : QCoreApplication::translate("Bundle", "%1 files").arg(files));
     count_->setAccessibleName(count_->text());
 }
 
@@ -318,7 +344,8 @@ bool DiagnosticBundleDialog::write_bundle(const QString& path, QString* error)
         if (!writer.add_file(file.name, file.data))
         {
             if (error != nullptr)
-                *error = t("The bundle has too many files.");
+                *error = QCoreApplication::translate(
+                    "Bundle", "The bundle has too many files.");
             return false;
         }
     }
@@ -350,8 +377,9 @@ bool DiagnosticBundleDialog::write_bundle(const QString& path, QString* error)
 void DiagnosticBundleDialog::save()
 {
     QString path = QFileDialog::getSaveFileName(
-        this, t("Save diagnostic bundle"), suggested_path(),
-        t("ZIP archives (*.zip)"));
+        this, QCoreApplication::translate("Bundle", "Save diagnostic bundle"),
+        suggested_path(),
+        QCoreApplication::translate("Bundle", "ZIP archives (*.zip)"));
     if (path.isEmpty())
         return;
     if (!path.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive))
@@ -360,19 +388,23 @@ void DiagnosticBundleDialog::save()
     QString error;
     if (!write_bundle(path, &error))
     {
-        ErrorDialog dialog(t("Could not save the bundle"), error, {}, this);
+        ErrorDialog dialog(
+            QCoreApplication::translate("Bundle", "Could not save the bundle"),
+            error, {}, this);
         dialog.exec();
         return;
     }
     ToastManager::instance().show(
-        this, t("Bundle saved to %1.").arg(QFileInfo(path).fileName()));
+        this, QCoreApplication::translate("Bundle", "Bundle saved to %1.")
+                  .arg(QFileInfo(path).fileName()));
     accept();
 }
 
 void DiagnosticBundleDialog::copy_environment()
 {
     QGuiApplication::clipboard()->setText(environment_report());
-    ToastManager::instance().show(this, t("Environment copied."));
+    ToastManager::instance().show(
+        this, QCoreApplication::translate("Bundle", "Environment copied."));
 }
 
 } // namespace vss::gui::support

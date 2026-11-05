@@ -27,31 +27,26 @@ namespace
 
 constexpr int kRowCap = 2000;
 
-QString tr(const char* text)
-{
-    return QCoreApplication::translate("EventLog", text);
-}
-
 QString kind_text(vss::event_kind kind)
 {
     switch (kind)
     {
     case vss::event_kind::started:
-        return tr("Started");
+        return QCoreApplication::translate("EventLog", "Started");
     case vss::event_kind::stopped:
-        return tr("Stopped");
+        return QCoreApplication::translate("EventLog", "Stopped");
     case vss::event_kind::lines:
-        return tr("Control lines");
+        return QCoreApplication::translate("EventLog", "Control lines");
     case vss::event_kind::error:
-        return tr("Error");
+        return QCoreApplication::translate("EventLog", "Error");
     case vss::event_kind::stats:
-        return tr("Counters");
+        return QCoreApplication::translate("EventLog", "Counters");
     case vss::event_kind::log_message:
-        return tr("Message");
+        return QCoreApplication::translate("EventLog", "Message");
     case vss::event_kind::data:
-        return tr("Traffic");
+        return QCoreApplication::translate("EventLog", "Traffic");
     }
-    return tr("Message");
+    return QCoreApplication::translate("EventLog", "Message");
 }
 
 } // namespace

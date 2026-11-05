@@ -61,12 +61,19 @@ struct fault_tile
 const std::array<fault_tile, 6>& fault_tiles()
 {
     static const std::array<fault_tile, 6> tiles = {{
-        {"Parity error", "Byte arrives with bad parity"},
-        {"Framing error", "Byte arrives with no valid stop bit"},
-        {"Overrun", "Incoming data lost, too fast"},
-        {"Break", "A break is received on the line"},
-        {"Hang-up", "Carrier drops, as a modem does"},
-        {"Disconnect", "Device vanishes, as if unplugged"},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Parity error"),
+         QT_TRANSLATE_NOOP("LineMatrix", "Byte arrives with bad parity")},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Framing error"),
+         QT_TRANSLATE_NOOP("LineMatrix",
+                           "Byte arrives with no valid stop bit")},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Overrun"),
+         QT_TRANSLATE_NOOP("LineMatrix", "Incoming data lost, too fast")},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Break"),
+         QT_TRANSLATE_NOOP("LineMatrix", "A break is received on the line")},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Hang-up"),
+         QT_TRANSLATE_NOOP("LineMatrix", "Carrier drops, as a modem does")},
+        {QT_TRANSLATE_NOOP("LineMatrix", "Disconnect"),
+         QT_TRANSLATE_NOOP("LineMatrix", "Device vanishes, as if unplugged")},
     }};
     return tiles;
 }
