@@ -10,8 +10,10 @@
 // framework: WdfRequestImpersonate runs a callback with the requestor's token on
 // the thread, and the callback reads it there. The rules are the same ones:
 //
-//   - a port made on demand: only the user who made it. The user-mode driver
-//     makes no port on demand yet, so this case does not arise;
+//   - a port made on demand: only the user who made it. The helper service made
+//     it and put that user's SID on the device as the owner property
+//     (vsscom_helper/protocol.h); the callback compares it with the user of the
+//     token;
 //   - a port made by hand: administrators.
 //
 // The token is at identification level (UmdfImpersonationLevel in the INF),
@@ -20,16 +22,87 @@
 // are read from the token itself.
 //
 
-#include "vsscom.h"
+#include "vsscom_um.h"
 
 typedef struct _VSSCOM_IMPERSONATION
 {
     PVSSCOM_DEVICE_CONTEXT Context;
-    BOOLEAN Ran;     // the callback has run
-    BOOLEAN Allowed; // and this is what it decided
+    VSSCOM_UM_OWNER Owner; // of a port made on demand
+    BOOLEAN Ran;           // the callback has run
+    BOOLEAN Allowed;       // and this is what it decided
 } VSSCOM_IMPERSONATION, *PVSSCOM_IMPERSONATION;
 
 static EVT_WDF_REQUEST_IMPERSONATE VssComEvtRequestImpersonate;
+
+// True when what a property query returned is the binary form of a SID.
+static BOOLEAN VssComUmOwnerIsSid(_In_ NTSTATUS Status, _In_ DEVPROPTYPE Type,
+                                  _In_ ULONG Size,
+                                  _In_ const VSSCOM_UM_OWNER* Owner)
+{
+    return NT_SUCCESS(Status) && Type == DEVPROP_TYPE_BINARY && Size > 0 &&
+           Size <= sizeof(Owner->Sid) && IsValidSid((PSID)Owner->Sid) &&
+           GetLengthSid((PSID)Owner->Sid) == Size;
+}
+
+BOOLEAN VssComUmDeviceInitHasOwner(_In_ PWDFDEVICE_INIT DeviceInit)
+{
+    WDF_DEVICE_PROPERTY_DATA data;
+    VSSCOM_UM_OWNER owner;
+    DEVPROPTYPE type = 0;
+    ULONG size = 0;
+    NTSTATUS status;
+
+    RtlZeroMemory(&owner, sizeof(owner));
+    WDF_DEVICE_PROPERTY_DATA_INIT(&data, &VssComUmOwnerKey);
+    status = WdfFdoInitQueryPropertyEx(DeviceInit, &data, sizeof(owner.Sid),
+                                       owner.Sid, &size, &type);
+    owner.Size = size;
+    return VssComUmOwnerIsSid(status, type, size, &owner);
+}
+
+// Reads the owner of the port from the device. FALSE when there is none that is
+// a SID, which refuses the open.
+static BOOLEAN VssComUmQueryOwner(_In_ WDFDEVICE Device,
+                                  _Out_ PVSSCOM_UM_OWNER Owner)
+{
+    WDF_DEVICE_PROPERTY_DATA data;
+    DEVPROPTYPE type = 0;
+    ULONG size = 0;
+    NTSTATUS status;
+
+    RtlZeroMemory(Owner, sizeof(*Owner));
+    WDF_DEVICE_PROPERTY_DATA_INIT(&data, &VssComUmOwnerKey);
+    status = WdfDeviceQueryPropertyEx(Device, &data, sizeof(Owner->Sid),
+                                      Owner->Sid, &size, &type);
+    Owner->Size = size;
+    return VssComUmOwnerIsSid(status, type, size, Owner);
+}
+
+// True when the thread's token is of the user in `Owner`.
+static BOOLEAN VssComThreadIsOwner(_In_ const VSSCOM_UM_OWNER* Owner)
+{
+    HANDLE token = NULL;
+    DWORD size = 0;
+    PTOKEN_USER user;
+    BOOLEAN same = FALSE;
+
+    if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &token))
+        return FALSE;
+
+    (void)GetTokenInformation(token, TokenUser, NULL, 0, &size);
+    if (size == 0)
+    {
+        CloseHandle(token);
+        return FALSE;
+    }
+    user = (PTOKEN_USER)HeapAlloc(GetProcessHeap(), 0, size);
+    if (user != NULL && GetTokenInformation(token, TokenUser, user, size, &size))
+        same = EqualSid(user->User.Sid, (PSID)Owner->Sid) ? TRUE : FALSE;
+    if (user != NULL)
+        HeapFree(GetProcessHeap(), 0, user);
+    CloseHandle(token);
+    return same;
+}
 
 // True when the thread's token has the Administrators group switched on: the
 // group is in the token, and it is not there only to deny. A user who runs
@@ -90,10 +163,10 @@ static VOID NTAPI VssComEvtRequestImpersonate(_In_ WDFREQUEST Request,
     if (who == NULL)
         return;
 
-    // The hub end of a port made on demand would be compared with its maker
-    // here. There is no such port in this driver yet, so every port is one made
-    // by hand.
-    who->Allowed = who->Context->OnDemand ? FALSE : VssComThreadIsAdmin();
+    // The hub end of a port made on demand opens for the user who asked for the
+    // port; one made by hand, for administrators.
+    who->Allowed = who->Context->OnDemand ? VssComThreadIsOwner(&who->Owner)
+                                          : VssComThreadIsAdmin();
     who->Ran = TRUE;
 }
 
@@ -109,6 +182,14 @@ VOID VssComAuthorizeHubOpen(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     who.Context = Context;
     who.Ran = FALSE;
     who.Allowed = FALSE;
+    RtlZeroMemory(&who.Owner, sizeof(who.Owner));
+
+    // A port made on demand with no usable owner is closed to everyone.
+    if (Context->OnDemand && !VssComUmQueryOwner(Context->Device, &who.Owner))
+    {
+        VssComHubOpenDecided(Context, Request, FileObject, FALSE);
+        return;
+    }
 
     status = WdfRequestImpersonate(Request, SecurityIdentification,
                                    VssComEvtRequestImpersonate, &who);

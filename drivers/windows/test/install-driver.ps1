@@ -6,11 +6,13 @@
 # (vsscom.sys, vsscom.inf, vsscomctl.inf and their catalogs) next to this script or
 # in -PackageDir.
 #
-#   install-driver.ps1 [-PackageDir <dir>] [-ResultPath <json>] [-Count <n>] [-Flavour kmdf|umdf]
+#   install-driver.ps1 [-PackageDir <dir>] [-ResultPath <json>] [-Count <n>] [-Flavour kmdf|umdf] [-Helper]
 #
 # With -Flavour umdf it installs the user-mode driver (vsscom_um.dll, vsscom_um.inf
 # and its catalog) and creates its ports, and no control device, which that driver
-# does not have.
+# does not have. With -Helper as well it installs the helper service
+# (vsscom_helper.exe and install-helper.ps1 from the package folder), which makes
+# that driver's ports on demand.
 #
 # The package must be signed by something the guest trusts: a catalog signed by
 # a certificate whose root is in LocalMachine\Root, with test signing on. The
@@ -23,7 +25,8 @@ param(
     [string] $PackageDir = $PSScriptRoot,
     [string] $ResultPath,
     [ValidateRange(1, 16)] [int] $Count = 2,
-    [ValidateSet('kmdf', 'umdf')] [string] $Flavour
+    [ValidateSet('kmdf', 'umdf')] [string] $Flavour,
+    [switch] $Helper
 )
 
 $ErrorActionPreference = 'Stop'
@@ -66,6 +69,15 @@ try {
             if (-not $control) { Start-Sleep -Milliseconds 500 }
         }
         $tests += New-TestRecord 'install.control' 'the control device has an interface' ($(if ($control) { 'pass' } else { 'fail' })) $control
+    }
+
+    # The helper service, which makes the user-mode driver's ports on demand. Its
+    # files (vsscom_helper.exe and install-helper.ps1) are in the package folder.
+    if ($Helper) {
+        if ($Flavour -ne 'umdf' -and $env:VSS_DRIVER -ne 'umdf') { throw '-Helper is for the user-mode driver (-Flavour umdf)' }
+        $helperOut = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PackageDir 'install-helper.ps1') `
+            -ExePath (Join-Path $PackageDir 'vsscom_helper.exe') 2>&1
+        $tests += New-TestRecord 'install.helper' 'install-helper.ps1' ($(if ($LASTEXITCODE -eq 0) { 'pass' } else { 'fail' })) (($helperOut | Out-String).Trim())
     }
 
     $ports = @()

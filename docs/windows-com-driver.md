@@ -76,7 +76,7 @@ Same answer, with two caveats:
 | Named pipe presented as a "port" | Not a COM port. Only applications that accept a pipe path can use it. |
 | USB/IP with a virtual CDC device | Requires `usbip-win` (another third-party driver) plus a server; fragile under suspend and reconnects. |
 | `SerCx2` (serial controller extension) | Designed for real UART controllers and DMA; far more ceremony than a software port needs. |
-| UMDF serial device | The serial class and its installer expect kernel-mode IRP handling; UMDF cannot implement the contract cleanly. |
+| UMDF serial device | First judged unworkable; it turned out to work. `vsscom_um` is a UMDF 2 driver for the same port, built from the same sources. It needs no kernel-mode signature, which is why it is offered beside the kernel-mode driver. It cannot be a bus, so its ports are made by a helper service (see "The user-mode driver and its helper"). |
 | **KMDF virtual serial function driver** | **Recommended.** A control device creates ports on demand; each port is a PDO implementing the serial contract with a shared-memory data path to the hub. |
 
 ## Recommended architecture
@@ -117,6 +117,31 @@ sizes, queue depth, and flags. The driver creates the PDO, chooses a free COM
 number when asked, writes `PortName` under the device's hardware key, creates
 `\DosDevices\COMx`, and returns names for the shared section and events. Names
 are derived from the instance id so two processes cannot collide.
+
+### The user-mode driver and its helper
+
+A UMDF driver cannot create child devices, so `vsscom_um` has no control device.
+Its ports are software devices (`SwDeviceCreate`, hardware ID `VSSCOMUM\PORT`,
+instance id the slot), and Windows lets only SYSTEM and administrators make
+those. The `vsscom_helper` service, which runs as SYSTEM, makes them for
+ordinary users and keeps the same rules as the control device:
+
+* A caller opens the named pipe `\\.\pipe\vsscom_helper` (signed-in users only,
+  no remote clients) at identification level and asks for a port. The helper
+  reads the caller's SID from the pipe, checks the limits (16 ports for a user,
+  32 in all, the lowest free slot) and makes the device with the SID on it as a
+  device property.
+* It answers when the driver has started on the device, so the COM name and the
+  hub interface exist by then.
+* The port lives as long as the pipe is open. When the caller closes it or
+  dies, the helper closes the device and the port goes.
+* The driver reads the owner property when it opens the hub end and compares it
+  with the user of the opener's token. A port without an owner was made by hand
+  and opens for administrators only.
+
+The pipe protocol is in `drivers/windows/vsscom_helper/protocol.h`. The studio
+tries the kernel-mode driver's control device first, then the helper, then a
+free port that already exists.
 
 ### Data path
 
@@ -228,8 +253,9 @@ too slow.
   understand the kind.
 * `vss::driver_available()` / `driver_version()` — a list of the driver's
   device interfaces, which opens nothing, and the interface version.
-* `vss::create_driver_port()` — asks the control device for a port of its own
-  (or, without one, takes a free port that exists), opens its hub end for
+* `vss::create_driver_port()` — asks the control device, or the helper service
+  of the user-mode driver, for a port of its own (or, with neither, takes a free
+  port that exists), opens its hub end for
   overlapped I/O and returns the transport that carries its bytes and control
   lines. Closing the transport removes a port it made. It reports
   `errc::unsupported` with no driver, `errc::device_busy` when there is no

@@ -13,8 +13,12 @@ $BinaryName = if ($Flavour -eq 'umdf') { 'vsscom_um.dll' } else { 'vsscom.sys' }
 $CatalogName = if ($Flavour -eq 'umdf') { 'vsscom_um.cat' } else { 'vsscom.cat' }
 # A port made by hand (install-driver.ps1 -Count).
 $HardwareId = if ($Flavour -eq 'umdf') { 'VSSCOMUM\VSSCOM0' } else { 'VSSCOM\VSSCOM0' }
-$DemandHardwareId = 'VSSCOM\PORT'    # a port that the control device made
+# A port made on demand: by the control device (kmdf) or by the helper service (umdf).
+$DemandHardwareId = if ($Flavour -eq 'umdf') { 'VSSCOMUM\PORT' } else { 'VSSCOM\PORT' }
 $ControlHardwareId = 'VSSCOM\CONTROL'
+# The named pipe of the helper service, and its service name.
+$HelperPipeName = 'vsscom_helper'
+$HelperServiceName = 'vsscom_helper'
 $PortsClassGuid = [guid]'4D36E978-E325-11CE-BFC1-08002BE10318'
 $SystemClassGuid = [guid]'4D36E97D-E325-11CE-BFC1-08002BE10318'
 
@@ -257,8 +261,10 @@ function Get-VssControlPath {
 
 # The port the control device made in `$Slot`, as @{ Port; Path }, or $null while it is
 # not there. Its hub path holds the device instance id: \\?\vsscom#port#<slot>#{guid}\hub
+# for the kernel-mode driver, \\?\swd#vsscomum#<slot>#{guid}\hub for the user-mode one.
 function Find-VssDemandPort([uint32] $Slot) {
-    $pattern = '*\vsscom#port#{0:x4}#*' -f $Slot
+    $prefix = if ($Flavour -eq 'umdf') { 'swd#vsscomum' } else { 'vsscom#port' }
+    $pattern = "*\$prefix#{0:x4}#*" -f $Slot
     foreach ($line in [VssSetup]::Interfaces($VssInterfaceGuid)) {
         $name, $path = $line -split '\|', 2
         if ($path -like $pattern) { return @{ Port = $name; Path = $path } }
