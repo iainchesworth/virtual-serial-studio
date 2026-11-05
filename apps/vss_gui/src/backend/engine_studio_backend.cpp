@@ -164,6 +164,9 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // `vss::studio::rename_port` renames the endpoint, the studio record
+    // and a pseudo terminal's stable link together.
+    caps.rename_port = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;
@@ -245,6 +248,16 @@ vss::result<void> EngineStudioBackend::remove_port(vss::endpoint_id id)
     const auto removed = studio_.remove_port(id);
     if (!removed)
         return removed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<void> EngineStudioBackend::rename_port(vss::endpoint_id id,
+                                                   const QString& name)
+{
+    const auto renamed = studio_.rename_port(id, name.toStdString());
+    if (!renamed)
+        return renamed.error();
     rebuild();
     return {};
 }
