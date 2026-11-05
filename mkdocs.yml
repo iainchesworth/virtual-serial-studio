@@ -25,9 +25,11 @@ nav:
       - Continuous integration: ci.md
       - Profiling: profiling.md
       - Releasing: releasing.md
+      - Languages: i18n.md
       - Contributing: contributing.md
   - How it works:
       - Architecture: architecture.md
+      - POSIX virtual ports: posix-virtual-ports.md
       - Windows COM port driver: windows-com-driver.md
       - Virtual machine testing: vm-testing.md
       - Workstreams: workstreams.md
