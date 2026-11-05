@@ -33,6 +33,7 @@
 #include <QSettings>
 #include <QStatusBar>
 #include <QString>
+#include <QSysInfo>
 #include <QTest>
 #include <QTimer>
 
@@ -244,20 +245,42 @@ TEST_CASE("journey: connect two programs")
     auto* card = launcher_card(window, QStringLiteral("Connect two programs"));
     REQUIRE(card != nullptr);
 
+    // Windows makes a linked pair out of a com0com pair or the Studio driver.
+    // Where neither is installed, as on a hosted runner, the dialog must keep
+    // the button off and say why; everywhere else the pair is created.
+    const bool windows = QSysInfo::kernelType() == QLatin1String("winnt");
+    bool offered = false;
+
     Waiting create(
         [](QWidget* widget) { return is_a<vss::gui::AddPortDialog>(widget); },
-        [](QWidget* dialog)
+        [&offered, windows](QWidget* dialog)
         {
             auto* primary = button(dialog, QStringLiteral("Create pair"));
             REQUIRE(primary != nullptr);
-            REQUIRE(primary->isEnabled());
-            QTest::mouseClick(primary, Qt::LeftButton);
+            offered = primary->isEnabled();
+            if (offered)
+            {
+                QTest::mouseClick(primary, Qt::LeftButton);
+                return;
+            }
+            REQUIRE(windows);
+            auto* note = dialog->findChild<QWidget*>(
+                QStringLiteral("pairDriverNote"));
+            REQUIRE(note != nullptr);
+            REQUIRE(note->isVisibleTo(dialog));
+            dialog->close();
         });
 
     QTest::mouseClick(card, Qt::LeftButton);
     QApplication::processEvents();
 
     REQUIRE(create.ran());
+    if (!offered)
+    {
+        REQUIRE_EQ(session.backend.ports().size(), 0);
+        REQUIRE_EQ(session.backend.links().size(), 0);
+        return;
+    }
     REQUIRE_EQ(session.backend.ports().size(), 2);
     REQUIRE_EQ(session.backend.links().size(), 1);
     auto* status = window.findChild<QStatusBar*>();

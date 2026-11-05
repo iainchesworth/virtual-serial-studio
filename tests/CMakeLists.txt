@@ -218,3 +218,12 @@ if(TARGET vss_gui_flows_tests)
     TIMEOUT 180
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
+
+# The matrix tools are checked without a built program; Python is optional.
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_FOUND)
+  add_test(NAME matrix_tools
+    COMMAND ${Python3_EXECUTABLE} -m unittest discover
+            -s ${PROJECT_SOURCE_DIR}/tools/matrix -p "test_*.py")
+  set_tests_properties(matrix_tools PROPERTIES TIMEOUT 120)
+endif()

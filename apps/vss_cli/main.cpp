@@ -149,6 +149,10 @@ void print_topology(studio& app)
                     static_cast<unsigned long long>(link.stats.bytes),
                     static_cast<unsigned long long>(link.stats.dropped));
     }
+
+    // A script that reads this through a pipe needs the table at once, not when
+    // the process exits.
+    std::fflush(stdout);
 }
 
 void run_for(studio& app, int seconds, bool verbose)
@@ -418,6 +422,7 @@ int command_virtual(const arguments& args)
     std::printf("virtual port %s\n", (*created)->name().c_str());
     std::printf("open this from your application: %s\n", path.c_str());
     std::printf("transport: %s\n", (*created)->description().c_str());
+    std::fflush(stdout);
 
     if (args.has("--verbose"))
     {
