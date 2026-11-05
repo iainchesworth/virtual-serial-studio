@@ -33,7 +33,7 @@ function Read-Vmx([string] $Path) {
 
 try {
     $expected = @{
-        windows10  = @{ Name = 'VSS - Windows 10'; Os = 'windows9-64'; Efi = $false; Cpus = '2'; Memory = '4096' }
+        windows10  = @{ Name = 'VSS - Windows 10'; Os = 'windows9-64'; Efi = $true; Cpus = '2'; Memory = '4096' }
         windows11  = @{ Name = 'VSS - Windows 11'; Os = 'windows11-64'; Efi = $true; Cpus = '4'; Memory = '8192' }
         ubuntu2604 = @{ Name = 'VSS - Ubuntu 26.04'; Os = 'ubuntu-64'; Efi = $false; Cpus = '2'; Memory = '4096' }
     }
@@ -52,6 +52,7 @@ try {
         Assert-That "${guest}: there is no virtual TPM and no encryption" (-not ($v.Keys | Where-Object { $_ -match 'vtpm|encryption' }))
         Assert-That "${guest}: the install disc and the answer disc are attached" ($v['sata0:1.fileName'] -like '*.iso' -and $v['sata0:2.fileName'] -like '*-seed.iso')
         Assert-That "${guest}: it uses NAT" ($v['ethernet0.connectionType'] -eq 'nat')
+        Assert-That "${guest}: the guests that wait for a key boot a patched ISO" (($guest -ne 'windows11') -eq ($v['sata0:1.fileName'] -like '*-autoinstall.iso' -or $v['sata0:1.fileName'] -like '*-noprompt.iso' -and $v['sata0:1.fileName'] -notlike '*v2-noprompt.iso'))
         Assert-That "${guest}: the PCIe root ports are present" ($v['pciBridge0.present'] -eq 'TRUE' -and (4..7 | Where-Object { $v["pciBridge$_.virtualDev"] -eq 'pcieRootPort' -and $v["pciBridge$_.functions"] -eq '8' }).Count -eq 4)
 
         Assert-That "${guest}: the script refuses to overwrite a guest" ($(& $pwsh -NoProfile -File $script $guest -DryRun -Root $work 2>&1 | Out-String) -match 'never overwrites')
@@ -59,12 +60,12 @@ try {
         & $pwsh -NoProfile -File $script $guest -Root $work -DetachMedia 2>&1 | Out-Null
         $v = Read-Vmx $vmx
         Assert-That "${guest}: DetachMedia disconnects both discs" ($v['sata0:1.present'] -eq 'FALSE' -and $v['sata0:2.present'] -eq 'FALSE')
-        Assert-That "${guest}: DetachMedia leaves the disk" ($v['displayName'] -eq $want.Name -and ($v['nvme0:0.fileName'] -or $v['sata0:0.fileName'] -or $v['scsi0:0.fileName']))
+        Assert-That "${guest}: DetachMedia leaves the disk" ($v['displayName'] -eq $want.Name -and ($v['sata0:0.fileName'] -or $v['scsi0:0.fileName']))
     }
 
-    Assert-That 'Windows 10 puts the disk on SATA and Windows 11 on NVMe' (
+    Assert-That 'both Windows guests put the disk on SATA' (
         (Read-Vmx (Join-Path (Join-Path $work 'VSS - Windows 10') 'VSS - Windows 10.vmx')).ContainsKey('sata0:0.fileName') -and
-        (Read-Vmx (Join-Path (Join-Path $work 'VSS - Windows 11') 'VSS - Windows 11.vmx')).ContainsKey('nvme0:0.fileName'))
+        (Read-Vmx (Join-Path (Join-Path $work 'VSS - Windows 11') 'VSS - Windows 11.vmx')).ContainsKey('sata0:0.fileName'))
 }
 finally {
     Remove-Item -Recurse -Force -LiteralPath $work -ErrorAction SilentlyContinue

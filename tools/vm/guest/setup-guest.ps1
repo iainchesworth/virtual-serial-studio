@@ -14,14 +14,19 @@ $log = 'C:\vss-setup.log'
 New-Item -ItemType Directory -Force -Path 'C:\vss' | Out-Null
 Start-Transcript -Path $log -Force | Out-Null
 
-# VMware Tools: the tools disc is the drive that holds setup64.exe.
-$tools = Get-PSDrive -PSProvider FileSystem |
-    ForEach-Object { Join-Path $_.Root 'setup64.exe' } |
-    Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($tools) {
-    Write-Host "installing VMware Tools from $tools"
-    $process = Start-Process -FilePath $tools -ArgumentList '/S /v"/qn REBOOT=R"' -Wait -PassThru
+# VMware Tools: the tools disc is the drive that holds VMwareToolsUpgrader.exe next to the installer
+# (setup.exe on current discs, setup64.exe on older ones).
+$toolsOk = $false
+$installer = Get-PSDrive -PSProvider FileSystem |
+    Where-Object { Test-Path (Join-Path $_.Root 'VMwareToolsUpgrader.exe') } |
+    ForEach-Object { foreach ($name in 'setup64.exe', 'setup.exe') { $candidate = Join-Path $_.Root $name; if (Test-Path $candidate) { $candidate; break } } } |
+    Select-Object -First 1
+if ($installer) {
+    Write-Host "installing VMware Tools from $installer"
+    $process = Start-Process -FilePath $installer -ArgumentList '/S /v"/qn REBOOT=R"' -Wait -PassThru
     Write-Host "VMware Tools installer exit code $($process.ExitCode)"
+    # 0 is success and 3010 is success with a restart pending, which the next boot completes.
+    $toolsOk = $process.ExitCode -in 0, 3010
 } else {
     Write-Host 'no VMware Tools disc found'
 }
@@ -35,8 +40,9 @@ powercfg /change standby-timeout-ac 0
 powercfg /hibernate off
 reg add 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization' /v NoLockScreen /t REG_DWORD /d 1 /f | Out-Host
 
-Set-Content -Path 'C:\vss\ready.txt' -Value (Get-Date -Format o)
+# The guest is ready only if Tools went in: without them the harness cannot reach it.
+if ($toolsOk) { Set-Content -Path 'C:\vss\ready.txt' -Value (Get-Date -Format o) }
 Stop-Transcript | Out-Null
 
 # Power off after a short delay; the snapshot is taken from the powered-off guest.
-shutdown /s /t 45 /c 'VSS guest is ready; take the clean snapshot.'
+shutdown /s /t 45 /c 'VSS guest set-up finished; the installer script checks it next.'
