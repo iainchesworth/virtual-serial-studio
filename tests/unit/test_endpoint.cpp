@@ -227,6 +227,44 @@ TEST_CASE("endpoint: monitor links do not propagate control lines")
     REQUIRE_EQ(second->lines().bits, before.bits);
 }
 
+TEST_CASE("endpoint: a link wiring decides which lines the peer sees")
+{
+    auto hub = start_hub();
+    auto first = add_loopback(*hub, "first");
+    auto second = add_loopback(*hub, "second");
+
+    // The default is the null-modem cable.
+    const auto linked = hub->connect(first->id(), second->id());
+    REQUIRE(linked);
+    REQUIRE(!first->set_line(control_line::dtr, true));
+    REQUIRE(wait_until(
+        [&] { return second->lines().dsr() && second->lines().dcd(); },
+        2000ms));
+    REQUIRE(!second->lines().ri());
+
+    // Rewiring DTR to RI takes effect at once, without another change on the
+    // sending side, and drops what the old wires carried.
+    modem_wiring wiring;
+    wiring.dtr_to_dsr = false;
+    wiring.dtr_to_dcd = false;
+    wiring.dtr_to_ri = true;
+    REQUIRE(hub->set_link_wiring(*linked, wiring));
+    REQUIRE(wait_until(
+        [&] {
+            return second->lines().ri() && !second->lines().dsr() &&
+                   !second->lines().dcd();
+        },
+        2000ms));
+    REQUIRE(hub->find_link(*linked)->options.wiring == wiring);
+
+    // The same wiring applies in the other direction of a duplex link.
+    REQUIRE(!second->set_line(control_line::dtr, true));
+    REQUIRE(wait_until([&] { return first->lines().ri(); }, 2000ms));
+
+    REQUIRE_EQ(hub->set_link_wiring(link_id{9999}, wiring),
+               make_error_code(errc::not_found));
+}
+
 TEST_CASE("endpoint: peer close is graceful")
 {
     auto hub = start_hub();

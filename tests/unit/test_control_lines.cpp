@@ -123,6 +123,42 @@ TEST_CASE("lines: null modem crosses dtr/dsr and rts/cts")
     REQUIRE_EQ(off.bits, 0u);
 }
 
+TEST_CASE("lines: modem wiring drives each input from the outputs wired to it")
+{
+    control_lines local;
+    local.set(control_line::dtr, true);
+
+    // The default wiring is the null-modem cable.
+    REQUIRE(modem_wiring{} == modem_wiring{});
+    REQUIRE_EQ(modem_wiring{}.apply(local).bits, null_modem_peer(local).bits);
+
+    modem_wiring crossed;
+    crossed.dtr_to_dsr = false;
+    crossed.dtr_to_dcd = false;
+    crossed.dtr_to_ri = true;
+    crossed.rts_to_ri = true;
+    crossed.rts_to_cts = false;
+    crossed.rts_to_dsr = true;
+    const control_lines dtr_only = crossed.apply(local);
+    REQUIRE(dtr_only.ri());
+    REQUIRE(!dtr_only.dsr());
+    REQUIRE(!dtr_only.dcd());
+    REQUIRE(!dtr_only.cts());
+
+    // An input is high when any output wired to it is high.
+    local.set(control_line::rts, true);
+    const control_lines both = crossed.apply(local);
+    REQUIRE(both.ri());
+    REQUIRE(both.dsr());
+    REQUIRE(!both.cts());
+
+    // Inputs are never copied through: only DTR and RTS drive anything.
+    control_lines inputs_only;
+    inputs_only.set(control_line::cts, true);
+    inputs_only.set(control_line::ri, true);
+    REQUIRE_EQ(crossed.apply(inputs_only).bits, 0u);
+}
+
 TEST_CASE("lines: with_peer_inputs replaces the peer driven inputs")
 {
     control_lines target;

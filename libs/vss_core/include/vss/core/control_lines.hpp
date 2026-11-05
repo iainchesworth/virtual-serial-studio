@@ -107,15 +107,46 @@ std::string to_string(control_lines lines);
 /// Parses `"dtr,rts"`, `"DTR|CTS"` or `"0x41"`.
 result<control_lines> parse_control_lines(std::string_view text);
 
+/// Which of the peer's input lines each of this endpoint's output lines
+/// drives across one link, like the wires of a cable.  An input is high when
+/// any output wired to it is high.  The defaults are a straight-through
+/// null-modem cable: DTR drives DSR and DCD, RTS drives CTS.
+struct modem_wiring
+{
+    bool dtr_to_dsr = true;
+    bool dtr_to_cts = false;
+    bool dtr_to_dcd = true;
+    bool dtr_to_ri = false;
+    bool rts_to_dsr = false;
+    bool rts_to_cts = true;
+    bool rts_to_dcd = false;
+    bool rts_to_ri = false;
+
+    /// The input lines the peer sees for the outputs in `local`.
+    constexpr control_lines apply(control_lines local) const noexcept
+    {
+        const bool dtr = local.dtr();
+        const bool rts = local.rts();
+        control_lines peer;
+        peer.set(control_line::dsr,
+                 (dtr && dtr_to_dsr) || (rts && rts_to_dsr));
+        peer.set(control_line::cts,
+                 (dtr && dtr_to_cts) || (rts && rts_to_cts));
+        peer.set(control_line::dcd,
+                 (dtr && dtr_to_dcd) || (rts && rts_to_dcd));
+        peer.set(control_line::ri, (dtr && dtr_to_ri) || (rts && rts_to_ri));
+        return peer;
+    }
+
+    friend constexpr bool operator==(const modem_wiring&,
+                                     const modem_wiring&) noexcept = default;
+};
+
 /// A straight-through null-modem cable mapping: the peer sees this endpoint's
 /// DTR as DSR and its RTS as CTS, and DCD follows DTR.
 constexpr control_lines null_modem_peer(control_lines local) noexcept
 {
-    control_lines peer;
-    peer.set(control_line::dsr, local.dtr());
-    peer.set(control_line::cts, local.rts());
-    peer.set(control_line::dcd, local.dtr());
-    return peer;
+    return modem_wiring{}.apply(local);
 }
 
 /// Merges the peer driven `inputs` into `target`, replacing every input bit
