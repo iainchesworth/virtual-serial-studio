@@ -76,7 +76,13 @@ try {
             Assert-That "${guest}: user-data is on the disc" ($disc.Text.Contains('#cloud-config') -and $disc.Text.Contains('autoinstall:'))
             Assert-That "${guest}: meta-data is on the disc" ($disc.Text.Contains('instance-id: vss-ubuntu2604'))
             Assert-That "${guest}: the test tools are listed" ($disc.Text.Contains('python3-serial') -and $disc.Text.Contains('picocom'))
-            Assert-That "${guest}: user-data has no carriage returns" (-not $disc.Text.Contains("`r"))
+            # The disc is binary, so a carriage-return byte can turn up in its headers by chance.
+            # Look only at the user-data file: it starts at #cloud-config and ends at the zero
+            # padding that fills the rest of its sector.
+            $first = $disc.Text.IndexOf('#cloud-config')
+            $last = $disc.Text.IndexOf([char]0, $first)
+            $userData = $disc.Text.Substring($first, $last - $first)
+            Assert-That "${guest}: user-data has no carriage returns" (-not $userData.Contains("`r"))
         }
     }
 
