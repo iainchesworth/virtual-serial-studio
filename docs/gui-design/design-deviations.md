@@ -259,12 +259,13 @@ backend, and the topology node menu, F2 and **Ports → Rename port** open the
 Rename dialog. Rows already written to the traffic log keep the name they had
 when they were written.
 
-### Remove has confirmation but no Undo
+### Remove has confirmation and a limited Undo
 
-`Capabilities::undo` is false, so Remove link and Remove port confirm the
-destructive action and say nothing is saved until the setup is saved. No Undo
-toast is offered because it could not be made reliable. This matches the
-WP3/WP4 instruction to confirm only for now.
+Remove link and Remove port confirm the destructive action and say nothing is
+saved until the setup is saved. Remove link can then be reversed with Undo
+(see "Undo and Redo reverse changes, not snapshots" under WP8). Remove port
+cannot, because a port that is made again is a different port. No Undo toast
+is offered for either; the confirmation stays.
 
 ### Nodes are nudged with the keyboard, not dragged
 
@@ -380,17 +381,32 @@ reported on <port>" because the call has succeeded when the fault is queued and
 the engine emits the error event on the fixture's next read. A failure from the
 call shows its message in that row instead.
 
-### Per-link wiring is a read-only Standard preset
+### Per-link wiring
 
-`StudioBackend` gained `link_wiring()` and `set_link_wiring()` with
-`unsupported`/`nullopt` defaults so the dialog has one adapter interface, but the
-real backend keeps `Capabilities::line_matrix` false. The matrix therefore
-shows the Standard null-modem preset and is read-only. `FakeStudioBackend`
-stores a wiring for tests so the editable path is exercised without faking a
-real engine feature. The preset table lives in `advanced/line_presets.cpp` and
-uses the engine's `null_modem_peer()` mapping (DTR→DSR, RTS→CTS, DTR→DCD) for
-Standard. The bundle does not define "Loopback"; it is two wires, DTR→DSR and
-RTS→CTS, and neither it nor Custom can be chosen in this build.
+`StudioBackend` has `link_wiring()` and `set_link_wiring()` with
+`unsupported`/`nullopt` defaults, so a backend without the engine feature shows
+the Standard preset read-only. The engine backend now has the feature and sets
+`Capabilities::line_matrix`, so the matrix is editable. The preset table lives
+in `advanced/line_presets.cpp`; Standard is the engine's default wiring
+(DTR→DSR, RTS→CTS, DTR→DCD). The bundle does not define "Loopback"; it is two
+wires, DTR→DSR and RTS→CTS.
+
+The engine side is `vss::modem_wiring` in `vss_core`: eight booleans, one per
+output and input pair, in `link_options`, with `apply()` giving the peer's
+inputs for the outputs that are high (an input is high when any output wired to
+it is). `hub::route_lines` uses the link's wiring instead of the fixed
+`null_modem_peer()`, which now calls `modem_wiring{}.apply()` and gives the same
+result. `hub::set_link_wiring()` changes a link that exists and sends the
+current lines through it at once, so a peer's inputs follow the new wires
+without waiting for the next change. This is the second change to `vss_core`
+in the capability work. `emulate_modem_lines` still switches all crossing off.
+
+The wiring is not in the topology JSON. The schema is unchanged, so a saved
+setup, `snapshot()` and Undo's remade link use the default wiring. Saving it
+would add an optional field to each link; that is left for a decision. RI can
+be wired, and Studio shows it, but a transport that cannot set RI (the
+pseudo terminal and the serial transports set only CTS, DSR and DCD) cannot
+pass it on to a program.
 
 The bundle's Faults mockup shows the matrix on the left of "Inject a fault";
 the wording in `screens/05` says rows DTR and RTS and columns DSR, CTS, DCD,
@@ -529,22 +545,33 @@ introduced.
 
 ## WP8
 
-### Undo and Redo stay disabled
+### Undo and Redo reverse changes, not snapshots
 
-The design's "Remove, with undo" pattern and the `Ctrl+Z`/`Ctrl+Y` menu items
-need an undo stack that restores the previous topology exactly. The engine's
+The design asks for a stack that restores the previous topology. The engine's
 `snapshot()` document records port names, kinds and settings, but not the
-endpoint identifiers or the advertised path an auto/pty/com0com port received.
-`apply()` therefore creates new endpoints and, for an auto port, a new COM
-number or pseudo terminal; a program that had the old path open loses it. That
-is not an exact restore, so `edit.undo` and `edit.redo` remain registered,
-visible and capability-gated disabled (`capabilities::undo == false`) with the
-tooltip "Not available in this build". The reason is repeated in
-`shell_window.cpp` where they are registered. Confirmations stay; no
-`QUndoStack` was added and no toast promises an undo that does not exist. If
-the engine later gains stable port identity and a path-preserving restore, the
-capability can be turned on and the two actions wired without changing the
-menus or shortcuts.
+endpoint identifiers or the advertised path an auto, pseudo terminal or
+com0com port received. `apply()` therefore creates new endpoints and, for an
+auto port, a new COM number or pseudo terminal; a program that had the old
+path open loses it. A snapshot restore is not exact, so none is used.
+
+`Capabilities::undo` is true for the engine backend and means something
+narrower: the window keeps a history (`UndoService`, 50 steps) of changes that
+have an exact inverse. Connecting a link is undone by removing it, removing a
+link by making it again with the same shape, ports, options and owner, an
+owner change by setting the previous owner, and a rename by naming the port as
+it was (the Topology JSON editor, the wizards and adding or removing ports are
+not recorded). A link is matched by the ports it
+joins and not by id, because the engine gives a link that is made again a new
+id. No `QUndoStack` is used, because its commands are objects with their own
+lifetime and the history here is only closures over the backend.
+
+The history describes the ports it was recorded on, so it is cleared whenever
+the set of ports changes: adding or removing a port, opening or applying a
+document, a wizard. A step that cannot be applied (the link it names has gone)
+clears the history rather than leave later steps that assumed it, and the status
+bar says so. Undo and Redo are disabled while there is nothing to reverse,
+and their text names the step ("Undo Connect ports"). A backend without the
+capability keeps them disabled with "Not available in this build".
 
 ### Support code uses the `vss::gui::support` namespace
 

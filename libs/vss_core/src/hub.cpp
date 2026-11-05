@@ -431,6 +431,35 @@ result<void> hub::release_owner(link_id id)
     return {};
 }
 
+result<void> hub::set_link_wiring(link_id id, const modem_wiring& wiring)
+{
+    std::vector<std::pair<endpoint_id, control_lines>> senders;
+    {
+        std::unique_lock lock(mutex_);
+        auto it = links_.find(id);
+        if (it == links_.end())
+            return make_error_code(errc::not_found);
+        it->second->options.wiring = wiring;
+
+        for (const auto& [from, routes] : routes_)
+        {
+            const bool uses = std::any_of(
+                routes.begin(), routes.end(),
+                [id](const route_entry& route) { return route.link == id; });
+            if (!uses)
+                continue;
+            const auto sender = endpoints_.find(from);
+            if (sender != endpoints_.end())
+                senders.emplace_back(from, sender->second->lines());
+        }
+    }
+
+    // The peers must see what the new wires carry now, not at the next change.
+    for (const auto& [from, lines] : senders)
+        route_lines(from, lines);
+    return {};
+}
+
 void hub::route_data(endpoint_id from, bytes_view data)
 {
     VSS_PROFILE_ZONE("hub.route");
@@ -492,7 +521,6 @@ void hub::route_lines(endpoint_id from, control_lines lines)
         if (it == routes_.end())
             return;
 
-        const control_lines peer = null_modem_peer(lines);
         for (const auto& route : it->second)
         {
             auto link_it = links_.find(route.link);
@@ -502,7 +530,9 @@ void hub::route_lines(endpoint_id from, control_lines lines)
                 continue;
             auto target = endpoints_.find(route.to);
             if (target != endpoints_.end())
-                updates.push_back({target->second, peer});
+                updates.push_back(
+                    {target->second,
+                     link_it->second->options.wiring.apply(lines)});
         }
     }
 

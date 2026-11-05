@@ -16,7 +16,7 @@ Put one narrow interface between the GUI and the engine, for example `StudioBack
 | Events, counters, bounded traffic ring buffer | Known | Subscribe through the sink, marshal to the GUI thread, batch by refresh interval. |
 | Set DTR, RTS, BREAK. Read CTS, DSR, DCD, RI | Known | Use directly. Unsupported lines return an error, show a disabled control. |
 | Null-modem crossing with an on or off switch (`emulate_modem_lines`) | Known | Use for "Emulate modem lines". |
-| **Per-link line wiring matrix** | Not in the engine (listed as roadmap) | Ship the matrix read-only with the Standard preset only, behind `Capabilities::lineMatrix`. Do not simulate it in the GUI. |
+| **Per-link line wiring matrix** | Provided by `vss_core` (`modem_wiring` in `link_options`, `hub::set_link_wiring`) | The engine backend sets `Capabilities::line_matrix` and the matrix is editable. A backend without it shows the Standard preset read-only. The wiring is not saved in the topology JSON. |
 | Fault injection on mock fixtures | Library mock backend can inject faults, GUI exposure unknown | Check the API on the object returned by `create_mock_port`. If absent, add a thin forwarding method in `vss_studio`. |
 | **Peer-open detection** ("Waiting for program", "Program connected") | Unknown, may not be detectable for PTY or com0com | Add a tri-state `PeerState` (Unknown, NotOpen, Open) to the adapter. "Open" is the normal state. Show "Waiting for program" and "Program connected" only where the adapter reports a definite NotOpen or Open (`Capabilities::peer_open`, a driver-side signal later), and say nothing about an outside program on Unknown. Never claim what you cannot know. |
 | Setup check inputs (com0com present, elevation, dialout membership) | Partly known (`detect_com0com`, pair list work without elevation) | Small platform helpers in the GUI layer. |
@@ -29,7 +29,7 @@ Put one narrow interface between the GUI and the engine, for example `StudioBack
 | JSON topology load, save, validate | Known (`vss_config`) | Use directly. |
 | JSON validation errors with line and column | Unknown | Use `QJsonDocument::fromJson` offsets for syntax. For schema errors without positions, show the message and hide "Go to line". |
 | Rename port | Provided by `vss_studio` (`studio::rename_port`) | The studio renames the endpoint, its records and a pseudo terminal's stable link together. `capabilities::rename_port` is true for the engine backend. A backend without it hides the menu item and F2. |
-| Undo and redo | Not in the engine | GUI `QUndoStack`. Snapshot before each mutating action and restore via the studio apply path. Verify restore is exact. If it cannot be made reliable, drop the Undo toast and keep confirmations. |
+| Undo and redo | Not in the engine; a snapshot restore is not exact | The GUI keeps a history of changes with an exact inverse (connect and remove a link, change an owner) and clears it when the set of ports changes. No snapshot is restored and there is no Undo toast; confirmations stay. |
 | Benchmark | CLI only (`vss_cli bench`) | Extract the core into a shared library function with progress and cancel callbacks, used by both CLI and GUI. Needs maintainer approval, do it in its own PR. |
 | Diagnostic bundle zip | None | No new dependency. Write a small stored (uncompressed) ZIP writer in the GUI layer, with tests. |
 | Event log tab | None | GUI-side `EventLog` fed from hub events. |
