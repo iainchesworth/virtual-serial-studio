@@ -22,6 +22,15 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)
 
+# Cases that need a platform API or expect platform-specific results live in
+# unit/platform/<os>/ and are compiled only there.
+if(WIN32)
+  list(APPEND VSS_UNIT_TEST_SOURCES
+    unit/platform/windows/test_ports_windows.cpp)
+elseif(UNIX)
+  list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)
+endif()
+
 add_executable(vss_unit_tests ${VSS_UNIT_TEST_SOURCES})
 target_include_directories(vss_unit_tests PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
