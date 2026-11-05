@@ -267,10 +267,11 @@ def test_t1(rec: Recorder, args, out: Path) -> None:
     evidence = None
     if args.t1_log and Path(args.t1_log).is_file():
         evidence = write_evidence(out, "t1.log", Path(args.t1_log).read_text(errors="replace"))
+    note = f" ({args.t1_note})" if args.t1_note else ""
     if args.t1_exit == 0:
-        rec.add("T1", "pass", "ctest passed", evidence)
+        rec.add("T1", "pass", "ctest passed" + note, evidence)
     else:
-        rec.add("T1", "fail", "the build or the ctest suite failed; the job log has the output", evidence)
+        rec.add("T1", "fail", "the build or the ctest suite failed" + note + "; the job log has the output", evidence)
 
 
 def test_t4(rec: Recorder, cli: Path | None, out: Path) -> None:
@@ -895,6 +896,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--snapshot", default="")
     parser.add_argument("--t1-exit", type=int, default=None)
     parser.add_argument("--t1-log", default="")
+    parser.add_argument("--t1-note", default="", help="what happened on the way to the ctest result, such as a rerun of failed suites")
     parser.add_argument("--package", type=Path, default=None, help="a release archive (.tar.gz or .zip) or an installed folder, for T9")
     args = parser.parse_args(argv)
 

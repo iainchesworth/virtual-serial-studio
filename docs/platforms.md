@@ -52,37 +52,39 @@ python3 tools/matrix/merge_results.py out --check
 
 ## Last results
 
-The first complete hosted run is [run 41919800221](https://github.com/iainchesworthlabs/virtual-serial-studio/actions/runs/41919800221), on commit `c3d4472` of the matrix pull request, on 2026-11-05. Every cell passed every applicable test.
+The last hosted run is [run 42024525324](https://github.com/iainchesworthlabs/virtual-serial-studio/actions/runs/42024525324), on commit `f249d31` of the guest-cell pull request, on 2026-11-05. Every cell passed every applicable test, including T8 and T9, and the macOS cells ran T5 and T6 again (the GUI had become an application bundle, which the runner did not find until that run).
 
-| Cell | System | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T10 |
-|---|---|---|---|---|---|---|---|---|---|
-| `ubuntu-24.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | 55.6 MB/s |
-| `ubuntu-26.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | 111.1 MB/s |
-| `windows-2025` | Windows Server 2025 (10.0.26100) | pass | skip | skip | pass | pass | pass | skip | skip |
-| `macos-15` | macOS 15.8, Apple silicon | pass | pass | pass | pass | pass | pass | pass | 5.1 MB/s |
-| `macos-26` | macOS 26.6, Apple silicon | pass | pass | pass | pass | pass | pass | pass | 7.0 MB/s |
-| `macos-15-intel` | macOS 15.7, Intel | pass | pass | pass | pass | pass | pass | pass | 2.1 MB/s |
-| `macos-26-intel` | macOS 26.6, Intel | pass | pass | pass | pass | pass | pass | pass | 1.6 MB/s |
-| `wsl-debian` (owner's machine) | WSL2 Debian, GCC 13, Qt 6.12.0 | not given | pass | pass | pass | pass | pass | pass | 20.4 MB/s |
-| `VSS - Ubuntu 26.04` (guest) | Ubuntu 26.04, Linux 7.0.0-42-generic | pass | pass | pass | pass | pass | pass | pass | 25.3 MB/s |
-| `VSS - Windows 11` (guest) | Windows 11 Pro 10.0.26200 | pass | skip | skip | pass | pass | pass | skip | skip |
-| `VSS - Windows 10` (guest) | Windows 10 Pro 10.0.19045 | pass | skip | skip | pass | pass | pass | skip | skip |
+| Cell | System | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10 | T11 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `ubuntu-24.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | pass | pass | 76.9 MB/s | skip |
+| `ubuntu-26.04` | Linux 7.0 (Azure), glibc | pass | pass | pass | pass | pass | pass | pass | pass | pass | 76.9 MB/s | skip |
+| `windows-2025` | Windows Server 2025 (10.0.26100) | pass | skip | skip | pass | pass | pass | skip | skip | pass | skip | skip |
+| `macos-15` | macOS 15.8, Apple silicon | pass | pass | pass | pass | pass | pass | pass | pass | pass | 5.4 MB/s | skip |
+| `macos-26` | macOS 26.6, Apple silicon | pass | pass | pass | pass | pass | pass | pass | pass | pass | 4.9 MB/s | skip |
+| `macos-15-intel` | macOS 15.7, Intel | pass | pass | pass | pass | pass | pass | pass | pass | pass | 2.4 MB/s | skip |
+| `macos-26-intel` | macOS 26.6, Intel | pass | pass | pass | pass | pass | pass | pass | pass | pass | 2.9 MB/s | skip |
+| `VSS - Ubuntu 26.04` (guest) | Ubuntu 26.04, Linux 7.0.0-42-generic | pass | pass | pass | pass | pass | pass | pass | pass | pass | 27.2 MB/s | pass |
+| `VSS - Windows 11` (guest) | Windows 11 Pro 10.0.26200 | pass | skip | skip | pass | pass | pass | skip | skip | pass | skip | skip |
+| `VSS - Windows 10` (guest) | Windows 10 Pro 10.0.19045 | pass | skip | skip | pass | pass | pass | skip | skip | pass | skip | skip |
 
-T8, T9 and T11 are skipped everywhere, and T7 observations are in each cell's `result-<cell>.json` artifact. What the first run showed:
+What these runs showed:
 
-- The GUI had never been built on macOS or Windows in CI. It failed on eight lambdas that capture `this` without using it (AppleClang) and on a missing `aqtsource` pin for Qt 6.12 on Windows. Both are fixed.
+- T9 found that the Linux package carries only the `xcb` Qt plugin, and that plugin needs `libxcb-cursor0` and other xcb libraries from the system. On a machine without them `vss_gui` stops at start. `releasing.md` lists the libraries.
+- The macOS GUI is an application bundle (`vss_gui.app`), and the runner now looks inside it.
 - macOS refuses 921600 baud on a pseudo terminal, so T10 asks for 115200.
-- On macOS, `ls /dev/cu.* /dev/tty.*` finds nothing and `ioreg -c IOSerialBSDClient` is empty while a studio pseudo terminal exists, so programs that list ports through IOKit do not see it.
+- On macOS, `ls /dev/cu.* /dev/tty.*` finds nothing and `ioreg -c IOSerialBSDClient` is empty while a studio pseudo terminal exists, and pyserial lists no port, so programs that list ports through IOKit do not see it. On Linux pyserial lists the 32 `ttyS` nodes of the runner and not the studio pseudo terminal. A kernel serial port (T11, `ttyACM0`) is in its list.
 - Pseudo terminal throughput on the Intel macOS runners is two to four times lower than on Apple silicon, which is why T10 records the rate and holds it to no floor yet.
 
 ## The guest cells
 
-The three guest rows ran on 2026-11-05 on commit `e0ece52`, each from the `clean` snapshot, with the tests of the commit run inside the guest. The programs were built outside the guests (the Linux one in WSL Debian with GCC 13, the Windows one on the owner's machine with MSVC and Qt 6.12.0) and copied in with their Qt libraries, so a guest cell proves that the build runs and passes on that system, not that the guest can build it. All 25 `ctest` suites passed on both Windows guests, and all 21 on Ubuntu (which has no `vm_*` tests).
+The guest rows ran on 2026-11-05 on `develop` at `dbf0c75` with the changes of the guest-cell pull request, each from the `clean` snapshot, with the tests run inside the guest. `tools/vm/guest-cell.ps1` ran them; [`vm-testing.md`](vm-testing.md) says how. The programs were built outside the guests (the Linux one in WSL Debian with GCC 13, the Windows one on the owner's machine with MSVC and Qt 6.12.0) and copied in with their Qt libraries, so a guest cell proves that the build runs and passes on that system, not that the guest can build it. T9 ran the unsigned package from the Release workflow's dry run (run 41937590004) for that system. All 26 `ctest` suites passed on the Windows guests and all 21 on Ubuntu (which has no `vm_*` tests).
 
-- **T11 cannot run on the stock Ubuntu 26.04 kernel.** `g_serial`, `libcomposite` and `usb_f_acm` are there, but `dummy_hcd`, which a gadget needs to attach to, is not in the `-generic` kernel and no `linux-modules-extra` package exists for it. The test stays skipped until the guest runs a kernel that has it.
+- **T11 runs on the Ubuntu guest.** The stock kernel has no `dummy_hcd`, but it has `usbip-vudc`, a virtual USB device controller, and `vhci-hcd`. With `g_serial` and `usbipd --device` they give a kernel serial pair: `/dev/ttyACM0` on the host side and `/dev/ttyGS0` on the gadget side. The test checks 1 KB each way, and `vss_cli bench` moves 1 MB between them at 3.8 MB/s. pyserial lists `ttyACM0`, which it does not do for a studio pseudo terminal.
 - **The driver tests passed on both Windows guests.** The `virtual-ports` session ran `drivers/windows/test` on the same guests on 2026-11-05: install, D0 to D13 and uninstall passed on Windows 10 and Windows 11. Those results are theirs; this page does not repeat them as a matrix cell.
-- A guest needs more than the program. The Ubuntu guest needed `cmake` for `ctest` and the OpenGL, EGL and fontconfig libraries for Qt. The Windows guests needed the `offscreen` platform plugin (`windeployqt` ships only `windows`), PowerShell 7 for the `vm_*` suites, and the build drive path, because some GUI tests read source files through the absolute path they were built with.
-- T8 and T9 wait for `vport` and the package.
+- A guest needs more than the program. The Ubuntu guest needed `cmake` for `ctest`, the OpenGL, EGL and fontconfig libraries for Qt, and Xvfb with the xcb libraries for T9. The Windows guests needed the `offscreen` platform plugin (`windeployqt` ships only `windows`), PowerShell 7 for the `vm_*` suites, and the build drive path, because some GUI tests read source files through the absolute path they were built with.
+- On the Windows guests the cell also takes a screenshot of the program on the guest's desktop (a scheduled task starts it in the logged-on user's session). It runs on both. On the guests' 1024 by 768 screen the main window is taller than the screen, so the status bar and the Simple and Advanced switch are off the bottom, and the toolbar shows icons without their text labels, which the 1280 by 800 offscreen images do not show.
+- The GUI tests that wait a fixed few milliseconds for an event can miss it on a slow guest. Windows 10 (two virtual CPUs) failed `gui_dialogs`, `gui_backend` and a timed-out `matrix_tools` on different runs while the host was busy, and passed on a quiet host. The guest scripts now rerun failed suites once and put the names in the T1 detail, so a rerun is never hidden.
+- The GUI test gallery (every window and dialog, in both themes and at the compact size) comes back with each guest cell. It is for review and for the user guide, and it is not committed.
 
 ## macOS
 

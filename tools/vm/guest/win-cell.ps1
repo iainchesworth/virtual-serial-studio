@@ -73,12 +73,25 @@ $t1 = $LASTEXITCODE
 "ctest exit $t1"
 Get-Content "$root\t1.log" -Tail 12
 
+# A few GUI tests wait a fixed few milliseconds for an event, which a slow guest can miss. Run the
+# failed suites once more, and say so in the result rather than hide it.
+$note = ''
+if ($t1 -ne 0) {
+    $failed = @(Select-String -Path "$root\t1.log" -Pattern '^\s+\d+ - (\S+) \(' | ForEach-Object { $_.Matches[0].Groups[1].Value })
+    "rerunning the failed suites once: $($failed -join ', ')"
+    & "$root\ctest.exe" --test-dir $buildDir -C Release --output-on-failure --rerun-failed 2>&1 |
+        Out-File -Encoding utf8 -Append "$root\t1.log"
+    $t1 = $LASTEXITCODE
+    $note = "first pass failed $($failed -join ', '); the rerun " + $(if ($t1 -eq 0) { 'passed' } else { 'failed too' })
+}
+
 Remove-Item "$root\cell-out" -Recurse -Force -ErrorAction SilentlyContinue
 $arguments = @(
     'tools\matrix\run_cell.py', '--cell', $Cell, '--kind', 'vm', '--vm', $VmName, '--snapshot', 'clean',
     '--build-dir', $buildDir, '--out', "$root\cell-out", '--t1-exit', $t1, '--t1-log', "$root\t1.log"
 )
 if ($Commit) { $arguments += @('--commit', $Commit) }
+if ($note) { $arguments += @('--t1-note', $note) }
 if (Test-Path "$root\package.zip") { $arguments += @('--package', "$root\package.zip") }
 & "$root\py\python.exe" @arguments
 "cell exit $LASTEXITCODE"

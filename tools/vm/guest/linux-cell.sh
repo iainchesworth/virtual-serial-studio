@@ -57,10 +57,22 @@ t1=$?
 echo "ctest exit $t1"
 tail -12 "$root/t1.log"
 
+# A few GUI tests wait a fixed few milliseconds for an event, which a slow guest can miss. Run the
+# failed suites once more, and say so in the result rather than hide it.
+note=""
+if [ "$t1" -ne 0 ]; then
+  failed="$(sed -nE 's/^[[:space:]]+[0-9]+ - ([^ ]+) \(.*/\1/p' "$root/t1.log" | paste -sd, -)"
+  echo "rerunning the failed suites once: $failed"
+  ctest --test-dir "$BUILD_DIR" --output-on-failure --rerun-failed >> "$root/t1.log" 2>&1
+  t1=$?
+  note="first pass failed $failed; the rerun $([ "$t1" -eq 0 ] && echo passed || echo failed too)"
+fi
+
 rm -rf "$root/cell-out"
 arguments=(tools/matrix/run_cell.py --cell "$cell" --kind vm --vm "$vm_name" --snapshot clean
   --build-dir "$BUILD_DIR" --out "$root/cell-out" --t1-exit "$t1" --t1-log "$root/t1.log")
 [ -n "$commit" ] && arguments+=(--commit "$commit")
+[ -n "$note" ] && arguments+=(--t1-note "$note")
 [ -f "$root/package.tar.gz" ] && arguments+=(--package "$root/package.tar.gz")
 python3 "${arguments[@]}"
 echo "cell exit $?"

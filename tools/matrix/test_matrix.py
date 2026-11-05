@@ -58,6 +58,11 @@ class RunCellTests(unittest.TestCase):
         _, result = self.run_empty([])
         self.assertEqual(result["results"][0]["status"], "not_run")
 
+    def test_a_rerun_is_said_in_the_detail(self) -> None:
+        _, result = self.run_empty(["--t1-exit", "0", "--t1-note", "first pass failed gui_backend; the rerun passed"])
+        self.assertEqual(result["results"][0]["status"], "pass")
+        self.assertIn("gui_backend", result["results"][0]["detail"])
+
     def test_a_failed_ctest_is_a_fail(self) -> None:
         _, result = self.run_empty(["--t1-exit", "3"])
         self.assertEqual(result["results"][0]["status"], "fail")

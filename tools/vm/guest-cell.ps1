@@ -103,7 +103,7 @@ try {
         # vmrun starts runs in session 0, which has no screen), then the screen is captured.
         $buildDir = if ($DryRun) { 'build\windows-msvc-release-gui' } else { (Get-Content -LiteralPath (Join-Path $Bundle 'bundle.json') -Raw | ConvertFrom-Json).buildDir }
         $gui = "$folder\src\$buildDir\bin\vss_gui.exe"
-        $start = "schtasks /create /tn vss-gui /tr '$gui' /sc once /st 23:59 /ru $env:VSS_VM_USER /it /f; schtasks /run /tn vss-gui; Start-Sleep -Seconds 15"
+        $start = "schtasks /create /tn vss-gui /tr '$gui' /sc once /st 23:59 /ru $env:VSS_VM_USER /it /f; schtasks /run /tn vss-gui; Start-Sleep -Seconds 40"
         Step 'run' @{ CommandLine = $start }
         Step 'screenshot' @{ Local = (Join-Path $destination "desktop-$Guest.png") }
         Step 'run' @{ CommandLine = "schtasks /delete /tn vss-gui /f; Stop-Process -Name vss_gui -Force -ErrorAction SilentlyContinue" }
