@@ -18,28 +18,25 @@
 /// Zone names must be string literals: Tracy stores the pointer, not a copy.
 #if defined(VSS_TRACY)
 
-// vcpkg installs the upstream tree under include/tracy/tracy; a source build
-// puts Tracy.hpp on the include path directly.
-#  if defined(__has_include) && __has_include(<tracy/Tracy.hpp>)
-#    include <tracy/Tracy.hpp>
-#  else
-#    include <Tracy.hpp>
-#  endif
+// cmake/VssTracy.cmake links the Tracy client target, whose include directory
+// makes this path resolve both for the vcpkg layout (include/tracy/tracy) and
+// for the upstream tree (public/tracy).
+#include <tracy/Tracy.hpp>
 
-#  define VSS_PROFILE_ZONE(name) ZoneScopedN(name)
-#  define VSS_PROFILE_FRAME() FrameMark
-#  define VSS_PROFILE_PLOT(name, value) \
-      TracyPlot(name, static_cast<std::int64_t>(value))
-#  define VSS_PROFILE_MESSAGE(text) TracyMessageL(text)
-#  define VSS_PROFILE_THREAD(name) ::tracy::SetThreadName(name)
+#define VSS_PROFILE_ZONE(name) ZoneScopedN(name)
+#define VSS_PROFILE_FRAME() FrameMark
+#define VSS_PROFILE_PLOT(name, value)                                          \
+    TracyPlot(name, static_cast<std::int64_t>(value))
+#define VSS_PROFILE_MESSAGE(text) TracyMessageL(text)
+#define VSS_PROFILE_THREAD(name) ::tracy::SetThreadName(name)
 
 #else
 
-#  define VSS_PROFILE_ZONE(name) ((void)0)
-#  define VSS_PROFILE_FRAME() ((void)0)
-#  define VSS_PROFILE_PLOT(name, value) ((void)0)
-#  define VSS_PROFILE_MESSAGE(text) ((void)0)
-#  define VSS_PROFILE_THREAD(name) ((void)0)
+#define VSS_PROFILE_ZONE(name) ((void)0)
+#define VSS_PROFILE_FRAME() ((void)0)
+#define VSS_PROFILE_PLOT(name, value) ((void)0)
+#define VSS_PROFILE_MESSAGE(text) ((void)0)
+#define VSS_PROFILE_THREAD(name) ((void)0)
 
 #endif
 

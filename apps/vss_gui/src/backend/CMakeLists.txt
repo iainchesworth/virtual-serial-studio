@@ -23,6 +23,8 @@ target_include_directories(vss_gui_backend PUBLIC
 target_link_libraries(vss_gui_backend PUBLIC Vss::studio Qt6::Core)
 target_compile_features(vss_gui_backend PUBLIC cxx_std_23)
 target_compile_definitions(vss_gui_backend PRIVATE QT_NO_KEYWORDS)
+icl_platform_sources(vss_gui_backend
+  DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform)
 set_target_properties(vss_gui_backend PROPERTIES AUTOMOC ON)
 vss_set_warnings(vss_gui_backend)
 

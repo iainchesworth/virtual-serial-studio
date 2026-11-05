@@ -35,5 +35,10 @@ if(WIN32)
 endif()
 
 vss_set_warnings(vss_core)
+
+# boost::system::error_category deliberately has a non-virtual destructor and
+# is meant to be derived from; GCC warns about the base anyway.
+set_source_files_properties(src/error.cpp PROPERTIES
+  COMPILE_OPTIONS "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wno-non-virtual-dtor>")
 vss_enable_coverage(vss_core)
 vss_mark_coverage_subject(vss_core)
