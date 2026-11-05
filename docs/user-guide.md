@@ -219,6 +219,15 @@ fault. Add another fixture to inject again. Every fault you inject is listed in
 **Injected so far**. Faults work only on fixtures; the buttons are off for any
 other port.
 
+The same dialog holds the **line matrix** for the link between the fixture
+and the port it is linked to. The rows are the outputs DTR and RTS and the
+columns are the inputs DSR, CTS, DCD and RI; tick a box to make that output
+drive that input on the other port, or pick a preset. A change applies at once,
+including to the inputs the other port already shows. The default is the
+null-modem cable (DTR to DSR and DCD, RTS to CTS) and one wiring serves both
+directions of the link. The wiring lasts while Studio runs and is not saved in a
+setup file. A port whose driver cannot set RI shows it in Studio only.
+
 ![The line matrix and faults dialog for a fixture: six Inject buttons, the Injected so far list and the control line state](images/fixture-faults-light.png)
 
 ## Connecting ports
@@ -473,8 +482,6 @@ available in this build". It never pretends. At the moment:
   cannot, so a busy device fails when you attach it.
 - **Real-device templates**: they need the attach dialog to open from a
   template.
-- The **per-line wiring matrix**: the engine has only a yes/no null-modem
-  crossing, so the matrix shows the Standard preset and cannot be edited.
 - **"Waiting for a program" and "Program connected"**: the engine cannot see
   whether another program has opened a port, so a port reads **Open** and no
   more.

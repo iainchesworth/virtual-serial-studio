@@ -380,17 +380,32 @@ reported on <port>" because the call has succeeded when the fault is queued and
 the engine emits the error event on the fixture's next read. A failure from the
 call shows its message in that row instead.
 
-### Per-link wiring is a read-only Standard preset
+### Per-link wiring
 
-`StudioBackend` gained `link_wiring()` and `set_link_wiring()` with
-`unsupported`/`nullopt` defaults so the dialog has one adapter interface, but the
-real backend keeps `Capabilities::line_matrix` false. The matrix therefore
-shows the Standard null-modem preset and is read-only. `FakeStudioBackend`
-stores a wiring for tests so the editable path is exercised without faking a
-real engine feature. The preset table lives in `advanced/line_presets.cpp` and
-uses the engine's `null_modem_peer()` mapping (DTR→DSR, RTS→CTS, DTR→DCD) for
-Standard. The bundle does not define "Loopback"; it is two wires, DTR→DSR and
-RTS→CTS, and neither it nor Custom can be chosen in this build.
+`StudioBackend` has `link_wiring()` and `set_link_wiring()` with
+`unsupported`/`nullopt` defaults, so a backend without the engine feature shows
+the Standard preset read-only. The engine backend now has the feature and sets
+`Capabilities::line_matrix`, so the matrix is editable. The preset table lives
+in `advanced/line_presets.cpp`; Standard is the engine's default wiring
+(DTR→DSR, RTS→CTS, DTR→DCD). The bundle does not define "Loopback"; it is two
+wires, DTR→DSR and RTS→CTS.
+
+The engine side is `vss::modem_wiring` in `vss_core`: eight booleans, one per
+output and input pair, in `link_options`, with `apply()` giving the peer's
+inputs for the outputs that are high (an input is high when any output wired to
+it is). `hub::route_lines` uses the link's wiring instead of the fixed
+`null_modem_peer()`, which now calls `modem_wiring{}.apply()` and gives the same
+result. `hub::set_link_wiring()` changes a link that exists and sends the
+current lines through it at once, so a peer's inputs follow the new wires
+without waiting for the next change. This is the second change to `vss_core`
+in the capability work. `emulate_modem_lines` still switches all crossing off.
+
+The wiring is not in the topology JSON. The schema is unchanged, so a saved
+setup, `snapshot()` and Undo's remade link use the default wiring. Saving it
+would add an optional field to each link; that is left for a decision. RI can
+be wired, and Studio shows it, but a transport that cannot set RI (the
+pseudo terminal and the serial transports set only CTS, DSR and DCD) cannot
+pass it on to a program.
 
 The bundle's Faults mockup shows the matrix on the left of "Inject a fault";
 the wording in `screens/05` says rows DTR and RTS and columns DSR, CTS, DCD,

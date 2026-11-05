@@ -164,6 +164,8 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // `vss::hub::set_link_wiring` holds the wires of every link.
+    caps.line_matrix = true;
     // `vss::studio::rename_port` renames the endpoint, the studio record
     // and a pseudo terminal's stable link together.
     caps.rename_port = true;
@@ -185,6 +187,43 @@ vss::result<vss::benchmark_result> EngineStudioBackend::run_benchmark(
     if (!sender || !receiver)
         return vss::make_error_code(vss::errc::not_found);
     return vss::run_benchmark(*sender, *receiver, options, progress, cancel);
+}
+
+std::optional<line_wiring> EngineStudioBackend::link_wiring(vss::link_id id) const
+{
+    const auto info = studio_.engine().find_link(id);
+    if (!info)
+        return std::nullopt;
+    const vss::modem_wiring& wires = info->options.wiring;
+    line_wiring out;
+    out.dtr_to_dsr = wires.dtr_to_dsr;
+    out.dtr_to_cts = wires.dtr_to_cts;
+    out.dtr_to_dcd = wires.dtr_to_dcd;
+    out.dtr_to_ri = wires.dtr_to_ri;
+    out.rts_to_dsr = wires.rts_to_dsr;
+    out.rts_to_cts = wires.rts_to_cts;
+    out.rts_to_dcd = wires.rts_to_dcd;
+    out.rts_to_ri = wires.rts_to_ri;
+    return out;
+}
+
+vss::result<void> EngineStudioBackend::set_link_wiring(vss::link_id id,
+                                                       const line_wiring& wiring)
+{
+    vss::modem_wiring wires;
+    wires.dtr_to_dsr = wiring.dtr_to_dsr;
+    wires.dtr_to_cts = wiring.dtr_to_cts;
+    wires.dtr_to_dcd = wiring.dtr_to_dcd;
+    wires.dtr_to_ri = wiring.dtr_to_ri;
+    wires.rts_to_dsr = wiring.rts_to_dsr;
+    wires.rts_to_cts = wiring.rts_to_cts;
+    wires.rts_to_dcd = wiring.rts_to_dcd;
+    wires.rts_to_ri = wiring.rts_to_ri;
+    const auto changed = studio_.engine().set_link_wiring(id, wires);
+    if (!changed)
+        return changed.error();
+    rebuild();
+    return {};
 }
 
 vss::result<void> EngineStudioBackend::inject_fault(vss::endpoint_id id,

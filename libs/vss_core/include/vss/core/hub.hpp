@@ -111,6 +111,10 @@ public:
     result<void> set_owner(link_id id, endpoint_id owner);
     result<void> release_owner(link_id id);
 
+    /// Changes which control line drives which across an existing link, and
+    /// brings the peers' input lines in step with the lines now high.
+    result<void> set_link_wiring(link_id id, const modem_wiring& wiring);
+
     // -- events ------------------------------------------------------------
 
     /// Registers a sink.
