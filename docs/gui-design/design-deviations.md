@@ -274,12 +274,13 @@ backend, and the topology node menu, F2 and **Ports → Rename port** open the
 Rename dialog. Rows already written to the traffic log keep the name they had
 when they were written.
 
-### Remove has confirmation but no Undo
+### Remove has confirmation and a limited Undo
 
-`Capabilities::undo` is false, so Remove link and Remove port confirm the
-destructive action and say nothing is saved until the setup is saved. No Undo
-toast is offered because it could not be made reliable. This matches the
-WP3/WP4 instruction to confirm only for now.
+Remove link and Remove port confirm the destructive action and say nothing is
+saved until the setup is saved. Remove link can then be reversed with Undo
+(see "Undo and Redo reverse changes, not snapshots" under WP8). Remove port
+cannot, because a port that is made again is a different port. No Undo toast
+is offered for either; the confirmation stays.
 
 ### Nodes are nudged with the keyboard, not dragged
 
@@ -559,22 +560,33 @@ introduced.
 
 ## WP8
 
-### Undo and Redo stay disabled
+### Undo and Redo reverse changes, not snapshots
 
-The design's "Remove, with undo" pattern and the `Ctrl+Z`/`Ctrl+Y` menu items
-need an undo stack that restores the previous topology exactly. The engine's
+The design asks for a stack that restores the previous topology. The engine's
 `snapshot()` document records port names, kinds and settings, but not the
-endpoint identifiers or the advertised path an auto/pty/com0com port received.
-`apply()` therefore creates new endpoints and, for an auto port, a new COM
-number or pseudo terminal; a program that had the old path open loses it. That
-is not an exact restore, so `edit.undo` and `edit.redo` remain registered,
-visible and capability-gated disabled (`capabilities::undo == false`) with the
-tooltip "Not available in this build". The reason is repeated in
-`shell_window.cpp` where they are registered. Confirmations stay; no
-`QUndoStack` was added and no toast promises an undo that does not exist. If
-the engine later gains stable port identity and a path-preserving restore, the
-capability can be turned on and the two actions wired without changing the
-menus or shortcuts.
+endpoint identifiers or the advertised path an auto, pseudo terminal or
+com0com port received. `apply()` therefore creates new endpoints and, for an
+auto port, a new COM number or pseudo terminal; a program that had the old
+path open loses it. A snapshot restore is not exact, so none is used.
+
+`Capabilities::undo` is true for the engine backend and means something
+narrower: the window keeps a history (`UndoService`, 50 steps) of changes that
+have an exact inverse. Connecting a link is undone by removing it, removing a
+link by making it again with the same shape, ports, options and owner, an
+owner change by setting the previous owner, and a rename by naming the port as
+it was (the Topology JSON editor, the wizards and adding or removing ports are
+not recorded). A link is matched by the ports it
+joins and not by id, because the engine gives a link that is made again a new
+id. No `QUndoStack` is used, because its commands are objects with their own
+lifetime and the history here is only closures over the backend.
+
+The history describes the ports it was recorded on, so it is cleared whenever
+the set of ports changes: adding or removing a port, opening or applying a
+document, a wizard. A step that cannot be applied (the link it names has gone)
+clears the history rather than leave later steps that assumed it, and the status
+bar says so. Undo and Redo are disabled while there is nothing to reverse,
+and their text names the step ("Undo Connect ports"). A backend without the
+capability keeps them disabled with "Not available in this build".
 
 ### Support code uses the `vss::gui::support` namespace
 

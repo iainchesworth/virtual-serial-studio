@@ -199,6 +199,9 @@ capabilities EngineStudioBackend::caps() const
     // A pseudo terminal on Linux can be checked for a program that has it
     // open; every other port reads as unknown and the GUI says nothing.
     caps.peer_open = vss::peer_open_supported();
+    // The window's Undo history reverses changes with exact inverse
+    // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
+    caps.undo = true;
     // `vss::hub::set_link_wiring` holds the wires of every link.
     caps.line_matrix = true;
     // The JSON editor places a schema error on its line with a path index of

@@ -56,6 +56,9 @@ public:
 Q_SIGNALS:
     /// A one-line sentence for the status bar.
     void message(const QString& text);
+    /// The owner of a link changed; zero means none.  For the Undo history.
+    void owner_changed(vss::link_id link, vss::endpoint_id before,
+                       vss::endpoint_id after);
 
 private:
     void refresh();

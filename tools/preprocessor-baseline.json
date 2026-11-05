@@ -62,6 +62,8 @@
     "apps/vss_gui/src/shell/level_service.hpp": 3,
     "apps/vss_gui/src/shell/shell_window.hpp": 3,
     "apps/vss_gui/src/shell/status_bar.hpp": 3,
+    "apps/vss_gui/src/shell/undo_service.hpp": 3,
+    "apps/vss_gui/src/shell/undo_steps.hpp": 3,
     "apps/vss_gui/src/shell/tests/main.cpp": 4,
     "apps/vss_gui/src/support/about_dialog.hpp": 3,
     "apps/vss_gui/src/support/build_info.cpp": 18,
