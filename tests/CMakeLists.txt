@@ -87,6 +87,10 @@ if(VSS_PWSH)
     COMMAND ${VSS_PWSH} -NoProfile -File
             ${PROJECT_SOURCE_DIR}/tools/vm/test-vm.ps1)
   set_tests_properties(vm_builder PROPERTIES TIMEOUT 120)
+  add_test(NAME vm_credentials
+    COMMAND ${VSS_PWSH} -NoProfile -File
+            ${PROJECT_SOURCE_DIR}/tools/vm/test-credentials.ps1)
+  set_tests_properties(vm_credentials PROPERTIES TIMEOUT 120)
   if(WIN32)
     add_test(NAME vm_seed
       COMMAND ${VSS_PWSH} -NoProfile -File

@@ -117,8 +117,16 @@ $lines = @(
     'ethernet0.connectionType = "nat"',
     'ethernet0.addressType = "generated"',
     'sound.present = "FALSE"',
-    'uuid.action = "create"'
+    'uuid.action = "create"',
+    # The PCIe root ports and the host bridge. VMware adds these when it makes a VM itself;
+    # without them, a hand-written VMX stops at power-on with "No PCIe slot available".
+    'pciBridge0.present = "TRUE"',
+    'hpet0.present = "TRUE"',
+    'vmci0.present = "TRUE"'
 )
+foreach ($port in 4..7) {
+    $lines += "pciBridge$port.present = `"TRUE`"", "pciBridge$port.virtualDev = `"pcieRootPort`"", "pciBridge$port.functions = `"8`""
+}
 if ($efi) {
     $lines += 'firmware = "efi"'
     $lines += 'uefi.secureBoot.enabled = "FALSE"'

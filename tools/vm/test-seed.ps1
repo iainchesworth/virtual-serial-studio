@@ -66,6 +66,7 @@ try {
             Assert-That "${guest}: the account and the logon use the user" (([regex]::Matches($disc.Text, '<(Name|Username)>placeholder-user</')).Count -eq 2)
             $edition = if ($guest -eq 'windows11') { 'Windows 11 Pro' } else { 'Windows 10 Pro' }
             Assert-That "${guest}: the edition is $edition" ($disc.Text.Contains("<Value>$edition</Value>"))
+            Assert-That "${guest}: the product key page is answered" ($disc.Text.Contains('<ProductKey>') -and $disc.Text -match '<Key>[A-Z0-9]{5}(-[A-Z0-9]{5}){4}</Key>')
             Assert-That "${guest}: the disk layout follows the firmware" (($guest -eq 'windows11') -eq $disc.Text.Contains('<Type>EFI</Type>'))
             Assert-That "${guest}: the TPM check is bypassed only on Windows 11" (($guest -eq 'windows11') -eq $disc.Text.Contains('BypassTPMCheck'))
         } else {

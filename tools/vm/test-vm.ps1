@@ -52,6 +52,7 @@ try {
         Assert-That "${guest}: there is no virtual TPM and no encryption" (-not ($v.Keys | Where-Object { $_ -match 'vtpm|encryption' }))
         Assert-That "${guest}: the install disc and the answer disc are attached" ($v['sata0:1.fileName'] -like '*.iso' -and $v['sata0:2.fileName'] -like '*-seed.iso')
         Assert-That "${guest}: it uses NAT" ($v['ethernet0.connectionType'] -eq 'nat')
+        Assert-That "${guest}: the PCIe root ports are present" ($v['pciBridge0.present'] -eq 'TRUE' -and (4..7 | Where-Object { $v["pciBridge$_.virtualDev"] -eq 'pcieRootPort' -and $v["pciBridge$_.functions"] -eq '8' }).Count -eq 4)
 
         Assert-That "${guest}: the script refuses to overwrite a guest" ($(& $pwsh -NoProfile -File $script $guest -DryRun -Root $work 2>&1 | Out-String) -match 'never overwrites')
 
