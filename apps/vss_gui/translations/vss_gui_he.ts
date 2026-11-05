@@ -2698,12 +2698,12 @@
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="169" />
+            <location filename="../src/dialogs/network_uri.cpp" line="189" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>הזינו כתובת כגון tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="175" />
+            <location filename="../src/dialogs/network_uri.cpp" line="195" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>בחרו יציאה בין 1 ל-65535.</translation>
         </message>
@@ -3856,37 +3856,37 @@
             <translation>%1 ו-%2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>Studio אינו יכול ליצור יציאה שתוכנית אחרת יכולה לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="147" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>רק %1 מתוך %2 התוכניות יכולות לפתוח את היציאה שלהן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="129" />
+            <location filename="../src/dialogs/share_plan.cpp" line="155" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio מצא זוג פנוי אחד.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="134" />
+            <location filename="../src/dialogs/share_plan.cpp" line="160" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio לא מצא זוגות פנויים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="139" />
+            <location filename="../src/dialogs/share_plan.cpp" line="165" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio מצא %1 זוגות פנויים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="154" />
+            <location filename="../src/dialogs/share_plan.cpp" line="180" />
             <source>The %1 port works only inside Studio.</source>
             <translation>היציאה %1 פועלת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="186" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>%1 היציאות הנותרות פועלות רק בתוך Studio.</translation>
         </message>
@@ -4540,12 +4540,12 @@
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="187" />
+            <location filename="../src/dialogs/share_plan.cpp" line="213" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="196" />
+            <location filename="../src/dialogs/share_plan.cpp" line="222" />
             <source>A free port</source>
             <translation>יציאה פנויה</translation>
         </message>
@@ -7428,6 +7428,169 @@
         <message>
             <source>Not valid</source>
             <translation type="vanished">לא תקין</translation>
+        </message>
+    </context>
+    <context>
+        <name>ordinal</name>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <source>first</source>
+            <translation>הראשונה</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <source>second</source>
+            <translation>השנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <source>third</source>
+            <translation>השלישית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <source>fourth</source>
+            <translation>הרביעית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <source>fifth</source>
+            <translation>החמישית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <source>sixth</source>
+            <translation>השישית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <source>seventh</source>
+            <translation>השביעית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <source>eighth</source>
+            <translation>השמינית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <source>ninth</source>
+            <translation>התשיעית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <source>tenth</source>
+            <translation>העשירית</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <source>eleventh</source>
+            <translation>ה-11</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <source>twelfth</source>
+            <translation>ה-12</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <source>thirteenth</source>
+            <translation>ה-13</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <source>fourteenth</source>
+            <translation>ה-14</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <source>fifteenth</source>
+            <translation>ה-15</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <source>sixteenth</source>
+            <translation>ה-16</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <source>seventeenth</source>
+            <translation>ה-17</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <source>eighteenth</source>
+            <translation>ה-18</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <source>nineteenth</source>
+            <translation>ה-19</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <source>twentieth</source>
+            <translation>ה-20</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <source>twenty-first</source>
+            <translation>ה-21</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <source>twenty-second</source>
+            <translation>ה-22</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <source>twenty-third</source>
+            <translation>ה-23</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <source>twenty-fourth</source>
+            <translation>ה-24</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <source>twenty-fifth</source>
+            <translation>ה-25</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <source>twenty-sixth</source>
+            <translation>ה-26</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <source>twenty-seventh</source>
+            <translation>ה-27</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <source>twenty-eighth</source>
+            <translation>ה-28</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <source>twenty-ninth</source>
+            <translation>ה-29</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <source>thirtieth</source>
+            <translation>ה-30</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <source>thirty-first</source>
+            <translation>ה-31</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <source>thirty-second</source>
+            <translation>ה-32</translation>
         </message>
     </context>
     <context>

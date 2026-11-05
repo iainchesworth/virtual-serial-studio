@@ -1,311 +1,434 @@
 # Using Virtual Serial Studio
 
-This guide is for people using the desktop application. It covers both
-interface modes, the everyday jobs, the expert tools, and what to check when
-something does not work.
+This guide is for people using the desktop application. It covers the two
+levels of the window, the everyday jobs, the expert tools, and what to check
+when something does not work.
 
 The application is a window over the `vss::studio` engine: it creates ports,
 wires them together, and shows what flows through them. Everything it can do
-can also be scripted with `vss_cli`; the command equivalents are listed at the
-end.
+can also be scripted with `vss_cli`; the command equivalents are listed near
+the end.
 
-## The two modes
+## Simple and Advanced
 
-The window has a **Simple** mode and an **Advanced** mode. Simple mode is the
-default and is designed for the most common job: "I need a serial port, now."
-Advanced mode adds the tools an integrator or diagnostician needs.
+The window has a **Simple** level and an **Advanced** level. Simple is the
+default and is built for one job: "I need a serial port, now." Advanced adds
+the tools an integrator or a diagnostician needs, in the same window. Nothing
+you have built changes when you switch.
 
 | | Simple | Advanced |
 |---|---|---|
-| Audience | Application users, test operators | Integrators, QA, developers |
-| Add virtual ports | Yes | Yes |
-| Attach a real serial device | Yes | Yes |
-| Connect ports (two-way, redirect, monitor, split, join) | Yes | Yes |
-| Remove ports and links | Yes | Yes |
-| Monitor, send, inspector, topology | Yes | Yes |
-| Saved topologies (open/save) | Yes | Yes |
-| First-run hint | Yes | No |
-| Traffic log dock | Hidden | Shown |
-| Mock fixture device | Hidden | Shown |
-| Null-modem demo | Hidden | Shown |
-| Share / join / bridge over the network | Hidden | Shown |
-| Fit topology (link removal stays available) | Hidden | Shown |
+| Launcher with four jobs | Yes | Yes |
+| Add a virtual port, a linked pair or a real device | Yes | Yes |
+| Connect ports, share a device, watch traffic | Yes | Yes |
+| Network endpoint and mock fixture | Hidden | Shown |
+| Ports table | Name, role, state, path | Adds RX, TX, Dropped and a filter |
+| Inspector | State, path, traffic, control lines (read only) | DTR and RTS switches, Break |
+| Send | Text or hex, Add CRLF | Adds Repeat and saved sends |
+| Monitor | Pause, Clear, Hex, Follow | Adds filters, search, Export, Log and Topology JSON tabs |
+| Link wiring, owner controls, Benchmark, Export as command, Fit | Hidden | Shown |
+| Dialogs | Guided, with defaults | Editable addresses and More options |
 
-Switch modes with **View → Advanced mode**, or in **Settings**. The choice is
-remembered between runs, and the status bar always shows which mode is active.
-
-Simple mode is not a reduced engine: every port and link it creates is a real
-one. It simply hides the controls that need an understanding of URIs, fixtures
-or the topology graph.
+Switch with **View → Advanced mode** (`Ctrl+Shift+A`), the switch at the right
+of the status bar, **Settings**, or the link in the launcher. The choice is
+remembered and applies to every document. Commands hidden in Simple still
+appear in the command palette, with a prompt that they need Advanced mode.
 
 ## The window at a glance
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
-│ File   Edit…   Ports   Topology   Tools   View   Help                │
+│ File  Edit  Ports  Topology  Tools  View  Help                       │
 ├──────────────────────────────────────────────────────────────────────┤
-│ [toolbar: New Open Save | Add port Attach Connect Remove | …]         │
+│ New Open Save │ Add port  Attach  Connect  Remove        [Search ⌘K] │
 ├───────────────┬──────────────────────────────────┬───────────────────┤
 │ Ports         │  Topology                        │ Inspector         │
-│ name kind     │   ┌────────┐      ┌────────┐     │ details, counters │
-│ state lines   │   │ port A │──────│ port B │     │ control lines     │
-│ path rx tx    │   └────────┘      └────────┘     ├───────────────────┤
+│ name  state   │   ┌────────┐      ┌────────┐     │ state, path       │
+│ role  path    │   │ port A │──────│ port B │     │ traffic, lines    │
+│               │   └────────┘      └────────┘     ├───────────────────┤
 │               │                                  │ Send              │
 ├───────────────┴──────────────────────────────────┴───────────────────┤
-│ Monitor / Log (tabs)                                                 │
+│ Monitor                                                              │
 ├──────────────────────────────────────────────────────────────────────┤
-│ Ports: 2  Links: 1  RX/TX rates  Hub: running  Advanced mode          │
+│ Ports 2  Links 1  RX  TX  Hub running      Setup ready  [Simple|Adv] │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Ports** (left): every endpoint with its name, kind, state, control lines,
-  advertised path and counters. The path column is what other programs open.
-- **Topology** (centre): one box per port and one edge per link. Click a box to
-  inspect it, click an edge to select the link, `Delete` removes the selection.
-- **Inspector** (right): details for the selected port, live counters, and — for
-  real serial endpoints — DTR/RTS/break toggles plus CTS/DSR/DCD/RI indicators.
+- **Ports** (left): one row per port with its name, a state chip, a line saying
+  what it is for, and its path with a copy button. The path is what your other
+  program opens. Select a port here, in the topology or in the monitor, and the
+  other two follow.
+- **Topology** (centre): one box per port and one line per link. Click a box to
+  inspect it and a line to select the link. **View → Show links as a list**
+  gives the same links as a list that a screen reader can walk.
+- **Inspector** (right): details for the selected port and the control lines.
+  A port that nothing has opened yet links to "Why is nothing arriving?".
 - **Send** (right): write bytes into an open port.
-- **Monitor** (bottom): traffic rows with time, endpoint, direction, length and
-  payload preview. `Log` is a second tab that records state changes; it is
-  shown in advanced mode.
-- **Status bar**: port and link counts, aggregate throughput, hub state and the
-  current mode.
+- **Monitor** (bottom): traffic rows with time, port, direction, bytes and a
+  preview. In Advanced it has two more tabs, **Log** and **Topology JSON**.
+- **Status bar**: port and link counts, receive and transmit rates, hub state,
+  a readiness chip that opens the setup check, and the Simple/Advanced switch.
+
+The window opens at 1280 by 800 and works down to 960 by 640. Dock sizes are
+remembered; **View → Reset layout** puts them back. **Theme** (follow the
+system, light or dark) and **Density** (comfortable or compact) are under
+**View** too.
+
+## The launcher
+
+When the studio has no ports, the window shows a launcher instead of the docks.
+It opens with a strip that says whether this PC is ready to create ports other
+programs can open, then four jobs:
+
+1. **Give my program a serial port.** Creates a virtual port and tells you the
+   name to open.
+2. **Connect two programs.** Creates a linked pair, like a null-modem cable.
+3. **Share one device with several programs.** Opens the share wizard.
+4. **Watch traffic.** Starts a read-only copy of a port's traffic.
+
+Below the cards, **Saved setups** shows your most recent file with **Open** and
+**Browse**. The launcher goes away when the first port exists. **View → Show
+launcher** brings it back.
 
 ## Quick start
 
-1. **Ports → Add virtual port…**, accept the suggested name and *Auto* kind.
-2. Find the new row in the Ports table and read the **Path** column — for
-   example `COM7` on Windows or `/dev/pts/3` on Linux.
-3. Open that path in the other program (a terminal, a test harness, your
-   application). Writes from that program appear in the monitor.
-4. To wire two ports together, select **Ports → Connect ports…**, choose
-   *Two-way (connect)*, pick source and target, press **Connect**.
-5. To test without another program, use the **Send** panel: pick the open port,
-   type bytes, press **Send**, and watch the monitor.
+1. Choose **Give my program a serial port** (or **Ports → Add port**,
+   `Ctrl+Shift+N`) and press **Create port**.
+2. The **Port ready** dialog shows the name to open, for example `COM7` on
+   Windows or `/dev/pts/3` on Linux. Press **Copy name**.
+3. In the other program, choose that port. Whatever it writes appears in the
+   monitor.
+4. To try the port without another program, use the **Send** panel: pick the
+   port, type text, press **Send**, and watch the monitor.
 
-## Creating virtual ports
+## Adding a port
 
-**Ports → Add virtual port…**
+**Ports → Add port** (`Ctrl+Shift+N`) asks what the new port should be:
 
-- **Name**: a unique suffix is added automatically if the name is taken. With
-  **How many** above one, names become `name-1`, `name-2`, … so a batch is easy
-  to recognise.
-- **Kind**:
-  - *Auto (best available)* — uses a com0com pair when the driver is installed
-    on Windows; otherwise an in-process loopback. On Linux and macOS it creates
-    a PTY.
-  - *PTY (pseudo terminal)* — a real operating-system terminal another
-    application can open.
-  - *Loopback (in-process)* — everything written is echoed back to the same
-    port; useful for protocol tests that do not need a second process.
+- **Virtual port** — a port other programs can open.
+- **Linked pair** — two ports wired together like a null-modem cable.
+- **Real device** — a serial device plugged into this PC, so you can share it.
+- In Advanced, **Network endpoint** (a TCP, UDP or RFC 2217 address used as a
+  port) and **Mock fixture** (a scriptable pretend device for tests).
 
-**How many** creates up to 32 ports in one step. Repeat the action to create
-more; there is no fixed ceiling beyond the operating system's resources.
+### Virtual port
 
-Remove a port with **Ports → Remove port** or `Delete`; its links are removed
-with it.
+- **Name**: a unique suffix is added if the name is taken. With **How many**
+  above one, names run `port-1`, `port-2` and so on. The number must be 1 to
+  32.
+- **Kind**: *Best available (recommended)* uses com0com on Windows when it is
+  installed and a pseudo terminal on Linux and macOS; *Pseudo terminal*; or
+  *In-process loopback*, whose port only Studio can open. On Windows there are
+  no pseudo terminals, so *Pseudo terminal* gives the same result as *Best
+  available*.
 
-## Attaching a real serial device
+A sentence under the form says what will be created. When you press **Create
+port**, the **Port ready** dialog opens with the path in large type, **Copy
+name**, a note on how to use it, and **Connect COM7 to something**, **Create
+another** and **Done**. **Show details** gives the saved-setup entry and the
+equivalent `vss_cli` command. Without a driver on Windows the title reads
+"port-1 is ready inside Studio" and the dialog warns that other programs cannot
+open it, with a button for the setup check.
 
-**Ports → Attach serial port…**
+### Linked pair
 
-1. Pick the device from the list. It is enumerated when the dialog opens,
-   so reopen it after plugging a device in.
-2. Choose the baud rate, data bits, parity, stop bits and flow control that the
-   device expects.
-3. Keep **Capture traffic in the monitor** ticked if you want its traffic
-   recorded; clear it to keep the monitor quiet.
-4. Give it a name and press **Attach**. The URI field updates as you choose,
-   and advanced users can type a URI directly.
+**Connect two programs** creates two ports that talk to each other. Choose the
+pair name. The two port names are shown for you to read: on Windows they come
+from the free com0com pairs, and on Linux and macOS they are paths such as
+`/dev/pts/3`. DTR is wired to DSR and RTS to CTS, as on a standard null-modem
+cable. The dialog uses a pair that already exists and never creates one, so it
+does not ask for administrator permission. When there are not enough free
+driver pairs, the button is disabled and the dialog points to the setup check;
+the share wizard can create another pair. In Advanced, **More options** offers
+the port kind.
 
-The device is opened once by the studio; your applications then open the
-virtual port that the studio advertises, not the hardware itself.
+### Real device
+
+**Attach a real device** lists the serial devices when the dialog opens; press
+**Refresh** after plugging one in. A com0com pair end is listed as *Virtual* and
+cannot be chosen, because it is a port and not a device. Studio cannot tell in
+advance that another program holds a device: if it does, opening fails with a
+message that offers **Try again** and **Choose another**. In the Add port
+dialog, choosing *Real device* and pressing **Next** opens this dialog.
+
+The settings (baud rate, data bits, parity, stop bits, flow control) are folded
+away in Simple with a one-line summary and open in Advanced. **Use common
+defaults** sets 115200 8N1. Keep **Capture traffic in the monitor** ticked to
+record it. The dialog shows the address it will use, for example
+`serial://COM3?baud=115200`; in Advanced you can edit it and the edit wins over
+the fields.
+
+Studio opens the device once and keeps it open. Your programs open the port
+that Studio creates, not the device.
+
+### Network endpoint (Advanced)
+
+A TCP, UDP or RFC 2217 address used as a port. Choose the transport, then
+whether Studio **connects to a server** or **waits for other computers to
+connect (server)**. Waiting works for TCP and UDP; RFC 2217 only connects. See
+[network addresses](#network-addresses).
+
+### Mock fixture (Advanced)
+
+A scripted pretend device with a name, baud rate and target, for tests without
+hardware.
 
 ## Connecting ports
 
-**Ports → Connect ports…** (`Ctrl+L`) is the guided way to create links.
+**Topology → Connect ports…** (`Ctrl+L`, enabled once two ports exist) creates a
+link:
 
-| Mode | Use it when | What the other side sees |
+| Relationship | Use it when | What the target sees |
 |---|---|---|
-| **Two-way (connect)** | Two ports should behave like a null-modem cable. | Everything, both directions. |
+| **Two-way** | Two ports should behave like a null-modem cable. | Everything, both directions. |
 | **One-way redirect** | Data must flow from A to B only. | Writes from A; B cannot reply. |
-| **Monitor** | You want to observe traffic without disturbing it. | A one-way copy, marked as a monitor so it never drives modem lines. |
-| **Split one port to many** | Several applications must see the same device. | Each target receives a copy of the source's data. |
-| **Join many ports into one** | Several publishers should feed one application. | The target receives every publisher's data. |
+| **Monitor** | You want to watch without disturbing. | A one-way copy that never drives modem lines. |
+| **Split one port to many** | Several programs must see the same device. | Each target receives a copy of the source. |
+| **Join many ports into one** | Several publishers feed one program. | The target receives every publisher's data. |
 
-The dialog lists the ports that currently exist, validates that a port is not
-connected to itself, requires at least two targets for a split and two
-publishers for a join, and prints a plain-language summary before you commit.
+The dialog lists only ports that exist, refuses a port linked to itself, needs
+at least two targets for a split and two publishers for a join, and prints a
+sentence describing the result before you commit. A link that would make a loop
+is refused, with a message naming the pair, and nothing changes.
 
-Remove a link by selecting its edge in the topology and pressing `Delete`, or
-**Topology → Remove selected link**.
+Remove a link by selecting its line and pressing `Delete`, or **Topology →
+Remove link**. Removing a port removes its links too, after a confirmation.
 
-## Monitoring and sending
+## Sharing one device with several programs
 
-The **Monitor** shows a row per transfer:
+**Topology → Share a device** opens a wizard.
 
-- **Time**, **Endpoint**, **Direction** (`rx`/`tx`), **Length**, **Preview**.
-- **Pause** stops appending; traffic continues to flow and is counted.
-- **Clear** empties the view.
-- **Hex** renders payloads as hexadecimal; **Follow** keeps the newest row
-  visible.
+1. **Choose the device** to share, and a name.
+2. **How many programs?** (1 to 32). The table lists the port each program will
+   open and whether other programs can open it. In step 1 you can change the
+   device's settings or use **A network device instead**. On Windows each outside program
+   needs its own com0com pair. When there are not enough free pairs the wizard
+   warns, for example "Only 2 of the 3 programs can open their port", and
+   offers **Create another pair** (administrator permission) or **Keep the
+   third as Studio only**. On Linux and macOS every port is a pseudo terminal.
+3. **Share device** builds the ports and the split link, and ends on a summary
+   of what each program should open. If any step fails, the wizard removes what
+   it created. **Add another program** on the summary builds the share again
+   with one more port, because the engine cannot add a listener to a share that
+   exists.
 
-The **Send** panel writes bytes into an open endpoint: choose the endpoint,
-type the payload, tick **Hex** if the text is hexadecimal, tick **CRLF** to
-append a line ending, and press **Send**. Errors appear in the status bar and
-the log.
+Everything the device receives is copied to all of the ports. Whatever a
+program writes goes back to the device. In Advanced, **Share a device** is also
+on the toolbar.
+
+## Watching traffic
+
+**Topology → Watch traffic** makes a read-only copy of a port. Choose the port
+and a name for the watcher. The watcher is a Studio-only port, shown in the
+ports list so you can remove it when you have finished, and it never drives
+modem lines. With **Open the monitor when it is ready** ticked, Studio selects
+the watched port and brings the monitor forward. The monitor is not filtered to
+that port; in Advanced you can set the port filter yourself.
+
+## The monitor and the Send panel
+
+The **Monitor** shows a row per transfer: **Time**, **Port**, **Direction**
+(`RX`, `TX`, or `DROP`), **Bytes** and **Preview**. A `DROP` row is one line each
+time a link's dropped count grows, for bytes that a port without the owner's
+right to write tried to send. It shows the count and not the bytes, because the
+hub does not publish them.
+
+- **Pause** (or `Space` in the table) stops appending. Traffic still flows and
+  is counted. **Clear** empties the view. **Hex** shows payloads as
+  hexadecimal. **Follow** keeps the newest row visible.
+- In Advanced you can also filter by port and by RX, TX or Dropped, search the
+  payload (`Ctrl+F`), switch between ASCII and Hex, and **Export** the visible
+  rows as text.
+- The monitor keeps the latest 10,000 rows.
+
+**Send** writes bytes into an open port: choose **Send to port**, type text, or
+tick **Hex** for hexadecimal (it is checked as you type), leave **Add CRLF**
+ticked to end the line, and press **Send**. In Advanced, **Repeat** sends at an
+interval and **Saved sends** keeps your favourites. Engine errors appear as a
+message and in the log.
 
 ## Control lines
 
-Select a real serial port to see its control-line state in the **Inspector**:
+Select a real serial port to see its control lines in the **Inspector**. Simple
+shows DTR, RTS, CTS, DSR, DCD and RI as read-only chips ("DTR on" or "DTR
+off"). Advanced turns **DTR** and **RTS** into switches and adds a **Break**
+button. Virtual ports accept the operations and report their own state; they
+have no physical wires.
 
-- **DTR** and **RTS** can be toggled; **Break** can be asserted.
-- **CTS**, **DSR**, **DCD** and **RI** are displayed as inputs.
+## Link wiring and ownership (Advanced)
 
-Virtual ports accept the operations and report their own state; they do not
-have physical wires.
+- **Topology → Link wiring** shows how the control lines of a pair are wired.
+  It shows the standard null-modem preset, read only.
+- **Topology → Owner** shows the owner bar for a link that uses an owner
+  policy. The owner can be released or given to another port.
+- **Tools → Benchmark** measures throughput between two endpoints.
 
-## Saving and opening topologies
+Some of these depend on what the engine can do; see
+[what this build cannot do](#what-this-build-cannot-do).
 
-A topology is a JSON document listing ports and links.
+## Saving, opening and templates
 
-- **File → Save** / **Save As…** writes the current studio state.
-- **File → Open…** applies a saved document.
-- The title bar shows a `*` while there are unsaved changes; closing asks
-  first (this prompt can be turned off in Settings).
-- **File → New** clears the studio.
+A setup is a JSON document that lists the ports and links.
 
-The same file can be replayed headlessly:
+- **File → Save** (`Ctrl+S`) and **Save as** (`Ctrl+Shift+S`) write the current
+  setup. **File → Open** (`Ctrl+O`) applies a saved one; **Open recent** opens
+  the latest.
+- The title bar shows `*` while there are unsaved changes. Closing, **New** and
+  **Open** ask first, and you can turn that off in Settings.
+- **File → Setups and templates** offers ready-made setups: a test bench, a
+  device on the network, three programs sharing one device, and two programs
+  with an owner. A template that needs a real device says "Needs a real device"
+  and cannot be used yet.
+- **File → Export as command** (Advanced) shows the `vss_cli` command that
+  builds the current setup.
+
+The same file can be replayed without the window:
 
 ```bash
 vss_cli run topology.json --seconds=60
 ```
 
-## Network tools (advanced mode)
+## Network addresses
 
-These live under **Scenarios** and are visible in advanced mode only.
+Under the choices in the dialogs, every endpoint is an address. The engine
+accepts these forms, and you can type them in Advanced and in `vss_cli`:
 
-### Share one port with several listeners
-
-**Scenarios → Share a serial port…** opens one endpoint and gives every
-listener its own virtual port. Enter the endpoint URI (for example
-`serial://COM3?baud=115200`) and the number of listeners.
-
-On Windows the first listener takes the other end of the com0com pair; further
-listeners fall back to loopback because a pair can only be wired once. On Linux
-and macOS, listeners are PTYs.
-
-### Join publishers by URI
-
-**Scenarios → Join publishers…** merges several publisher URIs into one target
-URI. Each publisher is a line in the dialog.
-
-### Bridge two transports
-
-**Scenarios → Bridge to network…** connects two URIs back to back, for example
-a serial device to a TCP server:
-
-```text
-from: serial://COM3?baud=115200
-to:   tcp://192.168.1.50:4001
-```
-
-URI forms accepted by the engine:
-
-| URI | Meaning |
+| Address | Meaning |
 |---|---|
 | `serial://COM3?baud=115200` | A real serial device with framing options. |
 | `tcp://host:port` | A TCP client: Studio connects to a server. |
 | `udp://host:port` | UDP datagrams sent to and received from one address. |
 | `tcp-listen://host:port` | A TCP server: Studio waits for other computers. Any number can connect; what you send goes to all of them. |
 | `udp-listen://host:port` | UDP datagrams from any sender; replies go to the senders heard from lately. |
-| `rfc2217://host:port` | RFC 2217 serial-over-network. |
+| `rfc2217://host:port` | RFC 2217 serial-over-network (connects only). |
 | `loopback:name` | An in-process loopback endpoint. |
 
-When sharing on a LAN, allow the port through the host firewall and listen on
-the interface other machines can reach (`0.0.0.0` for all interfaces). In the
-network dialog this is the "Wait for other computers to connect (server)"
-choice. RFC 2217 has no server choice: Studio can connect to an RFC 2217
-server but cannot act as one.
+To let other computers connect, allow the port through the host firewall and
+listen on an interface they can reach (`0.0.0.0` for all interfaces). Try
+`127.0.0.1` first. Studio does not use the network unless you add an endpoint
+like these.
 
-## Mock devices and demos (advanced mode)
+## Finding things: the command palette
 
-- **Ports → Add mock device…** creates a fixture endpoint with a name, baud
-  rate and target, useful for scripted tests without hardware.
-- **Scenarios → Null-modem loopback** creates two loopback ports and a
-  one-way link between them, so a fresh machine can demonstrate the whole path
-  in one click.
+`Ctrl+K`, or the **Search actions** box in the toolbar, opens a list of every
+action. Type a few letters, use the arrow keys and press `Enter`. Actions that
+need Advanced mode are listed with a prompt that offers to turn it on.
 
 ## Settings
 
-**Tools → Settings…** (`Ctrl+,`):
+**Tools → Settings** (`Ctrl+,`) has three pages. Changes apply immediately.
 
-- **Advanced mode** — show the expert tools.
-- **Refresh interval** — how often counters and state are read (50–5000 ms).
-  Shorter feels live; longer is lighter on a busy machine.
-- **Theme** — follow the desktop, light or dark.
-- **Default baud rate** — offered by the port dialogs.
-- **Ask before discarding an unsaved topology**.
+- **General**: *Advanced mode*, *Default baud rate* (offered first when you
+  attach a device) and *Ask before discarding an unsaved setup*.
+- **Appearance**: *Theme* (follow the system, light or dark) and *Density*
+  (comfortable or compact). Text size, display scale, high contrast and reduced
+  motion follow your operating system.
+- **Performance**: *Refresh interval*, 50 to 5000 ms. Shorter feels live;
+  longer is lighter on a busy machine.
 
-Settings are stored with `QSettings` (the registry on Windows, a config file on
-Linux/macOS) and applied immediately.
+**Reset to defaults** restores them. The values are stored with `QSettings` (the
+registry on Windows, a configuration file on Linux and macOS).
 
-## About and bug reports
+## Help and diagnostics
 
-**Help → About Virtual Serial Studio** has four tabs:
+- **Tools → Setup check** says what this PC needs so other programs can use
+  your ports. On Windows it looks for the com0com driver, whether administrator
+  rights will be needed, and the real serial devices. On Linux and macOS it
+  looks at pseudo terminals and your serial port group. The status bar chip
+  shows "Setup ready" or "Setup needs attention" and opens the same dialog.
+- **Help → Why is nothing arriving?** walks the steps between the device and
+  your program (the port is open, it is linked, the device is sending) and
+  suggests what to try. Studio cannot see whether a program has opened the
+  port, so the last two checks read "Not checked yet".
+- **File → Diagnostic bundle** saves a ZIP with the setup, the event log, the
+  environment and the port counters. Traffic contents are left out unless you
+  tick them. Nothing is sent anywhere; you choose where to save the file.
+- **Help → Keyboard shortcuts** lists every shortcut; **Help → Copy
+  environment** copies the build details for a bug report.
+- **Help → About** has four tabs: About (version and the GPLv3 notice),
+  Environment (commit, branch, build, compiler, Qt, operating system and the
+  language chosen), Licences (Qt, Boost, Boost.VirtualSerial, Tracy and the
+  optional com0com driver) and Fonts (none are bundled).
 
-- **About** — version, purpose and the GPLv3 notice.
-- **Environment** — commit, branch, build date and type, compiler, Qt runtime
-  and build versions, operating system, architecture and kernel.
-- **Licences** — Qt, Boost, Boost.VirtualSerial, Tracy and the optional com0com
-  driver.
-- **Fonts** — no fonts are bundled; the system UI font and its licence are
-  named.
-
-Copy the Environment tab into a bug report; it answers the "which build?"
-question.
+The application is available in nine languages and follows the system
+language. See [i18n.md](i18n.md).
 
 ## Keyboard shortcuts
 
+`Ctrl` is `Cmd` on macOS.
+
 | Shortcut | Action |
 |---|---|
-| `Ctrl+N` | New topology |
-| `Ctrl+O` | Open topology |
-| `Ctrl+S` | Save |
-| `Ctrl+Shift+S` | Save as |
+| `Ctrl+N` / `Ctrl+O` | New / Open |
+| `Ctrl+S` / `Ctrl+Shift+S` | Save / Save as |
+| `Ctrl+Q` | Quit |
+| `Ctrl+Shift+N` | Add port |
+| `Ctrl+Shift+C` | Copy port name |
+| `Delete` | Remove the selected port or link |
 | `Ctrl+L` | Connect ports |
+| `Ctrl+K` | Search actions |
 | `Ctrl+,` | Settings |
 | `F5` | Refresh now |
-| `Ctrl+0` | Fit topology |
-| `Delete` | Remove selected port or link |
-| `Ctrl+Q` | Quit |
+| `Ctrl+Shift+A` | Advanced mode |
+| `Ctrl+0` | Fit the topology (Advanced) |
+| `F1` | Help contents |
+| `Space`, `Ctrl+F` | In the monitor: pause, search |
+
+## What this build cannot do
+
+A control that the engine cannot back is shown disabled, with the tooltip "Not
+available in this build". It never pretends. At the moment:
+
+- **Undo and Redo**: they need an exact restore that the engine cannot prove.
+- **Rename a port** (`F2`): the hub can rename, but the saved setup would go out
+  of step.
+- **Reconnect a failed port**: a port that stops shows *Failed* and keeps its
+  links, but the engine has no call to reopen it.
+- **Editing a link that exists**: modem-line emulation and the merge policy are
+  fixed when the link is created.
+- **"In use" for a device**: shown only if the engine can prove it, and it
+  cannot, so a busy device fails when you attach it.
+- **Real-device templates**: they need the attach dialog to open from a
+  template.
+- **Fault injection** and the **per-line wiring matrix**: the engine has only a
+  yes/no null-modem crossing.
+- **"Waiting for a program" and "Program connected"**: the engine cannot see
+  whether another program has opened a port, so a port reads **Open** and no
+  more.
+- **Benchmark** from the window; use `vss_cli bench`.
+- **Line numbers** in JSON errors in the Topology JSON editor.
+- An **RFC 2217 server**: Studio can connect to one but cannot act as one.
+
+The reasons and the plan for each are in
+[gui-design/docs/08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
 
 ## Troubleshooting
 
 **No COM ports appear on Windows.** A virtual COM port needs a pair driver.
-Install com0com (or use the optional Windows COM driver from the driver
-branch); *Auto* falls back to an in-process loopback, whose path is
-`loopback:<name>` and which other applications cannot open. PTYs do not exist
-on Windows.
+Open **Tools → Setup check**. Without com0com, *Best available* falls back to an
+in-process loopback, whose path is `loopback:<name>` and which other
+applications cannot open. Pseudo terminals do not exist on Windows.
 
-**A PTY path is shown but another program cannot open it.** On Linux the path
-is `/dev/pts/N`; it exists only while the studio is running. Check permissions
-for the user running the studio.
+**A pseudo terminal path is shown but another program cannot open it.** On
+Linux the path is `/dev/pts/N`; it exists only while the studio is running.
+Check the permissions of the user running the program.
 
-**A real device cannot be opened.** Another program may already hold it. Close
-that program, then attach again. On Linux, add your user to `dialout` and log
-in again.
+**A real device cannot be opened.** Another program may hold it, or it was
+unplugged. Close the other program and try again. On Linux, add your user to
+`dialout` and log in again; the setup check shows the command.
 
-**Network peers cannot connect.** Check the firewall, that you bound to an
+**Network peers cannot connect.** Check the firewall, that you listened on an
 address the peer can reach, and that the port number matches. Test locally with
 `127.0.0.1` first.
 
-**The counters do not move.** Check the port state in the Ports table; a port
-that is `failed` or `closed` will not carry traffic. The log tab records state
-changes and errors.
+**The counters do not move.** Check the state in the Ports table; a port that
+is *Failed* or *Closed* does not carry traffic. Use **Help → Why is nothing
+arriving?**, and in Advanced the **Log** tab, which records state changes and
+errors.
 
-**Where are the logs?** The **Log** dock in advanced mode, the status bar, and
-`vss_cli --verbose` for the command line.
+**A port failed while running.** The row shows *Failed* and the links to it are
+kept. Fix the cause (for example, plug the cable back in) and attach the device
+again.
 
 ## Command line equivalents
 
@@ -316,26 +439,12 @@ changes and errors.
 | Create and hold a topology | `vss_cli run topology.json` |
 | Share a device | `vss_cli share serial://COM3 --listeners=3` |
 | Join publishers | `vss_cli join tcp://a:1 tcp://b:2 --target=serial://COM4` |
-| Bridge two transports | `vss_cli bridge serial://COM3 tcp://host:4001` |
+| Bridge two transports | `vss_cli bridge serial://COM3 tcp-listen://0.0.0.0:4001` |
 | Loopback demo | `vss_cli loopback` |
 | List devices | `vss_cli devices` |
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
 
-## Deliberate limits
-
-These remain unavailable in this build, with a visible reason in the window:
-
-- the network endpoint can connect to a server but cannot wait for one (the
-  engine has no listening transport);
-- a real device's "in use" state is reported only when the adapter can prove
-  it; the engine does not probe devices;
-- the real adapter cannot select a com0com pair name, so linked-pair names are
-  read-only;
-- undo/redo need an exact restore that the engine cannot prove;
-- real-device templates need a device picker before they can be enabled;
-- named bundles of links and baud-rate throttling are not implemented.
-
-The Log and Topology JSON tools are Advanced docks; the main Monitor carries
-the everyday traffic view. See [ux.md](ux.md) for the design and roadmap, and
-[scenarios.md](scenarios.md) for more worked examples.
+See [ux.md](ux.md) for the design reasoning, [scenarios.md](scenarios.md) for
+worked examples and [the screen specifications](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/00-product-brief.md) for the
+screen specifications.
