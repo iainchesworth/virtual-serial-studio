@@ -428,15 +428,21 @@ Syntax errors come from `QJsonDocument::fromJson` and carry its offset, so
 they always have a line. Schema errors are found by explicit GUI checks that
 name the field (unknown port kind, unknown virtual kind, missing address,
 duplicate names, unknown link mode with a `Did you mean` suggestion, bad
-arity, missing port references and loops); the helpers locate the offending
-token in the text so "Go to line" appears where it can. The check order
-matches the hub: a loop is tested against routes created so far, and a duplex
-link's reverse route is added with it. `vss::config::from_json()` has the
-final word and `Apply` is disabled unless it accepts the document, so an
-invalid document is never applied. A schema error that only the engine can
-name hides "Go to line". `Capabilities::json_positions` stays false because
-the engine still has no positions; the GUI-side checks are best effort and
-the deviation is that they exist at all.
+arity, missing port references and loops). The line of each field comes from
+a path index of the text: one pass over the document records where every
+value starts under a path such as `ports/1/serial/baud_rate`, so a problem in
+the second port is on the second port's line and not the first match of the
+same word. The check order matches the hub: a loop is tested against routes
+created so far, and a duplex link's reverse route is added with it.
+`vss::config::from_json()` has the final word and `Apply` is disabled unless
+it accepts the document, so an invalid document is never applied. It returns
+only an error code, so when the GUI checks pass and the engine still refuses,
+the editor asks the engine again for each port on its own, then for each
+serial setting of the failing port, and reports the line of the smallest piece
+the engine refuses. No engine rule is copied into the GUI and the schema is
+unchanged. "Go to line" is hidden only when the cause is not in a port or a
+link. `Capabilities::json_positions` is true for the engine backend, because
+the editor does the placing.
 
 `Export file` in the JSON editor writes the editor text verbatim when it
 parses; `Apply` always uses the engine's parsed document. `Format` uses the

@@ -161,6 +161,9 @@ capabilities EngineStudioBackend::caps() const
     caps.network_server = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // The JSON editor places a schema error on its line with a path index of
+    // the text, and asks `vss::config::from_json` which field it refused.
+    caps.json_positions = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;
