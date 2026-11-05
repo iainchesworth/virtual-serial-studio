@@ -4,7 +4,15 @@
 # Shared by install-driver.ps1, uninstall-driver.ps1 and test-driver.ps1. Run
 # inside a Windows guest, as an administrator. Dot-source it:  . $PSScriptRoot\common.ps1
 
-$HardwareId = 'VSSCOM\VSSCOM0'       # a port made by hand (install-driver.ps1 -Count)
+# Which driver the scripts work on: 'kmdf' (the default) or 'umdf'. The install,
+# uninstall and signing scripts take -Flavour and set VSS_DRIVER for the rest.
+$Flavour = if ($env:VSS_DRIVER) { $env:VSS_DRIVER } else { 'kmdf' }
+if ($Flavour -notin 'kmdf', 'umdf') { throw "VSS_DRIVER must be kmdf or umdf, not '$Flavour'" }
+$InfName = if ($Flavour -eq 'umdf') { 'vsscom_um.inf' } else { 'vsscom.inf' }
+$BinaryName = if ($Flavour -eq 'umdf') { 'vsscom_um.dll' } else { 'vsscom.sys' }
+$CatalogName = if ($Flavour -eq 'umdf') { 'vsscom_um.cat' } else { 'vsscom.cat' }
+# A port made by hand (install-driver.ps1 -Count).
+$HardwareId = if ($Flavour -eq 'umdf') { 'VSSCOMUM\VSSCOM0' } else { 'VSSCOM\VSSCOM0' }
 $DemandHardwareId = 'VSSCOM\PORT'    # a port that the control device made
 $ControlHardwareId = 'VSSCOM\CONTROL'
 $PortsClassGuid = [guid]'4D36E978-E325-11CE-BFC1-08002BE10318'

@@ -1,10 +1,34 @@
 # Windows virtual COM port driver
 
-`vsscom` is a KMDF function driver that gives Windows a virtual `COMn` port with
-no com0com and no hardware. The design and the reasons for it are in
+This gives Windows a virtual `COMn` port with no com0com and no hardware. The
+design and the reasons for it are in
 [docs/windows-com-driver.md](../../docs/windows-com-driver.md).
 
+## Two drivers, one port
+
+There are two drivers for the same port, built from the same sources. They sit
+side by side, and the person installing picks the one that suits them. Neither
+replaces the other.
+
+| | `vsscom` (kernel mode, KMDF) | `vsscom_um` (user mode, UMDF 2) |
+|---|---|---|
+| Runs in | the kernel | a driver host process |
+| Package | `vsscom.sys`, `vsscom.inf`, `vsscomctl.inf`, two catalogs | `vsscom_um.dll`, `vsscom_um.inf`, one catalog |
+| Signing | needs a Microsoft-trusted kernel signature to load without test signing | a user-mode package: needs a signed catalog that the machine trusts, and no kernel-mode signature |
+| Ports on demand | yes, through the control device | not yet: ports are made by hand |
+| Hand-made hub end | administrators | administrators |
+| The port itself | the same: a COM name, the application end, the hub end, the serial rules | the same |
+
+Both put their hub end on the same interface, `GUID_DEVINTERFACE_VSSCOM`, so the
+studio finds the ports of either without being told which driver they belong to.
+Their hardware IDs differ (`VSSCOM\VSSCOM0` and `VSSCOMUM\VSSCOM0`), so both can be
+installed on one machine.
+
 ## State
+
+The table is for the kernel-mode driver unless it says otherwise. The user-mode
+driver builds in CI from the same sources; its guest results are in the section
+"The user-mode driver" below.
 
 | Piece | State |
 |---|---|
@@ -28,27 +52,69 @@ packages named in `vsscom/vsscom.vcxproj`, so nothing else is installed.
 ./drivers/windows/build.ps1 -Platform x64      # or ARM64
 ```
 
-The package is written to `drivers/windows/artifacts/package/<platform>/`:
+The kernel-mode package is written to `drivers/windows/artifacts/package/<platform>/`:
 `vsscom.sys`, `vsscom.inf`, `vsscomctl.inf` and the catalogs `vsscom.cat` and
-`vsscomctl.cat`. CI runs the same script and uploads the package as the artifact
-`vsscom-<platform>`.
+`vsscomctl.cat`. The user-mode package is written to
+`drivers/windows/artifacts/package-um/<platform>/`: `vsscom_um.dll`,
+`vsscom_um.inf` and `vsscom_um.cat`. `-Driver kmdf` or `-Driver umdf` builds one of
+them. CI runs the same script and uploads the packages as the artifacts
+`vsscom-<platform>` and `vsscom-um-<platform>-unsigned` or
+`vsscom-um-<platform>-testsigned`.
+
+## Signing
+
+The user-mode package is signed in CI with the organisation's test certificate, by
+the same `sign-windows` action that signs the studio's programs. The leaf
+certificate and its key are the organisation secrets `WIN_TESTSIGN_PFX_BASE64` and
+`WIN_TESTSIGN_PFX_PASSWORD`; they reach only the CI step, never a developer's
+machine or an assistant. The `SIGN_WINDOWS` repository variable chooses:
+
+| `SIGN_WINDOWS` | The user-mode artifact |
+|---|---|
+| `false` (the default) | `vsscom-um-<platform>-unsigned`: nothing signed |
+| `test` | `vsscom-um-<platform>-testsigned`: `vsscom_um.dll` and `vsscom_um.cat` signed with the leaf certificate and timestamped |
+
+The catalog holds the hash of the DLL, so `build.ps1` runs in two stages with the
+signing between them: `-Stage build`, sign the DLL, `-Stage catalog`, sign the
+catalog.
+
+To use the test-signed package on a machine, install the organisation's test CA
+root there once (it is a public certificate; `docs/test-signing.md` in
+`icl-common-infra` says how), then install the package:
+
+```powershell
+Import-Certificate -FilePath ca.crt -CertStoreLocation Cert:\LocalMachine\Root
+pnputil /add-driver vsscom_um.inf /install
+```
+
+Windows accepts a user-mode driver whose catalog is signed by a CA it trusts, so
+**test signing mode stays off**. The kernel-mode driver does not have that
+freedom: Windows loads kernel code only if Microsoft signed it, or if test signing
+mode is on. The test certificate suffices for the second case only.
 
 ## Layout
 
 | Path | What |
 |---|---|
-| `vsscom/driver.c` | driver entry, port creation, COM name registration; tells a port from the control device |
-| `vsscom/io.c` | the application end: reads, writes and the serial control requests, and the pump that moves bytes between the ends |
-| `vsscom/hub.c` | the hub end: opening, reading, writing, the state the hub watches |
-| `vsscom/control.c` | the control device: the bus that makes ports on demand |
-| `vsscom/access.c` | who opened a handle, and who may open a hub end |
-| `vsscom/vsscom.h` | the device context shared by the four |
-| `vsscom/public.h` | what user mode sees: interface GUIDs, control codes, the hub state, the control requests |
-| `vsscom/vsscom.inf` | the ports (class Ports) |
-| `vsscom/vsscomctl.inf` | the control device (class System) |
-| `vsscom/core/` | the serial rules in plain C; built for the host and unit-tested |
-| `build.ps1` | restore, build, `InfVerif`, `Inf2Cat` |
-| `test/` | guest scripts: `install-driver.ps1` (the control device and two ports made by hand, `-Count` for more), `test-driver.ps1` (tests D1 to D21), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
+| `vsscom/port.c` | shared by both drivers: the COM name, the two interfaces, the file object rules, the device context and the queues of a port |
+| `vsscom/io.c` | shared: the application end: reads, writes and the serial control requests, and the pump that moves bytes between the ends |
+| `vsscom/hub.c` | shared: the hub end: opening, reading, writing, the state the hub watches |
+| `vsscom/core/` | shared: the serial rules in plain C; built for the host and unit-tested |
+| `vsscom/vsscom.h`, `vsscom/public.h` | shared: the device context and the entry points; what user mode sees (interface GUIDs, control codes, the hub state, the control requests) |
+| `vsscom/driver.c` | kernel mode: driver entry, the name and type of the device object; tells a port from the control device |
+| `vsscom/control.c` | kernel mode: the control device, the bus that makes ports on demand |
+| `vsscom/access.c` | kernel mode: who opened a handle, and who may open a hub end |
+| `vsscom/km/vsscom_platform.h` | kernel mode: the headers and the clock the shared code uses |
+| `vsscom/vsscom.inf`, `vsscom/vsscomctl.inf` | kernel mode: the ports (class Ports) and the control device (class System) |
+| `vsscom_um/um_driver.c` | user mode: driver entry |
+| `vsscom_um/um_access.c` | user mode: who may open a hub end, by impersonating the requestor |
+| `vsscom_um/um/vsscom_platform.h` | user mode: the headers and the clock the shared code uses |
+| `vsscom_um/vsscom_um.inf` | user mode: the ports (class Ports) |
+| `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver or both |
+| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device), `test-driver.ps1` (tests D1 to D22), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
+
+The two drivers include their own `vsscom_platform.h`, found first on the include
+path of each project, so the shared sources need no preprocessor conditionals.
 
 ## The two ends of a port
 

@@ -1,32 +1,48 @@
 # Copyright (c) 2026 Virtual Serial Studio contributors
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Builds the vsscom driver package: vsscom.sys, the two INF files (vsscom.inf for
-# the ports, vsscomctl.inf for the control device) and a catalog for each.
+# Builds the vsscom driver packages. There are two drivers for the same port, and
+# the user picks one:
+#
+#   kmdf   vsscom.sys, the two INF files (vsscom.inf for the ports, vsscomctl.inf
+#          for the control device) and a catalog for each;
+#   umdf   vsscom_um.dll, vsscom_um.inf and its catalog: a user-mode driver, which
+#          needs no kernel-mode code signature.
 #
 # It needs Visual Studio 2026 with the C++ desktop workload (the driver build
 # targets ship with it) and NuGet access. The Windows SDK and the WDK come from
-# the NuGet packages named in vsscom.vcxproj, so nothing else is installed. CI
+# the NuGet packages named in the project files, so nothing else is installed. CI
 # and a developer run the same script.
 #
 #   ./drivers/windows/build.ps1 [-Platform x64|ARM64] [-Configuration Release|Debug]
+#                               [-Driver all|kmdf|umdf]
 #
-# The package is written to drivers/windows/artifacts/package/<platform>/. It is
-# not signed here: see docs/windows-com-driver.md for the signing steps.
+# The kernel-mode package is written to drivers/windows/artifacts/package/<platform>/
+# and the user-mode one to drivers/windows/artifacts/package-um/<platform>/. They
+# are not signed here: see docs/windows-com-driver.md for the signing steps.
+#
+# A catalog holds the hash of the binary, so a package that is signed has to be built
+# in two steps with the signing between them. -Stage build stops before the catalogs;
+# -Stage catalog makes them from the package folder as it then is. CI uses the two
+# stages to sign the user-mode package with the organisation's test certificate.
 
 [CmdletBinding()]
 param(
     [ValidateSet('x64', 'ARM64')]
     [string] $Platform = 'x64',
     [ValidateSet('Release', 'Debug')]
-    [string] $Configuration = 'Release'
+    [string] $Configuration = 'Release',
+    [ValidateSet('all', 'kmdf', 'umdf')]
+    [string] $Driver = 'all',
+    [ValidateSet('all', 'build', 'catalog')]
+    [string] $Stage = 'all'
 )
 
 $ErrorActionPreference = 'Stop'
 
 $root = $PSScriptRoot
-$project = Join-Path $root 'vsscom\vsscom.vcxproj'
-$wdkVersion = ([xml](Get-Content $project)).SelectNodes("//*[local-name()='PackageReference'][@Include='Microsoft.Windows.WDK.x64']")[0].Version
+$kmProject = Join-Path $root 'vsscom\vsscom.vcxproj'
+$wdkVersion = ([xml](Get-Content $kmProject)).SelectNodes("//*[local-name()='PackageReference'][@Include='Microsoft.Windows.WDK.x64']")[0].Version
 $sdkTools = '10.0.28000.0'
 
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
@@ -34,43 +50,95 @@ if (-not (Test-Path $vswhere)) { throw 'vswhere not found; install Visual Studio
 $msbuild = & $vswhere -latest -products * -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
 if (-not $msbuild) { throw 'MSBuild not found' }
 
-Write-Host "== Build ($Platform, $Configuration)"
-& $msbuild $project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
-if ($LASTEXITCODE -ne 0) { throw "msbuild failed with exit code $LASTEXITCODE" }
-
-$out = Join-Path $root "artifacts\$Platform\$Configuration"
-$sys = Join-Path $out 'vsscom.sys'
-if (-not (Test-Path $sys)) { throw "vsscom.sys was not produced in $out" }
-
 # The WDK tools come from the restored package.
 $packages = if ($env:NUGET_PACKAGES) { $env:NUGET_PACKAGES } else { Join-Path $env:USERPROFILE '.nuget\packages' }
 $wdk = Join-Path $packages "microsoft.windows.wdk.x64\$wdkVersion\c"
 $infverif = Join-Path $wdk "tools\$sdkTools\x64\infverif.exe"
 $inf2cat = Join-Path $wdk "bin\$sdkTools\x86\Inf2Cat.exe"
-foreach ($tool in $infverif, $inf2cat) {
-    if (-not (Test-Path $tool)) { throw "missing $tool" }
-}
-
-$package = Join-Path $root "artifacts\package\$Platform"
-if (Test-Path $package) { Remove-Item $package -Recurse -Force }
-New-Item -ItemType Directory $package | Out-Null
-Copy-Item $sys $package
-$infs = 'vsscom.inf', 'vsscomctl.inf'
-foreach ($inf in $infs) { Copy-Item (Join-Path $root "vsscom\$inf") $package }
-
-Write-Host '== InfVerif'
-foreach ($inf in $infs) {
-    & $infverif /v /w (Join-Path $package $inf)
-    if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
-}
-
-Write-Host '== Inf2Cat'
 $os = if ($Platform -eq 'ARM64') { '10_RS4_ARM64' } else { '10_RS4_X64' }
-& $inf2cat "/driver:$package" "/os:$os" /verbose
-if ($LASTEXITCODE -ne 0) { throw "Inf2Cat failed with exit code $LASTEXITCODE" }
 
-foreach ($file in 'vsscom.sys', 'vsscom.inf', 'vsscom.cat', 'vsscomctl.inf', 'vsscomctl.cat') {
-    if (-not (Test-Path (Join-Path $package $file))) { throw "$file is missing from the package" }
+# One driver: build it, copy it with its INF files into a package folder, check
+# the INF files and make the catalogs.
+function Build-Driver {
+    param(
+        [string] $Name,         # for the messages
+        [string] $Project,
+        [string] $OutSubdir,    # under artifacts\ ('' for the kernel-mode driver)
+        [string] $Binary,       # vsscom.sys or vsscom_um.dll
+        [string] $InfDir,       # the folder of the INF files
+        [string[]] $Infs,
+        [string] $PackageSubdir,
+        [string[]] $Expected,
+        [string] $InfVerifMode = '/w'  # the user-mode driver needs /u, see below
+    )
+
+    $package = Join-Path $root "artifacts\$PackageSubdir\$Platform"
+
+    # The build stage: compile, copy into the package folder and check the INF files.
+    if ($Stage -ne 'catalog') {
+        Write-Host "== Build $Name ($Platform, $Configuration)"
+        & $msbuild $Project -restore -m "-p:Configuration=$Configuration" "-p:Platform=$Platform" -nologo -v:minimal
+        if ($LASTEXITCODE -ne 0) { throw "msbuild failed for $Name with exit code $LASTEXITCODE" }
+        # The tools come with the packages that the restore has just fetched.
+        foreach ($tool in $infverif, $inf2cat) {
+            if (-not (Test-Path $tool)) { throw "missing $tool" }
+        }
+
+        $outRelative = if ($OutSubdir) { "artifacts\$OutSubdir\$Platform\$Configuration" } else { "artifacts\$Platform\$Configuration" }
+        $out = Join-Path $root $outRelative
+        $binary = Join-Path $out $Binary
+        if (-not (Test-Path $binary)) { throw "$Binary was not produced in $out" }
+
+        if (Test-Path $package) { Remove-Item $package -Recurse -Force }
+        New-Item -ItemType Directory $package | Out-Null
+        Copy-Item $binary $package
+        foreach ($inf in $Infs) { Copy-Item (Join-Path $InfDir $inf) $package }
+
+        Write-Host "== InfVerif $Name"
+        foreach ($inf in $Infs) {
+            & $infverif /v $InfVerifMode (Join-Path $package $inf)
+            if ($LASTEXITCODE -ne 0) { throw "InfVerif failed for $inf with exit code $LASTEXITCODE" }
+        }
+    }
+    else {
+        # The catalog stage on its own: the build stage ran before, so the tools are there.
+        if (-not (Test-Path $package)) {
+            throw "the $Name package is not built yet: run the build stage first ($package)"
+        }
+        foreach ($tool in $infverif, $inf2cat) {
+            if (-not (Test-Path $tool)) { throw "missing $tool" }
+        }
+    }
+
+    # The catalog stage: hash what is in the package folder and write the catalogs.
+    # Run it after the binary has been signed, because the catalog holds its hash.
+    if ($Stage -ne 'build') {
+        Write-Host "== Inf2Cat $Name"
+        & $inf2cat "/driver:$package" "/os:$os" /verbose
+        if ($LASTEXITCODE -ne 0) { throw "Inf2Cat failed with exit code $LASTEXITCODE" }
+
+        foreach ($file in $Expected) {
+            if (-not (Test-Path (Join-Path $package $file))) { throw "$file is missing from the $Name package" }
+        }
+    }
+    Get-ChildItem $package | Select-Object Name, Length | Format-Table -AutoSize
+    Write-Host "Package: $package"
 }
-Get-ChildItem $package | Select-Object Name, Length | Format-Table -AutoSize
-Write-Host "Package: $package"
+
+if ($Driver -in 'all', 'kmdf') {
+    Build-Driver -Name 'kernel-mode driver' -Project $kmProject -OutSubdir '' -Binary 'vsscom.sys' `
+        -InfDir (Join-Path $root 'vsscom') -Infs 'vsscom.inf', 'vsscomctl.inf' -PackageSubdir 'package' `
+        -Expected 'vsscom.sys', 'vsscom.inf', 'vsscom.cat', 'vsscomctl.inf', 'vsscomctl.cat'
+}
+
+if ($Driver -in 'all', 'umdf') {
+    Build-Driver -Name 'user-mode driver' -Project (Join-Path $root 'vsscom_um\vsscom_um.vcxproj') -OutSubdir 'um' -Binary 'vsscom_um.dll' `
+        -InfDir (Join-Path $root 'vsscom_um') -Infs 'vsscom_um.inf' -PackageSubdir 'package-um' `
+        -Expected 'vsscom_um.dll', 'vsscom_um.inf', 'vsscom_um.cat' `
+        -InfVerifMode '/u'
+}
+
+# The user-mode INF names the Windows-supplied reflector (WUDFRd.sys) as a service
+# binary that it does not copy. InfVerif's Windows mode (/w) calls that an error;
+# its universal mode (/u) calls it a warning and checks the rest. The inbox
+# WUDFRD.inf would avoid it, but Windows 10 version 22H2 does not have that file.
