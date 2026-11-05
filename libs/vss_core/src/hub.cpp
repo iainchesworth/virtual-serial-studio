@@ -199,6 +199,7 @@ result<void> hub::rename_endpoint(endpoint_id id, const std::string& name)
 
     names_.erase(it->second->name());
     names_.emplace(name, id);
+    it->second->set_name(name);
     return {};
 }
 

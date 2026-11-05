@@ -50,6 +50,8 @@ public:
     attach_serial(const QString& name, const QString& uri,
                   const vss::serial_settings& settings, bool capture) override;
     vss::result<void> remove_port(vss::endpoint_id id) override;
+    vss::result<void> rename_port(vss::endpoint_id id,
+                                  const QString& name) override;
 
     std::vector<port_view> ports() const override { return ports_; }
     std::vector<link_view> links() const override { return links_; }

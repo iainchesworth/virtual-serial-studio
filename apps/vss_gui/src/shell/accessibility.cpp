@@ -19,6 +19,7 @@
 #include "flows/attach_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
+#include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
 #include "shell/action_registry.hpp"
 #include "support/about_dialog.hpp"
@@ -335,6 +336,10 @@ QStringList run_accessibility_checks(ActionRegistry& registry,
     {
         WatchDialog dialog(backend, *alpha);
         checker.run(dialog, QStringLiteral("watch"));
+    }
+    {
+        RenameDialog dialog(backend, *alpha);
+        checker.run(dialog, QStringLiteral("rename"));
     }
     {
         ConnectPortsDialog dialog(backend, *alpha, true);

@@ -13,6 +13,7 @@
 #include "flows/attach_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
+#include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
 #include "shell/launcher.hpp"
 #include "shell/shell_window.hpp"
@@ -772,6 +773,87 @@ TEST_CASE("flows: watch failure rolls back and hide when links are unavailable")
     REQUIRE(!unavailable.unavailable_note()->isHidden());
     REQUIRE_EQ(unavailable.unavailable_note()->text(),
                QStringLiteral("Watching needs link support in this build."));
+}
+
+TEST_CASE("flows: rename changes the name and refuses a name in use")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::capabilities caps;
+    caps.rename_port = true;
+    backend.set_capabilities(caps);
+    const auto device =
+        backend.create_auto_port(QStringLiteral("device"), true);
+    const auto terminal =
+        backend.create_auto_port(QStringLiteral("terminal"), true);
+    REQUIRE(device.has_value());
+    REQUIRE(terminal.has_value());
+
+    vss::gui::RenameDialog dialog(backend, *device);
+    dialog.show();
+    settle();
+    REQUIRE_EQ(dialog.name_edit()->text(), QStringLiteral("device"));
+    REQUIRE_EQ(dialog.old_name(), QStringLiteral("device"));
+    // Nothing has changed yet, so there is nothing to apply.
+    REQUIRE(!dialog.primary_button()->isEnabled());
+
+    dialog.name_edit()->setText(QStringLiteral("terminal"));
+    settle();
+    REQUIRE(!dialog.primary_button()->isEnabled());
+
+    dialog.name_edit()->setText(QStringLiteral("   "));
+    settle();
+    REQUIRE(!dialog.primary_button()->isEnabled());
+
+    dialog.name_edit()->setText(QStringLiteral("  modem  "));
+    settle();
+    REQUIRE(dialog.primary_button()->isEnabled());
+    REQUIRE_EQ(dialog.primary_button()->text(), QStringLiteral("Rename"));
+    dialog.primary_button()->click();
+    REQUIRE_EQ(dialog.result(), QDialog::Accepted);
+    REQUIRE_EQ(dialog.new_name(), QStringLiteral("modem"));
+    REQUIRE_EQ(backend.port(*device)->name, QStringLiteral("modem"));
+    REQUIRE_EQ(backend.port(*terminal)->name, QStringLiteral("terminal"));
+}
+
+TEST_CASE("flows: rename reports an engine failure and needs the capability")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::capabilities caps;
+    caps.rename_port = true;
+    backend.set_capabilities(caps);
+    const auto device =
+        backend.create_auto_port(QStringLiteral("device"), true);
+    REQUIRE(device.has_value());
+
+    vss::gui::RenameDialog dialog(backend, *device);
+    dialog.show();
+    settle();
+    QString title;
+    QObject::connect(&dialog, &vss::gui::RenameDialog::error_shown,
+                     [&title](const QString& value) { title = value; });
+    dialog.name_edit()->setText(QStringLiteral("modem"));
+    settle();
+    backend.fail_next(vss::make_error_code(vss::errc::io_error));
+    modal_probe probe;
+    close_next_modal(&probe);
+    dialog.primary_button()->click();
+    REQUIRE(title.startsWith(QStringLiteral("Could not rename")));
+    REQUIRE(probe.error_dialog);
+    REQUIRE(dialog.result() != QDialog::Accepted);
+    REQUIRE_EQ(backend.port(*device)->name, QStringLiteral("device"));
+    dialog.close();
+
+    // A build without the capability cannot apply a rename.
+    caps.rename_port = false;
+    backend.set_capabilities(caps);
+    vss::gui::RenameDialog unavailable(backend, *device);
+    unavailable.show();
+    settle();
+    unavailable.name_edit()->setText(QStringLiteral("modem"));
+    settle();
+    REQUIRE(!unavailable.primary_button()->isEnabled());
 }
 
 TEST_CASE("flows: every dialog passes the accessible-name and target walk")

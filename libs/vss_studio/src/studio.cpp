@@ -520,6 +520,66 @@ result<void> studio::remove_port(std::string_view name)
     return remove_port(endpoint->id());
 }
 
+result<void> studio::rename_port(endpoint_id id, const std::string& name)
+{
+    if (name.empty())
+        return make_error_code(errc::invalid_argument);
+
+    std::optional<stable_link> old_link;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        if (it->second.name == name)
+            return {};
+        old_link = it->second.link;
+    }
+
+    // A pseudo terminal is advertised by a link named after the port, so
+    // the link moves with the name.  Make the new one first: if the hub
+    // refuses the name, the old link is untouched.
+    std::optional<stable_link> new_link;
+    if (old_link)
+    {
+        const auto made = make_stable_link(
+            std::filesystem::path(old_link->path).parent_path(),
+            link_name(name), old_link->target);
+        if (!made)
+            return made.error();
+        if (made->path != old_link->path)
+            new_link = *made;
+    }
+
+    const auto renamed = hub_->rename_endpoint(id, name);
+    if (!renamed)
+    {
+        if (new_link)
+            remove_stable_link(*new_link);
+        return renamed.error();
+    }
+
+    std::lock_guard lock(record_mutex_);
+    const auto it = records_.find(id);
+    if (it == records_.end())
+    {
+        // The port was removed while the name changed.
+        if (new_link)
+            remove_stable_link(*new_link);
+        return {};
+    }
+    it->second.name = name;
+    if (new_link)
+    {
+        claimed_paths_.erase(it->second.advertised);
+        it->second.link = *new_link;
+        it->second.advertised = new_link->path;
+        claimed_paths_.insert(new_link->path);
+        remove_stable_link(*old_link);
+    }
+    return {};
+}
+
 std::string studio::advertised_path(endpoint_id id) const
 {
     std::lock_guard lock(record_mutex_);
