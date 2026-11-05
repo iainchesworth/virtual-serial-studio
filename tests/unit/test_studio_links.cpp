@@ -129,6 +129,34 @@ TEST_CASE("studio links: a refused rename leaves the old link in place")
                (directory / "one").string());
 }
 
+TEST_CASE("studio links: only a pseudo terminal has a peer state")
+{
+    if (!stable_links_supported())
+        return;
+
+    scratch_directory scratch;
+    studio app(linked_options(scratch.path() / "links"));
+    const auto terminal = app.create_virtual_port("tty", virtual_port_kind::pty);
+    const auto loop = app.create_virtual_port("loop", virtual_port_kind::loopback);
+    REQUIRE(terminal);
+    REQUIRE(loop);
+
+    const auto states = app.peer_states();
+    // A loopback port cannot be opened by another program, so it has no
+    // entry; "missing" means unknown, never "not open".
+    REQUIRE(states.find((*loop)->id()) == states.end());
+    if (peer_open_supported())
+    {
+        const auto found = states.find((*terminal)->id());
+        REQUIRE(found != states.end());
+        REQUIRE(found->second == peer_open_state::not_open);
+    }
+    else
+    {
+        REQUIRE(states.empty());
+    }
+}
+
 TEST_CASE("studio links: a port name becomes a safe link name")
 {
     if (!stable_links_supported())

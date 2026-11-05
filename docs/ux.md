@@ -225,8 +225,9 @@ the setup, log and environment, with traffic contents off unless chosen.
 1. Undo and redo for topology edits, once the engine can restore endpoint
    identities exactly.
 2. The per-line wiring matrix for mock fixtures. Fault injection is done.
-3. A way to see whether another program has opened a port, which would turn on
-   the *Waiting* and *Program connected* states.
+3. Showing whether another program has opened a port on Windows and macOS.
+   Linux shows the *Waiting* and *Program connected* states for a pseudo
+   terminal already.
 4. Reconnect for a port that failed, with the note and button the design
    specifies.
 5. Real-device templates that open the attach dialog.

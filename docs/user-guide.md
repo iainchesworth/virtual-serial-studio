@@ -416,8 +416,9 @@ registry on Windows, a configuration file on Linux and macOS).
 
 - **Help → Why is nothing arriving?** walks the steps between the device and
   your program (the port is open, it is linked, the device is sending) and
-  suggests what to try. Studio cannot see whether a program has opened the
-  port, so the last two checks read "Not checked yet".
+  suggests what to try. On Linux Studio can see whether a program has opened
+  a pseudo terminal, so those checks say so. Everywhere else it cannot, and the
+  last two checks read "Not checked yet".
 
 ![The Why is nothing arriving dialog: the port is open, it has no link, and the later checks are not yet run](images/troubleshoot-light.png)
 
@@ -475,9 +476,9 @@ available in this build". It never pretends. At the moment:
   template.
 - The **per-line wiring matrix**: the engine has only a yes/no null-modem
   crossing, so the matrix shows the Standard preset and cannot be edited.
-- **"Waiting for a program" and "Program connected"**: the engine cannot see
-  whether another program has opened a port, so a port reads **Open** and no
-  more.
+- **"Waiting for a program" and "Program connected" on Windows and macOS**:
+  Studio can see whether a program has opened a port only for a pseudo terminal
+  on Linux. Everywhere else a port reads **Open** and no more.
 - **Line numbers** in JSON errors in the Topology JSON editor.
 - An **RFC 2217 server**: Studio can connect to one but cannot act as one.
 

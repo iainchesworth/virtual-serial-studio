@@ -11,6 +11,7 @@
 #include "test_framework.hpp"
 
 #include <vss/core/hub.hpp>
+#include <vss/ports/peer_open.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QByteArray>
@@ -254,7 +255,9 @@ TEST_CASE("engine backend: ports, links and sends go through the adapter")
         REQUIRE(first.has_value());
         REQUIRE(second.has_value());
         REQUIRE_EQ(backend.ports().size(), std::size_t{2});
-        REQUIRE(!backend.caps().peer_open);
+        // Only a pseudo terminal on a platform that can inspect other
+        // processes has a definite answer; a loopback port never does.
+        REQUIRE_EQ(backend.caps().peer_open, vss::peer_open_supported());
         REQUIRE_EQ(backend.port(*first)->peer, vss::gui::peer_state::unknown);
 
         const auto link =
