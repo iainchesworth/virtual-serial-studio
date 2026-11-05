@@ -41,8 +41,9 @@ struct capabilities
     /// Observe whether another program opened the advertised path.  False:
     /// `endpoint_info::open` is the studio's own transport state.
     bool peer_open = false;
-    /// Rename a port safely.  False: the hub can rename but the studio's
-    /// records and saved JSON would go out of sync.
+    /// Rename a port.  The engine backend provides it through
+    /// `vss::studio::rename_port`, which keeps the hub, the studio's records
+    /// and a saved setup in step.
     bool rename_port = false;
     /// Undo/redo restored from an exact snapshot.
     bool undo = false;

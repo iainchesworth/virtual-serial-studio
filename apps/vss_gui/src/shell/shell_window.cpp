@@ -23,6 +23,7 @@
 #include "flows/attach_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
+#include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
 #include "panes/inspector_panel.hpp"
 #include "panes/monitor_panel.hpp"
@@ -277,6 +278,13 @@ void ShellWindow::build_actions()
         action_level::simple, [this] { copy_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
     add(
+        QStringLiteral("ports.rename"), tr("Rename port"),
+        tr("name change relabel"), {}, QKeySequence(Qt::Key_F2),
+        action_level::simple, [this] { show_rename(selection_.port()); },
+        false,
+        [this]
+        { return backend_.caps().rename_port && selection_.port() != 0; });
+    add(
         QStringLiteral("ports.remove"), tr("Remove port"), tr("delete remove"),
         {}, {}, action_level::simple, [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
@@ -528,6 +536,8 @@ void ShellWindow::build_menus()
     add(ports, QStringLiteral("ports.mock"));
     ports->addSeparator();
     add(ports, QStringLiteral("ports.copyName"));
+    if (backend_.caps().rename_port)
+        add(ports, QStringLiteral("ports.rename"));
     add(ports, QStringLiteral("ports.remove"));
 
     QMenu* topology = add_menu(tr("&Topology"));
@@ -700,10 +710,8 @@ void ShellWindow::build_central()
             [this](vss::endpoint_id id) { remove_port(id); });
     connect(topology_, &topology::TopologyView::remove_link_requested, this,
             [this](vss::link_id id) { remove_link(id); });
-    connect(
-        topology_, &topology::TopologyView::rename_requested, this,
-        [this](vss::endpoint_id)
-        { status_->showMessage(tr("Not available in this build."), 5000); });
+    connect(topology_, &topology::TopologyView::rename_requested, this,
+            [this](vss::endpoint_id id) { show_rename(id); });
     connect(topology_, &topology::TopologyView::status_message, this,
             [this](const QString& text) { status_->showMessage(text, 4000); });
 }
@@ -1719,6 +1727,23 @@ void ShellWindow::remove_port(vss::endpoint_id id)
     selection_.clear();
     backend_.refresh();
     status_->showMessage(tr("Removed %1.").arg(port->name), 3000);
+}
+
+void ShellWindow::show_rename(vss::endpoint_id id)
+{
+    if (id == 0 || !backend_.caps().rename_port)
+        return;
+    const auto port = backend_.port(id);
+    if (!port)
+        return;
+
+    RenameDialog dialog(backend_, id, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    selection_.select_port(id);
+    status_->showMessage(
+        tr("Renamed %1 to %2.").arg(port->name, dialog.new_name()), 3000);
 }
 
 void ShellWindow::show_links_dock(bool shown)

@@ -104,6 +104,7 @@ private:
     void remove_selected_link();
     void remove_link(vss::link_id id);
     void remove_port(vss::endpoint_id id);
+    void show_rename(vss::endpoint_id id);
     void show_links_dock(bool shown);
     void connect_from_port(vss::endpoint_id id);
 

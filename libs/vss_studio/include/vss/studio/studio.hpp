@@ -110,6 +110,15 @@ public:
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
 
+    /// Gives a port a new name, in the hub and in the studio's records, so
+    /// events, links and a saved snapshot all use it.  A pseudo terminal is
+    /// advertised by a link named after the port; the link is made again
+    /// under the new name and the old one removed.  Every other kind keeps
+    /// the path it was created with.  `errc::invalid_argument` for an empty
+    /// name, `errc::already_exists` when another port has the name and
+    /// `errc::not_found` for an unknown port.
+    result<void> rename_port(endpoint_id id, const std::string& name);
+
     /// What other applications should open for this endpoint.
     std::string advertised_path(endpoint_id id) const;
 

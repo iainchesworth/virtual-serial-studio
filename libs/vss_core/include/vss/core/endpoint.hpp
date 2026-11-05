@@ -76,7 +76,8 @@ public:
     endpoint& operator=(const endpoint&) = delete;
 
     endpoint_id id() const noexcept { return id_; }
-    const std::string& name() const noexcept { return name_; }
+    /// The current name.  A rename changes it, so it is returned by value.
+    std::string name() const;
     endpoint_kind kind() const noexcept { return kind_; }
     endpoint_state state() const noexcept;
     bool is_open() const noexcept;
@@ -130,6 +131,9 @@ private:
     endpoint(hub& owner, endpoint_id id, std::string name, endpoint_kind kind,
              std::shared_ptr<transport> transport, endpoint_options options);
 
+    /// Called by the hub, which holds its lock, when it renames the endpoint.
+    void set_name(std::string name);
+
     void do_read();
     void on_read(boost::system::error_code ec, std::size_t count);
     void request_write();
@@ -147,7 +151,8 @@ private:
 
     hub& owner_;
     const endpoint_id id_;
-    const std::string name_;
+    mutable std::mutex name_mutex_;
+    std::string name_;
     const endpoint_kind kind_;
     const std::shared_ptr<transport> transport_;
     endpoint_options options_;

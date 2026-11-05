@@ -496,11 +496,23 @@ void endpoint::reset_stats()
     stats_.started = started;
 }
 
+std::string endpoint::name() const
+{
+    std::lock_guard lock(name_mutex_);
+    return name_;
+}
+
+void endpoint::set_name(std::string name)
+{
+    std::lock_guard lock(name_mutex_);
+    name_ = std::move(name);
+}
+
 endpoint_info endpoint::info() const
 {
     endpoint_info out;
     out.id = id_;
-    out.name = name_;
+    out.name = name();
     out.kind = kind_;
     out.state = state();
     out.path = public_path();
@@ -524,7 +536,7 @@ void endpoint::transition(endpoint_state next)
     event.kind = next == endpoint_state::open ? event_kind::started
                                                : event_kind::stopped;
     event.endpoint = id_;
-    event.name = name_;
+    event.name = name();
     event.when = clock_type::now();
     event.message = std::string(to_string(previous)) + " -> "
         + to_string(next);
@@ -536,7 +548,7 @@ void endpoint::emit(error_code ec, std::string message, event_kind kind)
     endpoint_event event;
     event.kind = kind;
     event.endpoint = id_;
-    event.name = name_;
+    event.name = name();
     event.error = ec;
     event.message = std::move(message);
     event.when = clock_type::now();
@@ -549,7 +561,7 @@ void endpoint::emit_data(data_direction direction,
     endpoint_event event;
     event.kind = event_kind::data;
     event.endpoint = id_;
-    event.name = name_;
+    event.name = name();
     event.direction = direction;
     event.data = std::move(data);
     event.when = clock_type::now();
@@ -561,7 +573,7 @@ void endpoint::emit_lines()
     endpoint_event event;
     event.kind = event_kind::lines;
     event.endpoint = id_;
-    event.name = name_;
+    event.name = name();
     event.lines = lines();
     event.when = clock_type::now();
     owner_.publish(std::move(event));

@@ -48,6 +48,73 @@ TEST_CASE("studio: duplicate names are made unique")
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{2});
 }
 
+TEST_CASE("studio: a renamed port keeps its links and its saved name")
+{
+    studio app;
+    const auto first =
+        app.create_virtual_port("first", virtual_port_kind::loopback);
+    const auto second =
+        app.create_virtual_port("second", virtual_port_kind::loopback);
+    REQUIRE(first);
+    REQUIRE(second);
+    REQUIRE(app.connect("first", "second"));
+
+    REQUIRE(app.rename_port((*first)->id(), "renamed"));
+    REQUIRE_EQ((*first)->name(), std::string("renamed"));
+    REQUIRE(app.find("first") == nullptr);
+    REQUIRE_EQ(app.find("renamed")->id(), (*first)->id());
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{2});
+    // A loopback port is advertised by the name it was made with.
+    REQUIRE_EQ(app.advertised_path((*first)->id()),
+               std::string("loopback:first"));
+
+    // The saved setup uses the new name in the port list and in the link.
+    const auto document = app.snapshot();
+    REQUIRE_EQ(document.ports.size(), std::size_t{2});
+    bool found = false;
+    for (const auto& port : document.ports)
+    {
+        REQUIRE(port.name != "first");
+        found = found || port.name == "renamed";
+    }
+    REQUIRE(found);
+    REQUIRE_EQ(document.links.size(), std::size_t{1});
+    bool linked = false;
+    for (const auto& name : document.links.front().sources)
+        linked = linked || name == "renamed";
+    for (const auto& name : document.links.front().targets)
+        linked = linked || name == "renamed";
+    REQUIRE(linked);
+
+    // A saved setup can be applied again under the new name.
+    studio other;
+    REQUIRE(other.apply(document));
+    REQUIRE(other.find("renamed") != nullptr);
+    REQUIRE(other.find("first") == nullptr);
+}
+
+TEST_CASE("studio: rename refuses a bad name and an unknown port")
+{
+    studio app;
+    const auto first =
+        app.create_virtual_port("first", virtual_port_kind::loopback);
+    const auto second =
+        app.create_virtual_port("second", virtual_port_kind::loopback);
+    REQUIRE(first);
+    REQUIRE(second);
+
+    REQUIRE_EQ(app.rename_port((*first)->id(), ""),
+               make_error_code(errc::invalid_argument));
+    REQUIRE_EQ(app.rename_port((*first)->id(), "second"),
+               make_error_code(errc::already_exists));
+    REQUIRE_EQ(app.rename_port(endpoint_id{9999}, "x"),
+               make_error_code(errc::not_found));
+    // The same name is a no-op, not an error.
+    REQUIRE(app.rename_port((*first)->id(), "first"));
+    REQUIRE_EQ((*first)->name(), std::string("first"));
+    REQUIRE_EQ((*second)->name(), std::string("second"));
+}
+
 TEST_CASE("studio: mock ports are scriptable")
 {
     studio app;

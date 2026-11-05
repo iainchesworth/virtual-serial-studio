@@ -78,6 +78,57 @@ TEST_CASE("studio links: removing the port or the studio removes the link")
     REQUIRE(!fs::exists(fs::symlink_status(directory / "two")));
 }
 
+TEST_CASE("studio links: renaming a pseudo terminal moves its stable link")
+{
+    if (!stable_links_supported())
+        return;
+
+    scratch_directory scratch;
+    const auto directory = scratch.path() / "links";
+
+    studio app(linked_options(directory));
+    const auto created =
+        app.create_virtual_port("before", virtual_port_kind::pty);
+    REQUIRE(created);
+    const auto slave = (*created)->public_path();
+    REQUIRE(fs::is_symlink(directory / "before"));
+
+    REQUIRE(app.rename_port((*created)->id(), "after"));
+    REQUIRE(!fs::exists(fs::symlink_status(directory / "before")));
+    REQUIRE(fs::is_symlink(directory / "after"));
+    REQUIRE_EQ(fs::read_symlink(directory / "after").string(), slave);
+    REQUIRE_EQ(app.advertised_path((*created)->id()),
+               (directory / "after").string());
+    REQUIRE_EQ(app.endpoint_infos().front().path,
+               (directory / "after").string());
+
+    // Removing the port removes the link it has now, not the old one.
+    REQUIRE(app.remove_port("after"));
+    REQUIRE(!fs::exists(fs::symlink_status(directory / "after")));
+}
+
+TEST_CASE("studio links: a refused rename leaves the old link in place")
+{
+    if (!stable_links_supported())
+        return;
+
+    scratch_directory scratch;
+    const auto directory = scratch.path() / "links";
+
+    studio app(linked_options(directory));
+    const auto first = app.create_virtual_port("one", virtual_port_kind::pty);
+    const auto second = app.create_virtual_port("two", virtual_port_kind::pty);
+    REQUIRE(first);
+    REQUIRE(second);
+
+    REQUIRE_EQ(app.rename_port((*first)->id(), "two"),
+               make_error_code(errc::already_exists));
+    REQUIRE(fs::is_symlink(directory / "one"));
+    REQUIRE(fs::is_symlink(directory / "two"));
+    REQUIRE_EQ(app.advertised_path((*first)->id()),
+               (directory / "one").string());
+}
+
 TEST_CASE("studio links: a port name becomes a safe link name")
 {
     if (!stable_links_supported())

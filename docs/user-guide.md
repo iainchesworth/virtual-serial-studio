@@ -74,6 +74,12 @@ appear in the command palette, with a prompt that they need Advanced mode.
 - **Status bar**: port and link counts, receive and transmit rates, hub state,
   a readiness chip that opens the setup check, and the Simple/Advanced switch.
 
+To rename a port, select it and press `F2`, or use **Ports → Rename port** or
+the node's context menu. Links and the saved setup use the new name. A
+pseudo terminal on Linux or macOS moves its stable path to the new name, so
+a program that opened it by that path needs the new one. The path of every
+other kind stays as it was made.
+
 The window opens at 1280 by 800 and works down to 960 by 640. Dock sizes are
 remembered; **View → Reset layout** puts them back. **Theme** (follow the
 system, light or dark) and **Density** (comfortable or compact) are under
@@ -442,6 +448,7 @@ language. See [i18n.md](i18n.md).
 | `Ctrl+Q` | Quit |
 | `Ctrl+Shift+N` | Add port |
 | `Ctrl+Shift+C` | Copy port name |
+| `F2` | Rename the selected port |
 | `Delete` | Remove the selected port or link |
 | `Ctrl+L` | Connect ports |
 | `Ctrl+K` | Search actions |
@@ -458,8 +465,6 @@ A control that the engine cannot back is shown disabled, with the tooltip "Not
 available in this build". It never pretends. At the moment:
 
 - **Undo and Redo**: they need an exact restore that the engine cannot prove.
-- **Rename a port** (`F2`): the hub can rename, but the saved setup would go out
-  of step.
 - **Reconnect a failed port**: a port that stops shows *Failed* and keeps its
   links, but the engine has no call to reopen it.
 - **Editing a link that exists**: modem-line emulation and the merge policy are

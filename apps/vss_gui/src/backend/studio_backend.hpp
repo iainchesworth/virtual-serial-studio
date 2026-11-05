@@ -69,6 +69,15 @@ public:
 
     virtual vss::result<void> remove_port(vss::endpoint_id id) = 0;
 
+    /// Renames a port everywhere the studio keeps its name.  The default is
+    /// `unsupported`: a build without `Capabilities::rename_port` never
+    /// changes only part of the records.
+    virtual vss::result<void> rename_port(vss::endpoint_id /*id*/,
+                                          const QString& /*name*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     // -- snapshots ---------------------------------------------------------
 
     virtual std::vector<port_view> ports() const = 0;
