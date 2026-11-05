@@ -19,7 +19,7 @@
 # What it does:
 #   1. makes a code-signing certificate in LocalMachine\My (six months);
 #   2. puts its public part in LocalMachine\Root and LocalMachine\TrustedPublisher;
-#   3. signs vsscom.sys and vsscom.cat in -PackageDir;
+#   3. signs vsscom.sys, vsscom.cat and vsscomctl.cat in -PackageDir;
 #   4. reports whether test signing is on. A kernel driver whose signature does
 #      not chain to a Microsoft root loads only with test signing on, which needs
 #      Secure Boot off and a restart. -EnableTestSigning turns it on; restart the
@@ -49,7 +49,7 @@ if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrat
 }
 
 try {
-    foreach ($name in 'vsscom.sys', 'vsscom.cat', 'vsscom.inf') {
+    foreach ($name in 'vsscom.sys', 'vsscom.cat', 'vsscom.inf', 'vsscomctl.cat', 'vsscomctl.inf') {
         if (-not (Test-Path (Join-Path $PackageDir $name))) { throw "$name is not in $PackageDir" }
     }
 
@@ -67,7 +67,7 @@ try {
     }
     Remove-Item $public
 
-    foreach ($name in 'vsscom.sys', 'vsscom.cat') {
+    foreach ($name in 'vsscom.sys', 'vsscom.cat', 'vsscomctl.cat') {
         $result = Set-AuthenticodeSignature -FilePath (Join-Path $PackageDir $name) -Certificate $cert `
             -HashAlgorithm SHA256
         if ($result.Status -ne 'Valid') { throw "signing $name gave $($result.Status): $($result.StatusMessage)" }

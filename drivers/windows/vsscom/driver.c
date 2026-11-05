@@ -5,9 +5,12 @@
 //
 // vsscom - a KMDF virtual serial port.
 //
-// The device is root-enumerated from vsscom.inf with the hardware ID
-// VSSCOM\VSSCOM0. The Ports class installer gives it a COM<n> name, and this
-// file makes that name visible to applications. io.c carries out reads, writes
+// A port is either root-enumerated from vsscom.inf with the hardware ID
+// VSSCOM\VSSCOM0, or a child that the control device made (control.c) with the
+// hardware ID VSSCOM\PORT. The Ports class installer gives it a COM<n> name,
+// and this file makes that name visible to applications. The one device that
+// vsscomctl.inf installs is the control device and not a port; EvtDeviceAdd
+// tells them apart. io.c carries out reads, writes
 // and the serial control requests; core/vsscom_core.c holds the rules they
 // follow and is unit-tested on the host.
 //
@@ -137,8 +140,24 @@ VOID VssComEvtDeviceCleanup(_In_ WDFOBJECT Object)
     }
 }
 
-NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
-                            _Inout_ PWDFDEVICE_INIT DeviceInit)
+// True when the hardware key says this device is the control device.
+static BOOLEAN VssComIsControlDevice(_In_ PWDFDEVICE_INIT DeviceInit)
+{
+    WDFKEY key = NULL;
+    ULONG role = 0;
+    DECLARE_CONST_UNICODE_STRING(roleValue, VSSCOM_ROLE_VALUE);
+
+    if (!NT_SUCCESS(WdfFdoInitOpenRegistryKey(DeviceInit, PLUGPLAY_REGKEY_DEVICE,
+                                              KEY_QUERY_VALUE,
+                                              WDF_NO_OBJECT_ATTRIBUTES, &key)))
+        return FALSE;
+    if (!NT_SUCCESS(WdfRegistryQueryULong(key, &roleValue, &role)))
+        role = 0;
+    WdfRegistryClose(key);
+    return role == VSSCOM_ROLE_CONTROL;
+}
+
+static NTSTATUS VssComPortAdd(_Inout_ PWDFDEVICE_INIT DeviceInit)
 {
     static volatile LONG instance = 0;
     WCHAR nameBuffer[40];
@@ -150,7 +169,6 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
     WDFDEVICE device;
     PVSSCOM_DEVICE_CONTEXT context;
     NTSTATUS status;
-    UNREFERENCED_PARAMETER(Driver);
 
     // A name for the device object, so that the symbolic link has a target.
     RtlInitEmptyUnicodeString(&deviceName, nameBuffer, sizeof(nameBuffer));
@@ -194,7 +212,11 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
     vsscom_ring_init(&context->Tx, context->TxStorage, VSSCOM_TX_SIZE);
     vsscom_events_init(&context->Events);
 
-    status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &context->Lock);
+    // Child of the device, so that it goes when the device does. Ports now come
+    // and go while the driver stays loaded.
+    WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+    attributes.ParentObject = device;
+    status = WdfSpinLockCreate(&attributes, &context->Lock);
     if (!NT_SUCCESS(status))
         return status;
 
@@ -209,4 +231,14 @@ NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
         return status;
 
     return VssComCreateQueues(context);
+}
+
+NTSTATUS VssComEvtDeviceAdd(_In_ WDFDRIVER Driver,
+                            _Inout_ PWDFDEVICE_INIT DeviceInit)
+{
+    UNREFERENCED_PARAMETER(Driver);
+
+    if (VssComIsControlDevice(DeviceInit))
+        return VssComControlAdd(DeviceInit);
+    return VssComPortAdd(DeviceInit);
 }

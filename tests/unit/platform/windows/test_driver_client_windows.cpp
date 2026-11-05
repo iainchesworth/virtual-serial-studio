@@ -16,6 +16,8 @@
 #include <boost/asio/io_context.hpp>
 
 #include <cstddef>
+#include <cwchar>
+#include <string>
 
 #include <windows.h>
 #include <winioctl.h>
@@ -50,6 +52,34 @@ TEST_CASE("driver client: the hub state has the layout the driver fills")
     REQUIRE_EQ(static_cast<unsigned>(VSSCOM_LINE_DSR), static_cast<unsigned>(MS_DSR_ON));
     REQUIRE_EQ(static_cast<unsigned>(VSSCOM_LINE_RI), static_cast<unsigned>(MS_RING_ON));
     REQUIRE_EQ(static_cast<unsigned>(VSSCOM_LINE_DCD), static_cast<unsigned>(MS_RLSD_ON));
+}
+
+TEST_CASE("driver client: the control device has the codes and layout the guest scripts use")
+{
+    // test-driver.ps1 spells these out in CtlIo; a change here must change it too.
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_GET_VERSION), 0x80002040ul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_CREATE_PORT), 0x80002044ul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_DESTROY_PORT), 0x80002048ul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_LIST_PORTS), 0x8000204Cul);
+
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_VERSION_INFO), std::size_t{8});
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_CREATE), std::size_t{8});
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_PORT), std::size_t{4});
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_LIST_ENTRY), std::size_t{8});
+    REQUIRE_EQ(offsetof(VSSCOM_CTL_LIST, Ports), std::size_t{4});
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_LIST),
+               std::size_t{4 + 8 * VSSCOM_CTL_MAX_PORTS});
+    REQUIRE_EQ(static_cast<int>(VSSCOM_CTL_MAX_PORTS), 32);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_CTL_VERSION), 1);
+}
+
+TEST_CASE("driver client: the instance id of a port made on demand is predictable")
+{
+    // The client looks for this device instance id after CREATE_PORT.
+    wchar_t suffix[16]{};
+    std::swprintf(suffix, 16, VSSCOM_PORT_INSTANCE_FORMAT, 10ul);
+    REQUIRE(std::wstring(suffix) == L"000A");
+    REQUIRE(std::wstring(VSSCOM_PORT_HARDWARE_ID) == L"VSSCOM\\PORT");
 }
 
 TEST_CASE("driver client: without the driver it says so and takes nothing")

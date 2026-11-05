@@ -123,6 +123,13 @@ WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(VSSCOM_DEVICE_CONTEXT, VssComGetContext)
 // driver.c
 NTSTATUS VssComRegisterPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);
 
+// control.c: the device that makes ports. A device is the control device when
+// its hardware key holds VssRole = 1, which vsscomctl.inf sets; every other
+// device is a port.
+#define VSSCOM_ROLE_VALUE L"VssRole"
+#define VSSCOM_ROLE_CONTROL 1
+NTSTATUS VssComControlAdd(_Inout_ PWDFDEVICE_INIT DeviceInit);
+
 // io.c
 NTSTATUS VssComCreateQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context);
 VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context);

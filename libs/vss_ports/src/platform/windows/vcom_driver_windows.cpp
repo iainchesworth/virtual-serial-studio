@@ -3,8 +3,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
-// The studio's side of the vsscom driver: finding its ports and opening the hub
-// end of one. drivers/windows/vsscom/public.h says what the driver expects.
+// The studio's side of the vsscom driver: asking the control device for a port,
+// finding the ports that exist, and opening the hub end of one.
+// drivers/windows/vsscom/public.h says what the driver expects.
 //
 
 #include "../vcom_driver_platform.hpp"
@@ -16,12 +17,15 @@
 #include <windows.h>
 #include <winioctl.h>
 #include <setupapi.h>
+#include <cfgmgr32.h> // MAX_DEVICE_ID_LEN
 // Defines the interface GUID of public.h in this file only.
 #include <initguid.h>
 
 #include <vsscom/public.h>
 
 #include <atomic>
+#include <chrono>
+#include <cwchar>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -51,12 +55,14 @@ std::string to_utf8(const std::wstring& text)
     return out;
 }
 
-/// One port of the driver: the COM name an application opens and the path of
-/// the hub end.
+/// One port of the driver: the COM name an application opens, the path of the
+/// hub end, and the device instance id (VSSCOM\PORT\0000 for a port that the
+/// control device made).
 struct hub_interface
 {
     std::wstring port;
     std::wstring path;
+    std::wstring instance;
 };
 
 std::wstring read_port_name(HDEVINFO set, SP_DEVINFO_DATA& info)
@@ -111,11 +117,84 @@ std::vector<hub_interface> enumerate_hubs()
                                                 nullptr, &info))
             continue;
 
-        hubs.push_back({read_port_name(set, info), detail->DevicePath});
+        wchar_t instance[MAX_DEVICE_ID_LEN]{};
+        if (!::SetupDiGetDeviceInstanceIdW(set, &info, instance,
+                                           MAX_DEVICE_ID_LEN, nullptr))
+            instance[0] = L'\0';
+
+        hubs.push_back({read_port_name(set, info), detail->DevicePath, instance});
     }
 
     ::SetupDiDestroyDeviceInfoList(set);
     return hubs;
+}
+
+/// The path of the control device's interface, or empty when the control
+/// device is not installed.
+std::wstring find_control_path()
+{
+    GUID guid = GUID_DEVINTERFACE_VSSCOMCTL;
+    const HDEVINFO set = ::SetupDiGetClassDevsW(
+        &guid, nullptr, nullptr, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
+    if (set == INVALID_HANDLE_VALUE)
+        return {};
+
+    std::wstring path;
+    SP_DEVICE_INTERFACE_DATA data{};
+    data.cbSize = sizeof(data);
+    if (::SetupDiEnumDeviceInterfaces(set, nullptr, &guid, 0, &data))
+    {
+        DWORD required = 0;
+        ::SetupDiGetDeviceInterfaceDetailW(set, &data, nullptr, 0, &required,
+                                           nullptr);
+        if (required >= sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W))
+        {
+            std::vector<unsigned char> storage(required);
+            auto* detail =
+                reinterpret_cast<SP_DEVICE_INTERFACE_DETAIL_DATA_W*>(
+                    storage.data());
+            detail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
+            if (::SetupDiGetDeviceInterfaceDetailW(set, &data, detail, required,
+                                                   nullptr, nullptr))
+                path = detail->DevicePath;
+        }
+    }
+
+    ::SetupDiDestroyDeviceInfoList(set);
+    return path;
+}
+
+/// A handle that is closed when it goes out of scope.
+struct handle_closer
+{
+    void operator()(HANDLE handle) const noexcept
+    {
+        if (handle != nullptr && handle != INVALID_HANDLE_VALUE)
+            ::CloseHandle(handle);
+    }
+};
+
+using unique_handle = std::unique_ptr<void, handle_closer>;
+
+/// Opens the control device. A plain handle: its requests are short and waited
+/// for. A port made through it lives as long as this handle does.
+HANDLE open_control(const std::wstring& path, DWORD& error)
+{
+    const HANDLE handle = ::CreateFileW(
+        path.c_str(), GENERIC_READ | GENERIC_WRITE,
+        FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+    error = handle == INVALID_HANDLE_VALUE ? ::GetLastError() : 0;
+    return handle;
+}
+
+bool control_request(HANDLE handle, DWORD code, void* input, DWORD input_size,
+                     void* output, DWORD output_size, DWORD& error)
+{
+    DWORD returned = 0;
+    const BOOL ok = ::DeviceIoControl(handle, code, input, input_size, output,
+                                      output_size, &returned, nullptr);
+    error = ok ? 0 : ::GetLastError();
+    return ok != FALSE && returned == output_size;
 }
 
 /// Opens the hub end. An overlapped handle, so that asio can use it.
@@ -183,10 +262,14 @@ bool read_version(HANDLE handle, VSSCOM_VERSION_INFO& version)
 class driver_transport final : public transport
 {
 public:
+    /// `control` is the control handle that made the port, or empty for a port
+    /// that was there already. It is closed after the hub end, and closing it
+    /// removes the port.
     driver_transport(const executor_type& executor, HANDLE handle,
-                     std::string port, std::string name)
+                     std::string port, std::string name,
+                     unique_handle control = {})
         : handle_(executor, handle), raw_(handle), port_(std::move(port)),
-          name_(std::move(name))
+          name_(std::move(name)), control_(std::move(control))
     {
         refresh_lines();
     }
@@ -221,6 +304,8 @@ public:
         boost::system::error_code ignored;
         handle_.cancel(ignored);
         handle_.close(ignored);
+        // The port was made for this transport and goes with it.
+        control_.reset();
     }
 
     void cancel() override
@@ -285,17 +370,116 @@ private:
     control_lines lines_;
     ULONG hub_lines_ = 0;
     std::atomic<bool> open_{true};
+    unique_handle control_;
 };
+
+/// Asks the control device for a port and waits for Windows to build it.
+///
+/// Windows installs the driver on the new device before the hub end exists,
+/// which takes a second or two.
+result<virtual_port_result>
+create_port_on_demand(const transport::executor_type& executor,
+                      const std::string& name, const std::wstring& control_path)
+{
+    DWORD error = 0;
+    unique_handle control(open_control(control_path, error));
+    if (control.get() == INVALID_HANDLE_VALUE)
+    {
+        // The closer ignores an invalid handle, so there is nothing to release.
+        return make_error_code(error == ERROR_ACCESS_DENIED
+                                   ? errc::permission_denied
+                                   : errc::io_error);
+    }
+
+    VSSCOM_CTL_VERSION_INFO info{};
+    if (!control_request(control.get(),
+                         static_cast<DWORD>(IOCTL_VSSCOM_CTL_GET_VERSION),
+                         nullptr, 0, &info, sizeof(info), error) ||
+        info.Version != VSSCOM_CTL_VERSION)
+        return make_error_code(errc::unsupported);
+
+    VSSCOM_CTL_CREATE request{};
+    VSSCOM_CTL_PORT made{};
+    if (!control_request(control.get(),
+                         static_cast<DWORD>(IOCTL_VSSCOM_CTL_CREATE_PORT),
+                         &request, sizeof(request), &made, sizeof(made),
+                         error))
+    {
+        if (error == ERROR_NO_SYSTEM_RESOURCES)
+            return make_error_code(errc::port_exhausted);
+        return make_error_code(error == ERROR_ACCESS_DENIED
+                                   ? errc::permission_denied
+                                   : errc::io_error);
+    }
+
+    // From here, leaving closes the control handle, which removes the port.
+    wchar_t suffix[16]{};
+    std::swprintf(suffix, 16, VSSCOM_PORT_INSTANCE_FORMAT,
+                  static_cast<unsigned long>(made.Slot));
+    const std::wstring instance =
+        std::wstring(VSSCOM_PORT_HARDWARE_ID) + L"\\" + suffix;
+
+    using clock = std::chrono::steady_clock;
+    const auto deadline = clock::now() + std::chrono::seconds(30);
+    for (;;)
+    {
+        for (const auto& hub : enumerate_hubs())
+        {
+            if (hub.port.empty() ||
+                ::_wcsicmp(hub.instance.c_str(), instance.c_str()) != 0)
+                continue;
+
+            const HANDLE handle = open_hub(hub.path, error);
+            if (handle == INVALID_HANDLE_VALUE)
+                return make_error_code(errc::io_error);
+
+            VSSCOM_VERSION_INFO version{};
+            if (!read_version(handle, version) ||
+                version.Version != VSSCOM_VERSION)
+            {
+                ::CloseHandle(handle);
+                return make_error_code(errc::unsupported);
+            }
+
+            virtual_port_result out;
+            out.path = to_utf8(hub.port);
+            out.kind = virtual_port_kind::windows_driver;
+            out.port = std::make_shared<driver_transport>(
+                executor, handle, out.path, name, std::move(control));
+            return out;
+        }
+
+        if (clock::now() >= deadline)
+            return make_error_code(errc::timeout);
+        ::Sleep(100);
+    }
+}
 
 } // namespace
 
 bool platform_driver_available()
 {
-    return !enumerate_hubs().empty();
+    return !find_control_path().empty() || !enumerate_hubs().empty();
 }
 
 std::string platform_driver_version()
 {
+    // Both devices ship together; the control device speaks version 1 of its
+    // own interface alongside version 2 of the ports.
+    const std::wstring control_path = find_control_path();
+    if (!control_path.empty())
+    {
+        DWORD error = 0;
+        unique_handle control(open_control(control_path, error));
+        VSSCOM_CTL_VERSION_INFO info{};
+        if (control.get() != INVALID_HANDLE_VALUE &&
+            control_request(control.get(),
+                            static_cast<DWORD>(IOCTL_VSSCOM_CTL_GET_VERSION),
+                            nullptr, 0, &info, sizeof(info), error) &&
+            info.Version == VSSCOM_CTL_VERSION)
+            return std::to_string(VSSCOM_VERSION);
+    }
+
     for (const auto& hub : enumerate_hubs())
     {
         DWORD error = 0;
@@ -316,6 +500,17 @@ result<virtual_port_result>
 platform_create_driver_port(const transport::executor_type& executor,
                             const std::string& name)
 {
+    // With the control device installed, make a port of our own: it is ours
+    // alone and goes when the transport does. An older driver without one
+    // (errc::unsupported) falls back to the ports that exist.
+    const std::wstring control_path = find_control_path();
+    if (!control_path.empty())
+    {
+        auto made = create_port_on_demand(executor, name, control_path);
+        if (made || made.error() != make_error_code(errc::unsupported))
+            return made;
+    }
+
     const auto hubs = enumerate_hubs();
     if (hubs.empty())
         return make_error_code(errc::unsupported);
