@@ -134,7 +134,13 @@ exit 0
     $r = Invoke-Script @('revert', '-Vm', $vm)
     Assert-That 'revert to clean succeeds' ($r.Code -eq 0)
 
-    # 6. Guest actions need the credentials.
+    # 6. wait-tools asks without credentials: with them vmrun keeps answering "installed".
+    Reset-Log
+    $r = Invoke-Script @('wait-tools', '-Vm', $vm, '-TimeoutSeconds', '10')
+    Assert-That 'wait-tools succeeds' ($r.Code -eq 0)
+    Assert-That 'wait-tools sends no credentials' ((Get-Content $log -Raw) -match 'checkToolsState' -and (Get-Content $log -Raw) -notmatch '-gu ')
+
+    # 7. Guest actions need the credentials.
     Remove-Item Env:VSS_VM_PASSWORD
     $r = Invoke-Script @('copy-to', '-Vm', $vm, '-Local', $stub, '-Guest', 'C:\x')
     Assert-That 'a guest action without credentials fails' ($r.Code -ne 0 -and $r.Output -match 'VSS_VM_PASSWORD')

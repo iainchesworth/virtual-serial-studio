@@ -245,7 +245,8 @@ switch ($Action) {
     'wait-tools' {
         $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
         do {
-            $state = (Invoke-Vmrun 'checkToolsState' @($Vm) -Guest) -join ''
+            # No credentials here: with them vmrun keeps answering "installed" while Tools are running.
+            $state = (Invoke-Vmrun 'checkToolsState' @($Vm)) -join ''
             if ($DryRun -or $state -match 'running') { exit 0 }
             Start-Sleep -Seconds 5
         } while ((Get-Date) -lt $deadline)

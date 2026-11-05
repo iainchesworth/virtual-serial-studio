@@ -64,6 +64,9 @@ The first complete hosted run is [run 41919800221](https://github.com/iaincheswo
 | `macos-15-intel` | macOS 15.7, Intel | pass | pass | pass | pass | pass | pass | pass | 2.1 MB/s |
 | `macos-26-intel` | macOS 26.6, Intel | pass | pass | pass | pass | pass | pass | pass | 1.6 MB/s |
 | `wsl-debian` (owner's machine) | WSL2 Debian, GCC 13, Qt 6.12.0 | not given | pass | pass | pass | pass | pass | pass | 20.4 MB/s |
+| `VSS - Ubuntu 26.04` (guest) | Ubuntu 26.04, Linux 7.0.0-42-generic | pass | pass | pass | pass | pass | pass | pass | 25.3 MB/s |
+| `VSS - Windows 11` (guest) | Windows 11 Pro 10.0.26200 | pass | skip | skip | pass | pass | pass | skip | skip |
+| `VSS - Windows 10` (guest) | Windows 10 Pro 10.0.19045 | pass | skip | skip | pass | pass | pass | skip | skip |
 
 T8, T9 and T11 are skipped everywhere, and T7 observations are in each cell's `result-<cell>.json` artifact. What the first run showed:
 
@@ -72,7 +75,14 @@ T8, T9 and T11 are skipped everywhere, and T7 observations are in each cell's `r
 - On macOS, `ls /dev/cu.* /dev/tty.*` finds nothing and `ioreg -c IOSerialBSDClient` is empty while a studio pseudo terminal exists, so programs that list ports through IOKit do not see it.
 - Pseudo terminal throughput on the Intel macOS runners is two to four times lower than on Apple silicon, which is why T10 records the rate and holds it to no floor yet.
 
-The guest cells have not run yet.
+## The guest cells
+
+The three guest rows ran on 2026-11-05 on commit `e0ece52`, each from the `clean` snapshot, with the tests of the commit run inside the guest. The programs were built outside the guests (the Linux one in WSL Debian with GCC 13, the Windows one on the owner's machine with MSVC and Qt 6.12.0) and copied in with their Qt libraries, so a guest cell proves that the build runs and passes on that system, not that the guest can build it. All 25 `ctest` suites passed on both Windows guests, and all 21 on Ubuntu (which has no `vm_*` tests).
+
+- **T11 cannot run on the stock Ubuntu 26.04 kernel.** `g_serial`, `libcomposite` and `usb_f_acm` are there, but `dummy_hcd`, which a gadget needs to attach to, is not in the `-generic` kernel and no `linux-modules-extra` package exists for it. The test stays skipped until the guest runs a kernel that has it.
+- **The driver tests passed on both Windows guests.** The `virtual-ports` session ran `drivers/windows/test` on the same guests on 2026-11-05: install, D0 to D13 and uninstall passed on Windows 10 and Windows 11. Those results are theirs; this page does not repeat them as a matrix cell.
+- A guest needs more than the program. The Ubuntu guest needed `cmake` for `ctest` and the OpenGL, EGL and fontconfig libraries for Qt. The Windows guests needed the `offscreen` platform plugin (`windeployqt` ships only `windows`), PowerShell 7 for the `vm_*` suites, and the build drive path, because some GUI tests read source files through the absolute path they were built with.
+- T8 and T9 wait for `vport` and the package.
 
 ## macOS
 
