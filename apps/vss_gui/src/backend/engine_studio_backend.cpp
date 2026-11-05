@@ -159,9 +159,17 @@ capabilities EngineStudioBackend::caps() const
     // `udp-listen://`), which `vss::studio::attach_serial` opens. RFC 2217 has
     // no server role.
     caps.network_server = true;
+    // `vss::studio::inject_fault` reaches the mock fixture behind a port.
+    caps.faults = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;
+}
+
+vss::result<void> EngineStudioBackend::inject_fault(vss::endpoint_id id,
+                                                    vss::fault_kind fault)
+{
+    return studio_.inject_fault(id, fault);
 }
 
 vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(

@@ -84,6 +84,9 @@ public:
                                bool state) override;
     void refresh_lines(vss::endpoint_id id) override;
 
+    vss::result<void> inject_fault(vss::endpoint_id id,
+                                   vss::fault_kind fault) override;
+
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,
                             bool rollback_on_error) override;

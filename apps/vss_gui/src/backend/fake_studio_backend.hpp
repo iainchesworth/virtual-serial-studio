@@ -49,6 +49,11 @@ public:
     void fail_next(vss::error_code error) { next_error_ = error; }
 
     const std::vector<QByteArray>& sent() const noexcept { return sent_; }
+    /// The faults injected so far, in order.
+    const std::vector<vss::fault_kind>& injected() const noexcept
+    {
+        return injected_;
+    }
     int refresh_interval_ms() const noexcept { return refresh_interval_ms_; }
 
     capabilities caps() const override { return caps_; }
@@ -103,6 +108,9 @@ public:
                                bool state) override;
     void refresh_lines(vss::endpoint_id id) override;
 
+    vss::result<void> inject_fault(vss::endpoint_id id,
+                                   vss::fault_kind fault) override;
+
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,
                             bool rollback_on_error) override;
@@ -134,6 +142,7 @@ private:
     std::vector<traffic_view> traffic_;
     setup_facts facts_;
     std::vector<QByteArray> sent_;
+    std::vector<vss::fault_kind> injected_;
     QHash<vss::link_id, line_wiring> wiring_;
     std::optional<vss::error_code> next_error_;
     vss::endpoint_id next_port_ = 1;
