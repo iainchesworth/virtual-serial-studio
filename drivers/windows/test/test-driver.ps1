@@ -7,7 +7,7 @@
 #   test-driver.ps1 [-ResultPath <json>]
 #
 # Tests (the driver's own, named D to keep them apart from the platform cells):
-#   D1 enumeration     device, SERIALCOMM, GetPortNames and Win32_SerialPort agree
+#   D1 enumeration     the Ports device, SERIALCOMM and GetPortNames agree
 #   D2 configuration   baud, bits, parity and stop bits round-trip; data loops back
 #   D3 timeouts        the documented SetCommTimeouts combinations
 #   D4 pending I/O     a waiting read, CancelIoEx, PurgeComm, closing the handle
@@ -282,14 +282,23 @@ if (-not $port) {
 }
 $tests += New-TestRecord 'D0' 'a vsscom port is installed' 'pass' $port
 
-Add-Test 'D1' 'the device, SERIALCOMM, GetPortNames and Win32_SerialPort agree' {
+Add-Test 'D1' 'the Ports device, SERIALCOMM and GetPortNames agree' {
     $listed = (Get-ItemProperty 'HKLM:\HARDWARE\DEVICEMAP\SERIALCOMM').PSObject.Properties | ForEach-Object { $_.Value }
     Assert ($listed -contains $port) "$port is not in SERIALCOMM"
     $names = [System.IO.Ports.SerialPort]::GetPortNames()
     Assert ($names -contains $port) "$port is not in GetPortNames: $($names -join ',')"
-    $serial = Get-CimInstance Win32_SerialPort | ForEach-Object { $_.DeviceID }
-    Assert ($serial -contains $port) "$port is not in Win32_SerialPort: $($serial -join ',')"
-    "port $port"
+    # Windows lists a port in Win32_SerialPort only for the inbox serial stack, so
+    # a function driver such as this one is not in it (seen on Windows 11 25H2).
+    # Programs that find ports through SetupAPI, SERIALCOMM or GetPortNames, as
+    # pyserial and Qt do, see it. The test therefore checks the Ports device
+    # itself and only reports what the WMI class says.
+    $device = Get-PnpDevice -Class Ports -PresentOnly |
+        Where-Object { $_.FriendlyName -like "*($port)" }
+    Assert ($null -ne $device) "no Ports device is named for $port"
+    Assert ($device.Status -eq 'OK') "the Ports device status is $($device.Status)"
+    $serial = @(Get-CimInstance Win32_SerialPort | ForEach-Object { $_.DeviceID })
+    $wmi = if ($serial -contains $port) { 'listed' } else { 'not listed' }
+    "port $port; Win32_SerialPort $wmi"
 }
 
 Add-Test 'D2' 'line settings round-trip and bytes loop back' {
