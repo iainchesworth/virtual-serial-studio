@@ -53,6 +53,29 @@ public static class VssSetup
     static extern bool SetupDiEnumDeviceInfo(IntPtr set, uint index, ref SP_DEVINFO_DATA data);
     [DllImport("setupapi.dll", SetLastError = true)]
     static extern bool SetupDiDestroyDeviceInfoList(IntPtr set);
+    [StructLayout(LayoutKind.Sequential)]
+    struct SP_DEVICE_INTERFACE_DATA
+    {
+        public uint cbSize;
+        public Guid InterfaceClassGuid;
+        public uint Flags;
+        public IntPtr Reserved;
+    }
+
+    [DllImport("setupapi.dll", SetLastError = true)]
+    static extern bool SetupDiEnumDeviceInterfaces(IntPtr set, IntPtr info, ref Guid interfaceGuid, uint index,
+                                                   ref SP_DEVICE_INTERFACE_DATA data);
+    [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr set, ref SP_DEVICE_INTERFACE_DATA data, IntPtr detail,
+                                                       uint size, out uint required, ref SP_DEVINFO_DATA info);
+    [DllImport("setupapi.dll", SetLastError = true)]
+    static extern IntPtr SetupDiOpenDevRegKey(IntPtr set, ref SP_DEVINFO_DATA data, uint scope, uint profile,
+                                              uint keyType, uint access);
+    [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
+    static extern int RegQueryValueEx(IntPtr key, string name, IntPtr reserved, out uint type, byte[] data,
+                                      ref uint size);
+    [DllImport("advapi32.dll")]
+    static extern int RegCloseKey(IntPtr key);
     [DllImport("newdev.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     static extern bool UpdateDriverForPlugAndPlayDevices(IntPtr owner, string hardwareId, string infPath,
                                                          uint flags, out bool rebootRequired);
@@ -85,6 +108,52 @@ public static class VssSetup
         if (!UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, hardwareId, infPath, INSTALLFLAG_FORCE, out reboot))
             throw new Win32Exception(Marshal.GetLastWin32Error(), "UpdateDriverForPlugAndPlayDevices");
         return reboot;
+    }
+
+    /// The present device interfaces of a class, as "COMn|path" strings. The path ends
+    /// in the reference string of the interface, so it opens that end of the port.
+    public static string[] Interfaces(Guid interfaceGuid)
+    {
+        const uint DIGCF_PRESENT_INTERFACES = 0x12; // DIGCF_PRESENT | DIGCF_DEVICEINTERFACE
+        IntPtr set = SetupDiGetClassDevs(ref interfaceGuid, IntPtr.Zero, IntPtr.Zero, DIGCF_PRESENT_INTERFACES);
+        if (set == InvalidHandle) throw new Win32Exception(Marshal.GetLastWin32Error(), "SetupDiGetClassDevs");
+        var found = new System.Collections.Generic.List<string>();
+        try
+        {
+            for (uint index = 0; ; index++)
+            {
+                var data = new SP_DEVICE_INTERFACE_DATA { cbSize = (uint)Marshal.SizeOf(typeof(SP_DEVICE_INTERFACE_DATA)) };
+                if (!SetupDiEnumDeviceInterfaces(set, IntPtr.Zero, ref interfaceGuid, index, ref data)) break;
+
+                var info = new SP_DEVINFO_DATA { cbSize = (uint)Marshal.SizeOf(typeof(SP_DEVINFO_DATA)) };
+                uint required;
+                SetupDiGetDeviceInterfaceDetail(set, ref data, IntPtr.Zero, 0, out required, ref info);
+                IntPtr detail = Marshal.AllocHGlobal((int)required);
+                try
+                {
+                    // cbSize of SP_DEVICE_INTERFACE_DETAIL_DATA_W: 8 on 64-bit, 6 on 32-bit.
+                    Marshal.WriteInt32(detail, IntPtr.Size == 8 ? 8 : 6);
+                    if (!SetupDiGetDeviceInterfaceDetail(set, ref data, detail, required, out required, ref info))
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), "SetupDiGetDeviceInterfaceDetail");
+                    string path = Marshal.PtrToStringUni(new IntPtr(detail.ToInt64() + 4));
+
+                    string port = "";
+                    IntPtr key = SetupDiOpenDevRegKey(set, ref info, 1, 0, DIREG_DEV, 0x20019);
+                    if (key != InvalidHandle)
+                    {
+                        var buffer = new byte[64];
+                        uint type, size = (uint)buffer.Length;
+                        if (RegQueryValueEx(key, "PortName", IntPtr.Zero, out type, buffer, ref size) == 0)
+                            port = Encoding.Unicode.GetString(buffer, 0, (int)size).TrimEnd('\0');
+                        RegCloseKey(key);
+                    }
+                    found.Add(port + "|" + path);
+                }
+                finally { Marshal.FreeHGlobal(detail); }
+            }
+        }
+        finally { SetupDiDestroyDeviceInfoList(set); }
+        return found.ToArray();
     }
 
     /// Removes every present device with the hardware id. Returns how many.
@@ -137,12 +206,29 @@ function New-TestRecord {
     [ordered]@{ id = $Id; name = $Name; status = $Status; detail = $Detail }
 }
 
+# The COM names of the present vsscom ports, in order.
+function Get-VssComPorts {
+    $names = foreach ($device in (Get-CimInstance Win32_PnPEntity | Where-Object { $_.HardwareID -contains $HardwareId })) {
+        if ($device.Name -match '\((COM\d+)\)') { $Matches[1] }
+    }
+    @($names | Sort-Object { [int]($_ -replace '\D', '') })
+}
+
 # The COM name of the first present vsscom port, or $null.
 function Get-VssComPort {
-    $device = Get-CimInstance Win32_PnPEntity |
-        Where-Object { $_.HardwareID -contains $HardwareId } |
-        Select-Object -First 1
-    if (-not $device) { return $null }
-    if ($device.Name -match '\((COM\d+)\)') { return $Matches[1] }
-    return $null
+    $ports = Get-VssComPorts
+    if ($ports.Count -eq 0) { return $null }
+    $ports[0]
+}
+
+# COM name -> hub path, for the present vsscom ports. A port with no hub
+# interface is missing from the table.
+$VssInterfaceGuid = [guid]'7c9a1f62-3d54-4a6b-9d3e-5f0c2b8a4d11'
+function Get-VssHubPaths {
+    $table = @{}
+    foreach ($line in [VssSetup]::Interfaces($VssInterfaceGuid)) {
+        $name, $path = $line -split '\|', 2
+        if ($name) { $table[$name] = $path }
+    }
+    $table
 }

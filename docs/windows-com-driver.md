@@ -192,6 +192,18 @@ Driver development also needs a machine where test signing is enabled and a
 reboot is acceptable. GitHub-hosted runners cannot reboot mid-job, so driver
 smoke tests want a self-hosted Windows VM.
 
+## What the first driver builds
+
+The first driver is simpler than the architecture above and keeps its shape. It
+has no control device and no shared memory. A port is a device that already
+exists, created with `drivers/windows/test/install-driver.ps1` for now, and each
+port has two ends on one device object: the COM port, and a second handle that
+the studio opens through a device interface with the reference string `hub`.
+Bytes cross through two 64 KB queues inside the driver, with flow control, so
+`ReadFile` and `WriteFile` on the hub handle replace the shared rings. See
+`drivers/windows/README.md` for the table of the two ends. Creating ports on
+demand and the shared-memory data path remain the later phases.
+
 ## What is already in place
 
 * `vss::virtual_port_kind::windows_driver` and
