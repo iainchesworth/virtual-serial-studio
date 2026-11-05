@@ -872,9 +872,82 @@ runs. CTest uses the default (no captures) so CI does not write artifacts.
 
 ### Remaining limits carried past WP9
 
-The capability-gated features stay visible: network server, peer-open, fault
-injection, editable line matrix and benchmark extraction. The bundle's real
+The capability-gated features stay visible: peer-open, fault injection,
+editable line matrix and benchmark extraction. The network server role is no
+longer one of them: `vss_ports` listens for `tcp-listen://` and
+`udp-listen://` addresses, so the network dialog's server choice works for TCP
+and UDP (RFC 2217 still only connects). The bundle's real
 device templates are still disabled until a template device picker is
 designed. Log and Topology JSON remain Advanced docks. The legacy flat GUI
 sources are deleted in this package; `vss_gui` now builds only the redesigned
 tree.
+
+## Design review: what the build does
+
+These lines record behaviour the build has and the specs left out or worded
+differently. The build is right in each case, so the specs are read with these
+lines applied. The numbers are the rows of the design review.
+
+### Frame and chrome
+
+- **Advanced dock heights (3).** Send and Monitor grow to fit their extra
+  controls, to about 230 pixels, instead of staying at 162 and 196.
+- **Compact layout (4).** The compact layout starts below 1100 pixels wide or
+  700 pixels high, and topology nodes shrink below 500 pixels of view width.
+- **Toolbar labels (10).** The toolbar uses the menu wording: "Attach real
+  device", "Connect ports", "Remove port", "Mock fixture", "Share a device".
+- **Readiness chip (12, 19).** A third state, "Setup not checked", is shown by
+  builds that cannot run the setup check. The launcher strip has matching
+  variants: "Setup needs attention. New ports may not be usable by other
+  programs." and a "Setup was not checked" line.
+- **Settings keys (14).** Besides the nine keys in the information
+  architecture, the build stores `ui/savedSends`, `ui/recentSummary` and
+  `ui/recentEntries/<sha1>/...`.
+- **Help contents (15).** F1 opens a small index that opens the setup check,
+  Why is nothing arriving, Keyboard shortcuts or About.
+- **Export as command (16).** It reuses the Topology JSON block: the real file
+  name, "Copy as command" and "Export file".
+
+### Flows
+
+- **Real device in Add a port (22).** The settings area shows one sentence and
+  **Next** opens the Attach dialog, so there is one copy of the device state.
+- **Linked pair without enough pairs (27).** The message reads "There are not
+  enough free driver pairs. Open the setup check."
+- **Network addresses (53, 54).** A server is `tcp-listen://host:port` or
+  `udp-listen://host:port`, so the bridge command block reads
+  `vss_cli bridge serial://COM3?baud=115200 tcp-listen://0.0.0.0:4001`.
+  RFC 2217 is a client only, and the dialog says so.
+- **Errors in wizards (68).** An error appears as an inline panel with "Copy
+  details", so the wizard keeps its step and its input.
+
+### Panes and topology
+
+- **DROP rows (38).** The monitor shows one row when a link's dropped count
+  grows, with the count and no payload, because the hub publishes no drop
+  event.
+- **Monitor link (43).** A monitor link is dashed and has an arrow head, since
+  it is one-way.
+- **Unlinked ports (44).** Ports with no link are placed in a final column.
+
+### Support
+
+- **Diagnostic bundle (66).** Every file is redacted for secrets, and the
+  optional traffic contents go in `traffic.txt`.
+- **About (71).** The Environment tab includes a Boost row, and the Licences
+  tab summarises each licence instead of printing its text.
+- **Keyboard shortcuts (72).** One table, generated from the action registry,
+  replaces the available and proposed tables.
+
+### Tokens and strings
+
+- **Menu colours (75).** The product stylesheet sets `color: %ink%` on menus.
+  Without it menu text was dark on dark after a theme switch on Windows.
+- **Launcher cards (87).** The border colour `line2` is 1.76 to 1 against the
+  light surface. A card is identified by its text and icon, and the border is
+  decoration.
+- **Strings (84).** Strings stay inline in each dialog. There is no strings
+  header per screen. Every user-visible string goes through `tr()` and the
+  catalogues in `apps/vss_gui/translations/`.
+- **Ordinals.** The share wizard's ordinal words ("third") are catalogue
+  entries in the `ordinal` context, so each language inflects them.
