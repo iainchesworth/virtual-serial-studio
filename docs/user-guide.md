@@ -71,6 +71,9 @@ appear in the command palette, with a prompt that they need Advanced mode.
 - **Send** (right): write bytes into an open port.
 - **Monitor** (bottom): traffic rows with time, port, direction, bytes and a
   preview. In Advanced it has two more tabs, **Log** and **Topology JSON**.
+  When the JSON has an error, the editor names the line, marks it, and
+  **Go to line** jumps to it. That covers syntax mistakes, bad names, kinds,
+  modes and links, and invalid serial settings.
 - **Status bar**: port and link counts, receive and transmit rates, hub state,
   a readiness chip that opens the setup check, and the Simple/Advanced switch.
 
@@ -485,7 +488,6 @@ available in this build". It never pretends. At the moment:
 - **"Waiting for a program" and "Program connected"**: the engine cannot see
   whether another program has opened a port, so a port reads **Open** and no
   more.
-- **Line numbers** in JSON errors in the Topology JSON editor.
 - An **RFC 2217 server**: Studio can connect to one but cannot act as one.
 
 The reasons and the plan for each are in

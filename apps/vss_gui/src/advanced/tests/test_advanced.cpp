@@ -479,6 +479,93 @@ TEST_CASE("json: syntax, mode, duplicate name and loop errors")
     REQUIRE(looped.problem->line > 0);
 }
 
+TEST_CASE("json: every schema error names the line of its field")
+{
+    using namespace vss::gui;
+
+    // The second port has the bad kind, so the line must be the second port's
+    // and not the first match of the word "kind".
+    const QString bad_kind = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"name\": \"lab\",\n"
+        "  \"ports\": [\n"
+        "    { \"name\": \"a\", \"kind\": \"virtual\" },\n"
+        "    { \"name\": \"b\",\n"
+        "      \"kind\": \"serial\" }\n"
+        "  ]\n"
+        "}\n");
+    const json_validation kind = validate_json_document(bad_kind);
+    REQUIRE(!kind.valid());
+    REQUIRE(kind.problem.has_value());
+    REQUIRE_EQ(kind.problem->line, 7);
+
+    const QString bad_baud = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"name\": \"lab\",\n"
+        "  \"ports\": [\n"
+        "    { \"name\": \"a\", \"kind\": \"virtual\" },\n"
+        "    { \"name\": \"b\", \"kind\": \"virtual\",\n"
+        "      \"serial\": {\n"
+        "        \"parity\": \"none\",\n"
+        "        \"baud_rate\": -5\n"
+        "      } }\n"
+        "  ]\n"
+        "}\n");
+    const json_validation baud = validate_json_document(bad_baud);
+    REQUIRE(!baud.valid());
+    REQUIRE(baud.problem.has_value());
+    REQUIRE_EQ(baud.problem->line, 9);
+    REQUIRE(baud.problem->summary.startsWith(QStringLiteral("Line 9:")));
+
+    const QString bad_type = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"name\": \"lab\",\n"
+        "  \"ports\": [\n"
+        "    { \"name\": \"a\", \"kind\": \"virtual\",\n"
+        "      \"serial\": { \"parity\": 7 } }\n"
+        "  ]\n"
+        "}\n");
+    const json_validation type = validate_json_document(bad_type);
+    REQUIRE(!type.valid());
+    REQUIRE_EQ(type.problem->line, 6);
+
+    const QString not_a_list = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"ports\": 5\n"
+        "}\n");
+    const json_validation list = validate_json_document(not_a_list);
+    REQUIRE(!list.valid());
+    REQUIRE_EQ(list.problem->line, 3);
+
+    const QString missing_port = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"ports\": [ { \"name\": \"a\", \"kind\": \"virtual\" } ],\n"
+        "  \"links\": [\n"
+        "    { \"mode\": \"duplex\",\n"
+        "      \"sources\": [\"a\"],\n"
+        "      \"targets\": [\"ghost\"] }\n"
+        "  ]\n"
+        "}\n");
+    const json_validation missing = validate_json_document(missing_port);
+    REQUIRE(!missing.valid());
+    REQUIRE_EQ(missing.problem->line, 7);
+
+    const QString empty_name = QStringLiteral(
+        "{\n"
+        "  \"version\": 1,\n"
+        "  \"name\": \"\",\n"
+        "  \"ports\": []\n"
+        "}\n");
+    const json_validation unnamed = validate_json_document(empty_name);
+    REQUIRE(!unnamed.valid());
+    REQUIRE_EQ(unnamed.problem->line, 3);
+}
+
 TEST_CASE("json editor: apply only when valid and dirty")
 {
     using namespace vss::gui;

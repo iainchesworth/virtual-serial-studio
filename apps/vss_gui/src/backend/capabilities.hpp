@@ -52,7 +52,9 @@ struct capabilities
     /// Create the diagnostic bundle.  The ZIP writer lives in the GUI layer,
     /// so this is present whenever the GUI is built.
     bool diagnostics = true;
-    /// Report JSON validation errors with a line number.
+    /// Report JSON validation errors with a line number.  The engine's
+    /// `from_json` returns only an error code, so the editor finds the line
+    /// itself (see `json_validation.cpp`); the flag says the editor does it.
     bool json_positions = false;
     /// The setup check can gather driver and device facts.
     bool setup_check = true;

@@ -166,6 +166,9 @@ capabilities EngineStudioBackend::caps() const
     caps.faults = true;
     // `vss::hub::set_link_wiring` holds the wires of every link.
     caps.line_matrix = true;
+    // The JSON editor places a schema error on its line with a path index of
+    // the text, and asks `vss::config::from_json` which field it refused.
+    caps.json_positions = true;
     // `vss::studio::rename_port` renames the endpoint, the studio record
     // and a pseudo terminal's stable link together.
     caps.rename_port = true;
