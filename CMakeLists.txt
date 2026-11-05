@@ -139,10 +139,15 @@ endif()
 # ---------------------------------------------------------------------------
 
 if(VSS_INSTALL)
+  # Two components: "runtime" is what a release package holds (the programs,
+  # the Qt libraries beside the GUI, the licence texts) and "development" is
+  # the libraries and their headers.
   install(FILES LICENSE THIRD_PARTY_NOTICES.md
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/virtual_serial_studio)
-  install(FILES LICENSES/BSL-1.0.txt
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/virtual_serial_studio/LICENSES)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/virtual_serial_studio
+    COMPONENT runtime)
+  install(FILES LICENSES/BSL-1.0.txt LICENSES/GPL-3.0-or-later.txt
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/virtual_serial_studio/LICENSES
+    COMPONENT runtime)
 
   set(VSS_INSTALL_TARGETS "")
   foreach(_vss_target vss_core vss_ports vss_config vss_studio)
@@ -150,16 +155,17 @@ if(VSS_INSTALL)
       list(APPEND VSS_INSTALL_TARGETS ${_vss_target})
       get_target_property(_vss_dir ${_vss_target} SOURCE_DIR)
       if(EXISTS "${_vss_dir}/include")
-        install(DIRECTORY "${_vss_dir}/include/" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+        install(DIRECTORY "${_vss_dir}/include/" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+          COMPONENT development)
       endif()
     endif()
   endforeach()
 
   if(VSS_INSTALL_TARGETS)
     install(TARGETS ${VSS_INSTALL_TARGETS}
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT development
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT development
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT development)
   endif()
 endif()
 

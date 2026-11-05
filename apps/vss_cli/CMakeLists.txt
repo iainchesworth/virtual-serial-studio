@@ -8,4 +8,5 @@ target_compile_features(vss_cli PRIVATE cxx_std_23)
 target_link_libraries(vss_cli PRIVATE Vss::studio vss_testkit)
 vss_set_warnings(vss_cli)
 
-install(TARGETS vss_cli RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS vss_cli RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  COMPONENT runtime)

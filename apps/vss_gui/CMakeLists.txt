@@ -133,6 +133,41 @@ set_target_properties(vss_gui PROPERTIES
 
 vss_set_warnings(vss_gui)
 
+# The packaged program. The deploy script copies the Qt libraries and plugins
+# next to the program (and builds the bundle on macOS), so the installed tree
+# runs on a machine without Qt.
+if(VSS_INSTALL)
+  set_target_properties(vss_gui PROPERTIES
+    MACOSX_BUNDLE ON
+    MACOSX_BUNDLE_GUI_IDENTIFIER "com.iainchesworthlabs.virtualserialstudio"
+    MACOSX_BUNDLE_BUNDLE_NAME "Virtual Serial Studio"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+
+  # The deploy script puts the Qt libraries in lib/, beside bin/. On macOS
+  # macdeployqt copies the frameworks into the bundle, and it finds them through
+  # the program's run path, so the installed program keeps the directories it
+  # was linked from (INSTALL_RPATH_USE_LINK_PATH) until macdeployqt has run.
+  if(APPLE)
+    set_target_properties(vss_gui PROPERTIES
+      INSTALL_RPATH "@executable_path/../Frameworks"
+      INSTALL_RPATH_USE_LINK_PATH ON)
+  elseif(UNIX)
+    set_target_properties(vss_gui PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+  endif()
+
+  install(TARGETS vss_gui
+    BUNDLE DESTINATION . COMPONENT runtime
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT runtime)
+
+  qt_generate_deploy_app_script(
+    TARGET vss_gui
+    OUTPUT_SCRIPT vss_gui_deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+    NO_TRANSLATIONS)
+  install(SCRIPT "${vss_gui_deploy_script}" COMPONENT runtime)
+endif()
+
 # Translations. English is the source language; every other language of the
 # standard has a catalogue translations/vss_gui_<code>.ts, which lrelease turns
 # into a .qm file inside the program (:/i18n/vss_gui_<code>.qm). The
