@@ -6,6 +6,7 @@
 
 #include <vss/studio/studio.hpp>
 
+#include <vss/ports/listen_transport.hpp>
 #include <vss/ports/serial_transport.hpp>
 
 #include <algorithm>
@@ -41,6 +42,37 @@ std::string label_for_uri(const std::string& uri)
         return base;
     }
     return "port";
+}
+
+/// The transport a URI names: a listening endpoint for `tcp-listen://` and
+/// `udp-listen://`, otherwise a serial port or a network client. `settings`
+/// is null when the URI alone describes the port.
+std::shared_ptr<transport>
+open_transport(const transport::executor_type& executor, const std::string& uri,
+               const serial_settings* settings, error_code& ec)
+{
+    if (is_listen_uri(uri))
+    {
+        const auto address = parse_listen_uri(uri);
+        if (!address)
+        {
+            ec = address.error();
+            return nullptr;
+        }
+        auto listening =
+            std::make_shared<listen_transport>(executor, *address, ec);
+        if (ec)
+            return nullptr;
+        return listening;
+    }
+
+    auto serial = settings != nullptr
+                      ? std::make_shared<serial_transport>(executor, uri,
+                                                           *settings, ec)
+                      : std::make_shared<serial_transport>(executor, uri, ec);
+    if (ec)
+        return nullptr;
+    return serial;
 }
 
 /// A port name as a link name: the characters a link may hold, at most 64.
@@ -319,8 +351,7 @@ studio::attach_serial(const std::string& name, const std::string& uri,
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
-    auto transport =
-        std::make_shared<serial_transport>(hub_->executor(), uri, ec);
+    auto transport = open_transport(hub_->executor(), uri, nullptr, ec);
     if (ec)
         return ec;
 
@@ -350,8 +381,7 @@ studio::attach_serial(const std::string& name, const std::string& uri,
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
-    auto transport =
-        std::make_shared<serial_transport>(hub_->executor(), uri, settings, ec);
+    auto transport = open_transport(hub_->executor(), uri, &settings, ec);
     if (ec)
         return ec;
 

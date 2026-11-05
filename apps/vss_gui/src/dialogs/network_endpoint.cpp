@@ -279,7 +279,7 @@ void NetworkEndpointDialog::build()
     address_layout->addLayout(address_header);
 
     address_block_ = new CodeBlock(address_card);
-    address_block_->set_text(QStringLiteral("tcp://0.0.0.0:4001"),
+    address_block_->set_text(QStringLiteral("tcp-listen://0.0.0.0:4001"),
                              tr("Address"));
     address_layout->addWidget(address_block_);
 
@@ -621,12 +621,12 @@ QString NetworkEndpointDialog::build_fields_uri() const
     parse_port(port_edit_->text(), port_number);
     if (server_selected())
     {
-        return build_network_uri(transport_,
+        return build_network_uri(transport_, network_role::server,
                                  listen_host(listen_combo_, listen_custom_),
                                  port_number);
     }
-    return build_network_uri(transport_, address_edit_->text().trimmed(),
-                             port_number);
+    return build_network_uri(transport_, network_role::client,
+                             address_edit_->text().trimmed(), port_number);
 }
 
 QString NetworkEndpointDialog::effective_uri() const

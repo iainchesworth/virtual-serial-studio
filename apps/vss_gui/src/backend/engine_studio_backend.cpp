@@ -154,9 +154,11 @@ EngineStudioBackend::~EngineStudioBackend()
 capabilities EngineStudioBackend::caps() const
 {
     capabilities caps = capabilities{};
-    // The engine's network backends only connect; there is no listener path
-    // in Boost.VirtualSerial or `vss::studio::bridge` today.
-    caps.network_server = false;
+    // Boost.VirtualSerial's network backends only connect. Waiting for other
+    // computers is `vss_ports`' listen transport (`tcp-listen://` and
+    // `udp-listen://`), which `vss::studio::attach_serial` opens. RFC 2217 has
+    // no server role.
+    caps.network_server = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     return caps;

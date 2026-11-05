@@ -215,13 +215,18 @@ URI forms accepted by the engine:
 | URI | Meaning |
 |---|---|
 | `serial://COM3?baud=115200` | A real serial device with framing options. |
-| `tcp://host:port` | TCP client or server endpoints. |
-| `udp://host:port` | UDP datagrams. |
+| `tcp://host:port` | A TCP client: Studio connects to a server. |
+| `udp://host:port` | UDP datagrams sent to and received from one address. |
+| `tcp-listen://host:port` | A TCP server: Studio waits for other computers. Any number can connect; what you send goes to all of them. |
+| `udp-listen://host:port` | UDP datagrams from any sender; replies go to the senders heard from lately. |
 | `rfc2217://host:port` | RFC 2217 serial-over-network. |
 | `loopback:name` | An in-process loopback endpoint. |
 
-When sharing on a LAN, allow the port through the host firewall and bind to
-the interface other machines can reach (`0.0.0.0` for all interfaces).
+When sharing on a LAN, allow the port through the host firewall and listen on
+the interface other machines can reach (`0.0.0.0` for all interfaces). In the
+network dialog this is the "Wait for other computers to connect (server)"
+choice. RFC 2217 has no server choice: Studio can connect to an RFC 2217
+server but cannot act as one.
 
 ## Mock devices and demos (advanced mode)
 

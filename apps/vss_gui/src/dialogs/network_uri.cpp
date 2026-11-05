@@ -45,14 +45,23 @@ QString network_transport_name(network_transport transport)
 QString build_network_uri(network_transport transport, const QString& host,
                           int port)
 {
+    return build_network_uri(transport, network_role::client, host, port);
+}
+
+QString build_network_uri(network_transport transport, network_role role,
+                          const QString& host, int port)
+{
     QString address = host.trimmed();
     if (address.contains(QLatin1Char(':')) &&
         !address.startsWith(QLatin1Char('[')))
     {
         address = QStringLiteral("[%1]").arg(address);
     }
+    QString scheme = network_scheme(transport);
+    if (role == network_role::server && transport != network_transport::rfc2217)
+        scheme += QStringLiteral("-listen");
     return QStringLiteral("%1://%2:%3")
-        .arg(network_scheme(transport), address, QString::number(port));
+        .arg(scheme, address, QString::number(port));
 }
 
 bool valid_port(int port)
@@ -86,12 +95,23 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
 
     const QString scheme = value.left(scheme_end);
     network_endpoint endpoint;
+    endpoint.role = network_role::client;
     if (scheme == QLatin1String("tcp"))
         endpoint.transport = network_transport::tcp;
     else if (scheme == QLatin1String("udp"))
         endpoint.transport = network_transport::udp;
     else if (scheme == QLatin1String("rfc2217"))
         endpoint.transport = network_transport::rfc2217;
+    else if (scheme == QLatin1String("tcp-listen"))
+    {
+        endpoint.transport = network_transport::tcp;
+        endpoint.role = network_role::server;
+    }
+    else if (scheme == QLatin1String("udp-listen"))
+    {
+        endpoint.transport = network_transport::udp;
+        endpoint.role = network_role::server;
+    }
     else
     {
         if (error != nullptr)

@@ -12,6 +12,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_error_and_log.cpp
   unit/test_hub_events.cpp
   unit/test_hub_topology.cpp
+  unit/test_listen_transport.cpp
   unit/test_loopback_transport.cpp
   unit/test_native_and_com0com.cpp
   unit/test_serial_settings.cpp
@@ -52,6 +53,7 @@ set_tests_properties(unit PROPERTIES TIMEOUT 300)
 
 set(VSS_SYSTEM_TEST_SOURCES
   framework/main.cpp
+  system/test_system_listen.cpp
   system/test_system_serial.cpp
   system/test_system_tcp.cpp
   system/test_system_udp.cpp)

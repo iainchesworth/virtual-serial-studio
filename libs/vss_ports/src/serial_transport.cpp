@@ -5,6 +5,7 @@
 //
 
 #include <vss/ports/serial_transport.hpp>
+#include <vss/ports/listen_transport.hpp>
 #include <vss/ports/native_lines.hpp>
 
 #include <boost/asio/bind_executor.hpp>
@@ -84,6 +85,15 @@ vs::serial_config to_serial_config(const serial_settings& settings)
 
 result<endpoint_kind> classify_uri(std::string_view uri)
 {
+    if (is_listen_uri(uri))
+    {
+        const auto address = parse_listen_uri(uri);
+        if (!address)
+            return address.error();
+        return address->protocol == listen_protocol::tcp ? endpoint_kind::tcp
+                                                         : endpoint_kind::udp;
+    }
+
     boost::system::error_code ec;
     const auto configuration = vs::parse_uri(std::string(uri), ec);
     if (ec)

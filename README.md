@@ -27,7 +27,7 @@ abstraction that makes the transport replaceable.
 | Merge several writers into one device | `join` two or more publishers into one target |
 | Give an application its own serial port | Pseudo terminal on Linux/macOS, com0com pair on Windows, first-party driver planned |
 | Replace com0com entirely | The Windows driver is specified in [docs/windows-com-driver.md](docs/windows-com-driver.md); until it exists com0com is used |
-| Bridge a device to the network | `tcp://`, `udp://` and `rfc2217://` endpoints are first-class ports |
+| Bridge a device to the network | `tcp://`, `udp://` and `rfc2217://` endpoints are first-class ports; `tcp-listen://` and `udp-listen://` wait for other computers to connect |
 | Test RS-232 control lines | DTR/RTS/BREAK are drivable, CTS/DSR/DCD/RI are reported, a null-modem link crosses them |
 | Watch traffic without disturbing it | One-way `monitor` links and a bounded traffic ring buffer |
 | Script a device | The serial library's mock backend is exposed as an endpoint |

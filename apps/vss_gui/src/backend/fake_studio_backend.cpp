@@ -37,9 +37,9 @@ QString path_for(vss::virtual_port_kind kind, const QString& name,
 vss::endpoint_kind kind_for_uri(const QString& uri)
 {
     const QString scheme = uri.section(QStringLiteral("://"), 0, 0);
-    if (scheme == QLatin1String("tcp"))
+    if (scheme == QLatin1String("tcp") || scheme == QLatin1String("tcp-listen"))
         return vss::endpoint_kind::tcp;
-    if (scheme == QLatin1String("udp"))
+    if (scheme == QLatin1String("udp") || scheme == QLatin1String("udp-listen"))
         return vss::endpoint_kind::udp;
     if (scheme == QLatin1String("rfc2217"))
         return vss::endpoint_kind::rfc2217;
