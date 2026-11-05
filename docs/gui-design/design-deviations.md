@@ -359,7 +359,7 @@ follow-up outside this package; the tiles are already laid out for it.
 ### Per-link wiring is a read-only Standard preset
 
 `StudioBackend` gained `link_wiring()` and `set_link_wiring()` with
-`unsupported`/`nullopt` defaults so the dialog has one adapter seam, but the
+`unsupported`/`nullopt` defaults so the dialog has one adapter interface, but the
 real backend keeps `Capabilities::line_matrix` false. The matrix therefore
 shows the Standard null-modem preset and is read-only. `FakeStudioBackend`
 stores a wiring for tests so the editable path is exercised without faking a

@@ -9,7 +9,7 @@
 
 #include <cstdint>
 
-/// Instrumentation seam.
+/// Instrumentation hooks.
 ///
 /// `VSS_TRACY` pulls in Tracy and turns every macro into a real zone. Without
 /// it the macros compile to nothing, so production builds carry no cost and

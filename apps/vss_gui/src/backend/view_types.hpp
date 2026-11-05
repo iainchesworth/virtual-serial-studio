@@ -87,7 +87,7 @@ struct link_view
 /// The engine only has the boolean null-modem crossing
 /// (`link_options::emulate_modem_lines`), so `Capabilities::line_matrix` is
 /// false and the real adapter neither reads nor writes this.  The type is the
-/// adapter seam the line matrix dialog is built and tested against; it does
+/// adapter interface the line matrix dialog is built and tested against; it does
 /// not change the topology JSON schema or `vss_core`.
 struct line_wiring
 {

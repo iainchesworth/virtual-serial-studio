@@ -182,7 +182,7 @@ take weeks, and Windows 10+ will not load an unsigned kernel driver.
 
 | Phase | Scope | Estimate |
 |---|---|---|
-| 0 | Application seam, detection, configuration, docs (done) | — |
+| 0 | Application interface, detection, configuration, docs (done) | — |
 | 1 | ABI header, shared rings, stub driver creating a port that echoes bytes | 2–3 weeks |
 | 2 | Full serial contract: timeouts, purge, wait mask, line control, cancellation, power | 3–5 weeks |
 | 3 | INF, installer, upgrade/uninstall, version handshake | 1–2 weeks |
