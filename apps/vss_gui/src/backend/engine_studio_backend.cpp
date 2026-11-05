@@ -199,6 +199,9 @@ capabilities EngineStudioBackend::caps() const
     // A pseudo terminal on Linux can be checked for a program that has it
     // open; every other port reads as unknown and the GUI says nothing.
     caps.peer_open = vss::peer_open_supported();
+    // The JSON editor places a schema error on its line with a path index of
+    // the text, and asks `vss::config::from_json` which field it refused.
+    caps.json_positions = true;
     // `vss::studio::rename_port` renames the endpoint, the studio record
     // and a pseudo terminal's stable link together.
     caps.rename_port = true;
