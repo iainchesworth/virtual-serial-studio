@@ -90,11 +90,10 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
                                            network_role::client,
                                            QStringLiteral("lab"), 4001),
                QStringLiteral("tcp://lab:4001"));
-    // RFC 2217 has no server role.
     REQUIRE_EQ(vss::gui::build_network_uri(network_transport::rfc2217,
                                            network_role::server,
                                            QStringLiteral("lab"), 7001),
-               QStringLiteral("rfc2217://lab:7001"));
+               QStringLiteral("rfc2217-listen://lab:7001"));
 
     const auto listening = vss::gui::parse_network_uri(
         QStringLiteral("tcp-listen://127.0.0.1:4001"));
@@ -107,8 +106,11 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
                    ->role,
                network_role::server);
     REQUIRE_EQ(parsed->role, network_role::client);
-    REQUIRE(!vss::gui::parse_network_uri(QStringLiteral("rfc2217-listen://h:1"))
-                 .has_value());
+    const auto rfc_server =
+        vss::gui::parse_network_uri(QStringLiteral("rfc2217-listen://h:1"));
+    REQUIRE(rfc_server.has_value());
+    REQUIRE_EQ(rfc_server->transport, network_transport::rfc2217);
+    REQUIRE_EQ(rfc_server->role, network_role::server);
 
     REQUIRE(!vss::gui::valid_port(0));
     REQUIRE(!vss::gui::valid_port(65536));
@@ -186,6 +188,30 @@ TEST_CASE("network dialog: client role, URI preview and port validation")
     REQUIRE(dialog.submit());
     REQUIRE_EQ(dialog.result_port(), 4002);
     REQUIRE_EQ(backend.links().size(), std::size_t{1});
+}
+
+TEST_CASE("network dialog: RFC 2217 can wait for other computers")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend, true);
+    vss::gui::NetworkEndpointDialog dialog(backend, false, 0);
+    show(dialog);
+
+    dialog.set_transport(vss::gui::network_transport::rfc2217);
+    dialog.set_role(vss::gui::network_role::server);
+    dialog.set_listen_address(QStringLiteral("0.0.0.0"));
+    dialog.set_port(7001);
+    REQUIRE(dialog.server_selected());
+    REQUIRE_EQ(dialog.role(), vss::gui::network_role::server);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("rfc2217-listen://0.0.0.0:7001"));
+
+    // Without the capability the same choice falls back to connecting.
+    vss::gui::FakeStudioBackend plain;
+    configure(plain, false);
+    vss::gui::NetworkEndpointDialog client(plain, false, 0);
+    show(client);
+    client.set_transport(vss::gui::network_transport::rfc2217);
+    REQUIRE_EQ(client.role(), vss::gui::network_role::client);
 }
 
 TEST_CASE("network dialog: server role appears only with the capability")
