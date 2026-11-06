@@ -18,6 +18,8 @@ add_library(vss_gui_shell STATIC
   level_service.hpp
   port_warnings.cpp
   port_warnings.hpp
+  setup_group.cpp
+  setup_group.hpp
   shell_window.cpp
   shell_window.hpp
   status_bar.cpp

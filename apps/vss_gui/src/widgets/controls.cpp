@@ -293,6 +293,19 @@ void PickCard::refresh()
     update();
 }
 
+void PickCard::mousePressEvent(QMouseEvent* event)
+{
+    // The release only reaches this card when the press was accepted.  The
+    // labels ignore the mouse, so without this a click anywhere but on the
+    // small radio circle did nothing.
+    if (event->button() == Qt::LeftButton)
+    {
+        event->accept();
+        return;
+    }
+    QFrame::mousePressEvent(event);
+}
+
 void PickCard::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton && !radio_->isChecked())

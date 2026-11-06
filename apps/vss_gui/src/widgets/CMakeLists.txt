@@ -15,7 +15,9 @@ add_library(vss_gui_widgets STATIC
   dialogs.cpp
   dialogs.hpp
   gallery.cpp
-  gallery.hpp)
+  gallery.hpp
+  pick_row.cpp
+  pick_row.hpp)
 
 target_link_libraries(vss_gui_widgets PUBLIC vss_gui_theme)
 

@@ -14,6 +14,7 @@
 #include "advanced/json_editor.hpp"
 #include "advanced/owner_bar.hpp"
 #include "advanced/wiring_dialog.hpp"
+#include "backend/share_edit.hpp"
 #include "dialogs/connect_ports.hpp"
 #include "dialogs/network_endpoint.hpp"
 #include "dialogs/recent_files.hpp"
@@ -21,6 +22,7 @@
 #include "dialogs/templates_dialog.hpp"
 #include "flows/add_port_dialog.hpp"
 #include "flows/attach_dialog.hpp"
+#include "flows/common.hpp"
 #include "flows/com_number_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
@@ -34,6 +36,7 @@
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
+#include "shell/setup_group.hpp"
 #include "shell/port_warnings.hpp"
 #include "shell/status_bar.hpp"
 #include "shell/undo_steps.hpp"
@@ -293,6 +296,12 @@ void ShellWindow::build_actions()
         QStringLiteral("ports.remove"), tr("Remove port"), tr("delete remove"),
         {}, {}, action_level::simple, [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
+    add(
+        QStringLiteral("topology.removeSetup"), tr("Remove setup"),
+        tr("delete remove teardown close pair share attach everything"),
+        QStringLiteral("remove"), {}, action_level::simple,
+        [this] { remove_selected_setup(); }, false,
+        [this] { return selection_.port() != 0 || selection_.link() != 0; });
 
     // Topology
     add(
@@ -316,6 +325,11 @@ void ShellWindow::build_actions()
     add(QStringLiteral("topology.watch"), tr("Watch traffic"),
         tr("monitor copy"), QStringLiteral("watch"), {}, action_level::simple,
         [this] { show_watch(); });
+    add(
+        QStringLiteral("topology.addProgram"), tr("Add a program port"),
+        tr("share attach more listener another"), {}, {}, action_level::simple,
+        [this] { add_program_port(); }, false,
+        [this] { return share_link_of_selection() != 0; });
     add(
         QStringLiteral("topology.removeLink"), tr("Remove link"),
         tr("delete disconnect"), {}, {}, action_level::simple,
@@ -525,6 +539,7 @@ void ShellWindow::build_menus()
     add(edit, QStringLiteral("edit.redo"));
     edit->addSeparator();
     add(edit, QStringLiteral("edit.remove"));
+    add(edit, QStringLiteral("topology.removeSetup"));
 
     QMenu* ports = add_menu(tr("&Ports"));
     add(ports, QStringLiteral("ports.add"));
@@ -539,11 +554,13 @@ void ShellWindow::build_menus()
     if (backend_.caps().rename_port)
         add(ports, QStringLiteral("ports.rename"));
     add(ports, QStringLiteral("ports.remove"));
+    add(ports, QStringLiteral("topology.removeSetup"));
 
     QMenu* topology = add_menu(tr("&Topology"));
     add(topology, QStringLiteral("topology.connect"));
     add(topology, QStringLiteral("topology.share"));
     add(topology, QStringLiteral("topology.watch"));
+    add(topology, QStringLiteral("topology.addProgram"));
     topology->addSeparator();
     add(topology, QStringLiteral("topology.removeLink"));
     add(topology, QStringLiteral("topology.wiring"));
@@ -610,6 +627,7 @@ void ShellWindow::build_toolbar()
     add(QStringLiteral("ports.attach"));
     add(QStringLiteral("topology.connect"));
     add(QStringLiteral("ports.remove"));
+    add(QStringLiteral("topology.removeSetup"));
     toolbar_->addSeparator();
     add(QStringLiteral("ports.mock"));
     add(QStringLiteral("topology.shareToolbar"));
@@ -1243,34 +1261,7 @@ QString ShellWindow::document_signature() const
 
 void ShellWindow::remove_selected_port()
 {
-    const vss::endpoint_id id = selection_.port();
-    if (id == 0)
-        return;
-    const auto port = backend_.port(id);
-    if (!port)
-        return;
-    QString body = tr("The port and its links will be removed. This cannot "
-                      "be undone.");
-    if (const QString warning = removal_warning(*port); !warning.isEmpty())
-        body = warning + QLatin1Char(' ') + body;
-    if (!ConfirmDialog::ask(tr("Remove %1?").arg(port->name), body,
-                            tr("Remove port"), tr("Cancel"), true, this))
-    {
-        return;
-    }
-    const auto removed = backend_.remove_port(id);
-    if (!removed)
-    {
-        ErrorDialog dialog(tr("Could not remove %1").arg(port->name),
-                           error_text(removed.error()), {}, this);
-        dialog.exec();
-        return;
-    }
-    selection_.select_port(0);
-    last_signature_ = document_signature();
-    set_dirty(true);
-    update_content();
-    status_->showMessage(tr("Removed %1.").arg(port->name), 3000);
+    remove_port(selection_.port());
 }
 
 void ShellWindow::copy_selected_port()
@@ -1788,6 +1779,23 @@ void ShellWindow::remove_link(vss::link_id id)
     status_->showMessage(tr("Removed the link."), 3000);
 }
 
+namespace
+{
+
+QString port_count_text(int count)
+{
+    return count == 1 ? ShellWindow::tr("1 port")
+                      : ShellWindow::tr("%1 ports").arg(count);
+}
+
+QString link_count_text(int count)
+{
+    return count == 1 ? ShellWindow::tr("1 link")
+                      : ShellWindow::tr("%1 links").arg(count);
+}
+
+} // namespace
+
 void ShellWindow::remove_port(vss::endpoint_id id)
 {
     if (id == 0)
@@ -1796,29 +1804,216 @@ void ShellWindow::remove_port(vss::endpoint_id id)
     if (!port)
         return;
 
-    QString body = tr("Remove %1 and its links? Nothing is saved until "
-                      "you save the setup.")
-                       .arg(port->name);
-    if (const QString warning = removal_warning(*port); !warning.isEmpty())
-        body = warning + QLatin1Char(' ') + body;
-    if (!ConfirmDialog::ask(tr("Remove port"), body, tr("Remove port"),
-                            tr("Cancel"), true, this))
+    // A sentence in front of the question when a program has the port open.
+    QString warning = removal_warning(*port);
+    if (!warning.isEmpty())
+        warning += QLatin1Char(' ');
+
+    const auto ports = backend_.ports();
+    const auto links = backend_.links();
+    const setup_group group = find_setup(ports, links, id);
+    // One program of a share: the engine drops the link when any port on it
+    // goes, so the others are shared again after this one is removed.
+    const auto share = find_share(ports, links, id);
+    const bool program_of_share =
+        share && share->programs.contains(id) && share->programs.size() > 1;
+    if (group.has_company())
+    {
+        // The port is one part of something built together.  Offer the whole
+        // setup next to the single port so nobody has to hunt for it.
+        const int others = static_cast<int>(group.ports.size()) - 1;
+        const QVector<confirm_choice> choices{
+            {tr("Cancel"), QStringLiteral("quiet"), true},
+            {tr("Remove only %1").arg(port->name), {}, false},
+            {tr("Remove the whole setup"), QStringLiteral("danger"), false}};
+        const QString body =
+            program_of_share
+                ? tr("%1 is one of %2 programs sharing a device, in a setup "
+                     "with %3: %4. Remove only %1 and the others keep "
+                     "sharing, or close the whole setup. Nothing is saved "
+                     "until you save the setup.")
+                      .arg(port->name)
+                      .arg(share->programs.size())
+                      .arg(port_count_text(others),
+                           setup_port_names(group, ports))
+                : tr("%1 is part of a setup with %2: %3. Remove only %1 and "
+                     "its links, or close the whole setup. Nothing is saved "
+                     "until you save the setup.")
+                      .arg(port->name, port_count_text(others),
+                           setup_port_names(group, ports));
+        ConfirmDialog dialog(tr("Remove %1?").arg(port->name), warning + body,
+                             choices, 0, this);
+        dialog.exec();
+        if (dialog.chosen() == 2)
+        {
+            // Choosing it here is the confirmation.
+            remove_setup(group, false);
+            return;
+        }
+        if (dialog.chosen() != 1)
+            return;
+    }
+    else if (!ConfirmDialog::ask(
+                 tr("Remove %1?").arg(port->name),
+                 warning + tr("Remove %1 and its links? Nothing is saved "
+                              "until you save the setup.")
+                               .arg(port->name),
+                 tr("Remove port"), tr("Cancel"), true, this))
     {
         return;
     }
 
-    const auto removed = backend_.remove_port(id);
+    vss::result<void> removed = vss::result<void>{};
+    if (program_of_share)
+    {
+        const auto kept = vss::gui::remove_program_port(backend_, *share, id);
+        if (!kept)
+            removed = kept.error();
+    }
+    else
+    {
+        removed = backend_.remove_port(id);
+    }
     if (!removed)
     {
         ErrorDialog dialog(tr("Could not remove %1").arg(port->name),
                            error_text(removed.error()), {}, this);
         dialog.exec();
+        backend_.refresh();
         return;
     }
 
     selection_.clear();
     backend_.refresh();
     status_->showMessage(tr("Removed %1.").arg(port->name), 3000);
+}
+
+void ShellWindow::remove_selected_setup()
+{
+    const auto ports = backend_.ports();
+    const auto links = backend_.links();
+    const setup_group group =
+        selection_.port() != 0
+            ? find_setup(ports, links, selection_.port())
+            : find_setup_of_link(ports, links, selection_.link());
+    remove_setup(group);
+}
+
+void ShellWindow::remove_setup(const setup_group& group, bool confirm)
+{
+    if (group.empty())
+        return;
+    const auto ports = backend_.ports();
+    const int port_count = static_cast<int>(group.ports.size());
+    const int link_count = static_cast<int>(group.links.size());
+    const QString what = link_count == 0
+                             ? port_count_text(port_count)
+                             : tr("%1 and %2")
+                                   .arg(port_count_text(port_count),
+                                        link_count_text(link_count));
+    QString warnings;
+    for (const vss::endpoint_id id : group.ports)
+    {
+        for (const port_view& port : ports)
+        {
+            const QString warning =
+                port.id == id ? removal_warning(port) : QString();
+            if (!warning.isEmpty() && !warnings.contains(warning))
+                warnings += warning + QLatin1Char(' ');
+        }
+    }
+    if (confirm &&
+        !ConfirmDialog::ask(
+            tr("Remove this setup?"),
+            warnings +
+                tr("This closes %1: %2. A program that has one of these ports "
+                   "open loses it. Nothing is saved until you save the setup.")
+                    .arg(what, setup_port_names(group, ports)),
+            tr("Remove setup"), tr("Cancel"), true, this))
+    {
+        return;
+    }
+
+    int removed_ports = 0;
+    for (const vss::endpoint_id id : group.ports)
+    {
+        const auto removed = backend_.remove_port(id);
+        if (removed || removed.error() == vss::errc::not_found)
+        {
+            ++removed_ports;
+            continue;
+        }
+        QString name = QString::number(static_cast<qulonglong>(id));
+        if (const auto port = backend_.port(id))
+            name = port->name;
+        ErrorDialog dialog(
+            tr("Could not remove %1").arg(name),
+            tr("Part of the setup is still open. Close what is using it, "
+               "then choose Remove setup again."),
+            error_text(removed.error()), this);
+        dialog.exec();
+        break;
+    }
+
+    selection_.clear();
+    backend_.refresh();
+    if (removed_ports == port_count)
+        status_->showMessage(tr("Removed the setup (%1).").arg(what), 4000);
+    else
+        status_->showMessage(tr("Removed %1 of %2.")
+                                 .arg(port_count_text(removed_ports),
+                                      port_count_text(port_count)),
+                             4000);
+}
+
+vss::link_id ShellWindow::share_link_of_selection() const
+{
+    const auto ports = backend_.ports();
+    const auto links = backend_.links();
+    if (selection_.port() != 0)
+    {
+        const auto share = find_share(ports, links, selection_.port());
+        return share ? share->link : 0;
+    }
+    if (selection_.link() != 0)
+    {
+        const auto share = find_share_of_link(ports, links, selection_.link());
+        return share ? share->link : 0;
+    }
+    return 0;
+}
+
+void ShellWindow::add_program_port()
+{
+    const auto ports = backend_.ports();
+    const auto links = backend_.links();
+    const auto share =
+        selection_.port() != 0
+            ? find_share(ports, links, selection_.port())
+            : find_share_of_link(ports, links, selection_.link());
+    if (!share)
+        return;
+    const auto device = backend_.port(share->device);
+    const QString device_name = device ? device->name : tr("the device");
+
+    const auto added = vss::gui::add_program_port(
+        backend_, *share, next_program_name(ports), true);
+    if (!added)
+    {
+        ErrorDialog dialog(
+            tr("Could not add a program port to %1").arg(device_name),
+            tr("The setup is as it was. Check the device, then try again."),
+            error_text(added.error()), this);
+        dialog.exec();
+        return;
+    }
+    backend_.refresh();
+    selection_.select_port(added->port);
+    const auto port = backend_.port(added->port);
+    status_->showMessage(
+        tr("Added %1 to %2.")
+            .arg(port ? port_display_name(*port) : tr("a port"), device_name),
+        4000);
 }
 
 void ShellWindow::show_rename(vss::endpoint_id id)
