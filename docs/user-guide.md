@@ -202,7 +202,7 @@ that Studio creates, not the device.
 
 A TCP, UDP or RFC 2217 address used as a port. Choose the transport, then
 whether Studio **connects to a server** or **waits for other computers to
-connect (server)**. Waiting works for TCP and UDP; RFC 2217 only connects. See
+connect (server)**. Waiting works for TCP, UDP and RFC 2217. See
 [network addresses](#network-addresses).
 
 ![The Put a device on the network dialog with TCP chosen, a server address and the equivalent vss_cli bridge command](images/network-endpoint-light.png)
@@ -385,8 +385,15 @@ accepts these forms, and you can type them in Advanced and in `vss_cli`:
 | `udp://host:port` | UDP datagrams sent to and received from one address. |
 | `tcp-listen://host:port` | A TCP server: Studio waits for other computers. Any number can connect; what you send goes to all of them. |
 | `udp-listen://host:port` | UDP datagrams from any sender; replies go to the senders heard from lately. |
-| `rfc2217://host:port` | RFC 2217 serial-over-network (connects only). |
+| `rfc2217://host:port` | RFC 2217 serial-over-network: Studio connects to an access server. |
+| `rfc2217-listen://host:port` | An RFC 2217 access server: Studio waits for serial-over-network clients such as pySerial's `rfc2217://`. |
 | `loopback:name` | An in-process loopback endpoint. |
+
+An RFC 2217 server speaks Telnet with the COM-PORT option, so a client opens
+it as a serial port. Data passes through as it would for TCP. The client's
+DTR and RTS are the endpoint's output lines, so a linked port sees them as
+DSR, CTS and DCD, and the CTS, DSR, DCD and RI that reach the endpoint are
+sent to the client as modem state.
 
 To let other computers connect, allow the port through the host firewall and
 listen on an interface they can reach (`0.0.0.0` for all interfaces). Try
@@ -493,7 +500,10 @@ available in this build". It never pretends. At the moment:
 - **"Waiting for a program" and "Program connected" on Windows and macOS**:
   Studio can see whether a program has opened a port only for a pseudo terminal
   on Linux. Everywhere else a port reads **Open** and no more.
-- An **RFC 2217 server**: Studio can connect to one but cannot act as one.
+- **Settings sent by an RFC 2217 client** (baud rate, data bits, parity, stop
+  bits, flow control): the server accepts and reports them but does not apply
+  them to a real device linked to it. DTR, RTS and break from the client are
+  passed on as control lines.
 
 The reasons and the plan for each are in
 [gui-design/docs/08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
