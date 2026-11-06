@@ -10,6 +10,9 @@ name: Nightly
 #   TSan              ThreadSanitizer with Clang, once more on the day's merged tree.
 #   MSVC ASan         AddressSanitizer with MSVC. MSVC has no UBSan or TSan.
 #
+#   ccache seed       Compiles the presets of the gate, the queue and the post-merge run and saves their
+#                     compiler caches, because only a run on develop can seed the others (ci.yml).
+#
 # Nothing here gates a merge. A failure opens or updates one `nightly-analysis` issue per leg. A pull
 # request that changes this file, the toolchain set-up or the pins runs it too, so a change is
 # proven before it merges; only a run on develop reports to an issue.
@@ -23,6 +26,7 @@ on:
     paths:
       - ".github/workflows/nightly.yml"
       - ".github/actions/setup-toolchain/**"
+      - ".github/actions/save-ccache/**"
       - ".github/toolchain-versions.json"
 
 permissions: {}
@@ -177,3 +181,78 @@ jobs:
         with:
           engine: asan-msvc
           detail: AddressSanitizer reported a finding with MSVC, or the sanitizer build failed. MSVC has no UBSan or TSan.
+
+  # Seeds the compiler caches of the pull request gate, the merge queue and the post-merge run.
+  # A cache entry is readable from its own ref, a pull request's base and the default branch, so
+  # only a run on develop can seed the others, and the legs that run elsewhere never build on
+  # develop. Each night this builds the presets those legs use and saves one cache per lineage
+  # (the lineage names are the `ccache` inputs in ci.yml and the matrix of tools/ci/plan_legs.py).
+  # Compiling only: nothing is tested and nothing gates a merge. On a pull request that changes this
+  # file it builds and does not save.
+  ccache-seed:
+    name: Seed ccache (${{ matrix.lineage }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { lineage: linux-gcc-release,     os: ubuntu-26.04, compiler: gcc,   qt: "false", preset: linux-release }
+          - { lineage: linux-clang-release,   os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-release }
+          - { lineage: linux-clang-asan,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-asan-ubsan }
+          - { lineage: linux-clang-fuzz,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-fuzz }
+          - { lineage: linux-clang-tsan,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-tsan }
+          - { lineage: linux-clang-coverage,  os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-coverage }
+          - { lineage: linux-gcc-gui,         os: ubuntu-26.04, compiler: gcc,   qt: "true",  preset: linux-release-gui }
+          - { lineage: windows-msvc-release,  os: windows-2025, compiler: msvc,  qt: "false", preset: windows-msvc-release }
+          - { lineage: macos-appleclang,      os: macos-26,     compiler: none,  qt: "false", preset: macos-release }
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: ${{ matrix.compiler }}
+          qt: ${{ matrix.qt }}
+          ccache: ${{ matrix.lineage }}
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Put the LLVM tools on the path
+        if: matrix.lineage == 'linux-clang-coverage'
+        run: |
+          LLVM=$(python3 -c "import json; print(json.load(open('.github/toolchain-versions.json'))['llvm'])")
+          echo "/usr/lib/llvm-$LLVM/bin" >> "$GITHUB_PATH"
+
+      - name: Install GUI system libraries
+        if: matrix.qt == 'true'
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
+      - name: Configure
+        shell: bash
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: cmake --preset "$PRESET"
+
+      - name: Build
+        shell: bash
+        env:
+          PRESET: ${{ matrix.preset }}
+        run: cmake --build --preset "$PRESET"
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: ccache-seed-${{ matrix.lineage }}
+          detail: The build that seeds the ${{ matrix.lineage }} compiler cache failed. The pull request gate and the merge queue build the same preset, so they are likely to fail too.
