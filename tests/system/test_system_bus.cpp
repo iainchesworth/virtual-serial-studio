@@ -143,6 +143,10 @@ public:
         : address_(address), delay_ms_(delay_ms)
     {
         socket_.connect({boost::asio::ip::make_address("127.0.0.1"), port});
+        // A serial-over-network client sends what it writes at once, as
+        // pySerial's does. Without this a small reply can wait for the
+        // peer's delayed acknowledgement, which adds tens of milliseconds.
+        socket_.set_option(boost::asio::ip::tcp::no_delay(true));
         socket_.non_blocking(true);
         // A client that asks for the Com Port Control option, as pySerial does.
         const std::string ask("\xff\xfd\x2c", 3);
