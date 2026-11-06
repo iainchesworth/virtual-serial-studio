@@ -1665,7 +1665,15 @@ void ShellWindow::show_watch()
 {
     WatchDialog dialog(backend_, selection_.port(), vss::gui::host_platform(),
                        this);
-    if (dialog.exec() != QDialog::Accepted || dialog.link_id() == 0)
+    const int result = dialog.exec();
+    // The empty list offers "Create a port": open that flow now the Watch
+    // window has closed.
+    if (dialog.create_port_chosen())
+    {
+        show_add_port();
+        return;
+    }
+    if (result != QDialog::Accepted || dialog.link_id() == 0)
         return;
     const auto source = backend_.port(dialog.source_id());
     const auto watcher = backend_.port(dialog.watcher_id());

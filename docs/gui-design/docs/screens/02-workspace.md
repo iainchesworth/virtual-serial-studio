@@ -8,6 +8,7 @@ Header "Ports" with a count. Selection is shared with the Topology and Inspector
 - States (see states in `docs/04-components.md`): Open, Studio only, Closed, Failed. "Open" is the normal state of a port that exists. Where the platform reports whether a program has opened it (`Capabilities::peer_open`), Open is refined into Waiting for program and Program connected.
 - Advanced: filter field "Filter ports" above a table: Port (name over mono path), State (compact chip), RX, TX, Dropped (right aligned, mono). Dropped text is `bad` when above zero.
 - Keyboard: Up and Down select, Enter moves focus to the Inspector, Delete removes (confirm, Undo toast), F2 renames, Ctrl+Shift+C copies the path.
+- Below the list, when another program made virtual ports on this machine (`StudioBackend::other_program_ports`, Windows driver ports only): muted note "Another program made COM41. Studio cannot show or watch ports it did not make itself." It is read when the window opens, when the set of Studio's ports changes and every 5 seconds, and hidden when there are none or when `Capabilities::external_ports` is on.
 - Context menu (right click, or the Menu key or Shift+F10 on a row): Inspect, then the port actions below, then Copy path. The row under the pointer becomes the selection.
 
 ## Port actions (Ports context menu and Topology node menu)

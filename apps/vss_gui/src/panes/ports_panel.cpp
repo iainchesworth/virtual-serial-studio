@@ -6,8 +6,10 @@
 
 #include "panes/ports_panel.hpp"
 
+#include "backend/other_ports.hpp"
 #include "panes/port_delegate.hpp"
 #include "panes/port_model.hpp"
+#include "theme/theme.hpp"
 
 #include <QApplication>
 #include <QClipboard>
@@ -15,11 +17,13 @@
 #include <QItemSelectionModel>
 #include <QKeyEvent>
 #include <QKeySequence>
+#include <QLabel>
 #include <QLineEdit>
 #include <QListView>
 #include <QMenu>
 #include <QStackedWidget>
 #include <QTableView>
+#include <QTimer>
 #include <QVBoxLayout>
 
 namespace vss::gui
@@ -37,6 +41,15 @@ PortsPanel::PortsPanel(StudioBackend& backend, SelectionService& selection,
     connect(&selection_, &SelectionService::port_changed, this,
             [this](vss::endpoint_id id) { select_port(id); });
     refresh();
+    refresh_others();
+
+    // Ports another program made raise no event, and listing them reads the
+    // device list, so look again now and then rather than on every refresh.
+    others_timer_ = new QTimer(this);
+    others_timer_->setInterval(5000);
+    connect(others_timer_, &QTimer::timeout, this,
+            [this] { refresh_others(); });
+    others_timer_->start();
 }
 
 void PortsPanel::build()
@@ -132,11 +145,39 @@ void PortsPanel::build()
     stack_->addWidget(simple_);
     stack_->addWidget(table_);
     layout->addWidget(stack_, 1);
+
+    others_ = new QLabel(this);
+    others_->setObjectName(QStringLiteral("portsOtherProgram"));
+    others_->setWordWrap(true);
+    others_->setFont(Theme::instance().font(text_style::body));
+    others_->setProperty("muted", true);
+    others_->setContentsMargins(12, 8, 12, 8);
+    others_->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    others_->setVisible(false);
+    layout->addWidget(others_);
+}
+
+void PortsPanel::refresh_others()
+{
+    const QString reason = other_ports_reason(backend_.other_program_ports());
+    others_->setText(reason);
+    others_->setAccessibleName(reason);
+    others_->setVisible(!reason.isEmpty());
 }
 
 void PortsPanel::refresh()
 {
     const auto ports = backend_.ports();
+    // A port added or removed here can change which ports are another
+    // program's, so look again then; a traffic count alone cannot.
+    QStringList paths;
+    for (const auto& port : ports)
+        paths.push_back(port.path);
+    if (paths != known_paths_)
+    {
+        known_paths_ = paths;
+        refresh_others();
+    }
     const auto links = backend_.links();
     const vss::endpoint_id wanted = selection_.port();
     syncing_ = true;
