@@ -911,7 +911,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>שתי יציאות אלה מקושרות ב-Studio. נתקו אותן קודם.</translation>
         </message>
@@ -937,38 +937,38 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Received</source>
             <translation>התקבל</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Lost</source>
             <translation>אבד</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
             <source>Throughput</source>
             <translation>תפוקה</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
             <source>Not run</source>
             <translation>לא הורץ</translation>
         </message>
@@ -989,7 +989,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
@@ -1012,78 +1012,78 @@
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
             <source>Run</source>
             <translation>הרצה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>הוסיפו שתי יציאות כדי למדוד ביצועי חיבור.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
             <source>Choose two different ports.</source>
             <translation>בחרו שתי יציאות שונות.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
             <source>Running</source>
             <translation>רץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
             <source>Benchmark result: %1</source>
             <translation>תוצאת מבחן הביצועים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
             <source>%1 of %2 received</source>
             <translation>%1 מתוך %2 התקבלו</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
             <source>Could not finish: %1</source>
             <translation>לא ניתן לסיים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
             <source>Cancelled</source>
             <translation>בוטל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Passed</source>
             <translation>עבר</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
             <source>Finished at %1</source>
             <translation>הסתיים ב-%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: נשלחו %2, התקבלו %3, אבדו %4, תפוקה %5.</translation>
         </message>
@@ -1449,286 +1449,344 @@
             <translation>אפשרויות קישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="241" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="243" />
             <source>Link mode</source>
             <translation>מצב קישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="245" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="247" />
             <source>Two-way</source>
             <translation>דו-כיווני</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="246" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
             <source>Like a null-modem cable. Both ports see everything.</source>
             <translation>כמו כבל null-modem. שתי היציאות רואות הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="250" />
             <source>One-way redirect</source>
             <translation>הפניה חד-כיוונית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="249" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
             <source>Data flows from A to B only. B cannot reply.</source>
             <translation>הנתונים זורמים מ-A אל B בלבד. B אינו יכול להשיב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="253" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="252" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="254" />
             <source>Watch traffic without disturbing it. Never drives modem lines.</source>
             <translation>צפייה בתעבורה ללא הפרעה. לעולם לא מניע קווי מודם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="255" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="257" />
             <source>Split one port to many</source>
             <translation>פיצול יציאה אחת לרבות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="256" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
             <source>Several programs see the same device.</source>
             <translation>כמה תוכניות רואות את אותו התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="260" />
             <source>Join many ports into one</source>
             <translation>איחוד יציאות רבות לאחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="259" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="261" />
             <source>Several sources feed one target.</source>
             <translation>כמה מקורות מזינים יעד אחד.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="290" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="263" />
+            <source>Shared bus</source>
+            <translation>אפיק משותף</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="264" />
+            <source>Several programs on one wire. Each hears all the others.</source>
+            <translation>כמה תוכניות על חוט אחד. כל אחת שומעת את כל האחרות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="296" />
             <source>From</source>
             <translation>מ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="291" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="297" />
             <source>To</source>
             <translation>אל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="316" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="322" />
             <source>Port to split</source>
             <translation>יציאה לפיצול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="319" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="325" />
             <source>Send copies to, choose at least 2</source>
             <translation>שליחת עותקים אל, בחרו לפחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="357" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="363" />
             <source>Ports that send, choose at least 2</source>
             <translation>יציאות שולחות, בחרו לפחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="375" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="381" />
             <source>Send everything to</source>
             <translation>שליחת הכול אל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="389" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
             <source>More options</source>
             <translation>אפשרויות נוספות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="392" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
             <source>ADVANCED</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="394" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="400" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="401" />
             <source>Choose one owner at a time</source>
             <translation>בחרו בעלים אחד בכל פעם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="404" />
             <source>Turn on Advanced mode</source>
             <translation>הפעלת מצב מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="430" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <source>Ports on the bus, choose at least 2</source>
+            <translation>יציאות באפיק, יש לבחור לפחות 2</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="462" />
             <source>Shortcut: Ctrl+L</source>
             <translation>קיצור דרך: Ctrl+L</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="435" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="467" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="471" />
             <source>Connect</source>
             <translation>חיבור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="547" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="579" />
             <source>This is the port being split.</source>
             <translation>זוהי היציאה המפוצלת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="556" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="595" />
             <source>This is the port everything is sent to.</source>
             <translation>זוהי היציאה שאליה נשלח הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="650" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="846" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>יציאות ב-Studio בלבד מחזירות הד למה שהן מקבלות, ולכן קישור דו-כיווני ביניהן יחזור על הנתונים. השתמשו בחד-כיווני, או קשרו יציאה אמיתית או מזווגת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="678" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>נבחרו %1 יציאות. זה מספיק עבור %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="682" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
             <source>Choose at least 2 ports.</source>
             <translation>יש לבחור לפחות 2 יציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
             <source>split</source>
             <translation>פיצול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>join</source>
             <translation>איחוד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="737" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="744" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <source>bus</source>
+            <translation>אפיק</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>בחרו שתי יציאות כדי לראות מה הקישור יעשה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="739" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2. %2 אינה יכולה להשיב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="746" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2 מקבלת עותק לקריאה בלבד של מה ש-%1 שולחת. היא לעולם לא מניעה קווי מודם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="754" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
             <source>Choose a port to split.</source>
             <translation>בחרו יציאה לפיצול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="755" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאות שבחרתם. מה שהן כותבות חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="764" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק אל %2. מה ש%3 מהן כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>either</source>
             <translation>אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>any</source>
             <translation>איזו שהיא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="774" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
             <source>Choose a port to send everything to.</source>
             <translation>בחרו יציאה שאליה יישלח הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="775" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>כל מה שהיציאות שבחרתם כותבות עובר אל %1. הבתים שלהן משולבים לפי סדר ההגעה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>כל מה ש-%1 כותבות עובר אל %2. הבתים שלהן משולבים לפי סדר ההגעה. %2 אינה שולחת להן דבר בחזרה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="828" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <source>Choose the ports to put on the bus.</source>
+            <translation>יש לבחור את היציאות שיוצבו על האפיק.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
+            <translation>כל אחת מ-%1 שומעת את מה שהאחרות כותבות, ואף אחת אינה שומעת את עצמה. הבתים שלהן מתערבבים לפי סדר ההגעה.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
             <source>Links are not available in this build.</source>
             <translation>קישורים אינם זמינים בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="837" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <source>A bus takes at most %1 ports.</source>
+            <translation>אפיק מקבל לכל היותר %1 יציאות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
             <source>Choose two ports.</source>
             <translation>בחרו שתי יציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="839" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>יציאה אינה יכולה להתקשר לעצמה. בחרו יציאה אחרת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="915" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="974" />
             <source>Not available in Simple mode</source>
             <translation>לא זמין במצב פשוט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1042" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1120" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1137" />
             <source>That link would create a loop</source>
             <translation>הקישור הזה ייצור לולאה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1043" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1121" />
+            <source>A path leads out of the bus and back into it, so data would go round forever. Nothing was changed. Remove that link first, or choose different ports.</source>
+            <translation>נתיב יוצא מהאפיק וחוזר אליו, ולכן הנתונים היו מסתובבים לנצח. דבר לא שונה. יש להסיר קודם את הקישור הזה או לבחור יציאות אחרות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1130" />
+            <source>One of these ports is already on a bus. A port can be on one bus only. Nothing was changed.</source>
+            <translation>אחת היציאות כבר נמצאת על אפיק. יציאה יכולה להיות על אפיק אחד בלבד. דבר לא שונה.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
             <source>Data would travel from %1 to %2 and back to %1 forever. Nothing was changed. Remove a link first, or choose different ports.</source>
             <translation>הנתונים היו עוברים מ-%1 אל %2 וחוזרים אל %1 לנצח. דבר לא השתנה. הסירו קישור קודם, או בחרו יציאות אחרות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1051" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1247" />
+            <source>Put %1 on a shared bus.</source>
+            <translation>%1 הוצבו על אפיק משותף.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1146" />
             <source>Could not create the link</source>
             <translation>לא ניתן ליצור את הקישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1052" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1147" />
             <source>Nothing was changed. Check the ports and try again.</source>
             <translation>דבר לא השתנה. בדקו את היציאות ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1232" />
             <source>Connected %1 and %2.</source>
             <translation>%1 ו-%2 חוברו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1132" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1235" />
             <source>Redirected %1 to %2.</source>
             <translation>%1 הופנתה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1135" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1238" />
             <source>Monitoring %1 on %2.</source>
             <translation>%1 מנוטרת ב-%2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1241" />
             <source>Split %1 to %2.</source>
             <translation>%1 פוצלה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1141" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1244" />
             <source>Joined %1 into %2.</source>
             <translation>%1 אוחדה אל %2.</translation>
         </message>
@@ -6834,13 +6892,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/topology/topology_text.cpp" line="46" />
             <location filename="../src/topology/topology_text.cpp" line="231" />
-            <location filename="../src/topology/topology_text.cpp" line="247" />
+            <location filename="../src/topology/topology_text.cpp" line="249" />
             <source>two-way</source>
             <translation>דו-כיווני</translation>
         </message>
         <message>
             <location filename="../src/topology/topology_text.cpp" line="49" />
-            <location filename="../src/topology/topology_text.cpp" line="243" />
+            <location filename="../src/topology/topology_text.cpp" line="245" />
             <source>owner</source>
             <translation>בעלים</translation>
         </message>
@@ -7001,87 +7059,102 @@ Networks: %5</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="256" />
+            <location filename="../src/topology/topology_text.cpp" line="235" />
+            <source>Bus</source>
+            <translation>אפיק</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="258" />
             <source>No ports yet. Add a port to see it here.</source>
             <translation>עדיין אין יציאות. הוסיפו יציאה כדי לראות אותה כאן.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="265" />
+            <location filename="../src/topology/topology_text.cpp" line="267" />
             <source>%1, no links</source>
             <translation>%1, ללא קישורים</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="271" />
+            <location filename="../src/topology/topology_text.cpp" line="273" />
             <source>%1, %2: %3</source>
             <translation>%1, %2: %3</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="288" />
+            <location filename="../src/topology/topology_text.cpp" line="290" />
             <source>Split link, %1 to %2 ports</source>
             <translation>קישור פיצול, %1 אל %2 יציאות</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="296" />
+            <location filename="../src/topology/topology_text.cpp" line="298" />
             <source>Split link, %1 to %2</source>
             <translation>קישור פיצול, %1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="303" />
+            <location filename="../src/topology/topology_text.cpp" line="305" />
             <source>Join link, %1 ports into %2</source>
             <translation>קישור איחוד, %1 יציאות אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="311" />
+            <location filename="../src/topology/topology_text.cpp" line="313" />
             <source>Join link, %1 into %2</source>
             <translation>קישור איחוד, %1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="316" />
+            <location filename="../src/topology/topology_text.cpp" line="318" />
             <source>Two-way link, %1 to %2</source>
             <translation>קישור דו-כיווני, %1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="320" />
+            <location filename="../src/topology/topology_text.cpp" line="322" />
             <source>One-way link, %1 to %2</source>
             <translation>קישור חד-כיווני, %1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="324" />
+            <location filename="../src/topology/topology_text.cpp" line="326" />
             <source>Monitor link, %1 to %2</source>
             <translation>קישור מוניטור, %1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="340" />
+            <location filename="../src/topology/topology_text.cpp" line="330" />
+            <source>Bus link, %1 ports</source>
+            <translation>קישור אפיק, %1 יציאות</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="346" />
             <source>split from %1 to %2</source>
             <translation>פיצול מ-%1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="343" />
+            <location filename="../src/topology/topology_text.cpp" line="349" />
             <source>join from %1 into %2</source>
             <translation>איחוד מ-%1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="346" />
+            <location filename="../src/topology/topology_text.cpp" line="352" />
             <source>two-way between %1 and %2</source>
             <translation>דו-כיווני בין %1 ל-%2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="350" />
+            <location filename="../src/topology/topology_text.cpp" line="356" />
             <source>one-way from %1 to %2</source>
             <translation>חד-כיווני מ-%1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="353" />
+            <location filename="../src/topology/topology_text.cpp" line="359" />
             <source>monitor from %1 to %2</source>
             <translation>מוניטור מ-%1 אל %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="361" />
+            <location filename="../src/topology/topology_text.cpp" line="362" />
+            <source>bus of %1</source>
+            <translation>אפיק של %1</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="370" />
             <source>Copied %1.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="366" />
+            <location filename="../src/topology/topology_text.cpp" line="375" />
             <source>Selected %1.</source>
             <translation>נבחר: %1.</translation>
         </message>
@@ -7150,13 +7223,14 @@ Networks: %5</source>
             <location filename="../src/advanced/json_validation.cpp" line="670" />
             <location filename="../src/advanced/json_validation.cpp" line="705" />
             <location filename="../src/advanced/json_validation.cpp" line="741" />
-            <location filename="../src/advanced/json_validation.cpp" line="773" />
-            <location filename="../src/advanced/json_validation.cpp" line="808" />
-            <location filename="../src/advanced/json_validation.cpp" line="874" />
-            <location filename="../src/advanced/json_validation.cpp" line="914" />
-            <location filename="../src/advanced/json_validation.cpp" line="948" />
-            <location filename="../src/advanced/json_validation.cpp" line="1004" />
-            <location filename="../src/advanced/json_validation.cpp" line="1041" />
+            <location filename="../src/advanced/json_validation.cpp" line="774" />
+            <location filename="../src/advanced/json_validation.cpp" line="809" />
+            <location filename="../src/advanced/json_validation.cpp" line="859" />
+            <location filename="../src/advanced/json_validation.cpp" line="992" />
+            <location filename="../src/advanced/json_validation.cpp" line="1032" />
+            <location filename="../src/advanced/json_validation.cpp" line="1066" />
+            <location filename="../src/advanced/json_validation.cpp" line="1122" />
+            <location filename="../src/advanced/json_validation.cpp" line="1159" />
             <source>Valid JSON, version 1</source>
             <translation>JSON תקין, גרסה 1</translation>
         </message>
@@ -7172,12 +7246,13 @@ Networks: %5</source>
             <location filename="../src/advanced/json_validation.cpp" line="673" />
             <location filename="../src/advanced/json_validation.cpp" line="708" />
             <location filename="../src/advanced/json_validation.cpp" line="744" />
-            <location filename="../src/advanced/json_validation.cpp" line="776" />
-            <location filename="../src/advanced/json_validation.cpp" line="811" />
-            <location filename="../src/advanced/json_validation.cpp" line="877" />
-            <location filename="../src/advanced/json_validation.cpp" line="917" />
-            <location filename="../src/advanced/json_validation.cpp" line="951" />
-            <location filename="../src/advanced/json_validation.cpp" line="1007" />
+            <location filename="../src/advanced/json_validation.cpp" line="777" />
+            <location filename="../src/advanced/json_validation.cpp" line="812" />
+            <location filename="../src/advanced/json_validation.cpp" line="862" />
+            <location filename="../src/advanced/json_validation.cpp" line="995" />
+            <location filename="../src/advanced/json_validation.cpp" line="1035" />
+            <location filename="../src/advanced/json_validation.cpp" line="1069" />
+            <location filename="../src/advanced/json_validation.cpp" line="1125" />
             <source>Ports, all names unique</source>
             <translation>יציאות, כל השמות ייחודיים</translation>
         </message>
@@ -7193,12 +7268,13 @@ Networks: %5</source>
             <location filename="../src/advanced/json_validation.cpp" line="676" />
             <location filename="../src/advanced/json_validation.cpp" line="711" />
             <location filename="../src/advanced/json_validation.cpp" line="747" />
-            <location filename="../src/advanced/json_validation.cpp" line="779" />
-            <location filename="../src/advanced/json_validation.cpp" line="814" />
-            <location filename="../src/advanced/json_validation.cpp" line="880" />
-            <location filename="../src/advanced/json_validation.cpp" line="920" />
-            <location filename="../src/advanced/json_validation.cpp" line="954" />
-            <location filename="../src/advanced/json_validation.cpp" line="1010" />
+            <location filename="../src/advanced/json_validation.cpp" line="780" />
+            <location filename="../src/advanced/json_validation.cpp" line="815" />
+            <location filename="../src/advanced/json_validation.cpp" line="865" />
+            <location filename="../src/advanced/json_validation.cpp" line="998" />
+            <location filename="../src/advanced/json_validation.cpp" line="1038" />
+            <location filename="../src/advanced/json_validation.cpp" line="1072" />
+            <location filename="../src/advanced/json_validation.cpp" line="1128" />
             <source>Links, no loops</source>
             <translation>קישורים, ללא לולאות</translation>
         </message>
@@ -7238,8 +7314,10 @@ Networks: %5</source>
             <location filename="../src/advanced/json_validation.cpp" line="519" />
             <location filename="../src/advanced/json_validation.cpp" line="547" />
             <location filename="../src/advanced/json_validation.cpp" line="754" />
-            <location filename="../src/advanced/json_validation.cpp" line="791" />
-            <location filename="../src/advanced/json_validation.cpp" line="978" />
+            <location filename="../src/advanced/json_validation.cpp" line="792" />
+            <location filename="../src/advanced/json_validation.cpp" line="925" />
+            <location filename="../src/advanced/json_validation.cpp" line="934" />
+            <location filename="../src/advanced/json_validation.cpp" line="1096" />
             <source>Nothing was applied.</source>
             <translation>דבר לא הוחל.</translation>
         </message>
@@ -7334,94 +7412,126 @@ Networks: %5</source>
             <translation>"links" חייב להיות רשימה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="785" />
+            <location filename="../src/advanced/json_validation.cpp" line="786" />
             <source>Line %1: each link must be an object</source>
             <translation>שורה %1: כל קישור חייב להיות אובייקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="789" />
+            <location filename="../src/advanced/json_validation.cpp" line="790" />
             <source>Each link must be an object</source>
             <translation>כל קישור חייב להיות אובייקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="822" />
+            <location filename="../src/advanced/json_validation.cpp" line="823" />
             <source>Line %1: unknown link mode "%2"</source>
             <translation>שורה %1: מצב קישור לא מוכר "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="826" />
+            <location filename="../src/advanced/json_validation.cpp" line="827" />
             <source>Unknown link mode "%1"</source>
             <translation>מצב קישור לא מוכר "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="833" />
+            <location filename="../src/advanced/json_validation.cpp" line="834" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
             <translation>האם התכוונתם ל-"%1"? השורה מודגשת ודבר לא הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="843" />
             <source>Use duplex, split, join, redirect or monitor. Nothing was applied.</source>
-            <translation>השתמשו ב-duplex, split, join, redirect או monitor. דבר לא הוחל.</translation>
+            <translation type="vanished">השתמשו ב-duplex, split, join, redirect או monitor. דבר לא הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="886" />
+            <location filename="../src/advanced/json_validation.cpp" line="1004" />
             <source>Line %1: a link needs ports on both sides</source>
             <translation>שורה %1: קישור זקוק ליציאות בשני הצדדים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="890" />
+            <location filename="../src/advanced/json_validation.cpp" line="1008" />
             <source>A link needs ports on both sides</source>
             <translation>קישור זקוק ליציאות בשני הצדדים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="892" />
+            <location filename="../src/advanced/json_validation.cpp" line="1010" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
             <translation>sources ו-targets חייבים להיות רשימות לא ריקות של שמות יציאות. דבר לא הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="926" />
+            <location filename="../src/advanced/json_validation.cpp" line="1044" />
             <source>Line %1: "%2" has the wrong number of ports</source>
             <translation>שורה %1: ל-"%2" מספר יציאות שגוי</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="931" />
+            <location filename="../src/advanced/json_validation.cpp" line="1049" />
             <source>"%1" has the wrong number of ports</source>
             <translation>ל-"%1" מספר יציאות שגוי</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="935" />
+            <location filename="../src/advanced/json_validation.cpp" line="1053" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
             <translation>קישור duplex, redirect או monitor מחבר יציאה אחת ליציאה אחת; ל-split יש מקור אחד; ל-join יש יעד אחד. דבר לא הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="970" />
+            <location filename="../src/advanced/json_validation.cpp" line="1088" />
             <source>Line %1: no port is called "%2"</source>
             <translation>שורה %1: אין יציאה בשם "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="975" />
+            <location filename="../src/advanced/json_validation.cpp" line="922" />
+            <location filename="../src/advanced/json_validation.cpp" line="1093" />
             <source>No port is called "%1"</source>
             <translation>אין יציאה בשם "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1016" />
+            <location filename="../src/advanced/json_validation.cpp" line="1134" />
             <source>Line %1: these links create a loop</source>
             <translation>שורה %1: קישורים אלה יוצרים לולאה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1019" />
+            <location filename="../src/advanced/json_validation.cpp" line="950" />
+            <location filename="../src/advanced/json_validation.cpp" line="1137" />
             <source>These links create a loop</source>
             <translation>קישורים אלה יוצרים לולאה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1021" />
+            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <source>Use duplex, split, join, redirect, monitor or bus. Nothing was applied.</source>
+            <translation>יש להשתמש ב-duplex, ב-split, ב-join, ב-redirect, ב-monitor או ב-bus. דבר לא הוחל.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="875" />
+            <source>Bus links are not available in this build</source>
+            <translation>קישורי אפיק אינם זמינים בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="878" />
+            <source>This build cannot put ports on a shared bus. Nothing was applied.</source>
+            <translation>גרסה זו אינה יכולה להציב יציאות על אפיק משותף. דבר לא הוחל.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="904" />
+            <source>A bus needs between 2 and %1 ports</source>
+            <translation>אפיק דורש בין 2 ל-%1 יציאות</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="907" />
+            <source>List the ports of the bus in "members". Nothing was applied.</source>
+            <translation>יש לרשום את יציאות האפיק תחת "members". דבר לא הוחל.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="932" />
+            <source>A port can be on one bus only</source>
+            <translation>יציאה יכולה להיות על אפיק אחד בלבד</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="952" />
+            <location filename="../src/advanced/json_validation.cpp" line="1139" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
             <translation>הבתים היו מסתובבים לנצח, ולכן הרכזת דוחה לולאה ודבר לא הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1050" />
-            <location filename="../src/advanced/json_validation.cpp" line="1056" />
-            <location filename="../src/advanced/json_validation.cpp" line="1076" />
+            <location filename="../src/advanced/json_validation.cpp" line="1168" />
+            <location filename="../src/advanced/json_validation.cpp" line="1174" />
+            <location filename="../src/advanced/json_validation.cpp" line="1194" />
             <source>The setup format rejected this document</source>
             <translation>פורמט התצורה דחה מסמך זה</translation>
         </message>
@@ -7619,114 +7729,119 @@ Networks: %5</source>
             <translation>%1 נמצאת בקישור חד-כיווני מ-%2.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="183" />
+            <location filename="../src/support/troubleshoot.cpp" line="169" />
+            <source>%1 is on a shared bus with %2.</source>
+            <translation>%1 נמצאת על אפיק משותף עם %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="191" />
             <source>this port</source>
             <translation>יציאה זו</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="190" />
             <location filename="../src/support/troubleshoot.cpp" line="198" />
             <location filename="../src/support/troubleshoot.cpp" line="206" />
+            <location filename="../src/support/troubleshoot.cpp" line="214" />
             <source>The port exists and is open</source>
             <translation>היציאה קיימת ופתוחה</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="192" />
-            <location filename="../src/support/troubleshoot.cpp" line="232" />
-            <location filename="../src/support/troubleshoot.cpp" line="314" />
+            <location filename="../src/support/troubleshoot.cpp" line="200" />
+            <location filename="../src/support/troubleshoot.cpp" line="240" />
+            <location filename="../src/support/troubleshoot.cpp" line="322" />
             <source>Studio has no port to check.</source>
             <translation>אין ל-Studio יציאה לבדוק.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="200" />
+            <location filename="../src/support/troubleshoot.cpp" line="208" />
             <source>%1 is open on %2.</source>
             <translation>%1 פתוחה ב-%2.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="208" />
+            <location filename="../src/support/troubleshoot.cpp" line="216" />
             <source>%1 is not open.</source>
             <translation>%1 אינה פתוחה.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="230" />
             <location filename="../src/support/troubleshoot.cpp" line="238" />
-            <location filename="../src/support/troubleshoot.cpp" line="248" />
+            <location filename="../src/support/troubleshoot.cpp" line="246" />
+            <location filename="../src/support/troubleshoot.cpp" line="256" />
             <source>The port is linked to the device</source>
             <translation>היציאה מקושרת להתקן</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="240" />
+            <location filename="../src/support/troubleshoot.cpp" line="248" />
             <source>This port has no link. Connect it to a device.</source>
             <translation>ליציאה זו אין קישור. חברו אותה להתקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="258" />
+            <location filename="../src/support/troubleshoot.cpp" line="266" />
             <source>The device is sending</source>
             <translation>ההתקן שולח</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="263" />
+            <location filename="../src/support/troubleshoot.cpp" line="271" />
             <source>Connect the port to a device first.</source>
             <translation>חברו קודם את היציאה להתקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="270" />
+            <location filename="../src/support/troubleshoot.cpp" line="278" />
             <source>Studio cannot tell when %1 last sent data.</source>
             <translation>Studio לא יכול לדעת מתי %1 שלחה נתונים לאחרונה.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="279" />
+            <location filename="../src/support/troubleshoot.cpp" line="287" />
             <source>%1 received data in the last minute.</source>
             <translation>%1 קיבלה נתונים בדקה האחרונה.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="289" />
+            <location filename="../src/support/troubleshoot.cpp" line="297" />
             <source>Studio is still listening for the first bytes.</source>
             <translation>Studio עדיין מאזין לבתים הראשונים.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="297" />
+            <location filename="../src/support/troubleshoot.cpp" line="305" />
             <source>%1 has not sent anything in the last minute. Check the cable and the device's power.</source>
             <translation>%1 לא שלחה דבר בדקה האחרונה. בדקו את הכבל ואת החשמל של ההתקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="307" />
+            <location filename="../src/support/troubleshoot.cpp" line="315" />
             <source>A program has opened %1</source>
             <translation>תוכנית פתחה את %1</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="312" />
+            <location filename="../src/support/troubleshoot.cpp" line="320" />
             <source>A program has opened the port</source>
             <translation>תוכנית פתחה את היציאה</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="321" />
+            <location filename="../src/support/troubleshoot.cpp" line="329" />
             <source>Studio cannot tell whether a program has opened %1 in this build.</source>
             <translation>Studio לא יכול לדעת אם תוכנית פתחה את %1 בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="330" />
+            <location filename="../src/support/troubleshoot.cpp" line="338" />
             <source>A program has opened %1.</source>
             <translation>תוכנית פתחה את %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="338" />
+            <location filename="../src/support/troubleshoot.cpp" line="346" />
             <source>No program has opened %1 yet, so nothing can arrive.</source>
             <translation>שום תוכנית עדיין לא פתחה את %1, ולכן דבר לא יכול להגיע.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="351" />
-            <location filename="../src/support/troubleshoot.cpp" line="360" />
+            <location filename="../src/support/troubleshoot.cpp" line="359" />
+            <location filename="../src/support/troubleshoot.cpp" line="368" />
             <source>Data reaches the program</source>
             <translation>הנתונים מגיעים לתוכנית</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="353" />
+            <location filename="../src/support/troubleshoot.cpp" line="361" />
             <source>Studio cannot see whether the program read the data.</source>
             <translation>Studio לא יכול לראות אם התוכנית קראה את הנתונים.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="362" />
+            <location filename="../src/support/troubleshoot.cpp" line="370" />
             <source>Checked once a program connects.</source>
             <translation>נבדק לאחר שתוכנית מתחברת.</translation>
         </message>
@@ -9151,7 +9266,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>שתי יציאות אלה מקושרות ב-Studio. נתקו אותן קודם.</translation>
         </message>
@@ -9177,38 +9292,38 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Received</source>
             <translation>התקבל</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Lost</source>
             <translation>אבד</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
             <source>Throughput</source>
             <translation>תפוקה</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
             <source>Not run</source>
             <translation>לא הורץ</translation>
         </message>
@@ -9229,7 +9344,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
@@ -9252,78 +9367,78 @@ Networks: %5</source>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
             <source>Run</source>
             <translation>הרצה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>הוסיפו שתי יציאות כדי למדוד ביצועי חיבור.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
             <source>Choose two different ports.</source>
             <translation>בחרו שתי יציאות שונות.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
             <source>Running</source>
             <translation>רץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
             <source>Benchmark result: %1</source>
             <translation>תוצאת מבחן הביצועים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
             <source>%1 of %2 received</source>
             <translation>%1 מתוך %2 התקבלו</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
             <source>Could not finish: %1</source>
             <translation>לא ניתן לסיים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
             <source>Cancelled</source>
             <translation>בוטל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Passed</source>
             <translation>עבר</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
             <source>Finished at %1</source>
             <translation>הסתיים ב-%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: נשלחו %2, התקבלו %3, אבדו %4, תפוקה %5.</translation>
         </message>
@@ -9482,286 +9597,344 @@ Networks: %5</source>
             <translation>אפשרויות קישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="241" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="243" />
             <source>Link mode</source>
             <translation>מצב קישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="245" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="247" />
             <source>Two-way</source>
             <translation>דו-כיווני</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="246" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
             <source>Like a null-modem cable. Both ports see everything.</source>
             <translation>כמו כבל null-modem. שתי היציאות רואות הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="250" />
             <source>One-way redirect</source>
             <translation>הפניה חד-כיוונית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="249" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
             <source>Data flows from A to B only. B cannot reply.</source>
             <translation>הנתונים זורמים מ-A אל B בלבד. B אינו יכול להשיב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="253" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="252" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="254" />
             <source>Watch traffic without disturbing it. Never drives modem lines.</source>
             <translation>צפייה בתעבורה ללא הפרעה. לעולם לא מניע קווי מודם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="255" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="257" />
             <source>Split one port to many</source>
             <translation>פיצול יציאה אחת לרבות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="256" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
             <source>Several programs see the same device.</source>
             <translation>כמה תוכניות רואות את אותו התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="260" />
             <source>Join many ports into one</source>
             <translation>איחוד יציאות רבות לאחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="259" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="261" />
             <source>Several sources feed one target.</source>
             <translation>כמה מקורות מזינים יעד אחד.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="290" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="263" />
+            <source>Shared bus</source>
+            <translation>אפיק משותף</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="264" />
+            <source>Several programs on one wire. Each hears all the others.</source>
+            <translation>כמה תוכניות על חוט אחד. כל אחת שומעת את כל האחרות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="296" />
             <source>From</source>
             <translation>מ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="291" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="297" />
             <source>To</source>
             <translation>אל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="316" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="322" />
             <source>Port to split</source>
             <translation>יציאה לפיצול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="319" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="325" />
             <source>Send copies to, choose at least 2</source>
             <translation>שליחת עותקים אל, בחרו לפחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="357" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="363" />
             <source>Ports that send, choose at least 2</source>
             <translation>יציאות שולחות, בחרו לפחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="375" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="381" />
             <source>Send everything to</source>
             <translation>שליחת הכול אל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="389" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
             <source>More options</source>
             <translation>אפשרויות נוספות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="392" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
             <source>ADVANCED</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="394" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="400" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="401" />
             <source>Choose one owner at a time</source>
             <translation>בחרו בעלים אחד בכל פעם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="404" />
             <source>Turn on Advanced mode</source>
             <translation>הפעלת מצב מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="430" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <source>Ports on the bus, choose at least 2</source>
+            <translation>יציאות באפיק, יש לבחור לפחות 2</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="462" />
             <source>Shortcut: Ctrl+L</source>
             <translation>קיצור דרך: Ctrl+L</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="435" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="467" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="471" />
             <source>Connect</source>
             <translation>חיבור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="547" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="579" />
             <source>This is the port being split.</source>
             <translation>זוהי היציאה המפוצלת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="556" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="595" />
             <source>This is the port everything is sent to.</source>
             <translation>זוהי היציאה שאליה נשלח הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="650" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="846" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>יציאות ב-Studio בלבד מחזירות הד למה שהן מקבלות, ולכן קישור דו-כיווני ביניהן יחזור על הנתונים. השתמשו בחד-כיווני, או קשרו יציאה אמיתית או מזווגת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="678" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>נבחרו %1 יציאות. זה מספיק עבור %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="682" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
             <source>Choose at least 2 ports.</source>
             <translation>יש לבחור לפחות 2 יציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
             <source>split</source>
             <translation>פיצול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>join</source>
             <translation>איחוד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="737" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="744" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <source>bus</source>
+            <translation>אפיק</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>בחרו שתי יציאות כדי לראות מה הקישור יעשה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="739" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2. %2 אינה יכולה להשיב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="746" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2 מקבלת עותק לקריאה בלבד של מה ש-%1 שולחת. היא לעולם לא מניעה קווי מודם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="754" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
             <source>Choose a port to split.</source>
             <translation>בחרו יציאה לפיצול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="755" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאות שבחרתם. מה שהן כותבות חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="764" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק אל %2. מה ש%3 מהן כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>either</source>
             <translation>אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>any</source>
             <translation>איזו שהיא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="774" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
             <source>Choose a port to send everything to.</source>
             <translation>בחרו יציאה שאליה יישלח הכול.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="775" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>כל מה שהיציאות שבחרתם כותבות עובר אל %1. הבתים שלהן משולבים לפי סדר ההגעה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>כל מה ש-%1 כותבות עובר אל %2. הבתים שלהן משולבים לפי סדר ההגעה. %2 אינה שולחת להן דבר בחזרה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="828" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <source>Choose the ports to put on the bus.</source>
+            <translation>יש לבחור את היציאות שיוצבו על האפיק.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
+            <translation>כל אחת מ-%1 שומעת את מה שהאחרות כותבות, ואף אחת אינה שומעת את עצמה. הבתים שלהן מתערבבים לפי סדר ההגעה.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
             <source>Links are not available in this build.</source>
             <translation>קישורים אינם זמינים בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="837" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <source>A bus takes at most %1 ports.</source>
+            <translation>אפיק מקבל לכל היותר %1 יציאות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
             <source>Choose two ports.</source>
             <translation>בחרו שתי יציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="839" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>יציאה אינה יכולה להתקשר לעצמה. בחרו יציאה אחרת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="915" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="974" />
             <source>Not available in Simple mode</source>
             <translation>לא זמין במצב פשוט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1042" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1120" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1137" />
             <source>That link would create a loop</source>
             <translation>הקישור הזה ייצור לולאה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1043" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1121" />
+            <source>A path leads out of the bus and back into it, so data would go round forever. Nothing was changed. Remove that link first, or choose different ports.</source>
+            <translation>נתיב יוצא מהאפיק וחוזר אליו, ולכן הנתונים היו מסתובבים לנצח. דבר לא שונה. יש להסיר קודם את הקישור הזה או לבחור יציאות אחרות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1130" />
+            <source>One of these ports is already on a bus. A port can be on one bus only. Nothing was changed.</source>
+            <translation>אחת היציאות כבר נמצאת על אפיק. יציאה יכולה להיות על אפיק אחד בלבד. דבר לא שונה.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
             <source>Data would travel from %1 to %2 and back to %1 forever. Nothing was changed. Remove a link first, or choose different ports.</source>
             <translation>הנתונים היו עוברים מ-%1 אל %2 וחוזרים אל %1 לנצח. דבר לא השתנה. הסירו קישור קודם, או בחרו יציאות אחרות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1051" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1247" />
+            <source>Put %1 on a shared bus.</source>
+            <translation>%1 הוצבו על אפיק משותף.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1146" />
             <source>Could not create the link</source>
             <translation>לא ניתן ליצור את הקישור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1052" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1147" />
             <source>Nothing was changed. Check the ports and try again.</source>
             <translation>דבר לא השתנה. בדקו את היציאות ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1232" />
             <source>Connected %1 and %2.</source>
             <translation>%1 ו-%2 חוברו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1132" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1235" />
             <source>Redirected %1 to %2.</source>
             <translation>%1 הופנתה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1135" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1238" />
             <source>Monitoring %1 on %2.</source>
             <translation>%1 מנוטרת ב-%2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1241" />
             <source>Split %1 to %2.</source>
             <translation>%1 פוצלה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1141" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1244" />
             <source>Joined %1 into %2.</source>
             <translation>%1 אוחדה אל %2.</translation>
         </message>

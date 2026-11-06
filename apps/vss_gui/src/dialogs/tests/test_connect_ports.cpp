@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QRadioButton>
 
 #include <vector>
 
@@ -381,4 +382,107 @@ TEST_CASE("connect: without Advanced the join keeps interleaving")
     REQUIRE(dialog.submit());
     REQUIRE_EQ(only_link(backend).options.policy,
                vss::merge_policy::interleave);
+}
+
+namespace
+{
+
+/// A backend whose engine can make a shared bus, as the real one does.
+void allow_bus(vss::gui::FakeStudioBackend& backend)
+{
+    vss::gui::capabilities caps = backend.caps();
+    caps.shared_bus = true;
+    backend.set_capabilities(caps);
+}
+
+} // namespace
+
+TEST_CASE("connect: a shared bus puts the chosen ports on one link")
+{
+    vss::gui::FakeStudioBackend backend;
+    allow_bus(backend);
+    const fixture_ports ports = make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+
+    REQUIRE(dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    REQUIRE_EQ(dialog.current_mode(), vss::gui::ConnectPortsDialog::mode::bus);
+
+    dialog.set_member_ids({ports.alpha, ports.beta, ports.delta});
+    REQUIRE_EQ(dialog.count_text(),
+               QStringLiteral("3 ports chosen. That is enough for a bus."));
+    REQUIRE_EQ(dialog.accessible_result_text(),
+               QStringLiteral("Each of alpha, beta and delta hears what the "
+                              "others write, and none hears itself. Their "
+                              "bytes are mixed in the order they arrive."));
+    REQUIRE(dialog.primary_enabled());
+
+    dialog.set_member_ids({ports.alpha});
+    REQUIRE_EQ(dialog.count_text(), QStringLiteral("Choose at least 2 ports."));
+    REQUIRE(!dialog.primary_enabled());
+    REQUIRE_EQ(dialog.accessible_result_text(),
+               QStringLiteral("Choose the ports to put on the bus."));
+
+    dialog.set_member_ids({ports.alpha, ports.beta, ports.delta});
+    REQUIRE(dialog.submit());
+    const vss::gui::link_view link = only_link(backend);
+    REQUIRE_EQ(link.shape, vss::gui::link_shape::bus);
+    REQUIRE_EQ(link.mode, vss::link_mode::bus);
+    REQUIRE_EQ(link.sources.size(), 3);
+    REQUIRE(link.targets.isEmpty());
+    REQUIRE(!link.options.emulate_modem_lines);
+    REQUIRE_EQ(dialog.result_summary(),
+               QStringLiteral("Put alpha, beta and delta on a shared bus."));
+}
+
+TEST_CASE("connect: the bus is disabled where the build has none")
+{
+    vss::gui::FakeStudioBackend backend;
+    REQUIRE(!backend.caps().shared_bus);
+    make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+
+    // The other five modes still work; the star stays the way to share.
+    REQUIRE(!dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    REQUIRE_EQ(dialog.current_mode(),
+               vss::gui::ConnectPortsDialog::mode::two_way);
+
+    QRadioButton* radio = nullptr;
+    for (QRadioButton* candidate : dialog.findChildren<QRadioButton*>())
+    {
+        if (candidate->accessibleName() == QStringLiteral("Shared bus"))
+            radio = candidate;
+    }
+    REQUIRE(radio != nullptr);
+    REQUIRE(!radio->isEnabled());
+    REQUIRE_EQ(radio->parentWidget()->toolTip(),
+               QStringLiteral("Not available in this build"));
+}
+
+TEST_CASE("connect: a bus refused by the engine says why and stays open")
+{
+    vss::gui::FakeStudioBackend backend;
+    allow_bus(backend);
+    const fixture_ports ports = make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+    REQUIRE(dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    dialog.set_member_ids({ports.alpha, ports.beta});
+
+    backend.fail_next(vss::make_error_code(vss::errc::cycle_detected));
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_visible());
+    REQUIRE_EQ(dialog.error_title(),
+               QStringLiteral("That link would create a loop"));
+    REQUIRE(dialog.error_body().contains(QStringLiteral("out of the bus")));
+    REQUIRE(backend.links().empty());
+
+    backend.fail_next(vss::make_error_code(vss::errc::already_exists));
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_body().contains(
+        QStringLiteral("A port can be on one bus only")));
+
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::bus);
 }

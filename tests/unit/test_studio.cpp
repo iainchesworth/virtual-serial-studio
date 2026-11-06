@@ -585,3 +585,113 @@ TEST_CASE("studio: start and stop")
     app.stop();
     REQUIRE(!app.engine().running());
 }
+
+TEST_CASE("studio: a bus is applied, carried and saved again")
+{
+    const auto make_port = [](const std::string& name)
+    {
+        config::port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        return port;
+    };
+
+    config::document document;
+    document.name = "bus";
+    document.ports = {make_port("master"), make_port("one"), make_port("two"),
+                      make_port("tap")};
+
+    config::link_entry bus;
+    bus.mode = "bus";
+    bus.members = {"master", "one", "two"};
+    bus.emulate_modem_lines = false;
+    document.links.push_back(bus);
+
+    config::link_entry tap;
+    tap.mode = "join";
+    tap.sources = {"master", "one", "two"};
+    tap.targets = {"tap"};
+    tap.emulate_modem_lines = false;
+    document.links.push_back(tap);
+
+    studio app;
+    REQUIRE(app.apply(document));
+
+    const auto links = app.link_infos();
+    REQUIRE_EQ(links.size(), std::size_t{2});
+    REQUIRE_EQ(links[0].mode, link_mode::bus);
+    REQUIRE_EQ(links[0].sources.size(), std::size_t{3});
+
+    // What the snapshot saves is what was loaded.
+    const auto snapshot = app.snapshot();
+    REQUIRE_EQ(snapshot.links.size(), std::size_t{2});
+    REQUIRE_EQ(snapshot.links[0].mode, std::string("bus"));
+    REQUIRE((snapshot.links[0].members ==
+             std::vector<std::string>{"master", "one", "two"}));
+    REQUIRE(snapshot.links[0].sources.empty());
+    REQUIRE(snapshot.links[0].targets.empty());
+    REQUIRE(!config::validate(snapshot));
+
+    // A bus made through the facade is the same thing.
+    studio again;
+    REQUIRE(again.apply(snapshot));
+    REQUIRE_EQ(again.link_infos().front().mode, link_mode::bus);
+}
+
+TEST_CASE("studio: bus resolves names and reports what the hub refuses")
+{
+    studio app;
+    REQUIRE(app.create_virtual_port("a", virtual_port_kind::loopback));
+    REQUIRE(app.create_virtual_port("b", virtual_port_kind::loopback));
+    REQUIRE(app.create_virtual_port("c", virtual_port_kind::loopback));
+
+    REQUIRE_EQ(app.bus({"a", "missing"}).error(),
+               make_error_code(errc::not_found));
+    REQUIRE_EQ(app.bus({"a"}).error(), make_error_code(errc::invalid_argument));
+    REQUIRE(app.bus({"a", "b"}));
+    REQUIRE_EQ(app.bus({"b", "c"}).error(),
+               make_error_code(errc::already_exists));
+
+    REQUIRE(app.redirect("b", "c"));
+    REQUIRE_EQ(app.redirect("c", "a").error(),
+               make_error_code(errc::cycle_detected));
+}
+
+TEST_CASE("studio: a document that loops through a bus rolls back")
+{
+    config::document document;
+    document.name = "loop";
+    for (const char* name : {"a", "b", "c"})
+    {
+        config::port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        document.ports.push_back(port);
+    }
+
+    config::link_entry bus;
+    bus.mode = "bus";
+    bus.members = {"a", "b"};
+    bus.emulate_modem_lines = false;
+    document.links.push_back(bus);
+
+    config::link_entry out;
+    out.mode = "redirect";
+    out.sources = {"b"};
+    out.targets = {"c"};
+    document.links.push_back(out);
+
+    config::link_entry back;
+    back.mode = "redirect";
+    back.sources = {"c"};
+    back.targets = {"a"};
+    document.links.push_back(back);
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(!applied);
+    REQUIRE_EQ(applied.error(), make_error_code(errc::cycle_detected));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}

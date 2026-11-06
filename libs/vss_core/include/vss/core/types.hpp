@@ -59,7 +59,11 @@ enum class link_mode
     /// Traffic flows both ways between one source and its targets.
     duplex,
     /// Traffic flows from the sources to the targets only.
-    one_way
+    one_way,
+    /// A shared multi-drop bus.  Every member hears every other member and
+    /// never itself; the members are the link's `sources` and it has no
+    /// `targets`.
+    bus
 };
 
 /// How concurrent publishers into the same target are arbitrated.

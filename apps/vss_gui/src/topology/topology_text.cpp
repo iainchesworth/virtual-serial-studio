@@ -231,6 +231,8 @@ QString link_primary_label(link_shape shape)
         return QCoreApplication::translate("Topology", "two-way");
     case link_shape::monitor:
         return QCoreApplication::translate("Topology", "monitor");
+    case link_shape::bus:
+        return QCoreApplication::translate("Topology", "Bus");
     case link_shape::one_way:
         break;
     }
@@ -324,6 +326,10 @@ QString link_name(const link_view& link,
         base = QCoreApplication::translate("Topology", "Monitor link, %1 to %2")
                    .arg(source, target);
         break;
+    case link_shape::bus:
+        base = QCoreApplication::translate("Topology", "Bus link, %1 ports")
+                   .arg(link.sources.size());
+        break;
     }
     return with_states(base, link);
 }
@@ -352,6 +358,8 @@ QString link_phrase(const link_view& link,
     case link_shape::monitor:
         return QCoreApplication::translate("Topology", "monitor from %1 to %2")
             .arg(source, target);
+    case link_shape::bus:
+        return QCoreApplication::translate("Topology", "bus of %1").arg(source);
     }
     return {};
 }

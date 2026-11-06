@@ -20,6 +20,7 @@ namespace vss::gui::topology
 namespace
 {
 
+constexpr qreal kBusStub = 24.0;
 constexpr qreal kArrowLength = 8.0;
 constexpr qreal kArrowHalfWidth = 4.5;
 
@@ -52,8 +53,17 @@ QPolygonF arrow_head(const QPointF& tip, const QPointF& from)
 
 void note_point(QRectF& bounds, const QPointF& point)
 {
-    const QRectF dot(point, QSizeF(0.0, 0.0));
-    bounds = bounds.isNull() ? dot : bounds.united(dot);
+    // QRectF::united() ignores an empty rectangle, so a point has to widen the
+    // bounds by hand or the bar of a bus left of the first column is lost.
+    if (bounds.isNull())
+    {
+        bounds = QRectF(point, QSizeF(0.001, 0.001));
+        return;
+    }
+    bounds.setLeft(std::min(bounds.left(), point.x()));
+    bounds.setTop(std::min(bounds.top(), point.y()));
+    bounds.setRight(std::max(bounds.right(), point.x()));
+    bounds.setBottom(std::max(bounds.bottom(), point.y()));
 }
 
 void note_rect(QRectF& bounds, const QRectF& rect)
@@ -335,7 +345,8 @@ compute_link_geometry(const QVector<topo_link_input>& links,
             if (rects.contains(id))
                 targets.push_back(rects.value(id));
         }
-        if (sources.isEmpty() || targets.isEmpty())
+        const bool bus = link.shape == link_shape::bus;
+        if (sources.isEmpty() || (targets.isEmpty() && !bus))
             continue;
 
         topo_link_placement placement;
@@ -344,8 +355,30 @@ compute_link_geometry(const QVector<topo_link_input>& links,
         const auto add_segment = [&placement](const QLineF& line)
         { placement.segments.append(line); };
 
-        if (link.shape == link_shape::split && sources.size() == 1 &&
-            targets.size() > 1)
+        if (bus)
+        {
+            // The members hang off one vertical bar on their left, like taps
+            // on a wire; there is no direction, so no arrow.
+            std::sort(sources.begin(), sources.end(),
+                      [](const QRectF& left, const QRectF& right)
+                      { return left.center().y() < right.center().y(); });
+            qreal member_left = sources.first().left();
+            for (const auto& member : sources)
+                member_left = std::min(member_left, member.left());
+
+            const qreal bar_x = member_left - kBusStub;
+            for (const auto& member : sources)
+            {
+                add_segment(QLineF(left_centre(member),
+                                   QPointF(bar_x, member.center().y())));
+            }
+            placement.bar = QLineF(bar_x, sources.first().center().y(), bar_x,
+                                   sources.last().center().y());
+            placement.primary_anchor = placement.bar.p1();
+            placement.secondary_anchor = placement.primary_anchor;
+        }
+        else if (link.shape == link_shape::split && sources.size() == 1 &&
+                 targets.size() > 1)
         {
             std::sort(targets.begin(), targets.end(),
                       [](const QRectF& left, const QRectF& right)

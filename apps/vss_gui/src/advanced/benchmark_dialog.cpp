@@ -299,7 +299,10 @@ bool BenchmarkDialog::ports_linked() const
             link.sources.contains(from) && link.targets.contains(to);
         const bool backward =
             link.sources.contains(to) && link.targets.contains(from);
-        if (forward || backward)
+        const bool on_bus = link.shape == link_shape::bus &&
+                            link.sources.contains(from) &&
+                            link.sources.contains(to);
+        if (forward || backward || on_bus)
             return true;
     }
     return false;

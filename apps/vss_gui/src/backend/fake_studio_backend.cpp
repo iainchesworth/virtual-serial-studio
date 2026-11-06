@@ -361,6 +361,37 @@ vss::result<vss::link_id> FakeStudioBackend::monitor(vss::endpoint_id from,
                     options);
 }
 
+vss::result<vss::link_id>
+FakeStudioBackend::bus(const std::vector<vss::endpoint_id>& members)
+{
+    if (const auto error = take_error())
+        return *error;
+    if (!caps_.shared_bus)
+        return vss::make_error_code(vss::errc::unsupported);
+    if (members.size() < 2 || members.size() > vss::max_bus_members)
+        return vss::make_error_code(vss::errc::invalid_argument);
+    for (std::size_t index = 0; index < members.size(); ++index)
+    {
+        if (!find_port(members[index]))
+            return vss::make_error_code(vss::errc::not_found);
+        for (std::size_t other = 0; other < index; ++other)
+        {
+            if (members[other] == members[index])
+                return vss::make_error_code(vss::errc::invalid_argument);
+        }
+        for (const link_view& link : links_)
+        {
+            if (link.shape == link_shape::bus &&
+                link.sources.contains(members[index]))
+                return vss::make_error_code(vss::errc::already_exists);
+        }
+    }
+
+    vss::link_options options;
+    options.emulate_modem_lines = false;
+    return add_link(link_shape::bus, vss::link_mode::bus, members, {}, options);
+}
+
 vss::link_id
 FakeStudioBackend::add_link(link_shape shape, vss::link_mode mode,
                             const std::vector<vss::endpoint_id>& sources,
@@ -613,13 +644,20 @@ vss::config::document FakeStudioBackend::snapshot() const
         case link_shape::monitor:
             entry.mode = "monitor";
             break;
+        case link_shape::bus:
+            entry.mode = "bus";
+            break;
         }
         for (const vss::endpoint_id id : view.sources)
         {
             for (const auto& candidate : ports_)
             {
                 if (candidate.id == id)
-                    entry.sources.push_back(candidate.name.toStdString());
+                {
+                    (view.shape == link_shape::bus ? entry.members
+                                                   : entry.sources)
+                        .push_back(candidate.name.toStdString());
+                }
             }
         }
         for (const vss::endpoint_id id : view.targets)
@@ -711,13 +749,28 @@ FakeStudioBackend::apply(const vss::config::document& document, bool)
             view.shape = link_shape::join;
         else if (entry.mode == "monitor")
             view.shape = link_shape::monitor;
+        else if (entry.mode == "bus")
+        {
+            if (!caps_.shared_bus)
+                return vss::make_error_code(vss::errc::unsupported);
+            view.shape = link_shape::bus;
+        }
         else
             view.shape = link_shape::one_way;
-        view.mode = view.shape == link_shape::join ||
+        view.mode = view.shape == link_shape::bus ? vss::link_mode::bus
+                    : view.shape == link_shape::join ||
                             view.shape == link_shape::one_way ||
                             view.shape == link_shape::monitor
                         ? vss::link_mode::one_way
                         : vss::link_mode::duplex;
+
+        for (const auto& name : entry.members)
+        {
+            const auto id = resolve(name);
+            if (!id)
+                return vss::make_error_code(vss::errc::config_error);
+            view.sources.push_back(*id);
+        }
 
         for (const auto& name : entry.sources)
         {

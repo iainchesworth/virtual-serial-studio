@@ -8,6 +8,7 @@
 #define VSS_CONFIG_DOCUMENT_HPP
 
 #include <vss/core/error.hpp>
+#include <vss/core/link.hpp>
 #include <vss/core/serial_settings.hpp>
 #include <vss/core/types.hpp>
 
@@ -38,11 +39,17 @@ struct port_entry
 /// One link between ports.
 struct link_entry
 {
-    /// `duplex`, `split`, `join`, `redirect` or `monitor`.
+    /// `duplex`, `split`, `join`, `redirect`, `monitor` or `bus`.
     std::string mode = "duplex";
     std::vector<std::string> sources;
     std::vector<std::string> targets;
+    /// For `bus` only: the ports on the shared bus, 2 to
+    /// `vss::max_bus_members`.  A bus has no `sources` or `targets`.
+    std::vector<std::string> members;
+    /// A `bus` has no modem lines, so it must be `false` there; in the file
+    /// it may be left out for a bus.
     bool emulate_modem_lines = true;
+    /// A `bus` supports `interleave` only.
     merge_policy policy = merge_policy::interleave;
 
     friend bool operator==(const link_entry&, const link_entry&) = default;
@@ -80,8 +87,8 @@ constexpr const char* port_kinds[] = {"virtual", "physical", "tcp", "udp",
                                       "rfc2217", "mock"};
 constexpr const char* virtual_port_kinds[] = {"auto", "pty", "named-pipe",
                                               "loopback", "windows-driver"};
-constexpr const char* link_modes[] = {"duplex", "split", "join", "redirect",
-                                      "monitor"};
+constexpr const char* link_modes[] = {"duplex",   "split",   "join",
+                                      "redirect", "monitor", "bus"};
 
 } // namespace vss::config
 

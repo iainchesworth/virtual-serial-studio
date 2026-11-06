@@ -162,6 +162,14 @@ QString link_sentence(const port_view& port, const link_view& link,
         return QCoreApplication::translate("Troubleshoot",
                                            "%1 is in a one-way link from %2.")
             .arg(port.name, joined(sources));
+    case link_shape::bus:
+    {
+        QStringList others = sources;
+        others.removeAll(port.name);
+        return QCoreApplication::translate("Troubleshoot",
+                                           "%1 is on a shared bus with %2.")
+            .arg(port.name, joined(others));
+    }
     }
     return {};
 }

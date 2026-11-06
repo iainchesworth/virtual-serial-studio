@@ -84,6 +84,7 @@ each chunk to every target's write queue. Routes are derived from links:
 | `join([a, b], c)` | a→c and b→c |
 | `redirect(a, b)` | a→b |
 | `monitor(a, b)` | a→b with modem emulation disabled |
+| `bus([a, b, c])` | every ordered pair: a→b, a→c, b→a, b→c, c→a, c→b |
 
 Adding a link is refused when it would close a cycle in the graph, because a
 cycle in the routing table is an infinite loop. Cycles through *hardware* (the
@@ -92,6 +93,58 @@ two ends of a cable) cannot be detected and are documented as a user error.
 `merge_policy::owner` links keep an atomic owner; a publisher that does not own
 the link has its bytes counted as dropped instead of forwarded. `interleave`
 links forward everything.
+
+### The shared bus
+
+A bus is the one link that is a broadcast domain rather than a set of
+directions. `hub::bus(members)` puts two to 64 endpoints on one multi-drop
+wire, as an RS-485 pair does: a chunk read from any member is copied to every
+other member and never back to the member it came from. The routes are the
+`n * (n - 1)` ordered pairs, so routing needs nothing new, and the limit of 64
+keeps a saved file from asking for millions of them. The link is stored with
+`link_mode::bus`, its members in `sources` and no `targets`. Because the
+routes run both ways between every pair, the plain cycle check would refuse
+them; the rules below are what keep it sound.
+
+* **A bus is one node of the cycle graph.** The check treats all members as a
+  single node. The routes between members are not loops, but a path that leaves
+  the bus and comes back to it is: with a bus of `a`, `b` and `c`,
+  `redirect(a, x)` is allowed and `redirect(x, b)` is then refused, however long
+  the way round. Creating a bus is refused (`cycle_detected`) when an existing
+  route already runs from one member to another, directly or through other
+  ports, since the bytes would arrive twice. A route between two members of the
+  same bus is refused for the same reason.
+* **An endpoint is on at most one bus** (`already_exists`). Two buses that share
+  a member would be one bus, so the hub does not pretend otherwise. A member may
+  still be in a split, a join or a redirect; those links see it as the one
+  endpoint it is, and the cycle rule above covers the combination.
+* **A listen-only tap is not a member.** Nothing was added for it. A `join` from
+  every member to the tap (or a `monitor` from one member) copies each
+  member's bytes to it, and the tap sends nothing back because a join is one
+  way and the tap is not on the bus. A member that "must not transmit" is a
+  program that does not write, which the hub cannot enforce and a tap does not
+  need.
+* **No modem lines.** A multi-drop wire pair carries none, and with several
+  members "the peer's inputs" has no meaning, so `emulate_modem_lines` is stored
+  as `false` whatever the caller passed, and the wiring cannot be edited
+  (`unsupported`). A program that toggles RTS to switch an RS-485 transceiver
+  still works; the line goes nowhere.
+* **Only `interleave`.** `merge_policy::owner` names one publisher per link, which
+  on a bus would silence the replies a polled protocol needs, so it is refused
+  (`unsupported`) and so is `set_owner`. Bytes from different members are mixed
+  in the order the hub sees them, and nothing arbitrates a collision; chunks
+  from one member keep their order.
+* **Counting.** The link counts each delivery, as a split does, so a chunk of
+  `n` bytes from one member of a bus of five adds `4n` bytes and four messages
+  to the link. The traffic ring shows it once as received on the sender and
+  once as sent on each receiver.
+* **Removal.** Removing the link frees its members. Removing a member takes it
+  out of the bus and leaves the others on it; the bus goes when fewer than two
+  remain.
+
+Any endpoint kind may be a member: a driver port, a pseudo terminal, a loopback
+port, a real serial port, and TCP, UDP and RFC 2217 ports, so a port on another
+computer can sit on the same bus.
 
 ## Control lines
 

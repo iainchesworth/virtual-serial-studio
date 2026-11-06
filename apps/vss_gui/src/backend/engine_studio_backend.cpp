@@ -90,20 +90,26 @@ link_view make_link(const vss::link_info& info)
     view.owner = info.owner;
     view.stats = info.stats;
 
-    if (info.mode == vss::link_mode::duplex)
+    if (info.mode == vss::link_mode::bus)
+    {
+        view.shape = link_shape::bus;
+    }
+    else if (info.mode == vss::link_mode::duplex)
     {
         view.shape = info.sources.size() == 1 && info.targets.size() == 1
                          ? link_shape::two_way
                          : link_shape::split;
     }
-    else if (!info.options.emulate_modem_lines)
+    else if (info.sources.size() > 1)
     {
-        view.shape = link_shape::monitor;
+        // Many sources are a join with or without modem lines; a tap on a
+        // bus is a join without them.
+        view.shape = link_shape::join;
     }
     else
     {
-        view.shape =
-            info.sources.size() > 1 ? link_shape::join : link_shape::one_way;
+        view.shape = info.options.emulate_modem_lines ? link_shape::one_way
+                                                      : link_shape::monitor;
     }
     return view;
 }
@@ -206,6 +212,8 @@ capabilities EngineStudioBackend::caps() const
     caps.undo = true;
     // `vss::hub::set_link_wiring` holds the wires of every link.
     caps.line_matrix = true;
+    // `vss::hub::bus` is a shared multi-drop link, in the JSON as "bus".
+    caps.shared_bus = true;
     // The JSON editor places a schema error on its line with a path index of
     // the text, and asks `vss::config::from_json` which field it refused.
     caps.json_positions = true;
@@ -484,6 +492,16 @@ vss::result<vss::link_id> EngineStudioBackend::monitor(vss::endpoint_id from,
                                                        vss::endpoint_id to)
 {
     const auto linked = studio_.engine().monitor(from, to);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::bus(const std::vector<vss::endpoint_id>& members)
+{
+    const auto linked = studio_.engine().bus(members);
     if (!linked)
         return linked.error();
     rebuild();

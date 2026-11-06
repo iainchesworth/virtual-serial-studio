@@ -65,6 +65,52 @@ time, use an `owner` policy:
 publisher owns the link the other publishers' bytes are counted as dropped, not
 silently interleaved.
 
+## Put several programs on one bus
+
+A polled protocol such as Modbus RTU runs on a single line with one master and
+several devices, and every station hears every byte. A shared bus gives each
+program its own port and joins them like that line: what one writes goes to all
+the others and never back to itself.
+
+```bash
+vss_cli bus --virtual=3 --tap=virtual --seconds=60
+```
+
+```
+member-1 -> /dev/pts/4          <- open this in the master
+member-2 -> /dev/pts/5          <- and these in the devices
+member-3 -> /dev/pts/6
+tap -> /dev/pts/7               <- a listener that cannot transmit
+bus of 3 members (link 1)
+```
+
+Add `<uri>` arguments to put real or network ports on the bus as well, for
+example `vss_cli bus serial://COM3 tcp://10.0.0.2:4001 --virtual=1`.
+
+In JSON the bus lists its members, and the listener is a join from them that
+carries no modem lines:
+
+```json
+{
+  "name": "bus",
+  "ports": [
+    { "name": "master",   "kind": "virtual" },
+    { "name": "device-1", "kind": "virtual" },
+    { "name": "device-2", "kind": "virtual" },
+    { "name": "listener", "kind": "virtual" }
+  ],
+  "links": [
+    { "mode": "bus", "members": ["master", "device-1", "device-2"] },
+    { "mode": "join", "sources": ["master", "device-1", "device-2"],
+      "targets": ["listener"], "emulate_modem_lines": false }
+  ]
+}
+```
+
+A bus has no modem lines, no owner policy, and a port can be on one bus only.
+A route out of the bus and back into it is refused as a loop. The listener is
+outside the bus on purpose: a port that is not a member cannot send onto it.
+
 ## Watch traffic without disturbing the device
 
 `monitor` links are one-way and do not emulate modem lines, so the observer

@@ -252,16 +252,24 @@ link:
 | **Monitor** | You want to watch without disturbing. | A one-way copy that never drives modem lines. |
 | **Split one port to many** | Several programs must see the same device. | Each target receives a copy of the source. |
 | **Join many ports into one** | Several publishers feed one program. | The target receives every publisher's data. |
+| **Shared bus** | Several programs share one wire, like stations on an RS-485 line. | Every other port's data; never its own. |
 
 The dialog lists only ports that exist, refuses a port linked to itself, needs
-at least two targets for a split and two publishers for a join, and prints a
-sentence describing the result before you commit. A link that would make a loop
-is refused, with a message naming the pair, and nothing changes.
+at least two targets for a split, two publishers for a join and two ports for a
+bus, and prints a sentence describing the result before you commit. A link that
+would make a loop is refused, with a message naming the pair, and nothing
+changes.
 
-![The Connect ports dialog with the five relationships on the left and the From and To ports on the right](images/connect-ports-light.png)
+![The Connect ports dialog with the relationships on the left and the From and To ports on the right](images/connect-ports-light.png)
+
+A shared bus carries no modem lines and has no owner, and a port can be on only
+one bus. Where the engine has no bus (**What this build cannot do**), the choice
+is disabled with "Not available in this build".
 
 Remove a link by selecting its line and pressing `Delete`, or **Topology →
-Remove link**. Removing a port removes its links too, after a confirmation.
+Remove link**. Removing a port removes its links too, after a confirmation; a
+port on a shared bus just leaves the bus, which goes when fewer than two ports
+remain.
 
 ## Sharing one device with several programs
 
@@ -297,6 +305,62 @@ where no driver pair is free, so the ports work only inside Studio.
 ![Share step 2: three programs, the port each will open, and a warning offering Create another pair](images/share-programs-light.png)
 
 ![Share step 3: terminal on COM7, test-tool on COM8 and logger as Studio only](images/share-ready-light.png)
+
+## One master, several programs and a silent listener
+
+Some serial protocols put one master and several devices on a single two-wire
+line, the way Modbus RTU does over RS-485: the master asks, the addressed device
+answers, and every station hears every byte. A shared bus gives each program its
+own port and makes the ports behave like that one line, so you can try a master
+against several device programs, and watch the line, without hardware.
+
+1. **Add a port** for each program: the master, device 1 and device 2.
+2. **Topology → Connect ports…**, choose **Shared bus**, tick the three ports
+   and choose **Connect**. The sentence reads "Each of master, device 1 and
+   device 2 hears what the others write, and none hears itself."
+3. Open one port in each program, as **Port ready** shows.
+4. To listen without being on the line, add one more port, called *listener*,
+   and choose **Join many ports into one**. Tick the three bus ports as the
+   ports that send and *listener* as the target. Open an analyser on *listener*.
+   It hears what each of the three writes. Nothing it writes reaches the bus,
+   because a join is one way and *listener* is not on the bus.
+
+The same setup as a topology file, for `vss_cli run` or **File → Open**:
+
+```json
+{
+  "version": 1,
+  "name": "polled-bus",
+  "ports": [
+    { "name": "master",   "kind": "virtual" },
+    { "name": "device-1", "kind": "virtual" },
+    { "name": "device-2", "kind": "virtual" },
+    { "name": "listener", "kind": "virtual" }
+  ],
+  "links": [
+    { "mode": "bus", "members": ["master", "device-1", "device-2"] },
+    { "mode": "join", "sources": ["master", "device-1", "device-2"],
+      "targets": ["listener"], "emulate_modem_lines": false }
+  ]
+}
+```
+
+From the command line, `vss_cli bus --virtual=3 --tap=virtual` makes the three
+bus ports and the listener and prints the port each program should open.
+
+What to expect:
+
+- **No echo.** A port never hears its own bytes, so a program that reads back
+  what it sent, as an RS-485 transceiver in a loop would, sees nothing of its
+  own. Bytes from different ports are mixed in the order they arrive, and
+  nothing arbitrates when two programs talk at once; they are interleaved, not
+  corrupted. A master that polls and waits for the answer is not affected.
+- **No modem lines.** A program that toggles RTS to switch its transceiver
+  still runs; the line goes nowhere. Do not rely on a bus to carry DTR or RTS.
+- **One bus per port**, and no route may run from the bus out to another port
+  and back in to it. Studio refuses that with "That link would create a loop".
+- **Ports on other computers.** A TCP, UDP or RFC 2217 port can be a member too,
+  so a device on another machine can sit on the same bus.
 
 ## Watching traffic
 
@@ -636,6 +700,10 @@ available in this build". It never pretends. At the moment:
   bits, flow control): the server accepts and reports them but does not apply
   them to a real device linked to it. DTR, RTS and break from the client are
   passed on as control lines.
+- A **shared bus** in a build whose engine has no bus link: the choice in
+  **Connect ports** is disabled, and a topology file with a `bus` link is
+  refused with "Bus links are not available in this build". The star (one port
+  split to several, with a join to a listener) still works.
 
 The reasons and the plan for each are in
 [gui-design/docs/08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
@@ -679,6 +747,7 @@ again.
 | Create and hold a topology | `vss_cli run topology.json` |
 | Share a device | `vss_cli share serial://COM3 --listeners=3` |
 | Join publishers | `vss_cli join tcp://a:1 tcp://b:2 --target=serial://COM4` |
+| Put ports on a shared bus, with a listen-only tap | `vss_cli bus --virtual=3 --tap=virtual` |
 | Bridge two transports | `vss_cli bridge serial://COM3 tcp-listen://0.0.0.0:4001` |
 | Loopback demo | `vss_cli loopback` |
 | List devices | `vss_cli devices` |

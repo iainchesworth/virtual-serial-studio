@@ -352,3 +352,122 @@ TEST_CASE("document: owner policy roundtrips")
     REQUIRE(!parsed->links[0].emulate_modem_lines);
     REQUIRE_EQ(parsed->links[0].mode, std::string("join"));
 }
+
+namespace
+{
+
+document bus_document()
+{
+    document value;
+    value.name = "bus";
+    for (const char* name : {"master", "one", "two", "tap"})
+    {
+        port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        value.ports.push_back(port);
+    }
+
+    link_entry bus;
+    bus.mode = "bus";
+    bus.members = {"master", "one", "two"};
+    bus.emulate_modem_lines = false;
+    value.links.push_back(bus);
+
+    link_entry tap;
+    tap.mode = "join";
+    tap.sources = {"master", "one", "two"};
+    tap.targets = {"tap"};
+    tap.emulate_modem_lines = false;
+    value.links.push_back(tap);
+    return value;
+}
+
+} // namespace
+
+TEST_CASE("document: a bus round trips with its members")
+{
+    const document original = bus_document();
+    REQUIRE(!validate(original));
+
+    const auto text = to_json(original);
+    REQUIRE(text);
+    REQUIRE(text->find("\"mode\": \"bus\"") != std::string::npos);
+    REQUIRE(text->find("\"members\"") != std::string::npos);
+    // The version is still 1: a file without a bus loads as before.
+    REQUIRE(text->find("\"version\": 1") != std::string::npos);
+
+    const auto parsed = from_json(*text);
+    REQUIRE(parsed);
+    REQUIRE(*parsed == original);
+    REQUIRE_EQ(parsed->links[0].members.size(), std::size_t{3});
+    REQUIRE(parsed->links[0].sources.empty());
+    REQUIRE(parsed->links[0].targets.empty());
+}
+
+TEST_CASE("document: a bus in a hand written file needs only its members")
+{
+    const auto parsed =
+        from_json(R"({"version":1,"ports":[{"name":"a","kind":"virtual"},)"
+                  R"({"name":"b","kind":"virtual"}],)"
+                  R"("links":[{"mode":"bus","members":["a","b"]}]})");
+    REQUIRE(parsed);
+    REQUIRE_EQ(parsed->links.size(), std::size_t{1});
+    REQUIRE_EQ(parsed->links[0].mode, std::string("bus"));
+    // Absent means off for a bus.
+    REQUIRE(!parsed->links[0].emulate_modem_lines);
+    REQUIRE(parsed->links[0].policy == merge_policy::interleave);
+}
+
+TEST_CASE("document: a bus is validated")
+{
+    const auto expect_invalid = [](const std::string& links, errc expected)
+    {
+        const auto parsed = from_json(
+            R"({"version":1,"ports":[{"name":"a","kind":"virtual"},)"
+            R"({"name":"b","kind":"virtual"},{"name":"c","kind":"virtual"}],)"
+            R"("links":[)" +
+            links + "]}");
+        REQUIRE(!parsed);
+        REQUIRE_EQ(parsed.error(), make_error_code(expected));
+    };
+
+    expect_invalid(R"({"mode":"bus","members":["a"]})", errc::config_error);
+    expect_invalid(R"({"mode":"bus"})", errc::config_error);
+    expect_invalid(R"({"mode":"bus","members":["a","a"]})", errc::config_error);
+    expect_invalid(R"({"mode":"bus","members":["a","zzz"]})", errc::not_found);
+    expect_invalid(R"({"mode":"bus","members":["a","b"],"sources":["c"]})",
+                   errc::config_error);
+    expect_invalid(R"({"mode":"bus","members":["a","b"],"targets":["c"]})",
+                   errc::config_error);
+    expect_invalid(
+        R"({"mode":"bus","members":["a","b"],"emulate_modem_lines":true})",
+        errc::config_error);
+    expect_invalid(R"({"mode":"bus","members":["a","b"],"policy":"owner"})",
+                   errc::config_error);
+    expect_invalid(R"({"mode":"bus","members":"a"})", errc::config_error);
+    // Members belong to a bus only.
+    expect_invalid(
+        R"({"mode":"split","sources":["a"],"targets":["b"],"members":["c"]})",
+        errc::config_error);
+
+    // The most members a bus takes, and one more.
+    document big;
+    big.name = "big";
+    link_entry bus;
+    bus.mode = "bus";
+    bus.emulate_modem_lines = false;
+    for (std::size_t index = 0; index <= max_bus_members; ++index)
+    {
+        port_entry port;
+        port.name = "p" + std::to_string(index);
+        port.kind = "virtual";
+        big.ports.push_back(port);
+        bus.members.push_back(port.name);
+    }
+    big.links.push_back(bus);
+    REQUIRE_EQ(validate(big), make_error_code(errc::config_error));
+    big.links[0].members.pop_back();
+    REQUIRE(!validate(big));
+}

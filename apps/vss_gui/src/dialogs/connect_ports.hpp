@@ -32,8 +32,10 @@ class NoteBanner;
 class PickCard;
 class ResultSentence;
 
-/// Topology, Connect ports (Ctrl+L).  The five link shapes with per-mode
-/// validation, live result sentences and the engine's cycle refusal.
+/// Topology, Connect ports (Ctrl+L).  The six link shapes with per-mode
+/// validation, live result sentences and the engine's cycle refusal.  The
+/// shared bus is offered where `Capabilities::shared_bus` is on and shown
+/// disabled otherwise.
 class ConnectPortsDialog final : public QDialog
 {
     Q_OBJECT
@@ -45,7 +47,8 @@ public:
         redirect,
         monitor,
         split,
-        join
+        join,
+        bus
     };
 
     explicit ConnectPortsDialog(StudioBackend& backend,
@@ -91,6 +94,8 @@ public:
     void select_join_target(vss::endpoint_id id);
     QVector<vss::endpoint_id> source_ids() const;
     void set_source_ids(const QVector<vss::endpoint_id>& ids);
+    QVector<vss::endpoint_id> member_ids() const;
+    void set_member_ids(const QVector<vss::endpoint_id>& ids);
     QCheckBox* owner_check() const { return owner_check_; }
     QPushButton* primary_button() const { return primary_; }
 
@@ -103,15 +108,19 @@ private:
     QWidget* build_pair_page();
     QWidget* build_split_page();
     QWidget* build_join_page();
+    QWidget* build_bus_page();
     void build_footer(QVBoxLayout* outer);
     void add_mode_card(QLayout* layout, mode value, const QString& title,
                        const QString& description, const QString& glyph);
     void rebuild_split_list();
     void rebuild_join_list();
+    void rebuild_bus_list();
     void rebuild_checklist(QWidget* card, QVBoxLayout* card_layout, bool split,
-                           const QVector<vss::endpoint_id>& checked,
+                           QVector<vss::endpoint_id>& list,
                            vss::endpoint_id excluded,
                            const QString& excluded_reason);
+    void choose_first_two(QVector<vss::endpoint_id>& list,
+                          vss::endpoint_id avoid) const;
     void on_mode_selected(mode value);
     void on_ports_changed();
     void update_ui();
@@ -121,7 +130,7 @@ private:
     void show_backend_error(const vss::error_code& error, const QString& from,
                             const QString& to);
     std::optional<port_view> find_port(vss::endpoint_id id) const;
-    QVector<vss::endpoint_id> checked_ids(bool split) const;
+    QVector<vss::endpoint_id> checked_ids(mode kind) const;
     QString names_for(const QVector<vss::endpoint_id>& ids) const;
     QString single_name(vss::endpoint_id id) const;
 
@@ -133,8 +142,9 @@ private:
     vss::endpoint_id preselected_ = 0;
     QVector<vss::endpoint_id> split_targets_;
     QVector<vss::endpoint_id> join_sources_;
+    QVector<vss::endpoint_id> bus_members_;
 
-    PickCard* cards_[5] = {};
+    PickCard* cards_[6] = {};
     QButtonGroup* card_group_ = nullptr;
     QStackedWidget* stack_ = nullptr;
     QComboBox* from_combo_ = nullptr;
@@ -145,8 +155,11 @@ private:
     QVBoxLayout* split_layout_ = nullptr;
     QWidget* join_card_ = nullptr;
     QVBoxLayout* join_layout_ = nullptr;
+    QWidget* bus_card_ = nullptr;
+    QVBoxLayout* bus_layout_ = nullptr;
     QLabel* count_ = nullptr;
     QLabel* join_count_ = nullptr;
+    QLabel* bus_count_ = nullptr;
     NoteBanner* block_note_ = nullptr;
     InlineError* error_ = nullptr;
     ResultSentence* result_ = nullptr;

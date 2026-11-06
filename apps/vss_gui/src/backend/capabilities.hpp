@@ -69,6 +69,12 @@ struct capabilities
     /// (`vss_ports`' listen transport), so only a backend without one leaves
     /// this off.
     bool network_server = false;
+    /// A shared multi-drop bus link: every member hears every other and none
+    /// hears itself (`vss::hub::bus`).  The engine backend provides it.  A
+    /// backend without it keeps the star (a split with a join tap): the
+    /// Connect dialog shows the bus choice disabled with "Not available in
+    /// this build", and a setup file with a bus is refused with that reason.
+    bool shared_bus = false;
     /// Create another com0com null-modem pair (Windows, needs elevation).
     /// The share wizard's warn note calls the adapter method this gates.
     bool com0com_pair_creation = true;
