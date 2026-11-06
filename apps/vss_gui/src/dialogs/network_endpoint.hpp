@@ -100,6 +100,7 @@ private:
     void update_result();
     void update_address_blocks();
     void update_warning();
+    void show_firewall_dialog();
     void clear_error();
     QString build_fields_uri() const;
     QString effective_uri() const;
@@ -132,6 +133,7 @@ private:
     QLabel* hint_ = nullptr;
     NoteBanner* capability_note_ = nullptr;
     NoteBanner* firewall_note_ = nullptr;
+    QPushButton* firewall_button_ = nullptr;
     ResultSentence* result_ = nullptr;
     InlineError* error_ = nullptr;
     CodeBlock* address_block_ = nullptr;

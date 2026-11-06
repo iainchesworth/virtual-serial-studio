@@ -9,9 +9,13 @@
 
 #include "backend/studio_backend.hpp"
 
+#include <vss/ports/permissions.hpp>
+
 #include <QString>
 #include <QStringList>
 #include <QVector>
+
+#include <vector>
 
 namespace vss::gui::support
 {
@@ -30,6 +34,10 @@ struct platform_facts
     bool pty_available = false;
     bool dialout_known = false;
     bool dialout_member = false;
+    /// What the operating system may stop Studio doing: elevation, the firewall,
+    /// and on other systems the equivalents (see `vss/ports/permissions.hpp`).
+    /// Empty until asked.
+    std::vector<vss::permissions::fact> permissions;
 };
 
 /// "windows", "linux" or "macos".
@@ -53,7 +61,9 @@ enum class setup_action
     restart_elevated,
     refresh_devices,
     continue_test,
-    dialout_help
+    dialout_help,
+    /// Explain the firewall fact and, where this build can, offer the one rule.
+    firewall_help
 };
 
 struct setup_row

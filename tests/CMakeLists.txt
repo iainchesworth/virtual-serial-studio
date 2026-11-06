@@ -15,6 +15,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_listen_transport.cpp
   unit/test_loopback_transport.cpp
   unit/test_native_and_com0com.cpp
+  unit/test_permissions.cpp
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp

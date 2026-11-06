@@ -98,3 +98,38 @@ IOKit do not show.
 
 Virtual ports on Windows need the `vsscom` driver. Until it is installed, `auto` falls back to com0com when present, and to an
 in-process loopback device otherwise. See [`windows-com-driver.md`](windows-com-driver.md).
+
+### Elevation and Windows Firewall
+
+The permissions layer (`libs/vss_ports`, `vss/ports/permissions.hpp`) is shared by the
+GUI and `vss_cli permissions`. `observe()` reads the host (the process token with
+`GetTokenInformation`, and Windows Firewall through `INetFwPolicy2`, read only);
+`evaluate()` turns that into facts with reason codes and is plain code, so the
+tests inject observations and check every outcome on every system. A platform that
+cannot be asked answers `unknown`, and the Setup check shows "Not checked yet".
+
+- **Administrator.** Elevated, an administrator account that has not elevated (a
+  filtered token) and a standard user are three different facts, because Windows
+  asks for consent in the second and for a password in the third.
+- **One privileged step, in its own process.** Studio is never run elevated to do
+  one thing. The firewall rule is made by `vss_cli permissions firewall-allow`,
+  started with the `runas` verb so Windows shows its own prompt. The helper
+  validates its arguments (one port, one protocol, local subnet unless the caller
+  said otherwise, never every network), refuses a program that is not `vss_gui.exe`
+  or `vss_cli.exe` in its own folder, and replaces only a rule with its own name.
+  The prompt shows the helper's name and publisher. Until the release is signed the
+  publisher reads "Unknown", which the user guide says.
+- **Reading the rules.** An inbound rule decides a listener when it is enabled,
+  names the program (or no program), covers the protocol and the port, and applies
+  to a network the computer is on now. A block rule wins. "Block all incoming
+  connections" overrides every rule and is reported as such. Rules for a service
+  are skipped.
+- **Capability.** `capabilities::firewall_rule` is true where the platform has the
+  step. Without it, or without `vss_cli` beside the program, the dialog explains
+  and shows the command, and the button reads "Not available in this build".
+
+Not run on a real machine for this change (a check never changes the firewall of
+the machine the tests run on, so the step itself is covered by unit tests of the
+rule text, the argument round trip and the helper's refusals): adding and removing
+the rule in a Windows guest, the UAC prompt for a standard user, and a machine
+joined to a domain with policy-managed rules.

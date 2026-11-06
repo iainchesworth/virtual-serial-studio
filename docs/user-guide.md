@@ -393,6 +393,59 @@ listen on an interface they can reach (`0.0.0.0` for all interfaces). Try
 `127.0.0.1` first. Studio does not use the network unless you add an endpoint
 like these.
 
+## When the operating system asks, or says no
+
+Windows, Linux and macOS each protect the computer in ways that can stop a
+serial program or a network listener. Studio looks at these for you in **Tools →
+Setup check**, says what it found, and tells you the smallest thing to do. It
+follows three rules:
+
+- **It tells you before anything happens.** Studio never raises its own rights,
+  never changes a firewall rule and never changes a system setting without a
+  button you press, after it has shown you exactly what it will do.
+- **It says "Not checked yet" when it cannot tell.** It does not guess.
+- **It never turns a protection off.** The fix is always a narrow permission, or
+  a command for you to run yourself.
+
+### Windows
+
+**Administrator rights.** Studio and its command line run as you, and none of
+them asks for administrator rights when it starts. A step that needs them (a new
+com0com pair, a firewall rule) asks Windows for permission when you press its
+button. Windows shows its own **User Account Control** window; that window is
+the permission. The Setup check row *Administrator rights* says whether Windows
+will ask you only to confirm (your account is an administrator) or to type an
+administrator's password (it is not). *Restart as administrator* restarts the
+whole program with those rights; if you decline the prompt, Studio keeps running
+as before and says so.
+
+**Windows Firewall.** Nothing is asked while Studio listens on this PC only
+(`127.0.0.1`). When a network endpoint waits for other computers on `0.0.0.0` or a
+network address, Windows Firewall blocks them until a rule allows it. The
+*Network endpoint* dialog then shows **Check Windows Firewall for this port**, and
+the Setup check shows a *Windows Firewall* row. They open a dialog that says:
+
+- what Windows Firewall will do to this port, from reading its rules (Studio only
+  reads them);
+- the one rule Studio can add: this program, one protocol, one port, computers on
+  your local network only, on the network you are on now (private, domain or
+  public) and no other;
+- the same rule as a `netsh` command, if you would rather run it yourself.
+
+**Allow in Windows Firewall** starts a small helper (`vss_cli`, the command line
+beside the program) through the Windows permission prompt. The helper does that
+one thing and refuses any program that is not Studio. A rule that blocks the
+program, or the *Block all incoming connections* setting, is never changed by
+Studio; the dialog says where to change it. Remove the rule in Windows Defender
+Firewall (its name starts with *Virtual Serial Studio*), or with the command
+`netsh advfirewall firewall delete rule name="…"` that the dialog shows.
+
+The same check is available from a terminal and changes nothing:
+
+```
+vss_cli permissions check --listen=tcp-listen://0.0.0.0:4001
+```
+
 ## Finding things: the command palette
 
 `Ctrl+K`, or the **Search actions** box in the toolbar, opens a list of every
@@ -420,7 +473,8 @@ registry on Windows, a configuration file on Linux and macOS).
 
 - **Tools → Setup check** says what this PC needs so other programs can use
   your ports. On Windows it looks for the com0com driver, whether administrator
-  rights will be needed, and the real serial devices. On Linux and macOS it
+  rights will be needed, whether Windows Firewall lets other computers reach a
+  port you listen on, and the real serial devices. On Linux and macOS it
   looks at pseudo terminals and your serial port group. The status bar chip
   shows "Setup ready" or "Setup needs attention" and opens the same dialog.
 
@@ -513,7 +567,9 @@ Check the permissions of the user running the program.
 unplugged. Close the other program and try again. On Linux, add your user to
 `dialout` and log in again; the setup check shows the command.
 
-**Network peers cannot connect.** Check the firewall, that you listened on an
+**Network peers cannot connect.** Check the firewall (on Windows, the Setup check
+row and the dialog behind it in the Network endpoint dialog read the rules and
+show what is missing), that you listened on an
 address the peer can reach, and that the port number matches. Test locally with
 `127.0.0.1` first.
 
@@ -540,6 +596,7 @@ again.
 | List devices | `vss_cli devices` |
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
+| Check what the system may block | `vss_cli permissions check` |
 
 See [ux.md](ux.md) for the design reasoning, [scenarios.md](scenarios.md) for
 worked examples and [the screen specifications](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/00-product-brief.md) for the

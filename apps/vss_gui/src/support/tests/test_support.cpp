@@ -466,7 +466,11 @@ TEST_CASE("support: setup check dialog reads engine facts")
                           {}}});
 
     support::SetupCheckDialog dialog(backend);
-    REQUIRE_EQ(dialog.row_count(), 4);
+    // On a Windows host the Setup check also reads the real firewall, which
+    // adds its row; the rows built from the injected facts are the four.
+    const int firewall_rows =
+        support::host_platform() == QLatin1String("windows") ? 1 : 0;
+    REQUIRE_EQ(dialog.row_count(), 4 + firewall_rows);
     REQUIRE_EQ(dialog.report().header_chip, QStringLiteral("1 thing to fix"));
     REQUIRE_EQ(dialog.row_widget(0)->title_text(),
                QStringLiteral("Virtual port driver"));

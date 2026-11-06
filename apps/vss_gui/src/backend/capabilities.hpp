@@ -71,6 +71,11 @@ struct capabilities
     /// Create another com0com null-modem pair (Windows, needs elevation).
     /// The share wizard's warn note calls the adapter method this gates.
     bool com0com_pair_creation = true;
+    /// Add one Windows Firewall rule for a listener, through the elevated
+    /// helper, after the user agrees.  False where the platform has no such
+    /// step or the helper is not installed; the dialog then only explains and
+    /// shows the command, with "Not available in this build".
+    bool firewall_rule = false;
 };
 
 } // namespace vss::gui

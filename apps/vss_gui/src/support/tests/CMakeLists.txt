@@ -7,6 +7,7 @@
 if(VSS_BUILD_TESTS)
   add_executable(vss_gui_support_tests
     main.cpp
+    test_permission_rows.cpp
     test_support.cpp)
 
   target_include_directories(vss_gui_support_tests PRIVATE
