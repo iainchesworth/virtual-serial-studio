@@ -38,6 +38,12 @@ struct capabilities
     /// Per-line wiring matrix.  False: the engine only has a boolean
     /// null-modem crossing.
     bool line_matrix = false;
+    /// Choose the COM number of a port of the Windows driver, when it is made
+    /// and afterwards.  False where there is no such driver.
+    bool com_numbers = false;
+    /// Make a program let go of a port of the Windows driver: take the port
+    /// back, or end the program.  False where there is no such driver.
+    bool release_port = false;
     /// Observe whether another program opened the advertised path.  False:
     /// `endpoint_info::open` is the studio's own transport state.
     bool peer_open = false;

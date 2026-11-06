@@ -629,6 +629,46 @@ result<std::string> studio::set_com_number(endpoint_id id, unsigned com_number)
     return renumbered;
 }
 
+std::unordered_map<endpoint_id, std::string> studio::driver_ports() const
+{
+    std::unordered_map<endpoint_id, std::string> out;
+    std::lock_guard lock(record_mutex_);
+    for (const auto& [id, record] : records_)
+    {
+        if (!record.driver.expired())
+            out.emplace(id, record.target);
+    }
+    return out;
+}
+
+std::optional<driver_peer_info> studio::driver_holder(endpoint_id id) const
+{
+    std::string com_name;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end() || it->second.driver.expired())
+            return std::nullopt;
+        com_name = it->second.target;
+    }
+    return driver_peer(com_name);
+}
+
+result<std::uint32_t> studio::revoke_port(endpoint_id id)
+{
+    std::shared_ptr<transport> driver;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        driver = it->second.driver.lock();
+    }
+    if (!driver)
+        return make_error_code(errc::unsupported);
+    return revoke_driver_port(*driver);
+}
+
 std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
 {
     std::vector<endpoint_id> ids;

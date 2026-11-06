@@ -146,6 +146,13 @@ On Linux the **Port ready** dialog looks like this:
 - **Name**: a unique suffix is added if the name is taken. With **How many**
   above one, names run `port-1`, `port-2` and so on. The number must be 1 to
   32.
+- **COM number** (Windows, with the Studio driver and its helper service,
+  and only for *Best available*): *Automatic* takes a free number above the
+  ports this PC already has (never COM1 or COM2), or type the number a program
+  expects, 1 to 255. It names one port, so it is off
+  when **How many** is above one. A number that is refused is explained under
+  the field and nothing is made; see [Choosing a COM number
+  (Windows)](#choosing-a-com-number-windows).
 - **Kind**: *Best available (recommended)* uses the Virtual Serial Studio
   driver on Windows when it is installed, then com0com, and a pseudo terminal
   on Linux and macOS; *Pseudo terminal*; or
@@ -392,6 +399,116 @@ Here every byte takes between 180 and 200 ms to reach each other member.
   the ports themselves take. It is accurate to a few milliseconds, and a busy
   machine can make a byte late but never early.
 
+## RS-232, RS-422 and RS-485
+
+A Studio port has no electrical mode. A program cannot see the wiring, so a
+label of RS-232, RS-422 or RS-485 on a port would change nothing the program
+can notice, and would promise behaviour Studio does not have. What differs
+between the standards, for a program, is how many stations share the wire and who
+hears whom, and links model that:
+
+| Wiring | In Studio | Who hears whom |
+|---|---|---|
+| RS-232, one device | A **two-way** link (a null-modem cable) | Each end hears the other. |
+| RS-422, or RS-485 with four wires: a master transmits to many devices, and the devices answer on a pair that only the master hears | A **split** from the master's port to the device ports, with modem lines off | A device hears the master. The master hears every device. The devices do not hear each other. |
+| RS-485 with two wires: every station on one pair | A **shared bus** | Every station hears every other, and none hears itself. |
+
+Make the four-wire case with **Topology → Connect ports…** and **Split one port
+to many**, or `{ "mode": "split", "sources": ["master"], "targets": ["device-1",
+"device-2"], "emulate_modem_lines": false }`. A split already carries the
+devices' answers back to the master. Do not add a one-way join from the devices
+back to the master's port to "complete" it: that makes a loop, and Studio refuses
+it with "link would create a cycle". To listen without taking part, give a
+listener a **monitor** or a **join** from the ports, as in [One master, several
+programs and a silent listener](#one-master-several-programs-and-a-silent-listener).
+
+### RS-485 is half-duplex, and the bus is not yet
+
+On a real two-wire RS-485 line one station talks at a time. A station switches its
+transmitter on, sends, and switches it off, either in hardware (automatic
+direction) or by the program raising and dropping RTS. Studio's shared bus gives
+the same hearing, and a master that waits for the answer to each poll works as it
+would on the wire. It does not enforce the one-at-a-time rule:
+
+- **Overlap is not reported.** If two programs send at once, their bytes are
+  interleaved in the order they arrive. A real line would garble them, and Studio
+  neither garbles them nor says that it happened.
+- **RTS is not carried.** A program that raises RTS to enable its transmitter
+  runs, but nothing is gated by it.
+- **No echo.** A port never hears its own bytes. A transceiver that echoes what
+  its station sends, which some adapters do, is not modelled, so a program that
+  expects to read its own transmission back will not.
+- **Turn-around time is yours to add.** The time a device takes to switch from
+  receiving to sending is not modelled. To rehearse a late answer use a delay on
+  the link or in a [scripted device](#delay-and-jitter-on-a-link), and measure
+  with a capture.
+
+A bus option that reports overlap, and optionally holds the line for a turn-around
+time, is planned and is not in this build; the plan is in
+[gui-design/docs/08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
+
+## Old programs on Windows
+
+Many programs that talk to serial equipment were written long ago. They are
+often 32-bit, they open one fixed port, and they have habits that a port made by
+Studio has to meet. This is what to set up, and what to expect.
+
+### 32-bit programs
+
+The driver is 64-bit (x64 and ARM64); there is no 32-bit Windows driver. A
+32-bit program on 64-bit Windows reaches it as it reaches any COM port, and
+Windows passes the serial requests through unchanged, because they carry no
+pointers. A small 32-bit test program and a script that runs it against the driver
+(tests W1 to W4 and T1 to T7 in
+[drivers/windows/README.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/drivers/windows/README.md))
+are written, and the program is built in the project's checks. When this was
+written the script had not yet been run in a Windows test machine, so treat a
+32-bit program as expected to work and try yours.
+
+### The name a program opens
+
+A program opens a port by name, and there are two spellings:
+
+- `COM3`, and the other names up to `COM9`, work in every program.
+- `\\.\COM12` is the form that works for every number. A program that builds the
+  name as `"COM%d"`, and not as the C string `"\\\\.\\COM%d"`, cannot open
+  `COM10` or above, because
+  Windows reads the short form only up to 9.
+
+For an old program choose a number from 1 to 9 and keep it. Pick it in **Add
+port** (the **COM number** field) or with `vss_cli virtual --com=3`; see [Choosing a
+COM number (Windows)](#choosing-a-com-number-windows). A program that keeps its
+port in a setting file (for example `CommPort=3`) then finds the same port in
+every run, and a program that lists only `COM1` to `COM4` can be given a number in
+that range if the real ports on the PC leave one free.
+
+Make the ports before you start the program, with the numbers it expects. Many
+old programs fill their list of ports once, when they start. A port that is made,
+or that comes back, later is not in the list until the program is started again.
+
+### Programs that try every port
+
+Some programs look for their equipment by opening `COM1`, `COM2` and so on up to
+`COM16` in turn when they start. Studio's driver ports behave like real ones here:
+
+- **One program has a port at a time.** A second open of a port that a program
+  holds fails with "access denied", as it would on real hardware. A probe that
+  meets a port held by another program moves on to the next.
+- **A probe that finds your port may keep it.** If the first program to start
+  probes all sixteen and keeps what it finds, it can take a port meant for
+  another. Start the programs one at a time, in the order they should claim their
+  ports, and watch the Ports list: **Waiting for program** becomes **Program
+  connected** when a program opens the port.
+- **Fixed numbers make probing predictable.** With the ports at `COM3`, `COM4` and
+  `COM5`, a program that probes finds them where it expects them, in the same
+  order, every run.
+
+### What stops when Studio does
+
+Studio's driver ports belong to Studio and are removed when it closes, or if it
+stops without warning. A running program loses its port at that moment and may
+stop or show an error. Close the programs first, or accept that they will notice.
+
 ## Watching traffic
 
 **Topology → Watch traffic** makes a read-only copy of a port. Choose the port
@@ -511,8 +628,14 @@ or in a saved topology, as an optional field on a virtual port (1 to 255):
 Studio also remembers the number it was asked for and saves it with the topology.
 A port with no `com_number` takes the lowest free number, and the same slot keeps
 its number from one run to the next, but a different order of creation can give a
-different one. The Studio window does not offer to choose or change a number
-yet; the library does (`set_driver_com_number`, `studio::set_com_number`).
+different one.
+
+In the window, choose the number in **Add port** (the **COM number** field,
+*Automatic* by default), or select a driver port and press **Change...** beside
+its **COM number** in the Inspector. The change restarts the port, so the window
+tells you when a program has it open and refuses until the program lets go; use
+[Release port](#when-a-program-will-not-let-go-of-a-port-advanced) if it will
+not. The library does the same (`set_driver_com_number`, `studio::set_com_number`).
 
 What to know:
 
@@ -532,6 +655,39 @@ What to know:
 - Names above `COM9` must be written `\\.\COM12` by programs that open ports by
   name, which most do not. A program that opens `"COM%d"` fails above 9, so
   choose a number from 1 to 9 for such a program.
+
+## Ports under running programs
+
+A port of the Studio driver, and on Linux a pseudo terminal, tells Studio when a
+program opens it. The Ports list and the Inspector then read **Waiting for
+program** until something opens the port and **Program connected** once it does,
+so with several programs to start you can see which one has not yet.
+
+Studio's ports disappear with Studio, so a program that holds one loses it when
+you remove the port, start a new setup or close the window. Old programs may
+stop or show a bare error. Before any of those Studio names the ports that
+programs hold and asks you to confirm; it asks nothing when no program is known
+to hold a port. For a port Studio cannot observe (a hardware port, com0com, or
+anything on macOS) it does not guess, so it does not warn either.
+
+## When a program will not let go of a port (Advanced)
+
+Windows frees a port at once when its program ends, so this is rare: a program
+that is still running holds the port, and a second program cannot open it.
+Turn on **Advanced**, select the port (it reads **Program connected**) and press
+**Release port...** in the Inspector. The dialog names the program and its
+process and says how long no data has passed on the port. That is only a fact:
+Studio cannot tell a stuck program from a quiet one, so it never says the program
+is stuck. Choose one way, then press the button:
+
+- **Take the port back** (try this first). The program keeps running, but its
+  connection to the port stops working, and another program can open the port at
+  once with the same COM number. The Studio driver does this; Studio does not
+  touch the program.
+- **End the program.** Windows closes it straight away, as *End task* in Task
+  Manager does, and it does not get to save anything. Studio ends only your
+  own programs. For a program of another user, run Studio as administrator
+  (**Tools → Restart as administrator**); until then this choice is off and says why.
 
 ## Saving, opening and templates
 
@@ -613,6 +769,57 @@ bridge` warn when such a server can be reached from another computer and has no
 Every connection Studio accepts is set to send what it writes at once, so a
 short reply (a reply to a poll on a serial bus, for example) is not held back
 waiting for more data.
+
+### A device on another computer
+
+A device program on another computer can be one member of a bus. Add an
+`rfc2217-listen://` endpoint (**Add port → Network endpoint**, server role, in
+Advanced), put it on the bus like any other port, and on the other computer open
+it with a serial-over-network client such as pySerial's `rfc2217://host:port`.
+What to expect:
+
+- **The member is there with or without the other computer.** With nobody
+  connected, what the bus sends to it is dropped without an error and nothing
+  comes from it, which is what an unplugged device looks like. Studio does not
+  yet show whether a computer is connected.
+- **Time is Studio's.** Bytes are stamped once, when they pass through Studio, with
+  Studio's clock. The other computer's clock is not used, so a capture shows its
+  device on the same time axis as the others.
+- **The network is part of the reply window.** A master that waits 200 ms for an
+  answer waits for the network hop as well. On one computer the hop is under a
+  millisecond; across a network add its round trip to the device's own time, and
+  use a [delay on the link](#delay-and-jitter-on-a-link) to rehearse it. Every
+  connection Studio accepts is set to send at once, so a short reply is not held
+  back for more data.
+
+### Keeping it safe
+
+An RFC 2217 server has no password, and nothing it carries is encrypted. The list
+in [Who may connect](#who-may-connect) keeps strangers on the same network away,
+but an address can be forged, and the data crosses the network as it is. Choose
+the least open way that does the job:
+
+1. **The same computer.** Listen on `127.0.0.1`. Nothing else can reach it.
+2. **An SSH tunnel.** Listen on `127.0.0.1` on the Studio computer, and on the other
+   computer forward a port to it, then open `rfc2217://127.0.0.1:7001` there:
+
+   ```bash
+   ssh -N -L 7001:127.0.0.1:7001 user@studio-computer
+   ```
+
+   The traffic is encrypted and authenticated by SSH, and Studio sees only a
+   connection from itself.
+3. **A VPN.** Listen on the address the VPN gives the Studio computer, not
+   `0.0.0.0`, and add `?allow=` with the VPN's range, for example
+   `rfc2217-listen://10.8.0.1:7001?allow=10.8.0.0/24`. Only members of the VPN can
+   reach it.
+4. **A network you control.** Listen on the interface they can reach, add
+   `?allow=` with the computers that need it, and allow only that port through
+   the firewall. Use this only on a network whose other users you trust.
+
+Do not listen on `0.0.0.0` on a network you do not control, and do not make the
+port reachable from the Internet. The network dialog and `vss_cli bridge` warn
+when a server can be reached from another computer and has no `allow=` list.
 
 ## When the operating system asks, or says no
 
@@ -855,6 +1062,9 @@ available in this build". It never pretends. At the moment:
   bits, flow control): the server accepts and reports them but does not apply
   them to a real device linked to it. DTR, RTS and break from the client are
   passed on as control lines.
+- **Half-duplex behaviour of a bus**: a shared bus does not report two programs
+  sending at once, does not hold the line for a turn-around time and does not
+  carry RTS. See [RS-485 is half-duplex, and the bus is not yet](#rs-485-is-half-duplex-and-the-bus-is-not-yet).
 - A **shared bus** in a build whose engine has no bus link: the choice in
   **Connect ports** is disabled, and a topology file with a `bus` link is
   refused with "Bus links are not available in this build". The star (one port
@@ -870,12 +1080,15 @@ Virtual Serial Studio driver or com0com. Open **Tools → Setup check**. With
 neither, *Best available* falls back to an in-process loopback, whose path is `loopback:<name>` and which other
 applications cannot open. Pseudo terminals do not exist on Windows.
 
-**A COM number was refused.** `COM7 is already used by another device` means a
-real port, com0com or a port that was removed but keeps the name has it; pick
-another number, or remove the old device in Device Manager (*View > Show hidden
-devices*). `COM numbers need the Virtual Serial Studio driver and its helper
-service` means `vsscom_helper` is not installed or is older than the driver.
-`a program has COM7 open` means close it, then ask again.
+**A COM number was refused.** `COM7 already belongs to another device on this PC`
+means a real port, com0com or a port that was removed but keeps the name has it;
+pick another number, or remove the old device in Device Manager (*View > Show
+hidden devices*). `Choosing a COM number needs the Virtual Serial Studio helper
+service` means `vsscom_helper` is not installed or is older than the driver; leave
+the number on *Automatic* or install the helper. `A program has this port open`
+means close the program, or use Release port in Advanced mode, then ask again.
+`No more ports can be made` means you hold 16 driver ports (or the driver 32 in
+all): remove one.
 
 **A pseudo terminal path is shown but another program cannot open it.** On
 Linux the path is `/dev/pts/N`; it exists only while the studio is running.

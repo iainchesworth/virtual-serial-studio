@@ -35,6 +35,9 @@ platform_create_driver_port(const transport::executor_type& executor,
 result<std::string> platform_set_driver_com_number(transport& port,
                                                    unsigned com_number);
 
+/// Takes a driver port back from the program that has it open.
+result<std::uint32_t> platform_revoke_driver_port(transport& port);
+
 /// What the driver last said about the program on the COM port `com_name`.
 std::optional<driver_peer_info> platform_driver_peer(const std::string& com_name);
 

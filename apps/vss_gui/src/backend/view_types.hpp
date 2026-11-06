@@ -18,6 +18,7 @@
 #include <QByteArray>
 #include <QMetaType>
 #include <QString>
+#include <QtGlobal>
 #include <QVector>
 
 #include <cstdint>
@@ -68,6 +69,34 @@ struct port_view
     /// A loopback or mock endpoint: no other program can open it.
     bool studio_only = false;
     peer_state peer = peer_state::unknown;
+    /// A port the Windows driver made for this studio.  Its COM number can be
+    /// changed, and a program that holds it can be made to let go.
+    bool driver_port = false;
+    /// The number in the COM name of a driver port, or 0.
+    unsigned com_number = 0;
+};
+
+/// The program that has a driver port open, as the driver names it.
+struct holder_view
+{
+    quint32 process_id = 0;
+    /// The program's file name, or empty when Windows will not say.
+    QString process_name;
+    /// The program runs as the user who runs Studio.  Studio ends only such a
+    /// program, unless it was started as administrator.
+    bool own_user = false;
+    /// Studio may end the program.
+    bool can_end = false;
+};
+
+/// How a program is made to let go of a driver port.
+enum class release_method
+{
+    /// Take the port back: the program keeps running and keeps its handle,
+    /// which stops working, and another program can open the port.
+    take_back,
+    /// End the program, as Task Manager's End task does.
+    end_program
 };
 
 /// One link as the GUI needs it.

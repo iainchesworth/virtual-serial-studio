@@ -184,6 +184,37 @@ TEST_CASE("hub: split fans out to every listener")
                        2000ms));
 }
 
+TEST_CASE("hub: the listeners of a split do not hear each other")
+{
+    // Four-wire RS-422 and RS-485 multi-drop are modelled as a split: the master
+    // reaches every device, the devices answer to the master alone. The user
+    // guide says so, so this pins it.
+    topology fixture;
+    prepare(fixture);
+
+    const auto link = fixture.hub->split(fixture.a.endpoint->id(),
+                                         {fixture.b.endpoint->id(),
+                                          fixture.c.endpoint->id()});
+    REQUIRE(link);
+
+    fixture.b.inject_read("from-b");
+    REQUIRE(wait_until([&] { return written(fixture.a) == "from-b"; }, 2000ms));
+    fixture.c.inject_read("from-c");
+    REQUIRE(wait_until([&] { return written(fixture.a) == "from-bfrom-c"; },
+                       2000ms));
+
+    // Neither listener was written the other's answer, nor its own.
+    REQUIRE_EQ(written(fixture.b), std::string());
+    REQUIRE_EQ(written(fixture.c), std::string());
+
+    // A one-way join back from the listeners to the source would close a loop.
+    const auto back = fixture.hub->join({fixture.b.endpoint->id(),
+                                         fixture.c.endpoint->id()},
+                                        fixture.a.endpoint->id());
+    REQUIRE(!back);
+    REQUIRE_EQ(back.error(), make_error_code(errc::cycle_detected));
+}
+
 TEST_CASE("hub: split rejects an empty target list")
 {
     topology fixture;

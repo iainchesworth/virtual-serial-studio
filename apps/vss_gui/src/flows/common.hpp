@@ -44,6 +44,12 @@ struct flow_error
     QString details;
 };
 
+/// Why a COM number was refused, in words a person can act on.  `changing` is
+/// true for a port that exists and false for one being made.  `number` is the
+/// COM number that was asked for.
+QString com_number_refusal(const vss::error_code& error, unsigned number,
+                           bool changing);
+
 QString error_title(const QString& verb, const QString& thing);
 QString error_body(const vss::error_code& error, const QString& cause,
                    const QString& next_step);

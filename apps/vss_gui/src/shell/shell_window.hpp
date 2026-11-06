@@ -59,6 +59,10 @@ public:
 
     bool run_selftest();
 
+    /// Asks whether to close while programs have Studio's ports open, which
+    /// closing removes under them.  True when none do, or the user agrees.
+    bool confirm_exit();
+
 protected:
     void closeEvent(QCloseEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
@@ -111,6 +115,8 @@ private:
     void update_undo_actions();
     void remove_port(vss::endpoint_id id);
     void show_rename(vss::endpoint_id id);
+    void show_com_number(vss::endpoint_id id);
+    void show_release_port(vss::endpoint_id id);
     void show_links_dock(bool shown);
     void connect_from_port(vss::endpoint_id id);
 
