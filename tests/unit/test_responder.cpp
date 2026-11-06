@@ -270,13 +270,13 @@ TEST_CASE("responder: jitter stays inside its bounds and repeats with a seed")
         REQUIRE(running);
 
         std::vector<std::int64_t> gaps;
-        for (int index = 0; index < 8; ++index)
+        for (std::size_t index = 0; index < 8; ++index)
         {
             device.inject_read("\xaa");
             REQUIRE(wait_until(
                 [&] {
                     return times_of(events, "device", data_direction::tx).size() ==
-                           static_cast<std::size_t>(index + 1);
+                           index + 1;
                 },
                 2000ms));
             gaps.push_back(ms_between(
