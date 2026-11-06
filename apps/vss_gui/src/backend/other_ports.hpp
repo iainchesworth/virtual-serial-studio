@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_BACKEND_OTHER_PORTS_HPP
-#define VSS_GUI_BACKEND_OTHER_PORTS_HPP
+#pragma once
 
 #include "backend/view_types.hpp"
 
@@ -56,5 +55,3 @@ inline QString other_ports_reason(const std::vector<device_view>& ports)
 }
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_BACKEND_OTHER_PORTS_HPP

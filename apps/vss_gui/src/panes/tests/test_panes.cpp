@@ -376,7 +376,7 @@ TEST_CASE("ports panel: ports another program made are named, not shown")
 
     vss::gui::device_view driver;
     driver.path = QStringLiteral("COM41");
-    driver.hardware_id = QStringLiteral("VSSCOM\PORT");
+    driver.hardware_id = QStringLiteral("VSSCOM\\PORT");
     driver.virtual_device = true;
     backend.set_devices({driver});
 

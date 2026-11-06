@@ -88,7 +88,7 @@ vss::gui::device_view make_driver_port(const QString& path)
     device.path = path;
     device.description = QStringLiteral("Virtual Serial Studio port (%1)")
                              .arg(path);
-    device.hardware_id = QStringLiteral("VSSCOM\PORT");
+    device.hardware_id = QStringLiteral("VSSCOM\\PORT");
     device.virtual_device = true;
     return device;
 }
@@ -869,7 +869,7 @@ TEST_CASE("flows: watch with no ports says why and offers a next step")
                      [&requested] { requested = true; });
     dialog.empty_note()->action_button()->click();
     REQUIRE(requested);
-    REQUIRE(dialog.create_port_requested());
+    REQUIRE(dialog.create_port_chosen());
     REQUIRE_EQ(dialog.result(), QDialog::Rejected);
 }
 

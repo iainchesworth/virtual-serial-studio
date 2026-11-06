@@ -1593,7 +1593,7 @@ void ShellWindow::show_watch()
     const int result = dialog.exec();
     // The empty list offers "Create a port": open that flow now the Watch
     // window has closed.
-    if (dialog.create_port_requested())
+    if (dialog.create_port_chosen())
     {
         show_add_port();
         return;

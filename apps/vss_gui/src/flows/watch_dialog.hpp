@@ -46,7 +46,7 @@ public:
     /// The note shown when the list of ports is empty, or null.
     NoteBanner* empty_note() const noexcept { return empty_; }
     /// True when the user chose "Create a port" from the empty note.
-    bool create_port_requested() const noexcept
+    bool create_port_chosen() const noexcept
     {
         return create_port_requested_;
     }
