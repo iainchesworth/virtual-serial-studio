@@ -143,6 +143,70 @@ The pipe protocol is in `drivers/windows/vsscom_helper/protocol.h`. The studio
 tries the kernel-mode driver's control device first, then the helper, then a
 free port that already exists.
 
+### COM numbers
+
+A COM name comes from the Ports class installer when Windows builds the port:
+the lowest number in the COM name database (`ComDB`) that is free, written as
+`PortName` under the device's hardware key. Device Manager's *Advanced > COM
+Port Number* changes it. What that takes, found by trying it in a Windows 11
+guest, is why the driver does not honour a requested number itself:
+
+* **Writing `PortName` before the port is built does not work.** A key made
+  ahead of the device makes the install fail (`CONFIGFLAG_FAILEDINSTALL`), so a
+  number cannot be requested in the create request. A request field the driver
+  could honour would need the driver to claim the number in `ComDB`, which is a
+  user-mode, administrator-only API. The create request therefore keeps its
+  `Flags` and `Reserved` fields at zero.
+* **Changing a port that exists works**, and is what Device Manager does: claim
+  the new number in `ComDB` (refused if another device holds it), write
+  `PortName` in the device key, update the friendly name, restart the device so
+  that the driver reads the new `PortName`, then release the old number. The
+  driver creates the `\DosDevices` link, the `SERIALCOMM` value and the
+  interface only when it starts, so the restart makes all three follow.
+* **A restart with a handle open fails, and leaves the port unable to restart
+  again** until it is removed and made again (`DN_NEED_RESTART`). So the studio
+  checks `AppOpen` first, closes its own hub handle, and the helper looks for
+  a program by opening the COM port itself for an instant before it restarts.
+
+Everything in that list needs administrator rights, so the helper service
+(SYSTEM) does it, for both drivers, on request (`VSSCOM_HELPER_OP_SET_COM_NUMBER`
+for a port of the user-mode driver that the pipe made, and
+`VSSCOM_HELPER_OP_SET_COM_NUMBER_KM` for a port of the kernel-mode driver, where
+the helper asks the control device who made the port,
+`IOCTL_VSSCOM_CTL_GET_OWNER`, and compares the caller's SID). A number is taken
+if `ComDB` holds it or `\\.\COMn` resolves, which covers real ports, com0com and
+ports that have gone but keep their name. The range is 1 to 255.
+
+The studio asks for a number in `create_driver_port(..., com_number)`: it makes
+the port as usual, then has the helper change the number before it opens the hub
+end, so nothing is open. `set_driver_com_number` does the same later: it closes
+the hub handle, asks, opens the hub handle again on the restarted port, and gives
+the reads and writes that were waiting to the new handle, so the endpoint never
+sees the change.
+
+### Flow control, revoke and who has the port
+
+* **DTR and RTS.** `IOCTL_SERIAL_SET_HANDFLOW` applies its DTR and RTS settings.
+  Enable and disable move the line when the settings are given; handshake makes
+  the line follow the receive buffer (low at `XoffLimit` bytes free, high again at
+  `XonLimit` bytes waiting); toggle holds RTS high from the first queued byte
+  until the last has had time to leave at the current baud rate and frame. A line
+  in handshake mode refuses `SET_DTR` and `SET_RTS`, as `serial.sys` does. The
+  settings reset when the program closes the port. The rules are plain C in
+  `vsscom/core`, with unit tests. Output flow control (stopping on CTS or DSR,
+  XON/XOFF) is not applied.
+* **Revoke.** `IOCTL_VSSCOM_HUB_REVOKE`, on the hub handle, ends the waiting
+  requests of the program that has the COM port, marks its handle so that every
+  later request on it fails with `STATUS_DEVICE_REMOVED`, clears `AppOpen`,
+  resets the port as a close would, and lets a new program open it. Only the user
+  who owns the port has a hub handle (`access.c`), so only that user can revoke.
+  The program keeps its handle, and closing it later changes nothing.
+* **`AppProcessId`.** The hub state names the process that opened the port.
+  The studio logs each change of `AppOpen` against the endpoint with the time and
+  the process, and `vss::driver_peer` and `vss::peer_open` answer from it. A
+  version 3 driver and studio go together: the state grew by one field, so the
+  studio refuses a driver of version 2.
+
 ### Data path
 
 Per port, one named section holding two single-producer/single-consumer rings:
@@ -240,8 +304,8 @@ three ways, each with a reason:
   configuration. The process ending is the usual way a port goes, so the driver
   does not rely on a program to clean up.
 * The **slot** is the lowest free number and is the device's instance id, so a
-  port that returns gets the device node and COM name it had. There is no
-  requested COM number yet; the request has a field for it that must be zero.
+  port that returns gets the device node and COM name it had. A COM number can
+  be chosen and changed through the helper service; see "COM numbers".
 
 The shared-memory data path remains a later step, if the queues turn out to be
 too slow.
@@ -261,7 +325,10 @@ too slow.
   `errc::unsupported` with no driver, `errc::device_busy` when there is no
   control device and every port is taken, `errc::port_exhausted` when the
   control device has no slot left, `errc::permission_denied` and
-  `errc::timeout`.
+  `errc::timeout`. With a `com_number` it also reports `errc::already_exists` when
+  another device has the number and `errc::invalid_argument` outside 1 to 255;
+  `vss::set_driver_com_number()` changes the number of a port it made, and
+  `vss::driver_peer()` says what program has a port open.
 * Auto-selection order is already: **driver → com0com → loopback** on Windows,
   and **pty** elsewhere. When the driver installs, it wins without a code
   change elsewhere.
@@ -273,9 +340,8 @@ too slow.
 
 1. **Transitional fallback** — keep com0com support behind the driver, or drop
    it once the driver ships? Keeping it costs little and helps users migrate.
-2. **COM numbering** — auto-assign and let the user rename, or honour a
-   requested number? Auto-assign with an optional preference is least
-   surprising.
+2. **COM numbering** — decided: auto-assign, with an optional number asked for
+   when the port is made or changed later (see "COM numbers").
 3. **Driver signer** — who holds the EV certificate, and does the driver ship
    separately from the application?
 4. **Open source** — the driver in this repository under GPL-3.0-or-later, or a

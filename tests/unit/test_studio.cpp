@@ -695,3 +695,63 @@ TEST_CASE("studio: a document that loops through a bus rolls back")
     REQUIRE_EQ(applied.error(), make_error_code(errc::cycle_detected));
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
 }
+
+TEST_CASE("studio: a COM number is for the driver and is ignored by other ports")
+{
+    studio app;
+    const auto created =
+        app.create_virtual_port("plain", virtual_port_kind::loopback, {}, 9);
+    REQUIRE(created);
+
+    // Not a driver port: nothing to renumber, and nothing recorded.
+    const auto changed = app.set_com_number((*created)->id(), 12);
+    REQUIRE(!changed.has_value());
+    REQUIRE_EQ(changed.error(), make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.set_com_number(9999, 12).error(),
+               make_error_code(errc::not_found));
+    REQUIRE_EQ(app.snapshot().ports[0].com_number, 0u);
+}
+
+TEST_CASE("studio: a topology that asks for a COM number fails cleanly without the driver")
+{
+    if (vss::driver_available())
+        VSS_SKIP("the COM port driver is installed on this machine");
+
+    config::document document;
+    document.name = "numbered";
+    config::port_entry port;
+    port.name = "com";
+    port.kind = "virtual";
+    port.virtual_kind = "windows-driver";
+    port.com_number = 7;
+    document.ports.push_back(port);
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(!applied);
+    REQUIRE_EQ(applied.error(), make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
+}
+
+TEST_CASE("studio: an automatic port takes a COM number only where the driver is")
+{
+    if (vss::driver_available())
+        VSS_SKIP("the COM port driver is installed on this machine");
+
+    // Without the driver a COM number means nothing: the port is whatever the
+    // platform gives, and the number is not saved.
+    config::document document;
+    document.name = "auto-number";
+    config::port_entry port;
+    port.name = "any";
+    port.kind = "virtual";
+    port.virtual_kind = "auto";
+    port.com_number = 7;
+    document.ports.push_back(port);
+
+    studio app;
+    const auto applied = app.apply(document);
+    REQUIRE(applied.has_value());
+    REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{1});
+    REQUIRE_EQ(app.snapshot().ports[0].com_number, 0u);
+}

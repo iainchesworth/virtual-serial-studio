@@ -81,10 +81,24 @@ public:
     /// Creates an OS virtual port.  `auto` picks the best available: a
     /// pseudo terminal on POSIX, a com0com pair on Windows when one exists,
     /// and an in-process loopback otherwise.
+    /// `com_number` is the COM number a port of the Windows driver should have, 1 to
+    /// 255; 0 takes whichever Windows picks.  It means something only to that
+    /// driver (`virtual_port_kind::windows_driver`, or `auto` where the driver is
+    /// installed); every other port ignores it.  A number that another device has
+    /// fails with `errc::already_exists` and no port is made, and a number with no
+    /// helper service to give it fails with `errc::unsupported`.
     result<std::shared_ptr<endpoint>> create_virtual_port(
         const std::string& name,
         virtual_port_kind kind = virtual_port_kind::pty,
-        endpoint_options options = {});
+        endpoint_options options = {}, unsigned com_number = 0);
+
+    /// Gives a port of the Windows driver a different COM number, as Device
+    /// Manager's Advanced > COM Port Number does, and returns the new COM name.
+    /// The port is restarted, so no program may have it open; see
+    /// `set_driver_com_number` for the errors.  The studio remembers the number
+    /// the port was given, and `snapshot()` saves it.  `errc::not_found` for an
+    /// unknown port and `errc::unsupported` for a port the driver did not make.
+    result<std::string> set_com_number(endpoint_id id, unsigned com_number);
 
     /// Attaches a real serial port or a network backend from a URI.
     result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
@@ -200,6 +214,11 @@ private:
         bool capture = true;
         /// The fixture behind a mock port, or empty for every other kind.
         std::weak_ptr<serial_transport> fixture;
+        /// For a port of the Windows driver: the number it was asked to have
+        /// (0 for whichever Windows picked), and its transport, which the
+        /// number is changed through.
+        unsigned com_number = 0;
+        std::weak_ptr<transport> driver;
     };
 
     result<std::shared_ptr<endpoint>> register_port(
@@ -207,7 +226,8 @@ private:
         endpoint_options options);
 
     result<std::shared_ptr<endpoint>> create_auto_virtual_port(
-        const std::string& name, endpoint_options options);
+        const std::string& name, endpoint_options options,
+        unsigned com_number = 0);
 
     /// Makes the stable link for a new pseudo terminal when the options ask
     /// for one, and points the record's advertised path at it.

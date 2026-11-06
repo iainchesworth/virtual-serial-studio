@@ -46,6 +46,13 @@ static VOID VssComStartTimer(WDFTIMER Timer, ULONGLONG Deadline)
 
 // -- Small request helpers -------------------------------------------------
 
+// True when the request came from an application handle that was revoked.
+BOOLEAN VssComRequestRevoked(_In_ WDFREQUEST Request)
+{
+    WDFFILEOBJECT file = WdfRequestGetFileObject(Request);
+    return file != NULL && VssComFileContext(file)->Revoked ? TRUE : FALSE;
+}
+
 VOID VssComCompleteWithData(_In_ WDFREQUEST Request,
                             _In_reads_bytes_(Length) const VOID* Data,
                             _In_ size_t Length)
@@ -137,6 +144,15 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
 
         read = VssComReadContext(request);
         now = VssComNow();
+
+        // A read of a handle that was revoked ends here, wherever it was when the
+        // revoke ran: parked in the queue, or in this function's hands.
+        if (VssComRequestRevoked(request))
+        {
+            VssComStopReadTimers(Context);
+            VssComFinishRead(request, STATUS_DEVICE_REMOVED);
+            continue;
+        }
 
         VssComLockAcquire(Context->Lock);
         if (!read->Started)
@@ -287,6 +303,9 @@ VOID VssComPump(_In_ PVSSCOM_DEVICE_CONTEXT Context)
                 moved = TRUE;
         } while (moved);
 
+        // The buffers changed: a line that follows the receive buffer may move.
+        VssComApplyFlow(Context, FALSE);
+
         VssComLockAcquire(Context->Lock);
         again = Context->PumpAgain;
         if (!again)
@@ -331,6 +350,23 @@ static VOID VssComFinishWait(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     VssComLockRelease(Context->Lock);
 
     VssComCompleteWithData(request, &Events, sizeof(Events));
+}
+
+// Ends the waiting WaitCommEvent request, if there is one, with `Status`.
+VOID VssComFinishWaitWith(_In_ PVSSCOM_DEVICE_CONTEXT Context,
+                          _In_ NTSTATUS Status)
+{
+    WDFREQUEST request;
+
+    if (!NT_SUCCESS(WdfIoQueueRetrieveNextRequest(Context->WaitQueue, &request)))
+        return;
+
+    VssComLockAcquire(Context->Lock);
+    Context->WaitQueued = FALSE;
+    Context->Events.waiting = 0;
+    VssComLockRelease(Context->Lock);
+
+    WdfRequestComplete(request, Status);
 }
 
 // Something happened that an application can wait for.
@@ -400,6 +436,85 @@ static VOID VssComUpdateLines(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         VssComBumpState(Context);
 }
 
+// -- Flow control ----------------------------------------------------------
+
+VOID VssComApplyFlow(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ BOOLEAN Set)
+{
+    vsscom_flow flow;
+    vsscom_flow_lines now;
+    vsscom_flow_lines next;
+    ULONGLONG time = VssComNow();
+    ULONGLONG busy;
+    BOOLEAN changed;
+    BOOLEAN hold;
+    ULONG rx;
+    ULONG tx;
+
+    VssComLockAcquire(Context->Lock);
+    flow.control_handshake = Context->HandFlow.ControlHandShake;
+    flow.flow_replace = Context->HandFlow.FlowReplace;
+    flow.xon_limit = (vsscom_u32)Context->HandFlow.XonLimit;
+    flow.xoff_limit = (vsscom_u32)Context->HandFlow.XoffLimit;
+    now.dtr = Context->Dtr ? 1 : 0;
+    now.rts = Context->Rts ? 1 : 0;
+    rx = vsscom_ring_count(&Context->Rx);
+    tx = vsscom_ring_count(&Context->Tx);
+    busy = Context->TxBusyUntil;
+
+    next = vsscom_flow_update(&flow, now, rx, VSSCOM_RX_SIZE,
+                              vsscom_tx_sending(tx, time, busy),
+                              Set ? 1 : 0);
+    changed = next.dtr != now.dtr || next.rts != now.rts;
+    Context->Dtr = next.dtr != 0;
+    Context->Rts = next.rts != 0;
+    // The bytes have all gone to the hub, but the last may not have left yet: RTS
+    // stays up until its time is over.
+    hold = (flow.flow_replace & VSSCOM_RTS_MASK) == VSSCOM_RTS_TOGGLE &&
+           tx == 0 && time < busy;
+    VssComLockRelease(Context->Lock);
+
+    if (changed)
+    {
+        VssComApplyLines(Context);
+        VssComBumpState(Context);
+    }
+    if (hold)
+    {
+        // Restarting a timer that is queued does not move its due time.
+        WdfTimerStop(Context->FlowTimer, FALSE);
+        VssComStartTimer(Context->FlowTimer, busy);
+    }
+}
+
+VOID VssComFlowTransmit(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Bytes)
+{
+    const ULONGLONG time = VssComNow();
+    BOOLEAN toggle;
+
+    VssComLockAcquire(Context->Lock);
+    toggle = (Context->HandFlow.FlowReplace & VSSCOM_RTS_MASK) ==
+             VSSCOM_RTS_TOGGLE;
+    if (toggle)
+    {
+        const vsscom_u64 duration = vsscom_tx_time(
+            Context->BaudRate, Context->LineControl.WordLength,
+            Context->LineControl.Parity, Context->LineControl.StopBits, Bytes);
+        Context->TxBusyUntil =
+            vsscom_tx_busy_until(time, Context->TxBusyUntil, duration);
+    }
+    VssComLockRelease(Context->Lock);
+
+    // RTS goes high before the hub can read the bytes, so a hub that gates on it
+    // sees it first.
+    if (toggle)
+        VssComApplyFlow(Context, FALSE);
+}
+
+VOID VssComEvtFlowTimer(_In_ WDFTIMER Timer)
+{
+    VssComApplyFlow(VssComGetContext(WdfTimerGetParentObject(Timer)), FALSE);
+}
+
 // -- Reset on close --------------------------------------------------------
 
 // Like a UART driver, the port goes back to quiet when its last handle closes:
@@ -412,14 +527,59 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     vsscom_ring_clear(&Context->Rx);
     Context->Dtr = FALSE;
     Context->Rts = FALSE;
+    // Every open starts with the settings of a port nobody has configured, as it
+    // does on a UART: no DTR or RTS control, no handshake.
+    RtlZeroMemory(&Context->HandFlow, sizeof(Context->HandFlow));
+    Context->TxBusyUntil = 0;
     // With a hub attached its lines stay as they are, as a real device's would.
     Context->ModemLevels = Context->HubOpen ? (Context->HubLines & VSSCOM_LINE_MASK) : 0;
     Context->ModemDeltas = 0;
     release = vsscom_events_set_mask(&Context->Events, 0);
     VssComLockRelease(Context->Lock);
 
+    WdfTimerStop(Context->FlowTimer, FALSE);
     if (release)
         VssComFinishWait(Context, 0);
+}
+
+// -- Revoke ----------------------------------------------------------------
+
+// Takes the application handle back: its requests fail from now on, the ones that
+// wait end, and the port goes back to quiet so that a new program can open it. The
+// old handle stays open in its process, and closing it later changes nothing
+// (VssComEvtFileCleanup).
+ULONG VssComRevokeApplication(_In_ PVSSCOM_DEVICE_CONTEXT Context)
+{
+    WDFFILEOBJECT file;
+    ULONG process;
+    BOOLEAN was_open;
+
+    VssComLockAcquire(Context->Lock);
+    was_open = Context->AppOpen;
+    file = Context->AppFile;
+    process = Context->AppProcessId;
+    if (was_open)
+    {
+        if (file != NULL)
+            VssComFileContext(file)->Revoked = TRUE;
+        Context->AppFile = NULL;
+        Context->AppProcessId = 0;
+        Context->AppOpen = FALSE;
+        Context->Break = FALSE;
+        Context->RevokeCount++;
+    }
+    VssComLockRelease(Context->Lock);
+    if (!was_open)
+        return 0;
+
+    // The wait goes first, so that the reset does not complete it as a success.
+    VssComFinishWaitWith(Context, STATUS_DEVICE_REMOVED);
+    VssComAbortAppWrites(Context, STATUS_DEVICE_REMOVED);
+    VssComResetPort(Context);
+    VssComBumpState(Context);
+    // The reads of the old handle are in the read queue: the pump ends them.
+    VssComPump(Context);
+    return process;
 }
 
 // -- Read and write --------------------------------------------------------
@@ -429,7 +589,15 @@ VOID VssComResetPort(_In_ PVSSCOM_DEVICE_CONTEXT Context)
 static ULONG VssComRequestKind(_In_ WDFREQUEST Request)
 {
     WDFFILEOBJECT file = WdfRequestGetFileObject(Request);
-    return file == NULL ? 0 : VssComFileContext(file)->Kind;
+    PVSSCOM_FILE_CONTEXT context;
+
+    if (file == NULL)
+        return 0;
+    context = VssComFileContext(file);
+    // An application handle that was revoked is not an application handle any more.
+    if (context->Kind == VSSCOM_FILE_APP && context->Revoked)
+        return VssComFileRevoked;
+    return context->Kind;
 }
 
 static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
@@ -445,6 +613,11 @@ static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     if (kind == VSSCOM_FILE_HUB)
     {
         VssComHubRead(context, Request, Length);
+        return;
+    }
+    if (kind == VssComFileRevoked)
+    {
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
         return;
     }
     if (kind != VSSCOM_FILE_APP)
@@ -506,6 +679,11 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         VssComHubWrite(context, Request, Length);
         return;
     }
+    if (kind == VssComFileRevoked)
+    {
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
+        return;
+    }
     if (kind != VSSCOM_FILE_APP)
     {
         WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);
@@ -549,6 +727,7 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
 
     if (written != 0)
     {
+        VssComFlowTransmit(context, written);
         VssComPump(context);
         VssComRaise(context, VSSCOM_EV_RXCHAR);
     }
@@ -613,6 +792,11 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     if (kind == VSSCOM_FILE_HUB)
     {
         VssComHubIoControl(context, Request, IoControlCode);
+        return;
+    }
+    if (kind == VssComFileRevoked)
+    {
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
         return;
     }
     if (kind != VSSCOM_FILE_APP)
@@ -731,7 +915,17 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     case IOCTL_SERIAL_SET_HANDFLOW:
     {
         SERIAL_HANDFLOW handflow = {0};
+        vsscom_flow flow;
         if (!VssComFetchInput(Request, &handflow, sizeof(handflow)))
+        {
+            WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
+            return;
+        }
+        flow.control_handshake = handflow.ControlHandShake;
+        flow.flow_replace = handflow.FlowReplace;
+        flow.xon_limit = (vsscom_u32)handflow.XonLimit;
+        flow.xoff_limit = (vsscom_u32)handflow.XoffLimit;
+        if (!vsscom_flow_valid(&flow, VSSCOM_RX_SIZE))
         {
             WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
             return;
@@ -739,6 +933,9 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         VssComLockAcquire(context->Lock);
         context->HandFlow = handflow;
         VssComLockRelease(context->Lock);
+        // Enable and disable move DTR and RTS now; a handshake or a toggle starts to
+        // follow the buffers.
+        VssComApplyFlow(context, TRUE);
         WdfRequestComplete(Request, STATUS_SUCCESS);
         return;
     }
@@ -807,10 +1004,28 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     {
         BOOLEAN dtr;
         BOOLEAN rts;
+        BOOLEAN refused;
+        const BOOLEAN is_dtr = IoControlCode == IOCTL_SERIAL_SET_DTR ||
+                               IoControlCode == IOCTL_SERIAL_CLR_DTR;
+        vsscom_flow flow;
         VssComLockAcquire(context->Lock);
         dtr = context->Dtr;
         rts = context->Rts;
+        flow.control_handshake = context->HandFlow.ControlHandShake;
+        flow.flow_replace = context->HandFlow.FlowReplace;
+        flow.xon_limit = 0;
+        flow.xoff_limit = 0;
         VssComLockRelease(context->Lock);
+
+        // A line that follows the receive buffer is the driver's to move, as on a
+        // real port.
+        refused = is_dtr ? !vsscom_flow_dtr_manual(&flow)
+                         : !vsscom_flow_rts_manual(&flow);
+        if (refused)
+        {
+            WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
+            return;
+        }
 
         if (IoControlCode == IOCTL_SERIAL_SET_DTR)
             dtr = TRUE;
@@ -913,6 +1128,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     {
         vsscom_u32 fired = 0;
         BOOLEAN ready;
+        ULONG epoch;
         NTSTATUS status;
 
         VssComLockAcquire(context->Lock);
@@ -923,6 +1139,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
             return;
         }
         context->WaitQueued = TRUE;
+        epoch = context->RevokeCount;
         VssComLockRelease(context->Lock);
 
         // The request is parked before the event state says "waiting", so an
@@ -945,6 +1162,14 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         // and finish it now.
         if (ready)
             VssComFinishWait(context, fired);
+
+        // A revoke that ran between the check at the top and the parking found
+        // nothing to end. The request may be gone by now, so the count tells.
+        VssComLockAcquire(context->Lock);
+        ready = context->RevokeCount != epoch;
+        VssComLockRelease(context->Lock);
+        if (ready)
+            VssComFinishWaitWith(context, STATUS_DEVICE_REMOVED);
         return;
     }
 
@@ -1006,6 +1231,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         WdfRequestComplete(Request, STATUS_SUCCESS);
         if (stored != 0)
         {
+            VssComFlowTransmit(context, 1);
             VssComPump(context);
             if (!hub)
                 VssComRaise(context, VSSCOM_EV_RXCHAR);

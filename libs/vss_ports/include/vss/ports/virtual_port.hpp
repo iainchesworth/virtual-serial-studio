@@ -54,13 +54,17 @@ const char* to_string(virtual_port_kind kind) noexcept;
 /// The returned transport is already open and ready for reads.  For `pty`
 /// the slave side is held open by the studio so that the master never sees
 /// spurious end-of-file before an application connects.
+/// `com_number` is for `windows_driver` only: the COM number the port should have
+/// (see `create_driver_port`), 0 for whichever Windows picks.  Other kinds have no
+/// COM numbers and ignore it.
 result<virtual_port_result> create_virtual_port(
     const transport::executor_type& executor, virtual_port_kind kind,
-    const std::string& name);
+    const std::string& name, unsigned com_number = 0);
 
 /// Creates the best available kind for this platform.
 result<virtual_port_result> create_best_virtual_port(
-    const transport::executor_type& executor, const std::string& name);
+    const transport::executor_type& executor, const std::string& name,
+    unsigned com_number = 0);
 
 } // namespace vss
 

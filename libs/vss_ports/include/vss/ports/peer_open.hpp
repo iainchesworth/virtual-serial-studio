@@ -25,8 +25,12 @@ enum class peer_open_state
 };
 
 /// True when this platform can tell whether another program has a pseudo
-/// terminal open.  Linux can, by looking at the descriptors of other
-/// processes.  macOS and Windows cannot yet, and answer `unknown`.
+/// terminal or a driver port open.  Linux can, by looking at the descriptors of
+/// other processes.  Windows can for the ports of the Virtual Serial Studio
+/// driver, which tells the studio what program has the COM port open (a path
+/// is the COM name, such as `COM7`; any other COM port reads as `unknown`) and
+/// is true when that driver is installed.  macOS cannot yet, and answers
+/// `unknown`.
 bool peer_open_supported() noexcept;
 
 /// For each device path, whether another process has it open.  The process

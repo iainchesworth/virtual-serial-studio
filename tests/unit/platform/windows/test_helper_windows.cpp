@@ -20,6 +20,7 @@
 #include <devpropdef.h>
 // clang-format on
 
+#include <vsscom_helper/com_number.hpp>
 #include <vsscom_helper/lease_table.hpp>
 #include <vsscom_helper/protocol.h>
 
@@ -115,6 +116,11 @@ TEST_CASE("helper: the protocol has the layout the studio and the helper share")
     REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_VERSION), 1);
     REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_OP_CREATE), 1);
     REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_OP_DESTROY), 2);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_OP_SET_COM_NUMBER), 3);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_OP_SET_COM_NUMBER_KM), 4);
+    REQUIRE_EQ(offsetof(VSSCOM_HELPER_REQUEST, Argument), std::size_t{12});
+    REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_MIN_COM_NUMBER), 1);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_MAX_COM_NUMBER), 255);
 
     // The limits are the control device's, so the two drivers behave alike.
     REQUIRE_EQ(static_cast<int>(VSSCOM_HELPER_MAX_PORTS), 32);
@@ -132,4 +138,58 @@ TEST_CASE("helper: the names the guest scripts and the service use")
     REQUIRE(std::wstring(VssComUmPortHardwareId) == L"VSSCOMUM\\PORT");
     REQUIRE(std::wstring(VssComUmPortInstancePrefix) == L"SWD\\VSSCOMUM\\");
     REQUIRE_EQ(VssComUmOwnerKey.pid, static_cast<ULONG>(2));
+}
+
+TEST_CASE("helper: the COM numbers a port may have")
+{
+    using vss::helper::com_number_valid;
+
+    // The range of protocol.h, which the studio and the helper both enforce.
+    REQUIRE(!com_number_valid(0));
+    REQUIRE(com_number_valid(1));
+    REQUIRE(com_number_valid(255));
+    REQUIRE(!com_number_valid(256));
+    REQUIRE_EQ(vss::helper::min_com_number,
+               static_cast<unsigned long>(VSSCOM_HELPER_MIN_COM_NUMBER));
+    REQUIRE_EQ(vss::helper::max_com_number,
+               static_cast<unsigned long>(VSSCOM_HELPER_MAX_COM_NUMBER));
+}
+
+TEST_CASE("helper: COM names read and write the way Windows spells them")
+{
+    using vss::helper::com_name;
+    using vss::helper::parse_com_name;
+
+    REQUIRE(com_name(1) == L"COM1");
+    REQUIRE(com_name(255) == L"COM255");
+
+    REQUIRE_EQ(parse_com_name(L"COM7").value_or(0), 7ul);
+    REQUIRE_EQ(parse_com_name(L"com12").value_or(0), 12ul);
+    REQUIRE_EQ(parse_com_name(L"Com255").value_or(0), 255ul);
+
+    REQUIRE(!parse_com_name(L"").has_value());
+    REQUIRE(!parse_com_name(L"COM").has_value());
+    REQUIRE(!parse_com_name(L"COM-1").has_value());
+    REQUIRE(!parse_com_name(L"COMX").has_value());
+    REQUIRE(!parse_com_name(L"COM7x").has_value());
+    REQUIRE(!parse_com_name(L"LPT1").has_value());
+    REQUIRE(!parse_com_name(L"CNCA0").has_value());
+    REQUIRE(!parse_com_name(L"COM12345678").has_value());
+}
+
+TEST_CASE("helper: the friendly name follows the number")
+{
+    using vss::helper::friendly_name_for;
+
+    // What the Ports class installer made of it, changed as Device Manager would.
+    REQUIRE(friendly_name_for(L"Virtual Serial Studio COM Port (COM4)", 9) ==
+            L"Virtual Serial Studio COM Port (COM9)");
+    REQUIRE(friendly_name_for(L"Virtual Serial Studio COM Port (COM4)", 4) ==
+            L"Virtual Serial Studio COM Port (COM4)");
+    REQUIRE(friendly_name_for(L"Port (COM12) ", 3) == L"Port (COM3)");
+    // A name with another bracket is kept whole, and gets the COM name added.
+    REQUIRE(friendly_name_for(L"Adapter (USB)", 5) == L"Adapter (USB) (COM5)");
+    REQUIRE(friendly_name_for(L"Adapter", 5) == L"Adapter (COM5)");
+    // None at all: just the COM name.
+    REQUIRE(friendly_name_for(L"", 5) == L"(COM5)");
 }

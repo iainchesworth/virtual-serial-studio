@@ -7,13 +7,17 @@
 #include "support/test_support.hpp"
 
 #include <vss/core/hub.hpp>
+#include <vss/core/transport.hpp>
 
 #include <boost/asio/error.hpp>
 #include <boost/asio/post.hpp>
 
+#include <atomic>
 #include <chrono>
 #include <future>
 #include <memory>
+#include <mutex>
+#include <string>
 
 using namespace vss;
 using namespace vss::testkit;
@@ -543,4 +547,103 @@ TEST_CASE("endpoint: removal closes it and drops its links")
 
     REQUIRE_EQ(hub->remove_endpoint(first.endpoint->id()),
                make_error_code(errc::not_found));
+}
+
+namespace {
+
+/// A transport that tells its endpoint something, as a driver port does when a
+/// program opens it. It never has any bytes.
+class chatty_transport final : public transport
+{
+public:
+    explicit chatty_transport(executor_type executor)
+        : executor_(std::move(executor))
+    {
+    }
+
+    std::string describe() const override { return "chatty"; }
+    bool is_open() const override { return open_.load(); }
+
+    void async_read_some(boost::asio::mutable_buffer, io_handler handler) override
+    {
+        const std::lock_guard lock(mutex_);
+        read_ = std::move(handler);
+    }
+
+    void async_write_some(boost::asio::const_buffer buffer, io_handler handler) override
+    {
+        boost::asio::post(executor_, [handler = std::move(handler), size = buffer.size()]
+                          { handler({}, size); });
+    }
+
+    void close() override
+    {
+        io_handler read;
+        {
+            const std::lock_guard lock(mutex_);
+            read.swap(read_);
+        }
+        open_ = false;
+        if (read)
+            boost::asio::post(executor_, [read = std::move(read)]
+                              { read(boost::asio::error::operation_aborted, 0); });
+    }
+
+    void set_notice_sink(notice_sink sink) override
+    {
+        const std::lock_guard lock(mutex_);
+        sink_ = std::move(sink);
+    }
+
+    void say(std::string text)
+    {
+        notice_sink sink;
+        {
+            const std::lock_guard lock(mutex_);
+            sink = sink_;
+        }
+        if (sink)
+            sink(std::move(text));
+    }
+
+private:
+    executor_type executor_;
+    std::atomic<bool> open_{true};
+    std::mutex mutex_;
+    io_handler read_;
+    notice_sink sink_;
+};
+
+} // namespace
+
+TEST_CASE("endpoint: a notice from the transport is logged against the endpoint")
+{
+    auto hub = start_hub();
+    event_recorder recorder;
+    hub->subscribe({}, [recorder](const endpoint_event& event) { recorder.record(event); });
+
+    auto transport = std::make_shared<chatty_transport>(hub->executor());
+    auto added = hub->add_endpoint("talker", endpoint_kind::mock, transport);
+    REQUIRE(added.has_value());
+    const auto id = (*added)->id();
+
+    transport->say("a program opened the port");
+
+    REQUIRE(wait_until(
+        [&]
+        {
+            for (const auto& event : recorder.snapshot())
+            {
+                if (event.kind == event_kind::log_message && event.endpoint == id
+                    && event.message == "a program opened the port"
+                    && event.name == "talker" && event.when != time_point{})
+                    return true;
+            }
+            return false;
+        },
+        2000ms));
+
+    // Once the endpoint has gone, the transport can still talk without harm.
+    REQUIRE(hub->remove_endpoint(id).has_value());
+    transport->say("nobody listens");
 }

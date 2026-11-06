@@ -239,3 +239,110 @@ vsscom_u32 vsscom_modem_events(vsscom_u32 before, vsscom_u32 after)
         events |= VSSCOM_EV_RLSD;
     return events;
 }
+
+// -- Flow control ----------------------------------------------------------
+
+// The bits of ControlHandShake and FlowReplace that mean something, from
+// ntddser.h. Anything else is refused.
+static const vsscom_u32 control_known =
+    VSSCOM_DTR_MASK | 0x08u | 0x10u | 0x20u | 0x40u | 0x80000000u;
+static const vsscom_u32 flow_known =
+    0x01u | 0x02u | 0x04u | 0x08u | 0x10u | VSSCOM_RTS_MASK | 0x80000000u;
+
+vsscom_bool vsscom_flow_valid(const vsscom_flow* flow, vsscom_u32 rx_size)
+{
+    vsscom_bool uses_limits;
+
+    if ((flow->control_handshake & ~control_known) != 0)
+        return 0;
+    if ((flow->flow_replace & ~flow_known) != 0)
+        return 0;
+    // Both DTR bits together mean nothing.
+    if ((flow->control_handshake & VSSCOM_DTR_MASK) == VSSCOM_DTR_MASK)
+        return 0;
+
+    uses_limits =
+        (flow->control_handshake & VSSCOM_DTR_MASK) == VSSCOM_DTR_HANDSHAKE ||
+        (flow->flow_replace & VSSCOM_RTS_MASK) == VSSCOM_RTS_HANDSHAKE;
+    if (uses_limits &&
+        (flow->xon_limit > rx_size || flow->xoff_limit > rx_size))
+        return 0;
+    return 1;
+}
+
+vsscom_bool vsscom_flow_dtr_manual(const vsscom_flow* flow)
+{
+    return (flow->control_handshake & VSSCOM_DTR_MASK) != VSSCOM_DTR_HANDSHAKE;
+}
+
+vsscom_bool vsscom_flow_rts_manual(const vsscom_flow* flow)
+{
+    return (flow->flow_replace & VSSCOM_RTS_MASK) != VSSCOM_RTS_HANDSHAKE;
+}
+
+// A handshake line with hysteresis: low when the free space has run down to
+// the xoff limit, high again once the buffer has emptied to the xon limit.
+static vsscom_bool handshake_level(const vsscom_flow* flow, vsscom_bool now,
+                                   vsscom_u32 rx_count, vsscom_u32 rx_size,
+                                   vsscom_bool set)
+{
+    const vsscom_u32 free_bytes = rx_count >= rx_size ? 0 : rx_size - rx_count;
+
+    if (free_bytes <= flow->xoff_limit)
+        return 0;
+    if (set || rx_count <= flow->xon_limit)
+        return 1;
+    return now;
+}
+
+vsscom_flow_lines vsscom_flow_update(const vsscom_flow* flow,
+                                     vsscom_flow_lines now, vsscom_u32 rx_count,
+                                     vsscom_u32 rx_size, vsscom_bool sending,
+                                     vsscom_bool set)
+{
+    vsscom_flow_lines next = now;
+    const vsscom_u32 dtr = flow->control_handshake & VSSCOM_DTR_MASK;
+    const vsscom_u32 rts = flow->flow_replace & VSSCOM_RTS_MASK;
+
+    if (dtr == VSSCOM_DTR_HANDSHAKE)
+        next.dtr = handshake_level(flow, now.dtr, rx_count, rx_size, set);
+    else if (set)
+        next.dtr = dtr == VSSCOM_DTR_CONTROL;
+
+    if (rts == VSSCOM_RTS_HANDSHAKE)
+        next.rts = handshake_level(flow, now.rts, rx_count, rx_size, set);
+    else if (rts == VSSCOM_RTS_TOGGLE)
+        next.rts = sending ? 1 : 0;
+    else if (set)
+        next.rts = rts == VSSCOM_RTS_CONTROL;
+
+    return next;
+}
+
+vsscom_u64 vsscom_tx_time(vsscom_u32 baud, vsscom_u32 data_bits,
+                          vsscom_u32 parity, vsscom_u32 stop_bits,
+                          vsscom_u32 bytes)
+{
+    // Counted in half bits, so that one and a half stop bits stay whole.
+    vsscom_u64 half_bits;
+
+    if (baud == 0)
+        return 0;
+    half_bits = 2u * (1u + data_bits + (parity != 0 ? 1u : 0u));
+    half_bits += stop_bits == 0 ? 2u : (stop_bits == 1 ? 3u : 4u);
+    // One half bit lasts 5,000,000 / baud units of 100 ns.
+    return ((vsscom_u64)bytes * half_bits * 5000000ull) / baud;
+}
+
+vsscom_u64 vsscom_tx_busy_until(vsscom_u64 now, vsscom_u64 busy_until,
+                                vsscom_u64 duration)
+{
+    const vsscom_u64 start = busy_until > now ? busy_until : now;
+    return start + duration;
+}
+
+vsscom_bool vsscom_tx_sending(vsscom_u32 queued, vsscom_u64 now,
+                              vsscom_u64 busy_until)
+{
+    return queued != 0 || now < busy_until;
+}

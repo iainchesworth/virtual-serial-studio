@@ -25,14 +25,18 @@
 #include <cwchar>
 #include <future>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #include <windows.h>
 #include <winioctl.h>
+#include <devpropdef.h>
 
 #include <vsscom/public.h>
+#include <vsscom_helper/protocol.h>
 
 using namespace vss;
 
@@ -43,17 +47,20 @@ TEST_CASE("driver client: the control codes are the ones the guest scripts use")
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_GET_STATE), 0x80002004ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_WAIT_STATE), 0x80002008ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_SET_LINES), 0x8000200Cul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_REVOKE), 0x80002010ul);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_VERSION), 3);
 }
 
 TEST_CASE("driver client: the hub state has the layout the driver fills")
 {
-    // Eleven 32-bit words, in the order the guest script reads them.
-    REQUIRE_EQ(sizeof(VSSCOM_HUB_STATE), std::size_t{44});
+    // Twelve 32-bit words, in the order the guest script reads them.
+    REQUIRE_EQ(sizeof(VSSCOM_HUB_STATE), std::size_t{48});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Generation), std::size_t{0});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, AppOpen), std::size_t{4});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Dtr), std::size_t{24});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Lines), std::size_t{36});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, TxQueued), std::size_t{40});
+    REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, AppProcessId), std::size_t{44});
     REQUIRE_EQ(sizeof(VSSCOM_VERSION_INFO), std::size_t{8});
 
     // The line bits are the modem status bits Windows uses.
@@ -71,6 +78,9 @@ TEST_CASE("driver client: the control device has the codes and layout the guest 
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_CREATE_PORT), 0x80002044ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_DESTROY_PORT), 0x80002048ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_LIST_PORTS), 0x8000204Cul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_GET_OWNER), 0x80002050ul);
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_OWNER), std::size_t{8 + VSSCOM_CTL_MAX_SID_BYTES});
+    REQUIRE_EQ(offsetof(VSSCOM_CTL_OWNER, Sid), std::size_t{8});
 
     REQUIRE_EQ(sizeof(VSSCOM_CTL_VERSION_INFO), std::size_t{8});
     REQUIRE_EQ(sizeof(VSSCOM_CTL_CREATE), std::size_t{8});
@@ -253,4 +263,171 @@ TEST_CASE("driver client: without the driver it says so and takes nothing")
     REQUIRE(driver_version().empty());
     REQUIRE_EQ(create_driver_port(io.get_executor(), "x"),
                make_error_code(errc::unsupported));
+}
+
+namespace
+{
+
+/// A COM number nothing resolves, from `first` up.
+unsigned free_com_number(unsigned first)
+{
+    for (unsigned number = first; number <= 255; ++number)
+    {
+        char target[256];
+        if (::QueryDosDeviceA(("COM" + std::to_string(number)).c_str(), target,
+                              sizeof(target)) == 0)
+            return number;
+    }
+    return 0;
+}
+
+bool helper_service_present()
+{
+    return ::WaitNamedPipeW(VssComHelperPipeName, 1) != FALSE ||
+           ::GetLastError() != ERROR_FILE_NOT_FOUND;
+}
+
+} // namespace
+
+// Needs the driver and the helper service in a guest, like the case above, and
+// changes the COM numbers of ports it makes. test-client.ps1 runs it as C2.
+TEST_CASE("driver client: COM numbers with the helper service")
+{
+    char enabled[8]{};
+    const DWORD length = ::GetEnvironmentVariableA("VSS_TEST_DRIVER", enabled,
+                                                   sizeof(enabled));
+    if (length != 1 || enabled[0] != '1')
+        VSS_SKIP("needs the driver: set VSS_TEST_DRIVER=1 in a guest that has it");
+    if (!helper_service_present())
+        VSS_SKIP("needs the helper service (install-driver.ps1 -Helper)");
+
+    const unsigned first = free_com_number(100);
+    const unsigned second = free_com_number(first + 1);
+    REQUIRE(first != 0 && second != 0);
+
+    boost::asio::io_context io;
+    auto guard = boost::asio::make_work_guard(io);
+    std::thread runner([&io] { io.run(); });
+    auto stop = [&]
+    {
+        guard.reset();
+        io.stop();
+        runner.join();
+    };
+
+    try
+    {
+        // A port made with a number has it.
+        auto made = create_driver_port(io.get_executor(), "numbered", first);
+        REQUIRE(made.has_value());
+        const std::string name1 = "COM" + std::to_string(first);
+        const std::string name2 = "COM" + std::to_string(second);
+        REQUIRE(made->path == name1);
+        transport& hub = *made->port;
+        REQUIRE(hub.public_path() == name1);
+
+        // A number another device has is refused, and no port is left over.
+        auto taken = create_driver_port(io.get_executor(), "taken", first);
+        REQUIRE(!taken.has_value());
+        REQUIRE_EQ(taken.error(), make_error_code(errc::already_exists));
+
+        // The driver names the program that opens the port, and the transport
+        // logs it with the time.
+        std::mutex notes_mutex;
+        std::vector<std::string> notes;
+        hub.set_notice_sink(
+            [&](std::string text)
+            {
+                const std::lock_guard lock(notes_mutex);
+                notes.push_back(std::move(text));
+            });
+        const auto noted = [&](const std::string& what)
+        {
+            const auto until = std::chrono::steady_clock::now() + 10s;
+            while (std::chrono::steady_clock::now() < until)
+            {
+                {
+                    const std::lock_guard lock(notes_mutex);
+                    for (const auto& note : notes)
+                    {
+                        if (note.find(what) != std::string::npos)
+                            return true;
+                    }
+                }
+                std::this_thread::sleep_for(50ms);
+            }
+            return false;
+        };
+
+        {
+            const auto idle = driver_peer(name1);
+            REQUIRE(idle.has_value());
+            REQUIRE(!idle->open);
+            REQUIRE_EQ(idle->process_id, std::uint32_t{0});
+        }
+        HANDLE app = open_com(name1);
+        REQUIRE(app != INVALID_HANDLE_VALUE);
+        REQUIRE(noted("a program opened the port"));
+        {
+            const auto busy = driver_peer(name1);
+            REQUIRE(busy.has_value());
+            REQUIRE(busy->open);
+            REQUIRE_EQ(busy->process_id, static_cast<std::uint32_t>(::GetCurrentProcessId()));
+        }
+
+        // With a program on the port the number cannot change.
+        REQUIRE_EQ(set_driver_com_number(hub, second),
+                   make_error_code(errc::device_busy));
+        ::CloseHandle(app);
+        REQUIRE(noted("the program closed the port"));
+        REQUIRE(!driver_peer(name1)->open);
+
+        // A read that is waiting survives the change.
+        std::promise<std::pair<boost::system::error_code, std::size_t>> answered;
+        auto future = answered.get_future();
+        char buffer[16]{};
+        hub.async_read_some(boost::asio::buffer(buffer, sizeof(buffer)),
+                            [&](boost::system::error_code ec, std::size_t n)
+                            { answered.set_value({ec, n}); });
+
+        const auto renamed = set_driver_com_number(hub, second);
+        REQUIRE(renamed.has_value());
+        REQUIRE(*renamed == name2);
+        REQUIRE(hub.public_path() == name2);
+        REQUIRE(driver_peer(name2).has_value());
+        REQUIRE(!driver_peer(name1).has_value());
+
+        // The old name is gone, the new one opens, and the read is still ours.
+        const HANDLE old_name = open_com(name1);
+        REQUIRE(old_name == INVALID_HANDLE_VALUE);
+        app = open_com(name2);
+        REQUIRE(app != INVALID_HANDLE_VALUE);
+        DWORD done = 0;
+        REQUIRE(::WriteFile(app, "after", 5, &done, nullptr) != FALSE);
+        REQUIRE(future.wait_for(10s) == std::future_status::ready);
+        const auto got = future.get();
+        REQUIRE(!got.first);
+        REQUIRE(std::string(buffer, got.second) == "after");
+        ::CloseHandle(app);
+
+        // The number it left is free for the next port.
+        auto reused = create_driver_port(io.get_executor(), "reused", first);
+        REQUIRE(reused.has_value());
+        REQUIRE(reused->path == name1);
+
+        // A number outside the range is refused before anything happens.
+        REQUIRE_EQ(set_driver_com_number(hub, 0),
+                   make_error_code(errc::invalid_argument));
+
+        reused->port->close();
+        hub.close();
+        REQUIRE(wait_gone(name2));
+        REQUIRE(wait_gone(name1));
+    }
+    catch (...)
+    {
+        stop();
+        throw;
+    }
+    stop();
 }

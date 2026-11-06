@@ -41,9 +41,15 @@ static VOID VssComCompleteOpen(_In_ PVSSCOM_DEVICE_CONTEXT context,
     if (kind == VSSCOM_FILE_APP)
     {
         if (context->AppOpen)
+        {
             status = STATUS_ACCESS_DENIED;
+        }
         else
+        {
             context->AppOpen = TRUE;
+            context->AppFile = FileObject;
+            context->AppProcessId = WdfRequestGetRequestorProcessId(Request);
+        }
     }
     else
     {
@@ -126,11 +132,18 @@ VOID VssComEvtFileCleanup(_In_ WDFFILEOBJECT FileObject)
     if (!file->Granted)
         return;
 
+    // A handle that was revoked has nothing left to undo: the port is quiet, and
+    // may belong to another program by now.
+    if (file->Kind == VSSCOM_FILE_APP && file->Revoked)
+        return;
+
     if (file->Kind == VSSCOM_FILE_APP)
     {
         VssComResetPort(context);
         VssComLockAcquire(context->Lock);
         context->AppOpen = FALSE;
+        context->AppFile = NULL;
+        context->AppProcessId = 0;
         context->Break = FALSE;
         VssComLockRelease(context->Lock);
     }
@@ -169,6 +182,7 @@ static VOID VssComFillState(_In_ PVSSCOM_DEVICE_CONTEXT Context,
     State->Break = Context->Break ? 1 : 0;
     State->Lines = Context->HubLines;
     State->TxQueued = vsscom_ring_count(&Context->Tx);
+    State->AppProcessId = Context->AppOpen ? Context->AppProcessId : 0;
     VssComLockRelease(Context->Lock);
 }
 
@@ -373,6 +387,29 @@ VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         return;
     }
 
+    case IOCTL_VSSCOM_HUB_REVOKE:
+    {
+        // Only the user who owns the port has a hub handle (access.c), so only
+        // that user gets here. The answer is the process that had the port, or 0.
+        PVOID output = NULL;
+        ULONG process;
+
+        // The process id is an answer for those who ask for it: a caller with no
+        // output buffer revokes just the same.
+        const BOOLEAN wants_process = NT_SUCCESS(WdfRequestRetrieveOutputBuffer(
+            Request, sizeof(ULONG), &output, NULL));
+
+        process = VssComRevokeApplication(Context);
+        if (!wants_process)
+        {
+            WdfRequestComplete(Request, STATUS_SUCCESS);
+            return;
+        }
+        *(PULONG)output = process;
+        WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(ULONG));
+        return;
+    }
+
     default:
         WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);
         return;
@@ -479,6 +516,18 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
                                                       &request)))
             return moved;
 
+        // A write of a handle that was revoked ends here, wherever it was when the
+        // revoke ran.
+        if (VssComRequestRevoked(request))
+        {
+            VssComLockAcquire(Context->Lock);
+            Context->AppWritesPending--;
+            VssComLockRelease(Context->Lock);
+            VssComFinishPipe(request, STATUS_DEVICE_REMOVED);
+            moved = TRUE;
+            continue;
+        }
+
         pipe = VssComPipeContext(request);
         VssComLockAcquire(Context->Lock);
         hub = Context->HubOpen;
@@ -507,7 +556,11 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         VssComLockRelease(Context->Lock);
 
         if (stored != 0)
+        {
             moved = TRUE;
+            // An RTS toggle goes up before the hub reads what was stored.
+            VssComFlowTransmit(Context, stored);
+        }
         if (finished)
         {
             VssComFinishPipe(request, STATUS_SUCCESS);
@@ -608,5 +661,13 @@ NTSTATUS VssComCreateHubQueues(_In_ PVSSCOM_DEVICE_CONTEXT Context)
     timer.AutomaticSerialization = FALSE;
     WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
     attributes.ParentObject = device;
-    return WdfTimerCreate(&timer, &attributes, &Context->WriteTimer);
+    status = WdfTimerCreate(&timer, &attributes, &Context->WriteTimer);
+    if (!NT_SUCCESS(status))
+        return status;
+
+    // The hold of a toggling RTS ends here; it takes the lock through the flow
+    // rules, so the framework does not serialise it with the device either.
+    WDF_TIMER_CONFIG_INIT(&timer, VssComEvtFlowTimer);
+    timer.AutomaticSerialization = FALSE;
+    return WdfTimerCreate(&timer, &attributes, &Context->FlowTimer);
 }

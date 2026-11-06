@@ -326,3 +326,213 @@ TEST_CASE("vsscom modem lines: a change gives deltas and events")
     // The ring indicator is not wired in a loopback, so it never raises.
     REQUIRE_EQ(vsscom_modem_events(none, VSSCOM_MSR_RI), 0u);
 }
+
+// -- Flow control ----------------------------------------------------------
+
+namespace
+{
+
+constexpr std::uint32_t rx_size = 65536;
+
+vsscom_flow flow(std::uint32_t control, std::uint32_t replace,
+                 std::uint32_t xon = 0, std::uint32_t xoff = 0)
+{
+    vsscom_flow f{};
+    f.control_handshake = control;
+    f.flow_replace = replace;
+    f.xon_limit = xon;
+    f.xoff_limit = xoff;
+    return f;
+}
+
+vsscom_flow_lines lines(bool dtr, bool rts)
+{
+    vsscom_flow_lines l{};
+    l.dtr = dtr;
+    l.rts = rts;
+    return l;
+}
+
+bool flow_valid(vsscom_flow f)
+{
+    return vsscom_flow_valid(&f, rx_size) != 0;
+}
+
+bool dtr_manual(vsscom_flow f)
+{
+    return vsscom_flow_dtr_manual(&f) != 0;
+}
+
+bool rts_manual(vsscom_flow f)
+{
+    return vsscom_flow_rts_manual(&f) != 0;
+}
+
+vsscom_flow_lines update(vsscom_flow f, vsscom_flow_lines now,
+                         std::uint32_t rx_count, bool sending, bool set)
+{
+    return vsscom_flow_update(&f, now, rx_count, rx_size, sending, set);
+}
+
+} // namespace
+
+TEST_CASE("vsscom flow: enable drives the line high and disable drives it low")
+{
+    // The settings are given: enable and disable move the lines, whatever
+    // they were.
+    auto on = update(flow(VSSCOM_DTR_CONTROL, VSSCOM_RTS_CONTROL),
+                     lines(false, false), 0, false, true);
+    REQUIRE(on.dtr);
+    REQUIRE(on.rts);
+
+    auto down = update(flow(0, 0), lines(true, true), 0, false, true);
+    REQUIRE(!down.dtr);
+    REQUIRE(!down.rts);
+
+    // One line each way.
+    auto mixed = update(flow(VSSCOM_DTR_CONTROL, 0), lines(false, true), 0,
+                        false, true);
+    REQUIRE(mixed.dtr);
+    REQUIRE(!mixed.rts);
+}
+
+TEST_CASE("vsscom flow: enable and disable leave the line to the application afterwards")
+{
+    // Not a new setting: a change in the buffers must not undo SET_DTR.
+    auto same = update(flow(0, 0), lines(true, true), 100, true, false);
+    REQUIRE(same.dtr);
+    REQUIRE(same.rts);
+
+    auto kept = update(flow(VSSCOM_DTR_CONTROL, VSSCOM_RTS_CONTROL),
+                       lines(false, false), 100, true, false);
+    REQUIRE(!kept.dtr);
+    REQUIRE(!kept.rts);
+}
+
+TEST_CASE("vsscom flow: a handshake line drops when the buffer fills and rises when it empties")
+{
+    // Low at 4 KB or less free, high again at 16 KB or less in use.
+    const vsscom_flow f =
+        flow(VSSCOM_DTR_HANDSHAKE, VSSCOM_RTS_HANDSHAKE, 16384, 4096);
+
+    // Given with an empty buffer: both high.
+    auto l = update(f, lines(false, false), 0, false, true);
+    REQUIRE(l.dtr);
+    REQUIRE(l.rts);
+
+    // Filling: nothing happens until the free space reaches the xoff limit.
+    l = update(f, l, rx_size - 4097, false, false);
+    REQUIRE(l.dtr);
+    REQUIRE(l.rts);
+    l = update(f, l, rx_size - 4096, false, false);
+    REQUIRE(!l.dtr);
+    REQUIRE(!l.rts);
+
+    // Draining: still low between the limits, high at the xon limit.
+    l = update(f, l, 20000, false, false);
+    REQUIRE(!l.dtr);
+    REQUIRE(!l.rts);
+    l = update(f, l, 16385, false, false);
+    REQUIRE(!l.rts);
+    l = update(f, l, 16384, false, false);
+    REQUIRE(l.dtr);
+    REQUIRE(l.rts);
+
+    // High stays high between the limits.
+    l = update(f, l, 30000, false, false);
+    REQUIRE(l.dtr);
+    REQUIRE(l.rts);
+}
+
+TEST_CASE("vsscom flow: a handshake given while the buffer is full starts low")
+{
+    auto l = update(flow(0, VSSCOM_RTS_HANDSHAKE, 100, 100),
+                    lines(false, true), rx_size, false, true);
+    REQUIRE(!l.rts);
+}
+
+TEST_CASE("vsscom flow: toggle puts RTS high exactly while sending")
+{
+    const vsscom_flow f = flow(0, VSSCOM_RTS_TOGGLE);
+
+    // Given while idle: low.
+    auto l = update(f, lines(false, true), 0, false, true);
+    REQUIRE(!l.rts);
+
+    l = update(f, l, 0, true, false);
+    REQUIRE(l.rts);
+    l = update(f, l, 0, false, false);
+    REQUIRE(!l.rts);
+
+    // DTR is not touched by RTS toggle.
+    l = update(flow(VSSCOM_DTR_CONTROL, VSSCOM_RTS_TOGGLE), lines(false, false),
+               0, false, true);
+    REQUIRE(l.dtr);
+    REQUIRE(!l.rts);
+}
+
+TEST_CASE("vsscom flow: only a handshake line is closed to SET_DTR and SET_RTS")
+{
+    REQUIRE(dtr_manual(flow(0, 0)));
+    REQUIRE(dtr_manual(flow(VSSCOM_DTR_CONTROL, 0)));
+    REQUIRE(!dtr_manual(flow(VSSCOM_DTR_HANDSHAKE, 0)));
+
+    REQUIRE(rts_manual(flow(0, 0)));
+    REQUIRE(rts_manual(flow(0, VSSCOM_RTS_CONTROL)));
+    REQUIRE(rts_manual(flow(0, VSSCOM_RTS_TOGGLE)));
+    REQUIRE(!rts_manual(flow(0, VSSCOM_RTS_HANDSHAKE)));
+}
+
+TEST_CASE("vsscom flow: settings that mean nothing are refused")
+{
+    REQUIRE(flow_valid(flow(0, 0)));
+    REQUIRE(flow_valid(flow(VSSCOM_DTR_CONTROL, VSSCOM_RTS_TOGGLE)));
+    // CTS, DSR and carrier handshakes and XON/XOFF bits are accepted, even
+    // though the port does not act on them.
+    REQUIRE(flow_valid(flow(0x08u | 0x10u | 0x20u | 0x40u,
+                            0x01u | 0x02u | 0x04u | 0x08u | 0x10u)));
+    REQUIRE(flow_valid(flow(0x80000000u, 0x80000000u)));
+
+    // Both DTR bits together.
+    REQUIRE(!flow_valid(flow(VSSCOM_DTR_MASK, 0)));
+    // An unknown bit in either field.
+    REQUIRE(!flow_valid(flow(0x04u, 0)));
+    REQUIRE(!flow_valid(flow(0, 0x20u)));
+    REQUIRE(!flow_valid(flow(0x100u, 0)));
+
+    // Limits matter only when a line follows the buffer.
+    REQUIRE(flow_valid(flow(0, 0, rx_size + 1, 5)));
+    REQUIRE(!flow_valid(flow(VSSCOM_DTR_HANDSHAKE, 0, rx_size + 1, 5)));
+    REQUIRE(!flow_valid(flow(0, VSSCOM_RTS_HANDSHAKE, 5, rx_size + 1)));
+    REQUIRE(flow_valid(flow(0, VSSCOM_RTS_HANDSHAKE, rx_size, rx_size)));
+}
+
+TEST_CASE("vsscom flow: how long bytes take to leave a UART")
+{
+    // 9600 8N1: ten bits a byte, about 1.0417 ms, in units of 100 ns.
+    REQUIRE_EQ(vsscom_tx_time(9600, 8, 0, 0, 1), 10416ull);
+    REQUIRE_EQ(vsscom_tx_time(9600, 8, 0, 0, 0), 0ull);
+    // Eleven bits with parity, twelve with two stop bits.
+    REQUIRE_EQ(vsscom_tx_time(1000, 8, 2, 0, 1), 110000ull);
+    REQUIRE_EQ(vsscom_tx_time(1000, 8, 0, 2, 1), 110000ull);
+    // One and a half stop bits: 10.5 bits.
+    REQUIRE_EQ(vsscom_tx_time(1000, 8, 0, 1, 1), 105000ull);
+    // Five data bits, one stop bit: seven bits.
+    REQUIRE_EQ(vsscom_tx_time(1000, 5, 0, 0, 2), 140000ull);
+    // No baud rate, no time.
+    REQUIRE_EQ(vsscom_tx_time(0, 8, 0, 0, 100), 0ull);
+}
+
+TEST_CASE("vsscom flow: busy time queues behind earlier bytes")
+{
+    REQUIRE_EQ(vsscom_tx_busy_until(1000, 0, 500), 1500ull);
+    // Still busy: the new bytes follow the old.
+    REQUIRE_EQ(vsscom_tx_busy_until(1000, 1200, 500), 1700ull);
+    // The earlier bytes are long gone.
+    REQUIRE_EQ(vsscom_tx_busy_until(1000, 900, 500), 1500ull);
+
+    REQUIRE(vsscom_tx_sending(1, 1000, 0));
+    REQUIRE(vsscom_tx_sending(0, 1000, 1001));
+    REQUIRE(!vsscom_tx_sending(0, 1000, 1000));
+    REQUIRE(!vsscom_tx_sending(0, 1000, 0));
+}

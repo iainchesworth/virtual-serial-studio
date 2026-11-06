@@ -72,7 +72,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>swdevice.lib;cfgmgr32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>swdevice.lib;cfgmgr32.lib;setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <!-- Address space layout randomisation and data execution prevention. -->
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
@@ -85,6 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ClInclude Include="com_number.hpp" />
     <ClInclude Include="lease_table.hpp" />
     <ClInclude Include="protocol.h" />
   </ItemGroup>

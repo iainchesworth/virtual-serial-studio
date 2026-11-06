@@ -7,6 +7,7 @@
 #include <vss/studio/studio.hpp>
 
 #include <vss/ports/listen_transport.hpp>
+#include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/serial_transport.hpp>
 
 #include <boost/asio/post.hpp>
@@ -247,14 +248,15 @@ studio::register_port(port_record record, std::shared_ptr<transport> transport,
 
 result<std::shared_ptr<endpoint>>
 studio::create_virtual_port(const std::string& name, virtual_port_kind kind,
-                            endpoint_options options)
+                            endpoint_options options, unsigned com_number)
 {
     if (kind == virtual_port_kind::pty && !supports(virtual_port_kind::pty))
-        return create_auto_virtual_port(name, options);
+        return create_auto_virtual_port(name, options, com_number);
 
     const std::string final_name = unique_name(name);
 
-    auto created = vss::create_virtual_port(hub_->executor(), kind, final_name);
+    auto created = vss::create_virtual_port(hub_->executor(), kind, final_name,
+                                            com_number);
     if (!created)
         return created.error();
 
@@ -265,13 +267,18 @@ studio::create_virtual_port(const std::string& name, virtual_port_kind kind,
     record.target = created->path;
     record.advertised = created->path;
     record.capture = options.capture_traffic;
+    if (kind == virtual_port_kind::windows_driver)
+    {
+        record.com_number = com_number;
+        record.driver = created->port;
+    }
 
     return register_port(std::move(record), std::move(created->port), options);
 }
 
 result<std::shared_ptr<endpoint>>
 studio::create_auto_virtual_port(const std::string& name,
-                                 endpoint_options options)
+                                 endpoint_options options, unsigned com_number)
 {
     const std::string final_name = unique_name(name);
 
@@ -281,7 +288,8 @@ studio::create_auto_virtual_port(const std::string& name,
     if (supports(virtual_port_kind::windows_driver))
     {
         auto created = vss::create_virtual_port(
-            hub_->executor(), virtual_port_kind::windows_driver, final_name);
+            hub_->executor(), virtual_port_kind::windows_driver, final_name,
+            com_number);
         if (created)
         {
             port_record record;
@@ -291,10 +299,18 @@ studio::create_auto_virtual_port(const std::string& name,
             record.target = created->path;
             record.advertised = created->path;
             record.capture = options.capture_traffic;
+            record.com_number = com_number;
+            record.driver = created->port;
 
             return register_port(std::move(record), std::move(created->port),
                                  options);
         }
+
+        // A number was asked for and cannot be had: another port, or com0com, or a
+        // pseudo terminal would not be what the topology says, and the number
+        // is the point. Without a number any port will do.
+        if (com_number != 0)
+            return created.error();
     }
 
     // Where com0com does not exist the installation reports no pairs and the
@@ -580,6 +596,39 @@ result<void> studio::rename_port(endpoint_id id, const std::string& name)
     return {};
 }
 
+result<std::string> studio::set_com_number(endpoint_id id, unsigned com_number)
+{
+    std::shared_ptr<transport> driver;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        driver = it->second.driver.lock();
+    }
+    if (!driver)
+        return make_error_code(errc::unsupported);
+
+    // The port restarts, which takes a second or two: no lock is held.
+    auto renumbered = set_driver_com_number(*driver, com_number);
+    if (!renumbered)
+        return renumbered.error();
+
+    std::lock_guard lock(record_mutex_);
+    if (const auto it = records_.find(id); it != records_.end())
+    {
+        auto& record = it->second;
+        claimed_paths_.erase(record.target);
+        if (record.advertised != record.target)
+            claimed_paths_.erase(record.advertised);
+        record.target = *renumbered;
+        record.advertised = *renumbered;
+        record.com_number = com_number;
+        claimed_paths_.insert(*renumbered);
+    }
+    return renumbered;
+}
+
 std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
 {
     std::vector<endpoint_id> ids;
@@ -589,7 +638,9 @@ std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
         for (const auto& [id, record] : records_)
         {
             if (record.kind == "virtual" &&
-                record.virtual_kind == to_string(virtual_port_kind::pty) &&
+                (record.virtual_kind == to_string(virtual_port_kind::pty) ||
+                 record.virtual_kind ==
+                     to_string(virtual_port_kind::windows_driver)) &&
                 !record.target.empty())
             {
                 ids.push_back(id);
@@ -845,7 +896,8 @@ result<void> studio::apply(const config::document& value,
         if (port.kind == "virtual")
         {
             if (port.virtual_kind == "auto")
-                added = create_auto_virtual_port(port.name, options);
+                added = create_auto_virtual_port(port.name, options,
+                                                 port.com_number);
             else if (port.virtual_kind == "loopback")
                 added = create_virtual_port(
                     port.name, virtual_port_kind::loopback, options);
@@ -857,7 +909,8 @@ result<void> studio::apply(const config::document& value,
                     port.name, virtual_port_kind::named_pipe, options);
             else if (port.virtual_kind == "windows-driver")
                 added = create_virtual_port(
-                    port.name, virtual_port_kind::windows_driver, options);
+                    port.name, virtual_port_kind::windows_driver, options,
+                    port.com_number);
         }
         else if (port.kind == "mock")
         {
@@ -932,9 +985,11 @@ config::document studio::snapshot() const
         for (const auto& entry : records_)
         {
             const auto& record = entry.second;
-            document.ports.push_back(record_to_entry(
+            auto entry_of_port = record_to_entry(
                 record.name, record.kind, record.uri, record.virtual_kind,
-                record.serial, record.capture));
+                record.serial, record.capture);
+            entry_of_port.com_number = record.com_number;
+            document.ports.push_back(std::move(entry_of_port));
             names.emplace(record.id, record.name);
         }
     }

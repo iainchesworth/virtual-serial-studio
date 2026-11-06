@@ -32,6 +32,21 @@ try {
     $ran = $output -match '1 tests?, 1 passed, 0 failed, 0 skipped'
     $status = if ($code -eq 0 -and $ran) { 'pass' } else { 'fail' }
     $tests += New-TestRecord 'C1' 'the studio client makes a port, carries bytes both ways and removes it' $status "$detail ($($watch.Elapsed.TotalSeconds.ToString('0.0')) s)"
+
+    # C2: COM numbers and the program on the port, through the helper service. Without
+    # the helper service it is skipped.
+    $helperRunning = [bool]([IO.Directory]::GetFiles('\\.\pipe\') -contains "\\.\pipe\$HelperPipeName")
+    if ($helperRunning) {
+        $watch = [Diagnostics.Stopwatch]::StartNew()
+        $output = (& $Exe '--filter=COM numbers with the helper service' 2>&1 | Out-String).Trim()
+        $code = $LASTEXITCODE
+        $detail = ($output -split "\r?\n" | Select-Object -Last 6) -join '; '
+        $ran = $output -match '1 tests?, 1 passed, 0 failed, 0 skipped'
+        $status = if ($code -eq 0 -and $ran) { 'pass' } else { 'fail' }
+        $tests += New-TestRecord 'C2' 'the studio client gives a port a COM number, changes it, and sees the program on the port' $status "$detail ($($watch.Elapsed.TotalSeconds.ToString('0.0')) s)"
+    } else {
+        $tests += New-TestRecord 'C2' 'the studio client gives a port a COM number' 'skip' 'the helper service is not running (install-driver.ps1 -Helper)'
+    }
 } catch {
     $tests += New-TestRecord 'C1' 'the studio client against the driver' 'fail' $_.Exception.Message
 }
