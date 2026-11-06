@@ -335,8 +335,6 @@ void NetworkEndpointDialog::build()
             [this](int id)
             {
                 transport_ = static_cast<network_transport>(id);
-                if (transport_ == network_transport::rfc2217)
-                    role_ = network_role::client;
                 clear_error();
                 update_role_ui();
             });
@@ -517,8 +515,6 @@ void NetworkEndpointDialog::set_transport(network_transport transport)
     transport_ = transport;
     const QSignalBlocker blocker(transport_control_);
     transport_control_->set_current(static_cast<int>(transport));
-    if (transport_ == network_transport::rfc2217)
-        role_ = network_role::client;
     update_role_ui();
 }
 
@@ -543,10 +539,7 @@ void NetworkEndpointDialog::update_role_ui()
 {
     if (role_row_ == nullptr)
         return;
-    const bool rfc = transport_ == network_transport::rfc2217;
-    role_row_->setVisible(!rfc);
-    if (rfc)
-        role_ = network_role::client;
+    role_row_->setVisible(true);
 
     server_radio_->setEnabled(server_available_);
     server_radio_->setToolTip(

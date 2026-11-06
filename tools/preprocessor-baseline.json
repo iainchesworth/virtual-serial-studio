@@ -126,6 +126,7 @@
     "libs/vss_ports/include/vss/ports/loopback_transport.hpp": 3,
     "libs/vss_ports/include/vss/ports/native_lines.hpp": 3,
     "libs/vss_ports/include/vss/ports/peer_open.hpp": 3,
+    "libs/vss_ports/include/vss/ports/rfc2217.hpp": 3,
     "libs/vss_ports/include/vss/ports/serial_enumeration.hpp": 3,
     "libs/vss_ports/include/vss/ports/serial_transport.hpp": 3,
     "libs/vss_ports/include/vss/ports/stable_link.hpp": 3,

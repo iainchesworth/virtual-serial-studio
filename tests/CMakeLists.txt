@@ -14,6 +14,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_hub_topology.cpp
   unit/test_listen_transport.cpp
   unit/test_loopback_transport.cpp
+  unit/test_rfc2217.cpp
   unit/test_native_and_com0com.cpp
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
@@ -32,6 +33,7 @@ if(WIN32)
   list(APPEND VSS_UNIT_TEST_SOURCES
     unit/platform/windows/test_driver_client_windows.cpp
     unit/platform/windows/test_helper_windows.cpp
+    unit/platform/windows/test_manifest_windows.cpp
     unit/platform/windows/test_ports_windows.cpp)
 elseif(UNIX)
   list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)

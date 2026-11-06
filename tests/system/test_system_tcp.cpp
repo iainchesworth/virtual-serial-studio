@@ -40,7 +40,10 @@ public:
         acceptor_.open(boost::asio::ip::tcp::v4(), error);
         REQUIRE(!error);
         acceptor_.set_option(boost::asio::socket_base::reuse_address(true), error);
-        acceptor_.bind(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 0),
+        // Loopback only: a bind to every address makes Windows Firewall ask
+        // whether to allow the test program, which ends in a UAC prompt.
+        acceptor_.bind(boost::asio::ip::tcp::endpoint(
+                           boost::asio::ip::address_v4::loopback(), 0),
                        error);
         REQUIRE(!error);
         port_ = acceptor_.local_endpoint().port();

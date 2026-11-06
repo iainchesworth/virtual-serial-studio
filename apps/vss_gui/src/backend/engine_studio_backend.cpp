@@ -187,9 +187,9 @@ capabilities EngineStudioBackend::caps() const
 {
     capabilities caps = capabilities{};
     // Boost.VirtualSerial's network backends only connect. Waiting for other
-    // computers is `vss_ports`' listen transport (`tcp-listen://` and
-    // `udp-listen://`), which `vss::studio::attach_serial` opens. RFC 2217 has
-    // no server role.
+    // computers is `vss_ports`' listen transport (`tcp-listen://`,
+    // `udp-listen://` and `rfc2217-listen://`), which
+    // `vss::studio::attach_serial` opens.
     caps.network_server = true;
     // `vss::run_benchmark` is the core `vss_cli bench` uses, shared with the
     // GUI.
