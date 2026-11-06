@@ -29,6 +29,7 @@
 #include "flows/release_port_dialog.hpp"
 #include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
+#include "panes/fixture_behaviour.hpp"
 #include "panes/inspector_panel.hpp"
 #include "panes/monitor_panel.hpp"
 #include "panes/ports_panel.hpp"
@@ -241,7 +242,7 @@ void ShellWindow::build_actions()
         tr("cli command"), {}, {}, action_level::advanced,
         [this] { open_export_command(); });
     add(QStringLiteral("file.bundle"), tr("Diagnostic bundle"),
-        tr("support zip"), {}, {}, action_level::simple,
+        tr("support zip"), QStringLiteral("export"), {}, action_level::simple,
         [this] { open_bundle(); });
     add(QStringLiteral("file.quit"), tr("Quit"), tr("exit"), {},
         QKeySequence::Quit, action_level::simple, [this] { close(); });
@@ -289,19 +290,20 @@ void ShellWindow::build_actions()
         action_level::advanced, [this] { open_add_fixture(); });
     add(
         QStringLiteral("ports.copyName"), tr("Copy port name"),
-        tr("clipboard path"), {}, QKeySequence(QStringLiteral("Ctrl+Shift+C")),
-        action_level::simple, [this] { copy_selected_port(); }, false,
+        tr("clipboard path"), QStringLiteral("copy"),
+        QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
+        [this] { copy_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
     add(
         QStringLiteral("ports.rename"), tr("Rename port"),
         tr("name change relabel"), {}, QKeySequence(Qt::Key_F2),
-        action_level::simple, [this] { show_rename(selection_.port()); },
-        false,
+        action_level::simple, [this] { show_rename(selection_.port()); }, false,
         [this]
         { return backend_.caps().rename_port && selection_.port() != 0; });
     add(
         QStringLiteral("ports.remove"), tr("Remove port"), tr("delete remove"),
-        {}, {}, action_level::simple, [this] { remove_selected_port(); }, false,
+        QStringLiteral("remove"), {}, action_level::simple,
+        [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
     add(
         QStringLiteral("topology.removeSetup"), tr("Remove setup"),
@@ -339,8 +341,8 @@ void ShellWindow::build_actions()
         [this] { return share_link_of_selection() != 0; });
     add(
         QStringLiteral("topology.removeLink"), tr("Remove link"),
-        tr("delete disconnect"), {}, {}, action_level::simple,
-        [this] { remove_selected_link(); }, false,
+        tr("delete disconnect"), QStringLiteral("remove"), {},
+        action_level::simple, [this] { remove_selected_link(); }, false,
         [this] { return selection_.link() != 0; });
     add(QStringLiteral("topology.wiring"), tr("Link wiring"),
         tr("line matrix faults"), {}, {}, action_level::advanced,
@@ -474,14 +476,13 @@ void ShellWindow::build_actions()
     add(QStringLiteral("help.shortcuts"), tr("Keyboard shortcuts"), tr("keys"),
         {}, {}, action_level::simple, [this] { open_shortcuts(); });
     add(QStringLiteral("help.environment"), tr("Copy environment"),
-        tr("build bug report"), {}, {}, action_level::simple,
-        [this] { copy_environment(); });
+        tr("build bug report"), QStringLiteral("copy"), {},
+        action_level::simple, [this] { copy_environment(); });
     add(QStringLiteral("help.about"), tr("About"),
         tr("version licence copyright"), {}, {}, action_level::simple,
         [this] { open_about(); });
 
-    connect(&undo_, &UndoService::changed, this,
-            [this] { update_actions(); });
+    connect(&undo_, &UndoService::changed, this, [this] { update_actions(); });
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
@@ -648,8 +649,14 @@ void ShellWindow::build_toolbar()
     search_->setPlaceholderText(tr("Search actions"));
     search_->setAccessibleName(tr("Search actions"));
     search_->setClearButtonEnabled(true);
-    search_->setFixedWidth(240);
+    search_->setFixedWidth(220);
     search_->setFont(Theme::instance().font(text_style::body));
+    // The search field leads with the magnifier from the icon set.
+    search_
+        ->addAction(IconProvider::instance().icon(QStringLiteral("search"),
+                                                  colour_role::ink3, 16),
+                    QLineEdit::LeadingPosition)
+        ->setText(tr("Search actions"));
     toolbar_->addWidget(search_);
     connect(search_, &QLineEdit::returnPressed, this,
             [this] { open_palette(); });
@@ -711,14 +718,14 @@ void ShellWindow::build_central()
                 status_->showMessage(text, 6000);
                 log_local(text);
             });
-    connect(owner_bar_, &OwnerBar::owner_changed, this,
-            [this](vss::link_id id, vss::endpoint_id before,
-                   vss::endpoint_id after)
-            {
-                if (const auto link = backend_.link(id))
-                    undo_.push(owner_step(backend_, *link, before, after,
-                                          tr("Change owner")));
-            });
+    connect(
+        owner_bar_, &OwnerBar::owner_changed, this,
+        [this](vss::link_id id, vss::endpoint_id before, vss::endpoint_id after)
+        {
+            if (const auto link = backend_.link(id))
+                undo_.push(owner_step(backend_, *link, before, after,
+                                      tr("Change owner")));
+        });
     layout->addWidget(owner_bar_);
     central_->addWidget(workspace_);
 
@@ -780,6 +787,8 @@ void ShellWindow::build_docks()
     inspector_panel_ = new InspectorPanel(backend_, this);
     send_panel_ = new SendPanel(backend_, this);
     monitor_panel_ = new MonitorPanel(backend_, this);
+    behaviours_ = new FixtureBehaviours(backend_, this);
+    inspector_panel_->set_behaviours(behaviours_);
 
     ports_dock_ =
         make_dock(QStringLiteral("portsDock"), tr("Ports"), ports_panel_);
@@ -794,7 +803,7 @@ void ShellWindow::build_docks()
     inspector_dock_->setMinimumWidth(
         Theme::instance().metric(QStringLiteral("layout.inspector.default")));
     send_dock_->setMinimumHeight(
-        Theme::instance().metric(QStringLiteral("layout.send.default")));
+        Theme::instance().metric(QStringLiteral("layout.send.default")) + 24);
     monitor_dock_->setMinimumHeight(
         Theme::instance().metric(QStringLiteral("layout.monitor.default")));
 
@@ -818,6 +827,19 @@ void ShellWindow::build_docks()
                 selection_.select_port(id);
                 remove_selected_port();
             });
+    ports_panel_->set_menu_state_provider(
+        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
+    topology_->set_menu_state_provider(
+        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
+    connect(ports_panel_, &PortsPanel::port_action_requested, this,
+            [this](vss::endpoint_id id, port_menu_action action)
+            { run_port_action(id, action); });
+    connect(topology_, &topology::TopologyView::port_action_requested, this,
+            [this](vss::endpoint_id id, port_menu_action action)
+            { run_port_action(id, action); });
+    connect(behaviours_, &FixtureBehaviours::error_message, this,
+            [this](const QString& message)
+            { ToastManager::instance().show(this, message); });
     connect(ports_panel_, &PortsPanel::path_copied, this,
             [this](const QString& path)
             { status_->showMessage(tr("Copied %1.").arg(path), 2500); });
@@ -1102,7 +1124,10 @@ void ShellWindow::on_level_changed(bool advanced)
     {
         const int base =
             Theme::instance().metric(QStringLiteral("layout.send.default"));
-        send_dock_->setMinimumHeight(advanced ? base + 68 : base);
+        // The "Sending from" line is 24 high; Advanced adds the repeat and
+        // saved-sends rows, and a line for a running repeat.
+        send_dock_->setMinimumHeight(advanced ? base + 24 + 68 + 30
+                                              : base + 24);
     }
     if (monitor_dock_ != nullptr)
     {
@@ -1229,23 +1254,21 @@ void ShellWindow::update_undo_actions()
         QString plain;
         QString with_step;
         QString step;
-    } labels[] = {
-        {"edit.undo", tr("Undo"), tr("Undo %1"), undo_.undo_text()},
-        {"edit.redo", tr("Redo"), tr("Redo %1"), undo_.redo_text()}};
+    } labels[] = {{"edit.undo", tr("Undo"), tr("Undo %1"), undo_.undo_text()},
+                  {"edit.redo", tr("Redo"), tr("Redo %1"), undo_.redo_text()}};
     for (const auto& label : labels)
     {
-        QAction* action =
-            registry_.action(QString::fromLatin1(label.id));
+        QAction* action = registry_.action(QString::fromLatin1(label.id));
         if (action == nullptr)
             continue;
         action->setText(label.step.isEmpty() ? label.plain
                                              : label.with_step.arg(label.step));
         action->setToolTip(supported ? action->text()
                                      : tr("Not available in this build"));
-        action->setStatusTip(
-            supported ? tr("Reverses connecting or removing a link, "
-                           "changing an owner and renaming a port.")
-                      : tr("This build cannot reverse changes."));
+        action->setStatusTip(supported
+                                 ? tr("Reverses connecting or removing a link, "
+                                      "changing an owner and renaming a port.")
+                                 : tr("This build cannot reverse changes."));
     }
 }
 
@@ -1538,6 +1561,62 @@ void ShellWindow::show_monitor()
     {
         const QSignalBlocker blocker(monitor_action_);
         monitor_action_->setChecked(true);
+    }
+}
+
+void ShellWindow::show_send()
+{
+    if (send_dock_ == nullptr)
+        return;
+    send_dock_->show();
+    send_dock_->raise();
+}
+
+port_menu_state ShellWindow::port_menu_state_for(vss::endpoint_id id) const
+{
+    port_menu_state state;
+    state.advanced = level_.advanced();
+    state.repeating = send_panel_ != nullptr && send_panel_->repeating() &&
+                      send_panel_->repeat_port() == id;
+    if (behaviours_ != nullptr && behaviours_->is_fixture(id))
+    {
+        // The fixture behaviours are an Advanced control, like the fixture
+        // itself.
+        state.fixture = state.advanced;
+        state.generating = behaviours_->generating(id);
+        state.echoing = behaviours_->echoing(id);
+        state.echo_available = behaviours_->echo_available();
+    }
+    return state;
+}
+
+void ShellWindow::run_port_action(vss::endpoint_id id, port_menu_action action)
+{
+    selection_.select_port(id);
+    switch (action)
+    {
+    case port_menu_action::send_bytes:
+        show_send();
+        send_panel_->send_from(id);
+        break;
+    case port_menu_action::toggle_repeat:
+        show_send();
+        send_panel_->toggle_repeat(id);
+        break;
+    case port_menu_action::open_monitor:
+        monitor_panel_->set_selected_port(id);
+        show_monitor();
+        break;
+    case port_menu_action::toggle_generator:
+        behaviours_->toggle_generator(id);
+        status_->showMessage(behaviours_->generating(id)
+                                 ? tr("Generator started.")
+                                 : tr("Generator stopped."),
+                             3000);
+        break;
+    case port_menu_action::toggle_echo:
+        behaviours_->toggle_echo(id);
+        break;
     }
 }
 

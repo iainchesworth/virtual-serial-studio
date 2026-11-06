@@ -7,6 +7,7 @@
 #include "advanced/benchmark_dialog.hpp"
 
 #include "advanced/chrome.hpp"
+#include "theme/icon_provider.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
@@ -225,6 +226,8 @@ void BenchmarkDialog::build()
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);
     run_ = make_button(tr("Run"), "primary", footer);
+    run_->setIcon(IconProvider::instance().icon(QStringLiteral("run"),
+                                                colour_role::onAccent, 16));
     run_->setAccessibleName(tr("Run"));
     connect(run_, &QPushButton::clicked, this, &BenchmarkDialog::run);
     footer_layout->addWidget(run_);
@@ -446,8 +449,8 @@ void BenchmarkDialog::run()
 
 void BenchmarkDialog::start()
 {
-    const auto bytes = vss::parse_byte_size(
-        amount_->currentData().toString().toStdString());
+    const auto bytes =
+        vss::parse_byte_size(amount_->currentData().toString().toStdString());
     const auto chunk =
         vss::parse_byte_size(chunk_->currentData().toString().toStdString());
     if (!bytes || !chunk || *chunk == 0)
@@ -503,8 +506,8 @@ void BenchmarkDialog::on_progress(const vss::benchmark_progress& progress)
         return;
     const std::uint64_t done = progress.sent + progress.received;
     const std::uint64_t whole = progress.total * 2;
-    progress_->setValue(static_cast<int>(
-        std::min<std::uint64_t>(100, done * 100 / whole)));
+    progress_->setValue(
+        static_cast<int>(std::min<std::uint64_t>(100, done * 100 / whole)));
     finished_->setText(
         tr("%1 of %2 received")
             .arg(vss::format_byte_size(progress.received).c_str(),
@@ -537,10 +540,12 @@ void BenchmarkDialog::on_finished(
     }
 
     const vss::benchmark_result& ran = *outcome;
-    const QString sent = QString::fromStdString(vss::format_byte_size(ran.sent));
+    const QString sent =
+        QString::fromStdString(vss::format_byte_size(ran.sent));
     const QString received =
         QString::fromStdString(vss::format_byte_size(ran.received));
-    const QString lost = QString::fromStdString(vss::format_byte_size(ran.lost()));
+    const QString lost =
+        QString::fromStdString(vss::format_byte_size(ran.lost()));
     const QString rate = QString::fromStdString(
         vss::format_throughput(ran.received, ran.elapsed));
     set_metrics(sent, received, lost, rate);

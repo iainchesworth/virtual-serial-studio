@@ -26,6 +26,8 @@ enum class colour_role
     ground,
     panel,
     sunken,
+    hover,
+    pressed,
     line,
     line2,
     control,

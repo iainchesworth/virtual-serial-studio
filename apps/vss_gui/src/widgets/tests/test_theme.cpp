@@ -79,13 +79,28 @@ TEST_CASE("theme: every QSS placeholder resolves in both themes")
     REQUIRE(file.open(QIODevice::ReadOnly));
 
     const QString source = QString::fromUtf8(file.readAll());
-    const QRegularExpression pattern(QStringLiteral("%([A-Za-z0-9_]+)%"));
+    const QRegularExpression pattern(QStringLiteral("%([A-Za-z0-9_.]+)%"));
     auto matches = pattern.globalMatch(source);
     int count = 0;
     while (matches.hasNext())
     {
         const auto match = matches.next();
-        REQUIRE(theme.has_colour(match.captured(1)));
+        const QString name = match.captured(1);
+        // Size and theme placeholders resolve to a number or a name, not to
+        // a colour.
+        if (name == QLatin1String("theme") ||
+            name.startsWith(QLatin1String("space.")))
+        {
+            ++count;
+            continue;
+        }
+        if (name.startsWith(QLatin1String("radius.")))
+        {
+            REQUIRE(theme.radius(name.mid(7)) > 0);
+            ++count;
+            continue;
+        }
+        REQUIRE(theme.has_colour(name));
         ++count;
     }
     REQUIRE(count >= 30);
@@ -251,7 +266,7 @@ TEST_CASE("theme: fonts, metrics, spacing and density")
     REQUIRE_EQ(theme.metric(QStringLiteral("minTarget")), 24);
     REQUIRE_EQ(theme.metric(QStringLiteral("layout.ports.default")), 360);
     REQUIRE_EQ(theme.space(2), 12);
-    REQUIRE_EQ(theme.radius(QStringLiteral("control")), 4);
+    REQUIRE_EQ(theme.radius(QStringLiteral("control")), 6);
     REQUIRE_EQ(theme.size(QStringLiteral("toggleTrack")), QSize(34, 18));
     REQUIRE_EQ(theme.size(QStringLiteral("layout.windowMin")), QSize(960, 640));
 

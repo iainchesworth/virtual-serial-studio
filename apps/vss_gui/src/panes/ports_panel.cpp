@@ -20,6 +20,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListView>
+#include <QMenu>
 #include <QStackedWidget>
 #include <QTableView>
 #include <QTimer>
@@ -95,6 +96,9 @@ void PortsPanel::build()
         });
     simple_->setItemDelegate(simple_delegate_);
     simple_->installEventFilter(this);
+    simple_->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(simple_, &QWidget::customContextMenuRequested, this,
+            [this](const QPoint& position) { open_menu(simple_, position); });
     connect(simple_->selectionModel(), &QItemSelectionModel::currentChanged,
             this, [this](const QModelIndex& current, const QModelIndex&)
             { on_current_changed(current); });
@@ -131,6 +135,9 @@ void PortsPanel::build()
         });
     table_->setItemDelegate(table_delegate_);
     table_->installEventFilter(this);
+    table_->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(table_, &QWidget::customContextMenuRequested, this,
+            [this](const QPoint& position) { open_menu(table_, position); });
     connect(table_->selectionModel(), &QItemSelectionModel::currentChanged,
             this, [this](const QModelIndex& current, const QModelIndex&)
             { on_current_changed(current); });
@@ -279,6 +286,39 @@ void PortsPanel::sync_views(vss::endpoint_id id)
     simple_->scrollTo(index, QAbstractItemView::EnsureVisible);
     table_->scrollTo(index, QAbstractItemView::EnsureVisible);
     syncing_ = previous;
+}
+
+void PortsPanel::open_menu(QAbstractItemView* view, const QPoint& position)
+{
+    // A click names the row under the pointer; the Menu key has no pointer, so
+    // it names the current row.
+    QModelIndex index = view->indexAt(position);
+    QPoint global = view->viewport()->mapToGlobal(position);
+    if (!index.isValid())
+    {
+        index = view->currentIndex();
+        if (!index.isValid())
+            return;
+        global = view->viewport()->mapToGlobal(view->visualRect(index).center());
+    }
+    const vss::endpoint_id id = model_->port_id(index.row());
+    selection_.select_port(id);
+
+    auto* menu = new QMenu(this);
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    menu->setAccessibleName(tr("Port actions"));
+    menu->addAction(tr("Inspect"), this,
+                    [this, id] { Q_EMIT inspect_requested(id); });
+    add_port_menu_actions(menu, this,
+                          menu_state_ ? menu_state_(id) : port_menu_state{},
+                          [this, id](port_menu_action action)
+                          { Q_EMIT port_action_requested(id, action); });
+    const auto port = model_->port_at(index.row());
+    if (port && !port->path.isEmpty())
+    {
+        menu->addAction(tr("Copy path"), this, [this] { copy_selected_path(); });
+    }
+    menu->popup(global);
 }
 
 int PortsPanel::current_row() const

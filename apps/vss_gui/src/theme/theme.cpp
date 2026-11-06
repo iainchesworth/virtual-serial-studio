@@ -17,11 +17,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QScreen>
 #include <QStyle>
 #include <QStyleFactory>
 #include <QStyleHints>
 
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 #include <utility>
 
@@ -80,6 +82,52 @@ void flatten_layout(const QString& prefix, const QJsonObject& object,
     }
 }
 
+/// The design's body size in logical pixels.  The system font on Windows is
+/// 9 pt, which is 12 px and below the 12 px floor once the smaller styles are
+/// derived from it, so the body never goes under the design size.
+constexpr double design_body_px = 13.0;
+
+double logical_dpi()
+{
+    const QScreen* screen = QGuiApplication::primaryScreen();
+    if (screen != nullptr && screen->logicalDotsPerInchY() > 0.0)
+        return screen->logicalDotsPerInchY();
+    return 96.0;
+}
+
+/// The family is whatever the system reports for its UI font.  Segoe UI
+/// Variable would be the Windows 11 face, but Qt 6 draws its variable
+/// instances at the wrong weight through DirectWrite (every regular label
+/// comes out semi-bold), so Windows keeps Segoe UI.  The look comes from the
+/// whole-pixel sizes and the unhinted outline instead.
+QFont resolve_base_font()
+{
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    // Hinting snaps stems to whole pixels, which is what makes Windows text
+    // look crunchy next to a modern UI.  Positions and sizes are already whole
+    // pixels (see Theme::font), so ask for the unhinted outline.
+    font.setHintingPreference(QFont::PreferNoHinting);
+    font.setStyleStrategy(QFont::PreferAntialias);
+    return font;
+}
+
+/// The default fixed font on Windows is Courier New, a thin typewriter face.
+/// Consolas ships with Windows and is drawn for screens.  The fixed font on
+/// the other platforms is already a screen face.
+QFont resolve_mono_font()
+{
+    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    // Only the typewriter default is replaced, so this is a no-op wherever the
+    // system already reports a screen face.
+    const QString consolas = QStringLiteral("Consolas");
+    if (font.family() == QLatin1String("Courier New") &&
+        QFontDatabase::families().contains(consolas))
+        font.setFamily(consolas);
+    font.setHintingPreference(QFont::PreferNoHinting);
+    font.setStyleStrategy(QFont::PreferAntialias);
+    return font;
+}
+
 } // namespace
 
 Theme& Theme::instance()
@@ -94,8 +142,8 @@ Theme::Theme(QObject* parent) : QObject(parent)
     load_tokens();
     if (QGuiApplication::instance() != nullptr)
     {
-        base_font_ = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-        mono_font_ = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        base_font_ = resolve_base_font();
+        mono_font_ = resolve_mono_font();
     }
 }
 
@@ -106,8 +154,8 @@ void Theme::initialise()
 
     if (QGuiApplication::instance() != nullptr)
     {
-        base_font_ = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-        mono_font_ = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        base_font_ = resolve_base_font();
+        mono_font_ = resolve_mono_font();
     }
 
     if (!system_connected_ && QGuiApplication::styleHints() != nullptr)
@@ -230,21 +278,27 @@ QFont Theme::font(text_style style) const
     QFont font = fixed ? mono_font_ : base_font_;
     if (font.family().isEmpty())
         font = QApplication::font();
-    if (font.pointSizeF() <= 0)
-    {
-        const QFontInfo info(font);
-        if (info.pointSizeF() > 0)
-            font.setPointSizeF(info.pointSizeF());
-        else
-            font.setPixelSize(std::max(1, font.pixelSize()));
-    }
 
-    const double base = font.pointSizeF() > 0 ? font.pointSizeF() : 10.0;
+    // Every style lands on a whole number of logical pixels.  A fractional
+    // size (the system's 9 pt body times 0.923 is 11.08 px) is rasterised at
+    // a size no stem lines up with, which is the soft, uneven look.  The
+    // system size still scales the whole scale up when the user asks for
+    // larger text.
+    double system_px = font.pixelSize();
+    if (system_px <= 0.0)
+    {
+        const double points = font.pointSizeF() > 0 ? font.pointSizeF() : 9.0;
+        system_px = points * logical_dpi() / 72.0;
+    }
+    const double base_px = std::max(design_body_px, std::round(system_px));
     const double ratio = ratios_.value(key, 1.0);
-    font.setPointSizeF(std::max(1.0, base * ratio));
+    const double px = std::max(1.0, std::round(base_px * ratio));
+    font.setPointSizeF(px * 72.0 / logical_dpi());
 
     QString weight_key = QStringLiteral("body");
-    if (style == text_style::caption || style == text_style::label)
+    // Caption is the 12 px size used for hints and secondary lines; only the
+    // label style carries the semi-bold weight.
+    if (style == text_style::label)
         weight_key = QStringLiteral("label");
     else if (style == text_style::subtitle || style == text_style::title ||
              style == text_style::display)
@@ -332,7 +386,7 @@ QString Theme::style_sheet() const
     const QString source =
         read_resource(QStringLiteral(":/tokens/style.qss.in"));
     const auto& colours = current_colours();
-    const QRegularExpression pattern(QStringLiteral("%([A-Za-z0-9_]+)%"));
+    const QRegularExpression pattern(QStringLiteral("%([A-Za-z0-9_.]+)%"));
     auto matches = pattern.globalMatch(source);
 
     QString output;
@@ -343,6 +397,32 @@ QString Theme::style_sheet() const
         const QRegularExpressionMatch match = matches.next();
         output += source.mid(last, match.capturedStart() - last);
         const QString name = match.captured(1);
+        // Sizes come from the same token file: `%radius.control%` is the
+        // control radius and `%space.2%` the third step of the spacing scale,
+        // both in pixels.
+        // `%theme%` names the resolved theme so a path can pick the light or
+        // dark copy of an indicator image.
+        if (name == QLatin1String("theme"))
+        {
+            output +=
+                is_dark() ? QLatin1String("dark") : QLatin1String("light");
+            last = match.capturedEnd();
+            continue;
+        }
+        if (name.startsWith(QLatin1String("radius.")))
+        {
+            output +=
+                QString::number(radius(name.mid(7))) + QLatin1String("px");
+            last = match.capturedEnd();
+            continue;
+        }
+        if (name.startsWith(QLatin1String("space.")))
+        {
+            output += QString::number(space(name.mid(6).toInt())) +
+                      QLatin1String("px");
+            last = match.capturedEnd();
+            continue;
+        }
         const auto it = colours.find(name);
         if (it == colours.end())
             throw std::runtime_error(
@@ -382,6 +462,10 @@ void Theme::apply_palette_and_style()
     }
 
     qApp->setPalette(palette());
+    // Widgets that do not ask for a style (menus, tooltips, item views,
+    // dialog buttons) take the application font; make it the body style so
+    // they match the rest of the window instead of the platform's 9 pt.
+    qApp->setFont(font(text_style::body));
     qApp->setStyleSheet(style_sheet());
     Q_EMIT theme_changed();
 }
@@ -406,6 +490,8 @@ QString Theme::role_name(colour_role role)
         VSS_THEME_ROLE(ground);
         VSS_THEME_ROLE(panel);
         VSS_THEME_ROLE(sunken);
+        VSS_THEME_ROLE(hover);
+        VSS_THEME_ROLE(pressed);
         VSS_THEME_ROLE(line);
         VSS_THEME_ROLE(line2);
         VSS_THEME_ROLE(control);

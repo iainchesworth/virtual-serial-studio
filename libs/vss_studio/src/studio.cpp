@@ -554,10 +554,119 @@ result<void> studio::inject_fault(endpoint_id id, fault_kind fault)
     return {};
 }
 
+result<std::shared_ptr<serial_transport>> studio::fixture_for(
+    endpoint_id id) const
+{
+    std::shared_ptr<serial_transport> fixture;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        fixture = it->second.fixture.lock();
+    }
+    if (!fixture || fixture->mock() == nullptr)
+        return make_error_code(errc::unsupported);
+    return fixture;
+}
+
+namespace {
+
+/// Puts bytes in a fixture's receive path.  The fixture is not thread safe and
+/// the endpoint reads from it on its strand, so this runs there; the lambda
+/// holds the transport, which keeps the fixture alive until it has run.
+void post_inject(const std::shared_ptr<endpoint>& target,
+                 std::shared_ptr<serial_transport> fixture, byte_buffer data)
+{
+    boost::asio::post(
+        target->get_executor(),
+        [fixture = std::move(fixture), data = std::move(data)]
+        {
+            if (auto* mock = fixture->mock(); mock != nullptr)
+                mock->inject_read(data.data(), data.size());
+        });
+}
+
+} // namespace
+
+result<void> studio::inject_data(endpoint_id id, bytes_view data)
+{
+    const auto fixture = fixture_for(id);
+    if (!fixture)
+        return fixture.error();
+    const auto target = hub_->find_endpoint(id);
+    if (!target)
+        return make_error_code(errc::not_found);
+    post_inject(target, *fixture, byte_buffer(data.begin(), data.end()));
+    return {};
+}
+
+result<void> studio::set_fixture_echo(endpoint_id id, bool on)
+{
+    const auto fixture = fixture_for(id);
+    if (!fixture)
+        return fixture.error();
+    const auto target = hub_->find_endpoint(id);
+    if (!target)
+        return make_error_code(errc::not_found);
+
+    subscriber_id previous = 0;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        previous = it->second.echo;
+        if (on == (previous != 0))
+            return {};
+        if (!on)
+            it->second.echo = 0;
+    }
+    if (!on)
+    {
+        hub_->unsubscribe(previous);
+        return {};
+    }
+
+    event_filter filter;
+    filter.endpoint = id;
+    filter.kind = event_kind::data;
+    // What the hub writes to the fixture is a `tx` event on it.  The sink holds
+    // the endpoint and the transport, never the studio.
+    const auto subscription = hub_->subscribe(
+        filter,
+        [target, transport = *fixture](const endpoint_event& event)
+        {
+            if (!event.data || event.direction != data_direction::tx)
+                return;
+            post_inject(target, transport,
+                        byte_buffer(event.data->begin(), event.data->end()));
+        });
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it != records_.end())
+        {
+            it->second.echo = subscription;
+            return {};
+        }
+    }
+    hub_->unsubscribe(subscription);
+    return make_error_code(errc::not_found);
+}
+
+bool studio::fixture_echo(endpoint_id id) const
+{
+    std::lock_guard lock(record_mutex_);
+    const auto it = records_.find(id);
+    return it != records_.end() && it->second.echo != 0;
+}
+
 result<void> studio::remove_port(endpoint_id id)
 {
     std::string target;
     std::string advertised;
+    subscriber_id echo = 0;
     {
         std::lock_guard lock(record_mutex_);
         auto it = records_.find(id);
@@ -565,9 +674,12 @@ result<void> studio::remove_port(endpoint_id id)
         {
             target = it->second.target;
             advertised = it->second.advertised;
+            echo = it->second.echo;
         }
     }
 
+    if (echo != 0)
+        hub_->unsubscribe(echo);
     const auto removed = hub_->remove_endpoint(id);
     if (!removed)
         return removed.error();

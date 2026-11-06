@@ -29,5 +29,15 @@
     <file alias="icons/share.svg">resources/icons/share.svg</file>
     <file alias="icons/warning.svg">resources/icons/warning.svg</file>
     <file alias="icons/watch.svg">resources/icons/watch.svg</file>
+    <file alias="indicators/check-light.svg">resources/indicators/check-light.svg</file>
+    <file alias="indicators/check-dark.svg">resources/indicators/check-dark.svg</file>
+    <file alias="indicators/chevron-down-light.svg">resources/indicators/chevron-down-light.svg</file>
+    <file alias="indicators/chevron-down-dark.svg">resources/indicators/chevron-down-dark.svg</file>
+    <file alias="indicators/chevron-up-light.svg">resources/indicators/chevron-up-light.svg</file>
+    <file alias="indicators/chevron-up-dark.svg">resources/indicators/chevron-up-dark.svg</file>
+    <file alias="indicators/close-light.svg">resources/indicators/close-light.svg</file>
+    <file alias="indicators/close-dark.svg">resources/indicators/close-dark.svg</file>
+    <file alias="indicators/float-light.svg">resources/indicators/float-light.svg</file>
+    <file alias="indicators/float-dark.svg">resources/indicators/float-dark.svg</file>
   </qresource>
 </RCC>

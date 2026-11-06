@@ -10,11 +10,15 @@
 #include <vss/testkit/harness.hpp>
 
 #include "test_framework.hpp"
+#include "support/test_support.hpp"
 
 #include <chrono>
+#include <string>
+#include <thread>
 
 using namespace vss;
 using namespace vss::testkit;
+using namespace vss_test_support;
 
 TEST_CASE("studio: loopback virtual ports advertise their path")
 {
@@ -165,6 +169,109 @@ TEST_CASE("studio: faults are refused for other ports")
     REQUIRE(app.remove_port((*fixture)->id()));
     REQUIRE_EQ(app.inject_fault((*fixture)->id(), fault_kind::parity),
                make_error_code(errc::not_found));
+}
+
+namespace {
+
+/// The bytes of every data event on `port` going `direction`, joined.
+std::string data_on(const event_recorder& events, const std::string& port,
+                    data_direction direction)
+{
+    std::string joined;
+    for (const auto& event : events.snapshot())
+    {
+        if (event.kind == event_kind::data && event.name == port &&
+            event.direction == direction && event.data)
+            joined.append(event.data->begin(), event.data->end());
+    }
+    return joined;
+}
+
+} // namespace
+
+TEST_CASE("studio: a fixture speaks and the hub carries it along its links")
+{
+    using namespace std::chrono_literals;
+
+    studio app;
+    const auto fixture = app.create_mock_port("device");
+    const auto peer = app.create_virtual_port("peer", virtual_port_kind::loopback);
+    REQUIRE(fixture);
+    REQUIRE(peer);
+    REQUIRE(app.connect("device", "peer"));
+
+    event_recorder events;
+    app.engine().subscribe({}, [events](const endpoint_event& e)
+                           { events.record(e); });
+
+    const std::string text = "hello";
+    REQUIRE(app.inject_data((*fixture)->id(), as_bytes(text)));
+    REQUIRE(wait_until(
+        [&] { return data_on(events, "device", data_direction::rx) == text; },
+        2000ms));
+    // The hub wrote it to the other end of the link.
+    REQUIRE(wait_until(
+        [&] { return data_on(events, "peer", data_direction::tx) == text; },
+        2000ms));
+}
+
+TEST_CASE("studio: data can only be injected into a fixture")
+{
+    studio app;
+    const auto loopback =
+        app.create_virtual_port("v", virtual_port_kind::loopback);
+    REQUIRE(loopback);
+    const std::string text = "x";
+    REQUIRE_EQ(app.inject_data((*loopback)->id(), as_bytes(text)),
+               make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.inject_data(endpoint_id{4242}, as_bytes(text)),
+               make_error_code(errc::not_found));
+    REQUIRE_EQ(app.set_fixture_echo((*loopback)->id(), true),
+               make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.set_fixture_echo(endpoint_id{4242}, true),
+               make_error_code(errc::not_found));
+    REQUIRE(!app.fixture_echo((*loopback)->id()));
+}
+
+TEST_CASE("studio: an echoing fixture sends back what was written to it")
+{
+    using namespace std::chrono_literals;
+
+    studio app;
+    const auto fixture = app.create_mock_port("device");
+    REQUIRE(fixture);
+    const auto id = (*fixture)->id();
+
+    event_recorder events;
+    app.engine().subscribe({}, [events](const endpoint_event& e)
+                           { events.record(e); });
+
+    REQUIRE(!app.fixture_echo(id));
+    REQUIRE(app.set_fixture_echo(id, true));
+    REQUIRE(app.fixture_echo(id));
+    // Asking again changes nothing.
+    REQUIRE(app.set_fixture_echo(id, true));
+
+    const std::string text = "ping";
+    (*fixture)->write(as_bytes(text));
+    REQUIRE(wait_until(
+        [&] { return data_on(events, "device", data_direction::rx) == text; },
+        2000ms));
+
+    // Off: a later write is not answered.
+    REQUIRE(app.set_fixture_echo(id, false));
+    REQUIRE(!app.fixture_echo(id));
+    (*fixture)->write(as_bytes(text));
+    REQUIRE(wait_until(
+        [&] { return data_on(events, "device", data_direction::tx).size() == 8; },
+        2000ms));
+    std::this_thread::sleep_for(150ms);
+    REQUIRE_EQ(data_on(events, "device", data_direction::rx), text);
+
+    // Removing the fixture takes the echo with it.
+    REQUIRE(app.set_fixture_echo(id, true));
+    REQUIRE(app.remove_port(id));
+    REQUIRE(!app.fixture_echo(id));
 }
 
 TEST_CASE("studio: removal by id and by name")

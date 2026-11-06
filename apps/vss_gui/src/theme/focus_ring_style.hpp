@@ -33,7 +33,14 @@ public:
                        QPainter* painter,
                        const QWidget* widget = nullptr) const override;
 
+    QIcon standardIcon(StandardPixmap standard,
+                       const QStyleOption* option = nullptr,
+                       const QWidget* widget = nullptr) const override;
+
 private:
+    static bool draw_chevron(PrimitiveElement element,
+                             const QStyleOption* option, QPainter* painter);
+
     static Qt::FocusReason last_reason_;
     bool installed_ = false;
 };

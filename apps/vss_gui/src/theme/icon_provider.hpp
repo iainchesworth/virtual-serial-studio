@@ -15,11 +15,15 @@
 #include <QObject>
 #include <QString>
 
+#include <optional>
+
 namespace vss::gui
 {
 
-/// Loads `:/icons/<name>.svg`, replaces `currentColor`, and caches by name,
-/// size, device pixel ratio and colour.  The cache is flushed on a theme
+/// Loads `:/icons/<name>.svg`, replaces `currentColor`, and caches by name and
+/// colour or role.  The returned icon renders on demand at any size and device
+/// pixel ratio, follows the theme when it was asked for by role, and draws its
+/// disabled mode in the disabled text colour.  The cache is flushed on a theme
 /// change.
 class IconProvider final : public QObject
 {
@@ -36,7 +40,8 @@ public:
 private:
     explicit IconProvider(QObject* parent = nullptr);
 
-    QIcon render(const QString& name, const QColor& colour, int logical_size);
+    QIcon render(const QString& name, std::optional<colour_role> role,
+                 const QColor& colour);
 
     QHash<QString, QIcon> cache_;
 };

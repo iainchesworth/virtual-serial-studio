@@ -135,9 +135,11 @@ void ShortcutsDialog::build()
         QCoreApplication::translate("Shortcuts", "Filter shortcuts"));
     filter_->setClearButtonEnabled(true);
     filter_->setFixedWidth(240);
-    filter_->addAction(IconProvider::instance().icon(QStringLiteral("search"),
-                                                     colour_role::ink2, 16),
-                       QLineEdit::LeadingPosition);
+    filter_
+        ->addAction(IconProvider::instance().icon(QStringLiteral("search"),
+                                                  colour_role::ink2, 16),
+                    QLineEdit::LeadingPosition)
+        ->setText(QCoreApplication::translate("Shortcuts", "Filter shortcuts"));
     connect(filter_, &QLineEdit::textChanged, this,
             [this](const QString& text) { set_filter(text); });
     header_layout->addWidget(filter_, 0, Qt::AlignVCenter);

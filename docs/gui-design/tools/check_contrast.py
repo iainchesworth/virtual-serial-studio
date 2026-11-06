@@ -15,7 +15,8 @@ def ratio(a, b):
     return (la+0.05)/(lb+0.05)
 TEXT = [("ink","panel"),("ink","ground"),("ink","sunken"),("ink","accentSoft"),("ink2","panel"),("ink2","sunken"),("ink3","panel"),("ink3","ground"),
         ("accentStrong","panel"),("accentStrong","accentSoft"),("onAccent","accent"),("onDanger","bad"),("ok","okSoft"),("amber","amberSoft"),("bad","badSoft"),
-        ("noteInfoText","accentSoft"),("noteOkText","okSoft"),("noteWarnText","amberSoft"),("noteDangerText","badSoft"),("toastText","toastBg"),("toastLink","toastBg")]
+        ("noteInfoText","accentSoft"),("noteOkText","okSoft"),("noteWarnText","amberSoft"),("noteDangerText","badSoft"),("toastText","toastBg"),("toastLink","toastBg"),
+        ("ink","hover"),("ink","pressed"),("ink2","hover"),("accentStrong","hover")]
 NONTEXT = [("control","panel"),("control","ground"),("control","sunken"),("control","accentSoft"),("focus","panel"),("focus","ground"),("trackOff","panel")]
 fail = 0
 for theme, c in tokens.items():

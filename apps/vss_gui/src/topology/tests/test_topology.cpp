@@ -518,7 +518,8 @@ TEST_CASE("topology: double-click and the context menu")
     send_key(&view, Qt::Key_Right); // make sure a node has the focus
     const QStringList expected = view.node_menu_labels(view.focused_port());
     QStringList wanted;
-    wanted << QStringLiteral("Inspect") << QStringLiteral("Copy name")
+    wanted << QStringLiteral("Inspect") << QStringLiteral("Send bytes")
+           << QStringLiteral("Open in monitor") << QStringLiteral("Copy name")
            << QStringLiteral("Connect from here") << QStringLiteral("Remove");
     REQUIRE_EQ(expected, wanted);
     REQUIRE(!expected.contains(QStringLiteral("Rename")));
