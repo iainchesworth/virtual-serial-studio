@@ -35,7 +35,7 @@ driver builds in CI from the same sources; its guest results are in the section
 | Piece | State |
 |---|---|
 | Package: `vsscom.sys`, `vsscom.inf` and `vsscomctl.inf` with a catalog each, for x64 and ARM64 | builds in CI; `InfVerif` and `Inf2Cat` pass |
-| User-mode driver with its helper service: tests D1 to D13, D15 to D22, H14, and the studio client (C1) | pass in the Windows 11 guest with test signing off (Windows 10 not yet run with the helper) |
+| User-mode driver with its helper service: tests D1 to D13, D15 to D22, H14, and the studio client (C1) | pass in the Windows 11 and Windows 10 22H2 guests with test signing off, with the CI-signed packages, before and after a restart |
 | COM name: device interface, `\DosDevices` link, `SERIALCOMM` | runs in a Windows 10 and a Windows 11 guest |
 | Loopback port: waiting reads with the `SetCommTimeouts` rules, `WaitCommEvent`, purge and cancel, modem lines, one handle per end | runs in both guests (tests D1 to D7) |
 | Hub end: a second handle on each port that carries its bytes, line settings and lines, with flow control both ways | runs in both guests (tests D8 to D13) |
