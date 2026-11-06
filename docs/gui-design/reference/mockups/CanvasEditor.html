@@ -1,0 +1,232 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Advanced canvas editor</title>
+<link rel="stylesheet" href="../vss2.css">
+<style>
+body{margin:0;padding:24px;background:#DDE2E8;font-family:var(--ui);display:flex;flex-direction:column;gap:28px;align-items:flex-start}
+h2.cap{margin:0 0 8px;font:600 15px/20px var(--ui);color:#18212D}
+p.cap{margin:0 0 10px;max-width:1100px;font:13px/18px var(--ui);color:#465263}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* toolbox */
+.tbx{width:76px;flex:none;background:var(--sunken);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;overflow:hidden}
+.tbx .grp{width:64px;font-size:11px;line-height:14px;color:var(--ink3);font-weight:600;margin:4px 0 2px}
+.tile{width:64px;height:56px;border:1px solid transparent;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--ink2);font-size:12px;line-height:14px;background:transparent;box-sizing:border-box}
+.tile .ic{width:20px;height:20px;color:var(--ink)}
+.tile:hover,.tile.hov{background:var(--panel);border-color:var(--line2)}
+.tile.foc{outline:2px solid var(--focus);outline-offset:-2px;background:var(--panel)}
+.tile.off{color:#8A94A3}.tile.off .ic{color:#8A94A3}
+/* canvas */
+.cv{position:relative;flex:1;min-width:0;background:var(--panel);background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:16px 16px;overflow:hidden}
+.node{z-index:2}
+.node.fix{background:var(--panel)}
+.node .k{display:flex;align-items:center;gap:6px}
+.node .sub{color:var(--ink3);font-size:12px}
+.node.foc{outline:2px solid var(--focus);outline-offset:2px}
+.node.drop{background:var(--accent-soft);border-color:var(--accent)}
+.node.ghost{border:1px dashed var(--accent);background:var(--accent-soft);opacity:.6}
+.node.creating{border-style:dashed}
+.h{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--panel);border:1.5px solid var(--control);box-sizing:border-box;z-index:3}
+.h.on{border-color:var(--accent);background:var(--accent)}
+.wire{position:absolute;left:0;top:0;overflow:visible;z-index:1;fill:none;stroke-linecap:round}
+.menu{position:absolute;z-index:5;width:236px;background:var(--panel);border:1px solid var(--control);border-radius:6px;box-shadow:var(--shadow);padding:4px 0;font-size:13px}
+.menu .it{display:flex;align-items:center;gap:8px;height:28px;padding:0 12px}
+.menu .it .kbd{margin-left:auto}
+.menu .it.on{background:var(--accent-soft);color:var(--accent-d)}
+.menu .it.dis{color:#8A94A3}
+.menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.menu .it .chev{margin-left:auto;color:var(--ink3)}
+.sel-chip{font-weight:500;color:var(--accent-d)}
+.band{position:absolute;border:1px solid var(--accent);background:rgba(226,240,244,.4);z-index:1}
+.sheet{background:var(--panel);border:1px solid var(--control);border-radius:6px;box-shadow:var(--shadow);font-family:var(--ui);font-size:13px;line-height:18px;color:var(--ink)}
+.slot{display:grid;grid-template-columns:56px 128px minmax(0,1fr);gap:8px;align-items:center}
+.slot .inp,.fld .inp{height:28px;font-size:13px}
+.fld{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 12px;align-items:center}
+.fld label{color:var(--ink2)}
+select.inp{appearance:auto}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-port" viewBox="0 0 16 16"><rect x="2.5" y="4.5" width="11" height="7" rx="2"/><path d="M5.5 8h.01M8 8h.01M10.5 8h.01"/></symbol>
+  <symbol id="i-fixture" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 6h4v4H6z"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 16 16"><path d="M3 11h6.5a3 3 0 0 0 0-6H5"/><path d="M7 3L5 5l2 2"/></symbol>
+  <symbol id="i-device" viewBox="0 0 16 16"><rect x="2.5" y="5" width="11" height="6" rx="1"/><path d="M5 5V3M8 5V3M11 5V3"/></symbol>
+  <symbol id="i-net" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M2.5 8h11M8 2.5c2.2 2.2 2.2 8.8 0 11M8 2.5c-2.2 2.2-2.2 8.8 0 11"/></symbol>
+  <symbol id="i-pair" viewBox="0 0 16 16"><rect x="1.5" y="5.5" width="4" height="5" rx="1"/><rect x="10.5" y="5.5" width="4" height="5" rx="1"/><path d="M5.5 8h5"/></symbol>
+  <symbol id="i-split" viewBox="0 0 16 16"><path d="M2 8h4M6 8l6-4M6 8h6M6 8l6 4"/></symbol>
+  <symbol id="i-join" viewBox="0 0 16 16"><path d="M4 4l6 4M4 8h6M4 12l6-4M10 8h4M12 6l2 2-2 2"/></symbol>
+  <symbol id="i-bus" viewBox="0 0 16 16"><path d="M2 6h12M4 6v5M8 6v5M12 6v5"/></symbol>
+  <symbol id="i-switch" viewBox="0 0 16 16"><path d="M2 8h3M5 8l6-3.5M11 4.5h3M11 11.5h3"/><circle cx="5" cy="8" r="1"/></symbol>
+  <symbol id="i-redirect" viewBox="0 0 16 16"><path d="M2 8h10M9 5l3 3-3 3"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 16 16"><path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></symbol>
+  <symbol id="i-share" viewBox="0 0 16 16"><rect x="1.5" y="6" width="4" height="4" rx="1"/><path d="M5.5 8h2M7.5 8l5-4M7.5 8h5M7.5 8l5 4"/></symbol>
+  <symbol id="i-bench" viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="6" height="6" rx="1"/><rect x="7.5" y="7.5" width="6" height="6" rx="1"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 7.5V11M8 5.2v.1"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 16 16"><path d="M8 2.5l6 10.5H2z"/><path d="M8 6.5v3M8 11.2v.1"/></symbol>
+</svg>
+
+<!-- ============ 1. Workspace ============ -->
+<div>
+<h2 class="cap">1. Advanced workspace: toolbox, a pair of two fixtures, the node menu</h2>
+<p class="cap">The toolbox rail sits inside the Topology dock. rx-sim and tx-sim were added with the Pair tile, both ends set to New fixture, and are selected together (the header says "2 selected"). tx-sim has keyboard focus (focus ring) and its menu is open, with Settings highlighted. port-1 is hovered, so its handles show.</p>
+<div class="win" style="width:1280px;height:760px">
+  <div class="menubar"><button>File</button><button>Edit</button><button>Ports</button><button>Topology</button><button>Tools</button><button>View</button><button>Help</button></div>
+  <div class="toolbar">
+    <button class="tb">New</button><button class="tb">Open</button><button class="tb">Save</button><span class="sep"></span>
+    <button class="tb"><svg class="ic"><use href="#i-plus"/></svg>Add port</button>
+    <button class="tb"><svg class="ic"><use href="#i-device"/></svg>Attach device</button>
+    <button class="tb">Connect</button><button class="tb">Remove</button><span class="sep"></span>
+    <button class="tb"><svg class="ic"><use href="#i-fixture"/></svg>Mock device</button>
+    <button class="tb"><svg class="ic"><use href="#i-share"/></svg>Share</button>
+    <button class="tb">Fit</button>
+    <span class="grow"></span>
+    <label class="search"><input aria-label="Search actions" placeholder="Search actions" style="border:0;background:transparent;flex:1;min-width:0;outline:0;color:var(--ink)"><span class="kbd">Ctrl+K</span></label>
+  </div>
+  <div class="body">
+    <div class="row" style="flex:1">
+      <section class="dock grow" aria-label="Topology">
+        <div class="dock-h">Topology <span class="count">3 ports, 1 link</span><span class="sel-chip">2 selected</span><span class="grow"></span><span class="muted" style="font-weight:400;font-size:12px">Drag from a tile, or press Enter on it</span></div>
+        <div style="display:flex;flex:1;min-height:0">
+          <div class="tbx" role="list" aria-label="Toolbox">
+            <div class="grp">Ports</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-port"/></svg>Port</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-fixture"/></svg>Fixture</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-loop"/></svg>Loopback</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-device"/></svg>Device</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-net"/></svg>Network</div>
+            <div class="grp">Bundles</div>
+            <div class="tile hov" role="listitem"><svg class="ic"><use href="#i-pair"/></svg>Pair</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-split"/></svg>Split</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-join"/></svg>Join</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-bus"/></svg>Bus</div>
+            <div class="tile" role="listitem"><svg class="ic"><use href="#i-switch"/></svg>Switch</div>
+          </div>
+          <div class="cv">
+            <!-- link rx-sim <-> tx-sim -->
+            <svg class="wire" width="900" height="600"><path d="M232 128 H400" stroke="#566273" stroke-width="2"/></svg>
+            <div class="tlabel" style="left:288px;top:108px;width:56px">two-way</div>
+            <div class="node sel fix" style="left:64px;top:100px;width:168px;height:56px"><span><span class="k"><svg class="ic"><use href="#i-fixture"/></svg><b>rx-sim</b></span><span class="sub">Fixture, 115200 8N1</span></span></div>
+            <div class="node sel fix foc" style="left:400px;top:100px;width:168px;height:56px"><span><span class="k"><svg class="ic"><use href="#i-fixture"/></svg><b>tx-sim</b></span><span class="sub">Fixture, 115200 8N1</span></span></div>
+            <!-- hovered unlinked port with handles -->
+            <div class="node" style="left:64px;top:260px;width:168px;height:56px;border-style:dashed;border-color:#748090"><span><span class="k"><svg class="ic"><use href="#i-port"/></svg><b>port-1</b></span><span class="sub mono">COM7</span></span></div>
+            <div class="h" style="left:59px;top:283px"></div><div class="h on" style="left:227px;top:283px"></div>
+            <!-- node menu -->
+            <div class="menu" style="left:520px;top:150px" role="menu" aria-label="tx-sim">
+              <div class="it">Inspect<span class="kbd">Enter</span></div>
+              <div class="it on">Settings...<span class="kbd">Alt+Enter</span></div>
+              <div class="it">Rename<span class="kbd">F2</span></div>
+              <div class="it">Duplicate<span class="kbd">Ctrl+D</span></div>
+              <hr>
+              <div class="it">Connect from here<span class="kbd">Ctrl+L</span></div>
+              <div class="it">Link selected<span class="chev">&#8250;</span></div>
+              <div class="it">Send bytes...</div>
+              <div class="it">Start generator</div>
+              <div class="it">Echo received bytes</div>
+              <div class="it">Open in monitor</div>
+              <hr>
+              <div class="it">Copy name<span class="kbd">Ctrl+C</span></div>
+              <div class="it">Delete<span class="kbd">Delete</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div style="width:320px;flex:none;display:flex;flex-direction:column;gap:8px;min-height:0">
+        <section class="dock grow" aria-label="Inspector">
+          <div class="dock-h">Inspector <span class="count">tx-sim</span></div>
+          <div class="dock-b" style="display:flex;flex-direction:column;gap:10px">
+            <dl class="kv">
+              <dt>Kind</dt><dd>Fixture (mock)</dd>
+              <dt>State</dt><dd><span class="chip ok"><i></i>Open</span></dd>
+              <dt>Serial</dt><dd class="mono">115200 8N1, no flow control</dd>
+              <dt>Links</dt><dd>two-way with rx-sim</dd>
+            </dl>
+            <div><button class="btn sm">Settings...</button></div>
+            <div class="muted" style="font-size:12px">2 selected: rx-sim, tx-sim. Delete, Duplicate and Link selected act on both.</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="status"><span>Ports 3</span><span>Links 1</span><span>Hub running</span><span class="grow"></span><span class="chip ok"><i></i>Setup ready</span>
+    <span class="seg" style="height:24px"><button style="height:24px;padding:0 10px;font-size:12px">Simple</button><button class="on" style="height:24px;padding:0 10px;font-size:12px">Advanced</button></span></div>
+</div>
+</div>
+
+<!-- ============ 2. Wiring ============ -->
+<div>
+<h2 class="cap">2. Wiring: drag from a handle, drop on a node, choose the link</h2>
+<p class="cap">The wire is dragged from port-1's right handle. Every node shows its handles while a wire is out. The pointer is over tx-sim, which shows the drop highlight. A node that would close a loop would show a red edge instead. On release over tx-sim the link chooser opens; Two-way is the default for Enter.</p>
+<div class="win" style="width:820px;height:380px">
+  <div class="cv" style="height:380px">
+    <svg class="wire" width="820" height="380">
+      <path d="M232 98 H400" stroke="#566273" stroke-width="2"/>
+      <path d="M232 238 C 320 238, 330 128, 400 128" stroke="#0B6E8A" stroke-width="2" stroke-dasharray="6 4"/>
+    </svg>
+    <div class="tlabel" style="left:288px;top:78px;width:56px">two-way</div>
+    <div class="node" style="left:64px;top:70px;width:168px;height:56px"><span><span class="k"><svg class="ic"><use href="#i-fixture"/></svg><b>rx-sim</b></span><span class="sub">Fixture</span></span></div>
+    <div class="node drop" style="left:400px;top:100px;width:168px;height:56px"><span><span class="k"><svg class="ic"><use href="#i-fixture"/></svg><b>tx-sim</b></span><span class="sub">Fixture</span></span></div>
+    <div class="node sel" style="left:64px;top:210px;width:168px;height:56px"><span><span class="k"><svg class="ic"><use href="#i-port"/></svg><b>port-1</b></span><span class="sub mono">COM7</span></span></div>
+    <div class="h" style="left:59px;top:93px"></div><div class="h" style="left:227px;top:93px"></div>
+    <div class="h on" style="left:395px;top:123px"></div><div class="h" style="left:563px;top:123px"></div>
+    <div class="h" style="left:59px;top:233px"></div><div class="h on" style="left:227px;top:233px"></div>
+    <div class="menu" style="left:420px;top:166px;width:260px" role="menu" aria-label="Link port-1 and tx-sim">
+      <div class="it on">Two-way<span class="kbd">Enter</span></div>
+      <div class="it">One way, from port-1 to tx-sim</div>
+      <div class="it">Monitor port-1 on tx-sim</div>
+      <hr>
+      <div class="it dis">Add to the split</div>
+    </div>
+    <div style="position:absolute;left:64px;top:300px;font-size:12px;color:var(--ink3)">Keyboard: Ctrl+L on port-1, Tab to tx-sim, Enter, then choose. Esc cancels.</div>
+  </div>
+</div>
+</div>
+
+<!-- ============ 3. Add sheet ============ -->
+<div style="display:flex;gap:28px;align-items:flex-start">
+<div>
+<h2 class="cap">3. The Add sheet, after dropping the Pair tile</h2>
+<p class="cap" style="max-width:360px">Ghost nodes show where the pair will go. Both ends set to New fixture. Enter adds.</p>
+<div class="sheet" style="width:340px;padding:16px;display:flex;flex-direction:column;gap:12px">
+  <div style="display:flex;align-items:center;gap:8px"><svg class="ic" style="width:20px;height:20px"><use href="#i-pair"/></svg><b style="font-size:15px">Add pair</b></div>
+  <div class="muted" style="font-size:12px;margin-top:-6px">Two ports linked both ways, like a null-modem cable.</div>
+  <div class="slot"><span class="muted">End A</span><select class="inp" aria-label="End A kind"><option>New fixture</option></select><input class="inp" aria-label="End A name" value="rx-sim"></div>
+  <div class="slot"><span class="muted">End B</span><select class="inp" aria-label="End B kind"><option>New fixture</option></select><input class="inp" aria-label="End B name" value="tx-sim"></div>
+  <div style="font-size:13px;color:var(--accent-d)">&#9656; More settings <span class="muted">115200 8N1, no flow control</span></div>
+  <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn sm">Cancel</button><button class="btn sm primary">Add</button></div>
+</div>
+<div style="position:relative;width:340px;height:90px;margin-top:12px">
+  <div class="node ghost" style="left:0;top:16px;width:150px;height:48px"><b>rx-sim</b></div>
+  <div class="node ghost" style="left:190px;top:16px;width:150px;height:48px"><b>tx-sim</b></div>
+</div>
+</div>
+
+<!-- ============ 4. Settings ============ -->
+<div>
+<h2 class="cap">4. Settings for a port (right-click, Settings, or Alt+Enter)</h2>
+<p class="cap" style="max-width:460px">A real device is reopened with the new values, so the button says Apply and restart. A virtual port shows a different note and only saves the values.</p>
+<div class="dlg" style="width:460px;border-radius:6px">
+  <div class="dlg-h" style="padding-bottom:10px"><h1 style="font-size:17px;margin:0">Settings for device</h1></div>
+  <div class="dlg-b" style="gap:12px">
+    <div class="note info" style="align-items:center"><svg class="ic"><use href="#i-info"/></svg><span>Studio opens the device with these settings.</span></div>
+    <div class="fld">
+      <label for="b">Baud rate</label><select class="inp" id="b"><option>9600</option></select>
+      <label for="d">Data bits</label><select class="inp" id="d"><option>7</option></select>
+      <label for="p">Parity</label><select class="inp" id="p"><option>Even</option></select>
+      <label for="s">Stop bits</label><select class="inp" id="s"><option>1</option></select>
+      <label for="f">Flow control</label><select class="inp" id="f"><option>None</option></select>
+      <label for="rt">Read timeout</label><input class="inp" id="rt" value="0 ms">
+      <label for="wt">Write timeout</label><input class="inp" id="wt" value="0 ms">
+    </div>
+    <div class="mono muted">9600 7E1, no flow control</div>
+    <div class="note warn" style="align-items:center"><svg class="ic"><use href="#i-warn"/></svg><span>Restarting the port drops bytes that are in flight. Programs that have it open keep their handle.</span></div>
+  </div>
+  <div class="dlg-f"><span class="grow"></span><button class="btn">Cancel</button><button class="btn primary">Apply and restart</button></div>
+</div>
+</div>
+</div>
+</body>
+</html>

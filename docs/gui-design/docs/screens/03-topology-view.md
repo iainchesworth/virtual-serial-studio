@@ -1,5 +1,5 @@
 # Screens 03: topology view
-Mockups: Workspace, Advanced, Compact. Implemented with `QGraphicsView`/`QGraphicsScene`.
+Mockups: Workspace, Advanced, Compact, CanvasEditor. Implemented with `QGraphicsView`/`QGraphicsScene`. Building on the canvas in Advanced mode (the toolbox, wiring, Settings, multi-select, Duplicate and undo) is in `07-canvas-editor.md`; where the two differ in Advanced mode, `07` wins.
 
 ## Visuals
 - One node per port, drawn as a card: name (600) over a second line (mono path or role), optional inline chips (for example Owner, Dropped). Size 168 by 56 (the real device, or the target of a join, is 168 by 64). Compact window: 120 by 48. 6px radius, 1px `control` edge, `panel` fill. A real device uses `sunken` fill. Unlinked nodes use a dashed edge.
