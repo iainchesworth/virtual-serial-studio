@@ -394,13 +394,17 @@ VOID VssComHubIoControl(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         PVOID output = NULL;
         ULONG process;
 
-        if (!NT_SUCCESS(WdfRequestRetrieveOutputBuffer(
-                Request, sizeof(ULONG), &output, NULL)))
+        // The process id is an answer for those who ask for it: a caller with no
+        // output buffer revokes just the same.
+        const BOOLEAN wants_process = NT_SUCCESS(WdfRequestRetrieveOutputBuffer(
+            Request, sizeof(ULONG), &output, NULL));
+
+        process = VssComRevokeApplication(Context);
+        if (!wants_process)
         {
-            WdfRequestComplete(Request, STATUS_BUFFER_TOO_SMALL);
+            WdfRequestComplete(Request, STATUS_SUCCESS);
             return;
         }
-        process = VssComRevokeApplication(Context);
         *(PULONG)output = process;
         WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, sizeof(ULONG));
         return;
