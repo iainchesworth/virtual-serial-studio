@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_WIDGETS_PORT_MENU_HPP
-#define VSS_GUI_WIDGETS_PORT_MENU_HPP
+#pragma once
 
 #include <QString>
 #include <QStringList>
@@ -59,5 +58,3 @@ void add_port_menu_actions(QMenu* menu, QObject* context,
                            std::function<void(port_menu_action)> trigger);
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_WIDGETS_PORT_MENU_HPP

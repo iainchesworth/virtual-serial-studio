@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_PANES_FIXTURE_PANEL_HPP
-#define VSS_GUI_PANES_FIXTURE_PANEL_HPP
+#pragma once
 
 #include "panes/fixture_behaviour.hpp"
 
@@ -61,5 +60,3 @@ private:
 };
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_PANES_FIXTURE_PANEL_HPP
