@@ -16,6 +16,7 @@
 #include "widgets/common.hpp"
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/surfaces.hpp"
 
 #include <QCoreApplication>
 #include <QFrame>
@@ -240,10 +241,16 @@ void SetupCheckDialog::build()
     driver_note_->hide();
     body_layout->addWidget(driver_note_);
 
-    rows_host_ = new QWidget(body);
+    // One grouped section with dividers, not a stack of outlined cards
+    // (`10-design-language.md`, rule 10).
+    auto* group = new QFrame(body);
+    group->setProperty("group", true);
+    group->setAttribute(Qt::WA_StyledBackground, true);
+    polish(group);
+    rows_host_ = group;
     rows_layout_ = new QVBoxLayout(rows_host_);
     rows_layout_->setContentsMargins(0, 0, 0, 0);
-    rows_layout_->setSpacing(8);
+    rows_layout_->setSpacing(0);
     body_layout->addWidget(rows_host_);
 
     platform_note_ = new QLabel(body);
@@ -317,7 +324,9 @@ void SetupCheckDialog::rebuild()
         spec.action_text = row.action_text;
         spec.primary_action = row.action == setup_action::install_driver;
         spec.highlight = row.highlight;
-        spec.framed = true;
+        spec.framed = false;
+        if (!rows_.isEmpty())
+            rows_layout_->addWidget(make_group_divider(rows_host_));
         auto* widget = new CheckRowWidget(spec, rows_host_);
         widget->setAccessibleName(row.chip.isEmpty()
                                       ? row.title

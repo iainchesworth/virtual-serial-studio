@@ -47,7 +47,7 @@ void AddFixtureDialog::build()
         Theme::instance().metric(QStringLiteral("layout.dialogWidths.small")));
 
     auto* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(20, 20, 20, 0);
+    layout->setContentsMargins(24, 24, 24, 0);
     layout->setSpacing(14);
     layout->addWidget(make_header(
         tr("Add a mock fixture"),
@@ -103,7 +103,7 @@ void AddFixtureDialog::build()
     layout->addWidget(result_);
 
     auto* card = new QFrame(this);
-    card->setProperty("card", true);
+    card->setProperty("group", true);
     polish(card);
     auto* card_layout = new QVBoxLayout(card);
     card_layout->setContentsMargins(14, 12, 14, 12);

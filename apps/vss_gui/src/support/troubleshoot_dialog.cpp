@@ -12,6 +12,7 @@
 #include "theme/theme.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
+#include "widgets/surfaces.hpp"
 
 #include <QClipboard>
 #include <QCoreApplication>
@@ -66,23 +67,6 @@ QVector<link_view> to_links(const std::vector<link_view>& links)
 QString escape(const QString& text)
 {
     return text.toHtmlEscaped();
-}
-
-QWidget* separator(QWidget* parent)
-{
-    auto* line = new QWidget(parent);
-    line->setFixedHeight(1);
-    const auto apply_style = [line]
-    {
-        line->setStyleSheet(QStringLiteral("background: %1")
-                                .arg(Theme::instance()
-                                         .colour(colour_role::line)
-                                         .name(QColor::HexRgb)));
-    };
-    apply_style();
-    QObject::connect(&Theme::instance(), &Theme::theme_changed, line,
-                     [apply_style] { apply_style(); });
-    return line;
 }
 
 } // namespace
@@ -143,7 +127,8 @@ void TroubleshootDialog::build()
     body_layout->setSpacing(14);
 
     auto* checks = new QFrame(body);
-    checks->setProperty("card", true);
+    checks->setProperty("group", true);
+    checks->setAttribute(Qt::WA_StyledBackground, true);
     polish(checks);
     auto* checks_layout = new QVBoxLayout(checks);
     checks_layout->setContentsMargins(0, 0, 0, 0);
@@ -152,19 +137,19 @@ void TroubleshootDialog::build()
     checks_layout_ = checks_layout;
     body_layout->addWidget(checks);
 
+    // "Try this" is an info note: the next steps, tinted, with no edge.
     auto* try_card = new QFrame(body);
-    try_card->setProperty("card", true);
+    try_card->setProperty("note", QStringLiteral("info"));
+    try_card->setAttribute(Qt::WA_StyledBackground, true);
     polish(try_card);
     try_card_ = try_card;
     auto* try_layout = new QVBoxLayout(try_card);
-    try_layout->setContentsMargins(16, 14, 16, 14);
-    try_layout->setSpacing(8);
-    auto* eyebrow = new QLabel(
+    const Theme& theme = Theme::instance();
+    try_layout->setContentsMargins(theme.space(3), theme.space(2),
+                                   theme.space(3), theme.space(3));
+    try_layout->setSpacing(theme.space(1));
+    auto* eyebrow = new GroupLabel(
         QCoreApplication::translate("Troubleshoot", "Try this"), try_card);
-    eyebrow->setFont(Theme::instance().font(text_style::caption));
-    QFont bold = eyebrow->font();
-    bold.setWeight(QFont::DemiBold);
-    eyebrow->setFont(bold);
     try_layout->addWidget(eyebrow);
 
     steps_ = new QLabel(try_card);
@@ -325,7 +310,7 @@ void TroubleshootDialog::rebuild()
     for (const check_row& row : report.rows)
     {
         if (!first)
-            checks_layout_->addWidget(separator(checks_host_));
+            checks_layout_->addWidget(make_group_divider(checks_host_));
         first = false;
         CheckRowWidget::spec spec;
         spec.tone = tone_for(row.state);

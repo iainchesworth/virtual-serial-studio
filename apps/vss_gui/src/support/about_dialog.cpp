@@ -121,10 +121,11 @@ void AboutDialog::build()
     const auto apply_tile_style = [tile]
     {
         tile->setStyleSheet(
-            QStringLiteral("QLabel { background: %1; border-radius: 12px; }")
+            QStringLiteral("QLabel { background: %1; border-radius: %2px; }")
                 .arg(Theme::instance()
                          .colour(colour_role::accent)
-                         .name(QColor::HexRgb)));
+                         .name(QColor::HexRgb))
+                .arg(Theme::instance().radius(QStringLiteral("card"))));
         tile->setPixmap(
             IconProvider::instance()
                 .icon(QStringLiteral("device"), colour_role::onAccent, 30)

@@ -83,7 +83,7 @@ void BenchmarkDialog::build()
            720);
 
     auto* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(20, 20, 20, 0);
+    layout->setContentsMargins(24, 24, 24, 0);
     layout->setSpacing(14);
     layout->addWidget(make_header(
         title,
@@ -135,7 +135,7 @@ void BenchmarkDialog::build()
     layout->addWidget(linked_note_);
 
     auto* result_card = new QFrame(this);
-    result_card->setProperty("card", true);
+    result_card->setProperty("group", true);
     polish(result_card);
     auto* result_layout = new QVBoxLayout(result_card);
     result_layout->setContentsMargins(16, 16, 16, 16);
@@ -170,7 +170,7 @@ void BenchmarkDialog::build()
     for (int index = 0; index < 4; ++index)
     {
         auto* cell = new QFrame(result_card);
-        cell->setProperty("card", true);
+        cell->setProperty("tile", QStringLiteral("raised"));
         polish(cell);
         auto* cell_layout = new QVBoxLayout(cell);
         cell_layout->setContentsMargins(14, 10, 14, 10);

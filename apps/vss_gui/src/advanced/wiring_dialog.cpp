@@ -97,7 +97,7 @@ WiringDialog::WiringDialog(StudioBackend& backend, vss::endpoint_id endpoint,
     linked_ = linked;
 
     auto* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(20, 20, 20, 0);
+    layout->setContentsMargins(24, 24, 24, 0);
     layout->setSpacing(16);
 
     if (!port)

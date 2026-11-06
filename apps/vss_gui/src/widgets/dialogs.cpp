@@ -40,25 +40,8 @@ QFrame* make_footer(QWidget* parent, QHBoxLayout*& layout)
     footer->setObjectName(QStringLiteral("dialogFooter"));
     footer->setAttribute(Qt::WA_StyledBackground);
     footer->setFrameShape(QFrame::NoFrame);
-    const auto apply_style = [footer]
-    {
-        footer->setStyleSheet(
-            QStringLiteral("QFrame#dialogFooter { background: %1; border-top: "
-                           "1px solid %2; }")
-                .arg(Theme::instance()
-                         .colour(colour_role::sunken)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::line)
-                         .name(QColor::HexRgb)));
-    };
-    apply_style();
-    // A theme switch while a dialog is open must recolour its footer too.
-    QObject::connect(&Theme::instance(), &Theme::theme_changed, footer,
-                     [apply_style] { apply_style(); });
     layout = new QHBoxLayout(footer);
-    layout->setContentsMargins(20, 10, 20, 10);
-    layout->setSpacing(8);
+    set_dialog_footer_margins(layout);
     layout->addStretch(1);
     return footer;
 }
@@ -79,6 +62,16 @@ void add_title_and_body(QVBoxLayout* layout, const QString& title,
 }
 
 } // namespace
+
+void set_dialog_footer_margins(QHBoxLayout* layout)
+{
+    // The footer sits on the dialog surface with no band or divider, and
+    // shares the dialog padding.  See `10-design-language.md`, rule 11.
+    const Theme& theme = Theme::instance();
+    const int padding = theme.metric(QStringLiteral("layout.dialogPadding"));
+    layout->setContentsMargins(padding, theme.space(2), padding, padding - 4);
+    layout->setSpacing(theme.space(1));
+}
 
 QFrame* make_dialog_footer(QDialog* dialog, QHBoxLayout*& layout)
 {

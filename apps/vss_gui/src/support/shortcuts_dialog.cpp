@@ -11,6 +11,7 @@
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 #include "widgets/dialogs.hpp"
+#include "widgets/surfaces.hpp"
 
 #include <QCoreApplication>
 #include <QFrame>
@@ -19,9 +20,12 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QShowEvent>
 #include <QTableWidget>
 #include <QTimer>
 #include <QVBoxLayout>
+
+#include <algorithm>
 
 namespace vss::gui::support
 {
@@ -134,6 +138,7 @@ void ShortcutsDialog::build()
     filter_->setAccessibleName(
         QCoreApplication::translate("Shortcuts", "Filter shortcuts"));
     filter_->setClearButtonEnabled(true);
+    filter_->setProperty("search", true);
     filter_->setFixedWidth(240);
     filter_
         ->addAction(IconProvider::instance().icon(QStringLiteral("search"),
@@ -149,13 +154,8 @@ void ShortcutsDialog::build()
     auto* body_layout = new QVBoxLayout(body);
     body_layout->setContentsMargins(24, 4, 24, 16);
     body_layout->setSpacing(8);
-    auto* eyebrow = new QLabel(
-        QCoreApplication::translate("Shortcuts", "Available today"), body);
-    eyebrow->setFont(Theme::instance().font(text_style::caption));
-    QFont bold = eyebrow->font();
-    bold.setWeight(QFont::DemiBold);
-    eyebrow->setFont(bold);
-    body_layout->addWidget(eyebrow);
+    body_layout->addWidget(new GroupLabel(
+        QCoreApplication::translate("Shortcuts", "Available today"), body));
 
     table_ = new QTableWidget(0, 3, body);
     table_->setObjectName(QStringLiteral("shortcutTable"));
@@ -168,10 +168,12 @@ void ShortcutsDialog::build()
     table_->verticalHeader()->setVisible(false);
     table_->horizontalHeader()->setStretchLastSection(false);
     table_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    table_->horizontalHeader()->setSectionResizeMode(
-        1, QHeaderView::ResizeToContents);
-    table_->horizontalHeader()->setSectionResizeMode(
-        2, QHeaderView::ResizeToContents);
+    table_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    table_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    table_->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft |
+                                                    Qt::AlignVCenter);
+    table_->horizontalHeader()->setFont(
+        Theme::instance().font(text_style::group));
     table_->setSelectionBehavior(QAbstractItemView::SelectRows);
     table_->setSelectionMode(QAbstractItemView::SingleSelection);
     table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -236,7 +238,45 @@ void ShortcutsDialog::rebuild()
         table_->setCellWidget(row, 2,
                               key_cell(macos_text(entry.shortcut), table_));
     }
+    fit_key_columns();
     set_filter(filter_->text());
+}
+
+void ShortcutsDialog::showEvent(QShowEvent* event)
+{
+    QDialog::showEvent(event);
+    // The caps take their final font, and the cells their place, once the
+    // dialog is laid out for show, so measure again after that.
+    QTimer::singleShot(0, this, [this] { fit_key_columns(); });
+}
+
+void ShortcutsDialog::fit_key_columns()
+{
+    // ResizeToContents measures items, not cell widgets, so it clipped the
+    // longer key caps.  Size the key columns to their widest cap, plus the
+    // item padding the view puts around a cell widget.
+    QHeaderView* header = table_->horizontalHeader();
+    for (int column = 1; column < table_->columnCount(); ++column)
+    {
+        int width = header->sectionSizeHint(column);
+        for (int row = 0; row < table_->rowCount(); ++row)
+        {
+            QWidget* cell = table_->cellWidget(row, column);
+            if (cell == nullptr)
+                continue;
+            for (QWidget* child : cell->findChildren<QWidget*>())
+                child->ensurePolished();
+            cell->ensurePolished();
+            if (cell->layout() != nullptr)
+                cell->layout()->invalidate();
+            const int inset =
+                cell->width() > 0
+                    ? std::max(0, header->sectionSize(column) - cell->width())
+                    : 0;
+            width = std::max(width, cell->sizeHint().width() + inset);
+        }
+        header->resizeSection(column, width);
+    }
 }
 
 void ShortcutsDialog::set_filter(const QString& text)

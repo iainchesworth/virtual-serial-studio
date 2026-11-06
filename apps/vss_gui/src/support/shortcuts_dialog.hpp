@@ -47,9 +47,13 @@ public:
     static QString windows_linux_text(const QKeySequence& shortcut);
     static QString macos_text(const QKeySequence& shortcut);
 
+protected:
+    void showEvent(QShowEvent* event) override;
+
 private:
     void build();
     void rebuild();
+    void fit_key_columns();
 
     QVector<shortcut_entry> entries_;
     QLineEdit* filter_ = nullptr;

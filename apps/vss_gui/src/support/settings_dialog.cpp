@@ -113,43 +113,34 @@ void SettingsDialog::build()
     nav->setObjectName(QStringLiteral("settingsNav"));
     nav->setFixedWidth(200);
     nav->setAttribute(Qt::WA_StyledBackground, true);
+    // The section list sits on the dialog surface with no band or rule.  The
+    // current section is an inset `accentSoft` pill (rule 9).
     const auto apply_nav_style = [nav]
     {
+        const Theme& theme = Theme::instance();
+        const auto hex = [&theme](colour_role role)
+        { return theme.colour(role).name(QColor::HexRgb); };
         nav->setStyleSheet(
             QStringLiteral(
-                "QFrame#settingsNav { background: %1; border-right: 1px solid "
-                "%2; }"
-                "QFrame#settingsNav QPushButton { min-height: 34px; border: 0; "
-                "border-radius: 4px; padding: 0 12px; text-align: left; "
+                "QFrame#settingsNav { background: transparent; border: 0; }"
+                "QFrame#settingsNav QPushButton { min-height: %1px; border: 0; "
+                "border-radius: %2px; padding: 0 12px; text-align: left; "
                 "background: transparent; color: %3; }"
                 "QFrame#settingsNav QPushButton:hover:!checked { background: "
                 "%4; }"
                 "QFrame#settingsNav QPushButton:checked { background: %5; "
                 "color: %6; font-weight: 600; }")
-                .arg(Theme::instance()
-                         .colour(colour_role::sunken)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::line)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::ink2)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::panel)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::accentSoft)
-                         .name(QColor::HexRgb),
-                     Theme::instance()
-                         .colour(colour_role::accentStrong)
-                         .name(QColor::HexRgb)));
+                .arg(theme.metric(QStringLiteral("button")))
+                .arg(theme.radius(QStringLiteral("inner")))
+                .arg(hex(colour_role::ink2), hex(colour_role::hover),
+                     hex(colour_role::accentSoft),
+                     hex(colour_role::accentText)));
     };
     apply_nav_style();
     connect(&Theme::instance(), &Theme::theme_changed, nav,
             [apply_nav_style] { apply_nav_style(); });
     auto* nav_layout = new QVBoxLayout(nav);
-    nav_layout->setContentsMargins(10, 12, 10, 12);
+    nav_layout->setContentsMargins(16, 4, 0, 16);
     nav_layout->setSpacing(2);
     auto* group = new QButtonGroup(this);
     group->setExclusive(true);
@@ -176,7 +167,7 @@ void SettingsDialog::build()
     // -- General -----------------------------------------------------------
     auto* general = new QWidget(pages_);
     auto* general_layout = new QVBoxLayout(general);
-    general_layout->setContentsMargins(22, 22, 28, 22);
+    general_layout->setContentsMargins(24, 4, 24, 16);
     general_layout->setSpacing(14);
     general_layout->addWidget(section_title(
         QCoreApplication::translate("Settings", "General"), general));
@@ -227,7 +218,7 @@ void SettingsDialog::build()
     // -- Appearance --------------------------------------------------------
     auto* appearance = new QWidget(pages_);
     auto* appearance_layout = new QVBoxLayout(appearance);
-    appearance_layout->setContentsMargins(22, 22, 28, 22);
+    appearance_layout->setContentsMargins(24, 4, 24, 16);
     appearance_layout->setSpacing(14);
     appearance_layout->addWidget(section_title(
         QCoreApplication::translate("Settings", "Appearance"), appearance));
@@ -326,7 +317,7 @@ void SettingsDialog::build()
     // -- Performance -------------------------------------------------------
     auto* performance = new QWidget(pages_);
     auto* performance_layout = new QVBoxLayout(performance);
-    performance_layout->setContentsMargins(22, 22, 28, 22);
+    performance_layout->setContentsMargins(24, 4, 24, 16);
     performance_layout->setSpacing(14);
     performance_layout->addWidget(section_title(
         QCoreApplication::translate("Settings", "Performance"), performance));

@@ -141,6 +141,9 @@ public:
     explicit GroupLabel(const QString& text, QWidget* parent = nullptr);
 };
 
+/// The 1 px `line` rule between two rows of a grouped section.
+QFrame* make_group_divider(QWidget* parent);
+
 /// A sunken, rounded section that holds related rows with hairline dividers
 /// between them.  See `docs/10-design-language.md`, rule 10.
 class Group final : public QFrame
