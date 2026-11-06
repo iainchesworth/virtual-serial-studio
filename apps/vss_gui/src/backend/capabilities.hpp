@@ -88,6 +88,14 @@ struct capabilities
     /// Connect dialog shows the bus choice disabled with "Not available in
     /// this build", and a setup file with a bus is refused with that reason.
     bool shared_bus = false;
+    /// List, and watch the traffic of, ports that another program made.  False
+    /// in every build today: a Windows driver port belongs to the process that
+    /// made it (its hub end takes one handle and the port goes when that
+    /// process ends), and the hub keeps no registry that a second process can
+    /// read.  The window then says that such ports are not shown, and names
+    /// the ones Windows reports (`StudioBackend::other_program_ports`).  See
+    /// `docs/gui-design/docs/08-engine-gaps.md`.
+    bool external_ports = false;
     /// Create another com0com null-modem pair (Windows, needs elevation).
     /// The share wizard's warn note calls the adapter method this gates.
     bool com0com_pair_creation = true;

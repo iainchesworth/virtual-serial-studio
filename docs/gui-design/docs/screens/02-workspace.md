@@ -8,11 +8,12 @@ Header "Ports" with a count. Selection is shared with the Topology and Inspector
 - States (see states in `docs/04-components.md`): Open, Studio only, Closed, Failed. "Open" is the normal state of a port that exists. Where the platform reports whether a program has opened it (`Capabilities::peer_open`), Open is refined into Waiting for program and Program connected.
 - Advanced: filter field "Filter ports" above a table: Port (name over mono path), State (compact chip), RX, TX, Dropped (right aligned, mono). Dropped text is `bad` when above zero.
 - Keyboard: Up and Down select, Enter moves focus to the Inspector, Delete removes (confirm, Undo toast), F2 renames, Ctrl+Shift+C copies the path.
+- Below the list, when another program made virtual ports on this machine (`StudioBackend::other_program_ports`, Windows driver ports only): muted note "Another program made COM41. Studio cannot show or watch ports it did not make itself." It is read when the window opens, when the set of Studio's ports changes and every 5 seconds, and hidden when there are none or when `Capabilities::external_ports` is on.
 - Compact window: rows are two lines (name and mono path, then the chip), 240 wide.
 
 ## Inspector
 Header "Inspector" and the port name.
-- Simple: State (chip), Path (mono with copy), Traffic ("RX 0 B, TX 1.2 kB"). When waiting: "No program has opened COM7 yet." and the link "Why is nothing arriving?" (opens the troubleshoot dialog). "Control lines" label and six read-only chips in a 3 by 2 grid: DTR, RTS, CTS, DSR, DCD, RI, each "<name> on" (ok, filled) or "<name> off" (hollow).
+- Simple: State (chip), Path (mono with copy), Traffic ("RX 0 B, TX 1.2 kB"). When waiting: "No program has opened COM7 yet. The program has to open exactly COM7; a different port will not receive anything.", a quiet small button "Copy name" (copies the path, toast "COM7 copied.") and the link "Why is nothing arriving?" (opens the troubleshoot dialog). "Control lines" label and six read-only chips in a 3 by 2 grid: DTR, RTS, CTS, DSR, DCD, RI, each "<name> on" (ok, filled) or "<name> off" (hollow).
 - Advanced: also Serial ("115200 8N1, no flow control") for real devices. DTR and RTS become Switches ("DTR on", "RTS off"), a "Break" button, input chips CTS, DSR, DCD, RI, and a link "Open line matrix and faults".
 - Virtual ports accept the operations and report their own state. Unsupported operations are disabled with a tooltip, never silent.
 

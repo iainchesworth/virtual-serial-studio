@@ -345,7 +345,9 @@ troubleshoot_report build_troubleshoot_report(const troubleshoot_facts& facts)
             program_title,
             QCoreApplication::translate(
                 "Troubleshoot",
-                "No program has opened %1 yet, so nothing can arrive.")
+                "No program has opened %1 yet, so nothing can arrive. The "
+                "program has to open exactly %1; a different COM port will "
+                "not receive anything.")
                 .arg(port_title),
             true));
     }
