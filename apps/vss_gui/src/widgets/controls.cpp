@@ -70,29 +70,37 @@ SegmentedControl::SegmentedControl(QWidget* parent) : QWidget(parent)
 
 void SegmentedControl::apply_style()
 {
-    const int height = compact_ ? 24 : 32;
+    // A track in the fill colour with the selected segment raised on it as a
+    // panel-coloured thumb with a hairline.  The selected segment is never an
+    // accent fill: the accent is kept for primary actions and selection.
+    const int inset = compact_ ? 2 : 3;
+    const int height = compact_ ? 28 : 32;
     const int padding = compact_ ? 10 : 12;
+    layout_->setContentsMargins(inset, inset, inset, inset);
+    layout_->setSpacing(2);
+    setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet(
         QStringLiteral(
-            "QRadioButton { border: 1px solid %1; border-radius: 0; "
-            "background: %2; color: %3; padding: 0 %8px; min-height: %9px; "
-            "spacing: 0; }"
+            "vss--gui--SegmentedControl { background: %1; border: 0; "
+            "border-radius: %7px; }"
+            "QRadioButton { border: 1px solid transparent; border-radius: "
+            "%8px; background: transparent; color: %2; padding: 0 %5px; "
+            "min-height: %6px; spacing: 0; }"
             "QRadioButton::indicator { width: 0px; height: 0px; "
             "border: 0; margin: 0; background: transparent; image: none; }"
-            "QRadioButton:checked { background: %4; color: %5; "
-            "border-color: %6; }"
-            "QRadioButton:hover:!checked { background: %7; }")
-            .arg(colour_name(colour_role::control),
-                 colour_name(colour_role::panel), colour_name(colour_role::ink),
-                 colour_name(colour_role::accent),
-                 colour_name(colour_role::onAccent),
-                 colour_name(colour_role::accentStrong),
-                 colour_name(colour_role::sunken))
+            "QRadioButton:checked { background: %3; color: %4; "
+            "border-color: %9; }"
+            "QRadioButton:hover:!checked { color: %4; }")
+            .arg(colour_name(colour_role::fillHover),
+                 colour_name(colour_role::ink2),
+                 colour_name(colour_role::panel), colour_name(colour_role::ink))
             .arg(padding)
-            // The 1 px border is drawn inside the fixed height, so the
-            // content box is two pixels smaller; at the full height the bottom
-            // edge was cut off.
-            .arg(height - 2));
+            // The 1 px border is drawn inside the button, so the content box
+            // is two pixels smaller than the button.
+            .arg(height - 2 * inset - 2)
+            .arg(Theme::instance().radius(QStringLiteral("control")) + 1)
+            .arg(Theme::instance().radius(QStringLiteral("control")) - 1)
+            .arg(colour_name(colour_role::line2)));
 }
 
 void SegmentedControl::set_compact(bool compact)
@@ -100,7 +108,7 @@ void SegmentedControl::set_compact(bool compact)
     if (compact_ == compact)
         return;
     compact_ = compact;
-    setFixedHeight(compact ? 24 : 32);
+    setFixedHeight(compact ? 28 : 32);
     const auto buttons = group_->buttons();
     for (QAbstractButton* button : buttons)
     {
@@ -372,7 +380,7 @@ void Switch::paintEvent(QPaintEvent* event)
     const QColor on = theme.colour(isEnabled() ? colour_role::accent
                                                : colour_role::disabledText);
     const QColor off = theme.colour(colour_role::trackOff);
-    painter.setPen(QPen(theme.colour(colour_role::line2), 1.0));
+    painter.setPen(Qt::NoPen);
     painter.setBrush(isChecked() ? on : off);
     painter.drawRoundedRect(track, 9, 9);
 

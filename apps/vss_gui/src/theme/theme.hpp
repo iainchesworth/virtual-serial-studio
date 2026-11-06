@@ -59,7 +59,13 @@ enum class colour_role
     noteDangerText,
     toastBg,
     toastText,
-    toastLink
+    toastLink,
+    fill,
+    fillHover,
+    accentText,
+    violet,
+    violetSoft,
+    accentHover
 };
 
 /// The type scale from `02-design-tokens.md`.
@@ -73,7 +79,9 @@ enum class text_style
     title,
     display,
     portName,
-    data
+    data,
+    heading,
+    group
 };
 
 enum class theme_mode

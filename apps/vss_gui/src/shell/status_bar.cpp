@@ -73,6 +73,15 @@ void StatusBar::set_advanced(bool advanced)
     refresh();
 }
 
+SegmentedControl* StatusBar::release_level_switch(QWidget* parent)
+{
+    removeWidget(level_);
+    level_->setParent(parent);
+    level_->set_compact(false);
+    level_->show();
+    return level_;
+}
+
 void StatusBar::refresh()
 {
     const auto ports = backend_.ports();

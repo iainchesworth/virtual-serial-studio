@@ -1,13 +1,13 @@
 # 04 Component library
 
-Build these once in `apps/vss_gui/src/widgets/` (or the equivalent module chosen in WP0) and reuse them everywhere. Mockups: `reference/mockups/F4Components.html`.
+Build these once in `apps/vss_gui/src/widgets/` (or the equivalent module chosen in WP0) and reuse them everywhere. Mockups: `reference/mockups/F4Components.html` for structure; colour, shape and styling follow `10-design-language.md`.
 
 | Widget | Anatomy and states | Accessibility | Qt notes |
 |---|---|---|---|
-| **StatusChip** | Pill, height 22 (20 small). Dot plus text. Kinds: ok (filled dot), waiting (warn, hollow dot), connected (ok, filled), studioOnly (neutral, hollow), closed (neutral, hollow), failed (bad, cross glyph instead of dot), fixture (info, no dot). Text is the state name. | Accessible name is the text. Never colour alone. | Custom paint. Colours from Theme. `sizeHint` from font metrics. |
-| **DirectionBadge** | RX (panel fill, ink), TX (accentSoft, accentStrong), DROP (badSoft, bad). Mono 11px, 4px radius, 1px edge. | Name "received", "sent", "dropped". | Paint in the monitor delegate. |
+| **StatusChip** | Tinted pill with no border, height 22 (20 small). Dot plus text. Kinds: ok (filled dot), waiting (warn, hollow dot), connected (ok, filled), studioOnly (neutral, hollow), closed (neutral, hollow), failed (bad, cross glyph instead of dot), fixture (violet, no dot). Text is the state name. | Accessible name is the text. Never colour alone. | Custom paint. Colours from Theme. `sizeHint` from font metrics. |
+| **DirectionBadge** | RX (accentSoft, accentText), TX (violetSoft, violet), DROP (badSoft, bad). 5px radius, no edge. | Name "received", "sent", "dropped". | Paint in the monitor delegate. |
 | **Tag, Badge** | Tag 20 high, 11px bold. Variants: s (accentSoft), a (amberSoft), n (dashed edge), ok. Badge uppercase "ADVANCED". | Plain text label. | QLabel with painted background. |
-| **NoteBanner** | Icon plus text plus optional action link or buttons. Kinds info, ok, warn, danger. 6px radius, 1px edge, 10 by 12 padding. | `QAccessible::Role::StaticText` with the kind prefixed in the name ("Warning: ..."). Danger and warn use an alert role where available. | QFrame with `note` property. |
+| **NoteBanner** | Icon plus text plus optional action link or buttons. Kinds info, ok, warn, danger. 10px radius, tinted, no edge, 10 by 12 padding. | `QAccessible::Role::StaticText` with the kind prefixed in the name ("Warning: ..."). Danger and warn use an alert role where available. | QFrame with `note` property. |
 | **CodeBlock** | Mono text on `sunken`, 1px `line` edge, trailing CopyButton. Wraps. | Name "Address" or "Command". Copy announces "Copied". | QFrame `code` property, selectable QLabel. |
 | **CopyButton** | 24 to 28 square icon button. Click copies, tooltip "Copy <thing>", brief "Copied" toast. | Name "Copy <thing>". | `size="icon"`. |
 | **SegmentedControl** | Buttons joined in one 1px `control` frame, 32 high, selected = accent fill with onAccent text. | Exclusive group, radiogroup semantics, arrow keys move. | QButtonGroup of checkable buttons. |
@@ -24,3 +24,8 @@ Build these once in `apps/vss_gui/src/widgets/` (or the equivalent module chosen
 | **ConfirmDialog, ErrorDialog** | See `screens/06`. Primary action rightmost. Escape cancels. Destructive action is never default. | Initial focus on the safest action. | QDialog with `QDialogButtonBox`-like custom footer. |
 
 Every widget must: use `Theme` for colour and fonts, set an accessible name and role, show the focus ring via the shared style, handle both themes, and appear in a `WidgetGallery` developer dialog (hidden behind an environment variable) that the offscreen self-test instantiates.
+| **PaneHeader, Pane** | A pane is a 12px-radius panel surface with a line hairline on the ground. Its header is 44 high: title (heading style), optional count badge, then the pane's actions on the right. No float or close buttons. | The header's name is the title. The count badge reads "N items". | widgets/surfaces.hpp. Dock bodies are Panes; the dock title bar is an empty widget. |
+| **KindTile** | 32 square, 9px radius, tinted by port kind (accent, violet, ok, neutral) with a 16px icon in the tint's ink. | Decorative: the row names the kind in text. | widgets/surfaces.hpp, 	ile frame property. |
+| **Group, GroupLabel** | A sunken section with a 10px radius and line dividers between rows. The label is the group style (12/600, upper case) above it. | The label is the group's name. | widgets/surfaces.hpp, group frame and label properties. |
+| **DialogFrame** | Title (20/600), one-line subtitle in ink2, a scrolling body padded 24 with 16 between groups, and a right-aligned footer with no divider and the primary button last. | The title is the dialog's name. | widgets/surfaces.hpp. |
+| **ActionTile** | A card button: KindTile, semi-bold title, wrapping caption description, padded 14, 12px radius, `line2` edge. Hover adds a `hover` fill and `control` edge; checked is a 2px `accent` edge on `accentSoft`. About 250 wide by default, height for width. | A real button: Space and Enter press it. The name is the title, the description is the accessible description. Keyboard focus draws the ring. | `widgets/surfaces.hpp`, QAbstractButton. Use setCheckable for pick lists. |
