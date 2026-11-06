@@ -15,6 +15,8 @@
 
 #include <QGraphicsView>
 #include <QHash>
+#include <QLineF>
+#include <QPointF>
 #include <QRectF>
 #include <QSizeF>
 #include <QString>
@@ -36,9 +38,16 @@ class NodeItem;
 ///
 /// The view owns presentation and input only.  It is fed a snapshot with
 /// `set_topology`, reports intent with signals, and keeps node positions for
-/// the session (the JSON schema has no positions).  Keyboard operation is
-/// complete: Tab reaches nodes then links, Enter inspects, Delete removes,
-/// the arrow keys nudge, Shift+F10 opens the context menu and Ctrl+0 fits.
+/// the session (the JSON schema has no positions).  A node moves with the
+/// mouse or the arrow keys and the links that end on it follow; nodes never
+/// overlap and a link never runs under a node it is not attached to.
+/// Keyboard operation is complete: Tab reaches nodes then links, Enter
+/// inspects, Delete removes, the arrow keys move the node, Shift+F10 opens the
+/// context menu and Ctrl+0 fits.
+///
+/// Resizing: while the user has not zoomed, scrolled or arranged anything the
+/// view keeps fitting the content; after that a resize keeps the zoom and the
+/// point at the centre, and brings the content back if it was left outside.
 class TopologyView final : public QGraphicsView
 {
     Q_OBJECT
@@ -50,8 +59,10 @@ public:
     /// What this build can do; a missing capability hides its control.
     void set_capabilities(const capabilities& caps);
 
-    /// Replaces the graph.  Existing node positions are kept per port id for
-    /// the rest of the session; positions never enter the document.
+    /// Replaces the graph.  Until the user moves a node the whole layout is
+    /// recomputed; after that every node keeps its position for the rest of
+    /// the session and a new node goes into free space next to the node it
+    /// connects to.  Positions never enter the document.
     void set_topology(const std::vector<port_view>& ports,
                       const std::vector<link_view>& links);
 
@@ -72,6 +83,16 @@ public:
     int link_count() const;
     bool is_compact() const noexcept { return compact_; }
     qreal zoom() const;
+    /// True while the view re-fits on its own (no manual zoom, scroll or move).
+    bool is_auto_fit() const noexcept { return auto_fit_; }
+    /// True once the user has moved a node, so the layout is no longer
+    /// automatic.
+    bool is_arranged() const noexcept { return user_arranged_; }
+    /// Moves a node as a drag or a keyboard nudge would, and settles it clear
+    /// of the other nodes.  Used by the tests and by the keyboard path.
+    void move_node(vss::endpoint_id id, const QPointF& top_left);
+    /// The polyline segments of a link, for the tests.
+    QVector<QLineF> link_segments(vss::link_id id) const;
 
     /// The generated accessible description.
     QString summary() const { return summary_; }
@@ -92,8 +113,14 @@ public:
     /// from the same list; the tests read it without opening a popup.
     QStringList node_menu_labels(vss::endpoint_id id) const;
     QStringList link_menu_labels(vss::link_id id) const;
+    /// The labels of the menu on empty canvas: Tidy layout and Fit.
+    QStringList canvas_menu_labels() const;
 
+    /// Fits all items into view with a margin and returns to automatic fitting.
     void fit_content();
+    /// Runs the automatic layout again, dropping every moved position, then
+    /// fits.
+    void tidy_layout();
     void zoom_in();
     void zoom_out();
 
@@ -134,7 +161,7 @@ protected:
 
 private:
     void rebuild_items();
-    void apply_positions();
+    void apply_positions(bool refresh_scene_rect = true);
     void update_scene_rect();
     void update_overlays();
     void update_accessibility();
@@ -145,6 +172,11 @@ private:
     void focus_at(qsizetype index, bool select);
     void clear_focus();
     void nudge_focused(qreal dx, qreal dy);
+    void settle_node(vss::endpoint_id id);
+    void begin_drag();
+    void place_nodes();
+    void keep_content_in_view();
+    void mark_manual_view();
     void open_context_menu(const QPoint& viewport_position);
     void open_focused_menu();
     void centre_on_links(const QVector<vss::link_id>& ids);
@@ -165,8 +197,10 @@ private:
     QVector<vss::endpoint_id> node_order_;
     QVector<vss::link_id> link_order_;
     topology_layout layout_;
-    QHash<vss::endpoint_id, QPointF> base_positions_;
-    QHash<vss::endpoint_id, QPointF> overrides_;
+    /// The top-left of every node, in scene units.  The automatic layout fills
+    /// it until the user moves a node.
+    QHash<vss::endpoint_id, QPointF> positions_;
+    QVector<vss::endpoint_id> new_nodes_;
     QHash<vss::endpoint_id, QSizeF> node_sizes_;
 
     std::function<port_menu_state(vss::endpoint_id)> menu_state_;
@@ -185,8 +219,11 @@ private:
     bool show_focus_ = false;
 
     bool compact_ = false;
-    bool user_zoomed_ = false;
+    bool auto_fit_ = true;
+    bool user_arranged_ = false;
+    bool dragging_ = false;
     bool fitting_ = false;
+    bool internal_scroll_ = false;
 
     QVector<vss::link_id> loop_links_;
     QVector<vss::endpoint_id> loop_nodes_;

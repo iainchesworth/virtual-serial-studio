@@ -41,6 +41,10 @@ QString connect_from_here_action();
 QString connect_needs_two();
 QString remove_action();
 QString remove_link_action();
+/// The canvas menu: Tidy layout and Fit.
+QString tidy_layout_action();
+QString fit_action();
+QString layout_tidied();
 
 QString port_count(int count);
 QString link_count(int count);

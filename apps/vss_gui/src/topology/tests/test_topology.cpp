@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPushButton>
+#include <QScrollBar>
 #include <QSettings>
 #include <QStatusBar>
 #include <QWheelEvent>
@@ -1019,4 +1020,530 @@ TEST_CASE("topology: a bus has its own name and phrase")
                QStringLiteral("Bus link, 3 ports"));
     REQUIRE(vss::gui::topology_text::link_phrase(bus, names)
                 .contains(QStringLiteral("master")));
+}
+
+namespace
+{
+
+/// A linked pair with a mock fixture on each port: the setup that used to put
+/// a link under a box.
+struct pair_with_fixtures
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::endpoint_id first = 0;
+    vss::endpoint_id second = 0;
+    vss::endpoint_id fixture_one = 0;
+    vss::endpoint_id fixture_two = 0;
+
+    pair_with_fixtures()
+    {
+        if (const auto created = backend.create_virtual_port(
+                QStringLiteral("COM10"), vss::virtual_port_kind::pty, true))
+        {
+            first = *created;
+        }
+        if (const auto created = backend.create_virtual_port(
+                QStringLiteral("COM11"), vss::virtual_port_kind::pty, true))
+        {
+            second = *created;
+        }
+        static_cast<void>(
+            backend.connect_ports(first, second, vss::link_options{}));
+        add_fixture(QStringLiteral("fixture-1"), first, fixture_one);
+        add_fixture(QStringLiteral("fixture-2"), second, fixture_two);
+    }
+
+    void add_fixture(const QString& name, vss::endpoint_id target,
+                     vss::endpoint_id& id)
+    {
+        if (const auto created = backend.create_mock_port(
+                name, vss::serial_settings{}, QStringLiteral("scripted")))
+        {
+            id = *created;
+            vss::link_options options;
+            options.emulate_modem_lines = true;
+            static_cast<void>(backend.connect_ports(id, target, options));
+        }
+    }
+};
+
+QVector<QRectF> view_rects(const topo::TopologyView& view,
+                           const std::vector<vss::gui::port_view>& ports)
+{
+    QVector<QRectF> rects;
+    for (const auto& port : ports)
+        rects.append(view.node_rect(port.id));
+    return rects;
+}
+
+bool nodes_overlap(const QVector<QRectF>& rects)
+{
+    for (qsizetype left = 0; left < rects.size(); ++left)
+    {
+        for (qsizetype right = left + 1; right < rects.size(); ++right)
+        {
+            if (rects.at(left).intersects(rects.at(right)))
+                return true;
+        }
+    }
+    return false;
+}
+
+/// True when no segment of the link passes through a node it is not on.
+bool link_avoids_nodes(const topo::TopologyView& view,
+                       const vss::gui::link_view& link,
+                       const std::vector<vss::gui::port_view>& ports)
+{
+    QVector<QRectF> others;
+    for (const auto& port : ports)
+    {
+        const bool attached =
+            std::find(link.sources.begin(), link.sources.end(), port.id) !=
+                link.sources.end() ||
+            std::find(link.targets.begin(), link.targets.end(), port.id) !=
+                link.targets.end();
+        if (!attached)
+            others.append(view.node_rect(port.id));
+    }
+    for (const QLineF& segment : view.link_segments(link.id))
+    {
+        if (topo::segment_blocked(segment, others, 0.0))
+            return false;
+    }
+    return true;
+}
+
+void drag(QWidget* viewport, const QPoint& from, const QPoint& to)
+{
+    const auto event = [viewport](QEvent::Type type, const QPoint& at,
+                                  Qt::MouseButton button,
+                                  Qt::MouseButtons buttons)
+    {
+        QMouseEvent mouse(type, QPointF(at), QPointF(viewport->mapToGlobal(at)),
+                          button, buttons, Qt::NoModifier);
+        QApplication::sendEvent(viewport, &mouse);
+    };
+    event(QEvent::MouseButtonPress, from, Qt::LeftButton, Qt::LeftButton);
+    const QPoint middle = (from + to) / 2;
+    event(QEvent::MouseMove, middle, Qt::NoButton, Qt::LeftButton);
+    event(QEvent::MouseMove, to, Qt::NoButton, Qt::LeftButton);
+    event(QEvent::MouseButtonRelease, to, Qt::LeftButton, Qt::NoButton);
+    QApplication::processEvents();
+}
+
+} // namespace
+
+TEST_CASE("topology layout: a pair with two fixtures has no overlap and no "
+          "link under a box")
+{
+    pair_with_fixtures fixture;
+    const auto ports = fixture.backend.ports();
+    const auto links = fixture.backend.links();
+
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(ports, links);
+    QApplication::processEvents();
+
+    REQUIRE_EQ(view.node_count(), 4);
+    REQUIRE(!nodes_overlap(view_rects(view, ports)));
+    for (const auto& link : links)
+        REQUIRE(link_avoids_nodes(view, link, ports));
+    view.close();
+}
+
+TEST_CASE("topology layout: the computed layout keeps the gaps and routes "
+          "around the middle column")
+{
+    // 3 -> 1, 1 -> 2, 4 -> 2: the last link spans the column that holds 1.
+    QVector<topo::topo_node_input> nodes;
+    for (vss::endpoint_id id = 1; id <= 4; ++id)
+        nodes.append({id, QSizeF(168.0, 56.0)});
+    topo::topo_link_input one;
+    one.id = 1;
+    one.sources = {3};
+    one.targets = {1};
+    topo::topo_link_input two;
+    two.id = 2;
+    two.sources = {1};
+    two.targets = {2};
+    topo::topo_link_input three;
+    three.id = 3;
+    three.sources = {4};
+    three.targets = {2};
+    const QVector<topo::topo_link_input> links{one, two, three};
+
+    const topo::topology_layout layout =
+        topo::compute_topology_layout(nodes, links);
+    QVector<QRectF> rects;
+    for (const auto& node : layout.nodes)
+        rects.append(node.rect);
+    REQUIRE(!nodes_overlap(rects));
+
+    for (const auto& placement : layout.links)
+    {
+        const topo::topo_link_input* input = nullptr;
+        for (const auto& link : links)
+        {
+            if (link.id == placement.id)
+                input = &link;
+        }
+        REQUIRE(input != nullptr);
+        QVector<QRectF> others;
+        for (const auto& node : layout.nodes)
+        {
+            if (!input->sources.contains(node.id) &&
+                !input->targets.contains(node.id))
+                others.append(node.rect);
+        }
+        REQUIRE(!placement.segments.isEmpty());
+        for (const QLineF& segment : placement.segments)
+            REQUIRE(!topo::segment_blocked(segment, others, 0.0));
+    }
+
+    // The long link bends: more than the one straight segment.
+    const topo::topo_link_placement* long_link = layout.find_link(3);
+    REQUIRE(long_link != nullptr);
+    REQUIRE(long_link->segments.size() > 1);
+}
+
+TEST_CASE("topology layout: route_around keeps clear of an obstacle")
+{
+    const QVector<QRectF> obstacles{QRectF(100.0, 0.0, 100.0, 100.0)};
+    const QPointF from(0.0, 50.0);
+    const QPointF to(300.0, 50.0);
+    REQUIRE(topo::segment_blocked(QLineF(from, to), obstacles, 12.0));
+
+    const QVector<QPointF> path = topo::route_around(from, to, obstacles, 12.0);
+    REQUIRE(path.size() >= 3);
+    REQUIRE(path.first() == from);
+    REQUIRE(path.last() == to);
+    for (qsizetype index = 1; index < path.size(); ++index)
+    {
+        REQUIRE(!topo::segment_blocked(
+            QLineF(path.at(index - 1), path.at(index)), obstacles, 12.0));
+    }
+
+    // A clear line is returned as it is.
+    const QVector<QPointF> clear =
+        topo::route_around(QPointF(0.0, 300.0), to, obstacles, 12.0);
+    REQUIRE_EQ(clear.size(), 2);
+}
+
+TEST_CASE("topology layout: a free position is clear of every node and near "
+          "its anchor")
+{
+    const QRectF anchor(16.0, 100.0, 168.0, 56.0);
+    const QVector<QRectF> occupied{anchor, QRectF(280.0, 100.0, 168.0, 56.0),
+                                   QRectF(280.0, 204.0, 168.0, 56.0)};
+    const QSizeF size(168.0, 56.0);
+    const QPointF position = topo::find_free_position(
+        size, anchor, topo::anchor_side::right_of, occupied);
+    const QRectF placed(position, size);
+    for (const QRectF& rect : occupied)
+        REQUIRE(!placed.intersects(rect));
+    REQUIRE(position.x() > anchor.right());
+    REQUIRE(std::abs(placed.center().y() - anchor.center().y()) < 400.0);
+
+    const QPointF unlinked = topo::find_free_position(
+        size, QRectF(), topo::anchor_side::none, occupied);
+    for (const QRectF& rect : occupied)
+        REQUIRE(!QRectF(unlinked, size).intersects(rect));
+
+    // push_clear moves a rectangle off the one it overlaps, with the gap.
+    const QRectF pushed =
+        topo::push_clear(QRectF(300.0, 110.0, 168.0, 56.0), occupied, 16.0);
+    for (const QRectF& rect : occupied)
+        REQUIRE(!pushed.intersects(rect.adjusted(-15.9, -15.9, 15.9, 15.9)));
+}
+
+TEST_CASE("topology canvas: dragging a node moves it and its links follow")
+{
+    pair_with_fixtures fixture;
+    const auto ports = fixture.backend.ports();
+    const auto links = fixture.backend.links();
+
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(ports, links);
+    QApplication::processEvents();
+
+    const vss::endpoint_id moved = fixture.fixture_one;
+    const QRectF before = view.node_rect(moved);
+    const QPoint start = view.mapFromScene(before.center());
+    const qreal zoom = view.zoom();
+    REQUIRE(!view.is_arranged());
+
+    drag(view.viewport(), start, start + QPoint(0, 160));
+    REQUIRE(view.is_arranged());
+    REQUIRE(!view.is_auto_fit());
+    const QRectF after = view.node_rect(moved);
+    REQUIRE_NEAR(after.x(), before.x(), 1.0);
+    REQUIRE(after.y() > before.y() + 40.0);
+    REQUIRE(!nodes_overlap(view_rects(view, ports)));
+    REQUIRE(zoom > 0.0);
+
+    // The link that ends on the node ends on its new position.
+    vss::link_id link = 0;
+    for (const auto& item : links)
+    {
+        if (std::find(item.sources.begin(), item.sources.end(), moved) !=
+            item.sources.end())
+        {
+            link = item.id;
+        }
+    }
+    REQUIRE_NE(link, 0);
+    bool follows = false;
+    for (const QLineF& segment : view.link_segments(link))
+    {
+        if (std::abs(segment.p1().y() - after.center().y()) < 1.0 ||
+            std::abs(segment.p2().y() - after.center().y()) < 1.0)
+        {
+            follows = true;
+        }
+    }
+    REQUIRE(follows);
+    for (const auto& item : links)
+        REQUIRE(link_avoids_nodes(view, item, ports));
+
+    // Dropping a node on top of another leaves them apart.
+    const QPoint other =
+        view.mapFromScene(view.node_rect(fixture.fixture_two).center());
+    drag(view.viewport(), view.mapFromScene(view.node_rect(moved).center()),
+         other);
+    REQUIRE(!nodes_overlap(view_rects(view, ports)));
+    for (const auto& item : links)
+        REQUIRE(link_avoids_nodes(view, item, ports));
+    view.close();
+}
+
+TEST_CASE("topology canvas: a click without a drag does not move the node")
+{
+    pair_with_fixtures fixture;
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(fixture.backend.ports(), fixture.backend.links());
+    QApplication::processEvents();
+
+    const QRectF before = view.node_rect(fixture.first);
+    click(view.viewport(), view.mapFromScene(before.center()));
+    REQUIRE_EQ(view.selected_port(), fixture.first);
+    REQUIRE(view.node_rect(fixture.first) == before);
+    REQUIRE(!view.is_arranged());
+    view.close();
+}
+
+TEST_CASE("topology canvas: arrow keys cannot push a node onto another")
+{
+    pair_with_fixtures fixture;
+    const auto ports = fixture.backend.ports();
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(ports, fixture.backend.links());
+    QApplication::processEvents();
+
+    send_key(&view, Qt::Key_Tab);
+    for (int step = 0; step < 40; ++step)
+        send_key(&view, Qt::Key_Down, Qt::ShiftModifier);
+    for (int step = 0; step < 40; ++step)
+        send_key(&view, Qt::Key_Right, Qt::ShiftModifier);
+    REQUIRE(!nodes_overlap(view_rects(view, ports)));
+    view.close();
+}
+
+TEST_CASE("topology canvas: a new node goes into free space next to its "
+          "neighbour once the user has arranged the diagram")
+{
+    pair_with_fixtures fixture;
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(fixture.backend.ports(), fixture.backend.links());
+    QApplication::processEvents();
+
+    // Arrange: the nodes stay where they are from now on.
+    view.move_node(fixture.first,
+                   view.node_rect(fixture.first).topLeft() + QPointF(0.0, 8.0));
+    const QRectF first_before = view.node_rect(fixture.first);
+    const QRectF second_before = view.node_rect(fixture.second);
+    REQUIRE(view.is_arranged());
+
+    vss::endpoint_id extra = 0;
+    fixture.add_fixture(QStringLiteral("fixture-3"), fixture.first, extra);
+    REQUIRE_NE(extra, 0);
+    const auto ports = fixture.backend.ports();
+    view.set_topology(ports, fixture.backend.links());
+    QApplication::processEvents();
+
+    REQUIRE(view.node_rect(fixture.first) == first_before);
+    REQUIRE(view.node_rect(fixture.second) == second_before);
+    REQUIRE(!nodes_overlap(view_rects(view, ports)));
+    for (const auto& link : fixture.backend.links())
+        REQUIRE(link_avoids_nodes(view, link, ports));
+    // It is a source of the port, so it sits left of it.
+    REQUIRE(view.node_rect(extra).right() < first_before.left());
+    view.close();
+}
+
+TEST_CASE("topology canvas: Tidy layout restores the automatic layout")
+{
+    pair_with_fixtures fixture;
+    topo::TopologyView view;
+    view.resize(1000, 700);
+    view.show();
+    view.set_topology(fixture.backend.ports(), fixture.backend.links());
+    QApplication::processEvents();
+
+    const QRectF original = view.node_rect(fixture.first);
+    view.move_node(fixture.first, original.topLeft() + QPointF(0.0, 120.0));
+    REQUIRE(view.node_rect(fixture.first) != original);
+
+    QString message;
+    QObject::connect(&view, &topo::TopologyView::status_message,
+                     [&message](const QString& text) { message = text; });
+    view.tidy_layout();
+    REQUIRE(!view.is_arranged());
+    REQUIRE(view.is_auto_fit());
+    REQUIRE(view.node_rect(fixture.first) == original);
+    REQUIRE(!message.isEmpty());
+    view.close();
+}
+
+TEST_CASE("topology canvas: Fit shows every item with a margin from any view")
+{
+    pair_with_fixtures fixture;
+    topo::TopologyView view;
+    view.resize(900, 600);
+    view.show();
+    view.set_topology(fixture.backend.ports(), fixture.backend.links());
+    QApplication::processEvents();
+
+    const auto check_fitted = [&view]
+    {
+        const QRectF visible =
+            view.mapToScene(view.viewport()->rect()).boundingRect();
+        const QRectF content = view.scene()->itemsBoundingRect();
+        REQUIRE(visible.contains(content));
+        // A margin on every side.
+        REQUIRE(content.left() - visible.left() > 4.0);
+        REQUIRE(visible.right() - content.right() > 4.0);
+        REQUIRE(content.top() - visible.top() > 4.0);
+        REQUIRE(visible.bottom() - content.bottom() > 4.0);
+        REQUIRE(view.is_auto_fit());
+    };
+    check_fitted();
+    const qreal fitted = view.zoom();
+
+    // Zoomed in far enough to scroll, then scrolled away: Fit brings it all
+    // back.
+    for (int step = 0; step < 4; ++step)
+        view.zoom_in();
+    REQUIRE(view.zoom() > fitted);
+    REQUIRE(!view.is_auto_fit());
+    view.horizontalScrollBar()->setValue(view.horizontalScrollBar()->maximum());
+    view.verticalScrollBar()->setValue(view.verticalScrollBar()->maximum());
+    view.fit_content();
+    check_fitted();
+    REQUIRE_NEAR(view.zoom(), fitted, 0.001);
+
+    // And zoomed out.
+    for (int step = 0; step < 3; ++step)
+        view.zoom_out();
+    REQUIRE(view.zoom() < fitted);
+    view.fit_content();
+    check_fitted();
+
+    // The canvas menu offers it.
+    REQUIRE_EQ(view.canvas_menu_labels(),
+               (QStringList{vss::gui::topology_text::tidy_layout_action(),
+                            vss::gui::topology_text::fit_action()}));
+    view.close();
+}
+
+TEST_CASE("topology canvas: a resize re-fits until the user takes over")
+{
+    pair_with_fixtures fixture;
+    topo::TopologyView view;
+    view.resize(900, 600);
+    view.show();
+    view.set_topology(fixture.backend.ports(), fixture.backend.links());
+    QApplication::processEvents();
+
+    // Automatic: the content still fits after the window changes.
+    REQUIRE(view.is_auto_fit());
+    view.resize(1200, 800);
+    QApplication::processEvents();
+    REQUIRE(view.is_auto_fit());
+    {
+        const QRectF visible =
+            view.mapToScene(view.viewport()->rect()).boundingRect();
+        REQUIRE(visible.contains(view.scene()->itemsBoundingRect()));
+    }
+
+    // Manual: the zoom is kept.
+    view.zoom_in();
+    const qreal zoom = view.zoom();
+    REQUIRE(!view.is_auto_fit());
+    view.resize(1000, 700);
+    QApplication::processEvents();
+    REQUIRE_NEAR(view.zoom(), zoom, 1e-9);
+    REQUIRE(!view.is_auto_fit());
+
+    // Shrunk so far that none of the content shows: it is brought back.
+    view.resize(400, 300);
+    QApplication::processEvents();
+    REQUIRE_NEAR(view.zoom(), zoom, 1e-9);
+    const QRectF visible =
+        view.mapToScene(view.viewport()->rect()).boundingRect();
+    REQUIRE(visible.intersects(view.scene()->itemsBoundingRect()));
+    view.close();
+}
+
+TEST_CASE("topology canvas: zoom in, zoom out, Fit and Tidy through the shell")
+{
+    clear_settings();
+    {
+        pair_with_fixtures fixture;
+        vss::gui::ShellWindow window(fixture.backend);
+        window.resize(1280, 800);
+        window.show();
+        QApplication::processEvents();
+        auto* view = window.findChild<topo::TopologyView*>();
+        REQUIRE(view != nullptr);
+        view->set_topology(fixture.backend.ports(), fixture.backend.links());
+        QApplication::processEvents();
+
+        QAction* fit =
+            window.findChild<QAction*>(QStringLiteral("topology.fit"));
+        QAction* tidy =
+            window.findChild<QAction*>(QStringLiteral("topology.tidy"));
+        REQUIRE(fit != nullptr);
+        REQUIRE(tidy != nullptr);
+
+        fit->trigger();
+        const qreal fitted = view->zoom();
+        view->zoom_in();
+        view->zoom_in();
+        REQUIRE(view->zoom() > fitted);
+        view->zoom_out();
+        REQUIRE(view->zoom() > fitted);
+        fit->trigger();
+        QApplication::processEvents();
+        REQUIRE_NEAR(view->zoom(), fitted, 0.001);
+        REQUIRE(view->is_auto_fit());
+
+        view->move_node(fixture.first,
+                        view->node_rect(fixture.first).topLeft() +
+                            QPointF(0.0, 90.0));
+        REQUIRE(view->is_arranged());
+        tidy->trigger();
+        REQUIRE(!view->is_arranged());
+        window.close();
+    }
+    clear_settings();
 }

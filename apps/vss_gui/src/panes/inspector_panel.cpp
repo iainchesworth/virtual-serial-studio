@@ -17,8 +17,10 @@
 
 #include <vss/core/serial_settings.hpp>
 
+#include <QClipboard>
 #include <QFrame>
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -241,7 +243,22 @@ void InspectorPanel::build()
     help_link_->setFont(Theme::instance().font(text_style::body));
     connect(help_link_, &QLabel::linkActivated, this,
             [this](const QString&) { Q_EMIT troubleshoot_requested(); });
+    help_copy_ = new QPushButton(tr("Copy name"), help);
+    help_copy_->setObjectName(QStringLiteral("inspectorCopyName"));
+    help_copy_->setProperty("size", QStringLiteral("small"));
+    help_copy_->setCursor(Qt::PointingHandCursor);
+    polish(help_copy_);
+    connect(help_copy_, &QPushButton::clicked, this,
+            [this]
+            {
+                if (!port_)
+                    return;
+                QGuiApplication::clipboard()->setText(port_->path);
+                ToastManager::instance().show(this,
+                                              tr("%1 copied.").arg(port_->path));
+            });
     help_layout->addWidget(help_text_);
+    help_layout->addWidget(help_copy_, 0, Qt::AlignLeft);
     help_layout->addWidget(help_link_);
     layout->addWidget(help);
 
@@ -406,9 +423,14 @@ void InspectorPanel::update_content()
 
     const bool waiting = port.open && port.peer == peer_state::not_open;
     help_text_->setVisible(waiting);
-    help_text_->setText(waiting
-                            ? tr("No program has opened %1 yet.").arg(port.path)
-                            : QString());
+    help_text_->setText(
+        waiting ? tr("No program has opened %1 yet. The program has to open "
+                     "exactly %1; a different port will not receive anything.")
+                      .arg(port.path)
+                : QString());
+    help_copy_->setVisible(waiting);
+    help_copy_->setAccessibleName(tr("Copy name, %1").arg(port.path));
+    help_copy_->setToolTip(tr("Copy name"));
     help_link_->setText(
         tr("<a href=\"troubleshoot\">Why is nothing arriving?</a>"));
 

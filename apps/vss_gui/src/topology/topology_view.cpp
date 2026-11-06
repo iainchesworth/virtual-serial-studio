@@ -12,7 +12,9 @@
 #include "topology/topology_text.hpp"
 #include "widgets/notes.hpp"
 
+#include <QAbstractSlider>
 #include <QAccessible>
+#include <QAction>
 #include <QContextMenuEvent>
 #include <QFocusEvent>
 #include <QFontMetricsF>
@@ -23,6 +25,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QScrollBar>
 #include <QSet>
 #include <QWheelEvent>
 
@@ -41,7 +44,7 @@ constexpr int kCompactWidth = 500;
 constexpr qreal kMinZoom = 0.25;
 constexpr qreal kMaxZoom = 2.0;
 constexpr qreal kFitMaxZoom = 1.25;
-constexpr qreal kFitMargin = 12.0;
+constexpr qreal kFitMargin = 24.0;
 constexpr qreal kZoomStep = 1.25;
 constexpr qreal kArrowStep = 8.0;
 constexpr qreal kArrowStepLarge = 32.0;
@@ -125,6 +128,12 @@ TopologyView::TopologyView(QWidget* parent) : QGraphicsView(parent)
     hint_->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
     viewport()->installEventFilter(this);
+    // A scroll bar action comes from the user (a drag, a click, a key); the
+    // view's own moves do not trigger it.  Either one ends automatic fitting.
+    connect(horizontalScrollBar(), &QAbstractSlider::actionTriggered, this,
+            [this](int) { mark_manual_view(); });
+    connect(verticalScrollBar(), &QAbstractSlider::actionTriggered, this,
+            [this](int) { mark_manual_view(); });
     connect(&Theme::instance(), &Theme::theme_changed, this,
             [this]
             {
@@ -191,11 +200,23 @@ void TopologyView::set_topology(const std::vector<port_view>& ports,
     if (ports_.empty())
     {
         resetTransform();
-        user_zoomed_ = false;
+        auto_fit_ = true;
+        user_arranged_ = false;
     }
-    else if (!user_zoomed_)
+    else if (auto_fit_)
     {
         fit_content();
+    }
+    else
+    {
+        // The user has taken over the view: leave it where it is, but make
+        // sure a node that just appeared can be seen.
+        for (const vss::endpoint_id id : new_nodes_)
+        {
+            const QRectF rect = node_rect(id);
+            if (rect.isValid())
+                ensureVisible(rect.adjusted(-16.0, -16.0, 16.0, 16.0));
+        }
     }
 }
 
@@ -207,7 +228,6 @@ void TopologyView::rebuild_items()
     node_order_.clear();
     link_order_.clear();
     node_sizes_.clear();
-    base_positions_.clear();
 
     QSet<vss::endpoint_id> linked;
     QSet<vss::endpoint_id> owners;
@@ -259,14 +279,7 @@ void TopologyView::rebuild_items()
     }
 
     layout_ = compute_topology_layout(inputs, link_inputs_);
-
-    for (auto it = overrides_.begin(); it != overrides_.end();)
-    {
-        if (!node_sizes_.contains(it.key()))
-            it = overrides_.erase(it);
-        else
-            ++it;
-    }
+    place_nodes();
 
     for (const auto& placement : layout_.nodes)
     {
@@ -292,14 +305,25 @@ void TopologyView::rebuild_items()
         };
         callbacks.hover_entered = [](vss::endpoint_id) {};
         callbacks.hover_left = [](vss::endpoint_id) {};
+        callbacks.dragged = [this](vss::endpoint_id id, const QPointF& position)
+        {
+            begin_drag();
+            positions_.insert(id, position);
+            apply_positions(false);
+        };
+        callbacks.drag_finished = [this](vss::endpoint_id id)
+        {
+            dragging_ = false;
+            user_arranged_ = true;
+            settle_node(id);
+        };
 
         auto* item = new NodeItem(found.value(), placement.rect.size(),
                                   std::move(callbacks));
-        item->setPos(placement.rect.topLeft());
+        item->setPos(positions_.value(placement.id));
         scene_->addItem(item);
         node_items_.insert(placement.id, item);
         node_order_.append(placement.id);
-        base_positions_.insert(placement.id, placement.rect.topLeft());
     }
 
     QHash<vss::link_id, const link_view*> views;
@@ -370,7 +394,110 @@ void TopologyView::rebuild_items()
     }
 }
 
-void TopologyView::apply_positions()
+void TopologyView::place_nodes()
+{
+    QSet<vss::endpoint_id> known;
+    for (auto it = positions_.begin(); it != positions_.end();)
+    {
+        if (!node_sizes_.contains(it.key()))
+        {
+            it = positions_.erase(it);
+        }
+        else
+        {
+            known.insert(it.key());
+            ++it;
+        }
+    }
+
+    new_nodes_.clear();
+    if (!user_arranged_ || positions_.isEmpty())
+    {
+        // Nothing has been moved by hand: the automatic layout decides every
+        // position, so a new link can move a whole column.
+        positions_.clear();
+        for (const auto& placement : layout_.nodes)
+        {
+            positions_.insert(placement.id, placement.rect.topLeft());
+            if (!known.contains(placement.id))
+                new_nodes_.append(placement.id);
+        }
+        return;
+    }
+
+    // The user arranged the nodes: keep them where they are and put each new
+    // node in free space next to the node it connects to.
+    QVector<QRectF> occupied;
+    for (const auto& placement : layout_.nodes)
+    {
+        if (known.contains(placement.id))
+        {
+            occupied.append(QRectF(positions_.value(placement.id),
+                                   node_sizes_.value(placement.id)));
+        }
+    }
+
+    for (const auto& placement : layout_.nodes)
+    {
+        if (known.contains(placement.id))
+            continue;
+
+        QRectF anchor;
+        anchor_side side = anchor_side::none;
+        for (const auto& link : link_inputs_)
+        {
+            if (link.targets.contains(placement.id))
+            {
+                for (const vss::endpoint_id other : link.sources)
+                {
+                    if (other != placement.id && positions_.contains(other))
+                    {
+                        anchor = QRectF(positions_.value(other),
+                                        node_sizes_.value(other));
+                        side = anchor_side::right_of;
+                        break;
+                    }
+                }
+            }
+            if (side == anchor_side::none &&
+                link.sources.contains(placement.id))
+            {
+                for (const vss::endpoint_id other : link.targets)
+                {
+                    if (other != placement.id && positions_.contains(other))
+                    {
+                        anchor = QRectF(positions_.value(other),
+                                        node_sizes_.value(other));
+                        side = anchor_side::left_of;
+                        break;
+                    }
+                }
+            }
+            if (side != anchor_side::none)
+                break;
+        }
+
+        const QSizeF size = node_sizes_.value(placement.id);
+        const QPointF position =
+            find_free_position(size, anchor, side, occupied);
+        positions_.insert(placement.id, position);
+        occupied.append(QRectF(position, size));
+        new_nodes_.append(placement.id);
+    }
+
+    // A change of density can make a kept node overlap its neighbour.
+    QVector<QRectF> accepted;
+    for (const auto& placement : layout_.nodes)
+    {
+        QRectF rect(positions_.value(placement.id),
+                    node_sizes_.value(placement.id));
+        rect = push_clear(rect, accepted, 0.0);
+        positions_.insert(placement.id, rect.topLeft());
+        accepted.append(rect);
+    }
+}
+
+void TopologyView::apply_positions(bool refresh_scene_rect)
 {
     QHash<vss::endpoint_id, QRectF> rects;
     for (const auto& placement : layout_.nodes)
@@ -378,9 +505,8 @@ void TopologyView::apply_positions()
         auto* item = node_items_.value(placement.id);
         if (item == nullptr)
             continue;
-        const QPointF base = base_positions_.value(placement.id);
-        const QPointF delta = overrides_.value(placement.id);
-        const QRectF rect(base + delta, node_sizes_.value(placement.id));
+        const QRectF rect(positions_.value(placement.id),
+                          node_sizes_.value(placement.id));
         item->setPos(rect.topLeft());
         rects.insert(placement.id, rect);
     }
@@ -393,7 +519,8 @@ void TopologyView::apply_positions()
             item->set_geometry(placement);
     }
 
-    update_scene_rect();
+    if (refresh_scene_rect)
+        update_scene_rect();
 }
 
 void TopologyView::update_scene_rect()
@@ -423,7 +550,16 @@ void TopologyView::update_scene_rect()
                             std::max(1, viewport()->height())));
         return;
     }
-    setSceneRect(content.adjusted(-16.0, -16.0, 16.0, 16.0));
+
+    QRectF rect = content.adjusted(-16.0, -16.0, 16.0, 16.0);
+    if (!auto_fit_)
+    {
+        // Once the user is in charge of the view the scene is never smaller
+        // than what they see, so Qt does not re-centre the content when a
+        // node is dropped near an edge.
+        rect = rect.united(mapToScene(viewport()->rect()).boundingRect());
+    }
+    setSceneRect(rect);
 }
 
 void TopologyView::update_overlays()
@@ -583,9 +719,58 @@ void TopologyView::nudge_focused(qreal dx, qreal dy)
 {
     if (focused_port_ == 0)
         return;
-    overrides_[focused_port_] += QPointF(dx, dy);
-    apply_positions();
-    const QRectF rect = node_rect(focused_port_);
+    move_node(focused_port_,
+              node_rect(focused_port_).topLeft() + QPointF(dx, dy));
+}
+
+void TopologyView::move_node(vss::endpoint_id id, const QPointF& top_left)
+{
+    if (!node_items_.contains(id))
+        return;
+    positions_.insert(id, top_left);
+    user_arranged_ = true;
+    mark_manual_view();
+    settle_node(id);
+}
+
+void TopologyView::begin_drag()
+{
+    if (dragging_)
+        return;
+    dragging_ = true;
+    // Taking hold of a node means the user is arranging the diagram: stop
+    // re-fitting, and widen the scene to the visible area first so it does not
+    // re-centre under the pointer while the node moves.
+    mark_manual_view();
+    update_scene_rect();
+}
+
+void TopologyView::mark_manual_view()
+{
+    if (internal_scroll_ || fitting_)
+        return;
+    auto_fit_ = false;
+}
+
+/// Settles a moved node clear of the others and shows it.
+void TopologyView::settle_node(vss::endpoint_id id)
+{
+    QVector<QRectF> others;
+    for (const auto& placement : layout_.nodes)
+    {
+        if (placement.id != id)
+        {
+            others.append(QRectF(positions_.value(placement.id),
+                                 node_sizes_.value(placement.id)));
+        }
+    }
+    const QRectF settled =
+        push_clear(QRectF(positions_.value(id), node_sizes_.value(id)), others,
+                   topology_metrics{}.drop_gap);
+    positions_.insert(id, settled.topLeft());
+    apply_positions(true);
+
+    const QRectF rect = node_rect(id);
     if (rect.isValid())
         ensureVisible(rect.adjusted(-16.0, -16.0, 16.0, 16.0));
 }
@@ -764,8 +949,28 @@ void TopologyView::resizeEvent(QResizeEvent* event)
     }
 
     update_overlays();
-    if (!fitting_ && !user_zoomed_ && !ports_.empty())
+    if (ports_.empty() || fitting_)
+        return;
+
+    // A resize keeps the content in view.  Until the user zooms, scrolls or
+    // moves a node, "in view" means fitted, so the content follows the
+    // window.  After that the zoom and the centre are the user's: only bring
+    // the content back when the window left none of it visible.
+    if (auto_fit_)
         fit_content();
+    else
+        keep_content_in_view();
+}
+
+void TopologyView::keep_content_in_view()
+{
+    internal_scroll_ = true;
+    update_scene_rect();
+    const QRectF visible = mapToScene(viewport()->rect()).boundingRect();
+    const QRectF content = scene_->itemsBoundingRect();
+    if (!content.isNull() && !visible.intersects(content))
+        centerOn(content.center());
+    internal_scroll_ = false;
 }
 
 void TopologyView::focusInEvent(QFocusEvent* event)
@@ -806,6 +1011,13 @@ void TopologyView::wheelEvent(QWheelEvent* event)
         event->accept();
         return;
     }
+    // A plain wheel scrolls a view that is larger than its window; that is the
+    // user taking over, so the view stops re-fitting on resize.
+    if (horizontalScrollBar()->maximum() > horizontalScrollBar()->minimum() ||
+        verticalScrollBar()->maximum() > verticalScrollBar()->minimum())
+    {
+        mark_manual_view();
+    }
     QGraphicsView::wheelEvent(event);
 }
 
@@ -837,14 +1049,30 @@ void TopologyView::open_focused_menu()
     {
         const QPoint position = mapFromScene(link_anchor(focused_link_));
         open_context_menu(position);
+        return;
     }
+    // Nothing is focused: the menu of the canvas itself, so Tidy layout and
+    // Fit can be reached from the keyboard too.
+    open_context_menu(viewport()->rect().center());
 }
 
 void TopologyView::open_context_menu(const QPoint& viewport_position)
 {
     QGraphicsItem* item = itemAt(viewport_position);
     if (item == nullptr)
+    {
+        auto* menu = new QMenu(this);
+        menu->setAttribute(Qt::WA_DeleteOnClose);
+        menu->setAccessibleName(topology_text::view_name());
+        QAction* tidy = menu->addAction(topology_text::tidy_layout_action(),
+                                        this, [this] { tidy_layout(); });
+        tidy->setEnabled(!ports_.empty());
+        QAction* fit = menu->addAction(topology_text::fit_action(), this,
+                                       [this] { fit_content(); });
+        fit->setEnabled(!ports_.empty());
+        menu->popup(viewport()->mapToGlobal(viewport_position));
         return;
+    }
 
     const QPoint global = viewport()->mapToGlobal(viewport_position);
     auto* menu = new QMenu(this);
@@ -922,13 +1150,45 @@ QStringList TopologyView::link_menu_labels(vss::link_id id) const
     return {topology_text::remove_link_action()};
 }
 
+QStringList TopologyView::canvas_menu_labels() const
+{
+    return {topology_text::tidy_layout_action(), topology_text::fit_action()};
+}
+
+QVector<QLineF> TopologyView::link_segments(vss::link_id id) const
+{
+    LinkItem* item = link_items_.value(id);
+    return item == nullptr ? QVector<QLineF>() : item->geometry().segments;
+}
+
+void TopologyView::tidy_layout()
+{
+    if (ports_.empty())
+        return;
+
+    positions_.clear();
+    for (const auto& placement : layout_.nodes)
+        positions_.insert(placement.id, placement.rect.topLeft());
+    user_arranged_ = false;
+    auto_fit_ = true;
+    apply_positions(true);
+    fit_content();
+    Q_EMIT status_message(topology_text::layout_tidied());
+}
+
 void TopologyView::fit_content()
 {
     if (ports_.empty())
     {
         resetTransform();
+        auto_fit_ = true;
         return;
     }
+
+    // Fit means "show everything": the scene shrinks back to the content so
+    // nothing but the content decides where the view sits.
+    auto_fit_ = true;
+    update_scene_rect();
 
     const QRectF content = scene_->itemsBoundingRect();
     if (content.isNull())
@@ -945,11 +1205,13 @@ void TopologyView::fit_content()
     scale_factor = std::clamp(scale_factor, kMinZoom, kFitMaxZoom);
 
     fitting_ = true;
+    internal_scroll_ = true;
     resetTransform();
     scale(scale_factor, scale_factor);
     centerOn(content.center());
+    internal_scroll_ = false;
     fitting_ = false;
-    user_zoomed_ = false;
+    auto_fit_ = true;
 }
 
 void TopologyView::scale_by(qreal factor, QGraphicsView::ViewportAnchor anchor,
@@ -967,7 +1229,7 @@ void TopologyView::scale_by(qreal factor, QGraphicsView::ViewportAnchor anchor,
     scale(target / current, target / current);
     setTransformationAnchor(previous);
     if (user_action)
-        user_zoomed_ = true;
+        auto_fit_ = false;
 }
 
 void TopologyView::zoom_in()
@@ -1009,7 +1271,7 @@ void TopologyView::centre_on_links(const QVector<vss::link_id>& ids)
     scale(scale_factor, scale_factor);
     centerOn(bounds.center());
     fitting_ = false;
-    user_zoomed_ = true;
+    auto_fit_ = false;
 }
 
 bool TopologyView::show_loop_note()
