@@ -15,7 +15,7 @@ namespace
 
 constexpr unsigned char iac = 255;
 constexpr unsigned char dont = 254;
-constexpr unsigned char do_ = 253;
+constexpr unsigned char iac_do = 253;
 constexpr unsigned char wont = 252;
 constexpr unsigned char will = 251;
 constexpr unsigned char sb = 250;
@@ -147,9 +147,9 @@ std::string session::greeting()
     std::string out;
     put_command(out, will, option_com_port);
     put_command(out, will, option_binary);
-    put_command(out, do_, option_binary);
+    put_command(out, iac_do, option_binary);
     put_command(out, will, option_suppress_go_ahead);
-    put_command(out, do_, option_suppress_go_ahead);
+    put_command(out, iac_do, option_suppress_go_ahead);
     return out;
 }
 
@@ -208,7 +208,7 @@ feed_result session::feed(std::string_view bytes)
                 result.data.push_back(raw);
                 state_ = parse_state::data;
             }
-            else if (byte == will || byte == wont || byte == do_ ||
+            else if (byte == will || byte == wont || byte == iac_do ||
                      byte == dont)
             {
                 verb_ = byte;
@@ -263,7 +263,7 @@ void session::negotiate(unsigned char verb, unsigned char code,
 
     switch (verb)
     {
-    case do_:
+    case iac_do:
         if (!supported)
         {
             put_command(result.reply, wont, code);
@@ -285,7 +285,7 @@ void session::negotiate(unsigned char verb, unsigned char code,
             break;
         }
         if (entry.remote == option_state::off)
-            put_command(result.reply, do_, code);
+            put_command(result.reply, iac_do, code);
         entry.remote = option_state::on; // "asked" is answered by this WILL
         break;
     case wont:

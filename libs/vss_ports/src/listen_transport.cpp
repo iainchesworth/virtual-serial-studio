@@ -444,7 +444,11 @@ private:
     /// client, and the lines it drove.
     void consume_serial(const std::shared_ptr<client>& peer, std::size_t count)
     {
-        const auto fed = peer->session->feed(
+        auto& slot = peer->session;
+        if (!slot)
+            return;
+        rfc2217::session& session = *slot;
+        const auto fed = session.feed(
             std::string_view(peer->buffer.data(), count));
         received_.insert(received_.end(), fed.data.begin(), fed.data.end());
         if (!fed.reply.empty())
@@ -452,7 +456,7 @@ private:
         if (fed.modem_state_requested)
         {
             const std::string text =
-                peer->session->modem_state(current_inputs(), true);
+                session.modem_state(current_inputs(), true);
             if (!text.empty())
                 enqueue(peer, std::make_shared<std::string>(text));
         }
@@ -460,7 +464,7 @@ private:
         {
             {
                 std::lock_guard lock(lines_mutex_);
-                const control_lines driven = peer->session->outputs();
+                const control_lines driven = session.outputs();
                 for (const control_line line :
                      {control_line::dtr, control_line::rts,
                       control_line::break_signal})
@@ -680,9 +684,10 @@ private:
     {
         for (const auto& peer : clients_)
         {
-            if (!peer->session || !peer->session->com_port_active())
+            auto& slot = peer->session;
+            if (!slot || !slot->com_port_active())
                 continue;
-            const std::string text = peer->session->modem_state(inputs);
+            const std::string text = slot->modem_state(inputs);
             if (!text.empty())
                 enqueue(peer, std::make_shared<std::string>(text));
         }
