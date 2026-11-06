@@ -85,28 +85,26 @@ public:
         const auto direction = static_cast<traffic_direction>(
             index.data(MonitorModel::direction_role).toInt());
         const QString text = index.data(Qt::DisplayRole).toString();
-        QColor fill = theme.colour(colour_role::panel);
-        QColor edge = theme.colour(colour_role::line);
-        QColor ink = theme.colour(colour_role::ink);
+        // RX in the accent tint, TX in violet and DROP in the danger tint:
+        // tinted tags with no outline, as in DirectionBadge.
+        QColor fill = theme.colour(colour_role::accentSoft);
+        QColor ink = theme.colour(colour_role::accentText);
         if (direction == traffic_direction::tx)
         {
-            fill = theme.colour(colour_role::accentSoft);
-            edge = theme.colour(colour_role::accentLine);
-            ink = theme.colour(colour_role::accentStrong);
+            fill = theme.colour(colour_role::violetSoft);
+            ink = theme.colour(colour_role::violet);
         }
         else if (direction == traffic_direction::drop)
         {
             fill = theme.colour(colour_role::badSoft);
-            edge = theme.colour(colour_role::badLine);
             ink = theme.colour(colour_role::bad);
         }
         const QRect badge(option.rect.left() + 6, option.rect.center().y() - 9,
-                          44, 18);
+                          40, 18);
         painter->setRenderHint(QPainter::Antialiasing);
-        painter->setPen(QPen(edge, 1.0));
+        painter->setPen(Qt::NoPen);
         painter->setBrush(fill);
-        painter->drawRoundedRect(QRectF(badge).adjusted(0.5, 0.5, -0.5, -0.5),
-                                 4, 4);
+        painter->drawRoundedRect(QRectF(badge), 5, 5);
         QFont font = theme.font(text_style::caption);
         font.setWeight(QFont::DemiBold);
         painter->setFont(font);

@@ -3,24 +3,28 @@
 Authoritative values: `tokens/tokens.json`. This page explains how to use them in Qt.
 
 ## Colour roles (light / dark)
+`10-design-language.md` says how the roles are used; this table lists them.
+
 | Token | Role | Light | Dark |
 |---|---|---|---|
-| ground | Window background | #F2F4F7 | #11161D |
-| panel | Docks, dialogs, inputs | #FFFFFF | #1A212B |
-| sunken | Headers, wells, code, alternate rows | #F7F8FA | #151B23 |
-| hover / pressed | Fill of a button, toolbar button, menu row or tab under the pointer, and while pressed | #ECF0F4 / #DFE5EC | #232C39 / #2D3949 |
-| line | Decorative dividers | #D8DDE4 | #2B3543 |
-| line2 | Soft borders on cards, scrollbar thumbs | #BCC4CF | #445064 |
-| control | Boundaries of controls (3:1 rule) | #748090 | #7E8A9C |
-| ink / ink2 / ink3 | Text: primary, secondary, caption | #18212D / #465263 / #566273 | #E8EDF3 / #B8C3D1 / #9EABBB |
-| accent | Primary action, selection edge | #0B6E8A | #59B9D4 |
-| accentStrong | Accent text, links, hover | #085870 | #86CDE2 |
-| accentSoft / accentLine | Selection fill and its edge | #E2F0F4 / #B3D4DD | #163640 / #2F6171 |
-| ok, okSoft, okLine | Healthy | #1B7447 ... | #6FD29C ... |
-| amber, amberSoft, amberLine | Attention | #9A4F00 ... | #F2B764 ... |
-| bad, badSoft, badLine | Failure | #B3261E ... | #FF8D86 ... |
-| focus | Focus ring | #0A5C75 | #86CDE2 |
-| onAccent, onDanger | Label on accent and danger fills | #FFFFFF | #06222B, #3C0A07 |
+| ground | Window background behind the panes | #ECEEF1 | #0E0F12 |
+| panel | Panes, dialogs, cards, fields | #FFFFFF | #18191D |
+| sunken | Grouped sections, canvas, read-only fields | #F4F5F7 | #121316 |
+| fill / fillHover | Secondary buttons, segment tracks, neutral chips, menu rows under the pointer | #EEF0F3 / #E4E7EB | #26282D / #2F3137 |
+| hover / pressed | Row and ghost button under the pointer, and while pressed | #F3F4F6 / #E4E7EB | #1F2125 / #2F3137 |
+| line | Pane borders and dividers (decorative) | #E2E5E9 | #27292E |
+| line2 | Field and card borders, scrollbar thumbs | #CDD2D9 | #3A3D44 |
+| control | Check box and radio edges, field hover (3:1 rule) | #808996 | #7C828C |
+| ink / ink2 / ink3 | Text: primary, secondary, caption | #14171C / #4A515C / #646C79 | #ECEDEF / #B3B8C0 / #8C929C |
+| accent / accentHover | Primary fill, checked controls, selection edge; primary hover | #2160E0 / #1A52C4 | #2F6AE6 / #2558C9 |
+| accentStrong / accentText | Accent text, links and accent icons | #1A52C4 / #1D56C9 | #8AB4FF / #8AB4FF |
+| accentSoft / accentLine | Selection fill and its edge, RX tag | #E8EFFD / #B9CDF6 | #1B2742 / #2D4A80 |
+| violet / violetSoft | TX tag, fixture tiles and chips | #6941C6 / #EDE9FB | #B9A4FF / #272042 |
+| ok, okSoft, okLine | Healthy | #17744B ... | #4CC38A ... |
+| amber, amberSoft, amberLine | Attention | #9A5806 ... | #F0B14A ... |
+| bad, badSoft, badLine | Failure | #C4321F ... | #FF7A6B ... |
+| focus | Focus ring | #2160E0 | #8AB4FF |
+| onAccent, onDanger | Label on accent and danger fills | #FFFFFF | #FFFFFF, #2A0905 |
 
 Run `python3 tools/check_contrast.py` after any colour change. It must report `FAILURES: 0`.
 
@@ -28,12 +32,12 @@ Run `python3 tools/check_contrast.py` after any colour change. It must report `F
 - Never bundle fonts and never set a font family. Use `QFontDatabase::systemFont(QFontDatabase::GeneralFont)` and `QFontDatabase::systemFont(QFontDatabase::FixedFont)` for data, paths, addresses and payloads.
 - Windows: keep Segoe UI for text. Qt 6 draws Segoe UI Variable at the wrong weight through DirectWrite (every regular label comes out semi-bold), so do not select it. Use Consolas for the fixed font when present (the Qt default is Courier New). Both ship with the OS, nothing is bundled. See design-deviations.
 - Request the unhinted outline (`QFont::PreferNoHinting`) and `QFont::PreferAntialias`, and set `Qt::HighDpiScaleFactorRoundingPolicy::PassThrough` before the `QApplication` is built, so 125 and 150 percent displays are not rounded and resampled.
-- Every style lands on a whole number of logical pixels (body 13, caption and label 12, large 14, subtitle 16, title 20, display 26, port name 44). A fractional size such as 11.08 px is the cause of soft, uneven text. Convert to points with the screen's logical DPI so Qt gets the same whole pixel size back.
-- Implement the scale as ratios of the system font's size (never below the 13px design body) so OS text size is honoured: caption and label 0.923, body 1.0, body large 1.077, subtitle 1.231, title 1.538, display 2.0, port name 3.385 (fixed font, weight 500), data 0.923 (fixed font). Weights: labels, titles and display 600, button 500.
+- Every style lands on a whole number of logical pixels (body 13, caption, label and group 12, large and heading 14, subtitle 16, title 20, display 28, port name 44). A fractional size such as 11.08 px is the cause of soft, uneven text. Convert to points with the screen's logical DPI so Qt gets the same whole pixel size back.
+- Implement the scale as ratios of the system font's size (never below the 13px design body) so OS text size is honoured: caption and label 0.923, body 1.0, body large 1.077, subtitle 1.231, title 1.538, display 2.0, port name 3.385 (fixed font, weight 500), data 0.923 (fixed font). Weights: labels, headings, group labels, titles and display 600, button 500. Group labels are upper case with 6 percent extra tracking, set in `Theme::font(text_style::group)`.
 - Minimum text is 12px equivalent, except key caps and uppercase badges at 11px.
 
 ## Size, spacing, shape
-Use the `size`, `space`, `radius` and `layout` blocks in tokens.json. Radii: control 6, inner 8 (cards, menus), dialog 12, chip 11. The style sheet template reads them as `%radius.control%` and `%space.2%`, so change the token, not a widget. Spacing unit is 4px (4, 8, 12, 16, 24, 32, 48). Buttons are 34px high (28 small), inputs 34, toolbar buttons 34, dock headers 32, tab bars 32, status bar 30, menu bar 28, toolbar 48 (40 at the minimum window). Any pointer target is at least 24 by 24. Depth comes from 1px borders. Only dialogs, menus and toasts cast shadows, and those come from the platform.
+Use the `size`, `space`, `radius` and `layout` blocks in tokens.json. Radii: control 8, inner 8, group 10 (grouped sections, menus, notes), tile 9, pane 12, card 12, dialog 12, chip 11. The style sheet template reads them as `%radius.control%` and `%space.2%`, so change the token, not a widget. Spacing unit is 4px (4, 8, 12, 16, 24, 32, 48). Buttons are 32px high (28 small and in pane headers), inputs 32, toolbar buttons 32, pane headers 44, the header row 48, tab bars 32, status bar 32, kind tiles 32. Dialogs are padded 24 with 16 between groups. Panes sit 8 apart on the ground. Any pointer target is at least 24 by 24. Depth comes from tone: panes are `panel` on `ground` with a 1px `line` hairline. Only dialogs, menus and toasts cast shadows, and those come from the platform.
 
 ## Required Qt architecture
 ```

@@ -29,6 +29,11 @@ public:
     explicit StatusBar(StudioBackend& backend, QWidget* parent = nullptr);
 
     void set_advanced(bool advanced);
+
+    /// Moves the Simple and Advanced switch out of the bar and into
+    /// `parent`, so the window can show it in its header row.  The bar keeps
+    /// driving it.
+    SegmentedControl* release_level_switch(QWidget* parent);
     void refresh();
 
 Q_SIGNALS:

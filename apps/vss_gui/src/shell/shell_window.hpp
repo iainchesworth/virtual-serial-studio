@@ -39,6 +39,7 @@ struct setup_group;
 class MonitorPanel;
 class NoteBanner;
 class OwnerBar;
+class PaneHeader;
 class PortsPanel;
 class SendPanel;
 class StatusBar;
@@ -201,6 +202,10 @@ private:
     QDockWidget* log_dock_ = nullptr;
     QDockWidget* json_dock_ = nullptr;
     QToolBar* toolbar_ = nullptr;
+    PaneHeader* ports_header_ = nullptr;
+    PaneHeader* inspector_header_ = nullptr;
+    PaneHeader* send_header_ = nullptr;
+    PaneHeader* monitor_header_ = nullptr;
     QLineEdit* search_ = nullptr;
     StatusBar* status_ = nullptr;
     PortsPanel* ports_panel_ = nullptr;

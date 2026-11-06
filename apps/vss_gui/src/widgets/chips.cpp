@@ -31,45 +31,41 @@ struct chip_palette
 
 chip_palette palette_for(StatusChip::kind kind)
 {
+    // Chips are tinted capsules with no border: the tint, the mark shape and
+    // the text carry the state together.
     const Theme& theme = Theme::instance();
+    const QColor none = Qt::transparent;
     switch (kind)
     {
     case StatusChip::kind::open:
     case StatusChip::kind::healthy:
+    case StatusChip::kind::connected:
         return {theme.colour(colour_role::okSoft),
-                theme.colour(colour_role::okLine),
-                theme.colour(colour_role::noteOkText),
+                none,
+                theme.colour(colour_role::ok),
                 theme.colour(colour_role::ok),
                 false,
                 false,
                 true};
     case StatusChip::kind::waiting:
         return {theme.colour(colour_role::amberSoft),
-                theme.colour(colour_role::amberLine),
-                theme.colour(colour_role::noteWarnText),
+                none,
+                theme.colour(colour_role::amber),
                 theme.colour(colour_role::amber),
                 true,
                 false,
                 true};
-    case StatusChip::kind::connected:
-        return {theme.colour(colour_role::okSoft),
-                theme.colour(colour_role::okLine),
-                theme.colour(colour_role::noteOkText),
-                theme.colour(colour_role::ok),
-                false,
-                false,
-                true};
     case StatusChip::kind::studio_only:
-        return {theme.colour(colour_role::panel),
-                theme.colour(colour_role::line2),
+        return {theme.colour(colour_role::fill),
+                none,
                 theme.colour(colour_role::ink2),
                 theme.colour(colour_role::ink3),
                 true,
                 false,
                 true};
     case StatusChip::kind::closed:
-        return {theme.colour(colour_role::sunken),
-                theme.colour(colour_role::line),
+        return {theme.colour(colour_role::fill),
+                none,
                 theme.colour(colour_role::ink2),
                 theme.colour(colour_role::ink3),
                 true,
@@ -77,17 +73,17 @@ chip_palette palette_for(StatusChip::kind kind)
                 true};
     case StatusChip::kind::failed:
         return {theme.colour(colour_role::badSoft),
-                theme.colour(colour_role::badLine),
-                theme.colour(colour_role::noteDangerText),
+                none,
+                theme.colour(colour_role::bad),
                 theme.colour(colour_role::bad),
                 false,
                 true,
                 true};
     case StatusChip::kind::fixture:
-        return {theme.colour(colour_role::accentSoft),
-                theme.colour(colour_role::accentLine),
-                theme.colour(colour_role::noteInfoText),
-                theme.colour(colour_role::accent),
+        return {theme.colour(colour_role::violetSoft),
+                none,
+                theme.colour(colour_role::violet),
+                theme.colour(colour_role::violet),
                 false,
                 false,
                 false};
@@ -165,8 +161,8 @@ void StatusChip::paintEvent(QPaintEvent* event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    const QRectF frame = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
-    painter.setPen(QPen(palette.edge, 1.0));
+    const QRectF frame = QRectF(rect());
+    painter.setPen(Qt::NoPen);
     painter.setBrush(palette.fill);
     painter.drawRoundedRect(frame, height / 2.0, height / 2.0);
 
@@ -255,31 +251,29 @@ void DirectionBadge::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
     const Theme& theme = Theme::instance();
-    QColor fill = theme.colour(colour_role::panel);
-    QColor edge = theme.colour(colour_role::line2);
-    QColor ink = theme.colour(colour_role::ink);
+    // RX is the accent tint and TX the violet tint, so the two directions
+    // are told apart by colour as well as by their text.
+    QColor fill = theme.colour(colour_role::accentSoft);
+    QColor ink = theme.colour(colour_role::accentText);
     switch (direction_)
     {
     case direction::rx:
         break;
     case direction::tx:
-        fill = theme.colour(colour_role::accentSoft);
-        edge = theme.colour(colour_role::accentLine);
-        ink = theme.colour(colour_role::accentStrong);
+        fill = theme.colour(colour_role::violetSoft);
+        ink = theme.colour(colour_role::violet);
         break;
     case direction::drop:
         fill = theme.colour(colour_role::badSoft);
-        edge = theme.colour(colour_role::badLine);
         ink = theme.colour(colour_role::bad);
         break;
     }
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(edge, 1.0));
+    painter.setPen(Qt::NoPen);
     painter.setBrush(fill);
-    painter.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 4,
-                            4);
+    painter.drawRoundedRect(QRectF(rect()), 5, 5);
     painter.setPen(ink);
     painter.setFont(font());
     painter.drawText(rect(), Qt::AlignCenter, text());
@@ -329,7 +323,7 @@ void Tag::paintEvent(QPaintEvent* event)
     const Theme& theme = Theme::instance();
     QColor fill = theme.colour(colour_role::accentSoft);
     QColor edge = theme.colour(colour_role::accentLine);
-    QColor ink = theme.colour(colour_role::accentStrong);
+    QColor ink = theme.colour(colour_role::accentText);
     Qt::PenStyle style = Qt::SolidLine;
     switch (variant_)
     {
@@ -357,7 +351,8 @@ void Tag::paintEvent(QPaintEvent* event)
     painter.setRenderHint(QPainter::Antialiasing);
     QPen pen(edge, 1.0);
     pen.setStyle(style);
-    painter.setPen(pen);
+    // Only the dashed tag keeps an outline; the others are tints.
+    painter.setPen(variant_ == variant::n ? pen : QPen(Qt::NoPen));
     painter.setBrush(fill);
     painter.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 4,
                             4);
@@ -400,7 +395,7 @@ void Badge::paintEvent(QPaintEvent* event)
     const Theme& theme = Theme::instance();
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(theme.colour(colour_role::amberLine), 1.0));
+    painter.setPen(Qt::NoPen);
     painter.setBrush(theme.colour(colour_role::amberSoft));
     painter.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 4,
                             4);

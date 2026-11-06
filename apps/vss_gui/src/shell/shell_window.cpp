@@ -22,8 +22,8 @@
 #include "dialogs/templates_dialog.hpp"
 #include "flows/add_port_dialog.hpp"
 #include "flows/attach_dialog.hpp"
-#include "flows/common.hpp"
 #include "flows/com_number_dialog.hpp"
+#include "flows/common.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
 #include "flows/release_port_dialog.hpp"
@@ -37,8 +37,8 @@
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
-#include "shell/setup_group.hpp"
 #include "shell/port_warnings.hpp"
+#include "shell/setup_group.hpp"
 #include "shell/status_bar.hpp"
 #include "shell/undo_steps.hpp"
 #include "support/about_dialog.hpp"
@@ -60,6 +60,7 @@
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/surfaces.hpp"
 
 #include <memory>
 #include <vss/config/document.hpp>
@@ -614,42 +615,47 @@ void ShellWindow::build_menus()
 
 void ShellWindow::build_toolbar()
 {
+    // The tool row sits at the top of the topology pane, next to what it acts
+    // on; it is not a window-wide toolbar.  New, Open and Save live in File
+    // with their shortcuts.  See docs/10-design-language.md.
     toolbar_ = new QToolBar(tr("Main toolbar"), this);
     toolbar_->setObjectName(QStringLiteral("mainToolbar"));
     toolbar_->setMovable(false);
     toolbar_->setFloatable(false);
     toolbar_->setIconSize(QSize(16, 16));
     toolbar_->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    addToolBar(Qt::TopToolBarArea, toolbar_);
+    toolbar_->setStyleSheet(QStringLiteral(
+        "QToolBar#mainToolbar { background: transparent; padding: 0; }"));
 
     const auto add = [this](const QString& id)
     {
         if (QAction* action = registry_.action(id))
             toolbar_->addAction(action);
     };
-    add(QStringLiteral("file.new"));
-    add(QStringLiteral("file.open"));
-    add(QStringLiteral("file.save"));
-    toolbar_->addSeparator();
-    add(QStringLiteral("ports.add"));
     add(QStringLiteral("ports.attach"));
     add(QStringLiteral("topology.connect"));
-    add(QStringLiteral("ports.remove"));
-    add(QStringLiteral("topology.removeSetup"));
     toolbar_->addSeparator();
     add(QStringLiteral("ports.mock"));
     add(QStringLiteral("topology.shareToolbar"));
     add(QStringLiteral("topology.fit"));
+    toolbar_->addSeparator();
+    add(QStringLiteral("ports.remove"));
+    add(QStringLiteral("topology.removeSetup"));
 
-    auto* spacer = new QWidget(toolbar_);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    toolbar_->addWidget(spacer);
+    // Menus, the action search and the mode switch share one row: the search
+    // and the switch are the menu bar's right-hand corner widget.
+    auto* corner = new QWidget(this);
+    corner->setObjectName(QStringLiteral("headerCorner"));
+    auto* corner_layout = new QHBoxLayout(corner);
+    corner_layout->setContentsMargins(0, 0, Theme::instance().space(1), 0);
+    corner_layout->setSpacing(Theme::instance().space(2));
 
-    search_ = new QLineEdit(toolbar_);
+    search_ = new QLineEdit(corner);
+    search_->setProperty("search", true);
     search_->setPlaceholderText(tr("Search actions"));
     search_->setAccessibleName(tr("Search actions"));
     search_->setClearButtonEnabled(true);
-    search_->setFixedWidth(220);
+    search_->setFixedWidth(280);
     search_->setFont(Theme::instance().font(text_style::body));
     // The search field leads with the magnifier from the icon set.
     search_
@@ -657,9 +663,10 @@ void ShellWindow::build_toolbar()
                                                   colour_role::ink3, 16),
                     QLineEdit::LeadingPosition)
         ->setText(tr("Search actions"));
-    toolbar_->addWidget(search_);
+    corner_layout->addWidget(search_);
     connect(search_, &QLineEdit::returnPressed, this,
             [this] { open_palette(); });
+    menuBar()->setCornerWidget(corner, Qt::TopRightCorner);
 }
 
 void ShellWindow::build_central()
@@ -682,7 +689,9 @@ void ShellWindow::build_central()
 
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
-    layout->setContentsMargins(8, 8, 8, 8);
+    // The main window separators give the 8 px gap between panes.
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(Theme::instance().space(1));
 
     // The ports a restart of the helper or the driver took away.  Hidden
     // until there are any.
@@ -698,14 +707,31 @@ void ShellWindow::build_central()
 
     auto* card = new QFrame(workspace_);
 
-    card->setProperty("card", true);
+    card->setObjectName(QStringLiteral("topologyPane"));
+    card->setProperty("pane", true);
     polish(card);
     auto* card_layout = new QVBoxLayout(card);
-    card_layout->setContentsMargins(0, 0, 0, 0);
+    card_layout->setContentsMargins(1, 1, 1, 1);
+    card_layout->setSpacing(0);
+
+    // The tool row heads the pane, where a dock would have its title.
+    auto* tools = new QWidget(card);
+    auto* tools_layout = new QHBoxLayout(tools);
+    tools_layout->setContentsMargins(Theme::instance().space(1), 6,
+                                     Theme::instance().space(1), 6);
+    tools_layout->setSpacing(0);
+    toolbar_->setParent(tools);
+    tools_layout->addWidget(toolbar_, 1);
+    card_layout->addWidget(tools);
 
     topology_ = new topology::TopologyView(card);
     topology_->set_capabilities(backend_.caps());
-    card_layout->addWidget(topology_);
+    // Inset the diagram so its square view stays inside the pane's corners.
+    auto* canvas_layout = new QVBoxLayout;
+    const int inset = Theme::instance().space(1);
+    canvas_layout->setContentsMargins(inset, 0, inset, inset);
+    canvas_layout->addWidget(topology_);
+    card_layout->addLayout(canvas_layout, 1);
     layout->addWidget(card, 1);
 
     // The link bar under the diagram.  WP4 owns the diagram; the bar and its
@@ -773,13 +799,25 @@ void ShellWindow::build_central()
 
 void ShellWindow::build_docks()
 {
-    const auto make_dock =
-        [this](const QString& object_name, const QString& title, QWidget* page)
+    // Every dock is drawn as a pane: a rounded surface on the window ground
+    // with its own header.  The dock's title bar is replaced by an empty
+    // widget, so there are no float or close buttons; View shows and hides
+    // the panes and Reset layout puts them back.
+    const auto make_pane_dock = [this](const QString& object_name,
+                                       const QString& title, QWidget* page,
+                                       PaneHeader** header)
     {
         auto* dock = new QDockWidget(title, this);
         dock->setObjectName(object_name);
         dock->setAllowedAreas(Qt::AllDockWidgetAreas);
-        dock->setWidget(page);
+        dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        dock->setTitleBarWidget(new QWidget(dock));
+        auto* pane = new Pane(title, dock);
+        pane->setObjectName(object_name + QStringLiteral("Pane"));
+        pane->set_body(page);
+        if (header != nullptr)
+            *header = pane->header();
+        dock->setWidget(pane);
         return dock;
     };
 
@@ -790,13 +828,26 @@ void ShellWindow::build_docks()
     behaviours_ = new FixtureBehaviours(backend_, this);
     inspector_panel_->set_behaviours(behaviours_);
 
-    ports_dock_ =
-        make_dock(QStringLiteral("portsDock"), tr("Ports"), ports_panel_);
-    inspector_dock_ = make_dock(QStringLiteral("inspectorDock"),
-                                tr("Inspector"), inspector_panel_);
-    send_dock_ = make_dock(QStringLiteral("sendDock"), tr("Send"), send_panel_);
-    monitor_dock_ =
-        make_dock(QStringLiteral("monitorDock"), tr("Monitor"), monitor_panel_);
+    ports_dock_ = make_pane_dock(QStringLiteral("portsDock"), tr("Ports"),
+                                 ports_panel_, &ports_header_);
+    inspector_dock_ =
+        make_pane_dock(QStringLiteral("inspectorDock"), tr("Inspector"),
+                       inspector_panel_, &inspector_header_);
+    send_dock_ = make_pane_dock(QStringLiteral("sendDock"), tr("Send"),
+                                send_panel_, &send_header_);
+    monitor_dock_ = make_pane_dock(QStringLiteral("monitorDock"), tr("Monitor"),
+                                   monitor_panel_, &monitor_header_);
+
+    // The Ports pane carries its own Add port button.
+    if (QAction* add = registry_.action(QStringLiteral("ports.add")))
+    {
+        auto* button = new QToolButton(ports_header_);
+        button->setDefaultAction(add);
+        button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        button->setObjectName(QStringLiteral("portsAddButton"));
+        button->setProperty("role", QStringLiteral("secondary"));
+        ports_header_->add_action(button);
+    }
 
     ports_dock_->setMinimumWidth(
         Theme::instance().metric(QStringLiteral("layout.ports.default")));
@@ -827,10 +878,10 @@ void ShellWindow::build_docks()
                 selection_.select_port(id);
                 remove_selected_port();
             });
-    ports_panel_->set_menu_state_provider(
-        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
-    topology_->set_menu_state_provider(
-        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
+    ports_panel_->set_menu_state_provider([this](vss::endpoint_id id)
+                                          { return port_menu_state_for(id); });
+    topology_->set_menu_state_provider([this](vss::endpoint_id id)
+                                       { return port_menu_state_for(id); });
     connect(ports_panel_, &PortsPanel::port_action_requested, this,
             [this](vss::endpoint_id id, port_menu_action action)
             { run_port_action(id, action); });
@@ -1041,10 +1092,21 @@ void ShellWindow::build_status()
             [this](bool advanced) { level_.set_advanced(advanced); });
     status_->set_advanced(level_.advanced());
     menuBar()->setFont(Theme::instance().font(text_style::body));
+    // One header row: the menus on the left, the action search and the
+    // Simple and Advanced switch on the right.
     menuBar()->setFixedHeight(
-        Theme::instance().metric(QStringLiteral("menuBar")));
+        Theme::instance().metric(QStringLiteral("header")));
+    if (QWidget* corner = menuBar()->cornerWidget(Qt::TopRightCorner))
+    {
+        if (auto* corner_layout = qobject_cast<QHBoxLayout*>(corner->layout()))
+            corner_layout->addWidget(status_->release_level_switch(corner));
+    }
     toolbar_->setFixedHeight(
-        Theme::instance().metric(QStringLiteral("toolbar")));
+        Theme::instance().metric(QStringLiteral("buttonSmall")) + 4);
+    // The panes sit 8 px in from the window edge, like the gaps between
+    // them.
+    const int gutter = Theme::instance().space(1);
+    setContentsMargins(gutter, 0, gutter, 0);
     status_->setFixedHeight(
         Theme::instance().metric(QStringLiteral("statusBar")));
 }
@@ -1206,8 +1268,8 @@ void ShellWindow::recreate_lost_ports()
         lost_banner_->action_button()->setEnabled(false);
     auto outcome = std::make_shared<vss::result<std::size_t>>(
         vss::make_error_code(vss::errc::unsupported));
-    recreate_thread_ = QThread::create([this, outcome]
-                                       { *outcome = backend_.recreate_lost_ports(); });
+    recreate_thread_ = QThread::create(
+        [this, outcome] { *outcome = backend_.recreate_lost_ports(); });
     connect(recreate_thread_, &QThread::finished, this,
             [this, outcome]
             {
@@ -1313,6 +1375,11 @@ void ShellWindow::update_dock_titles()
             inspector = tr("Inspector %1").arg(port->name);
     }
     inspector_dock_->setWindowTitle(inspector);
+
+    // The Ports pane header shows the count as a badge rather than running
+    // it into the title.  The inspector shows the port's name in its body.
+    if (ports_header_ != nullptr)
+        ports_header_->set_count(static_cast<int>(ports.size()));
 }
 
 QString ShellWindow::document_signature() const
@@ -2193,8 +2260,8 @@ void ShellWindow::show_com_number(vss::endpoint_id id)
     last_signature_ = document_signature();
     set_dirty(true);
     selection_.select_port(id);
-    status_->showMessage(
-        tr("%1 is now %2.").arg(port->name, dialog.com_name()), 3000);
+    status_->showMessage(tr("%1 is now %2.").arg(port->name, dialog.com_name()),
+                         3000);
 }
 
 void ShellWindow::show_release_port(vss::endpoint_id id)
@@ -2488,7 +2555,8 @@ void ShellWindow::new_document()
 {
     if (!confirm_discard())
         return;
-    if (const QString warning = new_setup_warning(ports_in_use(backend_.ports()));
+    if (const QString warning =
+            new_setup_warning(ports_in_use(backend_.ports()));
         !warning.isEmpty() &&
         !ConfirmDialog::ask(tr("Start a new setup?"), warning, tr("Start new"),
                             tr("Cancel"), true, this))

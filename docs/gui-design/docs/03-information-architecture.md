@@ -1,15 +1,15 @@
 # 03 Information architecture
 
 ## Window frame (identical in Simple and Advanced)
-Menu bar 28, toolbar 48, body, status bar 30. Body (8px padding, 8px gaps): top row of three docks, then the Monitor dock below.
-- Ports dock left: 360 wide, minimum 240.
-- Topology dock centre: flexible.
-- Right column 340 wide, minimum 260: Inspector above Send (Send is 162 high). At the 960 by 640 minimum window the right column becomes one tabbed dock (Inspector, Send) 260 wide, the toolbar becomes icon only with a More overflow, and the Monitor is 156 high.
-- Monitor dock bottom: 196 high, minimum 160.
+One 48 high header row (the menus, then the action search and the Simple and Advanced switch on the right), the body, and a 32 high status line. Body (8px gutter, 8px gaps on the window ground): a top row of three rounded panes, then the Monitor pane below. Each pane has its own header in place of a dock title bar; see `10-design-language.md`.
+- Ports pane left: 300 wide, minimum 240.
+- Topology pane centre: flexible. Its tool row (Attach real device, Connect ports, the Advanced tools, Remove port, Remove setup) heads the pane. Add port is in the Ports pane header. New, Open and Save are in File.
+- Right column 320 wide, minimum 260: Inspector above Send (Send is 162 high). At the 960 by 640 minimum window the right column becomes one tabbed dock (Inspector, Send) 260 wide, the tool row becomes icon only with a More overflow, and the Monitor is 156 high.
+- Monitor pane bottom: 196 high, minimum 160.
 - Default window 1280 by 800, minimum 960 by 640. Dock sizes persist through `saveState`.
 
 ## Launcher (empty state)
-Shown in place of the dock grid while the studio has no ports, and from View, Show launcher. Contents: readiness strip, heading "What do you want to do?", four job cards, a Saved setups row with the most recent file, and an Advanced mode hint. Once any port exists the launcher disappears and the dock grid appears. Menu bar, toolbar and status bar are always visible.
+Shown in place of the dock grid while the studio has no ports, and from View, Show launcher. Contents: readiness strip, heading "What do you want to do?", four job cards, a Saved setups row with the most recent file, and an Advanced mode hint. Once any port exists the launcher disappears and the dock grid appears. The header row and status line are always visible.
 
 ## Menu structure (same for both levels)
 Items marked **A** are visible only in Advanced mode and hidden in Simple. **new** means it does not exist in the current GUI. Ctrl is Cmd on macOS.

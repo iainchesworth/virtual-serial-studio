@@ -305,8 +305,17 @@ QFont Theme::font(text_style style) const
         weight_key = QStringLiteral("title");
     else if (style == text_style::portName)
         weight_key = QStringLiteral("portName");
+    else if (style == text_style::heading || style == text_style::group)
+        weight_key = key;
     font.setWeight(static_cast<QFont::Weight>(weights_.value(
         weight_key, weights_.value(QStringLiteral("body"), 400))));
+    if (style == text_style::group)
+    {
+        // Group labels are small capitals with a little tracking, so a short
+        // label still reads as a heading at 12 px.
+        font.setCapitalization(QFont::AllUppercase);
+        font.setLetterSpacing(QFont::PercentageSpacing, 106.0);
+    }
     return font;
 }
 
@@ -351,10 +360,13 @@ QSize Theme::size(const QString& name) const
 QPalette Theme::palette() const
 {
     QPalette value;
-    value.setColor(QPalette::Window, colour(colour_role::ground));
+    // Window is the pane surface: anything that fills its own background (a
+    // scroll area viewport, a page) lands on the pane, and only the main
+    // window paints the ground, from the style sheet.
+    value.setColor(QPalette::Window, colour(colour_role::panel));
     value.setColor(QPalette::WindowText, colour(colour_role::ink));
     value.setColor(QPalette::Base, colour(colour_role::panel));
-    value.setColor(QPalette::AlternateBase, colour(colour_role::sunken));
+    value.setColor(QPalette::AlternateBase, colour(colour_role::panel));
     value.setColor(QPalette::ToolTipBase, colour(colour_role::toastBg));
     value.setColor(QPalette::ToolTipText, colour(colour_role::toastText));
     value.setColor(QPalette::Text, colour(colour_role::ink));
@@ -524,6 +536,12 @@ QString Theme::role_name(colour_role role)
         VSS_THEME_ROLE(toastBg);
         VSS_THEME_ROLE(toastText);
         VSS_THEME_ROLE(toastLink);
+        VSS_THEME_ROLE(fill);
+        VSS_THEME_ROLE(fillHover);
+        VSS_THEME_ROLE(accentText);
+        VSS_THEME_ROLE(violet);
+        VSS_THEME_ROLE(violetSoft);
+        VSS_THEME_ROLE(accentHover);
 #undef VSS_THEME_ROLE
     }
     return {};
@@ -551,6 +569,10 @@ QString Theme::style_name(text_style style)
         return QStringLiteral("portName");
     case text_style::data:
         return QStringLiteral("data");
+    case text_style::heading:
+        return QStringLiteral("heading");
+    case text_style::group:
+        return QStringLiteral("group");
     }
     return QStringLiteral("body");
 }

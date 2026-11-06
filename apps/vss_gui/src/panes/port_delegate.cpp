@@ -44,44 +44,47 @@ struct chip_style
 
 chip_style style_for(port_state_kind kind)
 {
+    // The same tinted capsules as StatusChip: no outline, the mark and text
+    // in the state's own colour.
     const Theme& theme = Theme::instance();
+    const QColor none = Qt::transparent;
     switch (kind)
     {
     case port_state_kind::open:
     case port_state_kind::connected:
         return {theme.colour(colour_role::okSoft),
-                theme.colour(colour_role::okLine),
-                theme.colour(colour_role::noteOkText),
+                none,
+                theme.colour(colour_role::ok),
                 theme.colour(colour_role::ok),
                 false,
                 false};
     case port_state_kind::waiting:
         return {theme.colour(colour_role::amberSoft),
-                theme.colour(colour_role::amberLine),
-                theme.colour(colour_role::noteWarnText),
+                none,
+                theme.colour(colour_role::amber),
                 theme.colour(colour_role::amber),
                 true,
                 false};
     case port_state_kind::studio_only:
     case port_state_kind::closed:
-        return {theme.colour(colour_role::sunken),
-                theme.colour(colour_role::line),
+        return {theme.colour(colour_role::fill),
+                none,
                 theme.colour(colour_role::ink2),
                 theme.colour(colour_role::ink3),
                 true,
                 false};
     case port_state_kind::failed:
         return {theme.colour(colour_role::badSoft),
-                theme.colour(colour_role::badLine),
-                theme.colour(colour_role::noteDangerText),
+                none,
+                theme.colour(colour_role::bad),
                 theme.colour(colour_role::bad),
                 false,
                 true};
     case port_state_kind::fixture:
-        return {theme.colour(colour_role::accentSoft),
-                theme.colour(colour_role::accentLine),
-                theme.colour(colour_role::noteInfoText),
-                theme.colour(colour_role::accentStrong),
+        return {theme.colour(colour_role::violetSoft),
+                none,
+                theme.colour(colour_role::violet),
+                theme.colour(colour_role::violet),
                 true,
                 false};
     }
@@ -103,10 +106,10 @@ void paint_chip(QPainter* painter, const QRect& rect, const QString& text,
     const chip_style style = style_for(kind);
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(QPen(style.edge, 1.0));
+    painter->setPen(Qt::NoPen);
     painter->setBrush(style.fill);
-    painter->drawRoundedRect(QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5),
-                             rect.height() / 2.0, rect.height() / 2.0);
+    painter->drawRoundedRect(QRectF(rect), rect.height() / 2.0,
+                             rect.height() / 2.0);
 
     QFont font = Theme::instance().font(text_style::caption);
     font.setWeight(QFont::DemiBold);
@@ -151,7 +154,7 @@ QRect PortDelegate::copy_rect_for(const QStyleOptionViewItem& option,
     const QString path = index.data(PortModel::path_role).toString();
     const QFont mono = Theme::instance().font(text_style::data);
     const QFontMetrics metrics(mono);
-    const int left = option.rect.left() + 12;
+    const int left = option.rect.left() + (table_ ? 12 : 16);
     const int top = table_ ? option.rect.top() + 20
                            : option.rect.bottom() - (compact_ ? 28 : 30);
     return QRect(left + metrics.horizontalAdvance(path) + 4, top, 24, 24);
@@ -164,9 +167,30 @@ void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
     const bool selected = (option.state & QStyle::State_Selected) != 0;
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->fillRect(option.rect, selected
-                                       ? theme.colour(colour_role::accentSoft)
-                                       : theme.colour(colour_role::panel));
+    const bool hovered = (option.state & QStyle::State_MouseOver) != 0;
+    if (table_)
+    {
+        painter->fillRect(option.rect,
+                          selected  ? theme.colour(colour_role::accentSoft)
+                          : hovered ? theme.colour(colour_role::hover)
+                                    : theme.colour(colour_role::panel));
+    }
+    else
+    {
+        // A list row is a rounded tile inset from the pane edge; selection
+        // and hover fill the tile, and there are no rules between rows.
+        painter->fillRect(option.rect, theme.colour(colour_role::panel));
+        if (selected || hovered)
+        {
+            const qreal radius =
+                Theme::instance().radius(QStringLiteral("inner"));
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(selected ? theme.colour(colour_role::accentSoft)
+                                       : theme.colour(colour_role::hover));
+            painter->drawRoundedRect(QRectF(option.rect).adjusted(6, 2, -6, -2),
+                                     radius, radius);
+        }
+    }
 
     if (table_ && index.column() > 0)
     {
@@ -199,8 +223,8 @@ void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
     const auto kind = static_cast<port_state_kind>(
         index.data(PortModel::state_kind_role).toInt());
 
-    const int left = option.rect.left() + 12;
-    const int right = option.rect.right() - 12;
+    const int left = option.rect.left() + (table_ ? 12 : 16);
+    const int right = option.rect.right() - (table_ ? 12 : 16);
     const int top = option.rect.top() + (compact_ ? 6 : 8);
     const QFont name_font = semibold(
         theme.font(compact_ ? text_style::body : text_style::bodyLarge));
@@ -228,17 +252,15 @@ void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
         // it is the part that needs acting on.
         const QString status = index.data(PortModel::status_role).toString();
         const bool warn = index.data(PortModel::format_warning_role).toBool();
-        const QString line =
-            status.isEmpty() ? role_text
-            : warn           ? status
-                             : role_text + QStringLiteral(". ") + status;
-        painter->setPen(theme.colour(warn ? colour_role::noteWarnText
-                                          : colour_role::ink3));
-        painter->drawText(
-            QRect(left, top + 20, right - left, 18),
-            Qt::AlignLeft | Qt::AlignVCenter,
-            QFontMetrics(theme.font(text_style::caption))
-                .elidedText(line, Qt::ElideRight, right - left));
+        const QString line = status.isEmpty() ? role_text
+                             : warn ? status
+                                    : role_text + QStringLiteral(". ") + status;
+        painter->setPen(
+            theme.colour(warn ? colour_role::noteWarnText : colour_role::ink3));
+        painter->drawText(QRect(left, top + 20, right - left, 18),
+                          Qt::AlignLeft | Qt::AlignVCenter,
+                          QFontMetrics(theme.font(text_style::caption))
+                              .elidedText(line, Qt::ElideRight, right - left));
     }
 
     const int path_y = table_ ? option.rect.top() + 22
@@ -268,8 +290,6 @@ void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
             Qt::AlignRight | Qt::AlignVCenter, serial);
     }
 
-    painter->setPen(QPen(theme.colour(colour_role::line), 1));
-    painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
     painter->restore();
 }
 
