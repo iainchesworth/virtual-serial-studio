@@ -9,8 +9,8 @@
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
-#include "test_framework.hpp"
 #include "support/test_support.hpp"
+#include "test_framework.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -134,9 +134,9 @@ TEST_CASE("studio: every fault stops a fixture with an error")
     using namespace std::chrono_literals;
 
     const fault_kind faults[] = {
-        fault_kind::parity,          fault_kind::framing,
-        fault_kind::overrun,         fault_kind::break_condition,
-        fault_kind::hangup,          fault_kind::disconnect,
+        fault_kind::parity,  fault_kind::framing,
+        fault_kind::overrun, fault_kind::break_condition,
+        fault_kind::hangup,  fault_kind::disconnect,
     };
     for (const fault_kind fault : faults)
     {
@@ -172,7 +172,8 @@ TEST_CASE("studio: faults are refused for other ports")
                make_error_code(errc::not_found));
 }
 
-namespace {
+namespace
+{
 
 /// The bytes of every data event on `port` going `direction`, joined.
 std::string data_on(const event_recorder& events, const std::string& port,
@@ -196,7 +197,8 @@ TEST_CASE("studio: a fixture speaks and the hub carries it along its links")
 
     studio app;
     const auto fixture = app.create_mock_port("device");
-    const auto peer = app.create_virtual_port("peer", virtual_port_kind::loopback);
+    const auto peer =
+        app.create_virtual_port("peer", virtual_port_kind::loopback);
     REQUIRE(fixture);
     REQUIRE(peer);
     REQUIRE(app.connect("device", "peer"));
@@ -264,7 +266,8 @@ TEST_CASE("studio: an echoing fixture sends back what was written to it")
     REQUIRE(!app.fixture_echo(id));
     (*fixture)->write(as_bytes(text));
     REQUIRE(wait_until(
-        [&] { return data_on(events, "device", data_direction::tx).size() == 8; },
+        [&]
+        { return data_on(events, "device", data_direction::tx).size() == 8; },
         2000ms));
     std::this_thread::sleep_for(150ms);
     REQUIRE_EQ(data_on(events, "device", data_direction::rx), text);
@@ -428,8 +431,8 @@ TEST_CASE("studio: documents apply and snapshot")
     REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("loopback"));
 }
 
-
-TEST_CASE("studio: a link's delay and jitter apply and snapshot, on a bus and a monitor")
+TEST_CASE("studio: a link's delay and jitter apply and snapshot, on a bus and "
+          "a monitor")
 {
     config::document document;
     document.name = "unit";
@@ -936,7 +939,8 @@ TEST_CASE("studio: a document that loops through a bus rolls back")
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
 }
 
-TEST_CASE("studio: a COM number is for the driver and is ignored by other ports")
+TEST_CASE(
+    "studio: a COM number is for the driver and is ignored by other ports")
 {
     studio app;
     const auto created =
@@ -952,7 +956,8 @@ TEST_CASE("studio: a COM number is for the driver and is ignored by other ports"
     REQUIRE_EQ(app.snapshot().ports[0].com_number, 0u);
 }
 
-TEST_CASE("studio: a topology that asks for a COM number fails cleanly without the driver")
+TEST_CASE("studio: a topology that asks for a COM number fails cleanly without "
+          "the driver")
 {
     if (vss::driver_available())
         VSS_SKIP("the COM port driver is installed on this machine");
@@ -973,7 +978,8 @@ TEST_CASE("studio: a topology that asks for a COM number fails cleanly without t
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{0});
 }
 
-TEST_CASE("studio: an automatic port takes a COM number only where the driver is")
+TEST_CASE(
+    "studio: an automatic port takes a COM number only where the driver is")
 {
     if (vss::driver_available())
         VSS_SKIP("the COM port driver is installed on this machine");
