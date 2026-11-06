@@ -896,7 +896,7 @@
     <context>
         <name>Benchmark</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="44" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="45" />
             <source>%1 (%2)</source>
             <translation>%1（%2）</translation>
         </message>
@@ -904,219 +904,219 @@
     <context>
         <name>BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
             <source>Benchmark a connection</source>
             <translation>连接基准测试</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="90" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>从一个串口向另一个串口发送数据，并统计收到的数据。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="100" />
             <source>Send from</source>
             <translation>发送自</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="104" />
             <source>Receive on</source>
             <translation>接收于</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="112" />
             <source>Amount of data</source>
             <translation>数据量</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="116" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="121" />
             <source>Chunk size</source>
             <translation>块大小</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>请勿在 Studio 中链接这两个串口。数据必须经过线缆或驱动程序串口对传输，这样计数才有意义。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="132" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="325" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>这两个串口已在 Studio 中链接。请先断开它们。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="147" />
             <source>Not run yet</source>
             <translation>尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="149" />
             <source>Benchmark result: not run yet</source>
             <translation>基准测试结果：尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="152" />
             <source>Not started</source>
             <translation>未开始</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="159" />
             <source>Benchmark progress</source>
             <translation>基准测试进度</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Sent</source>
             <translation>已发送</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Received</source>
             <translation>已接收</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Lost</source>
             <translation>丢失</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
             <source>Throughput</source>
             <translation>吞吐量</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
             <source>Not run</source>
             <translation>未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="184" />
             <source>%1: not run yet</source>
             <translation>%1：尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="192" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>如果收到的数量不足，则测试失败，结果会说明差了多少。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
             <source>Same thing from the command line</source>
             <translation>在命令行中执行同样的操作</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="207" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="391" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="214" />
             <source>Copy result</source>
             <translation>复制结果</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="222" />
             <source>Copied the result.</source>
             <translation>已复制结果。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="225" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="231" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="411" />
             <source>Run</source>
             <translation>运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>添加两个串口以对连接进行基准测试。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="323" />
             <source>Choose two different ports.</source>
             <translation>请选择两个不同的串口。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="403" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="431" />
             <source>%1: %2</source>
             <translation>%1：%2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
             <source>Running</source>
             <translation>运行中</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="528" />
             <source>Benchmark result: %1</source>
             <translation>基准测试结果：%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="512" />
             <source>%1 of %2 received</source>
             <translation>已接收 %1／%2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Failed</source>
             <translation>失败</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="535" />
             <source>Could not finish: %1</source>
             <translation>无法完成：%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="556" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Cancelled</source>
             <translation>已取消</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Passed</source>
             <translation>通过</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="566" />
             <source>Finished at %1</source>
             <translation>完成于 %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="568" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1：已发送 %2，已接收 %3，丢失 %4，吞吐量 %5。</translation>
         </message>
@@ -1901,12 +1901,12 @@
     <context>
         <name>Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="659" />
+            <location filename="../src/widgets/controls.cpp" line="655" />
             <source>%1, expanded</source>
             <translation>%1，已展开</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="660" />
+            <location filename="../src/widgets/controls.cpp" line="656" />
             <source>%1, collapsed</source>
             <translation>%1，已折叠</translation>
         </message>
@@ -2193,6 +2193,164 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>FixtureBehaviours</name>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="100" />
+            <source>Only a mock fixture has a byte generator.</source>
+            <translation>只有模拟设备才有字节生成器。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="112" />
+            <source>The pattern needs pairs of hex digits, such as 55 AA.</source>
+            <translation>格式需要成对的十六进制数字，例如 55 AA。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="119" />
+            <source>Type the line to send.</source>
+            <translation>请输入要发送的行。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="203" />
+            <source>The generator stopped: %1</source>
+            <translation>生成器已停止：%1</translation>
+        </message>
+    </context>
+    <context>
+        <name>FixturePanel</name>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="55" />
+            <source>Fixture behaviour</source>
+            <translation>模拟设备的行为</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="60" />
+            <source>What this fixture does</source>
+            <translation>此模拟设备的作用</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="62" />
+            <source>Echo received bytes</source>
+            <translation>回显收到的字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="71" />
+            <source>Generator</source>
+            <translation>生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="73" />
+            <source>Generator kind</source>
+            <translation>生成器类型</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="74" />
+            <source>Text line</source>
+            <translation>文本行</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="75" />
+            <source>Fixed pattern</source>
+            <translation>固定模式</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="77" />
+            <source>Counter</source>
+            <translation>计数器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="78" />
+            <source>Random bytes</source>
+            <translation>随机字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="82" />
+            <location filename="../src/panes/fixture_panel.cpp" line="190" />
+            <source>Line</source>
+            <translation>行</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="85" />
+            <source>Generator bytes</source>
+            <translation>生成器字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="89" />
+            <source>Bytes</source>
+            <translation>字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="93" />
+            <source> bytes each time</source>
+            <translation> 字节/次</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="94" />
+            <source>Bytes each time</source>
+            <translation>每次的字节数</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="97" />
+            <source>Rate</source>
+            <translation>速率</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="100" />
+            <source> per second</source>
+            <translation> 次/秒</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="101" />
+            <source>Sends per second</source>
+            <translation>每秒发送次数</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="105" />
+            <location filename="../src/panes/fixture_panel.cpp" line="228" />
+            <source>Start generator</source>
+            <translation>启动生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="185" />
+            <source>Pattern</source>
+            <translation>模式</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="186" />
+            <source>Hex, such as 55 AA</source>
+            <translation>十六进制，例如 55 AA</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="191" />
+            <source>Text, sent with CRLF</source>
+            <translation>文本，以 CRLF 结尾发送</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="227" />
+            <source>Stop generator</source>
+            <translation>停止生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="234" />
+            <source>Generating, %1 sent from this fixture.</source>
+            <translation>正在生成，此模拟设备已发送 %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="236" />
+            <source>Stopped after %1.</source>
+            <translation>在 %1 后停止。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="237" />
+            <source>Not running.</source>
+            <translation>未运行。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="241" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+    </context>
+    <context>
         <name>FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -2298,125 +2456,125 @@ Networks: %5</source>
     <context>
         <name>InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="117" />
+            <location filename="../src/panes/inspector_panel.cpp" line="119" />
             <source>Inspector</source>
             <translation>检查器</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="138" />
+            <location filename="../src/panes/inspector_panel.cpp" line="140" />
             <source>Select a port to inspect it.</source>
             <translation>请选择一个串口以查看。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="169" />
+            <location filename="../src/panes/inspector_panel.cpp" line="172" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="173" />
+            <location filename="../src/panes/inspector_panel.cpp" line="176" />
             <source>Path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="183" />
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
+            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="416" />
             <source>path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="188" />
+            <location filename="../src/panes/inspector_panel.cpp" line="191" />
             <source>COM number</source>
             <translation>COM 编号</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="196" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change...</source>
             <translation>更改...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="199" />
+            <location filename="../src/panes/inspector_panel.cpp" line="202" />
             <source>Change COM number</source>
             <translation>更改 COM 编号</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
+            <location filename="../src/panes/inspector_panel.cpp" line="215" />
             <source>Traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="224" />
             <source>Serial</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="238" />
-            <location filename="../src/panes/inspector_panel.cpp" line="422" />
+            <location filename="../src/panes/inspector_panel.cpp" line="241" />
+            <location filename="../src/panes/inspector_panel.cpp" line="439" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;为什么没有数据到达？&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
-            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <location filename="../src/panes/inspector_panel.cpp" line="246" />
+            <location filename="../src/panes/inspector_panel.cpp" line="437" />
             <source>Copy name</source>
             <translation>复制名称</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="262" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port...</source>
             <translation>释放端口...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="265" />
+            <location filename="../src/panes/inspector_panel.cpp" line="268" />
             <source>Release port</source>
             <translation>释放端口</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="275" />
+            <location filename="../src/panes/inspector_panel.cpp" line="278" />
             <source>Control lines</source>
             <translation>控制线</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="297" />
+            <location filename="../src/panes/inspector_panel.cpp" line="300" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="298" />
+            <location filename="../src/panes/inspector_panel.cpp" line="301" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="299" />
+            <location filename="../src/panes/inspector_panel.cpp" line="302" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="322" />
+            <location filename="../src/panes/inspector_panel.cpp" line="325" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;打开线路矩阵和故障&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="413" />
             <source>The engine reported a failure.</source>
             <translation>引擎报告了故障。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
+            <location filename="../src/panes/inspector_panel.cpp" line="417" />
             <source>RX %1, TX %2</source>
             <translation>RX %1，TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <location filename="../src/panes/inspector_panel.cpp" line="426" />
             <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
             <translation>还没有程序打开 %1。程序必须正好打开 %1；其他端口不会收到任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <location filename="../src/panes/inspector_panel.cpp" line="436" />
             <source>Copy name, %1</source>
             <translation>复制名称，%1</translation>
         </message>
@@ -2425,32 +2583,636 @@ Networks: %5</source>
             <translation type="vanished">尚无程序打开 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="434" />
-            <location filename="../src/panes/inspector_panel.cpp" line="440" />
+            <location filename="../src/panes/inspector_panel.cpp" line="451" />
+            <location filename="../src/panes/inspector_panel.cpp" line="457" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="452" />
+            <location filename="../src/panes/inspector_panel.cpp" line="478" />
             <source>This port does not support control lines.</source>
             <translation>此串口不支持控制线。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="480" />
-            <location filename="../src/panes/inspector_panel.cpp" line="494" />
+            <location filename="../src/panes/inspector_panel.cpp" line="506" />
+            <location filename="../src/panes/inspector_panel.cpp" line="520" />
             <source>%1 on</source>
             <translation>%1 开</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="481" />
-            <location filename="../src/panes/inspector_panel.cpp" line="495" />
+            <location filename="../src/panes/inspector_panel.cpp" line="507" />
+            <location filename="../src/panes/inspector_panel.cpp" line="521" />
             <source>%1 off</source>
             <translation>%1 关</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="514" />
+            <location filename="../src/panes/inspector_panel.cpp" line="540" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
+        </message>
+    </context>
+    <context>
+        <name>JobForm</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="264" />
+            <source>Your program</source>
+            <translation>你的程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>Second program</source>
+            <translation>第二个程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>First program</source>
+            <translation>第一个程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="270" />
+            <source>Program</source>
+            <translation>程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="271" />
+            <location filename="../src/simple/job_form.cpp" line="274" />
+            <location filename="../src/simple/job_form.cpp" line="278" />
+            <location filename="../src/simple/job_form.cpp" line="288" />
+            <location filename="../src/simple/job_form.cpp" line="962" />
+            <source>Device</source>
+            <translation>设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="273" />
+            <location filename="../src/simple/job_form.cpp" line="289" />
+            <source>Programs</source>
+            <translation>程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="282" />
+            <source>On the line</source>
+            <translation>在线路上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="285" />
+            <source>Receiver</source>
+            <translation>接收方</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="286" />
+            <source>Senders</source>
+            <translation>发送方</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="404" />
+            <location filename="../src/simple/job_form.cpp" line="416" />
+            <source>%1 (%2)</source>
+            <translation>%1（%2）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="414" />
+            <source>a new port</source>
+            <translation>一个新串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="419" />
+            <location filename="../src/simple/job_form.cpp" line="1139" />
+            <source>the device</source>
+            <translation>该设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="422" />
+            <source>the network device</source>
+            <translation>网络设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>Back to the setup</source>
+            <translation>返回配置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>All jobs</source>
+            <translation>所有任务</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="461" />
+            <location filename="../src/simple/job_form.cpp" line="463" />
+            <source>Change %1</source>
+            <translation>更改 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="470" />
+            <source>Cancel</source>
+            <translation>取消</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Apply</source>
+            <translation>应用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Create</source>
+            <translation>创建</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="508" />
+            <source>On the other end</source>
+            <translation>在另一端</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="510" />
+            <source>I'll type to it from this window</source>
+            <translation>我在此窗口中向它输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="511" />
+            <source>What your program sends shows here, and what you type goes to your program. Use it to see that your program sends what you expect.</source>
+            <translation>你的程序发送的内容会显示在这里，你输入的内容会发送给你的程序。可用它确认程序发送的内容是否符合预期。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="516" />
+            <source>Send everything straight back</source>
+            <translation>全部原样返回</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="517" />
+            <source>Whatever your program sends comes back to it at once. A quick test that its sending and receiving both work.</source>
+            <translation>你的程序发送的内容会立即返回给它。可快速测试它的发送和接收是否都正常。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="528" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="537" />
+            <source>You can connect it to something else later with Change.</source>
+            <translation>之后可以用“更改”把它连接到别的对象。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="543" />
+            <source>Other computers connect to</source>
+            <translation>其他计算机连接到</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="545" />
+            <location filename="../src/simple/job_form.cpp" line="549" />
+            <location filename="../src/simple/job_form.cpp" line="924" />
+            <source>Network port</source>
+            <translation>网络串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="562" />
+            <source>Other computers connect to this PC's address on this port. 4001 is common for serial over the network.</source>
+            <translation>其他计算机通过此 PC 的地址和这个端口连接。网络串口常用 4001。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="585" />
+            <source>Device speed (baud rate)</source>
+            <translation>设备速度（波特率）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="587" />
+            <source>The device's manual gives it. If text looks garbled later, this is usually why.</source>
+            <translation>设备手册里有这个值。之后如果文字显示乱码，通常就是这个原因。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="591" />
+            <source>Other device settings</source>
+            <translation>其他设备设置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="600" />
+            <location filename="../src/simple/job_form.cpp" line="613" />
+            <source>None</source>
+            <translation>无</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="601" />
+            <source>Odd</source>
+            <translation>奇</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="602" />
+            <source>Even</source>
+            <translation>偶</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="614" />
+            <source>Hardware (RTS and CTS)</source>
+            <translation>硬件（RTS 和 CTS）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="616" />
+            <source>Software (XON and XOFF)</source>
+            <translation>软件（XON 和 XOFF）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="620" />
+            <source>Data bits</source>
+            <translation>数据位</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="621" />
+            <source>Parity</source>
+            <translation>奇偶校验</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="622" />
+            <source>Stop bits</source>
+            <translation>停止位</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="623" />
+            <source>Flow control</source>
+            <translation>流控制</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="643" />
+            <location filename="../src/simple/job_form.cpp" line="646" />
+            <source>Name (optional)</source>
+            <translation>名称（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="655" />
+            <source>Also</source>
+            <translation>另外</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="665" />
+            <source>Handy for checking the device works before your own program is ready. What you type goes to the device, and its replies show here and in your programs.</source>
+            <translation>适合在你自己的程序就绪之前检查设备是否正常。你输入的内容会发送到设备，它的回复会显示在这里和你的程序中。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="672" />
+            <source>Show me the data going through</source>
+            <translation>显示经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="680" />
+            <source>A live list of what is sent each way, on the setup's page. It only looks, so it changes nothing. You can turn it on later too.</source>
+            <translation>在配置页面上实时列出双向发送的内容。它只是查看，不会改变任何设置。之后也可以再开启。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="748" />
+            <source>Add a program</source>
+            <translation>添加程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="758" />
+            <source>Add a device</source>
+            <translation>添加设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="768" />
+            <source>Up to %1. You can add more later.</source>
+            <translation>最多 %1 个。之后可以再添加。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="800" />
+            <source>Port name</source>
+            <translation>串口名称</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="816" />
+            <source>New port</source>
+            <translation>新串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="823" />
+            <source>Program, e.g. PuTTY (optional)</source>
+            <translation>程序，例如 PuTTY（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="824" />
+            <source>Which program, optional</source>
+            <translation>哪个程序（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="848" />
+            <location filename="../src/simple/job_form.cpp" line="1010" />
+            <source>Remove %1</source>
+            <translation>移除 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="849" />
+            <source>Remove</source>
+            <translation>移除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="859" />
+            <source>Some older programs only list COM1 to COM9.</source>
+            <translation>一些较旧的程序只列出 COM1 到 COM9。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="862" />
+            <source>Studio picks the name, such as /dev/pts/3 or COM7, and shows it when the port is ready.</source>
+            <translation>Studio 会选择名称，例如 /dev/pts/3 或 COM7，并在串口就绪时显示。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="882" />
+            <source>Where is the device</source>
+            <translation>设备在哪里</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="883" />
+            <source>Plugged into this PC</source>
+            <translation>已插在此 PC 上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="884" />
+            <source>On the network</source>
+            <translation>在网络上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="910" />
+            <source>Address, such as 192.168.1.50</source>
+            <translation>地址，例如 192.168.1.50</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="911" />
+            <source>Device address</source>
+            <translation>设备地址</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="935" />
+            <source>How it talks</source>
+            <translation>通信方式</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="952" />
+            <source>For a serial server box, such as a Moxa or Lantronix. Its manual gives the address and port. Choose RFC 2217 if the box supports it, so programs can change the baud rate.</source>
+            <translation>适用于串口服务器设备，例如 Moxa 或 Lantronix。地址和端口见其手册。如果设备支持，请选择 RFC 2217，这样程序就能更改波特率。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="973" />
+            <source>%1  %2</source>
+            <translation>%1  %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="978" />
+            <source>No devices found</source>
+            <translation>未找到设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="991" />
+            <source>Refresh</source>
+            <translation>刷新</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1018" />
+            <source>Not listed? Plug it in, then choose Refresh.</source>
+            <translation>没有列出？请先插上设备，然后点击“刷新”。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1138" />
+            <source>Let me type to %1 from this window</source>
+            <translation>让我在此窗口中向 %1 输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1142" />
+            <source>Studio names it for you</source>
+            <translation>由 Studio 为你命名</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1157" />
+            <source>Sends it straight back</source>
+            <translation>原样发回</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1158" />
+            <location filename="../src/simple/job_form.cpp" line="1161" />
+            <source>You, in this window</source>
+            <translation>你，在此窗口中</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1164" />
+            <source>Other computers, port %1</source>
+            <translation>其他计算机，端口 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1204" />
+            <source> Your program opens &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> 你的程序打开 &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1206" />
+            <source> Your programs open &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> 你的各个程序打开 &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1209" />
+            <source>, not %1</source>
+            <translation>，而不是 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1222" />
+            <source>Studio makes &lt;b&gt;%1&lt;/b&gt; for your program to open. </source>
+            <translation>Studio 会创建 &lt;b&gt;%1&lt;/b&gt; 供你的程序打开。 </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1224" />
+            <source>Whatever it sends comes straight back to it.</source>
+            <translation>它发送的内容会立即返回给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1225" />
+            <source>What it sends shows in this window, and what you type here goes to it.</source>
+            <translation>它发送的内容显示在此窗口中，你在这里输入的内容会发送给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1228" />
+            <source>What &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Open one in each program.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的内容会到达 &lt;b&gt;%2&lt;/b&gt;，反过来也一样。请在每个程序中各打开一个。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1232" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt; and passes its data to and from &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>Studio 会打开 &lt;b&gt;%1&lt;/b&gt;，并在它与 &lt;b&gt;%2&lt;/b&gt; 之间双向传递数据。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1237" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; sends goes to &lt;b&gt;%2&lt;/b&gt;. Whatever any of them sends goes to the device.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的所有内容都会发到 &lt;b&gt;%2&lt;/b&gt;。其中任何一个发送的内容都会发到设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1242" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt;. On the next page, type to it and read its replies.</source>
+            <translation>Studio 会打开 &lt;b&gt;%1&lt;/b&gt;。在下一页中，你可以向它输入并查看它的回复。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1246" />
+            <source>Other computers connect to this PC on network port &lt;b&gt;%1&lt;/b&gt; and talk to &lt;b&gt;%2&lt;/b&gt;. Data goes both ways.</source>
+            <translation>其他计算机通过网络端口 &lt;b&gt;%1&lt;/b&gt; 连接到此 PC，并与 &lt;b&gt;%2&lt;/b&gt; 通信。数据双向传输。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1251" />
+            <source>&lt;b&gt;%1&lt;/b&gt; share one line. Each hears what the others send, and none hears itself.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 共用一条线路。每个都能收到其他成员发送的内容，但收不到自己发送的内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1256" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; send arrives at &lt;b&gt;%2&lt;/b&gt;, in the order it arrives. Nothing goes back to them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的所有内容都会按到达顺序送到 &lt;b&gt;%2&lt;/b&gt;。不会有内容返回给它们。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1261" />
+            <source>&lt;b&gt;%1&lt;/b&gt; can all send to &lt;b&gt;%2&lt;/b&gt;, but only one at a time. You choose which on the next page. What the device sends back does not reach them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 都可以向 &lt;b&gt;%2&lt;/b&gt; 发送，但一次只能有一个。你在下一页选择是哪一个。设备回传的内容不会到达它们。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1299" />
+            <source>%1 stay open. Programs using them are not interrupted.</source>
+            <translation>%1 保持打开。使用它们的程序不会受到影响。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/job_form.cpp" line="1302" />
+            <source>%n new port(s) or device(s).</source>
+            <translation>
+                <numerusform>%n 个新串口或设备。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1304" />
+            <source>Closes %1. A program using one of them loses it.</source>
+            <translation>关闭 %1。使用其中某个串口的程序将失去它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1307" />
+            <source>No ports open or close.</source>
+            <translation>不会打开或关闭任何串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1308" />
+            <source>What Apply changes: %1</source>
+            <translation>“应用”会更改：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1324" />
+            <source>Choose a device. Plug it in, then choose Refresh.</source>
+            <translation>请选择设备。先插上设备，然后点击“刷新”。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1327" />
+            <source>%1 is chosen twice. Choose each device once.</source>
+            <translation>%1 被选择了两次。每个设备只能选择一次。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1335" />
+            <source>Enter the device's network address.</source>
+            <translation>请输入设备的网络地址。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1340" />
+            <source>COM%1 is chosen twice. Choose another name.</source>
+            <translation>COM%1 被选择了两次。请选择其他名称。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1348" />
+            <source>Sending everything back is not available in this build.</source>
+            <translation>此版本不支持原样返回所有内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1367" />
+            <source>Could not change the setup. %1 What was there before was put back where Studio could.</source>
+            <translation>无法更改配置。%1 Studio 已尽可能恢复了原来的内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1370" />
+            <source>Could not set it up. %1 Nothing was changed.</source>
+            <translation>无法完成设置。%1 未做任何更改。</translation>
+        </message>
+    </context>
+    <context>
+        <name>JobGrid</name>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="217" />
+            <source>What do you want to do?</source>
+            <translation>您想做什么？</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="222" />
+            <source>Choose a job. Studio sets it up and tells you which port to open in your program. Everything you set up is listed on the left, where you can change or remove it.</source>
+            <translation>请选择一项任务。Studio 会完成设置，并告诉你在程序中打开哪个串口。你设置的所有内容都列在左侧，可以在那里更改或移除。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="228" />
+            <location filename="../src/simple/job_grid.cpp" line="341" />
+            <source>Details</source>
+            <translation>详细信息</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="268" />
+            <source>My program needs a serial port</source>
+            <translation>我的程序需要一个串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="270" />
+            <source>I have a serial device</source>
+            <translation>我有一个串口设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="273" />
+            <source>Several programs or devices at once</source>
+            <translation>同时连接多个程序或设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="278" />
+            <source>See the data on a port</source>
+            <translation>查看串口上的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="279" />
+            <source>See what goes in and out of a port you already set up. Read only, so nothing changes for the programs using it.</source>
+            <translation>查看进出你已设置好的串口的内容。只读，因此不会影响正在使用它的程序。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="285" />
+            <source>Check this PC is ready</source>
+            <translation>检查此 PC 是否就绪</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="286" />
+            <source>Find out whether this PC can make ports that other programs can open, and what to do if not.</source>
+            <translation>了解此 PC 能否创建供其他程序打开的串口，以及不能时该怎么办。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="291" />
+            <source>Look and check</source>
+            <translation>查看与检查</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="297" />
+            <location filename="../src/simple/job_grid.cpp" line="303" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="308" />
+            <source>Open a saved setup…</source>
+            <translation>打开已保存的配置…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="312" />
+            <source>Start from an example…</source>
+            <translation>从示例开始…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="339" />
+            <source>This PC can make ports that other programs can open.</source>
+            <translation>此 PC 可以创建供其他程序打开的串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="346" />
+            <source>Other programs cannot see new ports until a driver is installed.</source>
+            <translation>安装驱动程序之前，其他程序看不到新串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="349" />
+            <source>Open setup check</source>
+            <translation>打开配置检查</translation>
         </message>
     </context>
     <context>
@@ -2985,177 +3747,177 @@ Networks: %5</source>
     <context>
         <name>MonitorPanel</name>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="147" />
+            <location filename="../src/panes/monitor_panel.cpp" line="294" />
             <source>Monitor</source>
             <translation>监视器</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="154" />
+            <location filename="../src/panes/monitor_panel.cpp" line="155" />
             <source>Monitor tabs</source>
             <translation>监视器标签页</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="167" />
-            <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="168" />
+            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Pause</source>
             <translation>暂停</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="170" />
-            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="173" />
+            <location filename="../src/panes/monitor_panel.cpp" line="221" />
             <source>Clear</source>
             <translation>清除</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="173" />
-            <location filename="../src/panes/monitor_panel.cpp" line="212" />
+            <location filename="../src/panes/monitor_panel.cpp" line="176" />
+            <location filename="../src/panes/monitor_panel.cpp" line="215" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="174" />
-            <location filename="../src/panes/monitor_panel.cpp" line="219" />
+            <location filename="../src/panes/monitor_panel.cpp" line="177" />
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
             <source>Follow</source>
             <translation>跟随</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="441" />
-            <location filename="../src/panes/monitor_panel.cpp" line="454" />
+            <location filename="../src/panes/monitor_panel.cpp" line="179" />
+            <location filename="../src/panes/monitor_panel.cpp" line="446" />
+            <location filename="../src/panes/monitor_panel.cpp" line="459" />
             <source>All ports</source>
             <translation>所有串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="194" />
+            <location filename="../src/panes/monitor_panel.cpp" line="197" />
             <source>Filter by port</source>
             <translation>按串口筛选</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="197" />
+            <location filename="../src/panes/monitor_panel.cpp" line="200" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="198" />
+            <location filename="../src/panes/monitor_panel.cpp" line="201" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="199" />
+            <location filename="../src/panes/monitor_panel.cpp" line="202" />
             <source>Dropped</source>
             <translation>已丢弃</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="204" />
-            <location filename="../src/panes/monitor_panel.cpp" line="205" />
+            <location filename="../src/panes/monitor_panel.cpp" line="207" />
+            <location filename="../src/panes/monitor_panel.cpp" line="208" />
             <source>Search payload</source>
             <translation>搜索负载</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="210" />
+            <location filename="../src/panes/monitor_panel.cpp" line="213" />
             <source>Preview format</source>
             <translation>预览格式</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="211" />
+            <location filename="../src/panes/monitor_panel.cpp" line="214" />
             <source>ASCII</source>
             <translation>ASCII</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="221" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
             <source>Export</source>
             <translation>导出</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="250" />
+            <location filename="../src/panes/monitor_panel.cpp" line="255" />
             <source>Traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="281" />
-            <location filename="../src/panes/monitor_panel.cpp" line="531" />
+            <location filename="../src/panes/monitor_panel.cpp" line="286" />
+            <location filename="../src/panes/monitor_panel.cpp" line="544" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>暂无流量。请发送一些字节，或在程序中打开该串口。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="293" />
-            <location filename="../src/panes/monitor_panel.cpp" line="296" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="301" />
             <source>Log</source>
             <translation>日志</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>拓扑 JSON 编辑器将随 WP7 提供。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="303" />
+            <location filename="../src/panes/monitor_panel.cpp" line="308" />
             <source>Topology JSON</source>
             <translation>拓扑 JSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Resume</source>
             <translation>继续</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="527" />
+            <location filename="../src/panes/monitor_panel.cpp" line="540" />
             <source>No traffic matches these filters.</source>
             <translation>没有符合这些筛选条件的流量。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="555" />
+            <location filename="../src/panes/monitor_panel.cpp" line="568" />
             <source>link</source>
             <translation>链接</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="591" />
+            <location filename="../src/panes/monitor_panel.cpp" line="604" />
             <source>Export visible traffic</source>
             <translation>导出可见流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="592" />
+            <location filename="../src/panes/monitor_panel.cpp" line="605" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>文本文件 (*.txt);;所有文件 (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="598" />
-            <location filename="../src/panes/monitor_panel.cpp" line="638" />
+            <location filename="../src/panes/monitor_panel.cpp" line="611" />
+            <location filename="../src/panes/monitor_panel.cpp" line="651" />
             <source>Could not save %1.</source>
             <translation>无法保存 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="602" />
-            <location filename="../src/panes/monitor_panel.cpp" line="641" />
+            <location filename="../src/panes/monitor_panel.cpp" line="615" />
+            <location filename="../src/panes/monitor_panel.cpp" line="654" />
             <source>Exported %1.</source>
             <translation>已导出 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="224" />
-            <location filename="../src/panes/monitor_panel.cpp" line="226" />
-            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <location filename="../src/panes/monitor_panel.cpp" line="229" />
+            <location filename="../src/panes/monitor_panel.cpp" line="231" />
+            <location filename="../src/panes/monitor_panel.cpp" line="625" />
             <source>Export capture</source>
             <translation>导出捕获</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <location filename="../src/panes/monitor_panel.cpp" line="233" />
             <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
             <translation>将显示的流量连同每个字节及其精确时间保存到捕获文件。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <location filename="../src/panes/monitor_panel.cpp" line="620" />
             <source>Capture text (*.cap)</source>
             <translation>捕获文本 (*.cap)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <location filename="../src/panes/monitor_panel.cpp" line="621" />
             <source>Comma separated values (*.csv)</source>
             <translation>逗号分隔值 (*.csv)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <location filename="../src/panes/monitor_panel.cpp" line="622" />
             <source>JSON Lines (*.jsonl)</source>
             <translation>JSON Lines (*.jsonl)</translation>
         </message>
@@ -4016,7 +4778,7 @@ Networks: %5</source>
     <context>
         <name>PickCard</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="256" />
+            <location filename="../src/widgets/controls.cpp" line="259" />
             <source>%1. %2</source>
             <translation>%1。%2</translation>
         </message>
@@ -4024,125 +4786,125 @@ Networks: %5</source>
     <context>
         <name>PortModel</name>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="365" />
+            <location filename="../src/panes/port_model.cpp" line="364" />
             <source>Program set %1</source>
             <translation>程序设置：%1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="373" />
+            <location filename="../src/panes/port_model.cpp" line="372" />
             <source>Clients connected: %1</source>
             <translation>已连接的客户端：%1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="371" />
+            <location filename="../src/panes/port_model.cpp" line="370" />
             <source>No remote connected</source>
             <translation>没有远程连接</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="376" />
+            <location filename="../src/panes/port_model.cpp" line="375" />
             <source>Differs from %1 in baud rate or framing</source>
             <translation>与 %1 的波特率或帧格式不同</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="182" />
+            <location filename="../src/panes/port_model.cpp" line="188" />
             <source>%1, %2, %3</source>
             <translation>%1，%2，%3</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="218" />
+            <location filename="../src/panes/port_model.cpp" line="232" />
             <source>Port</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="220" />
+            <location filename="../src/panes/port_model.cpp" line="234" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="222" />
+            <location filename="../src/panes/port_model.cpp" line="236" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="224" />
+            <location filename="../src/panes/port_model.cpp" line="238" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="226" />
+            <location filename="../src/panes/port_model.cpp" line="240" />
             <source>Dropped</source>
             <translation>已丢弃</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="259" />
+            <location filename="../src/panes/port_model.cpp" line="273" />
             <source>Failed</source>
             <translation>失败</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="261" />
+            <location filename="../src/panes/port_model.cpp" line="275" />
             <source>Fixture</source>
             <translation>模拟设备</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="263" />
+            <location filename="../src/panes/port_model.cpp" line="277" />
             <source>Studio only</source>
             <translation>仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="269" />
+            <location filename="../src/panes/port_model.cpp" line="283" />
             <source>Waiting for program</source>
             <translation>等待程序</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="271" />
+            <location filename="../src/panes/port_model.cpp" line="285" />
             <source>Program connected</source>
             <translation>程序已连接</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="275" />
+            <location filename="../src/panes/port_model.cpp" line="289" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="278" />
-            <location filename="../src/panes/port_model.cpp" line="279" />
+            <location filename="../src/panes/port_model.cpp" line="292" />
+            <location filename="../src/panes/port_model.cpp" line="293" />
             <source>Closed</source>
             <translation>已关闭</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="309" />
+            <location filename="../src/panes/port_model.cpp" line="323" />
             <source>Fixture (mock)</source>
             <translation>模拟设备（模拟）</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/port_model.cpp" line="314" />
+            <location filename="../src/panes/port_model.cpp" line="328" />
             <source>Real device, shared with %n programs</source>
             <translation>
                 <numerusform>真实设备，与 %n 个程序共享</numerusform>
             </translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="317" />
+            <location filename="../src/panes/port_model.cpp" line="331" />
             <source>Real device</source>
             <translation>真实设备</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="321" />
+            <location filename="../src/panes/port_model.cpp" line="335" />
             <source>Network port</source>
             <translation>网络串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="326" />
+            <location filename="../src/panes/port_model.cpp" line="340" />
             <source>In-process port. Only Studio can open it</source>
             <translation>进程内串口。只有 Studio 可以打开</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="328" />
+            <location filename="../src/panes/port_model.cpp" line="342" />
             <source>Virtual port, linked to %1</source>
             <translation>虚拟串口，已链接到 %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="329" />
+            <location filename="../src/panes/port_model.cpp" line="343" />
             <source>Virtual port</source>
             <translation>虚拟串口</translation>
         </message>
@@ -4150,161 +4912,161 @@ Networks: %5</source>
     <context>
         <name>PortReadyDialog</name>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="86" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="87" />
             <source>%1 is ready inside Studio</source>
             <translation>%1 已在 Studio 内就绪</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="88" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="89" />
             <source>Your port "%1" now exists inside Studio.</source>
             <translation>您的串口“%1”现已在 Studio 内创建。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="94" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="102" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="95" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="103" />
             <source>Your port "%1" now exists, and other programs can open it.</source>
             <translation>您的串口“%1”现已创建，其他程序可以打开它。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="100" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="101" />
             <source>%1 is ready</source>
             <translation>%1 已就绪</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="136" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
             <source>This port is Studio only</source>
             <translation>此串口仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="138" />
             <source>Open this port in your program</source>
             <translation>在您的程序中打开此串口</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="151" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
             <source>This port is Studio only. %1</source>
             <translation>此串口仅限 Studio。%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="153" />
             <source>Open this port in your program. %1</source>
             <translation>在您的程序中打开此串口。%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="158" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="161" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="159" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="164" />
             <source>Copy name</source>
             <translation>复制名称</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="160" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="163" />
             <source>Copy name, %1</source>
             <translation>复制名称，%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="168" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="171" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>其他程序无法打开此端口。它只存在于 Studio 内部。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="204" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>其他程序无法打开此串口。请安装驱动程序以创建它们可以打开的串口。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="208" />
             <source>Open setup check</source>
             <translation>打开配置检查</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="220" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>在您的程序中，选择 &lt;b&gt;%1&lt;/b&gt; 作为串口。波特率等设置由该程序选择。只要 Virtual Serial Studio 在运行，该串口就保持可用。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="226" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>在您的程序中，选择 %1 作为串口。波特率等设置由该程序选择。只要 Virtual Serial Studio 在运行，该串口就保持可用。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="236" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>只要 Virtual Serial Studio 在运行，此路径就存在。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="259" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="383" />
             <source>Show details</source>
             <translation>显示详细信息</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Name</source>
             <translation>名称</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Kind</source>
             <translation>类型</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="274" />
             <source>Path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>已保存配置 (JSON) 中的条目</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="289" />
             <source>Same thing from the command line</source>
             <translation>在命令行中执行同样的操作</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="294" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="317" />
             <source>Connect %1 to something</source>
             <translation>将 %1 连接到其他对象</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="325" />
             <source>Create another</source>
             <translation>再创建一个</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="332" />
             <source>Done</source>
             <translation>完成</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>Waiting</source>
             <translation>等待中</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
             <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
             <translation>还没有程序打开 %1。请在您的程序中选择正好 %1。有程序打开后，此面板会更新。</translation>
         </message>
@@ -4313,53 +5075,53 @@ Networks: %5</source>
             <translation type="vanished">尚无程序打开 %1。有程序打开时，此面板会更新。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="365" />
             <source>Program connected</source>
             <translation>程序已连接</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="366" />
             <source>A program is using %1.</source>
             <translation>有程序正在使用 %1。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="382" />
             <source>Hide details</source>
             <translation>隐藏详细信息</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>In-process loopback</source>
             <translation>进程内回环</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>Pseudo terminal</source>
             <translation>伪终端</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="397" />
             <source>Windows driver</source>
             <translation>Windows 驱动程序</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="402" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>自动，已解析为 Studio 驱动程序</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Auto, resolved to com0com</source>
             <translation>自动，解析为 com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="406" />
             <source>Real device</source>
             <translation>真实设备</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="407" />
             <source>Auto</source>
             <translation>自动</translation>
         </message>
@@ -4390,23 +5152,38 @@ Networks: %5</source>
     <context>
         <name>PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="61" />
             <location filename="../src/panes/ports_panel.cpp" line="62" />
+            <location filename="../src/panes/ports_panel.cpp" line="63" />
             <source>Filter ports</source>
             <translation>筛选串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="81" />
+            <location filename="../src/panes/ports_panel.cpp" line="82" />
             <source>Ports</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="104" />
+            <location filename="../src/panes/ports_panel.cpp" line="108" />
             <source>Ports table</source>
             <translation>串口表</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="301" />
+            <location filename="../src/panes/ports_panel.cpp" line="309" />
+            <source>Port actions</source>
+            <translation>串口操作</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="310" />
+            <source>Inspect</source>
+            <translation>检查</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="319" />
+            <source>Copy path</source>
+            <translation>复制路径</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="341" />
             <source>Copied %1.</source>
             <translation>已复制 %1。</translation>
         </message>
@@ -4449,103 +5226,103 @@ Networks: %5</source>
             <translation>已丢弃</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="341" />
+            <location filename="../src/widgets/controls.cpp" line="344" />
             <source>%1 on</source>
             <translation>%1 开</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="342" />
+            <location filename="../src/widgets/controls.cpp" line="345" />
             <source>%1 off</source>
             <translation>%1 关</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="435" />
+            <location filename="../src/widgets/controls.cpp" line="438" />
             <source>Step %1 of %2, %3</source>
             <translation>第 %1 步，共 %2 步，%3</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="57" />
+            <location filename="../src/panes/inspector_panel.cpp" line="59" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="59" />
+            <location filename="../src/panes/inspector_panel.cpp" line="61" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="61" />
+            <location filename="../src/panes/inspector_panel.cpp" line="63" />
             <source>CTS</source>
             <translation>CTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="63" />
+            <location filename="../src/panes/inspector_panel.cpp" line="65" />
             <source>DSR</source>
             <translation>DSR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="65" />
+            <location filename="../src/panes/inspector_panel.cpp" line="67" />
             <source>DCD</source>
             <translation>DCD</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="67" />
+            <location filename="../src/panes/inspector_panel.cpp" line="69" />
             <source>RI</source>
             <translation>RI</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="69" />
+            <location filename="../src/panes/inspector_panel.cpp" line="71" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="102" />
+            <location filename="../src/panes/inspector_panel.cpp" line="104" />
             <location filename="../src/dialogs/common.cpp" line="100" />
             <source>no flow control</source>
             <translation>无流控制</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="104" />
+            <location filename="../src/panes/inspector_panel.cpp" line="106" />
             <source>software flow control</source>
             <translation>软件流控制</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="106" />
+            <location filename="../src/panes/inspector_panel.cpp" line="108" />
             <source>hardware flow control</source>
             <translation>硬件流控制</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="51" />
+            <location filename="../src/panes/monitor_panel.cpp" line="52" />
             <source>started</source>
             <translation>已启动</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="53" />
+            <location filename="../src/panes/monitor_panel.cpp" line="54" />
             <source>stopped</source>
             <translation>已停止</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="55" />
+            <location filename="../src/panes/monitor_panel.cpp" line="56" />
             <source>data</source>
             <translation>数据</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="57" />
+            <location filename="../src/panes/monitor_panel.cpp" line="58" />
             <source>lines</source>
             <translation>线路</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="59" />
+            <location filename="../src/panes/monitor_panel.cpp" line="60" />
             <source>error</source>
             <translation>错误</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="61" />
+            <location filename="../src/panes/monitor_panel.cpp" line="62" />
             <source>stats</source>
             <translation>统计</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="63" />
+            <location filename="../src/panes/monitor_panel.cpp" line="64" />
             <source>log</source>
             <translation>日志</translation>
         </message>
@@ -4784,7 +5561,7 @@ Networks: %5</source>
             <translation>可能有其他程序正在使用该设备。未做任何更改。请关闭该程序后重试。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="114" />
+            <location filename="../src/shell/shell_window.cpp" line="119" />
             <source>untitled</source>
             <translation>未命名</translation>
         </message>
@@ -4976,78 +5753,135 @@ Networks: %5</source>
     <context>
         <name>SendPanel</name>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="70" />
-            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <location filename="../src/panes/send_panel.cpp" line="71" />
+            <location filename="../src/panes/send_panel.cpp" line="98" />
             <source>Send</source>
             <translation>发送</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="78" />
             <source>Send to port</source>
-            <translation>发送到串口</translation>
+            <translation type="vanished">发送到串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="90" />
+            <location filename="../src/panes/send_panel.cpp" line="81" />
+            <source>Sending from</source>
+            <translation>发送自</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <source>Pin</source>
+            <translation>固定</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="84" />
+            <location filename="../src/panes/send_panel.cpp" line="86" />
+            <source>Keep sending from this port when you select another.</source>
+            <translation>选择其他串口后，仍从此串口发送。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="93" />
+            <source>Send from port</source>
+            <translation>从串口发送</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="107" />
             <source>Bytes to send</source>
             <translation>要发送的字节</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="91" />
+            <location filename="../src/panes/send_panel.cpp" line="108" />
             <source>Type text, or hex if Hex is ticked</source>
             <translation>输入文本；勾选 Hex 时输入十六进制</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="107" />
+            <location filename="../src/panes/send_panel.cpp" line="124" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="108" />
+            <location filename="../src/panes/send_panel.cpp" line="125" />
             <source>Add CRLF</source>
             <translation>添加 CRLF</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="112" />
+            <location filename="../src/panes/send_panel.cpp" line="129" />
             <source>Repeat</source>
             <translation>重复</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="116" />
+            <location filename="../src/panes/send_panel.cpp" line="133" />
             <source> ms</source>
             <translation> ms</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="117" />
+            <location filename="../src/panes/send_panel.cpp" line="134" />
             <source>Repeat interval</source>
             <translation>重复间隔</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="126" />
-            <location filename="../src/panes/send_panel.cpp" line="131" />
+            <location filename="../src/panes/send_panel.cpp" line="148" />
+            <source>Repeat status</source>
+            <translation>重复状态</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="150" />
+            <location filename="../src/panes/send_panel.cpp" line="151" />
+            <source>Stop repeat</source>
+            <translation>停止重复</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="158" />
+            <location filename="../src/panes/send_panel.cpp" line="163" />
             <source>Saved sends</source>
             <translation>已保存的发送项</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="210" />
+            <location filename="../src/panes/send_panel.cpp" line="240" />
+            <source>The repeat stopped because %1 is gone.</source>
+            <translation>重复已停止，因为 %1 已不存在。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="492" />
             <source>%1 (%2)</source>
             <translation>%1（%2）</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="321" />
             <source>Hex needs pairs of digits, such as 48 65 6C 6C 6F.</source>
             <translation>Hex 需要成对的数字，例如 48 65 6C 6C 6F。</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="274" />
+            <location filename="../src/panes/send_panel.cpp" line="332" />
             <source>Select a port to send to.</source>
             <translation>请选择要发送到的串口。</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/send_panel.cpp" line="320" />
+            <location filename="../src/panes/send_panel.cpp" line="383" />
             <source>Queued %n bytes to %1.</source>
             <translation>
                 <numerusform>已向 %1 排队 %n 个字节。</numerusform>
             </translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="457" />
+            <source>Type the bytes to repeat, then start the repeat.</source>
+            <translation>请输入要重复发送的字节，然后开始重复。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="510" />
+            <source>Sending from: no port selected</source>
+            <translation>发送自：未选择串口</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="511" />
+            <source>Sending from: %1</source>
+            <translation>发送自：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="526" />
+            <source>Repeating every %1 ms from %2.</source>
+            <translation>每 %1 毫秒从 %2 重复发送。</translation>
         </message>
     </context>
     <context>
@@ -5877,6 +6711,321 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>SetupPage</name>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="84" />
+            <source>%1 (%2)</source>
+            <translation>%1（%2）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="132" />
+            <source>Received text</source>
+            <translation>收到的文本</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="138" />
+            <source>Type, then press Enter</source>
+            <translation>输入后按回车</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="139" />
+            <source>Text to send</source>
+            <translation>要发送的文本</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="141" />
+            <source>Send</source>
+            <translation>发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="152" />
+            <source>Enter adds a line ending</source>
+            <translation>回车会添加行尾符</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="161" />
+            <location filename="../src/simple/setup_page.cpp" line="177" />
+            <source>Data going through</source>
+            <translation>经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="162" />
+            <source>Show me the data going through</source>
+            <translation>显示经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="170" />
+            <source>Read only. Useful when a program says nothing arrives.</source>
+            <translation>只读。当程序提示没有收到数据时很有用。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="181" />
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Pause</source>
+            <translation>暂停</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Resume</source>
+            <translation>继续</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="189" />
+            <source>Clear</source>
+            <translation>清除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="197" />
+            <source>Show as hex</source>
+            <translation>以十六进制显示</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="204" />
+            <source>Hide</source>
+            <translation>隐藏</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="216" />
+            <source>See it on the canvas (Advanced mode)</source>
+            <translation>在画布上查看（高级模式）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="256" />
+            <source>Change in Advanced mode</source>
+            <translation>在高级模式中更改</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="257" />
+            <source>Change…</source>
+            <translation>更改…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="269" />
+            <source>Remove setup</source>
+            <translation>移除设置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="293" />
+            <location filename="../src/simple/setup_page.cpp" line="466" />
+            <source>your program</source>
+            <translation>你的程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="295" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt; at %3 baud.</source>
+            <translation>在 %1 中，以 %3 波特打开 &lt;b&gt;%2&lt;/b&gt;。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="300" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>在 %1 中打开 &lt;b&gt;%2&lt;/b&gt;。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="305" />
+            <source>Do not open &lt;b&gt;%1&lt;/b&gt; itself in your programs. Studio has it open.</source>
+            <translation>不要在你的程序中打开 &lt;b&gt;%1&lt;/b&gt; 本身。它已被 Studio 打开。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="309" />
+            <source>Choose below which program sends. The others only listen.</source>
+            <translation>请在下方选择由哪个程序发送。其他程序只接收。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="311" />
+            <source>What to do now</source>
+            <translation>现在该做什么</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="325" />
+            <source>Ports</source>
+            <translation>串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="341" />
+            <source>On the other end: everything your program sends comes straight back to it.</source>
+            <translation>另一端：你的程序发送的所有内容都会原样返回给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="344" />
+            <source>Echo</source>
+            <translation>回显</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="348" />
+            <source>Add a program</source>
+            <translation>添加程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="370" />
+            <source>Type to %1</source>
+            <translation>向 %1 输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="373" />
+            <source>What your program sends on %1 shows here. What you type goes to your program.</source>
+            <translation>你的程序在 %1 上发送的内容显示在这里。你输入的内容会发送给你的程序。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="378" />
+            <source>What you type goes to %1. Its replies show here.</source>
+            <translation>你输入的内容会发送到 %1，它的回复显示在这里。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="382" />
+            <source>What you type goes to %1. Its replies show here, and your programs get them too.</source>
+            <translation>你输入的内容会发送到 %1。它的回复显示在这里，你的程序也会收到。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="398" />
+            <source>Program opens</source>
+            <translation>程序打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="399" />
+            <source>%1 opens</source>
+            <translation>%1 打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="412" />
+            <location filename="../src/simple/setup_page.cpp" line="557" />
+            <source>Not open</source>
+            <translation>未打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="417" />
+            <source>Open in a program</source>
+            <translation>在程序中打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="422" />
+            <source>No program yet</source>
+            <translation>暂无程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="427" />
+            <source>Open</source>
+            <translation>已打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="435" />
+            <source>%1 copied.</source>
+            <translation>已复制 %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="449" />
+            <source>Close %1</source>
+            <translation>关闭 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="450" />
+            <source>Close this port</source>
+            <translation>关闭此串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="457" />
+            <location filename="../src/simple/setup_page.cpp" line="562" />
+            <source>%1: %2</source>
+            <translation>%1：%2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="462" />
+            <source>No program has opened %1 yet. In %2, choose exactly %1. This changes as soon as one does. &lt;a href="help"&gt;Nothing arriving?&lt;/a&gt;</source>
+            <translation>还没有程序打开 %1。请在 %2 中准确选择 %1。一旦有程序打开，这里就会更新。&lt;a href="help"&gt;没有收到数据？&lt;/a&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="485" />
+            <source>The program</source>
+            <translation>该程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="488" />
+            <source>%1 opened %2 at %3 baud, but the device runs at %4. Text will look garbled. Set %4 in %5.</source>
+            <translation>%1 以 %3 波特打开了 %2，但设备的速度是 %4。文字会显示为乱码。请在 %5 中设置为 %4。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="493" />
+            <source>the program</source>
+            <translation>该程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="505" />
+            <source>Sending now</source>
+            <translation>正在发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="511" />
+            <source>Let this one send</source>
+            <translation>让此程序发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="518" />
+            <source>%1 sends now. The others only listen.</source>
+            <translation>%1 正在发送。其他的只接收。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="538" />
+            <source>Device. Studio has it open, so your programs use their own ports instead.</source>
+            <translation>设备。它已被 Studio 打开，因此你的程序改用它们自己的串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="540" />
+            <source>Network device. Studio is connected to it.</source>
+            <translation>网络设备。Studio 已连接到它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="551" />
+            <source>Open at %1 baud</source>
+            <translation>以 %1 波特打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="552" />
+            <source>Connected</source>
+            <translation>已连接</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="575" />
+            <source>Other computers connect to this PC on network port</source>
+            <translation>其他计算机通过以下网络端口连接到此 PC</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="584" />
+            <source>No computer connected</source>
+            <translation>没有计算机连接</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_page.cpp" line="585" />
+            <source>%n computer(s) connected</source>
+            <translation>
+                <numerusform>已连接 %n 台计算机</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="592" />
+            <source>Network port %1: %2</source>
+            <translation>网络端口 %1：%2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="640" />
+            <source>%1  %2 sent  %3</source>
+            <translation>%1  %2 发送  %3</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>sent      %1</source>
+            <translation>发送  %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>received  %1</source>
+            <translation>接收  %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="703" />
+            <source>Could not send to %1. %2</source>
+            <translation>无法发送到 %1。%2</translation>
+        </message>
+    </context>
+    <context>
         <name>ShareWizard</name>
         <message>
             <location filename="../src/dialogs/share_plan.cpp" line="237" />
@@ -5913,13 +7062,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="182" />
             <location filename="../src/dialogs/share_wizard.cpp" line="195" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Share a device with several programs</source>
             <translation>与多个程序共享设备</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="197" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="952" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio 会打开设备一次，然后为每个程序提供各自的串口。</translation>
         </message>
@@ -5955,120 +7104,120 @@ Networks: %5</source>
             <translation>刷新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="260" />
             <source>Refresh the device list</source>
             <translation>刷新设备列表</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="271" />
             <source>Devices</source>
             <translation>设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="284" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>没有可用的串口设备。请插入设备，然后选择“刷新”。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="301" />
             <source>Device settings</source>
             <translation>设备设置</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="311" />
             <source>Change</source>
             <translation>更改</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="315" />
             <source>Change device settings</source>
             <translation>更改设备设置</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
             <source>None</source>
             <translation>无</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Odd</source>
             <translation>奇</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Even</source>
             <translation>偶</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
             <source>Mark</source>
             <translation>标记</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="342" />
             <source>Space</source>
             <translation>空格</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Hardware (RTS and CTS)</source>
             <translation>硬件（RTS 和 CTS）</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="358" />
             <source>Software (XON and XOFF)</source>
             <translation>软件（XON 和 XOFF）</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="362" />
             <source>Baud rate</source>
             <translation>波特率</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="365" />
             <source>Data bits</source>
             <translation>数据位</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="366" />
             <source>Parity</source>
             <translation>奇偶校验</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="369" />
             <source>Stop bits</source>
             <translation>停止位</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="370" />
             <source>Flow control</source>
             <translation>流控制</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
             <location filename="../src/dialogs/share_wizard.cpp" line="419" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="882" />
             <source>A network device instead</source>
             <translation>改用网络设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="423" />
             <source>ADVANCED</source>
             <translation>高级</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="426" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>TCP、UDP 或 RFC 2217 地址。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="452" />
             <source>Device address</source>
             <translation>设备地址</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="453" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>串口服务器的地址，使用 TCP、UDP 或 RFC 2217。</translation>
         </message>
@@ -6077,362 +7226,362 @@ Networks: %5</source>
             <translation type="vanished">您的程序将打开 Studio 创建的串口，而不是 %1 本身。接下来请选择程序的数量。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
             <translation>你的程序将打开 Studio 创建的串口，而不是 %1 本身。接下来选择有多少个程序。之后还可以添加更多。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="505" />
             <source>How many programs?</source>
             <translation>有几个程序？</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="514" />
             <source>Fewer programs</source>
             <translation>减少程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="518" />
             <source>More programs</source>
             <translation>增加程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
             <source>Up to 32</source>
             <translation>最多 32 个</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="537" />
             <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
             <translation>共享之后可以再添加程序，之后也可以用“移除串口”移除任一程序的串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="551" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>What each program will open</source>
             <translation>每个程序将打开什么</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Program name</source>
             <translation>程序名称</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Port to open</source>
             <translation>要打开的串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="557" />
             <source>Can other programs open it?</source>
             <translation>其他程序能打开吗？</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="609" />
             <source>Create another pair</source>
             <translation>再创建一个串口对</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="613" />
             <source>Keep the third as Studio only</source>
             <translation>第三个保持仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Shared ports</source>
             <translation>共享的串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Program</source>
             <translation>程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Open this port</source>
             <translation>打开此串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="689" />
             <source>Add another program</source>
             <translation>添加另一个程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="694" />
             <source>Back</source>
             <translation>返回</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="699" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="703" />
             <source>Next</source>
             <translation>下一步</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="708" />
             <source>Share device</source>
             <translation>共享设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="714" />
             <source>Open monitor</source>
             <translation>打开监视器</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="723" />
             <source>Done</source>
             <translation>完成</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0com 串口对的一端。这是虚拟串口，不是设备。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="768" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="775" />
             <source>Virtual</source>
             <translation>虚拟</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="774" />
             <source>This is a virtual port, not a device.</source>
             <translation>这是虚拟串口，不是设备。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="781" />
             <source>Serial device. Studio is already using it.</source>
             <translation>串口设备。Studio 已在使用它。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="782" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="788" />
             <source>Serial device</source>
             <translation>串口设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="789" />
             <source>Available</source>
             <translation>可用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="881" />
             <source>Use a device instead</source>
             <translation>改用设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Share %1 with several programs</source>
             <translation>与多个程序共享 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="961" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>每个程序都有自己的串口。Studio 会将设备的数据复制给所有程序。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="968" />
             <source>Open one of these ports in each program.</source>
             <translation>请在每个程序中打开其中一个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1111" />
             <source>the device</source>
             <translation>该设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>terminal</source>
             <translation>终端</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>test-tool</source>
             <translation>测试工具</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>logger</source>
             <translation>记录器</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1132" />
             <source>program-%1</source>
             <translation>程序-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
             <source>Name of program %1</source>
             <translation>程序 %1 的名称</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>Yes</source>
             <translation>是</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>No, Studio only</source>
             <translation>否，仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1232" />
             <source>Warning: %1</source>
             <translation>警告：%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1242" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows 会请求管理员权限。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1243" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the %1 as Studio only</source>
             <translation>将%1保持为仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1250" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>将其余 %1 个保持为仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1262" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1 收到的所有内容都会复制到 1 个串口。程序写入的任何内容都会回到 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1270" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1 收到的所有内容都会复制到全部 %2 个串口。任一程序写入的内容都会回到 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1321" />
             <source>Could not create another pair</source>
             <translation>无法再创建一个串口对</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1322" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows 未创建驱动程序串口对。请允许管理员权限，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1371" />
             <source>Sharing is not available in this build</source>
             <translation>此版本不提供共享功能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1372" />
             <source>Nothing was changed.</source>
             <translation>未做任何更改。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1389" />
             <source>Could not share %1</source>
             <translation>无法共享 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>上一次共享已被移除。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1392" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>配置未改变。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1412" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 已与 1 个程序共享</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 已与 %2 个程序共享</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1425" />
             <source>The most Studio can share is 32 programs</source>
             <translation>Studio 最多可共享 32 个程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1426" />
             <source>Remove a program's port first if you need a different one.</source>
             <translation>如需不同的数量，请先移除某个程序的串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1443" />
             <source>Could not add another program</source>
             <translation>无法添加更多程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1444" />
             <source>The share is as it was. Check the device, then try again.</source>
             <translation>共享保持原样。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1645" />
             <source>Studio only</source>
             <translation>仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1546" />
             <source>Not for other programs</source>
             <translation>不供其他程序使用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1555" />
             <source>Copy</source>
             <translation>复制</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1560" />
             <source>Copy %1</source>
             <translation>复制 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1567" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1615" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1 收到的所有内容现在都会复制到 1 个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1620" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1 收到的所有内容现在都会复制到全部 %2 个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1627" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>每个程序打开其串口后，“等待中”标签会变为“程序已连接”。</translation>
         </message>
@@ -6440,682 +7589,720 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
-            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <location filename="../src/shell/shell_window.cpp" line="730" />
             <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
             <translation>部分 COM 端口已丢失。辅助服务或驱动程序重新启动，移除了您的程序已打开的端口。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <location filename="../src/shell/shell_window.cpp" line="733" />
             <source>Recreate ports</source>
             <translation>重新创建端口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1274" />
             <source>Ports recreated.</source>
             <translation>端口已重新创建。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <location filename="../src/shell/shell_window.cpp" line="1275" />
             <source>Could not recreate every port: %1</source>
             <translation>未能重新创建所有端口：%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>New</source>
             <translation>新建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>new document setup</source>
             <translation>新建文档 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>open file setup</source>
             <translation>打开文件 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>Open recent</source>
             <translation>打开最近使用的</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>recent file</source>
             <translation>最近的文件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>Setups and templates</source>
             <translation>配置和模板</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="225" />
+            <location filename="../src/shell/shell_window.cpp" line="235" />
             <source>template setup</source>
             <translation>模板 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2482" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="2722" />
             <source>Save</source>
             <translation>保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>save file setup</source>
             <translation>保存文件 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>Save as</source>
             <translation>另存为</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>save as file</source>
             <translation>另存为 文件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="243" />
             <source>Export as command</source>
             <translation>导出为命令</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="244" />
             <source>cli command</source>
             <translation>命令行 命令</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>Diagnostic bundle</source>
             <translation>诊断包</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="247" />
             <source>support zip</source>
             <translation>支持 压缩包</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>Quit</source>
             <translation>退出</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>exit</source>
             <translation>退出 关闭</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo</source>
             <translation>撤销</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
             <source>undo stack restore</source>
             <translation>撤销 栈 还原</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo</source>
             <translation>重做</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
             <source>redo stack restore</source>
             <translation>重做 栈 还原</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Remove selected</source>
             <translation>移除所选</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>delete remove</source>
             <translation>删除 移除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Add port</source>
             <translation>添加串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>new virtual create</source>
             <translation>新建 虚拟 创建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Virtual port</source>
             <translation>虚拟串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>Linked pair</source>
             <translation>链接对</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>pair two null modem</source>
             <translation>配对 两个 空调制解调器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="272" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>Attach real device</source>
             <translation>连接真实设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
             <source>serial device</source>
             <translation>串口设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="276" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
             <source>Network endpoint</source>
             <translation>网络端点</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217 网络</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="280" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>Mock fixture</source>
             <translation>模拟设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="291" />
             <source>fixture mock script</source>
             <translation>模拟设备 模拟 脚本</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="294" />
             <source>Copy port name</source>
             <translation>复制串口名称</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="285" />
+            <location filename="../src/shell/shell_window.cpp" line="295" />
             <source>clipboard path</source>
             <translation>剪贴板 路径</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2032" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="2272" />
             <source>Rename port</source>
             <translation>重命名端口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>name change relabel</source>
             <translation>名称 更改 重命名</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
             <source>Remove port</source>
             <translation>移除串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
             <source>Remove setup</source>
             <translation>移除设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>删除 移除 拆除 关闭 配对 共享 连接 全部</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1353" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="1498" />
             <source>Connect ports</source>
             <translation>连接串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="320" />
             <source>link split join redirect monitor</source>
             <translation>链接 拆分 合并 重定向 监视</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>Share a device</source>
             <translation>共享设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="315" />
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="333" />
             <source>split listeners</source>
             <translation>拆分 监听者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>Watch traffic</source>
             <translation>监视流量</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>monitor copy</source>
             <translation>监视 复制</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Add a program port</source>
             <translation>添加程序串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="330" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>share attach more listener another</source>
             <translation>共享 连接 更多 另一个 监听</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1758" />
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="1959" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="1977" />
             <source>Remove link</source>
             <translation>移除链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>delete disconnect</source>
             <translation>删除 断开</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="349" />
             <source>Link wiring</source>
             <translation>链接接线</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="339" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
             <source>line matrix faults</source>
             <translation>线路矩阵 故障</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>Owner</source>
             <translation>所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>policy arbitration</source>
             <translation>策略 仲裁</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Fit</source>
             <translation>适应窗口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>zoom</source>
             <translation>缩放</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Tidy layout</source>
             <translation>整理布局</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>arrange align overlap</source>
             <translation>排列 对齐 重叠</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
-            <location filename="../src/shell/shell_window.cpp" line="641" />
-            <location filename="../src/shell/shell_window.cpp" line="642" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="651" />
+            <location filename="../src/shell/shell_window.cpp" line="652" />
+            <location filename="../src/shell/shell_window.cpp" line="661" />
             <source>Search actions</source>
             <translation>搜索操作</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>command palette</source>
             <translation>命令面板</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="364" />
+            <location filename="../src/shell/shell_window.cpp" line="375" />
             <source>Setup check</source>
             <translation>配置检查</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="365" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>driver com0com permissions</source>
             <translation>驱动程序 com0com 权限</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="378" />
             <source>Benchmark</source>
             <translation>基准测试</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="368" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>throughput speed</source>
             <translation>吞吐量 速度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>Refresh now</source>
             <translation>立即刷新</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>reload</source>
             <translation>重新加载</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>Refreshed.</source>
             <translation>已刷新。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Settings</source>
             <translation>设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>preferences theme density refresh baud</source>
             <translation>首选项 主题 密度 刷新 波特率</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="386" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Advanced mode</source>
             <translation>高级模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>simple expert level</source>
             <translation>简单 专家 级别</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="769" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="838" />
             <source>Monitor</source>
             <translation>监视器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
             <source>traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>Show links as a list</source>
             <translation>以列表显示链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="406" />
             <source>links topology list accessible</source>
             <translation>链接 拓扑 列表 无障碍</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
+            <location filename="../src/shell/shell_window.cpp" line="1000" />
             <source>Log</source>
             <translation>日志</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
             <source>events</source>
             <translation>事件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
-            <location filename="../src/shell/shell_window.cpp" line="934" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="1016" />
             <source>Topology JSON</source>
             <translation>拓扑 JSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
             <source>editor schema</source>
             <translation>编辑器 模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="415" />
             <source>Follow the system</source>
             <translation>跟随系统</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="405" />
+            <location filename="../src/shell/shell_window.cpp" line="416" />
             <source>theme colour scheme</source>
             <translation>主题 配色方案</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
             <source>Light</source>
             <translation>浅色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>theme</source>
             <translation>主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>Dark</source>
             <translation>深色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Comfortable</source>
             <translation>舒适</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>density spacing</source>
             <translation>密度 间距</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>Compact</source>
             <translation>紧凑</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="453" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Reset layout</source>
             <translation>重置布局</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>docks window</source>
             <translation>停靠面板 窗口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="456" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Show launcher</source>
             <translation>显示启动页</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
             <source>empty start</source>
             <translation>空白 开始</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="461" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>Help contents</source>
             <translation>帮助目录</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>manual help topics</source>
             <translation>手册 帮助 主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="464" />
+            <location filename="../src/shell/shell_window.cpp" line="475" />
             <source>Why is nothing arriving?</source>
             <translation>为什么没有数据到达？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="476" />
             <source>troubleshoot no data</source>
             <translation>故障排除 无数据</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>Keyboard shortcuts</source>
             <translation>键盘快捷键</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>keys</source>
             <translation>按键</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="469" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
             <source>Copy environment</source>
             <translation>复制环境信息</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="470" />
+            <location filename="../src/shell/shell_window.cpp" line="481" />
             <source>build bug report</source>
             <translation>构建 错误报告</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="472" />
+            <location filename="../src/shell/shell_window.cpp" line="483" />
             <source>About</source>
             <translation>关于</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="473" />
+            <location filename="../src/shell/shell_window.cpp" line="484" />
             <source>version licence copyright</source>
             <translation>版本 许可证 版权</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="487" />
-            <location filename="../src/shell/shell_window.cpp" line="492" />
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="497" />
+            <location filename="../src/shell/shell_window.cpp" line="502" />
+            <location filename="../src/shell/shell_window.cpp" line="1320" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="699" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
             <source>Change owner</source>
             <translation>更改所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1787" />
+            <location filename="../src/shell/shell_window.cpp" line="1672" />
+            <source>Generator started.</source>
+            <translation>生成器已启动。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1673" />
+            <source>Generator stopped.</source>
+            <translation>生成器已停止。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>1 port</source>
             <translation>1 个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
             <source>%1 ports</source>
             <translation>%1 个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1793" />
+            <location filename="../src/shell/shell_window.cpp" line="1994" />
             <source>1 link</source>
             <translation>1 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1794" />
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>%1 links</source>
             <translation>%1 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1827" />
+            <location filename="../src/shell/shell_window.cpp" line="2028" />
             <source>Remove only %1</source>
             <translation>仅移除 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1828" />
+            <location filename="../src/shell/shell_window.cpp" line="2029" />
             <source>Remove the whole setup</source>
             <translation>移除整个设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 是共享某个设备的 %2 个程序之一，所在设置包含 %3：%4。仅移除 %1，其他程序继续共享；或关闭整个设置。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1839" />
+            <location filename="../src/shell/shell_window.cpp" line="2040" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 属于一个包含 %2 的设置：%3。仅移除 %1 及其链接，或关闭整个设置。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <location filename="../src/shell/shell_window.cpp" line="2112" />
             <source>%1 and %2</source>
             <translation>%1 和 %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1927" />
+            <location filename="../src/shell/shell_window.cpp" line="2128" />
             <source>Remove this setup?</source>
             <translation>移除此设置？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1929" />
+            <location filename="../src/shell/shell_window.cpp" line="2130" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>这将关闭 %1：%2。已打开其中任一串口的程序会失去该串口。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1951" />
+            <location filename="../src/shell/shell_window.cpp" line="2152" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>设置的一部分仍处于打开状态。请关闭正在使用它的程序，然后再次选择“移除设置”。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Removed the setup (%1).</source>
             <translation>已移除设置（%1）。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2164" />
             <source>Removed %1 of %2.</source>
             <translation>已移除 %2 中的 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <source>Remove all setups?</source>
+            <translation>移除所有配置？</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <source>This closes %n setup(s) and every port in them. Programs using those ports lose them. Nothing is saved until you save.</source>
+            <translation>
+                <numerusform>这会关闭 %n 个配置及其中的所有串口。使用这些串口的程序将失去它们。保存之前不会存入任何内容。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <source>Remove all</source>
+            <translation>全部移除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2203" />
+            <source>Removed all setups.</source>
+            <translation>已移除所有配置。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2204" />
+            <source>%n port(s) could not be removed.</source>
+            <translation>
+                <numerusform>有 %n 个串口无法移除。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2237" />
             <source>the device</source>
             <translation>该设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2004" />
+            <location filename="../src/shell/shell_window.cpp" line="2244" />
             <source>Could not add a program port to %1</source>
             <translation>无法向 %1 添加程序串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2005" />
+            <location filename="../src/shell/shell_window.cpp" line="2245" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>设置保持原样。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2014" />
+            <location filename="../src/shell/shell_window.cpp" line="2254" />
             <source>Added %1 to %2.</source>
             <translation>已将 %1 添加到 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2015" />
+            <location filename="../src/shell/shell_window.cpp" line="2255" />
             <source>a port</source>
             <translation>一个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio?</source>
             <translation>关闭 Studio？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio</source>
             <translation>关闭 Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2663" />
+            <location filename="../src/shell/shell_window.cpp" line="2903" />
             <source>Keep Studio open</source>
             <translation>保持 Studio 打开</translation>
         </message>
@@ -7124,52 +8311,52 @@ Networks: %5</source>
             <translation type="vanished">撤销需要精确还原，而此版本无法证明能做到。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;File</source>
             <translation>文件(&amp;F)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="547" />
             <source>&amp;Edit</source>
             <translation>编辑(&amp;E)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="554" />
             <source>&amp;Ports</source>
             <translation>串口(&amp;P)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="559" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;Topology</source>
             <translation>拓扑(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="582" />
             <source>&amp;Tools</source>
             <translation>工具(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="590" />
             <source>&amp;View</source>
             <translation>视图(&amp;V)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Theme</source>
             <translation>主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="592" />
+            <location filename="../src/shell/shell_window.cpp" line="602" />
             <source>Density</source>
             <translation>密度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="599" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>&amp;Help</source>
             <translation>帮助(&amp;H)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="609" />
+            <location filename="../src/shell/shell_window.cpp" line="619" />
             <source>Main toolbar</source>
             <translation>主工具栏</translation>
         </message>
@@ -7178,100 +8365,100 @@ Networks: %5</source>
             <translation type="vanished">此版本不可用。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="764" />
+            <location filename="../src/shell/shell_window.cpp" line="833" />
             <source>Ports</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="766" />
-            <location filename="../src/shell/shell_window.cpp" line="1223" />
+            <location filename="../src/shell/shell_window.cpp" line="835" />
+            <location filename="../src/shell/shell_window.cpp" line="1362" />
             <source>Inspector</source>
             <translation>检查器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="767" />
+            <location filename="../src/shell/shell_window.cpp" line="836" />
             <source>Send</source>
             <translation>发送</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="802" />
-            <location filename="../src/shell/shell_window.cpp" line="1276" />
+            <location filename="../src/shell/shell_window.cpp" line="884" />
+            <location filename="../src/shell/shell_window.cpp" line="1415" />
             <source>Copied %1.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="822" />
+            <location filename="../src/shell/shell_window.cpp" line="904" />
             <source>Queued %1 bytes to %2.</source>
             <translation>已向 %2 排队 %1 个字节。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="878" />
+            <location filename="../src/shell/shell_window.cpp" line="960" />
             <source>Links</source>
             <translation>链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="933" />
+            <location filename="../src/shell/shell_window.cpp" line="1015" />
             <source>Applied the topology JSON.</source>
             <translation>已应用拓扑 JSON。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="1289" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo %1</source>
             <translation>撤销%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo %1</source>
             <translation>重做%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1183" />
+            <location filename="../src/shell/shell_window.cpp" line="1322" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>撤销连接或移除链接、所有者的更改以及端口的重命名。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1324" />
             <source>This build cannot reverse changes.</source>
             <translation>此版本无法撤销更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1193" />
+            <location filename="../src/shell/shell_window.cpp" line="1332" />
             <source>Undid %1.</source>
             <translation>已撤销%1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1335" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>无法撤销%1。此后设置已更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1204" />
+            <location filename="../src/shell/shell_window.cpp" line="1343" />
             <source>Redid %1.</source>
             <translation>已重做%1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>无法重做%1。此后设置已更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1222" />
+            <location filename="../src/shell/shell_window.cpp" line="1361" />
             <source>Ports %1</source>
             <translation>串口 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1227" />
+            <location filename="../src/shell/shell_window.cpp" line="1366" />
             <source>Inspector %1</source>
             <translation>检查器 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1844" />
-            <location filename="../src/shell/shell_window.cpp" line="1857" />
+            <location filename="../src/shell/shell_window.cpp" line="2045" />
+            <location filename="../src/shell/shell_window.cpp" line="2058" />
             <source>Remove %1?</source>
             <translation>移除 %1？</translation>
         </message>
@@ -7280,214 +8467,215 @@ Networks: %5</source>
             <translation type="vanished">该串口及其链接将被移除。此操作无法撤销。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1826" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
-            <location filename="../src/shell/shell_window.cpp" line="2352" />
-            <location filename="../src/shell/shell_window.cpp" line="2481" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2592" />
+            <location filename="../src/shell/shell_window.cpp" line="2721" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1879" />
-            <location filename="../src/shell/shell_window.cpp" line="1950" />
+            <location filename="../src/shell/shell_window.cpp" line="2080" />
+            <location filename="../src/shell/shell_window.cpp" line="2151" />
             <source>Could not remove %1</source>
             <translation>无法移除 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <location filename="../src/shell/shell_window.cpp" line="2089" />
             <source>Removed %1.</source>
             <translation>已移除 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1364" />
+            <location filename="../src/shell/shell_window.cpp" line="1509" />
             <source>Sharing is not available in this build.</source>
             <translation>此版本不提供共享功能。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1391" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
             <source>Networking is not available in this build.</source>
             <translation>此版本不提供网络功能。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1413" />
+            <location filename="../src/shell/shell_window.cpp" line="1558" />
             <source>Bridge is running on port %1.</source>
             <translation>桥接正在端口 %1 上运行。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1414" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Open monitor</source>
             <translation>打开监视器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1435" />
-            <location filename="../src/shell/shell_window.cpp" line="2393" />
-            <location filename="../src/shell/shell_window.cpp" line="2405" />
+            <location filename="../src/shell/shell_window.cpp" line="1580" />
+            <location filename="../src/shell/shell_window.cpp" line="2633" />
+            <location filename="../src/shell/shell_window.cpp" line="2645" />
             <source>Could not open %1</source>
             <translation>无法打开 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1436" />
+            <location filename="../src/shell/shell_window.cpp" line="1581" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>该配置需要此电脑上不可用的设备或网络端点。未做任何更改。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1459" />
-            <location filename="../src/shell/shell_window.cpp" line="2417" />
-            <location filename="../src/shell/shell_window.cpp" line="2445" />
+            <location filename="../src/shell/shell_window.cpp" line="1604" />
+            <location filename="../src/shell/shell_window.cpp" line="2657" />
+            <location filename="../src/shell/shell_window.cpp" line="2685" />
             <source>%1 ports, %2 links</source>
             <translation>%1 个串口，%2 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1551" />
-            <location filename="../src/shell/shell_window.cpp" line="1574" />
+            <location filename="../src/shell/shell_window.cpp" line="1752" />
+            <location filename="../src/shell/shell_window.cpp" line="1775" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>已创建链接对。程序 A 打开 %1；程序 B 打开 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1618" />
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>正在监视 %1。监视端是 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1668" />
+            <location filename="../src/shell/shell_window.cpp" line="1869" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 属于后续工作包。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1674" />
+            <location filename="../src/shell/shell_window.cpp" line="1875" />
             <source>%1 arrives with %2.</source>
             <translation>%1 将随 %2 提供。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1759" />
+            <location filename="../src/shell/shell_window.cpp" line="1960" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>移除此链接？%1。保存配置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <location filename="../src/shell/shell_window.cpp" line="1971" />
             <source>Could not remove the link</source>
             <translation>无法移除链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1980" />
             <source>Removed the link.</source>
             <translation>已移除链接。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1858" />
+            <location filename="../src/shell/shell_window.cpp" line="2059" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>移除 %1 及其链接？保存配置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2035" />
+            <location filename="../src/shell/shell_window.cpp" line="2275" />
             <source>Renamed %1 to %2.</source>
             <translation>已将 %1 重命名为 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2055" />
+            <location filename="../src/shell/shell_window.cpp" line="2295" />
             <source>%1 is now %2.</source>
             <translation>%1 现在是 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2070" />
+            <location filename="../src/shell/shell_window.cpp" line="2310" />
             <source>Released %1.</source>
             <translation>已释放 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2127" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
             <source>Add a port before opening the line matrix.</source>
             <translation>打开线路矩阵之前请先添加串口。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2162" />
+            <location filename="../src/shell/shell_window.cpp" line="2402" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>请选择采用所有者策略的合并目标，以控制谁可以写入。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2243" />
+            <location filename="../src/shell/shell_window.cpp" line="2483" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>测试模式。新串口仅在 Virtual Serial Studio 内有效。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2264" />
+            <location filename="../src/shell/shell_window.cpp" line="2504" />
             <source>Could not restart as administrator</source>
             <translation>无法以管理员身份重新启动</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2342" />
+            <location filename="../src/shell/shell_window.cpp" line="2582" />
             <source>Environment copied.</source>
             <translation>已复制环境信息。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start a new setup?</source>
             <translation>开始新的设置？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start new</source>
             <translation>开始新建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2608" />
             <source>Started a new setup.</source>
             <translation>已开始新配置。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2378" />
+            <location filename="../src/shell/shell_window.cpp" line="2618" />
             <source>Open setup</source>
             <translation>打开配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2379" />
+            <location filename="../src/shell/shell_window.cpp" line="2619" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studio 配置 (*.json);;所有文件 (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2420" />
+            <location filename="../src/shell/shell_window.cpp" line="2660" />
             <source>Opened %1.</source>
             <translation>已打开 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2436" />
+            <location filename="../src/shell/shell_window.cpp" line="2676" />
             <source>Could not save this setup</source>
             <translation>无法保存此配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2449" />
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2689" />
+            <location filename="../src/shell/shell_window.cpp" line="2690" />
             <source>Saved %1.</source>
             <translation>已保存 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2456" />
+            <location filename="../src/shell/shell_window.cpp" line="2696" />
             <source>Save setup</source>
             <translation>保存配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2458" />
+            <location filename="../src/shell/shell_window.cpp" line="2698" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studio 配置 (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2476" />
+            <location filename="../src/shell/shell_window.cpp" line="2716" />
             <source>Save changes to %1?</source>
             <translation>保存对 %1 的更改？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2477" />
+            <location filename="../src/shell/shell_window.cpp" line="2717" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>自上次保存以来，您的串口和链接已更改。您可以在设置中关闭此提示。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2480" />
+            <location filename="../src/shell/shell_window.cpp" line="2720" />
             <source>Don't save</source>
             <translation>不保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2545" />
+            <location filename="../src/shell/shell_window.cpp" line="2785" />
             <source>Layout reset.</source>
             <translation>已重置布局。</translation>
         </message>
@@ -7498,7 +8686,7 @@ Networks: %5</source>
             <location filename="../src/support/shortcuts_dialog.cpp" line="101" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="103" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="123" />
-            <location filename="../src/support/shortcuts_dialog.cpp" line="161" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="163" />
             <source>Keyboard shortcuts</source>
             <translation>键盘快捷键</translation>
         </message>
@@ -7510,36 +8698,37 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/shortcuts_dialog.cpp" line="133" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="135" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="142" />
             <source>Filter shortcuts</source>
             <translation>筛选快捷键</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="151" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="153" />
             <source>Available today</source>
             <translation>当前可用</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="163" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="165" />
             <source>Action</source>
             <translation>操作</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="164" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="166" />
             <source>Windows and Linux</source>
             <translation>Windows 和 Linux</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="165" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="167" />
             <source>macOS</source>
             <translation>macOS</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="187" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="189" />
             <source>Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and tooltips. Open this list with Help, Keyboard shortcuts.</source>
             <translation>Qt 在 macOS 上将 Ctrl 映射为 Cmd。快捷键也会显示在菜单和工具提示中。可通过“帮助”，“键盘快捷键”打开此列表。</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="199" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="201" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
@@ -7554,95 +8743,177 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>SimplePage</name>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="126" />
+            <location filename="../src/simple/simple_page.cpp" line="149" />
+            <source>Your setups</source>
+            <translation>你的配置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="132" />
+            <source>New</source>
+            <translation>新建</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="136" />
+            <location filename="../src/simple/simple_page.cpp" line="137" />
+            <source>Set up something new</source>
+            <translation>设置新内容</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="173" />
+            <source>Save…</source>
+            <translation>保存…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="177" />
+            <source>Open…</source>
+            <translation>打开…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="181" />
+            <source>Remove all</source>
+            <translation>全部移除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="218" />
+            <source>Nothing is set up yet, so there is no port to look at. Set something up first.</source>
+            <translation>尚未设置任何内容，因此没有可查看的串口。请先设置一些内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="226" />
+            <source>Choose a setup on the left to see its data.</source>
+            <translation>在左侧选择一个配置以查看其数据。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/simple_page.cpp" line="299" />
+            <source>%n setup(s)</source>
+            <translation>
+                <numerusform>%n 个配置</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="304" />
+            <source>Nothing set up yet. Choose what you want to do on the right.</source>
+            <translation>尚未设置任何内容。请在右侧选择你想做的事。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="315" />
+            <source>%1 (Advanced)</source>
+            <translation>%1（高级）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="385" />
+            <source>Done. %1.</source>
+            <translation>完成。%1。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="495" />
+            <source>Closed %1. The other programs were not interrupted.</source>
+            <translation>已关闭 %1。其他程序未受影响。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="519" />
+            <source>Could not change the setup. %1</source>
+            <translation>无法更改配置。%1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="541" />
+            <source>Added %1. The other programs were not interrupted.</source>
+            <translation>已添加 %1。其他程序未受影响。</translation>
+        </message>
+    </context>
+    <context>
         <name>StatusBar</name>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="24" />
+            <location filename="../src/shell/status_bar.cpp" line="29" />
             <source>Status bar</source>
             <translation>状态栏</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="39" />
+            <location filename="../src/shell/status_bar.cpp" line="44" />
             <source>0 dropped</source>
             <translation>已丢弃 0 个</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="45" />
-            <location filename="../src/shell/status_bar.cpp" line="154" />
+            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="159" />
             <source>Setup ready</source>
             <translation>配置就绪</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="55" />
             <source>Interface mode</source>
             <translation>界面模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="51" />
+            <location filename="../src/shell/status_bar.cpp" line="56" />
             <source>Simple</source>
             <translation>简单</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="52" />
+            <location filename="../src/shell/status_bar.cpp" line="57" />
             <source>Advanced</source>
             <translation>高级</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="109" />
+            <location filename="../src/shell/status_bar.cpp" line="114" />
             <source>No ports yet</source>
             <translation>暂无串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="112" />
+            <location filename="../src/shell/status_bar.cpp" line="117" />
             <source>Ports %1</source>
             <translation>串口 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="113" />
+            <location filename="../src/shell/status_bar.cpp" line="118" />
             <source>Links %1</source>
             <translation>链接 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="115" />
+            <location filename="../src/shell/status_bar.cpp" line="120" />
             <source>RX %1   TX %2</source>
             <translation>RX %1   TX %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="116" />
+            <location filename="../src/shell/status_bar.cpp" line="121" />
             <source>Hub running</source>
             <translation>中枢运行中</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="117" />
+            <location filename="../src/shell/status_bar.cpp" line="122" />
             <source>Hub stopped</source>
             <translation>中枢已停止</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="127" />
+            <location filename="../src/shell/status_bar.cpp" line="132" />
             <source>%1 dropped, not owner</source>
             <translation>已丢弃 %1 个，非所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="129" />
+            <location filename="../src/shell/status_bar.cpp" line="134" />
             <source>Bytes from a port that is not the owner were not forwarded.</source>
             <translation>来自非所有者串口的字节未被转发。</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="134" />
+            <location filename="../src/shell/status_bar.cpp" line="139" />
             <source>%1 dropped</source>
             <translation>已丢弃 %1 个</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="158" />
+            <location filename="../src/shell/status_bar.cpp" line="163" />
             <source>Setup needs attention</source>
             <translation>配置需要注意</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="162" />
+            <location filename="../src/shell/status_bar.cpp" line="167" />
             <source>Setup not checked</source>
             <translation>配置未检查</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="166" />
+            <location filename="../src/shell/status_bar.cpp" line="171" />
             <source>Open Tools, Setup check for the details.</source>
             <translation>打开“工具”，查看“配置检查”了解详情。</translation>
         </message>
@@ -8847,70 +10118,70 @@ Networks: %5</source>
             <translation>在有程序连接后检查。</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="99" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="101" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="257" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="100" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="102" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="262" />
             <source>Why is nothing arriving?</source>
             <translation>为什么没有数据到达？</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="124" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="125" />
             <source>Studio checked each step between the device and your program.</source>
             <translation>Studio 已检查设备与您的程序之间的每个步骤。</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="162" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="163" />
             <source>Try this</source>
             <translation>请尝试</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="180" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="269" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="181" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="274" />
             <source>Copy port path</source>
             <translation>复制串口路径</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="188" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="191" />
             <source>Check again</source>
             <translation>再次检查</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="201" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="206" />
             <source>Still stuck? A diagnostic bundle gathers the setup, the log and the environment for whoever helps you. Traffic contents are left out unless you choose to include them.</source>
             <translation>仍然没有解决？诊断包会收集配置、日志和环境信息，供帮助您的人使用。除非您选择包含，否则不会包含流量内容。</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="219" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="224" />
             <source>Create diagnostic bundle</source>
             <translation>创建诊断包</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="226" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="231" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="259" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="264" />
             <source>Why is nothing arriving on %1?</source>
             <translation>为什么 %1 上没有数据到达？</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="270" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="275" />
             <source>Copy %1</source>
             <translation>复制 %1</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="282" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="287" />
             <source>1. In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port.&lt;br&gt;2. If the program shows an error, another program may be using %1. Close it, then try again.&lt;br&gt;3. Some programs only list ports when they start. Restart the program after creating the port.</source>
             <translation>1. 在您的程序中，选择 &lt;b&gt;%1&lt;/b&gt; 作为串口。&lt;br&gt;2. 如果程序显示错误，可能是其他程序正在使用 %1。请关闭它，然后重试。&lt;br&gt;3. 有些程序只在启动时列出串口。创建串口后请重新启动该程序。</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="292" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="297" />
             <source>1. In your program, choose %1 as the serial port. 2. If the program shows an error, another program may be using %1. Close it, then try again. 3. Some programs only list ports when they start. Restart the program after creating the port.</source>
             <translation>1. 在您的程序中，选择 %1 作为串口。2. 如果程序显示错误，可能是其他程序正在使用 %1。请关闭它，然后重试。3. 有些程序只在启动时列出串口。创建串口后请重新启动该程序。</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="364" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="369" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
@@ -8918,7 +10189,7 @@ Networks: %5</source>
     <context>
         <name>TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
         </message>
@@ -9069,6 +10340,19 @@ Networks: %5</source>
             <location filename="../src/flows/watch_dialog.cpp" line="289" />
             <source>Studio could not create the read-only monitor link. Nothing was changed.</source>
             <translation>Studio 无法创建只读监视链接。未做任何更改。</translation>
+        </message>
+    </context>
+    <context>
+        <name>WireDiagram</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="88" />
+            <source>Picture of the setup</source>
+            <translation>配置示意图</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="100" />
+            <source>%1 to %2</source>
+            <translation>%1 到 %2</translation>
         </message>
     </context>
     <context>
@@ -10275,219 +11559,219 @@ Networks: %5</source>
     <context>
         <name>vss::gui::BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
             <source>Benchmark a connection</source>
             <translation>连接基准测试</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="90" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>从一个串口向另一个串口发送数据，并统计收到的数据。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="100" />
             <source>Send from</source>
             <translation>发送自</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="104" />
             <source>Receive on</source>
             <translation>接收于</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="112" />
             <source>Amount of data</source>
             <translation>数据量</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="116" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="121" />
             <source>Chunk size</source>
             <translation>块大小</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>请勿在 Studio 中链接这两个串口。数据必须经过线缆或驱动程序串口对传输，这样计数才有意义。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="132" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="325" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>这两个串口已在 Studio 中链接。请先断开它们。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="147" />
             <source>Not run yet</source>
             <translation>尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="149" />
             <source>Benchmark result: not run yet</source>
             <translation>基准测试结果：尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="152" />
             <source>Not started</source>
             <translation>未开始</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="159" />
             <source>Benchmark progress</source>
             <translation>基准测试进度</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Sent</source>
             <translation>已发送</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Received</source>
             <translation>已接收</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Lost</source>
             <translation>丢失</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
             <source>Throughput</source>
             <translation>吞吐量</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
             <source>Not run</source>
             <translation>未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="184" />
             <source>%1: not run yet</source>
             <translation>%1：尚未运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="192" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>如果收到的数量不足，则测试失败，结果会说明差了多少。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
             <source>Same thing from the command line</source>
             <translation>在命令行中执行同样的操作</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="207" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="391" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="214" />
             <source>Copy result</source>
             <translation>复制结果</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="222" />
             <source>Copied the result.</source>
             <translation>已复制结果。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="225" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="231" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="411" />
             <source>Run</source>
             <translation>运行</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>添加两个串口以对连接进行基准测试。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="323" />
             <source>Choose two different ports.</source>
             <translation>请选择两个不同的串口。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="403" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="431" />
             <source>%1: %2</source>
             <translation>%1：%2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
             <source>Running</source>
             <translation>运行中</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="528" />
             <source>Benchmark result: %1</source>
             <translation>基准测试结果：%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="512" />
             <source>%1 of %2 received</source>
             <translation>已接收 %1／%2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Failed</source>
             <translation>失败</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="535" />
             <source>Could not finish: %1</source>
             <translation>无法完成：%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="556" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Cancelled</source>
             <translation>已取消</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Passed</source>
             <translation>通过</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="566" />
             <source>Finished at %1</source>
             <translation>完成于 %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="568" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1：已发送 %2，已接收 %3，丢失 %4，吞吐量 %5。</translation>
         </message>
@@ -11065,12 +12349,12 @@ Networks: %5</source>
     <context>
         <name>vss::gui::Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="659" />
+            <location filename="../src/widgets/controls.cpp" line="655" />
             <source>%1, expanded</source>
             <translation>%1，已展开</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="660" />
+            <location filename="../src/widgets/controls.cpp" line="656" />
             <source>%1, collapsed</source>
             <translation>%1，已折叠</translation>
         </message>
@@ -11206,6 +12490,164 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>vss::gui::FixtureBehaviours</name>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="100" />
+            <source>Only a mock fixture has a byte generator.</source>
+            <translation>只有模拟设备才有字节生成器。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="112" />
+            <source>The pattern needs pairs of hex digits, such as 55 AA.</source>
+            <translation>格式需要成对的十六进制数字，例如 55 AA。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="119" />
+            <source>Type the line to send.</source>
+            <translation>请输入要发送的行。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="203" />
+            <source>The generator stopped: %1</source>
+            <translation>生成器已停止：%1</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::FixturePanel</name>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="55" />
+            <source>Fixture behaviour</source>
+            <translation>模拟设备的行为</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="60" />
+            <source>What this fixture does</source>
+            <translation>此模拟设备的作用</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="62" />
+            <source>Echo received bytes</source>
+            <translation>回显收到的字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="71" />
+            <source>Generator</source>
+            <translation>生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="73" />
+            <source>Generator kind</source>
+            <translation>生成器类型</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="74" />
+            <source>Text line</source>
+            <translation>文本行</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="75" />
+            <source>Fixed pattern</source>
+            <translation>固定模式</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="77" />
+            <source>Counter</source>
+            <translation>计数器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="78" />
+            <source>Random bytes</source>
+            <translation>随机字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="82" />
+            <location filename="../src/panes/fixture_panel.cpp" line="190" />
+            <source>Line</source>
+            <translation>行</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="85" />
+            <source>Generator bytes</source>
+            <translation>生成器字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="89" />
+            <source>Bytes</source>
+            <translation>字节</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="93" />
+            <source> bytes each time</source>
+            <translation> 字节/次</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="94" />
+            <source>Bytes each time</source>
+            <translation>每次的字节数</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="97" />
+            <source>Rate</source>
+            <translation>速率</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="100" />
+            <source> per second</source>
+            <translation> 次/秒</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="101" />
+            <source>Sends per second</source>
+            <translation>每秒发送次数</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="105" />
+            <location filename="../src/panes/fixture_panel.cpp" line="228" />
+            <source>Start generator</source>
+            <translation>启动生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="185" />
+            <source>Pattern</source>
+            <translation>模式</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="186" />
+            <source>Hex, such as 55 AA</source>
+            <translation>十六进制，例如 55 AA</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="191" />
+            <source>Text, sent with CRLF</source>
+            <translation>文本，以 CRLF 结尾发送</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="227" />
+            <source>Stop generator</source>
+            <translation>停止生成器</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="234" />
+            <source>Generating, %1 sent from this fixture.</source>
+            <translation>正在生成，此模拟设备已发送 %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="236" />
+            <source>Stopped after %1.</source>
+            <translation>在 %1 后停止。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="237" />
+            <source>Not running.</source>
+            <translation>未运行。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="241" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+    </context>
+    <context>
         <name>vss::gui::FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -11237,125 +12679,125 @@ Networks: %5</source>
     <context>
         <name>vss::gui::InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="117" />
+            <location filename="../src/panes/inspector_panel.cpp" line="119" />
             <source>Inspector</source>
             <translation>检查器</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="138" />
+            <location filename="../src/panes/inspector_panel.cpp" line="140" />
             <source>Select a port to inspect it.</source>
             <translation>请选择一个串口以查看。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="169" />
+            <location filename="../src/panes/inspector_panel.cpp" line="172" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="173" />
+            <location filename="../src/panes/inspector_panel.cpp" line="176" />
             <source>Path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="183" />
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
+            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="416" />
             <source>path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="188" />
+            <location filename="../src/panes/inspector_panel.cpp" line="191" />
             <source>COM number</source>
             <translation>COM 编号</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="196" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change...</source>
             <translation>更改...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="199" />
+            <location filename="../src/panes/inspector_panel.cpp" line="202" />
             <source>Change COM number</source>
             <translation>更改 COM 编号</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
+            <location filename="../src/panes/inspector_panel.cpp" line="215" />
             <source>Traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="224" />
             <source>Serial</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="238" />
-            <location filename="../src/panes/inspector_panel.cpp" line="422" />
+            <location filename="../src/panes/inspector_panel.cpp" line="241" />
+            <location filename="../src/panes/inspector_panel.cpp" line="439" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;为什么没有数据到达？&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
-            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <location filename="../src/panes/inspector_panel.cpp" line="246" />
+            <location filename="../src/panes/inspector_panel.cpp" line="437" />
             <source>Copy name</source>
             <translation>复制名称</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="262" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port...</source>
             <translation>释放端口...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="265" />
+            <location filename="../src/panes/inspector_panel.cpp" line="268" />
             <source>Release port</source>
             <translation>释放端口</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="275" />
+            <location filename="../src/panes/inspector_panel.cpp" line="278" />
             <source>Control lines</source>
             <translation>控制线</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="297" />
+            <location filename="../src/panes/inspector_panel.cpp" line="300" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="298" />
+            <location filename="../src/panes/inspector_panel.cpp" line="301" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="299" />
+            <location filename="../src/panes/inspector_panel.cpp" line="302" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="322" />
+            <location filename="../src/panes/inspector_panel.cpp" line="325" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;打开线路矩阵和故障&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="413" />
             <source>The engine reported a failure.</source>
             <translation>引擎报告了故障。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
+            <location filename="../src/panes/inspector_panel.cpp" line="417" />
             <source>RX %1, TX %2</source>
             <translation>RX %1，TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <location filename="../src/panes/inspector_panel.cpp" line="426" />
             <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
             <translation>还没有程序打开 %1。程序必须正好打开 %1；其他端口不会收到任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <location filename="../src/panes/inspector_panel.cpp" line="436" />
             <source>Copy name, %1</source>
             <translation>复制名称，%1</translation>
         </message>
@@ -11364,30 +12806,30 @@ Networks: %5</source>
             <translation type="vanished">尚无程序打开 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="434" />
-            <location filename="../src/panes/inspector_panel.cpp" line="440" />
+            <location filename="../src/panes/inspector_panel.cpp" line="451" />
+            <location filename="../src/panes/inspector_panel.cpp" line="457" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="452" />
+            <location filename="../src/panes/inspector_panel.cpp" line="478" />
             <source>This port does not support control lines.</source>
             <translation>此串口不支持控制线。</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="480" />
-            <location filename="../src/panes/inspector_panel.cpp" line="494" />
+            <location filename="../src/panes/inspector_panel.cpp" line="506" />
+            <location filename="../src/panes/inspector_panel.cpp" line="520" />
             <source>%1 on</source>
             <translation>%1 开</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="481" />
-            <location filename="../src/panes/inspector_panel.cpp" line="495" />
+            <location filename="../src/panes/inspector_panel.cpp" line="507" />
+            <location filename="../src/panes/inspector_panel.cpp" line="521" />
             <source>%1 off</source>
             <translation>%1 关</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="514" />
+            <location filename="../src/panes/inspector_panel.cpp" line="540" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
         </message>
@@ -11821,177 +13263,177 @@ Networks: %5</source>
     <context>
         <name>vss::gui::MonitorPanel</name>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="147" />
+            <location filename="../src/panes/monitor_panel.cpp" line="294" />
             <source>Monitor</source>
             <translation>监视器</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="154" />
+            <location filename="../src/panes/monitor_panel.cpp" line="155" />
             <source>Monitor tabs</source>
             <translation>监视器标签页</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="167" />
-            <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="168" />
+            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Pause</source>
             <translation>暂停</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="170" />
-            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="173" />
+            <location filename="../src/panes/monitor_panel.cpp" line="221" />
             <source>Clear</source>
             <translation>清除</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="173" />
-            <location filename="../src/panes/monitor_panel.cpp" line="212" />
+            <location filename="../src/panes/monitor_panel.cpp" line="176" />
+            <location filename="../src/panes/monitor_panel.cpp" line="215" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="174" />
-            <location filename="../src/panes/monitor_panel.cpp" line="219" />
+            <location filename="../src/panes/monitor_panel.cpp" line="177" />
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
             <source>Follow</source>
             <translation>跟随</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="441" />
-            <location filename="../src/panes/monitor_panel.cpp" line="454" />
+            <location filename="../src/panes/monitor_panel.cpp" line="179" />
+            <location filename="../src/panes/monitor_panel.cpp" line="446" />
+            <location filename="../src/panes/monitor_panel.cpp" line="459" />
             <source>All ports</source>
             <translation>所有串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="194" />
+            <location filename="../src/panes/monitor_panel.cpp" line="197" />
             <source>Filter by port</source>
             <translation>按串口筛选</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="197" />
+            <location filename="../src/panes/monitor_panel.cpp" line="200" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="198" />
+            <location filename="../src/panes/monitor_panel.cpp" line="201" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="199" />
+            <location filename="../src/panes/monitor_panel.cpp" line="202" />
             <source>Dropped</source>
             <translation>已丢弃</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="204" />
-            <location filename="../src/panes/monitor_panel.cpp" line="205" />
+            <location filename="../src/panes/monitor_panel.cpp" line="207" />
+            <location filename="../src/panes/monitor_panel.cpp" line="208" />
             <source>Search payload</source>
             <translation>搜索负载</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="210" />
+            <location filename="../src/panes/monitor_panel.cpp" line="213" />
             <source>Preview format</source>
             <translation>预览格式</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="211" />
+            <location filename="../src/panes/monitor_panel.cpp" line="214" />
             <source>ASCII</source>
             <translation>ASCII</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="221" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
             <source>Export</source>
             <translation>导出</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="250" />
+            <location filename="../src/panes/monitor_panel.cpp" line="255" />
             <source>Traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="281" />
-            <location filename="../src/panes/monitor_panel.cpp" line="531" />
+            <location filename="../src/panes/monitor_panel.cpp" line="286" />
+            <location filename="../src/panes/monitor_panel.cpp" line="544" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>暂无流量。请发送一些字节，或在程序中打开该串口。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="293" />
-            <location filename="../src/panes/monitor_panel.cpp" line="296" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="301" />
             <source>Log</source>
             <translation>日志</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>拓扑 JSON 编辑器将随 WP7 提供。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="303" />
+            <location filename="../src/panes/monitor_panel.cpp" line="308" />
             <source>Topology JSON</source>
             <translation>拓扑 JSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Resume</source>
             <translation>继续</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="527" />
+            <location filename="../src/panes/monitor_panel.cpp" line="540" />
             <source>No traffic matches these filters.</source>
             <translation>没有符合这些筛选条件的流量。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="555" />
+            <location filename="../src/panes/monitor_panel.cpp" line="568" />
             <source>link</source>
             <translation>链接</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="591" />
+            <location filename="../src/panes/monitor_panel.cpp" line="604" />
             <source>Export visible traffic</source>
             <translation>导出可见流量</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="592" />
+            <location filename="../src/panes/monitor_panel.cpp" line="605" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>文本文件 (*.txt);;所有文件 (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="598" />
-            <location filename="../src/panes/monitor_panel.cpp" line="638" />
+            <location filename="../src/panes/monitor_panel.cpp" line="611" />
+            <location filename="../src/panes/monitor_panel.cpp" line="651" />
             <source>Could not save %1.</source>
             <translation>无法保存 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="602" />
-            <location filename="../src/panes/monitor_panel.cpp" line="641" />
+            <location filename="../src/panes/monitor_panel.cpp" line="615" />
+            <location filename="../src/panes/monitor_panel.cpp" line="654" />
             <source>Exported %1.</source>
             <translation>已导出 %1。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="224" />
-            <location filename="../src/panes/monitor_panel.cpp" line="226" />
-            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <location filename="../src/panes/monitor_panel.cpp" line="229" />
+            <location filename="../src/panes/monitor_panel.cpp" line="231" />
+            <location filename="../src/panes/monitor_panel.cpp" line="625" />
             <source>Export capture</source>
             <translation>导出捕获</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <location filename="../src/panes/monitor_panel.cpp" line="233" />
             <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
             <translation>将显示的流量连同每个字节及其精确时间保存到捕获文件。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <location filename="../src/panes/monitor_panel.cpp" line="620" />
             <source>Capture text (*.cap)</source>
             <translation>捕获文本 (*.cap)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <location filename="../src/panes/monitor_panel.cpp" line="621" />
             <source>Comma separated values (*.csv)</source>
             <translation>逗号分隔值 (*.csv)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <location filename="../src/panes/monitor_panel.cpp" line="622" />
             <source>JSON Lines (*.jsonl)</source>
             <translation>JSON Lines (*.jsonl)</translation>
         </message>
@@ -12512,7 +13954,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PickCard</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="256" />
+            <location filename="../src/widgets/controls.cpp" line="259" />
             <source>%1. %2</source>
             <translation>%1。%2</translation>
         </message>
@@ -12540,105 +13982,105 @@ Networks: %5</source>
             <translation>与 %1 的波特率或帧格式不同</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="182" />
+            <location filename="../src/panes/port_model.cpp" line="188" />
             <source>%1, %2, %3</source>
             <translation>%1，%2，%3</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="218" />
+            <location filename="../src/panes/port_model.cpp" line="232" />
             <source>Port</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="220" />
+            <location filename="../src/panes/port_model.cpp" line="234" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="222" />
+            <location filename="../src/panes/port_model.cpp" line="236" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="224" />
+            <location filename="../src/panes/port_model.cpp" line="238" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="226" />
+            <location filename="../src/panes/port_model.cpp" line="240" />
             <source>Dropped</source>
             <translation>已丢弃</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="259" />
+            <location filename="../src/panes/port_model.cpp" line="273" />
             <source>Failed</source>
             <translation>失败</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="261" />
+            <location filename="../src/panes/port_model.cpp" line="275" />
             <source>Fixture</source>
             <translation>模拟设备</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="263" />
+            <location filename="../src/panes/port_model.cpp" line="277" />
             <source>Studio only</source>
             <translation>仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="269" />
+            <location filename="../src/panes/port_model.cpp" line="283" />
             <source>Waiting for program</source>
             <translation>等待程序</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="271" />
+            <location filename="../src/panes/port_model.cpp" line="285" />
             <source>Program connected</source>
             <translation>程序已连接</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="275" />
+            <location filename="../src/panes/port_model.cpp" line="289" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="278" />
-            <location filename="../src/panes/port_model.cpp" line="279" />
+            <location filename="../src/panes/port_model.cpp" line="292" />
+            <location filename="../src/panes/port_model.cpp" line="293" />
             <source>Closed</source>
             <translation>已关闭</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="309" />
+            <location filename="../src/panes/port_model.cpp" line="323" />
             <source>Fixture (mock)</source>
             <translation>模拟设备（模拟）</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/port_model.cpp" line="314" />
+            <location filename="../src/panes/port_model.cpp" line="328" />
             <source>Real device, shared with %n programs</source>
             <translation>
                 <numerusform>真实设备，与 %n 个程序共享</numerusform>
             </translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="317" />
+            <location filename="../src/panes/port_model.cpp" line="331" />
             <source>Real device</source>
             <translation>真实设备</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="321" />
+            <location filename="../src/panes/port_model.cpp" line="335" />
             <source>Network port</source>
             <translation>网络串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="326" />
+            <location filename="../src/panes/port_model.cpp" line="340" />
             <source>In-process port. Only Studio can open it</source>
             <translation>进程内串口。只有 Studio 可以打开</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="328" />
+            <location filename="../src/panes/port_model.cpp" line="342" />
             <source>Virtual port, linked to %1</source>
             <translation>虚拟串口，已链接到 %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="329" />
+            <location filename="../src/panes/port_model.cpp" line="343" />
             <source>Virtual port</source>
             <translation>虚拟串口</translation>
         </message>
@@ -12646,161 +14088,161 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortReadyDialog</name>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="86" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="87" />
             <source>%1 is ready inside Studio</source>
             <translation>%1 已在 Studio 内就绪</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="88" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="89" />
             <source>Your port "%1" now exists inside Studio.</source>
             <translation>您的串口“%1”现已在 Studio 内创建。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="94" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="102" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="95" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="103" />
             <source>Your port "%1" now exists, and other programs can open it.</source>
             <translation>您的串口“%1”现已创建，其他程序可以打开它。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="100" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="101" />
             <source>%1 is ready</source>
             <translation>%1 已就绪</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="136" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
             <source>This port is Studio only</source>
             <translation>此串口仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="138" />
             <source>Open this port in your program</source>
             <translation>在您的程序中打开此串口</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="151" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
             <source>This port is Studio only. %1</source>
             <translation>此串口仅限 Studio。%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="153" />
             <source>Open this port in your program. %1</source>
             <translation>在您的程序中打开此串口。%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="158" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="161" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="159" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="164" />
             <source>Copy name</source>
             <translation>复制名称</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="160" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="163" />
             <source>Copy name, %1</source>
             <translation>复制名称，%1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="168" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="171" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>其他程序无法打开此端口。它只存在于 Studio 内部。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="204" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>其他程序无法打开此串口。请安装驱动程序以创建它们可以打开的串口。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="208" />
             <source>Open setup check</source>
             <translation>打开配置检查</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="220" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>在您的程序中，选择 &lt;b&gt;%1&lt;/b&gt; 作为串口。波特率等设置由该程序选择。只要 Virtual Serial Studio 在运行，该串口就保持可用。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="226" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>在您的程序中，选择 %1 作为串口。波特率等设置由该程序选择。只要 Virtual Serial Studio 在运行，该串口就保持可用。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="236" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>只要 Virtual Serial Studio 在运行，此路径就存在。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="259" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="383" />
             <source>Show details</source>
             <translation>显示详细信息</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Name</source>
             <translation>名称</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Kind</source>
             <translation>类型</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="274" />
             <source>Path</source>
             <translation>路径</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>已保存配置 (JSON) 中的条目</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="289" />
             <source>Same thing from the command line</source>
             <translation>在命令行中执行同样的操作</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="294" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="317" />
             <source>Connect %1 to something</source>
             <translation>将 %1 连接到其他对象</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="325" />
             <source>Create another</source>
             <translation>再创建一个</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="332" />
             <source>Done</source>
             <translation>完成</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>Waiting</source>
             <translation>等待中</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
             <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
             <translation>还没有程序打开 %1。请在您的程序中选择正好 %1。有程序打开后，此面板会更新。</translation>
         </message>
@@ -12809,53 +14251,53 @@ Networks: %5</source>
             <translation type="vanished">尚无程序打开 %1。有程序打开时，此面板会更新。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="365" />
             <source>Program connected</source>
             <translation>程序已连接</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="366" />
             <source>A program is using %1.</source>
             <translation>有程序正在使用 %1。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="382" />
             <source>Hide details</source>
             <translation>隐藏详细信息</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>In-process loopback</source>
             <translation>进程内回环</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>Pseudo terminal</source>
             <translation>伪终端</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="397" />
             <source>Windows driver</source>
             <translation>Windows 驱动程序</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="402" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>自动，已解析为 Studio 驱动程序</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Auto, resolved to com0com</source>
             <translation>自动，解析为 com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="406" />
             <source>Real device</source>
             <translation>真实设备</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="407" />
             <source>Auto</source>
             <translation>自动</translation>
         </message>
@@ -12863,23 +14305,38 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="61" />
             <location filename="../src/panes/ports_panel.cpp" line="62" />
+            <location filename="../src/panes/ports_panel.cpp" line="63" />
             <source>Filter ports</source>
             <translation>筛选串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="81" />
+            <location filename="../src/panes/ports_panel.cpp" line="82" />
             <source>Ports</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="104" />
+            <location filename="../src/panes/ports_panel.cpp" line="108" />
             <source>Ports table</source>
             <translation>串口表</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="301" />
+            <location filename="../src/panes/ports_panel.cpp" line="309" />
+            <source>Port actions</source>
+            <translation>串口操作</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="310" />
+            <source>Inspect</source>
+            <translation>检查</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="319" />
+            <source>Copy path</source>
+            <translation>复制路径</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="341" />
             <source>Copied %1.</source>
             <translation>已复制 %1。</translation>
         </message>
@@ -13071,78 +14528,135 @@ Networks: %5</source>
     <context>
         <name>vss::gui::SendPanel</name>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="70" />
-            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <location filename="../src/panes/send_panel.cpp" line="71" />
+            <location filename="../src/panes/send_panel.cpp" line="98" />
             <source>Send</source>
             <translation>发送</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="78" />
             <source>Send to port</source>
-            <translation>发送到串口</translation>
+            <translation type="vanished">发送到串口</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="90" />
+            <location filename="../src/panes/send_panel.cpp" line="81" />
+            <source>Sending from</source>
+            <translation>发送自</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <source>Pin</source>
+            <translation>固定</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="84" />
+            <location filename="../src/panes/send_panel.cpp" line="86" />
+            <source>Keep sending from this port when you select another.</source>
+            <translation>选择其他串口后，仍从此串口发送。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="93" />
+            <source>Send from port</source>
+            <translation>从串口发送</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="107" />
             <source>Bytes to send</source>
             <translation>要发送的字节</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="91" />
+            <location filename="../src/panes/send_panel.cpp" line="108" />
             <source>Type text, or hex if Hex is ticked</source>
             <translation>输入文本；勾选 Hex 时输入十六进制</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="107" />
+            <location filename="../src/panes/send_panel.cpp" line="124" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="108" />
+            <location filename="../src/panes/send_panel.cpp" line="125" />
             <source>Add CRLF</source>
             <translation>添加 CRLF</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="112" />
+            <location filename="../src/panes/send_panel.cpp" line="129" />
             <source>Repeat</source>
             <translation>重复</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="116" />
+            <location filename="../src/panes/send_panel.cpp" line="133" />
             <source> ms</source>
             <translation> ms</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="117" />
+            <location filename="../src/panes/send_panel.cpp" line="134" />
             <source>Repeat interval</source>
             <translation>重复间隔</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="126" />
-            <location filename="../src/panes/send_panel.cpp" line="131" />
+            <location filename="../src/panes/send_panel.cpp" line="148" />
+            <source>Repeat status</source>
+            <translation>重复状态</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="150" />
+            <location filename="../src/panes/send_panel.cpp" line="151" />
+            <source>Stop repeat</source>
+            <translation>停止重复</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="158" />
+            <location filename="../src/panes/send_panel.cpp" line="163" />
             <source>Saved sends</source>
             <translation>已保存的发送项</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="210" />
+            <location filename="../src/panes/send_panel.cpp" line="240" />
+            <source>The repeat stopped because %1 is gone.</source>
+            <translation>重复已停止，因为 %1 已不存在。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="492" />
             <source>%1 (%2)</source>
             <translation>%1（%2）</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="321" />
             <source>Hex needs pairs of digits, such as 48 65 6C 6C 6F.</source>
             <translation>Hex 需要成对的数字，例如 48 65 6C 6C 6F。</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="274" />
+            <location filename="../src/panes/send_panel.cpp" line="332" />
             <source>Select a port to send to.</source>
             <translation>请选择要发送到的串口。</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/send_panel.cpp" line="320" />
+            <location filename="../src/panes/send_panel.cpp" line="383" />
             <source>Queued %n bytes to %1.</source>
             <translation>
                 <numerusform>已向 %1 排队 %n 个字节。</numerusform>
             </translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="457" />
+            <source>Type the bytes to repeat, then start the repeat.</source>
+            <translation>请输入要重复发送的字节，然后开始重复。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="510" />
+            <source>Sending from: no port selected</source>
+            <translation>发送自：未选择串口</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="511" />
+            <source>Sending from: %1</source>
+            <translation>发送自：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="526" />
+            <source>Repeating every %1 ms from %2.</source>
+            <translation>每 %1 毫秒从 %2 重复发送。</translation>
         </message>
     </context>
     <context>
@@ -13171,13 +14685,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="182" />
             <location filename="../src/dialogs/share_wizard.cpp" line="195" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Share a device with several programs</source>
             <translation>与多个程序共享设备</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="197" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="952" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio 会打开设备一次，然后为每个程序提供各自的串口。</translation>
         </message>
@@ -13213,120 +14727,120 @@ Networks: %5</source>
             <translation>刷新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="260" />
             <source>Refresh the device list</source>
             <translation>刷新设备列表</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="271" />
             <source>Devices</source>
             <translation>设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="284" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>没有可用的串口设备。请插入设备，然后选择“刷新”。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="301" />
             <source>Device settings</source>
             <translation>设备设置</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="311" />
             <source>Change</source>
             <translation>更改</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="315" />
             <source>Change device settings</source>
             <translation>更改设备设置</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
             <source>None</source>
             <translation>无</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Odd</source>
             <translation>奇</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Even</source>
             <translation>偶</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
             <source>Mark</source>
             <translation>标记</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="342" />
             <source>Space</source>
             <translation>空格</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Hardware (RTS and CTS)</source>
             <translation>硬件（RTS 和 CTS）</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="358" />
             <source>Software (XON and XOFF)</source>
             <translation>软件（XON 和 XOFF）</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="362" />
             <source>Baud rate</source>
             <translation>波特率</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="365" />
             <source>Data bits</source>
             <translation>数据位</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="366" />
             <source>Parity</source>
             <translation>奇偶校验</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="369" />
             <source>Stop bits</source>
             <translation>停止位</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="370" />
             <source>Flow control</source>
             <translation>流控制</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
             <location filename="../src/dialogs/share_wizard.cpp" line="419" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="882" />
             <source>A network device instead</source>
             <translation>改用网络设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="423" />
             <source>ADVANCED</source>
             <translation>高级</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="426" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>TCP、UDP 或 RFC 2217 地址。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="452" />
             <source>Device address</source>
             <translation>设备地址</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="453" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>串口服务器的地址，使用 TCP、UDP 或 RFC 2217。</translation>
         </message>
@@ -13335,362 +14849,362 @@ Networks: %5</source>
             <translation type="vanished">您的程序将打开 Studio 创建的串口，而不是 %1 本身。接下来请选择程序的数量。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
             <translation>你的程序将打开 Studio 创建的串口，而不是 %1 本身。接下来选择有多少个程序。之后还可以添加更多。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="505" />
             <source>How many programs?</source>
             <translation>有几个程序？</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="514" />
             <source>Fewer programs</source>
             <translation>减少程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="518" />
             <source>More programs</source>
             <translation>增加程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
             <source>Up to 32</source>
             <translation>最多 32 个</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="537" />
             <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
             <translation>共享之后可以再添加程序，之后也可以用“移除串口”移除任一程序的串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="551" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>What each program will open</source>
             <translation>每个程序将打开什么</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Program name</source>
             <translation>程序名称</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Port to open</source>
             <translation>要打开的串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="557" />
             <source>Can other programs open it?</source>
             <translation>其他程序能打开吗？</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="609" />
             <source>Create another pair</source>
             <translation>再创建一个串口对</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="613" />
             <source>Keep the third as Studio only</source>
             <translation>第三个保持仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Shared ports</source>
             <translation>共享的串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Program</source>
             <translation>程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Open this port</source>
             <translation>打开此串口</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>State</source>
             <translation>状态</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="689" />
             <source>Add another program</source>
             <translation>添加另一个程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="694" />
             <source>Back</source>
             <translation>返回</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="699" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="703" />
             <source>Next</source>
             <translation>下一步</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="708" />
             <source>Share device</source>
             <translation>共享设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="714" />
             <source>Open monitor</source>
             <translation>打开监视器</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="723" />
             <source>Done</source>
             <translation>完成</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0com 串口对的一端。这是虚拟串口，不是设备。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="768" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="775" />
             <source>Virtual</source>
             <translation>虚拟</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="774" />
             <source>This is a virtual port, not a device.</source>
             <translation>这是虚拟串口，不是设备。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="781" />
             <source>Serial device. Studio is already using it.</source>
             <translation>串口设备。Studio 已在使用它。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="782" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="788" />
             <source>Serial device</source>
             <translation>串口设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="789" />
             <source>Available</source>
             <translation>可用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="881" />
             <source>Use a device instead</source>
             <translation>改用设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Share %1 with several programs</source>
             <translation>与多个程序共享 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="961" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>每个程序都有自己的串口。Studio 会将设备的数据复制给所有程序。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="968" />
             <source>Open one of these ports in each program.</source>
             <translation>请在每个程序中打开其中一个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1111" />
             <source>the device</source>
             <translation>该设备</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>terminal</source>
             <translation>终端</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>test-tool</source>
             <translation>测试工具</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>logger</source>
             <translation>记录器</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1132" />
             <source>program-%1</source>
             <translation>程序-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
             <source>Name of program %1</source>
             <translation>程序 %1 的名称</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>Yes</source>
             <translation>是</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>No, Studio only</source>
             <translation>否，仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1232" />
             <source>Warning: %1</source>
             <translation>警告：%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1242" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows 会请求管理员权限。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1243" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the %1 as Studio only</source>
             <translation>将%1保持为仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1250" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>将其余 %1 个保持为仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1262" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1 收到的所有内容都会复制到 1 个串口。程序写入的任何内容都会回到 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1270" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1 收到的所有内容都会复制到全部 %2 个串口。任一程序写入的内容都会回到 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1321" />
             <source>Could not create another pair</source>
             <translation>无法再创建一个串口对</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1322" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows 未创建驱动程序串口对。请允许管理员权限，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1371" />
             <source>Sharing is not available in this build</source>
             <translation>此版本不提供共享功能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1372" />
             <source>Nothing was changed.</source>
             <translation>未做任何更改。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1389" />
             <source>Could not share %1</source>
             <translation>无法共享 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>上一次共享已被移除。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1392" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>配置未改变。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1412" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 已与 1 个程序共享</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 已与 %2 个程序共享</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1425" />
             <source>The most Studio can share is 32 programs</source>
             <translation>Studio 最多可共享 32 个程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1426" />
             <source>Remove a program's port first if you need a different one.</source>
             <translation>如需不同的数量，请先移除某个程序的串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1443" />
             <source>Could not add another program</source>
             <translation>无法添加更多程序</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1444" />
             <source>The share is as it was. Check the device, then try again.</source>
             <translation>共享保持原样。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1645" />
             <source>Studio only</source>
             <translation>仅限 Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1546" />
             <source>Not for other programs</source>
             <translation>不供其他程序使用</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1555" />
             <source>Copy</source>
             <translation>复制</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1560" />
             <source>Copy %1</source>
             <translation>复制 %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1567" />
             <source>%1 copied.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1615" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1 收到的所有内容现在都会复制到 1 个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1620" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1 收到的所有内容现在都会复制到全部 %2 个串口。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1627" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>每个程序打开其串口后，“等待中”标签会变为“程序已连接”。</translation>
         </message>
@@ -13698,682 +15212,720 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
-            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <location filename="../src/shell/shell_window.cpp" line="730" />
             <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
             <translation>部分 COM 端口已丢失。辅助服务或驱动程序重新启动，移除了您的程序已打开的端口。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <location filename="../src/shell/shell_window.cpp" line="733" />
             <source>Recreate ports</source>
             <translation>重新创建端口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1274" />
             <source>Ports recreated.</source>
             <translation>端口已重新创建。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <location filename="../src/shell/shell_window.cpp" line="1275" />
             <source>Could not recreate every port: %1</source>
             <translation>未能重新创建所有端口：%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>New</source>
             <translation>新建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>new document setup</source>
             <translation>新建文档 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>Open</source>
             <translation>已打开</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>open file setup</source>
             <translation>打开文件 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>Open recent</source>
             <translation>打开最近使用的</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>recent file</source>
             <translation>最近的文件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>Setups and templates</source>
             <translation>配置和模板</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="225" />
+            <location filename="../src/shell/shell_window.cpp" line="235" />
             <source>template setup</source>
             <translation>模板 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2482" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="2722" />
             <source>Save</source>
             <translation>保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>save file setup</source>
             <translation>保存文件 配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>Save as</source>
             <translation>另存为</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>save as file</source>
             <translation>另存为 文件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="243" />
             <source>Export as command</source>
             <translation>导出为命令</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="244" />
             <source>cli command</source>
             <translation>命令行 命令</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>Diagnostic bundle</source>
             <translation>诊断包</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="247" />
             <source>support zip</source>
             <translation>支持 压缩包</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>Quit</source>
             <translation>退出</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>exit</source>
             <translation>退出 关闭</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo</source>
             <translation>撤销</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
             <source>undo stack restore</source>
             <translation>撤销 栈 还原</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo</source>
             <translation>重做</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
             <source>redo stack restore</source>
             <translation>重做 栈 还原</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Remove selected</source>
             <translation>移除所选</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>delete remove</source>
             <translation>删除 移除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Add port</source>
             <translation>添加串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>new virtual create</source>
             <translation>新建 虚拟 创建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Virtual port</source>
             <translation>虚拟串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>Linked pair</source>
             <translation>链接对</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>pair two null modem</source>
             <translation>配对 两个 空调制解调器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="272" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>Attach real device</source>
             <translation>连接真实设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
             <source>serial device</source>
             <translation>串口设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="276" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
             <source>Network endpoint</source>
             <translation>网络端点</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217 网络</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="280" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>Mock fixture</source>
             <translation>模拟设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="291" />
             <source>fixture mock script</source>
             <translation>模拟设备 模拟 脚本</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="294" />
             <source>Copy port name</source>
             <translation>复制串口名称</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="285" />
+            <location filename="../src/shell/shell_window.cpp" line="295" />
             <source>clipboard path</source>
             <translation>剪贴板 路径</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2032" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="2272" />
             <source>Rename port</source>
             <translation>重命名端口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>name change relabel</source>
             <translation>名称 更改 重命名</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
             <source>Remove port</source>
             <translation>移除串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
             <source>Remove setup</source>
             <translation>移除设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>删除 移除 拆除 关闭 配对 共享 连接 全部</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1353" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="1498" />
             <source>Connect ports</source>
             <translation>连接串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="320" />
             <source>link split join redirect monitor</source>
             <translation>链接 拆分 合并 重定向 监视</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>Share a device</source>
             <translation>共享设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="315" />
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="333" />
             <source>split listeners</source>
             <translation>拆分 监听者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>Watch traffic</source>
             <translation>监视流量</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>monitor copy</source>
             <translation>监视 复制</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Add a program port</source>
             <translation>添加程序串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="330" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>share attach more listener another</source>
             <translation>共享 连接 更多 另一个 监听</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1758" />
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="1959" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="1977" />
             <source>Remove link</source>
             <translation>移除链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>delete disconnect</source>
             <translation>删除 断开</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="349" />
             <source>Link wiring</source>
             <translation>链接接线</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="339" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
             <source>line matrix faults</source>
             <translation>线路矩阵 故障</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>Owner</source>
             <translation>所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>policy arbitration</source>
             <translation>策略 仲裁</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Fit</source>
             <translation>适应窗口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>zoom</source>
             <translation>缩放</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Tidy layout</source>
             <translation>整理布局</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>arrange align overlap</source>
             <translation>排列 对齐 重叠</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
-            <location filename="../src/shell/shell_window.cpp" line="641" />
-            <location filename="../src/shell/shell_window.cpp" line="642" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="651" />
+            <location filename="../src/shell/shell_window.cpp" line="652" />
+            <location filename="../src/shell/shell_window.cpp" line="661" />
             <source>Search actions</source>
             <translation>搜索操作</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>command palette</source>
             <translation>命令面板</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="364" />
+            <location filename="../src/shell/shell_window.cpp" line="375" />
             <source>Setup check</source>
             <translation>配置检查</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="365" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>driver com0com permissions</source>
             <translation>驱动程序 com0com 权限</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="378" />
             <source>Benchmark</source>
             <translation>基准测试</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="368" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>throughput speed</source>
             <translation>吞吐量 速度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>Refresh now</source>
             <translation>立即刷新</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>reload</source>
             <translation>重新加载</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>Refreshed.</source>
             <translation>已刷新。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Settings</source>
             <translation>设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>preferences theme density refresh baud</source>
             <translation>首选项 主题 密度 刷新 波特率</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="386" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Advanced mode</source>
             <translation>高级模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>simple expert level</source>
             <translation>简单 专家 级别</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="769" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="838" />
             <source>Monitor</source>
             <translation>监视器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
             <source>traffic</source>
             <translation>流量</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>Show links as a list</source>
             <translation>以列表显示链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="406" />
             <source>links topology list accessible</source>
             <translation>链接 拓扑 列表 无障碍</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
+            <location filename="../src/shell/shell_window.cpp" line="1000" />
             <source>Log</source>
             <translation>日志</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
             <source>events</source>
             <translation>事件</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
-            <location filename="../src/shell/shell_window.cpp" line="934" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="1016" />
             <source>Topology JSON</source>
             <translation>拓扑 JSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
             <source>editor schema</source>
             <translation>编辑器 模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="415" />
             <source>Follow the system</source>
             <translation>跟随系统</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="405" />
+            <location filename="../src/shell/shell_window.cpp" line="416" />
             <source>theme colour scheme</source>
             <translation>主题 配色方案</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
             <source>Light</source>
             <translation>浅色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>theme</source>
             <translation>主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>Dark</source>
             <translation>深色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Comfortable</source>
             <translation>舒适</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>density spacing</source>
             <translation>密度 间距</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>Compact</source>
             <translation>紧凑</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="453" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Reset layout</source>
             <translation>重置布局</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>docks window</source>
             <translation>停靠面板 窗口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="456" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Show launcher</source>
             <translation>显示启动页</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
             <source>empty start</source>
             <translation>空白 开始</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="461" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>Help contents</source>
             <translation>帮助目录</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>manual help topics</source>
             <translation>手册 帮助 主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="464" />
+            <location filename="../src/shell/shell_window.cpp" line="475" />
             <source>Why is nothing arriving?</source>
             <translation>为什么没有数据到达？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="476" />
             <source>troubleshoot no data</source>
             <translation>故障排除 无数据</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>Keyboard shortcuts</source>
             <translation>键盘快捷键</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>keys</source>
             <translation>按键</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="469" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
             <source>Copy environment</source>
             <translation>复制环境信息</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="470" />
+            <location filename="../src/shell/shell_window.cpp" line="481" />
             <source>build bug report</source>
             <translation>构建 错误报告</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="472" />
+            <location filename="../src/shell/shell_window.cpp" line="483" />
             <source>About</source>
             <translation>关于</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="473" />
+            <location filename="../src/shell/shell_window.cpp" line="484" />
             <source>version licence copyright</source>
             <translation>版本 许可证 版权</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="487" />
-            <location filename="../src/shell/shell_window.cpp" line="492" />
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="497" />
+            <location filename="../src/shell/shell_window.cpp" line="502" />
+            <location filename="../src/shell/shell_window.cpp" line="1320" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="699" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
             <source>Change owner</source>
             <translation>更改所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1787" />
+            <location filename="../src/shell/shell_window.cpp" line="1672" />
+            <source>Generator started.</source>
+            <translation>生成器已启动。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1673" />
+            <source>Generator stopped.</source>
+            <translation>生成器已停止。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>1 port</source>
             <translation>1 个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
             <source>%1 ports</source>
             <translation>%1 个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1793" />
+            <location filename="../src/shell/shell_window.cpp" line="1994" />
             <source>1 link</source>
             <translation>1 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1794" />
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>%1 links</source>
             <translation>%1 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1827" />
+            <location filename="../src/shell/shell_window.cpp" line="2028" />
             <source>Remove only %1</source>
             <translation>仅移除 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1828" />
+            <location filename="../src/shell/shell_window.cpp" line="2029" />
             <source>Remove the whole setup</source>
             <translation>移除整个设置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 是共享某个设备的 %2 个程序之一，所在设置包含 %3：%4。仅移除 %1，其他程序继续共享；或关闭整个设置。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1839" />
+            <location filename="../src/shell/shell_window.cpp" line="2040" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 属于一个包含 %2 的设置：%3。仅移除 %1 及其链接，或关闭整个设置。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <location filename="../src/shell/shell_window.cpp" line="2112" />
             <source>%1 and %2</source>
             <translation>%1 和 %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1927" />
+            <location filename="../src/shell/shell_window.cpp" line="2128" />
             <source>Remove this setup?</source>
             <translation>移除此设置？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1929" />
+            <location filename="../src/shell/shell_window.cpp" line="2130" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>这将关闭 %1：%2。已打开其中任一串口的程序会失去该串口。保存设置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1951" />
+            <location filename="../src/shell/shell_window.cpp" line="2152" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>设置的一部分仍处于打开状态。请关闭正在使用它的程序，然后再次选择“移除设置”。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Removed the setup (%1).</source>
             <translation>已移除设置（%1）。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2164" />
             <source>Removed %1 of %2.</source>
             <translation>已移除 %2 中的 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <source>Remove all setups?</source>
+            <translation>移除所有配置？</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <source>This closes %n setup(s) and every port in them. Programs using those ports lose them. Nothing is saved until you save.</source>
+            <translation>
+                <numerusform>这会关闭 %n 个配置及其中的所有串口。使用这些串口的程序将失去它们。保存之前不会存入任何内容。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <source>Remove all</source>
+            <translation>全部移除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2203" />
+            <source>Removed all setups.</source>
+            <translation>已移除所有配置。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2204" />
+            <source>%n port(s) could not be removed.</source>
+            <translation>
+                <numerusform>有 %n 个串口无法移除。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2237" />
             <source>the device</source>
             <translation>该设备</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2004" />
+            <location filename="../src/shell/shell_window.cpp" line="2244" />
             <source>Could not add a program port to %1</source>
             <translation>无法向 %1 添加程序串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2005" />
+            <location filename="../src/shell/shell_window.cpp" line="2245" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>设置保持原样。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2014" />
+            <location filename="../src/shell/shell_window.cpp" line="2254" />
             <source>Added %1 to %2.</source>
             <translation>已将 %1 添加到 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2015" />
+            <location filename="../src/shell/shell_window.cpp" line="2255" />
             <source>a port</source>
             <translation>一个串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio?</source>
             <translation>关闭 Studio？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio</source>
             <translation>关闭 Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2663" />
+            <location filename="../src/shell/shell_window.cpp" line="2903" />
             <source>Keep Studio open</source>
             <translation>保持 Studio 打开</translation>
         </message>
@@ -14382,52 +15934,52 @@ Networks: %5</source>
             <translation type="vanished">撤销需要精确还原，而此版本无法证明能做到。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;File</source>
             <translation>文件(&amp;F)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="547" />
             <source>&amp;Edit</source>
             <translation>编辑(&amp;E)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="554" />
             <source>&amp;Ports</source>
             <translation>串口(&amp;P)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="559" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;Topology</source>
             <translation>拓扑(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="582" />
             <source>&amp;Tools</source>
             <translation>工具(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="590" />
             <source>&amp;View</source>
             <translation>视图(&amp;V)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Theme</source>
             <translation>主题</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="592" />
+            <location filename="../src/shell/shell_window.cpp" line="602" />
             <source>Density</source>
             <translation>密度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="599" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>&amp;Help</source>
             <translation>帮助(&amp;H)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="609" />
+            <location filename="../src/shell/shell_window.cpp" line="619" />
             <source>Main toolbar</source>
             <translation>主工具栏</translation>
         </message>
@@ -14436,100 +15988,100 @@ Networks: %5</source>
             <translation type="vanished">此版本不可用。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="764" />
+            <location filename="../src/shell/shell_window.cpp" line="833" />
             <source>Ports</source>
             <translation>串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="766" />
-            <location filename="../src/shell/shell_window.cpp" line="1223" />
+            <location filename="../src/shell/shell_window.cpp" line="835" />
+            <location filename="../src/shell/shell_window.cpp" line="1362" />
             <source>Inspector</source>
             <translation>检查器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="767" />
+            <location filename="../src/shell/shell_window.cpp" line="836" />
             <source>Send</source>
             <translation>发送</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="802" />
-            <location filename="../src/shell/shell_window.cpp" line="1276" />
+            <location filename="../src/shell/shell_window.cpp" line="884" />
+            <location filename="../src/shell/shell_window.cpp" line="1415" />
             <source>Copied %1.</source>
             <translation>已复制 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="822" />
+            <location filename="../src/shell/shell_window.cpp" line="904" />
             <source>Queued %1 bytes to %2.</source>
             <translation>已向 %2 排队 %1 个字节。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="878" />
+            <location filename="../src/shell/shell_window.cpp" line="960" />
             <source>Links</source>
             <translation>链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="933" />
+            <location filename="../src/shell/shell_window.cpp" line="1015" />
             <source>Applied the topology JSON.</source>
             <translation>已应用拓扑 JSON。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="1289" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo %1</source>
             <translation>撤销%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo %1</source>
             <translation>重做%1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1183" />
+            <location filename="../src/shell/shell_window.cpp" line="1322" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>撤销连接或移除链接、所有者的更改以及端口的重命名。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1324" />
             <source>This build cannot reverse changes.</source>
             <translation>此版本无法撤销更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1193" />
+            <location filename="../src/shell/shell_window.cpp" line="1332" />
             <source>Undid %1.</source>
             <translation>已撤销%1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1335" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>无法撤销%1。此后设置已更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1204" />
+            <location filename="../src/shell/shell_window.cpp" line="1343" />
             <source>Redid %1.</source>
             <translation>已重做%1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>无法重做%1。此后设置已更改。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1222" />
+            <location filename="../src/shell/shell_window.cpp" line="1361" />
             <source>Ports %1</source>
             <translation>串口 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1227" />
+            <location filename="../src/shell/shell_window.cpp" line="1366" />
             <source>Inspector %1</source>
             <translation>检查器 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1844" />
-            <location filename="../src/shell/shell_window.cpp" line="1857" />
+            <location filename="../src/shell/shell_window.cpp" line="2045" />
+            <location filename="../src/shell/shell_window.cpp" line="2058" />
             <source>Remove %1?</source>
             <translation>移除 %1？</translation>
         </message>
@@ -14538,214 +16090,215 @@ Networks: %5</source>
             <translation type="vanished">该串口及其链接将被移除。此操作无法撤销。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1826" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
-            <location filename="../src/shell/shell_window.cpp" line="2352" />
-            <location filename="../src/shell/shell_window.cpp" line="2481" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2592" />
+            <location filename="../src/shell/shell_window.cpp" line="2721" />
             <source>Cancel</source>
             <translation>取消</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1879" />
-            <location filename="../src/shell/shell_window.cpp" line="1950" />
+            <location filename="../src/shell/shell_window.cpp" line="2080" />
+            <location filename="../src/shell/shell_window.cpp" line="2151" />
             <source>Could not remove %1</source>
             <translation>无法移除 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <location filename="../src/shell/shell_window.cpp" line="2089" />
             <source>Removed %1.</source>
             <translation>已移除 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1364" />
+            <location filename="../src/shell/shell_window.cpp" line="1509" />
             <source>Sharing is not available in this build.</source>
             <translation>此版本不提供共享功能。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1391" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
             <source>Networking is not available in this build.</source>
             <translation>此版本不提供网络功能。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1413" />
+            <location filename="../src/shell/shell_window.cpp" line="1558" />
             <source>Bridge is running on port %1.</source>
             <translation>桥接正在端口 %1 上运行。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1414" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Open monitor</source>
             <translation>打开监视器</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1435" />
-            <location filename="../src/shell/shell_window.cpp" line="2393" />
-            <location filename="../src/shell/shell_window.cpp" line="2405" />
+            <location filename="../src/shell/shell_window.cpp" line="1580" />
+            <location filename="../src/shell/shell_window.cpp" line="2633" />
+            <location filename="../src/shell/shell_window.cpp" line="2645" />
             <source>Could not open %1</source>
             <translation>无法打开 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1436" />
+            <location filename="../src/shell/shell_window.cpp" line="1581" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>该配置需要此电脑上不可用的设备或网络端点。未做任何更改。请检查设备，然后重试。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1459" />
-            <location filename="../src/shell/shell_window.cpp" line="2417" />
-            <location filename="../src/shell/shell_window.cpp" line="2445" />
+            <location filename="../src/shell/shell_window.cpp" line="1604" />
+            <location filename="../src/shell/shell_window.cpp" line="2657" />
+            <location filename="../src/shell/shell_window.cpp" line="2685" />
             <source>%1 ports, %2 links</source>
             <translation>%1 个串口，%2 个链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1551" />
-            <location filename="../src/shell/shell_window.cpp" line="1574" />
+            <location filename="../src/shell/shell_window.cpp" line="1752" />
+            <location filename="../src/shell/shell_window.cpp" line="1775" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>已创建链接对。程序 A 打开 %1；程序 B 打开 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1618" />
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>正在监视 %1。监视端是 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1668" />
+            <location filename="../src/shell/shell_window.cpp" line="1869" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 属于后续工作包。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1674" />
+            <location filename="../src/shell/shell_window.cpp" line="1875" />
             <source>%1 arrives with %2.</source>
             <translation>%1 将随 %2 提供。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1759" />
+            <location filename="../src/shell/shell_window.cpp" line="1960" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>移除此链接？%1。保存配置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <location filename="../src/shell/shell_window.cpp" line="1971" />
             <source>Could not remove the link</source>
             <translation>无法移除链接</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1980" />
             <source>Removed the link.</source>
             <translation>已移除链接。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1858" />
+            <location filename="../src/shell/shell_window.cpp" line="2059" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>移除 %1 及其链接？保存配置之前不会保存任何内容。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2035" />
+            <location filename="../src/shell/shell_window.cpp" line="2275" />
             <source>Renamed %1 to %2.</source>
             <translation>已将 %1 重命名为 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2055" />
+            <location filename="../src/shell/shell_window.cpp" line="2295" />
             <source>%1 is now %2.</source>
             <translation>%1 现在是 %2。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2070" />
+            <location filename="../src/shell/shell_window.cpp" line="2310" />
             <source>Released %1.</source>
             <translation>已释放 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2127" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
             <source>Add a port before opening the line matrix.</source>
             <translation>打开线路矩阵之前请先添加串口。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2162" />
+            <location filename="../src/shell/shell_window.cpp" line="2402" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>请选择采用所有者策略的合并目标，以控制谁可以写入。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2243" />
+            <location filename="../src/shell/shell_window.cpp" line="2483" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>测试模式。新串口仅在 Virtual Serial Studio 内有效。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2264" />
+            <location filename="../src/shell/shell_window.cpp" line="2504" />
             <source>Could not restart as administrator</source>
             <translation>无法以管理员身份重新启动</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2342" />
+            <location filename="../src/shell/shell_window.cpp" line="2582" />
             <source>Environment copied.</source>
             <translation>已复制环境信息。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start a new setup?</source>
             <translation>开始新的设置？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start new</source>
             <translation>开始新建</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2608" />
             <source>Started a new setup.</source>
             <translation>已开始新配置。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2378" />
+            <location filename="../src/shell/shell_window.cpp" line="2618" />
             <source>Open setup</source>
             <translation>打开配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2379" />
+            <location filename="../src/shell/shell_window.cpp" line="2619" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studio 配置 (*.json);;所有文件 (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2420" />
+            <location filename="../src/shell/shell_window.cpp" line="2660" />
             <source>Opened %1.</source>
             <translation>已打开 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2436" />
+            <location filename="../src/shell/shell_window.cpp" line="2676" />
             <source>Could not save this setup</source>
             <translation>无法保存此配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2449" />
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2689" />
+            <location filename="../src/shell/shell_window.cpp" line="2690" />
             <source>Saved %1.</source>
             <translation>已保存 %1。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2456" />
+            <location filename="../src/shell/shell_window.cpp" line="2696" />
             <source>Save setup</source>
             <translation>保存配置</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2458" />
+            <location filename="../src/shell/shell_window.cpp" line="2698" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studio 配置 (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2476" />
+            <location filename="../src/shell/shell_window.cpp" line="2716" />
             <source>Save changes to %1?</source>
             <translation>保存对 %1 的更改？</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2477" />
+            <location filename="../src/shell/shell_window.cpp" line="2717" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>自上次保存以来，您的串口和链接已更改。您可以在设置中关闭此提示。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2480" />
+            <location filename="../src/shell/shell_window.cpp" line="2720" />
             <source>Don't save</source>
             <translation>不保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2545" />
+            <location filename="../src/shell/shell_window.cpp" line="2785" />
             <source>Layout reset.</source>
             <translation>已重置布局。</translation>
         </message>
@@ -14753,93 +16306,93 @@ Networks: %5</source>
     <context>
         <name>vss::gui::StatusBar</name>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="24" />
+            <location filename="../src/shell/status_bar.cpp" line="29" />
             <source>Status bar</source>
             <translation>状态栏</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="39" />
+            <location filename="../src/shell/status_bar.cpp" line="44" />
             <source>0 dropped</source>
             <translation>已丢弃 0 个</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="45" />
-            <location filename="../src/shell/status_bar.cpp" line="154" />
+            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="159" />
             <source>Setup ready</source>
             <translation>配置就绪</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="55" />
             <source>Interface mode</source>
             <translation>界面模式</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="51" />
+            <location filename="../src/shell/status_bar.cpp" line="56" />
             <source>Simple</source>
             <translation>简单</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="52" />
+            <location filename="../src/shell/status_bar.cpp" line="57" />
             <source>Advanced</source>
             <translation>高级</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="109" />
+            <location filename="../src/shell/status_bar.cpp" line="114" />
             <source>No ports yet</source>
             <translation>暂无串口</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="112" />
+            <location filename="../src/shell/status_bar.cpp" line="117" />
             <source>Ports %1</source>
             <translation>串口 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="113" />
+            <location filename="../src/shell/status_bar.cpp" line="118" />
             <source>Links %1</source>
             <translation>链接 %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="115" />
+            <location filename="../src/shell/status_bar.cpp" line="120" />
             <source>RX %1   TX %2</source>
             <translation>RX %1   TX %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="116" />
+            <location filename="../src/shell/status_bar.cpp" line="121" />
             <source>Hub running</source>
             <translation>中枢运行中</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="117" />
+            <location filename="../src/shell/status_bar.cpp" line="122" />
             <source>Hub stopped</source>
             <translation>中枢已停止</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="127" />
+            <location filename="../src/shell/status_bar.cpp" line="132" />
             <source>%1 dropped, not owner</source>
             <translation>已丢弃 %1 个，非所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="129" />
+            <location filename="../src/shell/status_bar.cpp" line="134" />
             <source>Bytes from a port that is not the owner were not forwarded.</source>
             <translation>来自非所有者串口的字节未被转发。</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="134" />
+            <location filename="../src/shell/status_bar.cpp" line="139" />
             <source>%1 dropped</source>
             <translation>已丢弃 %1 个</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="158" />
+            <location filename="../src/shell/status_bar.cpp" line="163" />
             <source>Setup needs attention</source>
             <translation>配置需要注意</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="162" />
+            <location filename="../src/shell/status_bar.cpp" line="167" />
             <source>Setup not checked</source>
             <translation>配置未检查</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="166" />
+            <location filename="../src/shell/status_bar.cpp" line="171" />
             <source>Open Tools, Setup check for the details.</source>
             <translation>打开“工具”，查看“配置检查”了解详情。</translation>
         </message>
@@ -15414,6 +16967,1088 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>vss::gui::simple::JobForm</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="70" />
+            <source>%1 and %2</source>
+            <translation>%1 和 %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="264" />
+            <source>Your program</source>
+            <translation>你的程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>Second program</source>
+            <translation>第二个程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>First program</source>
+            <translation>第一个程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="270" />
+            <source>Program</source>
+            <translation>程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="271" />
+            <location filename="../src/simple/job_form.cpp" line="274" />
+            <location filename="../src/simple/job_form.cpp" line="278" />
+            <location filename="../src/simple/job_form.cpp" line="288" />
+            <location filename="../src/simple/job_form.cpp" line="962" />
+            <source>Device</source>
+            <translation>设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="273" />
+            <location filename="../src/simple/job_form.cpp" line="289" />
+            <source>Programs</source>
+            <translation>程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="282" />
+            <source>On the line</source>
+            <translation>在线路上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="285" />
+            <source>Receiver</source>
+            <translation>接收方</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="286" />
+            <source>Senders</source>
+            <translation>发送方</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="404" />
+            <location filename="../src/simple/job_form.cpp" line="416" />
+            <source>%1 (%2)</source>
+            <translation>%1（%2）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="414" />
+            <source>a new port</source>
+            <translation>一个新串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="419" />
+            <location filename="../src/simple/job_form.cpp" line="1139" />
+            <source>the device</source>
+            <translation>该设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="422" />
+            <source>the network device</source>
+            <translation>网络设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>Back to the setup</source>
+            <translation>返回配置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>All jobs</source>
+            <translation>所有任务</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="461" />
+            <location filename="../src/simple/job_form.cpp" line="463" />
+            <source>Change %1</source>
+            <translation>更改 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="470" />
+            <source>Cancel</source>
+            <translation>取消</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Apply</source>
+            <translation>应用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Create</source>
+            <translation>创建</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="508" />
+            <source>On the other end</source>
+            <translation>在另一端</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="510" />
+            <source>I'll type to it from this window</source>
+            <translation>我在此窗口中向它输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="511" />
+            <source>What your program sends shows here, and what you type goes to your program. Use it to see that your program sends what you expect.</source>
+            <translation>你的程序发送的内容会显示在这里，你输入的内容会发送给你的程序。可用它确认程序发送的内容是否符合预期。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="516" />
+            <source>Send everything straight back</source>
+            <translation>全部原样返回</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="517" />
+            <source>Whatever your program sends comes back to it at once. A quick test that its sending and receiving both work.</source>
+            <translation>你的程序发送的内容会立即返回给它。可快速测试它的发送和接收是否都正常。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="528" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="537" />
+            <source>You can connect it to something else later with Change.</source>
+            <translation>之后可以用“更改”把它连接到别的对象。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="543" />
+            <source>Other computers connect to</source>
+            <translation>其他计算机连接到</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="545" />
+            <location filename="../src/simple/job_form.cpp" line="549" />
+            <location filename="../src/simple/job_form.cpp" line="924" />
+            <source>Network port</source>
+            <translation>网络串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="562" />
+            <source>Other computers connect to this PC's address on this port. 4001 is common for serial over the network.</source>
+            <translation>其他计算机通过此 PC 的地址和这个端口连接。网络串口常用 4001。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="585" />
+            <source>Device speed (baud rate)</source>
+            <translation>设备速度（波特率）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="587" />
+            <source>The device's manual gives it. If text looks garbled later, this is usually why.</source>
+            <translation>设备手册里有这个值。之后如果文字显示乱码，通常就是这个原因。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="591" />
+            <source>Other device settings</source>
+            <translation>其他设备设置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="600" />
+            <location filename="../src/simple/job_form.cpp" line="613" />
+            <source>None</source>
+            <translation>无</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="601" />
+            <source>Odd</source>
+            <translation>奇</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="602" />
+            <source>Even</source>
+            <translation>偶</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="614" />
+            <source>Hardware (RTS and CTS)</source>
+            <translation>硬件（RTS 和 CTS）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="616" />
+            <source>Software (XON and XOFF)</source>
+            <translation>软件（XON 和 XOFF）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="620" />
+            <source>Data bits</source>
+            <translation>数据位</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="621" />
+            <source>Parity</source>
+            <translation>奇偶校验</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="622" />
+            <source>Stop bits</source>
+            <translation>停止位</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="623" />
+            <source>Flow control</source>
+            <translation>流控制</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="643" />
+            <location filename="../src/simple/job_form.cpp" line="646" />
+            <source>Name (optional)</source>
+            <translation>名称（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="655" />
+            <source>Also</source>
+            <translation>另外</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="665" />
+            <source>Handy for checking the device works before your own program is ready. What you type goes to the device, and its replies show here and in your programs.</source>
+            <translation>适合在你自己的程序就绪之前检查设备是否正常。你输入的内容会发送到设备，它的回复会显示在这里和你的程序中。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="672" />
+            <source>Show me the data going through</source>
+            <translation>显示经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="680" />
+            <source>A live list of what is sent each way, on the setup's page. It only looks, so it changes nothing. You can turn it on later too.</source>
+            <translation>在配置页面上实时列出双向发送的内容。它只是查看，不会改变任何设置。之后也可以再开启。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="748" />
+            <source>Add a program</source>
+            <translation>添加程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="758" />
+            <source>Add a device</source>
+            <translation>添加设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="768" />
+            <source>Up to %1. You can add more later.</source>
+            <translation>最多 %1 个。之后可以再添加。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="800" />
+            <source>Port name</source>
+            <translation>串口名称</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="816" />
+            <source>New port</source>
+            <translation>新串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="823" />
+            <source>Program, e.g. PuTTY (optional)</source>
+            <translation>程序，例如 PuTTY（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="824" />
+            <source>Which program, optional</source>
+            <translation>哪个程序（可选）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="848" />
+            <location filename="../src/simple/job_form.cpp" line="1010" />
+            <source>Remove %1</source>
+            <translation>移除 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="849" />
+            <source>Remove</source>
+            <translation>移除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="859" />
+            <source>Some older programs only list COM1 to COM9.</source>
+            <translation>一些较旧的程序只列出 COM1 到 COM9。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="862" />
+            <source>Studio picks the name, such as /dev/pts/3 or COM7, and shows it when the port is ready.</source>
+            <translation>Studio 会选择名称，例如 /dev/pts/3 或 COM7，并在串口就绪时显示。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="882" />
+            <source>Where is the device</source>
+            <translation>设备在哪里</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="883" />
+            <source>Plugged into this PC</source>
+            <translation>已插在此 PC 上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="884" />
+            <source>On the network</source>
+            <translation>在网络上</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="910" />
+            <source>Address, such as 192.168.1.50</source>
+            <translation>地址，例如 192.168.1.50</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="911" />
+            <source>Device address</source>
+            <translation>设备地址</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="935" />
+            <source>How it talks</source>
+            <translation>通信方式</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="952" />
+            <source>For a serial server box, such as a Moxa or Lantronix. Its manual gives the address and port. Choose RFC 2217 if the box supports it, so programs can change the baud rate.</source>
+            <translation>适用于串口服务器设备，例如 Moxa 或 Lantronix。地址和端口见其手册。如果设备支持，请选择 RFC 2217，这样程序就能更改波特率。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="973" />
+            <source>%1  %2</source>
+            <translation>%1  %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="978" />
+            <source>No devices found</source>
+            <translation>未找到设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="991" />
+            <source>Refresh</source>
+            <translation>刷新</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1018" />
+            <source>Not listed? Plug it in, then choose Refresh.</source>
+            <translation>没有列出？请先插上设备，然后点击“刷新”。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1138" />
+            <source>Let me type to %1 from this window</source>
+            <translation>让我在此窗口中向 %1 输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1142" />
+            <source>Studio names it for you</source>
+            <translation>由 Studio 为你命名</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1157" />
+            <source>Sends it straight back</source>
+            <translation>原样发回</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1158" />
+            <location filename="../src/simple/job_form.cpp" line="1161" />
+            <source>You, in this window</source>
+            <translation>你，在此窗口中</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1164" />
+            <source>Other computers, port %1</source>
+            <translation>其他计算机，端口 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1204" />
+            <source> Your program opens &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> 你的程序打开 &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1206" />
+            <source> Your programs open &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> 你的各个程序打开 &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1209" />
+            <source>, not %1</source>
+            <translation>，而不是 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1222" />
+            <source>Studio makes &lt;b&gt;%1&lt;/b&gt; for your program to open. </source>
+            <translation>Studio 会创建 &lt;b&gt;%1&lt;/b&gt; 供你的程序打开。 </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1224" />
+            <source>Whatever it sends comes straight back to it.</source>
+            <translation>它发送的内容会立即返回给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1225" />
+            <source>What it sends shows in this window, and what you type here goes to it.</source>
+            <translation>它发送的内容显示在此窗口中，你在这里输入的内容会发送给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1228" />
+            <source>What &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Open one in each program.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的内容会到达 &lt;b&gt;%2&lt;/b&gt;，反过来也一样。请在每个程序中各打开一个。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1232" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt; and passes its data to and from &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>Studio 会打开 &lt;b&gt;%1&lt;/b&gt;，并在它与 &lt;b&gt;%2&lt;/b&gt; 之间双向传递数据。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1237" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; sends goes to &lt;b&gt;%2&lt;/b&gt;. Whatever any of them sends goes to the device.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的所有内容都会发到 &lt;b&gt;%2&lt;/b&gt;。其中任何一个发送的内容都会发到设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1242" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt;. On the next page, type to it and read its replies.</source>
+            <translation>Studio 会打开 &lt;b&gt;%1&lt;/b&gt;。在下一页中，你可以向它输入并查看它的回复。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1246" />
+            <source>Other computers connect to this PC on network port &lt;b&gt;%1&lt;/b&gt; and talk to &lt;b&gt;%2&lt;/b&gt;. Data goes both ways.</source>
+            <translation>其他计算机通过网络端口 &lt;b&gt;%1&lt;/b&gt; 连接到此 PC，并与 &lt;b&gt;%2&lt;/b&gt; 通信。数据双向传输。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1251" />
+            <source>&lt;b&gt;%1&lt;/b&gt; share one line. Each hears what the others send, and none hears itself.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 共用一条线路。每个都能收到其他成员发送的内容，但收不到自己发送的内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1256" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; send arrives at &lt;b&gt;%2&lt;/b&gt;, in the order it arrives. Nothing goes back to them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 发送的所有内容都会按到达顺序送到 &lt;b&gt;%2&lt;/b&gt;。不会有内容返回给它们。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1261" />
+            <source>&lt;b&gt;%1&lt;/b&gt; can all send to &lt;b&gt;%2&lt;/b&gt;, but only one at a time. You choose which on the next page. What the device sends back does not reach them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; 都可以向 &lt;b&gt;%2&lt;/b&gt; 发送，但一次只能有一个。你在下一页选择是哪一个。设备回传的内容不会到达它们。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1299" />
+            <source>%1 stay open. Programs using them are not interrupted.</source>
+            <translation>%1 保持打开。使用它们的程序不会受到影响。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/job_form.cpp" line="1302" />
+            <source>%n new port(s) or device(s).</source>
+            <translation>
+                <numerusform>%n 个新串口或设备。</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1304" />
+            <source>Closes %1. A program using one of them loses it.</source>
+            <translation>关闭 %1。使用其中某个串口的程序将失去它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1307" />
+            <source>No ports open or close.</source>
+            <translation>不会打开或关闭任何串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1308" />
+            <source>What Apply changes: %1</source>
+            <translation>“应用”会更改：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1324" />
+            <source>Choose a device. Plug it in, then choose Refresh.</source>
+            <translation>请选择设备。先插上设备，然后点击“刷新”。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1327" />
+            <source>%1 is chosen twice. Choose each device once.</source>
+            <translation>%1 被选择了两次。每个设备只能选择一次。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1335" />
+            <source>Enter the device's network address.</source>
+            <translation>请输入设备的网络地址。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1340" />
+            <source>COM%1 is chosen twice. Choose another name.</source>
+            <translation>COM%1 被选择了两次。请选择其他名称。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1348" />
+            <source>Sending everything back is not available in this build.</source>
+            <translation>此版本不支持原样返回所有内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1367" />
+            <source>Could not change the setup. %1 What was there before was put back where Studio could.</source>
+            <translation>无法更改配置。%1 Studio 已尽可能恢复了原来的内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1370" />
+            <source>Could not set it up. %1 Nothing was changed.</source>
+            <translation>无法完成设置。%1 未做任何更改。</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::JobGrid</name>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="217" />
+            <source>What do you want to do?</source>
+            <translation>您想做什么？</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="222" />
+            <source>Choose a job. Studio sets it up and tells you which port to open in your program. Everything you set up is listed on the left, where you can change or remove it.</source>
+            <translation>请选择一项任务。Studio 会完成设置，并告诉你在程序中打开哪个串口。你设置的所有内容都列在左侧，可以在那里更改或移除。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="228" />
+            <location filename="../src/simple/job_grid.cpp" line="341" />
+            <source>Details</source>
+            <translation>详细信息</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="268" />
+            <source>My program needs a serial port</source>
+            <translation>我的程序需要一个串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="270" />
+            <source>I have a serial device</source>
+            <translation>我有一个串口设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="273" />
+            <source>Several programs or devices at once</source>
+            <translation>同时连接多个程序或设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="278" />
+            <source>See the data on a port</source>
+            <translation>查看串口上的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="279" />
+            <source>See what goes in and out of a port you already set up. Read only, so nothing changes for the programs using it.</source>
+            <translation>查看进出你已设置好的串口的内容。只读，因此不会影响正在使用它的程序。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="285" />
+            <source>Check this PC is ready</source>
+            <translation>检查此 PC 是否就绪</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="286" />
+            <source>Find out whether this PC can make ports that other programs can open, and what to do if not.</source>
+            <translation>了解此 PC 能否创建供其他程序打开的串口，以及不能时该怎么办。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="291" />
+            <source>Look and check</source>
+            <translation>查看与检查</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="297" />
+            <location filename="../src/simple/job_grid.cpp" line="303" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="308" />
+            <source>Open a saved setup…</source>
+            <translation>打开已保存的配置…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="312" />
+            <source>Start from an example…</source>
+            <translation>从示例开始…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="339" />
+            <source>This PC can make ports that other programs can open.</source>
+            <translation>此 PC 可以创建供其他程序打开的串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="346" />
+            <source>Other programs cannot see new ports until a driver is installed.</source>
+            <translation>安装驱动程序之前，其他程序看不到新串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="349" />
+            <source>Open setup check</source>
+            <translation>打开配置检查</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SetupKinds</name>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="405" />
+            <source>%1 shared with %n programs</source>
+            <translation>
+                <numerusform>%1 与 %n 个程序共享</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="414" />
+            <source>%n on one line</source>
+            <translation>
+                <numerusform>%n 个在同一条线上</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="419" />
+            <source>%n senders into %1</source>
+            <translation>
+                <numerusform>%n 个发送方到 %1</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <source>Line with %n</source>
+            <translation type="vanished">
+                <numerusform>含 %n 个成员的线路</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <source>%n into %1</source>
+            <translation type="vanished">
+                <numerusform>%n 个合并到 %1</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="425" />
+            <source>%n programs take turns sending to %1</source>
+            <translation>
+                <numerusform>%n 个程序轮流向 %1 发送</numerusform>
+            </translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SetupPage</name>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="84" />
+            <source>%1 (%2)</source>
+            <translation>%1（%2）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="132" />
+            <source>Received text</source>
+            <translation>收到的文本</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="138" />
+            <source>Type, then press Enter</source>
+            <translation>输入后按回车</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="139" />
+            <source>Text to send</source>
+            <translation>要发送的文本</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="141" />
+            <source>Send</source>
+            <translation>发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="152" />
+            <source>Enter adds a line ending</source>
+            <translation>回车会添加行尾符</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="161" />
+            <location filename="../src/simple/setup_page.cpp" line="177" />
+            <source>Data going through</source>
+            <translation>经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="162" />
+            <source>Show me the data going through</source>
+            <translation>显示经过的数据</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="170" />
+            <source>Read only. Useful when a program says nothing arrives.</source>
+            <translation>只读。当程序提示没有收到数据时很有用。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="181" />
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Pause</source>
+            <translation>暂停</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Resume</source>
+            <translation>继续</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="189" />
+            <source>Clear</source>
+            <translation>清除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="197" />
+            <source>Show as hex</source>
+            <translation>以十六进制显示</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="204" />
+            <source>Hide</source>
+            <translation>隐藏</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="216" />
+            <source>See it on the canvas (Advanced mode)</source>
+            <translation>在画布上查看（高级模式）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="256" />
+            <source>Change in Advanced mode</source>
+            <translation>在高级模式中更改</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="257" />
+            <source>Change…</source>
+            <translation>更改…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="269" />
+            <source>Remove setup</source>
+            <translation>移除设置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="293" />
+            <location filename="../src/simple/setup_page.cpp" line="466" />
+            <source>your program</source>
+            <translation>你的程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="295" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt; at %3 baud.</source>
+            <translation>在 %1 中，以 %3 波特打开 &lt;b&gt;%2&lt;/b&gt;。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="300" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>在 %1 中打开 &lt;b&gt;%2&lt;/b&gt;。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="305" />
+            <source>Do not open &lt;b&gt;%1&lt;/b&gt; itself in your programs. Studio has it open.</source>
+            <translation>不要在你的程序中打开 &lt;b&gt;%1&lt;/b&gt; 本身。它已被 Studio 打开。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="309" />
+            <source>Choose below which program sends. The others only listen.</source>
+            <translation>请在下方选择由哪个程序发送。其他程序只接收。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="311" />
+            <source>What to do now</source>
+            <translation>现在该做什么</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="325" />
+            <source>Ports</source>
+            <translation>串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="341" />
+            <source>On the other end: everything your program sends comes straight back to it.</source>
+            <translation>另一端：你的程序发送的所有内容都会原样返回给它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="344" />
+            <source>Echo</source>
+            <translation>回显</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="348" />
+            <source>Add a program</source>
+            <translation>添加程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="370" />
+            <source>Type to %1</source>
+            <translation>向 %1 输入</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="373" />
+            <source>What your program sends on %1 shows here. What you type goes to your program.</source>
+            <translation>你的程序在 %1 上发送的内容显示在这里。你输入的内容会发送给你的程序。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="378" />
+            <source>What you type goes to %1. Its replies show here.</source>
+            <translation>你输入的内容会发送到 %1，它的回复显示在这里。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="382" />
+            <source>What you type goes to %1. Its replies show here, and your programs get them too.</source>
+            <translation>你输入的内容会发送到 %1。它的回复显示在这里，你的程序也会收到。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="398" />
+            <source>Program opens</source>
+            <translation>程序打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="399" />
+            <source>%1 opens</source>
+            <translation>%1 打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="412" />
+            <location filename="../src/simple/setup_page.cpp" line="557" />
+            <source>Not open</source>
+            <translation>未打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="417" />
+            <source>Open in a program</source>
+            <translation>在程序中打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="422" />
+            <source>No program yet</source>
+            <translation>暂无程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="427" />
+            <source>Open</source>
+            <translation>已打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="435" />
+            <source>%1 copied.</source>
+            <translation>已复制 %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="449" />
+            <source>Close %1</source>
+            <translation>关闭 %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="450" />
+            <source>Close this port</source>
+            <translation>关闭此串口</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="457" />
+            <location filename="../src/simple/setup_page.cpp" line="562" />
+            <source>%1: %2</source>
+            <translation>%1：%2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="462" />
+            <source>No program has opened %1 yet. In %2, choose exactly %1. This changes as soon as one does. &lt;a href="help"&gt;Nothing arriving?&lt;/a&gt;</source>
+            <translation>还没有程序打开 %1。请在 %2 中准确选择 %1。一旦有程序打开，这里就会更新。&lt;a href="help"&gt;没有收到数据？&lt;/a&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="485" />
+            <source>The program</source>
+            <translation>该程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="488" />
+            <source>%1 opened %2 at %3 baud, but the device runs at %4. Text will look garbled. Set %4 in %5.</source>
+            <translation>%1 以 %3 波特打开了 %2，但设备的速度是 %4。文字会显示为乱码。请在 %5 中设置为 %4。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="493" />
+            <source>the program</source>
+            <translation>该程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="505" />
+            <source>Sending now</source>
+            <translation>正在发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="511" />
+            <source>Let this one send</source>
+            <translation>让此程序发送</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="518" />
+            <source>%1 sends now. The others only listen.</source>
+            <translation>%1 正在发送。其他的只接收。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="538" />
+            <source>Device. Studio has it open, so your programs use their own ports instead.</source>
+            <translation>设备。它已被 Studio 打开，因此你的程序改用它们自己的串口。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="540" />
+            <source>Network device. Studio is connected to it.</source>
+            <translation>网络设备。Studio 已连接到它。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="551" />
+            <source>Open at %1 baud</source>
+            <translation>以 %1 波特打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="552" />
+            <source>Connected</source>
+            <translation>已连接</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="575" />
+            <source>Other computers connect to this PC on network port</source>
+            <translation>其他计算机通过以下网络端口连接到此 PC</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="584" />
+            <source>No computer connected</source>
+            <translation>没有计算机连接</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_page.cpp" line="585" />
+            <source>%n computer(s) connected</source>
+            <translation>
+                <numerusform>已连接 %n 台计算机</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="592" />
+            <source>Network port %1: %2</source>
+            <translation>网络端口 %1：%2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="640" />
+            <source>%1  %2 sent  %3</source>
+            <translation>%1  %2 发送  %3</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>sent      %1</source>
+            <translation>发送  %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>received  %1</source>
+            <translation>接收  %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="703" />
+            <source>Could not send to %1. %2</source>
+            <translation>无法发送到 %1。%2</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SimplePage</name>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="61" />
+            <source>%1 (%2)</source>
+            <translation>%1（%2）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="67" />
+            <source>%1, open in a program</source>
+            <translation>%1，在程序中打开</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="71" />
+            <source>%1, no program yet</source>
+            <translation>%1，暂无程序</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="77" />
+            <source>%1, device</source>
+            <translation>%1，设备</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="126" />
+            <location filename="../src/simple/simple_page.cpp" line="149" />
+            <source>Your setups</source>
+            <translation>你的配置</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="132" />
+            <source>New</source>
+            <translation>新建</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="136" />
+            <location filename="../src/simple/simple_page.cpp" line="137" />
+            <source>Set up something new</source>
+            <translation>设置新内容</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="173" />
+            <source>Save…</source>
+            <translation>保存…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="177" />
+            <source>Open…</source>
+            <translation>打开…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="181" />
+            <source>Remove all</source>
+            <translation>全部移除</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="218" />
+            <source>Nothing is set up yet, so there is no port to look at. Set something up first.</source>
+            <translation>尚未设置任何内容，因此没有可查看的串口。请先设置一些内容。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="226" />
+            <source>Choose a setup on the left to see its data.</source>
+            <translation>在左侧选择一个配置以查看其数据。</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/simple_page.cpp" line="299" />
+            <source>%n setup(s)</source>
+            <translation>
+                <numerusform>%n 个配置</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="304" />
+            <source>Nothing set up yet. Choose what you want to do on the right.</source>
+            <translation>尚未设置任何内容。请在右侧选择你想做的事。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="315" />
+            <source>%1 (Advanced)</source>
+            <translation>%1（高级）</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="385" />
+            <source>Done. %1.</source>
+            <translation>完成。%1。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="495" />
+            <source>Closed %1. The other programs were not interrupted.</source>
+            <translation>已关闭 %1。其他程序未受影响。</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="519" />
+            <source>Could not change the setup. %1</source>
+            <translation>无法更改配置。%1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="541" />
+            <source>Added %1. The other programs were not interrupted.</source>
+            <translation>已添加 %1。其他程序未受影响。</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::WireDiagram</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="88" />
+            <source>Picture of the setup</source>
+            <translation>配置示意图</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="100" />
+            <source>%1 to %2</source>
+            <translation>%1 到 %2</translation>
+        </message>
+    </context>
+    <context>
         <name>vss::gui::support::HelpContentsDialog</name>
         <message>
             <location filename="../src/support/help_contents_dialog.cpp" line="120" />
@@ -15441,7 +18076,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::support::TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
         </message>

@@ -41,6 +41,7 @@
 #include "shell/port_warnings.hpp"
 #include "shell/status_bar.hpp"
 #include "shell/undo_steps.hpp"
+#include "simple/simple_page.hpp"
 #include "support/about_dialog.hpp"
 #include "support/build_info.hpp"
 #include "support/diagnostic_bundle_dialog.hpp"
@@ -66,6 +67,7 @@
 #include <vss/studio/studio.hpp>
 
 #include <QAction>
+#include <QSet>
 #include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
@@ -664,8 +666,24 @@ void ShellWindow::build_toolbar()
 
 void ShellWindow::build_central()
 {
-    central_ = new QStackedWidget(this);
-    setCentralWidget(central_);
+    // The lost-ports banner sits above the body, so it shows in Simple and
+    // Advanced mode alike.
+    auto* body = new QWidget(this);
+    auto* body_layout = new QVBoxLayout(body);
+    body_layout->setContentsMargins(0, 0, 0, 0);
+    body_layout->setSpacing(0);
+    lost_banner_ = new NoteBanner(
+        NoteBanner::kind::danger,
+        tr("Some COM ports were lost. The helper service or the driver was "
+           "restarted and removed the ports your programs had open."),
+        body);
+    lost_banner_->set_action(tr("Recreate ports"),
+                             [this] { recreate_lost_ports(); });
+    lost_banner_->setVisible(false);
+    body_layout->addWidget(lost_banner_);
+    central_ = new QStackedWidget(body);
+    body_layout->addWidget(central_, 1);
+    setCentralWidget(body);
 
     launcher_ = new Launcher(backend_, central_);
     connect(launcher_, &Launcher::job_requested, this,
@@ -680,21 +698,47 @@ void ShellWindow::build_central()
             [this] { level_.set_advanced(true); });
     central_->addWidget(launcher_);
 
+    // Simple mode is the setups list and a guided page per job; the dock
+    // grid and the canvas are Advanced mode (screens/08-simple-mode.md).
+    simple_page_ = new simple::SimplePage(backend_, central_);
+    connect(simple_page_, &simple::SimplePage::check_requested, this,
+            [this] { open_setup_check(); });
+    connect(simple_page_, &simple::SimplePage::open_requested, this,
+            [this] { open_document(); });
+    connect(simple_page_, &simple::SimplePage::save_requested, this,
+            [this] { save_document(); });
+    connect(simple_page_, &simple::SimplePage::examples_requested, this,
+            [this] { open_templates(); });
+    connect(simple_page_, &simple::SimplePage::advanced_requested, this,
+            [this] { level_.set_advanced(true); });
+    connect(simple_page_, &simple::SimplePage::troubleshoot_requested, this,
+            [this] { open_troubleshoot(); });
+    connect(simple_page_, &simple::SimplePage::remove_setup_requested, this,
+            [this](vss::endpoint_id port)
+            {
+                remove_setup(
+                    find_setup(backend_.ports(), backend_.links(), port));
+            });
+    connect(simple_page_, &simple::SimplePage::remove_all_requested, this,
+            [this] { remove_all_setups(); });
+    connect(simple_page_, &simple::SimplePage::setup_selected, this,
+            [this](vss::endpoint_id port)
+            {
+                selection_.select_link(0);
+                selection_.select_port(port);
+            });
+    connect(simple_page_, &simple::SimplePage::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    central_->addWidget(simple_page_);
+
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
     layout->setContentsMargins(8, 8, 8, 8);
 
-    // The ports a restart of the helper or the driver took away.  Hidden
-    // until there are any.
-    lost_banner_ = new NoteBanner(
-        NoteBanner::kind::danger,
-        tr("Some COM ports were lost. The helper service or the driver was "
-           "restarted and removed the ports your programs had open."),
-        workspace_);
-    lost_banner_->set_action(tr("Recreate ports"),
-                             [this] { recreate_lost_ports(); });
-    lost_banner_->setVisible(false);
-    layout->addWidget(lost_banner_);
 
     auto* card = new QFrame(workspace_);
 
@@ -1148,6 +1192,20 @@ void ShellWindow::update_level_ui()
 
 void ShellWindow::update_content()
 {
+    if (!level_.advanced())
+    {
+        central_->setCurrentWidget(simple_page_);
+        for (QDockWidget* dock :
+             {ports_dock_, inspector_dock_, send_dock_, monitor_dock_,
+              links_dock_, log_dock_, json_dock_})
+        {
+            if (dock != nullptr)
+                dock->hide();
+        }
+        sync_selection();
+        status_->refresh();
+        return;
+    }
     const bool has_ports = !backend_.ports().empty();
     const bool show_launcher_page = launcher_forced_ || !has_ports;
     if (show_launcher_page)
@@ -1401,6 +1459,12 @@ void ShellWindow::apply_compact()
 
 void ShellWindow::show_launcher()
 {
+    if (!level_.advanced())
+    {
+        simple_page_->show_jobs();
+        update_content();
+        return;
+    }
     launcher_forced_ = true;
     update_content();
 }
@@ -2106,6 +2170,45 @@ void ShellWindow::remove_setup(const setup_group& group, bool confirm)
                                  .arg(port_count_text(removed_ports),
                                       port_count_text(port_count)),
                              4000);
+}
+
+void ShellWindow::remove_all_setups()
+{
+    const auto ports = backend_.ports();
+    if (ports.empty())
+        return;
+    const auto links = backend_.links();
+    int setups = 0;
+    QSet<vss::endpoint_id> seen;
+    for (const auto& port : ports)
+    {
+        if (seen.contains(port.id))
+            continue;
+        ++setups;
+        for (const auto id : find_setup(ports, links, port.id).ports)
+            seen.insert(id);
+    }
+    if (!ConfirmDialog::ask(
+            tr("Remove all setups?"),
+            tr("This closes %n setup(s) and every port in them. Programs "
+               "using those ports lose them. Nothing is saved until you save.",
+               nullptr, setups),
+            tr("Remove all"), tr("Cancel"), true, this))
+        return;
+    int failed = 0;
+    for (const auto& port : ports)
+    {
+        const auto removed = backend_.remove_port(port.id);
+        if (!removed && removed.error() != vss::errc::not_found)
+            ++failed;
+    }
+    selection_.clear();
+    backend_.refresh();
+    status_->showMessage(failed == 0
+                             ? tr("Removed all setups.")
+                             : tr("%n port(s) could not be removed.", nullptr,
+                                  failed),
+                         5000);
 }
 
 vss::link_id ShellWindow::share_link_of_selection() const

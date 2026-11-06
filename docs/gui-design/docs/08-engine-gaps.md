@@ -49,3 +49,7 @@ Put one narrow interface between the GUI and the engine, for example `StudioBack
 | Event log tab | None | GUI-side `EventLog` fed from hub events. |
 | Recent files, templates | None | `QSettings` list, and JSON templates bundled as Qt resources validated by `vss_config`. |
 | Node positions in topology | Not in JSON | Session only. Do not change the JSON schema. |
+| Simple-mode setup name and options | Not in JSON | The program label is the port's name, which the file keeps. A setup's own name and the "Let me type" and "Show me the data" choices are session only until the schema owner agrees a field for them. |
+| Simple-mode setup kind | Not in JSON | Read back from the ports and links (`simple/setup_kinds`), so a file or an Advanced-mode drawing shows the same way. Anything no job describes is listed as made in Advanced mode. |
+| Simple-mode Change | No in-place edit of a link's ends | The GUI keeps the ports that stay, makes the new ones, disconnects the old link and makes the new one, and removes the ports that close. Programs on kept ports keep them open; only bytes in flight during the swap can be lost. |
+| Take turns with replies | The owner rule applies to every route of a link, including the device's replies on a duplex split | Simple mode's "take turns" is a join with the owner policy, so the device's replies do not reach the programs, and the job says so. Replies to every program while one owns the sending side need the owner rule to apply to the targets' routes only. Not changed here. |

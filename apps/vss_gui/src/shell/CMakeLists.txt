@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # The redesigned window shell: actions, level, launcher, command palette,
-# status bar and the dock frame.  Panes are placeholders until WP3 to WP8.
+# status bar, the dock frame, and the Simple-mode page in ../simple.
 #
 
 add_library(vss_gui_shell STATIC
@@ -27,7 +27,19 @@ add_library(vss_gui_shell STATIC
   undo_service.cpp
   undo_service.hpp
   undo_steps.cpp
-  undo_steps.hpp)
+  undo_steps.hpp
+  ../simple/job_form.cpp
+  ../simple/job_form.hpp
+  ../simple/job_grid.cpp
+  ../simple/job_grid.hpp
+  ../simple/job_plan.cpp
+  ../simple/job_plan.hpp
+  ../simple/setup_kinds.cpp
+  ../simple/setup_kinds.hpp
+  ../simple/setup_page.cpp
+  ../simple/setup_page.hpp
+  ../simple/simple_page.cpp
+  ../simple/simple_page.hpp)
 
 target_link_libraries(vss_gui_shell PUBLIC
   vss_gui_panes
@@ -47,3 +59,4 @@ set_target_properties(vss_gui_shell PROPERTIES AUTOMOC ON)
 vss_set_warnings(vss_gui_shell)
 
 add_subdirectory(tests)
+add_subdirectory(../simple/tests simple_tests)

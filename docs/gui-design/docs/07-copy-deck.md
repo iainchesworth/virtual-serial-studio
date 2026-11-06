@@ -50,3 +50,10 @@ First-time users do not know that an attached or shared device is taken over by 
 - Program port of a share: the body says "<port> is one of <n> programs sharing a device, in a setup with ..." and "the others keep sharing".
 - Port with no links: title "Remove <port>?", body "Remove <port> and its links? Nothing is saved until you save the setup.", buttons "Remove port" and "Cancel".
 - Status bar after a setup: "Removed the setup (2 ports and 1 link)."
+
+## Simple mode words
+Simple mode asks about the user's things only: their device and their programs. It never names a part of Studio
+(terminal, monitor, fixture, loopback, link, endpoint, topology) as something to choose or connect. Typing to a device is
+"Let me type to COM3 from this window"; seeing traffic is "Show me the data going through"; an echo is "Send everything
+straight back". Every choice has one sentence on what it does and when it helps. The program's name is optional and is a
+label only: "Program, e.g. PuTTY (optional)". Full strings: `screens/08-simple-mode.md`.
