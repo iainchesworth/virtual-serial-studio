@@ -52,6 +52,14 @@ public:
     attach_serial(const QString& name, const QString& uri,
                   const vss::serial_settings& settings, bool capture) override;
     vss::result<void> remove_port(vss::endpoint_id id) override;
+    vss::result<vss::endpoint_id> create_driver_port(const QString& name,
+                                                     bool capture,
+                                                     unsigned com_number) override;
+    vss::result<QString> set_com_number(vss::endpoint_id id,
+                                        unsigned com_number) override;
+    std::optional<holder_view> port_holder(vss::endpoint_id id) const override;
+    vss::result<void> release_port(vss::endpoint_id id,
+                                   release_method method) override;
     vss::result<void> rename_port(vss::endpoint_id id,
                                   const QString& name) override;
 

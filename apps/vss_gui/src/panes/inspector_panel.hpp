@@ -37,9 +37,16 @@ public:
     void set_selected_port(vss::endpoint_id id);
     void refresh();
 
+    /// "Change..." beside the COM number of a driver port.
+    QPushButton* com_change_button() const noexcept { return com_change_; }
+    /// "Release port..." (Advanced), for a driver port a program has open.
+    QPushButton* release_button() const noexcept { return release_; }
+
 Q_SIGNALS:
     void troubleshoot_requested();
     void advanced_tools_requested();
+    void com_number_requested(vss::endpoint_id id);
+    void release_port_requested(vss::endpoint_id id);
     void error_message(const QString& message);
 
 private:
@@ -63,6 +70,11 @@ private:
     QLabel* path_ = nullptr;
     CopyButton* copy_ = nullptr;
     QLabel* traffic_ = nullptr;
+    QLabel* com_caption_ = nullptr;
+    QWidget* com_row_ = nullptr;
+    QLabel* com_value_ = nullptr;
+    QPushButton* com_change_ = nullptr;
+    QPushButton* release_ = nullptr;
     QLabel* serial_label_ = nullptr;
     QWidget* serial_row_ = nullptr;
     QLabel* help_text_ = nullptr;

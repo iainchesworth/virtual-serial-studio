@@ -146,6 +146,12 @@ On Linux the **Port ready** dialog looks like this:
 - **Name**: a unique suffix is added if the name is taken. With **How many**
   above one, names run `port-1`, `port-2` and so on. The number must be 1 to
   32.
+- **COM number** (Windows, with the Studio driver and its helper service,
+  and only for *Best available*): *Automatic* takes the lowest free number, or
+  type the number a program expects, 1 to 255. It names one port, so it is off
+  when **How many** is above one. A number that is refused is explained under
+  the field and nothing is made; see [Choosing a COM number
+  (Windows)](#choosing-a-com-number-windows).
 - **Kind**: *Best available (recommended)* uses the Virtual Serial Studio
   driver on Windows when it is installed, then com0com, and a pseudo terminal
   on Linux and macOS; *Pseudo terminal*; or
@@ -511,8 +517,14 @@ or in a saved topology, as an optional field on a virtual port (1 to 255):
 Studio also remembers the number it was asked for and saves it with the topology.
 A port with no `com_number` takes the lowest free number, and the same slot keeps
 its number from one run to the next, but a different order of creation can give a
-different one. The Studio window does not offer to choose or change a number
-yet; the library does (`set_driver_com_number`, `studio::set_com_number`).
+different one.
+
+In the window, choose the number in **Add port** (the **COM number** field,
+*Automatic* by default), or select a driver port and press **Change...** beside
+its **COM number** in the Inspector. The change restarts the port, so the window
+tells you when a program has it open and refuses until the program lets go; use
+[Release port](#when-a-program-will-not-let-go-of-a-port-advanced) if it will
+not. The library does the same (`set_driver_com_number`, `studio::set_com_number`).
 
 What to know:
 
@@ -532,6 +544,39 @@ What to know:
 - Names above `COM9` must be written `\\.\COM12` by programs that open ports by
   name, which most do not. A program that opens `"COM%d"` fails above 9, so
   choose a number from 1 to 9 for such a program.
+
+## Ports under running programs
+
+A port of the Studio driver, and on Linux a pseudo terminal, tells Studio when a
+program opens it. The Ports list and the Inspector then read **Waiting for
+program** until something opens the port and **Program connected** once it does,
+so with several programs to start you can see which one has not yet.
+
+Studio's ports disappear with Studio, so a program that holds one loses it when
+you remove the port, start a new setup or close the window. Old programs may
+stop or show a bare error. Before any of those Studio names the ports that
+programs hold and asks you to confirm; it asks nothing when no program is known
+to hold a port. For a port Studio cannot observe (a hardware port, com0com, or
+anything on macOS) it does not guess, so it does not warn either.
+
+## When a program will not let go of a port (Advanced)
+
+Windows frees a port at once when its program ends, so this is rare: a program
+that is still running holds the port, and a second program cannot open it.
+Turn on **Advanced**, select the port (it reads **Program connected**) and press
+**Release port...** in the Inspector. The dialog names the program and its
+process and says how long no data has passed on the port. That is only a fact:
+Studio cannot tell a stuck program from a quiet one, so it never says the program
+is stuck. Choose one way, then press the button:
+
+- **Take the port back** (try this first). The program keeps running, but its
+  connection to the port stops working, and another program can open the port at
+  once with the same COM number. The Studio driver does this; Studio does not
+  touch the program.
+- **End the program.** Windows closes it straight away, as *End task* in Task
+  Manager does, and it does not get to save anything. Studio ends only your
+  own programs. For a program of another user, run Studio as administrator
+  (**Tools → Restart as administrator**); until then this choice is off and says why.
 
 ## Saving, opening and templates
 
@@ -870,12 +915,15 @@ Virtual Serial Studio driver or com0com. Open **Tools → Setup check**. With
 neither, *Best available* falls back to an in-process loopback, whose path is `loopback:<name>` and which other
 applications cannot open. Pseudo terminals do not exist on Windows.
 
-**A COM number was refused.** `COM7 is already used by another device` means a
-real port, com0com or a port that was removed but keeps the name has it; pick
-another number, or remove the old device in Device Manager (*View > Show hidden
-devices*). `COM numbers need the Virtual Serial Studio driver and its helper
-service` means `vsscom_helper` is not installed or is older than the driver.
-`a program has COM7 open` means close it, then ask again.
+**A COM number was refused.** `COM7 already belongs to another device on this PC`
+means a real port, com0com or a port that was removed but keeps the name has it;
+pick another number, or remove the old device in Device Manager (*View > Show
+hidden devices*). `Choosing a COM number needs the Virtual Serial Studio helper
+service` means `vsscom_helper` is not installed or is older than the driver; leave
+the number on *Automatic* or install the helper. `A program has this port open`
+means close the program, or use Release port in Advanced mode, then ask again.
+`No more ports can be made` means you hold 16 driver ports (or the driver 32 in
+all): remove one.
 
 **A pseudo terminal path is shown but another program cannot open it.** On
 Linux the path is `/dev/pts/N`; it exists only while the studio is running.

@@ -11,8 +11,10 @@
 #include "backend/fake_studio_backend.hpp"
 #include "flows/add_port_dialog.hpp"
 #include "flows/attach_dialog.hpp"
+#include "flows/com_number_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
+#include "flows/release_port_dialog.hpp"
 #include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
 #include "shell/launcher.hpp"
@@ -47,6 +49,7 @@
 #include <QTimer>
 
 #include <algorithm>
+#include <chrono>
 
 namespace
 {
@@ -924,6 +927,384 @@ TEST_CASE("flows: rename reports an engine failure and needs the capability")
     REQUIRE(!unavailable.primary_button()->isEnabled());
 }
 
+namespace
+{
+
+/// A fake backend with the Studio driver's abilities, one driver port named
+/// "meter" on COM7 and a program that has it open.
+struct driver_fixture
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::endpoint_id port = 0;
+
+    driver_fixture()
+    {
+        vss::gui::capabilities caps;
+        caps.com_numbers = true;
+        caps.release_port = true;
+        caps.peer_open = true;
+        backend.set_capabilities(caps);
+        const auto made =
+            backend.create_driver_port(QStringLiteral("meter"), true, 7);
+        REQUIRE(made.has_value());
+        port = *made;
+    }
+
+    void program_opens(bool own_user = true)
+    {
+        backend.set_peer_state(port, vss::gui::peer_state::open);
+        vss::gui::holder_view holder;
+        holder.process_id = 4321;
+        holder.process_name = QStringLiteral("pwrcntr.exe");
+        holder.own_user = own_user;
+        holder.can_end = own_user;
+        backend.set_holder(port, holder);
+    }
+};
+
+} // namespace
+
+TEST_CASE("flows: add port offers a COM number only where the driver is")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::AddPortDialog without(backend, false,
+                                    vss::gui::AddPortDialog::mode::virtual_port,
+                                    vss::gui::platform_kind::windows);
+    without.show();
+    settle();
+    REQUIRE(!without.com_number_visible());
+    REQUIRE(without.com_number_row()->isHidden());
+
+    vss::gui::capabilities caps;
+    caps.com_numbers = true;
+    backend.set_capabilities(caps);
+    vss::gui::AddPortDialog dialog(backend, false,
+                                   vss::gui::AddPortDialog::mode::virtual_port,
+                                   vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    REQUIRE(dialog.com_number_visible());
+    REQUIRE(!dialog.com_number_row()->isHidden());
+    REQUIRE_EQ(dialog.com_number_spin()->value(), 0);
+    REQUIRE_EQ(dialog.com_number_spin()->text(), QStringLiteral("Automatic"));
+
+    // A pseudo terminal or a loopback has no COM number.
+    dialog.kind_combo()->setCurrentIndex(2);
+    settle();
+    REQUIRE(!dialog.com_number_visible());
+    dialog.kind_combo()->setCurrentIndex(0);
+    settle();
+    REQUIRE(dialog.com_number_visible());
+
+    // One number names one port, so a batch takes Automatic.
+    dialog.com_number_spin()->setValue(9);
+    dialog.count_spin()->setValue(2);
+    settle();
+    REQUIRE(!dialog.com_number_spin()->isEnabled());
+    REQUIRE_EQ(dialog.com_number_spin()->value(), 0);
+
+    // Another system has no such row at all.
+    vss::gui::AddPortDialog linux_dialog(
+        backend, false, vss::gui::AddPortDialog::mode::virtual_port,
+        vss::gui::platform_kind::linux);
+    REQUIRE(!linux_dialog.com_number_visible());
+}
+
+TEST_CASE("flows: add port makes the port with the number asked for")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::capabilities caps;
+    caps.com_numbers = true;
+    backend.set_capabilities(caps);
+    backend.set_taken_com_numbers({3});
+
+    vss::gui::AddPortDialog dialog(backend, false,
+                                   vss::gui::AddPortDialog::mode::virtual_port,
+                                   vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    dialog.name_edit()->setText(QStringLiteral("meter"));
+
+    // A number another device has is refused beside the number, the form stays
+    // as it was and nothing is made.
+    dialog.com_number_spin()->setValue(3);
+    QString title;
+    QObject::connect(&dialog, &vss::gui::AddPortDialog::error_shown,
+                     [&title](const QString& value) { title = value; });
+    dialog.primary_button()->click();
+    REQUIRE(dialog.result() != QDialog::Accepted);
+    REQUIRE_EQ(title, QStringLiteral("Could not create the port"));
+    REQUIRE(backend.ports().empty());
+    REQUIRE(dialog.com_number_spin()->accessibleDescription().contains(
+        QStringLiteral("COM3 already belongs to another device")));
+    REQUIRE_EQ(dialog.name_edit()->text(), QStringLiteral("meter"));
+
+    dialog.com_number_spin()->setValue(7);
+    REQUIRE(dialog.com_number_spin()->accessibleDescription().isEmpty());
+    dialog.primary_button()->click();
+    REQUIRE_EQ(dialog.result(), QDialog::Accepted);
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+    const auto made = backend.ports().front();
+    REQUIRE(made.driver_port);
+    REQUIRE_EQ(made.com_number, 7U);
+    REQUIRE_EQ(made.path, QStringLiteral("COM7"));
+}
+
+TEST_CASE("flows: add port with Automatic leaves the number to Windows")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::capabilities caps;
+    caps.com_numbers = true;
+    backend.set_capabilities(caps);
+
+    vss::gui::AddPortDialog dialog(backend, false,
+                                   vss::gui::AddPortDialog::mode::virtual_port,
+                                   vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    dialog.primary_button()->click();
+    REQUIRE_EQ(dialog.result(), QDialog::Accepted);
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+    // The ordinary path was taken, not a driver port.
+    REQUIRE(!backend.ports().front().driver_port);
+}
+
+TEST_CASE("flows: change COM number applies, and says why it was refused")
+{
+    clear_settings();
+    driver_fixture fixture;
+    fixture.backend.set_taken_com_numbers({5});
+
+    vss::gui::ComNumberDialog dialog(fixture.backend, fixture.port);
+    dialog.show();
+    settle();
+    REQUIRE_EQ(dialog.number_spin()->value(), 7);
+    // Nothing has changed yet, so there is nothing to apply.
+    REQUIRE(!dialog.primary_button()->isEnabled());
+
+    // A number another device has: the reason comes back beside the number.
+    dialog.number_spin()->setValue(5);
+    settle();
+    REQUIRE(dialog.primary_button()->isEnabled());
+    dialog.primary_button()->click();
+    REQUIRE(dialog.busy());
+    REQUIRE(vss_test::wait_until([&] { return !dialog.busy(); }));
+    REQUIRE(dialog.result() != QDialog::Accepted);
+    REQUIRE(dialog.number_spin()->accessibleDescription().contains(
+        QStringLiteral("COM5 already belongs to another device")));
+    REQUIRE_EQ(fixture.backend.port(fixture.port)->path,
+               QStringLiteral("COM7"));
+    REQUIRE(dialog.primary_button()->isEnabled());
+
+    // A free number is applied and the dialog closes.
+    dialog.number_spin()->setValue(12);
+    settle();
+    REQUIRE(dialog.number_spin()->accessibleDescription().isEmpty());
+    dialog.primary_button()->click();
+    REQUIRE(vss_test::wait_until([&] { return dialog.result() == QDialog::Accepted; }));
+    REQUIRE_EQ(dialog.com_name(), QStringLiteral("COM12"));
+    REQUIRE_EQ(fixture.backend.port(fixture.port)->com_number, 12U);
+}
+
+TEST_CASE("flows: change COM number explains a missing helper and a held port")
+{
+    clear_settings();
+    driver_fixture fixture;
+
+    {
+        vss::gui::ComNumberDialog dialog(fixture.backend, fixture.port);
+        dialog.show();
+        settle();
+        dialog.number_spin()->setValue(9);
+        settle();
+        fixture.backend.fail_next(vss::make_error_code(vss::errc::unsupported));
+        dialog.primary_button()->click();
+        REQUIRE(vss_test::wait_until([&] { return !dialog.busy(); }));
+        REQUIRE(dialog.number_spin()->accessibleDescription().contains(
+            QStringLiteral("needs the Virtual Serial Studio helper service")));
+        dialog.close();
+    }
+
+    // A program holding the port is named before anything is tried.
+    fixture.program_opens();
+    vss::gui::ComNumberDialog held(fixture.backend, fixture.port);
+    held.show();
+    settle();
+    held.number_spin()->setValue(9);
+    settle();
+    REQUIRE(!held.primary_button()->isEnabled());
+    REQUIRE(held.number_spin()->accessibleDescription().contains(
+        QStringLiteral("A program has this port open")));
+    REQUIRE(held.number_spin()->accessibleDescription().contains(
+        QStringLiteral("Release port")));
+    held.close();
+
+    // Without the capability there is nothing to apply.
+    vss::gui::capabilities none;
+    fixture.backend.set_capabilities(none);
+    vss::gui::ComNumberDialog unavailable(fixture.backend, fixture.port);
+    unavailable.show();
+    settle();
+    unavailable.number_spin()->setValue(9);
+    settle();
+    REQUIRE(!unavailable.primary_button()->isEnabled());
+}
+
+TEST_CASE("flows: refusal texts name the number and the next step")
+{
+    using vss::gui::com_number_refusal;
+    const auto refusal = [](vss::errc code, bool changing)
+    { return com_number_refusal(vss::make_error_code(code), 7, changing); };
+    REQUIRE(refusal(vss::errc::already_exists, false)
+                .contains(QStringLiteral("COM7 already belongs")));
+    REQUIRE(refusal(vss::errc::invalid_argument, false)
+                .contains(QStringLiteral("1 to 255")));
+    REQUIRE(refusal(vss::errc::unsupported, false)
+                .contains(QStringLiteral("helper service")));
+    REQUIRE(refusal(vss::errc::device_busy, true)
+                .contains(QStringLiteral("Release port")));
+    REQUIRE(refusal(vss::errc::device_busy, false)
+                .contains(QStringLiteral("Every port of the driver")));
+    REQUIRE(refusal(vss::errc::port_exhausted, false)
+                .contains(QStringLiteral("16")));
+    REQUIRE(refusal(vss::errc::timeout, false)
+                .contains(QStringLiteral("did not appear")));
+    REQUIRE(refusal(vss::errc::permission_denied, false)
+                .contains(QStringLiteral("administrator")));
+    REQUIRE(refusal(vss::errc::io_error, false)
+                .contains(QStringLiteral("Setup check")));
+    // Every refusal says what happened to the port.
+    REQUIRE(refusal(vss::errc::io_error, true)
+                .contains(QStringLiteral("Nothing was changed")));
+}
+
+TEST_CASE("flows: release port names the program and states a fact")
+{
+    clear_settings();
+    driver_fixture fixture;
+    fixture.program_opens();
+
+    vss::gui::ReleasePortDialog dialog(fixture.backend, fixture.port);
+    dialog.show();
+    settle();
+    const QString holder = dialog.holder_note()->text();
+    REQUIRE(holder.contains(QStringLiteral("pwrcntr.exe")));
+    REQUIRE(holder.contains(QStringLiteral("4321")));
+    REQUIRE(holder.contains(QStringLiteral("COM7")));
+    // The silence is stated as a fact and the program is not called stuck.
+    REQUIRE(dialog.idle_note()->text().contains(
+        QStringLiteral("No data has passed on COM7")));
+    const QString everything =
+        holder + dialog.idle_note()->text() +
+        dialog.take_back_card()->findChild<QLabel*>()->text();
+    for (const auto* word : {"hung", "frozen", "stuck", "crashed", "dead"})
+        REQUIRE(!everything.contains(QLatin1String(word), Qt::CaseInsensitive));
+
+    REQUIRE_EQ(dialog.method(), vss::gui::release_method::take_back);
+    REQUIRE(dialog.primary_button()->isEnabled());
+    REQUIRE_EQ(dialog.primary_button()->text(), QStringLiteral("Release port"));
+    dialog.primary_button()->click();
+    REQUIRE_EQ(dialog.result(), QDialog::Accepted);
+    REQUIRE(dialog.released());
+    REQUIRE_EQ(fixture.backend.releases().size(), std::size_t{1});
+    REQUIRE_EQ(fixture.backend.releases().front().second,
+               vss::gui::release_method::take_back);
+    REQUIRE(fixture.backend.port(fixture.port)->peer ==
+            vss::gui::peer_state::not_open);
+}
+
+TEST_CASE("flows: release port can end the program of the same user only")
+{
+    clear_settings();
+    driver_fixture fixture;
+    fixture.program_opens();
+
+    vss::gui::ReleasePortDialog own(fixture.backend, fixture.port);
+    own.show();
+    settle();
+    own.end_program_card()->radio()->click();
+    settle();
+    REQUIRE_EQ(own.method(), vss::gui::release_method::end_program);
+    REQUIRE_EQ(own.primary_button()->text(), QStringLiteral("End program"));
+    REQUIRE(own.primary_button()->isEnabled());
+    own.primary_button()->click();
+    REQUIRE(own.released());
+    REQUIRE_EQ(fixture.backend.releases().front().second,
+               vss::gui::release_method::end_program);
+
+    // Another user's program: ending it is not offered, taking the port back is.
+    driver_fixture other;
+    other.program_opens(false);
+    vss::gui::ReleasePortDialog dialog(other.backend, other.port);
+    dialog.show();
+    settle();
+    REQUIRE(!dialog.end_program_card()->radio()->isEnabled());
+    REQUIRE(dialog.end_program_card()->toolTip().contains(
+        QStringLiteral("administrator")));
+    REQUIRE(dialog.primary_button()->isEnabled());
+    dialog.primary_button()->click();
+    REQUIRE(dialog.released());
+    REQUIRE_EQ(other.backend.releases().front().second,
+               vss::gui::release_method::take_back);
+}
+
+TEST_CASE("flows: release port reports a refusal and changes nothing")
+{
+    clear_settings();
+    driver_fixture fixture;
+    fixture.program_opens();
+
+    vss::gui::ReleasePortDialog dialog(fixture.backend, fixture.port);
+    dialog.show();
+    settle();
+    QString title;
+    QObject::connect(&dialog, &vss::gui::ReleasePortDialog::error_shown,
+                     [&title](const QString& value) { title = value; });
+    fixture.backend.fail_next(vss::make_error_code(vss::errc::io_error));
+    modal_probe probe;
+    close_next_modal(&probe);
+    dialog.primary_button()->click();
+    REQUIRE(title.startsWith(QStringLiteral("Could not release")));
+    REQUIRE(probe.error_dialog);
+    REQUIRE(!dialog.released());
+    REQUIRE(fixture.backend.releases().empty());
+    REQUIRE(fixture.backend.port(fixture.port)->peer ==
+            vss::gui::peer_state::open);
+    dialog.close();
+
+    // Nobody has the port: there is nothing to release.
+    driver_fixture idle;
+    vss::gui::ReleasePortDialog nobody(idle.backend, idle.port);
+    nobody.show();
+    settle();
+    REQUIRE(!nobody.primary_button()->isEnabled());
+    REQUIRE(nobody.holder_note()->text().contains(
+        QStringLiteral("No program is known to have COM7 open")));
+
+    // Without the capability the button stays off.
+    driver_fixture none;
+    none.program_opens();
+    none.backend.set_capabilities({});
+    vss::gui::ReleasePortDialog unavailable(none.backend, none.port);
+    unavailable.show();
+    settle();
+    REQUIRE(!unavailable.primary_button()->isEnabled());
+}
+
+TEST_CASE("flows: idle time is told in seconds, minutes and hours")
+{
+    using vss::gui::ReleasePortDialog;
+    using namespace std::chrono_literals;
+    REQUIRE_EQ(ReleasePortDialog::idle_text(1s), QStringLiteral("1 second"));
+    REQUIRE_EQ(ReleasePortDialog::idle_text(45s), QStringLiteral("45 seconds"));
+    REQUIRE_EQ(ReleasePortDialog::idle_text(5min), QStringLiteral("5 minutes"));
+    REQUIRE_EQ(ReleasePortDialog::idle_text(3h), QStringLiteral("3 hours"));
+    REQUIRE_EQ(ReleasePortDialog::idle_text(-4s), QStringLiteral("0 seconds"));
+}
+
 TEST_CASE("flows: every dialog passes the accessible-name and target walk")
 {
     clear_settings();
@@ -958,7 +1339,11 @@ TEST_CASE("flows: every dialog passes the accessible-name and target walk")
     auto* ready =
         new vss::gui::PortReadyDialog(backend, *port, QStringLiteral("auto"),
                                       true, vss::gui::platform_kind::linux);
-    dialogs << add << pair << attach << watch << ready;
+    driver_fixture driver;
+    driver.program_opens();
+    auto* number = new vss::gui::ComNumberDialog(driver.backend, driver.port);
+    auto* release = new vss::gui::ReleasePortDialog(driver.backend, driver.port);
+    dialogs << add << pair << attach << watch << ready << number << release;
     for (auto* dialog : dialogs)
     {
         dialog->show();
