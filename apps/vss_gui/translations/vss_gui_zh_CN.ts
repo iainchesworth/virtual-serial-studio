@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="zh_CN">
     <context>
         <name>About</name>
@@ -1996,59 +1995,59 @@
     <context>
         <name>FirewallDialog</name>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <location filename="../src/support/firewall_dialog.cpp" line="39" />
             <source>domain</source>
             <translation>域</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <location filename="../src/support/firewall_dialog.cpp" line="41" />
             <source>private</source>
             <translation>专用</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <location filename="../src/support/firewall_dialog.cpp" line="43" />
             <source>public</source>
             <translation>公用</translation>
         </message>
         <message>
             <location filename="../src/support/firewall_dialog.cpp" line="69" />
-            <location filename="../src/support/firewall_dialog.cpp" line="70" />
-            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <location filename="../src/support/firewall_dialog.cpp" line="71" />
+            <location filename="../src/support/firewall_dialog.cpp" line="84" />
             <source>Windows Firewall</source>
             <translation>Windows 防火墙</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
             <source>Other computers cannot reach this port until a rule allows it.</source>
             <translation>在有规则允许之前，其他计算机无法访问此端口。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <location filename="../src/support/firewall_dialog.cpp" line="89" />
             <source>Windows Firewall stops other computers reaching this port.</source>
             <translation>Windows 防火墙阻止其他计算机访问此端口。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <location filename="../src/support/firewall_dialog.cpp" line="98" />
             <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
             <translation>Studio 正在等待其他计算机连接。Windows 防火墙会阻止没有任何规则允许的连接。Studio 绝不会自行更改防火墙。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <location filename="../src/support/firewall_dialog.cpp" line="108" />
             <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
             <translation>Windows 防火墙中的一条规则在此端口上阻止了此程序。阻止规则的优先级高于允许规则，Studio 不会删除它。如果希望其他计算机能够连接，请打开“高级安全 Windows Defender 防火墙”，在“入站规则”中找到该阻止规则，并将其禁用或删除。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <location filename="../src/support/firewall_dialog.cpp" line="120" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
             <translation>Windows 防火墙被设置为阻止所有传入连接，这会覆盖所有规则。请打开 Windows 安全中心，选择“防火墙和网络保护”，选中您当前所在的网络，然后关闭“阻止所有传入连接”。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <location filename="../src/support/firewall_dialog.cpp" line="133" />
             <source>The rule Studio would add lets only this in:</source>
             <translation>Studio 将添加的规则只允许以下内容：</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <location filename="../src/support/firewall_dialog.cpp" line="138" />
             <source>Program: %1
 Protocol and port: %2 %3
 Who: %4
@@ -2059,48 +2058,48 @@ Networks: %5</source>
 网络：%5</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
             <source>computers on your local network</source>
             <translation>您本地网络中的计算机</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <location filename="../src/support/firewall_dialog.cpp" line="148" />
             <source>any computer</source>
             <translation>任何计算机</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <location filename="../src/support/firewall_dialog.cpp" line="159" />
             <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
             <translation>同一条规则的命令形式。如果您想自己运行，请在以管理员身份打开的终端中执行：</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <location filename="../src/support/firewall_dialog.cpp" line="163" />
             <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
             <translation>要自己添加该规则，请在以管理员身份打开的终端中运行：</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <location filename="../src/support/firewall_dialog.cpp" line="171" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="158" />
-            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <location filename="../src/support/firewall_dialog.cpp" line="185" />
+            <location filename="../src/support/firewall_dialog.cpp" line="189" />
             <source>Allow in Windows Firewall</source>
             <translation>在 Windows 防火墙中允许</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <location filename="../src/support/firewall_dialog.cpp" line="193" />
             <source>Windows will ask for administrator permission before the rule is added.</source>
             <translation>添加规则之前，Windows 会请求管理员权限。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <location filename="../src/support/firewall_dialog.cpp" line="208" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
@@ -3661,6 +3660,221 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>PermissionDialog</name>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="54" />
+            <source>Serial device access</source>
+            <translation>串行设备访问</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="58" />
+            <source>Your account is not in the group that owns %1.</source>
+            <translation>您的账户不在拥有 %1 的组中。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="62" />
+            <source>On Linux, the group that owns a serial device decides who may open it. Add your account to that group, then sign out and back in. Studio never changes a group by itself.</source>
+            <translation>在 Linux 上，拥有串行设备的组决定谁可以打开它。请将您的账户添加到该组，然后注销并重新登录。Studio 绝不会自行更改组。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="70" />
+            <source>Your account is in the group, but this login does not know yet.</source>
+            <translation>您的账户已在该组中，但当前登录会话尚未识别。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="74" />
+            <source>Sign out and back in. To use the group in one terminal right now, run the command below there and start Studio from that terminal.</source>
+            <translation>请注销并重新登录。若想现在就在某个终端中使用该组，请在该终端中运行下面的命令，并从该终端启动 Studio。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="83" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>拥有 %1 的组没有读取和写入它的权限。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="87" />
+            <source>Look at the permissions of the device with the command below. Changing them is a system setting, so Studio leaves it to you; a udev rule makes a change last across restarts.</source>
+            <translation>请用下面的命令查看该设备的权限。更改权限属于系统设置，因此 Studio 交给您自己处理；udev 规则可使更改在重启后依然有效。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="97" />
+            <source>The file permissions allow %1, but something outside them refused it.</source>
+            <translation>文件权限允许访问 %1，但文件权限之外的机制拒绝了它。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="102" />
+            <source>Linux security policy (AppArmor, SELinux) or a sandbox (Flatpak, Snap) can refuse a device that the file permissions allow. The text below is the fix for the one that applies to this system.</source>
+            <translation>Linux 安全策略（AppArmor、SELinux）或沙盒（Flatpak、Snap）可能会拒绝文件权限所允许的设备。下面的文字是针对此系统上适用情况的解决办法。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="110" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
+            <source>Command</source>
+            <translation>命令</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="114" />
+            <source>Confinement</source>
+            <translation>限制</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="117" />
+            <source>Studio runs inside a Flatpak sandbox.</source>
+            <translation>Studio 运行在 Flatpak 沙盒中。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="119" />
+            <source>A Flatpak sees only the devices and folders it was given. If a serial device is missing, give the application access to devices with the command below.</source>
+            <translation>Flatpak 只能看到授予它的设备和文件夹。如果找不到串行设备，请用下面的命令授予应用程序访问设备的权限。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="128" />
+            <source>Studio runs inside a Snap sandbox.</source>
+            <translation>Studio 运行在 Snap 沙盒中。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="130" />
+            <source>A Snap reaches a serial device only through an interface that is connected. The command below lists what is connected; the serial-port interface is the one a serial device needs.</source>
+            <translation>Snap 只能通过已连接的接口访问串行设备。下面的命令列出了已连接的内容；串行设备需要的是 serial-port 接口。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="138" />
+            <source>An AppArmor profile confines Studio (%1).</source>
+            <translation>AppArmor 配置文件限制了 Studio（%1）。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="142" />
+            <source>The profile may refuse serial devices, pseudo terminals or Studio's link folder. If a program is refused, add the lines below to the local override of the profile and reload it. Studio never edits a profile.</source>
+            <translation>该配置文件可能会拒绝串行设备、伪终端或 Studio 的链接文件夹。如果某个程序被拒绝，请将下面的行添加到该配置文件的本地覆盖文件中并重新加载。Studio 绝不会编辑配置文件。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio 运行在 macOS 的 App Sandbox 中。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>沙盒中的应用只有拥有相应权限（entitlements）才能访问串行设备和网络。下面的行是沙盒版 Studio 在其 entitlements 文件中所需要的。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <source>SELinux is enforcing.</source>
+            <translation>SELinux 处于 enforcing 模式。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
+            <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
+            <translation>这是正常现象，只要没有设备被拒绝就没有问题。如果有设备被拒绝，下面的命令可找出拒绝记录并为其生成策略模块。安装之前，请先阅读 audit2allow 给出的建议。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
+            <source>Commands</source>
+            <translation>命令</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
+            <source>Firewall</source>
+            <translation>防火墙</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
+            <source>A firewall is on and may stop other computers reaching this port.</source>
+            <translation>防火墙已开启，可能会阻止其他计算机访问此端口。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
+            <translation>没有管理员权限，Studio 无法读取防火墙规则。如果其他计算机无法连接，请用下面的命令打开该端口。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <source>Studio cannot read the firewall rules.</source>
+            <translation>Studio 无法读取防火墙规则。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
+            <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
+            <translation>读取规则需要管理员权限，而且 ufw 和 firewalld 都未开启。如果其他计算机无法连接，请使用管理员账户检查规则，例如运行 sudo nft list ruleset。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS 防火墙</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>其他计算机的第一次连接会让 macOS 弹出询问。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>防火墙开启时，macOS 会针对每个程序询问一次是否允许其接受传入连接。请选择“允许”。如果您选择了“拒绝”，请打开“系统设置”，依次进入“网络”、“防火墙”、“选项”，将该程序设为“允许传入连接”，或在终端中运行下面的命令。Studio 绝不会更改防火墙。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>防火墙阻止所有传入连接。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>该设置会覆盖所有程序。如果希望其他计算机能够连接，请打开“系统设置”，依次进入“网络”、“防火墙”、“选项”，关闭“阻止所有传入连接”。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio 无法读取防火墙。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>请查看“系统设置”中的“网络”、“防火墙”。如果防火墙已开启而其他计算机无法连接，请检查“选项”。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>本地网络访问</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS 会询问一次 Studio 是否可以使用您的本地网络。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>从 macOS 15 起，应用需要得到您的许可才能查找并连接本地网络上的设备。Studio 无法检查您的回答。如果您选择了“不允许”而其他计算机无法连接，请打开“系统设置”，依次进入“隐私与安全性”、“本地网络”，然后打开 Virtual Serial Studio。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
+            <source>Permissions</source>
+            <translation>权限</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
+            <source>Add me to the %1 group</source>
+            <translation>将我添加到 %1 组</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
+            <source>Your desktop will ask for your password before anything changes.</source>
+            <translation>在更改任何内容之前，您的桌面环境会要求输入密码。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
+            <source>Not available in this build</source>
+            <translation>此版本不可用</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
+            <source>Close</source>
+            <translation>关闭</translation>
+        </message>
+    </context>
+    <context>
         <name>PickCard</name>
         <message>
             <location filename="../src/widgets/controls.cpp" line="256" />
@@ -4322,17 +4536,22 @@ Networks: %5</source>
             <translation>高级</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="64" />
+            <location filename="../src/flows/common.cpp" line="66" />
             <source>Could not %1 %2</source>
             <translation>无法%1 %2</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="72" />
+            <location filename="../src/flows/common.cpp" line="76" />
+            <source>The system did not allow this. Nothing was changed. Open Tools, Setup check: it says whether your account is missing the serial device group or AppArmor, SELinux or a sandbox is in the way, and shows the command to fix it.</source>
+            <translation>系统不允许这样做。没有任何更改。请打开“工具”中的“配置检查”：它会说明是您的账户缺少串行设备组，还是 AppArmor、SELinux 或沙盒造成了阻碍，并给出修复命令。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="82" />
             <source>Windows did not allow this change. Nothing was changed. Run Virtual Serial Studio as administrator and try again.</source>
             <translation>Windows 不允许此更改。未做任何更改。请以管理员身份运行 Virtual Serial Studio 后重试。</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="78" />
+            <location filename="../src/flows/common.cpp" line="88" />
             <source>Another program may be using the device. Nothing was changed. Close that program and try again.</source>
             <translation>可能有其他程序正在使用该设备。未做任何更改。请关闭该程序后重试。</translation>
         </message>
@@ -4657,7 +4876,7 @@ Networks: %5</source>
             <translation>Virtual Serial Studio 可见 %1 和 %2。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <location filename="../src/support/permission_rows.cpp" line="28" />
             <source>the port you choose</source>
             <translation>您选择的端口</translation>
         </message>
@@ -4672,72 +4891,243 @@ Networks: %5</source>
             <translation>Studio 无法读取 Windows 防火墙规则，因此无法判断其他计算机能否连接。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="52" />
-            <location filename="../src/support/permission_rows.cpp" line="61" />
-            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="63" />
+            <location filename="../src/support/permission_rows.cpp" line="74" />
+            <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>正常</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="54" />
             <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
             <translation>Windows 防火墙不起作用。Studio 没有在等待其他计算机连接。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <location filename="../src/support/permission_rows.cpp" line="64" />
             <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
             <translation>您所在网络的 Windows 防火墙已关闭，因此不会阻止其他计算机。Studio 不会更改此设置。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <location filename="../src/support/permission_rows.cpp" line="76" />
             <source>Windows Firewall has a rule that lets other computers reach %1.</source>
             <translation>Windows 防火墙中有一条规则，允许其他计算机访问 %1。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="90" />
             <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
             <translation>Windows 防火墙可能会阻止其他计算机连接到 %1。经您同意后，Studio 可以为此程序和此端口添加一条规则。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <location filename="../src/support/permission_rows.cpp" line="98" />
             <source>Allow through the firewall</source>
             <translation>在防火墙中允许</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <location filename="../src/support/permission_rows.cpp" line="100" />
             <source>How to allow it</source>
             <translation>如何允许</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <location filename="../src/support/permission_rows.cpp" line="104" />
             <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
             <translation>Windows 防火墙中的一条规则在 %1 上阻止了此程序。Studio 从不删除阻止规则；请在 Windows Defender 防火墙中更改。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="99" />
-            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <location filename="../src/support/permission_rows.cpp" line="111" />
+            <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>如何更改</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <location filename="../src/support/permission_rows.cpp" line="115" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
             <translation>Windows 防火墙被设置为阻止所有传入连接，这会覆盖所有规则。如果希望其他计算机能够连接，请在 Windows 安全中心中更改此设置。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <location filename="../src/support/permission_rows.cpp" line="141" />
+            <source>Serial device access</source>
+            <translation>串行设备访问</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="146" />
+            <source>Studio could not check whether you may open the serial devices.</source>
+            <translation>Studio 无法检查您是否可以打开串行设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="155" />
+            <source>You may open the serial devices Studio found.</source>
+            <translation>您可以打开 Studio 找到的串行设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="167" />
+            <source>Your account is not in the group that owns %1, so programs cannot open it.</source>
+            <translation>您的账户不在拥有 %1 的组中，因此程序无法打开它。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="174" />
+            <source>Add me to the group</source>
+            <translation>将我添加到该组</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="180" />
+            <source>Your account is in the group that owns %1, but this login does not know yet. Sign out and back in.</source>
+            <translation>您的账户已在拥有 %1 的组中，但当前登录会话尚未识别。请注销并重新登录。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="186" />
+            <source>How to refresh</source>
+            <translation>如何刷新</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="190" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>拥有 %1 的组没有读取和写入它的权限。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="195" />
+            <source>How to check it</source>
+            <translation>如何检查</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="199" />
+            <source>Something outside the file permissions refused %1: AppArmor, SELinux or a sandbox.</source>
+            <translation>文件权限之外的机制拒绝了 %1：AppArmor、SELinux 或沙盒。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="205" />
+            <location filename="../src/support/permission_rows.cpp" line="223" />
+            <source>Show the fix</source>
+            <translation>显示解决办法</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="220" />
+            <source>Confinement</source>
+            <translation>限制</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="221" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
+            <source>For information</source>
+            <translation>仅供参考</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="226" />
+            <source>Studio runs in a Flatpak sandbox. It sees only the devices it was given.</source>
+            <translation>Studio 运行在 Flatpak 沙盒中，只能看到授予它的设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="232" />
+            <source>Studio runs in a Snap sandbox. It reaches a serial device only through a connected interface.</source>
+            <translation>Studio 运行在 Snap 沙盒中，只能通过已连接的接口访问串行设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="238" />
+            <source>AppArmor confines Studio with the profile %1. It may refuse serial devices.</source>
+            <translation>AppArmor 使用配置文件 %1 限制 Studio，它可能会拒绝串行设备。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio 运行在 macOS 的 App Sandbox 中。只有拥有正确的权限（entitlements），它才能访问串行设备或网络。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
+            <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
+            <translation>SELinux 处于 enforcing 模式。这是正常现象，只有在设备被拒绝时才有关系。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <source>Firewall</source>
+            <translation>防火墙</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="275" />
+            <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
+            <translation>防火墙已开启。如果其他计算机无法访问 %1，请打开该端口。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="281" />
+            <source>Show the command</source>
+            <translation>显示命令</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="287" />
+            <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
+            <translation>没有管理员权限，Studio 无法读取防火墙规则，因此无法判断其他计算机能否连接。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
+            <source>How to check</source>
+            <translation>如何检查</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS 防火墙</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>macOS 防火墙已关闭，因此不会阻止其他计算机。Studio 不会更改此设置。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>macOS 防火墙已开启。其他计算机第一次连接时，macOS 会询问是否允许 Studio 接受传入连接。请选择“允许”。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>如果您选择了“拒绝”</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>macOS 防火墙被设置为阻止所有传入连接，任何程序都无法绕过。如果希望其他计算机能够连接，请在“系统设置”中将其关闭。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio 无法读取 macOS 防火墙设置，因此无法判断其他计算机能否连接。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>本地网络访问</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>从 macOS 15 起，macOS 会询问一次应用是否可以连接本地网络上的设备。这里无法检查；如果您选择了“不允许”，请重新打开。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>显示位置</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>您的账户是管理员，因此 Windows 会请您确认。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>您的账户不是管理员，因此 Windows 会要求输入管理员密码。</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/permission_rows.cpp" line="145" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="461" />
             <location filename="../src/support/setup_facts.cpp" line="472" />
@@ -4804,7 +5194,9 @@ Networks: %5</source>
             <translation>未找到 Virtual Serial Studio 驱动程序，也未找到 com0com。Windows 需要驱动程序，其他程序才能把虚拟端口当作 COM 端口。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="193" />
             <location filename="../src/support/setup_facts.cpp" line="300" />
             <location filename="../src/support/setup_facts.cpp" line="340" />
@@ -4917,6 +5309,7 @@ Networks: %5</source>
             <translation>您的账户不属于 dialout 组，因此程序可能无法打开串行设备。</translation>
         </message>
         <message>
+            <location filename="../src/support/permission_rows.cpp" line="176" />
             <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>如何将我加入</translation>
@@ -4966,34 +5359,34 @@ Networks: %5</source>
             <translation>仅 Windows 支持以管理员身份重新启动。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="53" />
             <source>Could not open the project page</source>
             <translation>无法打开项目页面</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="55" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>浏览器未能打开。请复制链接并自行打开。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="67" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="69" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Install the com0com driver</source>
             <translation>安装 com0com 驱动程序</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="82" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studio 不会为您安装驱动程序。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="88" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>在驱动程序创建 COM 口之前，其他程序看不到虚拟串口。在 Windows 上，该驱动程序是 com0com。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="98" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -5004,64 +5397,64 @@ Networks: %5</source>
 4. 返回配置检查，选择“重新检查”。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="113" />
             <source>com0com project page</source>
             <translation>com0com 项目页面</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="120" />
             <source>Open project page</source>
             <translation>打开项目页面</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="131" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="174" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="275" />
             <source>Close</source>
             <translation>关闭</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="144" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="146" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="158" />
             <source>Add me to the dialout group</source>
             <translation>将我加入 dialout 组</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="160" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>在终端中运行此命令，然后注销并重新登录。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="167" />
             <source>Command</source>
             <translation>命令</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
             <location filename="../src/support/setup_check_dialog.cpp" line="196" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="197" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>Setup check</source>
             <translation>配置检查</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="219" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>此电脑需要什么，其他程序才能使用您的虚拟串口。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="225" />
             <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>一切就绪</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="262" />
             <source>Why is a driver needed?</source>
             <translation>为什么需要驱动程序？</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="270" />
             <source>Re-check</source>
             <translation>重新检查</translation>
         </message>
@@ -5082,6 +5475,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/elevated_step.cpp" line="38" />
+            <location filename="../src/support/elevated_step.cpp" line="117" />
             <source>Not available in this build.</source>
             <translation>此版本不可用。</translation>
         </message>
@@ -5100,11 +5494,31 @@ Networks: %5</source>
             <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
             <translation>无法更改防火墙规则。请改用所显示的命令，并在以管理员身份打开的终端中运行。</translation>
         </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="126" />
+            <source>Done. Sign out and back in so that the new group takes effect, then choose Re-check.</source>
+            <translation>完成。请注销并重新登录，使新组生效，然后选择“重新检查”。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="132" />
+            <source>You dismissed the authentication prompt, so nothing was changed.</source>
+            <translation>您关闭了身份验证提示，因此没有任何更改。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="138" />
+            <source>The system did not authorise the change, so nothing was changed. Use the command shown instead.</source>
+            <translation>系统未授权此更改，因此没有任何更改。请改用所显示的命令。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="144" />
+            <source>The group could not be changed. Use the command shown instead, in a terminal.</source>
+            <translation>无法更改组。请改用所显示的命令，并在终端中运行。</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
         </message>
@@ -13869,7 +14283,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1，%2</translation>
         </message>

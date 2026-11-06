@@ -116,8 +116,8 @@ TEST_CASE("permission rows: the firewall row says what it knows")
     REQUIRE(row->action == support::setup_action::none);
 
     // A listener with no rule: attention, with the offer.
-    report = report_with({firewall(perm::reason::no_allow_rule,
-                                   perm::state::attention, true)});
+    report = report_with(
+        {firewall(perm::reason::no_allow_rule, perm::state::attention, true)});
     row = find_row(report, title);
     REQUIRE(row->state == support::setup_state::attention);
     REQUIRE(row->action == support::setup_action::firewall_help);
@@ -179,9 +179,9 @@ TEST_CASE("permission rows: listeners come from listen addresses only")
         QStringLiteral("tcp-listen://0.0.0.0:4001"));
     REQUIRE_EQ(ask.listeners.size(), std::size_t{1});
     REQUIRE_EQ(ask.listeners.front().port, std::uint16_t{4001});
-    REQUIRE(support::permission_context_for(
-                QStringLiteral("tcp://10.0.0.5:4001"))
-                .listeners.empty());
+    REQUIRE(
+        support::permission_context_for(QStringLiteral("tcp://10.0.0.5:4001"))
+            .listeners.empty());
 }
 
 TEST_CASE("firewall dialog: the rule is shown exactly and nothing runs unasked")

@@ -226,6 +226,7 @@ capabilities EngineStudioBackend::caps() const
     // have the step and be able to start a program through its own prompt.
     caps.firewall_rule = vss::permissions::can_manage_firewall_rules() &&
                          vss::permissions::can_run_elevated();
+    caps.serial_group_step = vss::permissions::can_add_user_to_group();
     return caps;
 }
 

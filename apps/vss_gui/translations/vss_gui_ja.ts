@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="ja">
     <context>
         <name>About</name>
@@ -1996,59 +1995,59 @@
     <context>
         <name>FirewallDialog</name>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <location filename="../src/support/firewall_dialog.cpp" line="39" />
             <source>domain</source>
             <translation>ドメイン</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <location filename="../src/support/firewall_dialog.cpp" line="41" />
             <source>private</source>
             <translation>プライベート</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <location filename="../src/support/firewall_dialog.cpp" line="43" />
             <source>public</source>
             <translation>パブリック</translation>
         </message>
         <message>
             <location filename="../src/support/firewall_dialog.cpp" line="69" />
-            <location filename="../src/support/firewall_dialog.cpp" line="70" />
-            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <location filename="../src/support/firewall_dialog.cpp" line="71" />
+            <location filename="../src/support/firewall_dialog.cpp" line="84" />
             <source>Windows Firewall</source>
             <translation>Windows ファイアウォール</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
             <source>Other computers cannot reach this port until a rule allows it.</source>
             <translation>ルールで許可されるまで、他のコンピューターはこのポートに接続できません。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <location filename="../src/support/firewall_dialog.cpp" line="89" />
             <source>Windows Firewall stops other computers reaching this port.</source>
             <translation>Windows ファイアウォールが、他のコンピューターからこのポートへの接続を止めています。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <location filename="../src/support/firewall_dialog.cpp" line="98" />
             <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
             <translation>Studio は他のコンピューターからの接続を待っています。Windows ファイアウォールは、どのルールも許可していない接続をブロックします。Studio がファイアウォールを自動で変更することはありません。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <location filename="../src/support/firewall_dialog.cpp" line="108" />
             <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
             <translation>Windows ファイアウォールのルールが、このポートでこのプログラムをブロックしています。ブロックルールは許可ルールより優先され、Studio はこれを削除しません。他のコンピューターから接続できるようにするには、「セキュリティが強化された Windows Defender ファイアウォール」を開き、「受信の規則」でブロックルールを探して、無効にするか削除してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <location filename="../src/support/firewall_dialog.cpp" line="120" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
             <translation>Windows ファイアウォールは受信接続をすべてブロックする設定になっており、すべてのルールより優先されます。Windows セキュリティを開き、「ファイアウォールとネットワーク保護」を選び、使用中のネットワークを選んで、「着信接続をすべてブロックする」をオフにしてください。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <location filename="../src/support/firewall_dialog.cpp" line="133" />
             <source>The rule Studio would add lets only this in:</source>
             <translation>Studio が追加するルールが許可するのは次の内容だけです:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <location filename="../src/support/firewall_dialog.cpp" line="138" />
             <source>Program: %1
 Protocol and port: %2 %3
 Who: %4
@@ -2059,48 +2058,48 @@ Networks: %5</source>
 ネットワーク: %5</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
             <source>computers on your local network</source>
             <translation>ローカルネットワーク上のコンピューター</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <location filename="../src/support/firewall_dialog.cpp" line="148" />
             <source>any computer</source>
             <translation>すべてのコンピューター</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <location filename="../src/support/firewall_dialog.cpp" line="159" />
             <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
             <translation>同じルールをコマンドで示します。ご自身で実行する場合は、管理者として開いたターミナルで実行してください:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <location filename="../src/support/firewall_dialog.cpp" line="163" />
             <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
             <translation>ご自身でルールを追加するには、管理者として開いたターミナルで次を実行してください:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <location filename="../src/support/firewall_dialog.cpp" line="171" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="158" />
-            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <location filename="../src/support/firewall_dialog.cpp" line="185" />
+            <location filename="../src/support/firewall_dialog.cpp" line="189" />
             <source>Allow in Windows Firewall</source>
             <translation>Windows ファイアウォールで許可</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <location filename="../src/support/firewall_dialog.cpp" line="193" />
             <source>Windows will ask for administrator permission before the rule is added.</source>
             <translation>ルールを追加する前に、Windows が管理者の許可を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <location filename="../src/support/firewall_dialog.cpp" line="208" />
             <source>Close</source>
             <translation>閉じる</translation>
         </message>
@@ -3661,6 +3660,221 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>PermissionDialog</name>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="54" />
+            <source>Serial device access</source>
+            <translation>シリアルデバイスへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="58" />
+            <source>Your account is not in the group that owns %1.</source>
+            <translation>お使いのアカウントは、%1 を所有するグループに入っていません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="62" />
+            <source>On Linux, the group that owns a serial device decides who may open it. Add your account to that group, then sign out and back in. Studio never changes a group by itself.</source>
+            <translation>Linux では、シリアルデバイスを所有するグループが、誰がそれを開けるかを決めます。アカウントをそのグループに追加してから、いったんサインアウトして再度サインインしてください。Studio がグループを自動で変更することはありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="70" />
+            <source>Your account is in the group, but this login does not know yet.</source>
+            <translation>アカウントはグループに入っていますが、このログインセッションはまだそれを認識していません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="74" />
+            <source>Sign out and back in. To use the group in one terminal right now, run the command below there and start Studio from that terminal.</source>
+            <translation>サインアウトして再度サインインしてください。今すぐ 1 つのターミナルでだけグループを使うには、そのターミナルで下のコマンドを実行し、そこから Studio を起動してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="83" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>%1 を所有するグループには、読み取りと書き込みの権限がありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="87" />
+            <source>Look at the permissions of the device with the command below. Changing them is a system setting, so Studio leaves it to you; a udev rule makes a change last across restarts.</source>
+            <translation>下のコマンドでデバイスのアクセス権を確認してください。変更はシステム設定にあたるため、Studio は行いません。udev ルールを使うと、再起動後も変更が保たれます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="97" />
+            <source>The file permissions allow %1, but something outside them refused it.</source>
+            <translation>ファイルのアクセス権は %1 を許可していますが、それ以外の仕組みが拒否しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="102" />
+            <source>Linux security policy (AppArmor, SELinux) or a sandbox (Flatpak, Snap) can refuse a device that the file permissions allow. The text below is the fix for the one that applies to this system.</source>
+            <translation>Linux のセキュリティポリシー (AppArmor、SELinux) やサンドボックス (Flatpak、Snap) は、ファイルのアクセス権が許可しているデバイスでも拒否することがあります。下の内容は、このシステムで当てはまるものへの対処です。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="110" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
+            <source>Command</source>
+            <translation>コマンド</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="114" />
+            <source>Confinement</source>
+            <translation>制限</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="117" />
+            <source>Studio runs inside a Flatpak sandbox.</source>
+            <translation>Studio は Flatpak のサンドボックス内で動作しています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="119" />
+            <source>A Flatpak sees only the devices and folders it was given. If a serial device is missing, give the application access to devices with the command below.</source>
+            <translation>Flatpak には、与えられたデバイスとフォルダーしか見えません。シリアルデバイスが見えない場合は、下のコマンドでアプリケーションにデバイスへのアクセスを与えてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="128" />
+            <source>Studio runs inside a Snap sandbox.</source>
+            <translation>Studio は Snap のサンドボックス内で動作しています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="130" />
+            <source>A Snap reaches a serial device only through an interface that is connected. The command below lists what is connected; the serial-port interface is the one a serial device needs.</source>
+            <translation>Snap がシリアルデバイスに届くのは、接続済みのインターフェイスを通した場合だけです。下のコマンドで接続状況を一覧できます。シリアルデバイスに必要なのは serial-port インターフェイスです。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="138" />
+            <source>An AppArmor profile confines Studio (%1).</source>
+            <translation>AppArmor のプロファイルが Studio を制限しています (%1)。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="142" />
+            <source>The profile may refuse serial devices, pseudo terminals or Studio's link folder. If a program is refused, add the lines below to the local override of the profile and reload it. Studio never edits a profile.</source>
+            <translation>プロファイルがシリアルデバイス、疑似端末、または Studio のリンク用フォルダーを拒否することがあります。プログラムが拒否される場合は、下の行をプロファイルのローカル上書きに追加して再読み込みしてください。Studio がプロファイルを編集することはありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio は macOS の App Sandbox 内で動作しています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>サンドボックス内のアプリは、権限 (entitlements) がある場合にのみシリアルデバイスやネットワークに届きます。次の行は、サンドボックス版の Studio がエンタイトルメントファイルに必要とするものです。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <source>SELinux is enforcing.</source>
+            <translation>SELinux は enforcing モードです。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
+            <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
+            <translation>これは通常の状態で、デバイスが拒否されない限り問題ではありません。拒否される場合は、下のコマンドで拒否を見つけ、そのためのポリシーモジュールを作成できます。インストールする前に、audit2allow が提案する内容を確認してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
+            <source>Commands</source>
+            <translation>コマンド</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
+            <source>Firewall</source>
+            <translation>ファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
+            <source>A firewall is on and may stop other computers reaching this port.</source>
+            <translation>ファイアウォールが有効で、他のコンピューターがこのポートに届かない可能性があります。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
+            <translation>Studio は管理者権限なしではファイアウォールのルールを読み取れません。他のコンピューターから接続できない場合は、下のコマンドでポートを開いてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <source>Studio cannot read the firewall rules.</source>
+            <translation>Studio はファイアウォールのルールを読み取れません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
+            <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
+            <translation>読み取りには管理者権限が必要で、ufw も firewalld も有効ではありません。他のコンピューターから接続できない場合は、管理者アカウントでルールを確認してください (例: sudo nft list ruleset)。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS のファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>他のコンピューターからの最初の接続で、macOS が確認を求めます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>ファイアウォールがオンの場合、macOS はプログラムごとに 1 回、受信接続を受け付けてよいかを尋ねます。「許可」を選んでください。「許可しない」を選んだ場合は、システム設定の「ネットワーク」→「ファイアウォール」→「オプション」を開き、そのプログラムを「外部からの接続を許可」に設定するか、下のコマンドをターミナルで実行してください。Studio がファイアウォールを変更することはありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>ファイアウォールがすべての受信接続をブロックしています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>この設定はすべてのプログラムより優先されます。他のコンピューターから接続できるようにするには、システム設定の「ネットワーク」→「ファイアウォール」→「オプション」を開き、「外部からのすべての接続をブロック」をオフにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio はファイアウォールを読み取れませんでした。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>システム設定の「ネットワーク」→「ファイアウォール」を確認してください。オンで他のコンピューターから接続できない場合は、オプションを確認してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>ローカルネットワークへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS は、Studio がローカルネットワークを使ってよいかを 1 回だけ尋ねます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>macOS 15 以降では、ローカルネットワーク上のデバイスを探して接続するために、アプリにユーザーの許可が必要です。Studio は回答を確認できません。「許可しない」を選び、他のコンピューターから接続できない場合は、システム設定の「プライバシーとセキュリティ」→「ローカルネットワーク」を開き、Virtual Serial Studio をオンにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
+            <source>Permissions</source>
+            <translation>アクセス許可</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
+            <source>Add me to the %1 group</source>
+            <translation>%1 グループに自分を追加</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
+            <source>Your desktop will ask for your password before anything changes.</source>
+            <translation>変更の前に、デスクトップがパスワードを求めます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
+            <source>Not available in this build</source>
+            <translation>このビルドでは利用できません</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
+            <source>Close</source>
+            <translation>閉じる</translation>
+        </message>
+    </context>
+    <context>
         <name>PickCard</name>
         <message>
             <location filename="../src/widgets/controls.cpp" line="256" />
@@ -4322,17 +4536,22 @@ Networks: %5</source>
             <translation>上級</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="64" />
+            <location filename="../src/flows/common.cpp" line="66" />
             <source>Could not %1 %2</source>
             <translation>%2を%1できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="72" />
+            <location filename="../src/flows/common.cpp" line="76" />
+            <source>The system did not allow this. Nothing was changed. Open Tools, Setup check: it says whether your account is missing the serial device group or AppArmor, SELinux or a sandbox is in the way, and shows the command to fix it.</source>
+            <translation>システムが許可しませんでした。何も変更されていません。「ツール」の「セットアップチェック」を開いてください。アカウントにシリアルデバイスのグループがないのか、AppArmor、SELinux、サンドボックスが妨げているのかが表示され、解決のコマンドも示されます。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="82" />
             <source>Windows did not allow this change. Nothing was changed. Run Virtual Serial Studio as administrator and try again.</source>
             <translation>Windowsがこの変更を許可しませんでした。何も変更されていません。Virtual Serial Studioを管理者として実行して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="78" />
+            <location filename="../src/flows/common.cpp" line="88" />
             <source>Another program may be using the device. Nothing was changed. Close that program and try again.</source>
             <translation>別のプログラムがデバイスを使用中の可能性があります。何も変更されていません。そのプログラムを閉じて、もう一度やり直してください。</translation>
         </message>
@@ -4657,7 +4876,7 @@ Networks: %5</source>
             <translation>%1と%2がVirtual Serial Studioから見えています。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <location filename="../src/support/permission_rows.cpp" line="28" />
             <source>the port you choose</source>
             <translation>選択したポート</translation>
         </message>
@@ -4672,72 +4891,243 @@ Networks: %5</source>
             <translation>Studio は Windows ファイアウォールのルールを読み取れなかったため、他のコンピューターから接続できるかどうかは判断できません。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="52" />
-            <location filename="../src/support/permission_rows.cpp" line="61" />
-            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="63" />
+            <location filename="../src/support/permission_rows.cpp" line="74" />
+            <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>OK</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="54" />
             <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
             <translation>Windows ファイアウォールは関係しません。Studio は他のコンピューターからの接続を待っていません。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <location filename="../src/support/permission_rows.cpp" line="64" />
             <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
             <translation>使用中のネットワークでは Windows ファイアウォールがオフなので、他のコンピューターは止められません。Studio はこの設定を変更しません。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <location filename="../src/support/permission_rows.cpp" line="76" />
             <source>Windows Firewall has a rule that lets other computers reach %1.</source>
             <translation>Windows ファイアウォールに、他のコンピューターが %1 に接続できるようにするルールがあります。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="90" />
             <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
             <translation>Windows ファイアウォールが、他のコンピューターから %1 への接続を止めている可能性があります。ご同意いただければ、Studio がこのプログラムとこのポート用のルールを 1 つ追加できます。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <location filename="../src/support/permission_rows.cpp" line="98" />
             <source>Allow through the firewall</source>
             <translation>ファイアウォールで許可</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <location filename="../src/support/permission_rows.cpp" line="100" />
             <source>How to allow it</source>
             <translation>許可する方法</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <location filename="../src/support/permission_rows.cpp" line="104" />
             <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
             <translation>Windows ファイアウォールのルールが、%1 でこのプログラムをブロックしています。Studio はブロックルールを削除しません。Windows Defender ファイアウォールで変更してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="99" />
-            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <location filename="../src/support/permission_rows.cpp" line="111" />
+            <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>変更する方法</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <location filename="../src/support/permission_rows.cpp" line="115" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
             <translation>Windows ファイアウォールは受信接続をすべてブロックする設定になっており、すべてのルールより優先されます。他のコンピューターから接続できるようにするには、Windows セキュリティでこの設定を変更してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <location filename="../src/support/permission_rows.cpp" line="141" />
+            <source>Serial device access</source>
+            <translation>シリアルデバイスへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="146" />
+            <source>Studio could not check whether you may open the serial devices.</source>
+            <translation>Studio は、シリアルデバイスを開けるかどうかを確認できませんでした。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="155" />
+            <source>You may open the serial devices Studio found.</source>
+            <translation>Studio が見つけたシリアルデバイスを開くことができます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="167" />
+            <source>Your account is not in the group that owns %1, so programs cannot open it.</source>
+            <translation>お使いのアカウントは %1 を所有するグループに入っていないため、プログラムはそれを開けません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="174" />
+            <source>Add me to the group</source>
+            <translation>自分をグループに追加</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="180" />
+            <source>Your account is in the group that owns %1, but this login does not know yet. Sign out and back in.</source>
+            <translation>アカウントは %1 を所有するグループに入っていますが、このログインセッションはまだそれを認識していません。サインアウトして再度サインインしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="186" />
+            <source>How to refresh</source>
+            <translation>更新する方法</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="190" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>%1 を所有するグループには、読み取りと書き込みの権限がありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="195" />
+            <source>How to check it</source>
+            <translation>確認する方法</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="199" />
+            <source>Something outside the file permissions refused %1: AppArmor, SELinux or a sandbox.</source>
+            <translation>ファイルのアクセス権以外の仕組みが %1 を拒否しました。AppArmor、SELinux、またはサンドボックスです。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="205" />
+            <location filename="../src/support/permission_rows.cpp" line="223" />
+            <source>Show the fix</source>
+            <translation>対処方法を表示</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="220" />
+            <source>Confinement</source>
+            <translation>制限</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="221" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
+            <source>For information</source>
+            <translation>参考情報</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="226" />
+            <source>Studio runs in a Flatpak sandbox. It sees only the devices it was given.</source>
+            <translation>Studio は Flatpak のサンドボックス内で動作しています。与えられたデバイスしか見えません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="232" />
+            <source>Studio runs in a Snap sandbox. It reaches a serial device only through a connected interface.</source>
+            <translation>Studio は Snap のサンドボックス内で動作しています。シリアルデバイスには接続済みのインターフェイスを通してのみ届きます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="238" />
+            <source>AppArmor confines Studio with the profile %1. It may refuse serial devices.</source>
+            <translation>AppArmor がプロファイル %1 で Studio を制限しています。シリアルデバイスが拒否されることがあります。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio は macOS の App Sandbox 内で動作しています。適切な権限 (entitlements) がある場合にのみシリアルデバイスやネットワークに届きます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
+            <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
+            <translation>SELinux は enforcing モードです。これは通常の状態で、デバイスが拒否された場合にだけ関係します。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <source>Firewall</source>
+            <translation>ファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="275" />
+            <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
+            <translation>ファイアウォールが有効です。他のコンピューターが %1 に届かない場合は、ポートを開いてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="281" />
+            <source>Show the command</source>
+            <translation>コマンドを表示</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="287" />
+            <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
+            <translation>Studio は管理者権限なしではファイアウォールのルールを読み取れないため、他のコンピューターから接続できるかどうかは判断できません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
+            <source>How to check</source>
+            <translation>確認する方法</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS のファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>macOS のファイアウォールはオフなので、他のコンピューターは止められません。Studio はこの設定を変更しません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>macOS のファイアウォールはオンです。他のコンピューターが初めて接続したときに、macOS が Studio に受信接続を受け付けてよいかを尋ねます。「許可」を選んでください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>「許可しない」を選んだ場合</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>macOS のファイアウォールはすべての受信接続をブロックする設定になっており、どのプログラムもこれを回避できません。他のコンピューターから接続できるようにするには、システム設定でこれをオフにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio は macOS のファイアウォール設定を読み取れなかったため、他のコンピューターから接続できるかどうかは判断できません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>ローカルネットワークへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>macOS 15 以降では、アプリがローカルネットワーク上のデバイスに接続してよいかを macOS が 1 回だけ尋ねます。ここからは確認できません。「許可しない」を選んだ場合は、オンに戻してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>場所を表示</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>お使いのアカウントは管理者なので、Windows が確認を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>お使いのアカウントは管理者ではないので、Windows が管理者のパスワードを求めます。</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/permission_rows.cpp" line="145" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="461" />
             <location filename="../src/support/setup_facts.cpp" line="472" />
@@ -4804,7 +5194,9 @@ Networks: %5</source>
             <translation>Virtual Serial Studio ドライバーも com0com も見つかりませんでした。他のプログラムが仮想ポートを COM ポートとして認識するには、Windows にドライバーが必要です。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="193" />
             <location filename="../src/support/setup_facts.cpp" line="300" />
             <location filename="../src/support/setup_facts.cpp" line="340" />
@@ -4917,6 +5309,7 @@ Networks: %5</source>
             <translation>お使いのアカウントはdialoutグループに所属していないため、プログラムからシリアルデバイスを開けない場合があります。</translation>
         </message>
         <message>
+            <location filename="../src/support/permission_rows.cpp" line="176" />
             <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>追加方法</translation>
@@ -4966,34 +5359,34 @@ Networks: %5</source>
             <translation>管理者としての再起動はWindowsでのみ利用できます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="53" />
             <source>Could not open the project page</source>
             <translation>プロジェクトのページを開けませんでした</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="55" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>ブラウザーが開きませんでした。リンクをコピーして、ご自身で開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="67" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="69" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Install the com0com driver</source>
             <translation>com0comドライバーをインストール</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="82" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studioはドライバーをインストールしません。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="88" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>ドライバーがCOMポートを作成するまで、他のプログラムは仮想ポートを見ることができません。Windowsではそのドライバーがcom0comです。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="98" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -5004,64 +5397,64 @@ Networks: %5</source>
 4. セットアップチェックに戻り、「再チェック」を選びます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="113" />
             <source>com0com project page</source>
             <translation>com0comのプロジェクトページ</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="120" />
             <source>Open project page</source>
             <translation>プロジェクトページを開く</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="131" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="174" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="275" />
             <source>Close</source>
             <translation>閉じる</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="144" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="146" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="158" />
             <source>Add me to the dialout group</source>
             <translation>dialoutグループに自分を追加</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="160" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>ターミナルで次のコマンドを実行し、いったんサインアウトしてからサインインし直してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="167" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
             <location filename="../src/support/setup_check_dialog.cpp" line="196" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="197" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>Setup check</source>
             <translation>セットアップチェック</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="219" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>他のプログラムから仮想ポートを使うためにこのPCに必要なものです。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="225" />
             <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>準備完了</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="262" />
             <source>Why is a driver needed?</source>
             <translation>ドライバーが必要な理由</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="270" />
             <source>Re-check</source>
             <translation>再チェック</translation>
         </message>
@@ -5082,6 +5475,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/elevated_step.cpp" line="38" />
+            <location filename="../src/support/elevated_step.cpp" line="117" />
             <source>Not available in this build.</source>
             <translation>このビルドでは利用できません。</translation>
         </message>
@@ -5100,11 +5494,31 @@ Networks: %5</source>
             <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
             <translation>ファイアウォールのルールを変更できませんでした。代わりに表示されているコマンドを、管理者として開いたターミナルで実行してください。</translation>
         </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="126" />
+            <source>Done. Sign out and back in so that the new group takes effect, then choose Re-check.</source>
+            <translation>完了しました。新しいグループを有効にするため、サインアウトして再度サインインし、「再確認」を選んでください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="132" />
+            <source>You dismissed the authentication prompt, so nothing was changed.</source>
+            <translation>認証の確認を閉じたため、何も変更されていません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="138" />
+            <source>The system did not authorise the change, so nothing was changed. Use the command shown instead.</source>
+            <translation>システムが変更を許可しなかったため、何も変更されていません。代わりに表示されているコマンドを使ってください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="144" />
+            <source>The group could not be changed. Use the command shown instead, in a terminal.</source>
+            <translation>グループを変更できませんでした。代わりに表示されているコマンドを、ターミナルで実行してください。</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1、%2</translation>
         </message>
@@ -13869,7 +14283,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1、%2</translation>
         </message>

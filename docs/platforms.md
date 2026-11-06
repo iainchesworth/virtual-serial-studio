@@ -164,3 +164,63 @@ the machine the tests run on, so the step itself is covered by unit tests of the
 rule text, the argument round trip and the helper's refusals): adding and removing
 the rule in a Windows guest, the UAC prompt for a standard user, and a machine
 joined to a domain with policy-managed rules.
+
+### Serial access, confinement and the firewall on Linux
+
+The same permissions layer reads what an ordinary user can read: the groups of
+the process, `stat` and `access(2)` of each serial device, `/proc/self/attr/current`
+(an AppArmor profile or an SELinux context), `/sys/fs/selinux/enforce`,
+`FLATPAK_ID` and `SNAP_NAME`, `/etc/ufw/ufw.conf`, and the presence of
+`/run/firewalld.pid`. `access(2)` answers for the file mode only, which is what
+makes a policy denial recognisable: a device the mode allows and an open that was
+refused is AppArmor, SELinux or a sandbox, and the fact says so with the fix for the
+one in force.
+
+- **One privileged step.** Putting the user in the serial group is
+  `pkexec usermod -aG <group> <user>`, started with `posix_spawn` after the user
+  presses the button. polkit's agent shows the command it is asked to run. The step
+  names only the current user and only `dialout`, `uucp`, `tty` or `lock`.
+- **Honest limits.** A bare label such as `kernel` (WSL) is not an AppArmor profile.
+  Firewall rules need root, so without `ufw` or `firewalld` the fact is `unknown`.
+  Whether a polkit agent is running cannot be asked in advance, so a declined or
+  missing prompt is reported after the fact.
+- **Capability.** `capabilities::serial_group_step` is true where `pkexec` and
+  `usermod` are installed; otherwise the dialog only explains and shows the command.
+
+Run for this change: the Linux part of the library compiled with GCC 14 and
+`-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror`, its unit tests, and a
+read-only probe in a Debian WSL distribution, which found `/dev/ttyS0` owned by
+`dialout` with the user outside the group and printed the exact command. Not run:
+the polkit prompt and the group change (they change the account), AppArmor and
+SELinux denials on real profiles, a Flatpak or Snap build, and Clang. Those need the
+Ubuntu guest of `docs/vm-testing.md` and a Fedora guest.
+
+### The Application Firewall, Local Network and the sandbox on macOS
+
+The permissions layer reads: `stat` and `access(2)` of each serial device, the
+`APP_SANDBOX_CONTAINER_ID` that the App Sandbox sets, the Darwin release from
+`uname` (24 is macOS 15, where the Local Network permission starts), and, only when a
+listener is open to other computers, `socketfilterfw --getglobalstate` and
+`--getblockall` run with a small fixed environment and a three second limit
+(`capture_command` in `src/platform/posix/permissions_posix.hpp`). The output is
+parsed by `parse_alf_global_state` and `parse_alf_block_all`, which leave a state
+unknown when the text is not what macOS prints.
+
+- **No step.** The firewall answer is given in the prompt macOS shows. The fix for
+  "Don't Allow" is two `sudo socketfilterfw` commands that the user runs; Studio
+  does not run them, so there is no capability flag to gate.
+- **Local Network** has no query and is reported as information from macOS 15 only
+  when a listener is open to other computers. The bundle's `Info.plist`
+  (`apps/vss_gui/macos/Info.plist.in`) carries `NSLocalNetworkUsageDescription`;
+  without it macOS refuses the request without asking.
+- **Release.** `apps/vss_gui/macos/vss_gui.entitlements` is the hardened-runtime
+  entitlements file for the notarised release: empty on purpose, because Studio needs
+  no exception (no JIT, no unsigned memory, no foreign libraries). A sandboxed build
+  starts from `vss_gui.sandbox.entitlements`. `tools/macos/sign-and-notarize.sh` signs
+  from the inside out, notarises and staples; see [Releasing](releasing.md).
+
+Not run: anything on a Mac. The macOS file was compiled with GCC 14 against a stand-in
+for `mach-o/dyld.h`, its parsing was tested with the text macOS prints, the shared
+command runner was tested on Linux, and the `Info.plist` template was expanded with
+CMake and read back as a property list. The Application Firewall query, the prompts,
+signing and notarisation need a Mac with an Apple Developer ID.

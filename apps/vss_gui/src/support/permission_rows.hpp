@@ -39,6 +39,11 @@ void append_permission_rows(QVector<setup_row>& rows,
 /// Empty when the facts say nothing.
 QString elevation_sentence(const std::vector<vss::permissions::fact>& facts);
 
+/// The fact about one topic, if there is one.
+std::optional<vss::permissions::fact>
+find_fact(const std::vector<vss::permissions::fact>& facts,
+          vss::permissions::topic what);
+
 /// The Windows Firewall fact, if there is one.
 std::optional<vss::permissions::fact>
 firewall_fact(const std::vector<vss::permissions::fact>& facts);

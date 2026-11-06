@@ -18,6 +18,8 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_rfc2217.cpp
   unit/test_native_and_com0com.cpp
   unit/test_permissions.cpp
+  unit/test_permissions_linux.cpp
+  unit/test_permissions_macos.cpp
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
@@ -39,7 +41,8 @@ if(WIN32)
     unit/platform/windows/test_manifest_windows.cpp
     unit/platform/windows/test_ports_windows.cpp)
 elseif(UNIX)
-  list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)
+  list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp
+    unit/platform/posix/test_permissions_posix.cpp)
 endif()
 
 add_executable(vss_unit_tests ${VSS_UNIT_TEST_SOURCES})

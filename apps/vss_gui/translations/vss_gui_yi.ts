@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="yi">
     <context>
         <name>About</name>
@@ -1996,59 +1995,59 @@
     <context>
         <name>FirewallDialog</name>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <location filename="../src/support/firewall_dialog.cpp" line="39" />
             <source>domain</source>
             <translation>דאָמען</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <location filename="../src/support/firewall_dialog.cpp" line="41" />
             <source>private</source>
             <translation>פּריוואַט</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <location filename="../src/support/firewall_dialog.cpp" line="43" />
             <source>public</source>
             <translation>עפֿנטלעך</translation>
         </message>
         <message>
             <location filename="../src/support/firewall_dialog.cpp" line="69" />
-            <location filename="../src/support/firewall_dialog.cpp" line="70" />
-            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <location filename="../src/support/firewall_dialog.cpp" line="71" />
+            <location filename="../src/support/firewall_dialog.cpp" line="84" />
             <source>Windows Firewall</source>
             <translation>Windows Firewall</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
             <source>Other computers cannot reach this port until a rule allows it.</source>
             <translation>אַנדערע קאָמפּיוטערס קענען נישט דערגרייכן דעם פּאָרט ביז אַ כּלל דערלויבט עס.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <location filename="../src/support/firewall_dialog.cpp" line="89" />
             <source>Windows Firewall stops other computers reaching this port.</source>
             <translation>דער Windows Firewall פֿאַרהיט אַנדערע קאָמפּיוטערס צו דערגרייכן דעם פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <location filename="../src/support/firewall_dialog.cpp" line="98" />
             <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
             <translation>Studio וואַרט אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן. דער Windows Firewall בלאָקירט פֿאַרבינדונגען וואָס קיין שום כּלל דערלויבט נישט. Studio ענדערט קיינמאָל נישט דעם פֿײַערוואָל פֿון זיך אַליין.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <location filename="../src/support/firewall_dialog.cpp" line="108" />
             <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
             <translation>אַ כּלל אין Windows Firewall בלאָקירט דאָס פּראָגראַם אויף דעם פּאָרט. אַ בלאָקיר־כּלל האָט פֿאָרראַנג איבער אַ דערלויבן־כּלל, און Studio באַזייטיקט עס נישט. עפֿנט Windows Defender Firewall מיט פֿאַרבעסערטער זיכערקייט, געפֿינט דאָס בלאָקיר־כּלל אונטער אײַנקומענדיקע כּללים, און דיאַקטיוויזירט אָדער מעקט עס אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <location filename="../src/support/firewall_dialog.cpp" line="120" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
             <translation>דער Windows Firewall איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס שטעלט אַוועק יעדעס כּלל. עפֿנט Windows Security, קלײַבט אויס Firewall &amp; network protection, קלײַבט אויס דעם נעץ אויף וועלכן איר זײַט, און שטעלט אָפּ בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <location filename="../src/support/firewall_dialog.cpp" line="133" />
             <source>The rule Studio would add lets only this in:</source>
             <translation>דאָס כּלל וואָס Studio וואָלט צוגעגעבן דערלויבט בלויז דאָס:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <location filename="../src/support/firewall_dialog.cpp" line="138" />
             <source>Program: %1
 Protocol and port: %2 %3
 Who: %4
@@ -2059,48 +2058,48 @@ Networks: %5</source>
 נעצן: %5</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
             <source>computers on your local network</source>
             <translation>קאָמפּיוטערס אין אײַער לאָקאַלן נעץ</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <location filename="../src/support/firewall_dialog.cpp" line="148" />
             <source>any computer</source>
             <translation>יעדער קאָמפּיוטער</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <location filename="../src/support/firewall_dialog.cpp" line="159" />
             <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
             <translation>דאָס זעלבע כּלל ווי אַ באַפֿעל, אויב איר ווילט עס אַליין לויפֿן אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <location filename="../src/support/firewall_dialog.cpp" line="163" />
             <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
             <translation>כּדי צוצולייגן דאָס כּלל אַליין, לויפֿט דאָס אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <location filename="../src/support/firewall_dialog.cpp" line="171" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="158" />
-            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <location filename="../src/support/firewall_dialog.cpp" line="185" />
+            <location filename="../src/support/firewall_dialog.cpp" line="189" />
             <source>Allow in Windows Firewall</source>
             <translation>דערלויבן אין Windows Firewall</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <location filename="../src/support/firewall_dialog.cpp" line="193" />
             <source>Windows will ask for administrator permission before the rule is added.</source>
             <translation>Windows וועט פֿרעגן וועגן אַדמיניסטראַטאָר־דערלויבעניש איידער דאָס כּלל ווערט צוגעגעבן.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <location filename="../src/support/firewall_dialog.cpp" line="208" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
@@ -3661,6 +3660,221 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>PermissionDialog</name>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="54" />
+            <source>Serial device access</source>
+            <translation>צוטריט צו סעריעלע מכשירים</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="58" />
+            <source>Your account is not in the group that owns %1.</source>
+            <translation>אײַער קאָנטאָ איז נישט אין דער גרופּע וואָס באַזיצט %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="62" />
+            <source>On Linux, the group that owns a serial device decides who may open it. Add your account to that group, then sign out and back in. Studio never changes a group by itself.</source>
+            <translation>אין Linux באַשטימט די גרופּע וואָס באַזיצט אַ סעריעלן מכשיר ווער מעג עפֿענען אים. לייגט צו אײַער קאָנטאָ צו דער גרופּע, דערנאָך לאָגט אַרויס און אַרײַן נאָך אַ מאָל. Studio ענדערט קיינמאָל נישט קיין גרופּע פֿון זיך אַליין.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="70" />
+            <source>Your account is in the group, but this login does not know yet.</source>
+            <translation>אײַער קאָנטאָ איז אין דער גרופּע, אָבער דער איצטיקער לאָגין ווייסט נאָך נישט דערפֿון.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="74" />
+            <source>Sign out and back in. To use the group in one terminal right now, run the command below there and start Studio from that terminal.</source>
+            <translation>לאָגט אַרויס און אַרײַן נאָך אַ מאָל. כּדי צו ניצן די גרופּע גלײַך אין איין טערמינאַל, לויפֿט דאָרטן דעם באַפֿעל אונטן און הייבט אָן Studio פֿון יענעם טערמינאַל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="83" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>די גרופּע וואָס באַזיצט %1 מעג עס נישט לייענען און שרײַבן אין עס.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="87" />
+            <source>Look at the permissions of the device with the command below. Changing them is a system setting, so Studio leaves it to you; a udev rule makes a change last across restarts.</source>
+            <translation>קוקט אויף די דערלויבענישן פֿון דעם מכשיר מיט דעם באַפֿעל אונטן. זיי צו ענדערן איז אַ סיסטעם־באַשטימונג, דעריבער לאָזט Studio עס צו אײַך; אַ udev־כּלל מאַכט אַז די ענדערונג בלײַבט נאָך אַ ריסטאַרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="97" />
+            <source>The file permissions allow %1, but something outside them refused it.</source>
+            <translation>די דערלויבענישן פֿון דער טעקע דערלויבן %1, אָבער עפּעס אַרויס פֿון זיי האָט עס אָפּגעוואָרפֿן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="102" />
+            <source>Linux security policy (AppArmor, SELinux) or a sandbox (Flatpak, Snap) can refuse a device that the file permissions allow. The text below is the fix for the one that applies to this system.</source>
+            <translation>אַ Linux־זיכערהייט־פּאָליטיק (AppArmor, SELinux) אָדער אַ זאַמד־קאַסטן (Flatpak, Snap) קענען אָפּוואַרפֿן אַ מכשיר וואָס די דערלויבענישן פֿון דער טעקע דערלויבן. דער טעקסט אונטן איז די לייזונג פֿאַר דעם וואָס גילט אויף דער סיסטעם.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="110" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
+            <source>Command</source>
+            <translation>קאָמאַנדע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="114" />
+            <source>Confinement</source>
+            <translation>באַגרענעצונג</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="117" />
+            <source>Studio runs inside a Flatpak sandbox.</source>
+            <translation>Studio לויפֿט אין אַ Flatpak זאַמד־קאַסטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="119" />
+            <source>A Flatpak sees only the devices and folders it was given. If a serial device is missing, give the application access to devices with the command below.</source>
+            <translation>אַ Flatpak זעט בלויז די מכשירים און פּאַפּקעס וואָס מען האָט אים געגעבן. אויב אַ סעריעלער מכשיר פֿעלט, גיט דער אַפּליקאַציע צוטריט צו מכשירים מיט דעם באַפֿעל אונטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="128" />
+            <source>Studio runs inside a Snap sandbox.</source>
+            <translation>Studio לויפֿט אין אַ Snap זאַמד־קאַסטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="130" />
+            <source>A Snap reaches a serial device only through an interface that is connected. The command below lists what is connected; the serial-port interface is the one a serial device needs.</source>
+            <translation>אַ Snap דערגרייכט אַ סעריעלן מכשיר בלויז דורך אַ פֿאַרבונדענעם אינטערפֿייס. דער באַפֿעל אונטן ווײַזט וואָס איז פֿאַרבונדן; דער אינטערפֿייס וואָס אַ סעריעלער מכשיר דאַרף איז serial-port.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="138" />
+            <source>An AppArmor profile confines Studio (%1).</source>
+            <translation>אַ AppArmor־פּראָפֿיל באַגרענעצט Studio (%1).</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="142" />
+            <source>The profile may refuse serial devices, pseudo terminals or Studio's link folder. If a program is refused, add the lines below to the local override of the profile and reload it. Studio never edits a profile.</source>
+            <translation>דער פּראָפֿיל קען אָפּוואַרפֿן סעריעלע מכשירים, פּסעוודאָ־טערמינאַלן אָדער Studio׳ס לינק־פּאַפּקע. אויב אַ פּראָגראַם ווערט אָפּגעוואָרפֿן, לייגט צו די שורות אונטן צו דער לאָקאַלער איבערשרײַבונג פֿון דעם פּראָפֿיל און לאָדט אים נאָך אַ מאָל. Studio רעדאַקטירט קיינמאָל נישט קיין פּראָפֿיל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio לויפֿט אין macOS׳ס App Sandbox.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>אַן אַפּ אין דער זאַמד־קאַסטן דערגרייכט אַ סעריעלן מכשיר און דעם נעץ בלויז מיט דערלויבענישן (entitlements). די שורות אונטן זענען די וואָס אַ זאַמד־קאַסטן־ווערסיע פֿון Studio דאַרף אין איר entitlements־טעקע.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <source>SELinux is enforcing.</source>
+            <translation>SELinux איז אין enforcing־מאָדע.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
+            <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
+            <translation>דאָס איז נאָרמאַל און גאָרנישט איז פֿאַלש כּל־זמן קיין מכשיר ווערט נישט אָפּגעוואָרפֿן. אויב יאָ, געפֿינען די באַפֿעלן אונטן די אָפּוואַרפֿונג און בויען פֿאַר איר אַ פּאָליטיק־מאָדול. לייענט וואָס audit2allow שלאָגט פֿאָר איידער איר אינסטאַלירט עס.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
+            <source>Commands</source>
+            <translation>באַפֿעלן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
+            <source>Firewall</source>
+            <translation>פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
+            <source>A firewall is on and may stop other computers reaching this port.</source>
+            <translation>אַ פֿײַערוואָל איז אָנגעשטעלט און קען פֿאַרהיטן אַנדערע קאָמפּיוטערס צו דערגרייכן דעם פּאָרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
+            <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל אָן אַדמיניסטראַטאָר־רעכט. אויב אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, עפֿנט דעם פּאָרט מיט דעם באַפֿעל אונטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <source>Studio cannot read the firewall rules.</source>
+            <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
+            <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
+            <translation>זיי צו לייענען דאַרף אַדמיניסטראַטאָר־רעכט, און ניט ufw און ניט firewalld איז אָנגעשטעלט. אויב אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, קאָנטראָלירט די כּללים מיט אַן אַדמיניסטראַטאָר־קאָנטאָ, למשל מיט sudo nft list ruleset.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS־פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>די ערשטע פֿאַרבינדונג פֿון אַן אַנדער קאָמפּיוטער מאַכט macOS פֿרעגן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>ווען דער פֿײַערוואָל איז אָנגעשטעלט, פֿרעגט macOS איין מאָל פֿאַר יעדן פּראָגראַם צי עס מעג אָננעמען אײַנקומענדיקע פֿאַרבינדונגען. קלײַבט אויס Allow. אויב איר האָט אויסגעקליבן Don't Allow, עפֿנט System Settings, Network, Firewall, Options, און שטעלט דאָס פּראָגראַם אויף Allow incoming connections, אָדער לויפֿט די באַפֿעלן אונטן אין אַ טערמינאַל. Studio ענדערט קיינמאָל נישט דעם פֿײַערוואָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>דער פֿײַערוואָל בלאָקירט אַלע אײַנקומענדיקע פֿאַרבינדונגען.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>די באַשטימונג שטעלט אַוועק יעדעס פּראָגראַם. עפֿנט System Settings, Network, Firewall, Options, און שטעלט אָפּ Block all incoming connections אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio האָט נישט געקענט לייענען דעם פֿײַערוואָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>קוקט אין System Settings, Network, Firewall. אויב ער איז אָנגעשטעלט און אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, קאָנטראָלירט די Options.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>צוטריט צו דעם לאָקאַלן נעץ</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS פֿרעגט איין מאָל צי Studio מעג נוצן אײַער לאָקאַלן נעץ.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>פֿון macOS 15 אָן דאַרף אַן אַפּ אײַער דערלויבעניש צו געפֿינען מכשירים אין דעם לאָקאַלן נעץ און זיך פֿאַרבינדן צו זיי. Studio קען נישט קאָנטראָלירן די תּשובֿה. אויב איר האָט אויסגעקליבן Don't Allow און אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, עפֿנט System Settings, Privacy &amp; Security, Local Network, און שטעלט אָן Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
+            <source>Permissions</source>
+            <translation>דערלויבענישן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
+            <source>Add me to the %1 group</source>
+            <translation>לייגט מיך צו צו דער %1־גרופּע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
+            <source>Your desktop will ask for your password before anything changes.</source>
+            <translation>אײַער דעסקטאַפּ וועט פֿרעגן וועגן אײַער פּאַראָל איידער עפּעס ענדערט זיך.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
+            <source>Close</source>
+            <translation>פֿאַרמאַכן</translation>
+        </message>
+    </context>
+    <context>
         <name>PickCard</name>
         <message>
             <location filename="../src/widgets/controls.cpp" line="256" />
@@ -4323,17 +4537,22 @@ Networks: %5</source>
             <translation>אַוואַנסירט</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="64" />
+            <location filename="../src/flows/common.cpp" line="66" />
             <source>Could not %1 %2</source>
             <translation>נישט געקענט %1 %2</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="72" />
+            <location filename="../src/flows/common.cpp" line="76" />
+            <source>The system did not allow this. Nothing was changed. Open Tools, Setup check: it says whether your account is missing the serial device group or AppArmor, SELinux or a sandbox is in the way, and shows the command to fix it.</source>
+            <translation>די סיסטעם האָט עס נישט דערלויבט. גאָרנישט איז געענדערט געוואָרן. עפֿנט Tools, אײַנשטעלונג־קאָנטראָלע: עס זאָגט צי אײַער קאָנטאָ פֿעלט די גרופּע פֿאַר סעריעלע מכשירים אָדער צי AppArmor, SELinux אָדער אַ זאַמד־קאַסטן שטערט, און ווײַזט דעם באַפֿעל וואָס פֿאַרריכט עס.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="82" />
             <source>Windows did not allow this change. Nothing was changed. Run Virtual Serial Studio as administrator and try again.</source>
             <translation>Windows האָט נישט דערלויבט די ענדערונג. גאָרנישט איז געענדערט געוואָרן. לויפֿט Virtual Serial Studio ווי אַדמיניסטראַטאָר און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="78" />
+            <location filename="../src/flows/common.cpp" line="88" />
             <source>Another program may be using the device. Nothing was changed. Close that program and try again.</source>
             <translation>אפֿשר ניצט אַן אַנדער פּראָגראַם דעם אַפּאַראַט. גאָרנישט איז געענדערט געוואָרן. פֿאַרמאַכט יענע פּראָגראַם און פּרובירט נאָך אַ מאָל.</translation>
         </message>
@@ -4659,7 +4878,7 @@ Networks: %5</source>
             <translation>Virtual Serial Studio זעט %1 און %2.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <location filename="../src/support/permission_rows.cpp" line="28" />
             <source>the port you choose</source>
             <translation>דער פּאָרט וואָס איר קלײַבט אויס</translation>
         </message>
@@ -4674,72 +4893,243 @@ Networks: %5</source>
             <translation>Studio האָט נישט געקענט לייענען די כּללים פֿון Windows Firewall, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="52" />
-            <location filename="../src/support/permission_rows.cpp" line="61" />
-            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="63" />
+            <location filename="../src/support/permission_rows.cpp" line="74" />
+            <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>OK</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="54" />
             <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
             <translation>Windows Firewall האָט נישט צו טאָן. Studio וואַרט נישט אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <location filename="../src/support/permission_rows.cpp" line="64" />
             <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
             <translation>Windows Firewall איז אָפּגעשטעלט פֿאַר דעם נעץ אויף וועלכן איר זײַט, דעריבער האַלט ער נישט אָפּ אַנדערע קאָמפּיוטערס. Studio ענדערט נישט די באַשטימונג.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <location filename="../src/support/permission_rows.cpp" line="76" />
             <source>Windows Firewall has a rule that lets other computers reach %1.</source>
             <translation>Windows Firewall האָט אַ כּלל וואָס לאָזט אַנדערע קאָמפּיוטערס דערגרייכן %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="90" />
             <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
             <translation>Windows Firewall קען פֿאַרהיטן אַנדערע קאָמפּיוטערס זיך צו פֿאַרבינדן צו %1. Studio קען צולייגן איין כּלל פֿאַר דעם פּראָגראַם און דעם פּאָרט, נאָכן ווי איר שטימט צו.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <location filename="../src/support/permission_rows.cpp" line="98" />
             <source>Allow through the firewall</source>
             <translation>דערלויבן אין פֿײַערוואָל</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <location filename="../src/support/permission_rows.cpp" line="100" />
             <source>How to allow it</source>
             <translation>ווי אַזוי צו דערלויבן</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <location filename="../src/support/permission_rows.cpp" line="104" />
             <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
             <translation>אַ כּלל אין Windows Firewall בלאָקירט דאָס פּראָגראַם אויף %1. Studio מעקט קיינמאָל נישט אויס אַ בלאָקיר־כּלל; ענדערט עס אין Windows Defender Firewall.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="99" />
-            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <location filename="../src/support/permission_rows.cpp" line="111" />
+            <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>ווי אַזוי צו ענדערן</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <location filename="../src/support/permission_rows.cpp" line="115" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
             <translation>דער Windows Firewall איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס שטעלט אַוועק יעדעס כּלל. ענדערט די באַשטימונג אין Windows Security אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <location filename="../src/support/permission_rows.cpp" line="141" />
+            <source>Serial device access</source>
+            <translation>צוטריט צו סעריעלע מכשירים</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="146" />
+            <source>Studio could not check whether you may open the serial devices.</source>
+            <translation>Studio האָט נישט געקענט קאָנטראָלירן צי איר מעגט עפֿענען די סעריעלע מכשירים.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="155" />
+            <source>You may open the serial devices Studio found.</source>
+            <translation>איר מעגט עפֿענען די סעריעלע מכשירים וואָס Studio האָט געפֿונען.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="167" />
+            <source>Your account is not in the group that owns %1, so programs cannot open it.</source>
+            <translation>אײַער קאָנטאָ איז נישט אין דער גרופּע וואָס באַזיצט %1, דעריבער קענען פּראָגראַמען עס נישט עפֿענען.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="174" />
+            <source>Add me to the group</source>
+            <translation>לייגט מיך צו צו דער גרופּע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="180" />
+            <source>Your account is in the group that owns %1, but this login does not know yet. Sign out and back in.</source>
+            <translation>אײַער קאָנטאָ איז אין דער גרופּע וואָס באַזיצט %1, אָבער דער איצטיקער לאָגין ווייסט נאָך נישט דערפֿון. לאָגט אַרויס און אַרײַן נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="186" />
+            <source>How to refresh</source>
+            <translation>ווי אַזוי צו דערפֿרישן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="190" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>די גרופּע וואָס באַזיצט %1 מעג עס נישט לייענען און שרײַבן אין עס.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="195" />
+            <source>How to check it</source>
+            <translation>ווי אַזוי צו קאָנטראָלירן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="199" />
+            <source>Something outside the file permissions refused %1: AppArmor, SELinux or a sandbox.</source>
+            <translation>עפּעס אַרויס פֿון די דערלויבענישן פֿון דער טעקע האָט אָפּגעוואָרפֿן %1: AppArmor, SELinux אָדער אַ זאַמד־קאַסטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="205" />
+            <location filename="../src/support/permission_rows.cpp" line="223" />
+            <source>Show the fix</source>
+            <translation>ווײַזן די לייזונג</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="220" />
+            <source>Confinement</source>
+            <translation>באַגרענעצונג</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="221" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
+            <source>For information</source>
+            <translation>צו װיסן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="226" />
+            <source>Studio runs in a Flatpak sandbox. It sees only the devices it was given.</source>
+            <translation>Studio לויפֿט אין אַ Flatpak זאַמד־קאַסטן. עס זעט בלויז די מכשירים וואָס מען האָט אים געגעבן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="232" />
+            <source>Studio runs in a Snap sandbox. It reaches a serial device only through a connected interface.</source>
+            <translation>Studio לויפֿט אין אַ Snap זאַמד־קאַסטן. עס דערגרייכט אַ סעריעלן מכשיר בלויז דורך אַ פֿאַרבונדענעם אינטערפֿייס.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="238" />
+            <source>AppArmor confines Studio with the profile %1. It may refuse serial devices.</source>
+            <translation>AppArmor באַגרענעצט Studio מיט דעם פּראָפֿיל %1. עס קען אָפּוואַרפֿן סעריעלע מכשירים.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio לויפֿט אין macOS׳ס App Sandbox. עס דערגרייכט אַ סעריעלן מכשיר אָדער דעם נעץ בלויז מיט די ריכטיקע דערלויבענישן (entitlements).</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
+            <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
+            <translation>SELinux איז אין enforcing־מאָדע. דאָס איז נאָרמאַל; עס איז וויכטיק בלויז אויב אַ מכשיר ווערט אָפּגעוואָרפֿן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <source>Firewall</source>
+            <translation>פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="275" />
+            <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
+            <translation>אַ פֿײַערוואָל איז אָנגעשטעלט. אויב אַנדערע קאָמפּיוטערס קענען נישט דערגרייכן %1, עפֿנט דעם פּאָרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="281" />
+            <source>Show the command</source>
+            <translation>ווײַזן דעם באַפֿעל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="287" />
+            <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
+            <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל אָן אַדמיניסטראַטאָר־רעכט, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
+            <source>How to check</source>
+            <translation>ווי אַזוי צו קאָנטראָלירן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS־פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>דער macOS־פֿײַערוואָל איז אָפּגעשטעלט, דעריבער האַלט ער נישט אָפּ אַנדערע קאָמפּיוטערס. Studio ענדערט נישט די באַשטימונג.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>דער macOS־פֿײַערוואָל איז אָנגעשטעלט. דאָס ערשטע מאָל וואָס אַן אַנדער קאָמפּיוטער פֿאַרבינדט זיך, פֿרעגט macOS צי Studio מעג אָננעמען אײַנקומענדיקע פֿאַרבינדונגען. קלײַבט אויס Allow.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>אויב איר האָט אויסגעקליבן Don't Allow</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>דער macOS־פֿײַערוואָל איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס קיין שום פּראָגראַם קען נישט אַרומגיין. שטעלט עס אָפּ אין System Settings אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio האָט נישט געקענט לייענען די באַשטימונג פֿון דעם macOS־פֿײַערוואָל, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>צוטריט צו דעם לאָקאַלן נעץ</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>פֿון macOS 15 אָן פֿרעגט macOS איין מאָל צי אַפּס מעגן זיך פֿאַרבינדן צו מכשירים אין אײַער לאָקאַלן נעץ. מען קען דאָס נישט קאָנטראָלירן פֿון דאָ; אויב איר האָט אויסגעקליבן Don't Allow, שטעלט עס װידער אָן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>וווּ צו געפֿינען</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>אײַער קאָנטאָ איז אַ אַדמיניסטראַטאָר, דעריבער וועט Windows בעטן אַז איר זאָלט באַשטעטיקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>אײַער קאָנטאָ איז נישט אַ אַדמיניסטראַטאָר, דעריבער וועט Windows פֿרעגן וועגן אַ אַדמיניסטראַטאָרס פּאַראָל.</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/permission_rows.cpp" line="145" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="461" />
             <location filename="../src/support/setup_facts.cpp" line="472" />
@@ -4806,7 +5196,9 @@ Networks: %5</source>
             <translation>ניט דער Virtual Serial Studio דרייווער און ניט com0com איז געפֿונען געוואָרן. Windows דאַרף אַ דרייווער כּדי אַנדערע פּראָגראַמען זאָלן זען ווירטועלע פּאָרטן ווי COM פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="193" />
             <location filename="../src/support/setup_facts.cpp" line="300" />
             <location filename="../src/support/setup_facts.cpp" line="340" />
@@ -4919,6 +5311,7 @@ Networks: %5</source>
             <translation>אײַער חשבון איז נישט אין דער dialout־גרופע, דעריבער קענען פּראָגראַמען אפֿשר נישט עפֿענען סעריעלע אַפּאַראַטן.</translation>
         </message>
         <message>
+            <location filename="../src/support/permission_rows.cpp" line="176" />
             <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>ווי צוצולייגן מיך</translation>
@@ -4968,34 +5361,34 @@ Networks: %5</source>
             <translation>ווידער אָנהייבן ווי אַדמיניסטראַטאָר איז נאָר פֿאַראַנען אויף Windows.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="53" />
             <source>Could not open the project page</source>
             <translation>די פּראָיעקט־זײַט האָט זיך נישט געעפֿנט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="55" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>אײַער בראַוזער האָט זיך נישט געעפֿנט. קאָפּירט דעם לינק און עפֿנט אים אַליין.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="67" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="69" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Install the com0com driver</source>
             <translation>אינסטאַלירן דעם com0com־דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="82" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studio אינסטאַלירט נישט קיין דרײַווערס פֿאַר אײַך.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="88" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט זען אַ ווירטועלן פּאָרט ביז אַ דרײַווער שאַפֿט אַ COM־פּאָרט. אויף Windows איז דער דרײַווער com0com.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="98" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -5006,64 +5399,64 @@ Networks: %5</source>
 4. קומט צוריק צו דער אײַנשטעלונג־קאָנטראָלע און קלײַבט איבערקאָנטראָלירן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="113" />
             <source>com0com project page</source>
             <translation>com0com־פּראָיעקט־זײַט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="120" />
             <source>Open project page</source>
             <translation>עפֿענען פּראָיעקט־זײַט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="131" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="174" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="275" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="144" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="146" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="158" />
             <source>Add me to the dialout group</source>
             <translation>צולייגן מיך צו דער dialout־גרופע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="160" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>לויפֿט די דאָזיקע קאָמאַנדע אין אַ טערמינאַל, דערנאָך לאָגט זיך אַרויס און ווידער אַרײַן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="167" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
             <location filename="../src/support/setup_check_dialog.cpp" line="196" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="197" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>Setup check</source>
             <translation>אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="219" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>וואָס דער קאָמפּיוטער דאַרף כדי אַנדערע פּראָגראַמען זאָלן קענען ניצן אײַערע ווירטועלע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="225" />
             <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>אַלץ גרייט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="262" />
             <source>Why is a driver needed?</source>
             <translation>פֿאַרוואָס דאַרף מען אַ דרײַווער?</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="270" />
             <source>Re-check</source>
             <translation>איבערקאָנטראָלירן</translation>
         </message>
@@ -5084,6 +5477,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/elevated_step.cpp" line="38" />
+            <location filename="../src/support/elevated_step.cpp" line="117" />
             <source>Not available in this build.</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
@@ -5102,11 +5496,31 @@ Networks: %5</source>
             <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
             <translation>דאָס פֿײַערוואָל־כּלל האָט נישט געקענט ווערן געענדערט. ניצט אַנשטאָט דעם באַפֿעל וואָס ווערט געוויזן, אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר.</translation>
         </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="126" />
+            <source>Done. Sign out and back in so that the new group takes effect, then choose Re-check.</source>
+            <translation>פֿאַרטיק. לאָגט אַרויס און אַרײַן נאָך אַ מאָל כּדי די נײַע גרופּע זאָל ווירקן, דערנאָך קלײַבט אויס Re-check.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="132" />
+            <source>You dismissed the authentication prompt, so nothing was changed.</source>
+            <translation>איר האָט פֿאַרמאַכט די אויטענטיפֿיקאַציע־פֿרעג, דעריבער איז גאָרנישט געענדערט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="138" />
+            <source>The system did not authorise the change, so nothing was changed. Use the command shown instead.</source>
+            <translation>די סיסטעם האָט נישט דערלויבט די ענדערונג, דעריבער איז גאָרנישט געענדערט געוואָרן. ניצט אַנשטאָט דעם באַפֿעל וואָס ווערט געוויזן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="144" />
+            <source>The group could not be changed. Use the command shown instead, in a terminal.</source>
+            <translation>די גרופּע האָט נישט געקענט ווערן געענדערט. ניצט אַנשטאָט דעם באַפֿעל וואָס ווערט געוויזן, אין אַ טערמינאַל.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -13873,7 +14287,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>

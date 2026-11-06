@@ -18,7 +18,8 @@
 
 using namespace vss::permissions;
 
-namespace {
+namespace
+{
 
 const std::string program = "C:\\Studio\\bin\\vss_gui.exe";
 
@@ -119,8 +120,7 @@ TEST_CASE("permissions: a firewall verdict follows program, protocol, port and "
 
     // The right rule.
     REQUIRE(firewall_verdict_for({allow_rule(program, "4001")}, program, tcp,
-                                 profile_private) ==
-            firewall_verdict::allowed);
+                                 profile_private) == firewall_verdict::allowed);
     // The program is compared without regard to case or the kind of slash.
     REQUIRE(firewall_verdict_for(
                 {allow_rule("c:/studio/BIN/VSS_GUI.EXE", "4001")}, program, tcp,
@@ -128,14 +128,13 @@ TEST_CASE("permissions: a firewall verdict follows program, protocol, port and "
     // Another program, another port, another protocol, a disabled rule, an
     // outbound rule and another network do not count.
     REQUIRE(firewall_verdict_for({allow_rule("C:\\Other\\x.exe", "4001")},
-                                 program, tcp, profile_private) ==
-            firewall_verdict::no_rule);
+                                 program, tcp,
+                                 profile_private) == firewall_verdict::no_rule);
     REQUIRE(firewall_verdict_for({allow_rule(program, "4002")}, program, tcp,
-                                 profile_private) ==
-            firewall_verdict::no_rule);
+                                 profile_private) == firewall_verdict::no_rule);
     REQUIRE(firewall_verdict_for({allow_rule(program, "4001", 17)}, program,
-                                 tcp, profile_private) ==
-            firewall_verdict::no_rule);
+                                 tcp,
+                                 profile_private) == firewall_verdict::no_rule);
     auto disabled = allow_rule(program, "4001");
     disabled.enabled = false;
     REQUIRE(firewall_verdict_for({disabled}, program, tcp, profile_private) ==
@@ -146,26 +145,24 @@ TEST_CASE("permissions: a firewall verdict follows program, protocol, port and "
             firewall_verdict::no_rule);
     auto public_only = allow_rule(program, "4001");
     public_only.profiles = profile_public;
-    REQUIRE(firewall_verdict_for({public_only}, program, tcp, profile_private) ==
-            firewall_verdict::no_rule);
+    REQUIRE(firewall_verdict_for({public_only}, program, tcp,
+                                 profile_private) == firewall_verdict::no_rule);
 
     // A rule for any program and the port, or for the program and any port.
     REQUIRE(firewall_verdict_for({allow_rule("", "4001")}, program, tcp,
-                                 profile_private) ==
-            firewall_verdict::allowed);
+                                 profile_private) == firewall_verdict::allowed);
     REQUIRE(firewall_verdict_for({allow_rule(program, "*", 256)}, program, tcp,
-                                 profile_private) ==
-            firewall_verdict::allowed);
+                                 profile_private) == firewall_verdict::allowed);
 
     // A block rule wins over an allow rule, whatever the order.
     auto block = allow_rule(program, "4001");
     block.allow = false;
     REQUIRE(firewall_verdict_for({allow_rule(program, "4001"), block}, program,
-                                 tcp, profile_private) ==
-            firewall_verdict::blocked);
+                                 tcp,
+                                 profile_private) == firewall_verdict::blocked);
     REQUIRE(firewall_verdict_for({block, allow_rule(program, "4001")}, program,
-                                 tcp, profile_private) ==
-            firewall_verdict::blocked);
+                                 tcp,
+                                 profile_private) == firewall_verdict::blocked);
 }
 
 TEST_CASE("permissions: elevation facts say what the user could do")
@@ -204,8 +201,7 @@ TEST_CASE("permissions: no firewall question while Studio listens on this "
     observation seen = firewall_on_with({});
     for (const char* host : {"127.0.0.1", "localhost", "::1"})
     {
-        const auto facts =
-            evaluate(seen, listening_on(host, 4001), "windows");
+        const auto facts = evaluate(seen, listening_on(host, 4001), "windows");
         const fact* firewall = find(facts, topic::windows_firewall);
         REQUIRE(firewall != nullptr);
         REQUIRE(firewall->status == state::ok);
@@ -277,12 +273,6 @@ TEST_CASE("permissions: firewall off, block-all and unreadable rules")
     firewall = find(facts, topic::windows_firewall);
     REQUIRE(firewall->status == state::unknown);
     REQUIRE_EQ(firewall->why, std::string(reason::not_asked));
-}
-
-TEST_CASE("permissions: other systems report nothing they were not asked")
-{
-    REQUIRE(evaluate({}, listening_on("0.0.0.0", 4001), "linux").empty());
-    REQUIRE(evaluate({}, listening_on("0.0.0.0", 4001), "macos").empty());
 }
 
 TEST_CASE("permissions: the firewall rule is one program, one port, one scope")
@@ -423,6 +413,8 @@ TEST_CASE("permissions: this host can be asked without changing anything")
     const auto facts = probe();
     if (host == "windows")
         REQUIRE(find(facts, topic::windows_elevation) != nullptr);
+    if (host == "linux")
+        REQUIRE(find(facts, topic::confinement) != nullptr);
 
     // A spec that fails validation is refused before anything is touched.
     firewall_rule_spec spec;
@@ -445,9 +437,9 @@ TEST_CASE("permissions: listen addresses are read as the engine reads them")
     REQUIRE(parse_listen_uri("tcp-listen://[::1]:4001", each));
     REQUIRE_EQ(each.host, std::string("::1"));
 
-    for (const char* bad : {"tcp://127.0.0.1:4001", "tcp-listen://127.0.0.1",
-                            "tcp-listen://127.0.0.1:0",
-                            "tcp-listen://127.0.0.1:70000",
-                            "udp-listen://:x", ""})
+    for (const char* bad :
+         {"tcp://127.0.0.1:4001", "tcp-listen://127.0.0.1",
+          "tcp-listen://127.0.0.1:0", "tcp-listen://127.0.0.1:70000",
+          "udp-listen://:x", ""})
         REQUIRE(!parse_listen_uri(bad, each));
 }

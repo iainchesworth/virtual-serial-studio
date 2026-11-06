@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="de">
     <context>
         <name>About</name>
@@ -1996,59 +1995,59 @@
     <context>
         <name>FirewallDialog</name>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <location filename="../src/support/firewall_dialog.cpp" line="39" />
             <source>domain</source>
             <translation>Domäne</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <location filename="../src/support/firewall_dialog.cpp" line="41" />
             <source>private</source>
             <translation>privat</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <location filename="../src/support/firewall_dialog.cpp" line="43" />
             <source>public</source>
             <translation>öffentlich</translation>
         </message>
         <message>
             <location filename="../src/support/firewall_dialog.cpp" line="69" />
-            <location filename="../src/support/firewall_dialog.cpp" line="70" />
-            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <location filename="../src/support/firewall_dialog.cpp" line="71" />
+            <location filename="../src/support/firewall_dialog.cpp" line="84" />
             <source>Windows Firewall</source>
             <translation>Windows-Firewall</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
             <source>Other computers cannot reach this port until a rule allows it.</source>
             <translation>Andere Computer erreichen diesen Port erst, wenn eine Regel es erlaubt.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <location filename="../src/support/firewall_dialog.cpp" line="89" />
             <source>Windows Firewall stops other computers reaching this port.</source>
             <translation>Die Windows-Firewall hindert andere Computer daran, diesen Port zu erreichen.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <location filename="../src/support/firewall_dialog.cpp" line="98" />
             <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
             <translation>Studio wartet darauf, dass sich andere Computer verbinden. Die Windows-Firewall blockiert Verbindungen, die keine Regel erlaubt. Studio ändert die Firewall nie von selbst.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <location filename="../src/support/firewall_dialog.cpp" line="108" />
             <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
             <translation>Eine Regel der Windows-Firewall blockiert dieses Programm auf diesem Port. Eine Blockierregel hat Vorrang vor einer Zulassungsregel, und Studio entfernt sie nicht. Öffnen Sie die Windows Defender Firewall mit erweiterter Sicherheit, suchen Sie die Blockierregel unter „Eingehende Regeln“ und deaktivieren oder löschen Sie sie, wenn sich andere Computer verbinden sollen.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <location filename="../src/support/firewall_dialog.cpp" line="120" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
             <translation>Die Windows-Firewall blockiert alle eingehenden Verbindungen, was jede Regel außer Kraft setzt. Öffnen Sie die Windows-Sicherheit, wählen Sie „Firewall- &amp; Netzwerkschutz“, wählen Sie das Netzwerk, in dem Sie sind, und schalten Sie „Alle eingehenden Verbindungen blockieren“ aus.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <location filename="../src/support/firewall_dialog.cpp" line="133" />
             <source>The rule Studio would add lets only this in:</source>
             <translation>Die Regel, die Studio hinzufügen würde, erlaubt nur Folgendes:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <location filename="../src/support/firewall_dialog.cpp" line="138" />
             <source>Program: %1
 Protocol and port: %2 %3
 Who: %4
@@ -2059,48 +2058,48 @@ Wer: %4
 Netzwerke: %5</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
             <source>computers on your local network</source>
             <translation>Computer in Ihrem lokalen Netzwerk</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <location filename="../src/support/firewall_dialog.cpp" line="148" />
             <source>any computer</source>
             <translation>jeder Computer</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <location filename="../src/support/firewall_dialog.cpp" line="159" />
             <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
             <translation>Dieselbe Regel als Befehl, falls Sie ihn lieber selbst in einem als Administrator geöffneten Terminal ausführen:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <location filename="../src/support/firewall_dialog.cpp" line="163" />
             <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
             <translation>Um die Regel selbst hinzuzufügen, führen Sie dies in einem als Administrator geöffneten Terminal aus:</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <location filename="../src/support/firewall_dialog.cpp" line="171" />
             <source>Command</source>
             <translation>Befehl</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="158" />
-            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <location filename="../src/support/firewall_dialog.cpp" line="185" />
+            <location filename="../src/support/firewall_dialog.cpp" line="189" />
             <source>Allow in Windows Firewall</source>
             <translation>In der Windows-Firewall zulassen</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <location filename="../src/support/firewall_dialog.cpp" line="193" />
             <source>Windows will ask for administrator permission before the rule is added.</source>
             <translation>Windows fragt nach der Erlaubnis eines Administrators, bevor die Regel hinzugefügt wird.</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>In diesem Build nicht verfügbar</translation>
         </message>
         <message>
-            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <location filename="../src/support/firewall_dialog.cpp" line="208" />
             <source>Close</source>
             <translation>Schließen</translation>
         </message>
@@ -3661,6 +3660,221 @@ Netzwerke: %5</translation>
         </message>
     </context>
     <context>
+        <name>PermissionDialog</name>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="54" />
+            <source>Serial device access</source>
+            <translation>Zugriff auf serielle Geräte</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="58" />
+            <source>Your account is not in the group that owns %1.</source>
+            <translation>Ihr Konto gehört nicht zu der Gruppe, der %1 gehört.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="62" />
+            <source>On Linux, the group that owns a serial device decides who may open it. Add your account to that group, then sign out and back in. Studio never changes a group by itself.</source>
+            <translation>Unter Linux entscheidet die Gruppe, der ein serielles Gerät gehört, wer es öffnen darf. Fügen Sie Ihr Konto dieser Gruppe hinzu und melden Sie sich dann ab und wieder an. Studio ändert nie von selbst eine Gruppe.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="70" />
+            <source>Your account is in the group, but this login does not know yet.</source>
+            <translation>Ihr Konto gehört zur Gruppe, aber diese Anmeldung weiß es noch nicht.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="74" />
+            <source>Sign out and back in. To use the group in one terminal right now, run the command below there and start Studio from that terminal.</source>
+            <translation>Melden Sie sich ab und wieder an. Um die Gruppe sofort in einem Terminal zu nutzen, führen Sie dort den folgenden Befehl aus und starten Sie Studio aus diesem Terminal.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="83" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>Die Gruppe, der %1 gehört, darf es nicht lesen und beschreiben.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="87" />
+            <source>Look at the permissions of the device with the command below. Changing them is a system setting, so Studio leaves it to you; a udev rule makes a change last across restarts.</source>
+            <translation>Sehen Sie sich die Berechtigungen des Geräts mit dem folgenden Befehl an. Sie zu ändern ist eine Systemeinstellung, daher überlässt Studio das Ihnen; eine udev-Regel macht eine Änderung dauerhaft.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="97" />
+            <source>The file permissions allow %1, but something outside them refused it.</source>
+            <translation>Die Dateiberechtigungen erlauben %1, aber etwas anderes hat den Zugriff verweigert.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="102" />
+            <source>Linux security policy (AppArmor, SELinux) or a sandbox (Flatpak, Snap) can refuse a device that the file permissions allow. The text below is the fix for the one that applies to this system.</source>
+            <translation>Eine Linux-Sicherheitsrichtlinie (AppArmor, SELinux) oder eine Sandbox (Flatpak, Snap) kann ein Gerät verweigern, das die Dateiberechtigungen erlauben. Der folgende Text ist die Lösung für das, was auf diesem System zutrifft.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="110" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
+            <source>Command</source>
+            <translation>Befehl</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="114" />
+            <source>Confinement</source>
+            <translation>Einschränkung</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="117" />
+            <source>Studio runs inside a Flatpak sandbox.</source>
+            <translation>Studio läuft in einer Flatpak-Sandbox.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="119" />
+            <source>A Flatpak sees only the devices and folders it was given. If a serial device is missing, give the application access to devices with the command below.</source>
+            <translation>Ein Flatpak sieht nur die Geräte und Ordner, die ihm gegeben wurden. Fehlt ein serielles Gerät, geben Sie der Anwendung mit dem folgenden Befehl Zugriff auf Geräte.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="128" />
+            <source>Studio runs inside a Snap sandbox.</source>
+            <translation>Studio läuft in einer Snap-Sandbox.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="130" />
+            <source>A Snap reaches a serial device only through an interface that is connected. The command below lists what is connected; the serial-port interface is the one a serial device needs.</source>
+            <translation>Ein Snap erreicht ein serielles Gerät nur über eine verbundene Schnittstelle. Der folgende Befehl listet auf, was verbunden ist; die Schnittstelle serial-port ist die, die ein serielles Gerät braucht.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="138" />
+            <source>An AppArmor profile confines Studio (%1).</source>
+            <translation>Ein AppArmor-Profil schränkt Studio ein (%1).</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="142" />
+            <source>The profile may refuse serial devices, pseudo terminals or Studio's link folder. If a program is refused, add the lines below to the local override of the profile and reload it. Studio never edits a profile.</source>
+            <translation>Das Profil kann serielle Geräte, Pseudoterminals oder den Link-Ordner von Studio verweigern. Wird ein Programm abgelehnt, fügen Sie die folgenden Zeilen der lokalen Ergänzung des Profils hinzu und laden Sie es neu. Studio ändert nie ein Profil.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio läuft in der App Sandbox von macOS.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>Eine App in der Sandbox erreicht ein serielles Gerät und das Netzwerk nur mit Berechtigungen (Entitlements). Die folgenden Zeilen braucht eine Sandbox-Version von Studio in ihrer Entitlements-Datei.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <source>SELinux is enforcing.</source>
+            <translation>SELinux ist im Modus „enforcing“.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
+            <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
+            <translation>Das ist normal und nichts ist falsch, solange kein Gerät verweigert wird. Wenn doch, finden die folgenden Befehle die Ablehnung und erzeugen dafür ein Richtlinienmodul. Lesen Sie, was audit2allow vorschlägt, bevor Sie es installieren.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
+            <source>Commands</source>
+            <translation>Befehle</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
+            <source>Firewall</source>
+            <translation>Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
+            <source>A firewall is on and may stop other computers reaching this port.</source>
+            <translation>Eine Firewall ist aktiv und hindert andere Computer möglicherweise daran, diesen Port zu erreichen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
+            <translation>Studio kann die Firewallregeln ohne Administratorrechte nicht lesen. Wenn sich andere Computer nicht verbinden können, öffnen Sie den Port mit dem folgenden Befehl.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <source>Studio cannot read the firewall rules.</source>
+            <translation>Studio kann die Firewallregeln nicht lesen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
+            <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
+            <translation>Dafür sind Administratorrechte nötig, und weder ufw noch firewalld ist aktiv. Wenn sich andere Computer nicht verbinden können, prüfen Sie die Regeln mit einem Administratorkonto, zum Beispiel mit sudo nft list ruleset.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS-Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>Die erste Verbindung eines anderen Computers lässt macOS nachfragen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>Ist die Firewall eingeschaltet, fragt macOS einmal pro Programm, ob es eingehende Verbindungen annehmen darf. Wählen Sie „Erlauben“. Haben Sie „Nicht erlauben“ gewählt, öffnen Sie Systemeinstellungen, Netzwerk, Firewall, Optionen und stellen das Programm auf „Eingehende Verbindungen erlauben“, oder führen Sie die folgenden Befehle in einem Terminal aus. Studio ändert die Firewall nie.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>Die Firewall blockiert alle eingehenden Verbindungen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>Diese Einstellung hat Vorrang vor jedem Programm. Öffnen Sie Systemeinstellungen, Netzwerk, Firewall, Optionen und schalten Sie „Alle eingehenden Verbindungen blockieren“ aus, wenn sich andere Computer verbinden sollen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio konnte die Firewall nicht lesen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>Sehen Sie unter Systemeinstellungen, Netzwerk, Firewall nach. Ist sie eingeschaltet und können sich andere Computer nicht verbinden, prüfen Sie die Optionen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>Zugriff auf das lokale Netzwerk</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS fragt einmal, ob Studio Ihr lokales Netzwerk nutzen darf.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>Ab macOS 15 braucht eine App Ihre Erlaubnis, um Geräte im lokalen Netzwerk zu finden und sich mit ihnen zu verbinden. Studio kann die Antwort nicht prüfen. Haben Sie „Nicht erlauben“ gewählt und können sich andere Computer nicht verbinden, öffnen Sie Systemeinstellungen, Datenschutz &amp; Sicherheit, Lokales Netzwerk und schalten Virtual Serial Studio ein.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
+            <source>Permissions</source>
+            <translation>Berechtigungen</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
+            <source>Add me to the %1 group</source>
+            <translation>Mich zur Gruppe %1 hinzufügen</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
+            <source>Your desktop will ask for your password before anything changes.</source>
+            <translation>Ihre Desktopumgebung fragt nach Ihrem Kennwort, bevor sich etwas ändert.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
+            <source>Not available in this build</source>
+            <translation>In diesem Build nicht verfügbar</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
+            <source>Close</source>
+            <translation>Schließen</translation>
+        </message>
+    </context>
+    <context>
         <name>PickCard</name>
         <message>
             <location filename="../src/widgets/controls.cpp" line="256" />
@@ -4323,17 +4537,22 @@ Netzwerke: %5</translation>
             <translation>Erweitert</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="64" />
+            <location filename="../src/flows/common.cpp" line="66" />
             <source>Could not %1 %2</source>
             <translation>%2 lässt sich nicht %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="72" />
+            <location filename="../src/flows/common.cpp" line="76" />
+            <source>The system did not allow this. Nothing was changed. Open Tools, Setup check: it says whether your account is missing the serial device group or AppArmor, SELinux or a sandbox is in the way, and shows the command to fix it.</source>
+            <translation>Das System hat dies nicht erlaubt. Es wurde nichts geändert. Öffnen Sie „Extras“, „Einrichtungsprüfung“: Dort steht, ob Ihrem Konto die Gruppe für serielle Geräte fehlt oder ob AppArmor, SELinux oder eine Sandbox im Weg ist, und welcher Befehl das behebt.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="82" />
             <source>Windows did not allow this change. Nothing was changed. Run Virtual Serial Studio as administrator and try again.</source>
             <translation>Windows hat diese Änderung nicht erlaubt. Es wurde nichts geändert. Führen Sie Virtual Serial Studio als Administrator aus und versuchen Sie es erneut.</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="78" />
+            <location filename="../src/flows/common.cpp" line="88" />
             <source>Another program may be using the device. Nothing was changed. Close that program and try again.</source>
             <translation>Möglicherweise verwendet ein anderes Programm das Gerät. Es wurde nichts geändert. Schließen Sie dieses Programm und versuchen Sie es erneut.</translation>
         </message>
@@ -4659,7 +4878,7 @@ Netzwerke: %5</translation>
             <translation>%1 und %2 sind für Virtual Serial Studio sichtbar.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <location filename="../src/support/permission_rows.cpp" line="28" />
             <source>the port you choose</source>
             <translation>den Port, den Sie wählen</translation>
         </message>
@@ -4674,72 +4893,243 @@ Netzwerke: %5</translation>
             <translation>Studio konnte die Regeln der Windows-Firewall nicht lesen und kann daher nicht sagen, ob sich andere Computer verbinden können.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="52" />
-            <location filename="../src/support/permission_rows.cpp" line="61" />
-            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="63" />
+            <location filename="../src/support/permission_rows.cpp" line="74" />
+            <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>OK</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <location filename="../src/support/permission_rows.cpp" line="54" />
             <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
             <translation>Die Windows-Firewall ist nicht beteiligt. Studio wartet nicht darauf, dass sich andere Computer verbinden.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <location filename="../src/support/permission_rows.cpp" line="64" />
             <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
             <translation>Die Windows-Firewall ist für das Netzwerk, in dem Sie sind, ausgeschaltet und hält andere Computer daher nicht auf. Studio ändert diese Einstellung nicht.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <location filename="../src/support/permission_rows.cpp" line="76" />
             <source>Windows Firewall has a rule that lets other computers reach %1.</source>
             <translation>Die Windows-Firewall hat eine Regel, die anderen Computern den Zugriff auf %1 erlaubt.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="90" />
             <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
             <translation>Die Windows-Firewall hindert andere Computer möglicherweise daran, sich mit %1 zu verbinden. Studio kann mit Ihrer Zustimmung eine Regel für dieses Programm und diesen Port hinzufügen.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <location filename="../src/support/permission_rows.cpp" line="98" />
             <source>Allow through the firewall</source>
             <translation>In der Firewall zulassen</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <location filename="../src/support/permission_rows.cpp" line="100" />
             <source>How to allow it</source>
             <translation>So erlauben Sie es</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <location filename="../src/support/permission_rows.cpp" line="104" />
             <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
             <translation>Eine Regel der Windows-Firewall blockiert dieses Programm auf %1. Studio entfernt nie eine Blockierregel; ändern Sie sie in der Windows Defender Firewall.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="99" />
-            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <location filename="../src/support/permission_rows.cpp" line="111" />
+            <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>So ändern Sie es</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <location filename="../src/support/permission_rows.cpp" line="115" />
             <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
             <translation>Die Windows-Firewall blockiert alle eingehenden Verbindungen, was jede Regel außer Kraft setzt. Ändern Sie diese Einstellung in der Windows-Sicherheit, wenn sich andere Computer verbinden sollen.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <location filename="../src/support/permission_rows.cpp" line="141" />
+            <source>Serial device access</source>
+            <translation>Zugriff auf serielle Geräte</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="146" />
+            <source>Studio could not check whether you may open the serial devices.</source>
+            <translation>Studio konnte nicht prüfen, ob Sie die seriellen Geräte öffnen dürfen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="155" />
+            <source>You may open the serial devices Studio found.</source>
+            <translation>Sie dürfen die von Studio gefundenen seriellen Geräte öffnen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="167" />
+            <source>Your account is not in the group that owns %1, so programs cannot open it.</source>
+            <translation>Ihr Konto gehört nicht zu der Gruppe, der %1 gehört, daher können Programme es nicht öffnen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="174" />
+            <source>Add me to the group</source>
+            <translation>Mich zur Gruppe hinzufügen</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="180" />
+            <source>Your account is in the group that owns %1, but this login does not know yet. Sign out and back in.</source>
+            <translation>Ihr Konto gehört zu der Gruppe, der %1 gehört, aber diese Anmeldung weiß es noch nicht. Melden Sie sich ab und wieder an.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="186" />
+            <source>How to refresh</source>
+            <translation>So aktualisieren Sie es</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="190" />
+            <source>The group that owns %1 may not read and write it.</source>
+            <translation>Die Gruppe, der %1 gehört, darf es nicht lesen und beschreiben.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="195" />
+            <source>How to check it</source>
+            <translation>So prüfen Sie es</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="199" />
+            <source>Something outside the file permissions refused %1: AppArmor, SELinux or a sandbox.</source>
+            <translation>Etwas außerhalb der Dateiberechtigungen hat %1 verweigert: AppArmor, SELinux oder eine Sandbox.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="205" />
+            <location filename="../src/support/permission_rows.cpp" line="223" />
+            <source>Show the fix</source>
+            <translation>Lösung anzeigen</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="220" />
+            <source>Confinement</source>
+            <translation>Einschränkung</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="221" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
+            <source>For information</source>
+            <translation>Zur Information</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="226" />
+            <source>Studio runs in a Flatpak sandbox. It sees only the devices it was given.</source>
+            <translation>Studio läuft in einer Flatpak-Sandbox. Es sieht nur die Geräte, die ihm gegeben wurden.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="232" />
+            <source>Studio runs in a Snap sandbox. It reaches a serial device only through a connected interface.</source>
+            <translation>Studio läuft in einer Snap-Sandbox. Es erreicht ein serielles Gerät nur über eine verbundene Schnittstelle.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="238" />
+            <source>AppArmor confines Studio with the profile %1. It may refuse serial devices.</source>
+            <translation>AppArmor schränkt Studio mit dem Profil %1 ein. Es kann serielle Geräte verweigern.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio läuft in der App Sandbox von macOS. Es erreicht ein serielles Gerät oder das Netzwerk nur mit den passenden Berechtigungen (Entitlements).</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
+            <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
+            <translation>SELinux ist im Modus „enforcing“. Das ist normal; es spielt nur eine Rolle, wenn ein Gerät verweigert wird.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <source>Firewall</source>
+            <translation>Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="275" />
+            <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
+            <translation>Eine Firewall ist aktiv. Wenn andere Computer %1 nicht erreichen, öffnen Sie den Port.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="281" />
+            <source>Show the command</source>
+            <translation>Befehl anzeigen</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="287" />
+            <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
+            <translation>Studio kann die Firewallregeln ohne Administratorrechte nicht lesen und kann daher nicht sagen, ob sich andere Computer verbinden können.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
+            <source>How to check</source>
+            <translation>So prüfen Sie es</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS-Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>Die macOS-Firewall ist ausgeschaltet und hält andere Computer daher nicht auf. Studio ändert diese Einstellung nicht.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>Die macOS-Firewall ist eingeschaltet. Wenn sich zum ersten Mal ein anderer Computer verbindet, fragt macOS, ob Studio eingehende Verbindungen annehmen darf. Wählen Sie „Erlauben“.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>Wenn Sie „Nicht erlauben“ gewählt haben</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>Die macOS-Firewall blockiert alle eingehenden Verbindungen, was kein Programm umgehen kann. Schalten Sie das in den Systemeinstellungen aus, wenn sich andere Computer verbinden sollen.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio konnte die Einstellung der macOS-Firewall nicht lesen und kann daher nicht sagen, ob sich andere Computer verbinden können.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>Zugriff auf das lokale Netzwerk</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>Ab macOS 15 fragt macOS einmal, ob Apps sich mit Geräten in Ihrem lokalen Netzwerk verbinden dürfen. Das lässt sich von hier aus nicht prüfen; haben Sie „Nicht erlauben“ gewählt, schalten Sie es wieder ein.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>Wo es zu finden ist</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>Ihr Konto ist ein Administrator, daher bittet Windows Sie um Bestätigung.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>Ihr Konto ist kein Administrator, daher fragt Windows nach dem Kennwort eines Administrators.</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/permission_rows.cpp" line="145" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="461" />
             <location filename="../src/support/setup_facts.cpp" line="472" />
@@ -4806,7 +5196,9 @@ Netzwerke: %5</translation>
             <translation>Weder der Virtual-Serial-Studio-Treiber noch com0com wurde gefunden. Windows braucht einen Treiber, damit andere Programme virtuelle Ports als COM-Ports sehen.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="193" />
             <location filename="../src/support/setup_facts.cpp" line="300" />
             <location filename="../src/support/setup_facts.cpp" line="340" />
@@ -4919,6 +5311,7 @@ Netzwerke: %5</translation>
             <translation>Ihr Konto gehört nicht der Gruppe dialout an, sodass Programme serielle Geräte möglicherweise nicht öffnen können.</translation>
         </message>
         <message>
+            <location filename="../src/support/permission_rows.cpp" line="176" />
             <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>So füge ich mich hinzu</translation>
@@ -4968,34 +5361,34 @@ Netzwerke: %5</translation>
             <translation>Der Neustart als Administrator ist nur unter Windows verfügbar.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="53" />
             <source>Could not open the project page</source>
             <translation>Die Projektseite konnte nicht geöffnet werden</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="55" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>Ihr Browser wurde nicht geöffnet. Kopieren Sie den Link und öffnen Sie ihn selbst.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="67" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="69" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Install the com0com driver</source>
             <translation>Den com0com-Treiber installieren</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="82" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studio installiert keine Treiber für Sie.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="88" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>Andere Programme sehen einen virtuellen Port erst, wenn ein Treiber einen COM-Port anlegt. Unter Windows ist das com0com.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="98" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -5006,64 +5399,64 @@ Netzwerke: %5</translation>
 4. Kehren Sie zur Einrichtungsprüfung zurück und wählen Sie „Erneut prüfen“.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="113" />
             <source>com0com project page</source>
             <translation>com0com-Projektseite</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="120" />
             <source>Open project page</source>
             <translation>Projektseite öffnen</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="131" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="174" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="275" />
             <source>Close</source>
             <translation>Schließen</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="144" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="146" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="158" />
             <source>Add me to the dialout group</source>
             <translation>Mich zur Gruppe dialout hinzufügen</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="160" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>Führen Sie diesen Befehl in einem Terminal aus, melden Sie sich dann ab und wieder an.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="167" />
             <source>Command</source>
             <translation>Befehl</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
             <location filename="../src/support/setup_check_dialog.cpp" line="196" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="197" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>Setup check</source>
             <translation>Einrichtungsprüfung</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="219" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>Was dieser PC braucht, damit andere Programme Ihre virtuellen Ports nutzen können.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="225" />
             <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>Alles bereit</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="262" />
             <source>Why is a driver needed?</source>
             <translation>Warum wird ein Treiber gebraucht?</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="270" />
             <source>Re-check</source>
             <translation>Erneut prüfen</translation>
         </message>
@@ -5084,6 +5477,7 @@ Netzwerke: %5</translation>
         </message>
         <message>
             <location filename="../src/support/elevated_step.cpp" line="38" />
+            <location filename="../src/support/elevated_step.cpp" line="117" />
             <source>Not available in this build.</source>
             <translation>In diesem Build nicht verfügbar.</translation>
         </message>
@@ -5102,11 +5496,31 @@ Netzwerke: %5</translation>
             <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
             <translation>Die Firewallregel konnte nicht geändert werden. Verwenden Sie stattdessen den angezeigten Befehl in einem als Administrator geöffneten Terminal.</translation>
         </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="126" />
+            <source>Done. Sign out and back in so that the new group takes effect, then choose Re-check.</source>
+            <translation>Fertig. Melden Sie sich ab und wieder an, damit die neue Gruppe wirksam wird, und wählen Sie dann „Erneut prüfen“.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="132" />
+            <source>You dismissed the authentication prompt, so nothing was changed.</source>
+            <translation>Sie haben die Anmeldeabfrage geschlossen, daher wurde nichts geändert.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="138" />
+            <source>The system did not authorise the change, so nothing was changed. Use the command shown instead.</source>
+            <translation>Das System hat die Änderung nicht erlaubt, daher wurde nichts geändert. Verwenden Sie stattdessen den angezeigten Befehl.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="144" />
+            <source>The group could not be changed. Use the command shown instead, in a terminal.</source>
+            <translation>Die Gruppe konnte nicht geändert werden. Verwenden Sie stattdessen den angezeigten Befehl in einem Terminal.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -13873,7 +14287,7 @@ Netzwerke: %5</translation>
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="324" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
