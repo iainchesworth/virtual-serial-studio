@@ -1,1 +1,1 @@
-A `join` of several ports that does not carry modem lines was saved as a `monitor` and shown as one, which a saved file could not read back. It is saved and shown as a `join`.
+**A join without modem lines is saved and shown as a join.** A join of several ports that did not carry modem lines was saved as a `monitor` and drawn as one, and a saved file could not read that back. The tap on a shared bus is such a join.
