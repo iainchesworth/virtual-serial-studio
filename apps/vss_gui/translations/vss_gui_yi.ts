@@ -2870,6 +2870,31 @@
             <source>Exported %1.</source>
             <translation>%1 איז עקספּאָרטירט.</translation>
         </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>עקספּאָרטירן קאַפּטשער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>היטן דעם געוויזענעם פאַרקער אין אַ קאַפּטשער־טעקע, מיט יעדער בייט און זיין גענויע צייט.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>קאַפּטשער־טעקסט (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>ווערטן באַשיידן מיט קאָמעס (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON שורות (*.jsonl)</translation>
+        </message>
     </context>
     <context>
         <name>NetworkEndpoint</name>
@@ -10456,6 +10481,31 @@
             <location filename="../src/panes/monitor_panel.cpp" line="589" />
             <source>Exported %1.</source>
             <translation>%1 איז עקספּאָרטירט.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>עקספּאָרטירן קאַפּטשער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>היטן דעם געוויזענעם פאַרקער אין אַ קאַפּטשער־טעקע, מיט יעדער בייט און זיין גענויע צייט.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>קאַפּטשער־טעקסט (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>ווערטן באַשיידן מיט קאָמעס (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON שורות (*.jsonl)</translation>
         </message>
     </context>
     <context>

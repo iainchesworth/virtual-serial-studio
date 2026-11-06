@@ -31,6 +31,7 @@ abstraction that makes the transport replaceable.
 | Test RS-232 control lines | DTR/RTS/BREAK are drivable, CTS/DSR/DCD/RI are reported, a null-modem link crosses them |
 | Watch traffic without disturbing it | One-way `monitor` links and a bounded traffic ring buffer |
 | Put several programs on one multi-drop line | A `bus` link: each port hears every other and never itself, with a `join` to a listen-only tap |
+| Record traffic with exact times | `vss_cli capture` and the monitor's **Export capture** write every byte as `.cap`, CSV or JSON Lines |
 | Script a device | The serial library's mock backend is exposed as an endpoint |
 | Save and reload a topology | Validated JSON documents, opened by the GUI and by `vss_cli run` |
 | Measure the data path | `vss_cli bench` and a CI performance suite with enforced floors |
@@ -88,6 +89,7 @@ vss_cli loopback                    # a virtual port plus a monitor, no hardware
 vss_cli share serial://COM3 --listeners=3 --seconds=30
 vss_cli bridge serial://COM3 tcp://192.168.1.50:4001 --seconds=30
 vss_cli run lab.json --seconds=60
+vss_cli capture lab.json --out=run.cap --port=master --seconds=60
 vss_cli bench --from=serial://COM3 --to=serial://COM5 --bytes=10MB
 vss_cli selftest
 ```

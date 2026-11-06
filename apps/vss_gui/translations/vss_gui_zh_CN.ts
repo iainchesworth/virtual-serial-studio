@@ -2870,6 +2870,31 @@
             <source>Exported %1.</source>
             <translation>已导出 %1。</translation>
         </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>导出捕获</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>将显示的流量连同每个字节及其精确时间保存到捕获文件。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>捕获文本 (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>逗号分隔值 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
+        </message>
     </context>
     <context>
         <name>NetworkEndpoint</name>
@@ -10454,6 +10479,31 @@
             <location filename="../src/panes/monitor_panel.cpp" line="589" />
             <source>Exported %1.</source>
             <translation>已导出 %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>导出捕获</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>将显示的流量连同每个字节及其精确时间保存到捕获文件。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>捕获文本 (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>逗号分隔值 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
         </message>
     </context>
     <context>

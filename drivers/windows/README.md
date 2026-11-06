@@ -43,6 +43,7 @@ driver builds in CI from the same sources; its guest results are in the section
 | Write timeouts, and who may open the hub end and make how many ports | tests D18, D20 and D21 |
 | Driver Verifier (standard settings) on `vsscom.sys` | the whole suite passes with it on in the Windows 11 guest |
 | The studio opening a port (`create_driver_port`) | runs in a guest with `test-client.ps1` (test C1) |
+| A 32-bit program (WOW64) and a hung or killed program | the client and `test-wow64.ps1` (W1 to W4, T1 to T7) are written and the client builds in CI; the guest results are in the pull request that added them, and are not yet in this table |
 | Signing | not done: the package is unsigned |
 
 ## Build
@@ -155,7 +156,7 @@ mode is on. The test certificate suffices for the second case only.
 | `vsscom_helper/install-helper.ps1` | installs or removes the service |
 | `trust/install-trust.ps1` | makes a machine trust the owner's CA and the signer of a package, so a test-signed package installs with test signing off |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver, the helper or all |
-| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D22, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
+| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D22, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `test-wow64.ps1` (a 32-bit program and the hung-program tests), `hub-io.ps1` (its hub-end helpers), `client32/` (the C program they run), `uninstall-driver.ps1` |
 
 The two drivers include their own `vsscom_platform.h`, found first on the include
 path of each project, so the shared sources need no preprocessor conditionals.
@@ -260,3 +261,57 @@ PowerShell:
 cannot be exported and trusts it only there; the revert discards it. Test
 signing needs Secure Boot off. A release package is signed with an organisation
 certificate instead, which is a separate step.
+
+## Old programs: a 32-bit client and the hung-program tests
+
+The programs this driver has to serve are old 32-bit Windows programs, and they
+sometimes hang and then cannot start again until the machine restarts. Two things
+are tested, with one small C program, `test/client32/vss_com_client.c`, built three
+ways (Win32, x64, ARM64) so a 32-bit run has a native one to be compared with.
+
+**There is no 32-bit guest.** The driver is x64 and ARM64 only, and a 32-bit
+Windows cannot load an x64 driver. An x86 driver build does not exist and is not
+planned. A "32-bit program" here is the Win32 build of the client running under
+WOW64 in the usual 64-bit Windows 10 and Windows 11 guests, which is what a 32-bit
+program on a 64-bit machine does. The serial requests carry no pointers, so WOW64
+passes them straight through; `test-wow64.ps1` is the proof that it does.
+
+The client has four modes: `probe` (opens `COM1` to `COM16`, with and without the
+`\.\` prefix), `open` (one open, to see what a second program gets), `exercise`
+(`SetupComm`, `SetCommState` with the DTR and RTS control modes, `SetCommTimeouts`
+in the usual combinations, `GetCommProperties`, `GetCommConfig`,
+`EscapeCommFunction`, overlapped `WaitCommEvent`, `ReadFile` and `WriteFile`,
+`PurgeComm`, the modem status) and `hold` (leaves requests pending and stays alive).
+Each prints one JSON document. Build it with
+`cmake -S drivers/windows/test/client32 -B build/client32-x86 -A Win32` and
+`cmake --build build/client32-x86 --config Release`; CI builds it in the driver job
+and uploads it as `vss-com-client-x64` (Win32 and x64) and `vss-com-client-ARM64`.
+
+`test-wow64.ps1` runs inside a guest after `install-driver.ps1` (add `-Flavour umdf`
+and `-Helper` for the user-mode driver). Its hub end is the echo of `hub-io.ps1`,
+which sends back what the program writes and shows DTR as DSR and DCD and RTS as CTS.
+
+| Test | What it does |
+|---|---|
+| W1 | the 32-bit probe of `COM1` to `COM16`, with the target free and while another program holds it, and the 64-bit probe for comparison |
+| W2, W3 | the whole exercise with the 32-bit build, and with the native build |
+| W4 | the two builds' answers agree, step by step |
+| T1 | a pending read, a pending event wait and a write stalled on the full 64 KB queue; the program is killed. `AppOpen` must clear in under a second and the port reopen |
+| T2 | the same with the program suspended, which is the hang: records what a second open returns (access denied is expected), then kills it |
+| T3 | a synchronous read with no timeout; the program is killed |
+| T4 | the handle in the suspended program is closed from outside (`DuplicateHandle` with `DUPLICATE_CLOSE_SOURCE`, then `CancelIoEx`): does the port come free without killing the program |
+| T5 | the driver's revoke request on the suspended program. Skipped until the driver has `IOCTL_VSSCOM_HUB_REVOKE` (hub end, no input, no output) in `vsscom/public.h`; ship `public.h` next to the script, or pass `-RevokeCode` |
+| T6 | the port is removed while a handle is held and made again: the slot and COM name that come back are recorded |
+| T7 | the helper service is restarted with a program attached (user-mode driver only) |
+
+A test ends `pass`, `fail`, `skip` or `unexpected`. `unexpected` is for a result the
+design did not predict, such as a second open that succeeds or a new port that takes
+the old COM name; nothing the test was built to prove has failed, and the detail says
+what happened. T1 to T3 fail only when the port is not free within a second of the
+kill, or does not reopen: those are the cases where the driver itself holds a port.
+If they pass, a hang that needs a reboot is not the driver, and T2 and T4 say what
+can still be done to a program that is alive but stuck.
+
+`tools/vm/make-driver-bundle.ps1` packs the packages, the scripts and the client into
+one zip, and `tools/vm/guest-cell.ps1 -DriverBundle` runs it in a guest from the clean
+snapshot (see `docs/vm-testing.md`).

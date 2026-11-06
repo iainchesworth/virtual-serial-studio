@@ -10,6 +10,7 @@
 //
 
 #include <vss/studio/benchmark.hpp>
+#include <vss/studio/capture.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
@@ -17,8 +18,10 @@
 #include <atomic>
 #include <chrono>
 #include <csignal>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <iterator>
 #include <map>
 #include <string>
 #include <thread>
@@ -34,6 +37,8 @@ struct arguments
 {
     std::vector<std::string> positional;
     std::map<std::string, std::string> options;
+    /// Every value an option was given, for the ones that may repeat.
+    std::map<std::string, std::vector<std::string>> repeated;
     std::vector<std::string> flags;
 
     bool has(const std::string& flag) const
@@ -45,6 +50,12 @@ struct arguments
     {
         const auto it = options.find(key);
         return it == options.end() ? fallback : it->second;
+    }
+
+    std::vector<std::string> all(const std::string& key) const
+    {
+        const auto it = repeated.find(key);
+        return it == repeated.end() ? std::vector<std::string>{} : it->second;
     }
 
     int number(const std::string& key, int fallback) const
@@ -112,6 +123,19 @@ void print_usage()
         "\n"
         "  vss_cli run <topology.json> [--seconds=N]\n"
         "      Apply a saved topology and keep it alive.\n"
+        "\n"
+        "  vss_cli capture [<topology.json>] [--uri=<uri>...] --out=<file>\n"
+        "                  [--format=cap|csv|jsonl] [--port=<name>[,<name>...]]\n"
+        "                  [--seconds=N]\n"
+        "      Record every byte that crosses the ports, each with its time in\n"
+        "      milliseconds from the start and the port it belongs to.  cap is\n"
+        "      the `[ms] R|W 0x..|0x..` text format, one line per chunk, and\n"
+        "      has no port names; csv and jsonl carry the port, the direction\n"
+        "      and the absolute start time.  R is bytes the port received and\n"
+        "      W is bytes written to it, so use --port to keep one row per\n"
+        "      message.\n"
+        "      The format comes from the file name when --format is left out.\n"
+        "      Runs until Ctrl-C or SIGTERM, or for N seconds.\n"
         "\n"
         "  vss_cli bench --from=<uri> --to=<uri> [--bytes=1MB] [--chunk=4KB]\n"
         "      Measure a real end-to-end transfer.\n"
@@ -676,6 +700,122 @@ int command_run(const arguments& args)
     return 0;
 }
 
+/// Applies the topology a command names and opens every `--uri`, the way
+/// `capture`, `play` and `respond` all start.  The topology is the positional
+/// argument at `topology_index`, if there is one.  Returns an exit code, or -1
+/// when the ports are ready.
+int open_ports(studio& app, const arguments& args, std::size_t topology_index)
+{
+    if (args.positional.size() > topology_index)
+    {
+        const auto& path = args.positional[topology_index];
+        const auto document = vss::config::load_file(path);
+        if (!document)
+        {
+            std::fprintf(stderr, "cannot load %s: %s\n", path.c_str(),
+                         document.error().message().c_str());
+            return 1;
+        }
+        if (const auto applied = app.apply(*document); !applied)
+        {
+            std::fprintf(stderr, "cannot apply the topology: %s\n",
+                         applied.error().message().c_str());
+            return 1;
+        }
+    }
+
+    for (const auto& uri : args.all("--uri"))
+    {
+        const auto attached = app.attach_serial(uri, uri);
+        if (!attached)
+        {
+            std::fprintf(stderr, "cannot open %s: %s\n", uri.c_str(),
+                         attached.error().message().c_str());
+            return 1;
+        }
+    }
+    return -1;
+}
+
+int command_capture(const arguments& args)
+{
+    const std::string out = args.get("--out");
+    if (out.empty())
+    {
+        std::fprintf(stderr, "capture needs --out=<file>\n");
+        return 2;
+    }
+    if (args.positional.size() < 2 && args.all("--uri").empty())
+    {
+        std::fprintf(stderr,
+                     "capture needs a topology file or at least one --uri\n");
+        return 2;
+    }
+
+    vss::capture_options options;
+    if (args.options.count("--format") != 0)
+    {
+        const auto format = vss::parse_capture_format(args.get("--format"));
+        if (!format)
+        {
+            std::fprintf(stderr, "unknown --format=%s (use cap, csv or jsonl)\n",
+                         args.get("--format").c_str());
+            return 2;
+        }
+        options.format = *format;
+    }
+    else if (const auto guessed = vss::capture_format_for_path(out))
+    {
+        options.format = *guessed;
+    }
+    for (const auto& list : args.all("--port"))
+    {
+        for (const auto& name : split_list(list, ','))
+            options.ports.push_back(name);
+    }
+
+    catch_stop_signals();
+    studio app;
+    if (const int code = open_ports(app, args, 1); code >= 0)
+        return code;
+
+    for (const auto& name : options.ports)
+    {
+        if (app.find(name))
+            continue;
+        std::fprintf(stderr, "there is no port named %s; the ports are:\n",
+                     name.c_str());
+        for (const auto& info : app.endpoint_infos())
+            std::fprintf(stderr, "  %s\n", info.name.c_str());
+        return 2;
+    }
+
+    auto session = vss::capture_session::start(app.engine(), out, options);
+    if (!session)
+    {
+        std::fprintf(stderr, "cannot write %s: %s\n", out.c_str(),
+                     session.error().message().c_str());
+        return 1;
+    }
+
+    print_topology(app);
+    std::printf("capturing %s to %s (%s)\n",
+                options.ports.empty() ? "every port" : "the chosen ports",
+                out.c_str(), vss::to_string(options.format));
+    std::fflush(stdout);
+
+    run_until_stopped(app, args.number("--seconds", 0), false);
+
+    (*session)->stop();
+    const bool good = (*session)->good();
+    std::printf("wrote %llu record(s), %llu byte(s)\n",
+                static_cast<unsigned long long>((*session)->records()),
+                static_cast<unsigned long long>((*session)->bytes()));
+    if (!good)
+        std::fprintf(stderr, "writing %s failed\n", out.c_str());
+    return good ? 0 : 1;
+}
+
 int command_bench(const arguments& args)
 {
     const std::string from = args.get("--from");
@@ -778,6 +918,15 @@ int command_selftest()
     return 0;
 }
 
+/// Options that take a value, so `--out file` means the same as `--out=file`.
+bool takes_value(const std::string& name)
+{
+    static const char* const names[] = {"--out", "--format", "--port",
+                                        "--uri", "--seconds"};
+    return std::find(std::begin(names), std::end(names), name) !=
+           std::end(names);
+}
+
 arguments parse(int argc, char** argv)
 {
     arguments parsed;
@@ -787,10 +936,22 @@ arguments parse(int argc, char** argv)
         if (value.rfind("--", 0) == 0)
         {
             const auto equals = value.find('=');
-            if (equals == std::string::npos)
-                parsed.flags.push_back(value);
+            if (equals != std::string::npos)
+            {
+                const auto name = value.substr(0, equals);
+                parsed.options[name] = value.substr(equals + 1);
+                parsed.repeated[name].push_back(value.substr(equals + 1));
+            }
+            else if (takes_value(value) && index + 1 < argc)
+            {
+                parsed.options[value] = argv[index + 1];
+                parsed.repeated[value].push_back(argv[index + 1]);
+                ++index;
+            }
             else
-                parsed.options[value.substr(0, equals)] = value.substr(equals + 1);
+            {
+                parsed.flags.push_back(value);
+            }
         }
         else
         {
@@ -832,6 +993,8 @@ int main(int argc, char** argv)
             return command_vport(args);
         if (command == "run")
             return command_run(args);
+        if (command == "capture")
+            return command_capture(args);
         if (command == "bench")
             return command_bench(args);
         if (command == "selftest")

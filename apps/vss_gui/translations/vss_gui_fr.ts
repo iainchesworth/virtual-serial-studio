@@ -2870,6 +2870,31 @@
             <source>Exported %1.</source>
             <translation>%1 exporté.</translation>
         </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>Exporter la capture</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>Enregistre le trafic affiché dans un fichier de capture, avec chaque octet et son heure exacte.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>Texte de capture (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>Valeurs séparées par des virgules (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>Lignes JSON (*.jsonl)</translation>
+        </message>
     </context>
     <context>
         <name>NetworkEndpoint</name>
@@ -10456,6 +10481,31 @@
             <location filename="../src/panes/monitor_panel.cpp" line="589" />
             <source>Exported %1.</source>
             <translation>%1 exporté.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>Exporter la capture</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>Enregistre le trafic affiché dans un fichier de capture, avec chaque octet et son heure exacte.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>Texte de capture (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>Valeurs séparées par des virgules (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>Lignes JSON (*.jsonl)</translation>
         </message>
     </context>
     <context>

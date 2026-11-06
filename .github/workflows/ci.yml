@@ -604,6 +604,41 @@ jobs:
           name: vsscom-helper-${{ matrix.platform }}${{ steps.sign_helper.outputs.suffix }}
           path: drivers/windows/artifacts/package-helper/${{ matrix.platform }}/
           if-no-files-found: error
+      # The test client for the guests (drivers/windows/test/client32). The driver is x64 and
+      # ARM64 only, so a 32-bit program meets it under WOW64 in an x64 guest: the x64 leg builds
+      # the client as Win32 (the old programs' build) and as x64 (what it is compared with), the
+      # ARM64 leg builds it for ARM64. Nothing runs against a driver here; a hosted runner cannot
+      # load one. tools/vm/make-driver-bundle.ps1 packs these into a guest run.
+      - name: Build the test client
+        shell: pwsh
+        env:
+          ARCHITECTURES: ${{ matrix.platform == 'x64' && 'Win32 x64' || 'ARM64' }}
+        run: |
+          New-Item -ItemType Directory -Force client32-out | Out-Null
+          foreach ($arch in $env:ARCHITECTURES -split ' ') {
+            cmake -S drivers/windows/test/client32 -B "build/client32-$arch" -A $arch
+            if ($LASTEXITCODE -ne 0) { throw "cmake failed for $arch" }
+            cmake --build "build/client32-$arch" --config Release
+            if ($LASTEXITCODE -ne 0) { throw "the test client did not build for $arch" }
+            Copy-Item "build/client32-$arch/Release/vss_com_client_*.exe" client32-out
+          }
+          Get-ChildItem client32-out | Select-Object Name, Length
+      # The 32-bit build must run here as a 32-bit program under WOW64. Nothing is opened but
+      # COM1 and COM2, to see that the program starts and prints its JSON.
+      - name: Check that the 32-bit client starts under WOW64
+        if: matrix.platform == 'x64'
+        shell: pwsh
+        run: |
+          $text = & ./client32-out/vss_com_client_x86.exe probe --first 1 --last 2 | Out-String
+          $text
+          $report = $text | ConvertFrom-Json
+          if ($report.arch -ne 'x86' -or -not $report.wow64) { throw 'the 32-bit client did not run as a 32-bit program under WOW64' }
+      - name: Upload the test client
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: vss-com-client-${{ matrix.platform }}
+          path: client32-out/
+          if-no-files-found: error
 
   zizmor:
     name: Workflow analysis

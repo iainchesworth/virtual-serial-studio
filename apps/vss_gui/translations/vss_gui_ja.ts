@@ -2870,6 +2870,31 @@
             <source>Exported %1.</source>
             <translation>%1をエクスポートしました。</translation>
         </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>キャプチャをエクスポート</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>表示中の通信を、すべてのバイトと正確な時刻とともにキャプチャファイルに保存します。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>キャプチャテキスト (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>カンマ区切り値 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
+        </message>
     </context>
     <context>
         <name>NetworkEndpoint</name>
@@ -10454,6 +10479,31 @@
             <location filename="../src/panes/monitor_panel.cpp" line="589" />
             <source>Exported %1.</source>
             <translation>%1をエクスポートしました。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <source>Export capture</source>
+            <translation>キャプチャをエクスポート</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>表示中の通信を、すべてのバイトと正確な時刻とともにキャプチャファイルに保存します。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>キャプチャテキスト (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>カンマ区切り値 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
         </message>
     </context>
     <context>

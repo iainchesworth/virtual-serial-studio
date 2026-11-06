@@ -21,6 +21,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
   unit/test_benchmark.cpp
+  unit/test_capture.cpp
   unit/test_studio.cpp
   unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp
@@ -32,6 +33,7 @@ if(WIN32)
   list(APPEND VSS_UNIT_TEST_SOURCES
     unit/platform/windows/test_driver_client_windows.cpp
     unit/platform/windows/test_helper_windows.cpp
+    unit/platform/windows/test_manifest_windows.cpp
     unit/platform/windows/test_ports_windows.cpp)
 elseif(UNIX)
   list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)
@@ -48,6 +50,8 @@ if(WIN32)
   target_include_directories(vss_unit_tests PRIVATE
     ${PROJECT_SOURCE_DIR}/drivers/windows)
 endif()
+target_compile_definitions(vss_unit_tests PRIVATE
+  VSS_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 vss_set_warnings(vss_unit_tests)
 vss_enable_coverage(vss_unit_tests)
 
