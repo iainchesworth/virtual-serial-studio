@@ -709,11 +709,16 @@ def unpack_package(package: Path, target: Path) -> Path:
         return package
     target.mkdir(parents=True, exist_ok=True)
     if package.name.endswith((".tar.gz", ".tgz")):
-        with tarfile.open(package) as archive:
-            try:
+        # The data filter refuses names outside target, absolute names and links that leave it. It
+        # is in Python 3.12 and in late patch releases of 3.9 to 3.11; an older Python is refused
+        # here and not trusted to unpack an archive unchecked.
+        if not hasattr(tarfile, "data_filter"):
+            raise ValueError("this Python cannot unpack an archive safely; use Python 3.12 or a newer patch release")
+        try:
+            with tarfile.open(package) as archive:
                 archive.extractall(target, filter="data")
-            except TypeError:  # Python before 3.12 has no extraction filter
-                archive.extractall(target)
+        except tarfile.TarError as error:
+            raise ValueError(f"unsafe or damaged archive: {error}") from error
     elif package.suffix == ".zip":
         with zipfile.ZipFile(package) as archive:
             archive.extractall(target)
