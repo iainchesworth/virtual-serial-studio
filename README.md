@@ -30,6 +30,7 @@ abstraction that makes the transport replaceable.
 | Bridge a device to the network | `tcp://`, `udp://` and `rfc2217://` endpoints are first-class ports; `tcp-listen://` and `udp-listen://` wait for other computers to connect |
 | Test RS-232 control lines | DTR/RTS/BREAK are drivable, CTS/DSR/DCD/RI are reported, a null-modem link crosses them |
 | Watch traffic without disturbing it | One-way `monitor` links and a bounded traffic ring buffer |
+| Put several programs on one multi-drop line | A `bus` link: each port hears every other and never itself, with a `join` to a listen-only tap |
 | Script a device | The serial library's mock backend is exposed as an endpoint |
 | Save and reload a topology | Validated JSON documents, opened by the GUI and by `vss_cli run` |
 | Measure the data path | `vss_cli bench` and a CI performance suite with enforced floors |
@@ -127,7 +128,9 @@ strand so a transport is never touched by two threads at once.
 links carry it one way, and `monitor` links are passive taps that do not drive
 the peer's modem lines. A single link can fan out to many targets (`split`) or
 accept many sources (`join`), and every link can arbitrate between publishers:
-either `interleave` them or give one publisher `owner`ship.
+either `interleave` them or give one publisher `owner`ship. A `bus` link puts
+several endpoints on one shared multi-drop line: each hears every other and
+never itself, and it carries no modem lines and takes no owner.
 
 **A hub** owns the `io_context`, the endpoints, the routing table and the event
 dispatcher. The `studio` layer above it adds the bits applications need:

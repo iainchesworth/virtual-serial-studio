@@ -140,7 +140,7 @@ opens", and says which control lines are wired.
 ### Wire existing ports (integrator)
 
 **Topology → Connect ports** chooses a relationship in plain words (two-way,
-one-way, monitor, split, join), lists only ports that exist, and updates its
+one-way, monitor, split, join, shared bus), lists only ports that exist, and updates its
 summary sentence live. It validates before closing; a failure leaves the
 dialog's data intact.
 

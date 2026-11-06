@@ -906,7 +906,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>די צוויי פּאָרטן זענען פֿאַרבונדן אין Studio. טרענט זיי פֿריִער אָפּ.</translation>
         </message>
@@ -932,38 +932,38 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Sent</source>
             <translation>געשיקט</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Received</source>
             <translation>באקומען</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Lost</source>
             <translation>פֿאַרלוירן</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
             <source>Throughput</source>
             <translation>דורכגאַנג</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
             <source>Not run</source>
             <translation>נישט אָפּגעלאָפֿן</translation>
         </message>
@@ -984,7 +984,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
@@ -1007,78 +1007,78 @@
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
             <source>Run</source>
             <translation>לויפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>לייגט צו צוויי פּאָרטן כדי צו בענטשמאַרקירן אַ פֿאַרבינדונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
             <source>Choose two different ports.</source>
             <translation>קלײַבט אויס צוויי פֿאַרשידענע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
             <source>Running</source>
             <translation>לויפֿט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
             <source>Benchmark result: %1</source>
             <translation>בענטשמאַרק־רעזולטאַט: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
             <source>%1 of %2 received</source>
             <translation>%1 פֿון %2 באקומען</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Failed</source>
             <translation>דורכגעפֿאַלן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
             <source>Could not finish: %1</source>
             <translation>נישט געקענט ענדיקן: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
             <source>Cancelled</source>
             <translation>אַנולירט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Passed</source>
             <translation>דורכגעגאַנגען</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
             <source>Finished at %1</source>
             <translation>פֿאַרענדיקט אום %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: געשיקט %2, באקומען %3, פֿאַרלוירן %4, דורכגאַנג %5.</translation>
         </message>
@@ -1444,286 +1444,344 @@
             <translation>פֿאַרבינדונג־אָפּציעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="241" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="243" />
             <source>Link mode</source>
             <translation>פֿאַרבינדונג־מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="245" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="247" />
             <source>Two-way</source>
             <translation>צוויי־וועגיק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="246" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
             <source>Like a null-modem cable. Both ports see everything.</source>
             <translation>ווי אַ נאַל־מאָדעם־קאַבל. ביידע פּאָרטן זען אַלעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="250" />
             <source>One-way redirect</source>
             <translation>איין־וועגיקע אומלייטונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="249" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
             <source>Data flows from A to B only. B cannot reply.</source>
             <translation>דאַטן גייען נאָר פֿון A קיין B. B קען נישט ענטפֿערן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="253" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="252" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="254" />
             <source>Watch traffic without disturbing it. Never drives modem lines.</source>
             <translation>באַטראַכט טראַפֿיק אָן אים צו שטערן. טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="255" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="257" />
             <source>Split one port to many</source>
             <translation>צעטיילן איין פּאָרט אויף פֿילע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="256" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
             <source>Several programs see the same device.</source>
             <translation>עטלעכע פּראָגראַמען זען דעם זעלבן אַפּאַראַט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="260" />
             <source>Join many ports into one</source>
             <translation>פֿאַראייניקן פֿילע פּאָרטן אין איינעם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="259" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="261" />
             <source>Several sources feed one target.</source>
             <translation>עטלעכע קוואַלן שפּײַזן איין ציל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="290" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="263" />
+            <source>Shared bus</source>
+            <translation>געמיינזאַמער באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="264" />
+            <source>Several programs on one wire. Each hears all the others.</source>
+            <translation>עטלעכע פּראָגראַמען אויף איין דראָט. יעדער הערט אַלע אַנדערע.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="296" />
             <source>From</source>
             <translation>פֿון</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="291" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="297" />
             <source>To</source>
             <translation>צו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="316" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="322" />
             <source>Port to split</source>
             <translation>פּאָרט צום צעטיילן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="319" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="325" />
             <source>Send copies to, choose at least 2</source>
             <translation>שיקט קאָפּיעס צו, קלײַבט אויס לפּחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="357" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="363" />
             <source>Ports that send, choose at least 2</source>
             <translation>פּאָרטן וואָס שיקן, קלײַבט אויס לפּחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="375" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="381" />
             <source>Send everything to</source>
             <translation>שיקט אַלעס צו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="389" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
             <source>More options</source>
             <translation>מער אָפּציעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="392" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
             <source>ADVANCED</source>
             <translation>אַוואַנסירט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="394" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="400" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="401" />
             <source>Choose one owner at a time</source>
             <translation>קלײַבט אויס איין באַזיצער אויף אײן מאָל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="404" />
             <source>Turn on Advanced mode</source>
             <translation>אָנשאַלטן דעם אַוואַנסירטן מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="430" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <source>Ports on the bus, choose at least 2</source>
+            <translation>פּאָרטן אויפֿן באַס, קלײַבט אויס לפּחות 2</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="462" />
             <source>Shortcut: Ctrl+L</source>
             <translation>שאָרטקאַט: Ctrl+L</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="435" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="467" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="471" />
             <source>Connect</source>
             <translation>פֿאַרבינדן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="547" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="579" />
             <source>This is the port being split.</source>
             <translation>דאָס איז דער פּאָרט וואָס ווערט צעטיילט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="556" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="595" />
             <source>This is the port everything is sent to.</source>
             <translation>דאָס איז דער פּאָרט צו וועלכן אַלעס ווערט געשיקט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="650" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="846" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>פּאָרטן נאָר אין Studio ווידערהילכן וואָס זיי באַקומען, דעריבער וואָלט אַ צוויי־וועגיקע פֿאַרבינדונג צווישן זיי איבערחזרן דאַטן. ניצט איין־וועגיק, אָדער פֿאַרבינדט אַ פֿיזישן פּאָרט אָדער אַ פּאָרט פֿון אַ פּאָר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="678" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>%1 פּאָרטן אויסגעקליבן. דאָס איז גענוג פֿאַר אַ %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="682" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
             <source>Choose at least 2 ports.</source>
             <translation>קלײַבט אויס לפּחות 2 פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
             <source>split</source>
             <translation>צעטיילונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>join</source>
             <translation>פֿאַראייניקונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="737" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="744" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <source>bus</source>
+            <translation>באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>קלײַבט אויס צוויי פּאָרטן כדי צו זען וואָס די פֿאַרבינדונג וועט טאָן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>אַלעס וואָס %1 שיקט קומט אָן ביי %2, און פֿאַרקערט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="739" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>אַלעס וואָס %1 שיקט קומט אָן ביי %2. %2 קען נישט ענטפֿערן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="746" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2 באַקומט אַ נאָר־לייענען־קאָפּיע פֿון וואָס %1 שיקט. עס טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="754" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
             <source>Choose a port to split.</source>
             <translation>קלײַבט אויס אַ פּאָרט צום צעטיילן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="755" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>אַלעס וואָס %1 באַקומט ווערט קאָפּירט אויף די פּאָרטן וואָס איר קלײַבט אויס. אַלעס וואָס זיי שרײַבן גייט צוריק צו %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="764" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>אַלעס וואָס %1 באַקומט ווערט קאָפּירט אויף %2. אַלעס וואָס %3 פֿון זיי שרײַבט גייט צוריק צו %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>either</source>
             <translation>איינער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>any</source>
             <translation>יעדער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="774" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
             <source>Choose a port to send everything to.</source>
             <translation>קלײַבט אויס אַ פּאָרט צו וועלכן אַלעס זאָל גיין.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="775" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>אַלעס וואָס די אויסגעקליבענע פּאָרטן שרײַבן גייט צו %1. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>אַלעס וואָס %1 שרײַבן גייט צו %2. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן. %2 שיקט גאָרנישט צוריק צו זיי.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="828" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <source>Choose the ports to put on the bus.</source>
+            <translation>קלײַבט אויס די פּאָרטן וואָס קומען אויפֿן באַס.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
+            <translation>יעדער פֿון %1 הערט וואָס די אַנדערע שרײַבן, און קיינער הערט נישט זיך אַלײן. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
             <source>Links are not available in this build.</source>
             <translation>פֿאַרבינדונגען זענען נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="837" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <source>A bus takes at most %1 ports.</source>
+            <translation>אַ באַס נעמט אָן העכסטנס %1 פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
             <source>Choose two ports.</source>
             <translation>קלײַבט אויס צוויי פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="839" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>אַ פּאָרט קען זיך נישט פֿאַרבינדן מיט זיך אַליין. קלײַבט אויס אַן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="915" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="974" />
             <source>Not available in Simple mode</source>
             <translation>נישט פֿאַראַנען אין פּשוטן מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1042" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1120" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1137" />
             <source>That link would create a loop</source>
             <translation>די פֿאַרבינדונג וואָלט באַשאַפֿן אַ שלײַף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1043" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1121" />
+            <source>A path leads out of the bus and back into it, so data would go round forever. Nothing was changed. Remove that link first, or choose different ports.</source>
+            <translation>אַ וועג גייט אַרויס פֿון באַס און צוריק אַרײַן, דעריבער וואָלטן דאַטן גיין אין אַ קרײַז אויף אײביק. גאָרנישט איז געביטן געוואָרן. נעמט אַוועק יענע פֿאַרבינדונג צו ערשט, אָדער קלײַבט אויס אַנדערע פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1130" />
+            <source>One of these ports is already on a bus. A port can be on one bus only. Nothing was changed.</source>
+            <translation>איינער פֿון די פּאָרטן איז שוין אויף אַ באַס. אַ פּאָרט קען זײַן נאָר אויף איין באַס. גאָרנישט איז געביטן געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
             <source>Data would travel from %1 to %2 and back to %1 forever. Nothing was changed. Remove a link first, or choose different ports.</source>
             <translation>דאַטן וואָלטן אויף אײביק גיין פֿון %1 קיין %2 און צוריק קיין %1. גאָרנישט איז געענדערט געוואָרן. נעמט פֿריִער אַוועק אַ פֿאַרבינדונג, אָדער קלײַבט אויס אַנדערע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1051" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1247" />
+            <source>Put %1 on a shared bus.</source>
+            <translation>%1 איז אַרײַנגעלייגט אויף אַ געמיינזאַמען באַס.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1146" />
             <source>Could not create the link</source>
             <translation>נישט געקענט באַשאַפֿן די פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1052" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1147" />
             <source>Nothing was changed. Check the ports and try again.</source>
             <translation>גאָרנישט איז געענדערט געוואָרן. קאָנטראָלירט די פּאָרטן און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1232" />
             <source>Connected %1 and %2.</source>
             <translation>%1 און %2 זענען פֿאַרבונדן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1132" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1235" />
             <source>Redirected %1 to %2.</source>
             <translation>%1 איז אומגעלייט צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1135" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1238" />
             <source>Monitoring %1 on %2.</source>
             <translation>מאָניטאָרירט %1 אויף %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1241" />
             <source>Split %1 to %2.</source>
             <translation>%1 איז צעטיילט אויף %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1141" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1244" />
             <source>Joined %1 into %2.</source>
             <translation>%1 איז פֿאַראייניקט אין %2.</translation>
         </message>
@@ -6488,13 +6546,13 @@
         <message>
             <location filename="../src/topology/topology_text.cpp" line="46" />
             <location filename="../src/topology/topology_text.cpp" line="231" />
-            <location filename="../src/topology/topology_text.cpp" line="247" />
+            <location filename="../src/topology/topology_text.cpp" line="249" />
             <source>two-way</source>
             <translation>צוויי־וועגיק</translation>
         </message>
         <message>
             <location filename="../src/topology/topology_text.cpp" line="49" />
-            <location filename="../src/topology/topology_text.cpp" line="243" />
+            <location filename="../src/topology/topology_text.cpp" line="245" />
             <source>owner</source>
             <translation>באַזיצער</translation>
         </message>
@@ -6655,87 +6713,102 @@
             <translation>מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="256" />
+            <location filename="../src/topology/topology_text.cpp" line="235" />
+            <source>Bus</source>
+            <translation>באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="258" />
             <source>No ports yet. Add a port to see it here.</source>
             <translation>נאָך קיין פּאָרטן. לייגט צו אַ פּאָרט כדי עס דאָ צו זען.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="265" />
+            <location filename="../src/topology/topology_text.cpp" line="267" />
             <source>%1, no links</source>
             <translation>%1, קיין פֿאַרבינדונגען</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="271" />
+            <location filename="../src/topology/topology_text.cpp" line="273" />
             <source>%1, %2: %3</source>
             <translation>%1, %2: %3</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="288" />
+            <location filename="../src/topology/topology_text.cpp" line="290" />
             <source>Split link, %1 to %2 ports</source>
             <translation>צעטיילטע פֿאַרבינדונג, %1 צו %2 פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="296" />
+            <location filename="../src/topology/topology_text.cpp" line="298" />
             <source>Split link, %1 to %2</source>
             <translation>צעטיילטע פֿאַרבינדונג, %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="303" />
+            <location filename="../src/topology/topology_text.cpp" line="305" />
             <source>Join link, %1 ports into %2</source>
             <translation>פֿאַראייניקטע פֿאַרבינדונג, %1 פּאָרטן אין %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="311" />
+            <location filename="../src/topology/topology_text.cpp" line="313" />
             <source>Join link, %1 into %2</source>
             <translation>פֿאַראייניקטע פֿאַרבינדונג, %1 אין %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="316" />
+            <location filename="../src/topology/topology_text.cpp" line="318" />
             <source>Two-way link, %1 to %2</source>
             <translation>צוויי־וועגיקע פֿאַרבינדונג, %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="320" />
+            <location filename="../src/topology/topology_text.cpp" line="322" />
             <source>One-way link, %1 to %2</source>
             <translation>איין־וועגיקע פֿאַרבינדונג, %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="324" />
+            <location filename="../src/topology/topology_text.cpp" line="326" />
             <source>Monitor link, %1 to %2</source>
             <translation>מאָניטאָר־פֿאַרבינדונג, %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="340" />
+            <location filename="../src/topology/topology_text.cpp" line="330" />
+            <source>Bus link, %1 ports</source>
+            <translation>באַס־פֿאַרבינדונג, %1 פּאָרטן</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="346" />
             <source>split from %1 to %2</source>
             <translation>צעטיילט פֿון %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="343" />
+            <location filename="../src/topology/topology_text.cpp" line="349" />
             <source>join from %1 into %2</source>
             <translation>פֿאַראייניקט פֿון %1 אין %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="346" />
+            <location filename="../src/topology/topology_text.cpp" line="352" />
             <source>two-way between %1 and %2</source>
             <translation>צוויי־וועגיק צווישן %1 און %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="350" />
+            <location filename="../src/topology/topology_text.cpp" line="356" />
             <source>one-way from %1 to %2</source>
             <translation>איין־וועגיק פֿון %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="353" />
+            <location filename="../src/topology/topology_text.cpp" line="359" />
             <source>monitor from %1 to %2</source>
             <translation>מאָניטאָר פֿון %1 צו %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="361" />
+            <location filename="../src/topology/topology_text.cpp" line="362" />
+            <source>bus of %1</source>
+            <translation>באַס פֿון %1</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="370" />
             <source>Copied %1.</source>
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="366" />
+            <location filename="../src/topology/topology_text.cpp" line="375" />
             <source>Selected %1.</source>
             <translation>אויסגעקליבן %1.</translation>
         </message>
@@ -6804,13 +6877,14 @@
             <location filename="../src/advanced/json_validation.cpp" line="670" />
             <location filename="../src/advanced/json_validation.cpp" line="705" />
             <location filename="../src/advanced/json_validation.cpp" line="741" />
-            <location filename="../src/advanced/json_validation.cpp" line="773" />
-            <location filename="../src/advanced/json_validation.cpp" line="808" />
-            <location filename="../src/advanced/json_validation.cpp" line="874" />
-            <location filename="../src/advanced/json_validation.cpp" line="914" />
-            <location filename="../src/advanced/json_validation.cpp" line="948" />
-            <location filename="../src/advanced/json_validation.cpp" line="1004" />
-            <location filename="../src/advanced/json_validation.cpp" line="1041" />
+            <location filename="../src/advanced/json_validation.cpp" line="774" />
+            <location filename="../src/advanced/json_validation.cpp" line="809" />
+            <location filename="../src/advanced/json_validation.cpp" line="859" />
+            <location filename="../src/advanced/json_validation.cpp" line="992" />
+            <location filename="../src/advanced/json_validation.cpp" line="1032" />
+            <location filename="../src/advanced/json_validation.cpp" line="1066" />
+            <location filename="../src/advanced/json_validation.cpp" line="1122" />
+            <location filename="../src/advanced/json_validation.cpp" line="1159" />
             <source>Valid JSON, version 1</source>
             <translation>גילטיקער JSON, ווערסיע 1</translation>
         </message>
@@ -6826,12 +6900,13 @@
             <location filename="../src/advanced/json_validation.cpp" line="673" />
             <location filename="../src/advanced/json_validation.cpp" line="708" />
             <location filename="../src/advanced/json_validation.cpp" line="744" />
-            <location filename="../src/advanced/json_validation.cpp" line="776" />
-            <location filename="../src/advanced/json_validation.cpp" line="811" />
-            <location filename="../src/advanced/json_validation.cpp" line="877" />
-            <location filename="../src/advanced/json_validation.cpp" line="917" />
-            <location filename="../src/advanced/json_validation.cpp" line="951" />
-            <location filename="../src/advanced/json_validation.cpp" line="1007" />
+            <location filename="../src/advanced/json_validation.cpp" line="777" />
+            <location filename="../src/advanced/json_validation.cpp" line="812" />
+            <location filename="../src/advanced/json_validation.cpp" line="862" />
+            <location filename="../src/advanced/json_validation.cpp" line="995" />
+            <location filename="../src/advanced/json_validation.cpp" line="1035" />
+            <location filename="../src/advanced/json_validation.cpp" line="1069" />
+            <location filename="../src/advanced/json_validation.cpp" line="1125" />
             <source>Ports, all names unique</source>
             <translation>פּאָרטן, אַלע נעמען אײנציקאַרטיק</translation>
         </message>
@@ -6847,12 +6922,13 @@
             <location filename="../src/advanced/json_validation.cpp" line="676" />
             <location filename="../src/advanced/json_validation.cpp" line="711" />
             <location filename="../src/advanced/json_validation.cpp" line="747" />
-            <location filename="../src/advanced/json_validation.cpp" line="779" />
-            <location filename="../src/advanced/json_validation.cpp" line="814" />
-            <location filename="../src/advanced/json_validation.cpp" line="880" />
-            <location filename="../src/advanced/json_validation.cpp" line="920" />
-            <location filename="../src/advanced/json_validation.cpp" line="954" />
-            <location filename="../src/advanced/json_validation.cpp" line="1010" />
+            <location filename="../src/advanced/json_validation.cpp" line="780" />
+            <location filename="../src/advanced/json_validation.cpp" line="815" />
+            <location filename="../src/advanced/json_validation.cpp" line="865" />
+            <location filename="../src/advanced/json_validation.cpp" line="998" />
+            <location filename="../src/advanced/json_validation.cpp" line="1038" />
+            <location filename="../src/advanced/json_validation.cpp" line="1072" />
+            <location filename="../src/advanced/json_validation.cpp" line="1128" />
             <source>Links, no loops</source>
             <translation>פֿאַרבינדונגען, קיין שלײַפֿן</translation>
         </message>
@@ -6892,8 +6968,10 @@
             <location filename="../src/advanced/json_validation.cpp" line="519" />
             <location filename="../src/advanced/json_validation.cpp" line="547" />
             <location filename="../src/advanced/json_validation.cpp" line="754" />
-            <location filename="../src/advanced/json_validation.cpp" line="791" />
-            <location filename="../src/advanced/json_validation.cpp" line="978" />
+            <location filename="../src/advanced/json_validation.cpp" line="792" />
+            <location filename="../src/advanced/json_validation.cpp" line="925" />
+            <location filename="../src/advanced/json_validation.cpp" line="934" />
+            <location filename="../src/advanced/json_validation.cpp" line="1096" />
             <source>Nothing was applied.</source>
             <translation>גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
@@ -6988,94 +7066,126 @@
             <translation>"links" מוז זײַן אַ ליסטע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="785" />
+            <location filename="../src/advanced/json_validation.cpp" line="786" />
             <source>Line %1: each link must be an object</source>
             <translation>שורה %1: יעדע פֿאַרבינדונג מוז זײַן אַן אָביעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="789" />
+            <location filename="../src/advanced/json_validation.cpp" line="790" />
             <source>Each link must be an object</source>
             <translation>יעדע פֿאַרבינדונג מוז זײַן אַן אָביעקט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="822" />
+            <location filename="../src/advanced/json_validation.cpp" line="823" />
             <source>Line %1: unknown link mode "%2"</source>
             <translation>שורה %1: אומבאַקאַנטע פֿאַרבינדונג־מאָדע "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="826" />
+            <location filename="../src/advanced/json_validation.cpp" line="827" />
             <source>Unknown link mode "%1"</source>
             <translation>אומבאַקאַנטע פֿאַרבינדונג־מאָדע "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="833" />
+            <location filename="../src/advanced/json_validation.cpp" line="834" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
             <translation>צי האָט איר געמיינט "%1"? די שורה איז אַרויסגעהויבן און גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="843" />
             <source>Use duplex, split, join, redirect or monitor. Nothing was applied.</source>
-            <translation>ניצט duplex, split, join, redirect אָדער monitor. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
+            <translation type="vanished">ניצט duplex, split, join, redirect אָדער monitor. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="886" />
+            <location filename="../src/advanced/json_validation.cpp" line="1004" />
             <source>Line %1: a link needs ports on both sides</source>
             <translation>שורה %1: אַ פֿאַרבינדונג דאַרף פּאָרטן אויף ביידע זײַטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="890" />
+            <location filename="../src/advanced/json_validation.cpp" line="1008" />
             <source>A link needs ports on both sides</source>
             <translation>אַ פֿאַרבינדונג דאַרף פּאָרטן אויף ביידע זײַטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="892" />
+            <location filename="../src/advanced/json_validation.cpp" line="1010" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
             <translation>sources און targets מוזן זײַן נישט־ליידיקע ליסטעס פֿון פּאָרט־נעמען. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="926" />
+            <location filename="../src/advanced/json_validation.cpp" line="1044" />
             <source>Line %1: "%2" has the wrong number of ports</source>
             <translation>שורה %1: "%2" האָט אַ פֿאַלשע צאָל פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="931" />
+            <location filename="../src/advanced/json_validation.cpp" line="1049" />
             <source>"%1" has the wrong number of ports</source>
             <translation>"%1" האָט אַ פֿאַלשע צאָל פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="935" />
+            <location filename="../src/advanced/json_validation.cpp" line="1053" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
             <translation>אַ פֿאַרבינדונג פֿון סאָרט duplex, redirect אָדער monitor פֿאַרבינדט איין פּאָרט מיט איין פּאָרט; אַ split האָט איין קוואַל; אַ join האָט איין ציל. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="970" />
+            <location filename="../src/advanced/json_validation.cpp" line="1088" />
             <source>Line %1: no port is called "%2"</source>
             <translation>שורה %1: קיין פּאָרט הייסט נישט "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="975" />
+            <location filename="../src/advanced/json_validation.cpp" line="922" />
+            <location filename="../src/advanced/json_validation.cpp" line="1093" />
             <source>No port is called "%1"</source>
             <translation>קיין פּאָרט הייסט נישט "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1016" />
+            <location filename="../src/advanced/json_validation.cpp" line="1134" />
             <source>Line %1: these links create a loop</source>
             <translation>שורה %1: די פֿאַרבינדונגען באַשאַפֿן אַ שלײַף</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1019" />
+            <location filename="../src/advanced/json_validation.cpp" line="950" />
+            <location filename="../src/advanced/json_validation.cpp" line="1137" />
             <source>These links create a loop</source>
             <translation>די פֿאַרבינדונגען באַשאַפֿן אַ שלײַף</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1021" />
+            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <source>Use duplex, split, join, redirect, monitor or bus. Nothing was applied.</source>
+            <translation>ניצט duplex, split, join, redirect, monitor אָדער bus. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="875" />
+            <source>Bus links are not available in this build</source>
+            <translation>באַס־פֿאַרבינדונגען זענען נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="878" />
+            <source>This build cannot put ports on a shared bus. Nothing was applied.</source>
+            <translation>די דאָזיקע ווערסיע קען נישט אַרײַנלייגן פּאָרטן אויף אַ געמיינזאַמען באַס. גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="904" />
+            <source>A bus needs between 2 and %1 ports</source>
+            <translation>אַ באַס דאַרף צווישן 2 און %1 פּאָרטן</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="907" />
+            <source>List the ports of the bus in "members". Nothing was applied.</source>
+            <translation>שרײַבט די פּאָרטן פֿון באַס אין "members". גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="932" />
+            <source>A port can be on one bus only</source>
+            <translation>אַ פּאָרט קען זײַן נאָר אויף איין באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/advanced/json_validation.cpp" line="952" />
+            <location filename="../src/advanced/json_validation.cpp" line="1139" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
             <translation>בײַטן וואָלטן גיין אין אַ קרײַז אויף אײביק, דעריבער לאָזט דער האַב נישט צו קיין שלײַף און גאָרנישט איז אָנגעווענדט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1050" />
-            <location filename="../src/advanced/json_validation.cpp" line="1056" />
-            <location filename="../src/advanced/json_validation.cpp" line="1076" />
+            <location filename="../src/advanced/json_validation.cpp" line="1168" />
+            <location filename="../src/advanced/json_validation.cpp" line="1174" />
+            <location filename="../src/advanced/json_validation.cpp" line="1194" />
             <source>The setup format rejected this document</source>
             <translation>דער אײַנשטעלונג־פֿאָרמאַט האָט אָפּגעוואָרפֿן דעם דאָקומענט</translation>
         </message>
@@ -7273,114 +7383,119 @@
             <translation>%1 איז אין אַן איין־וועגיקער פֿאַרבינדונג פֿון %2.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="183" />
+            <location filename="../src/support/troubleshoot.cpp" line="169" />
+            <source>%1 is on a shared bus with %2.</source>
+            <translation>%1 איז אויף אַ געמיינזאַמען באַס מיט %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="191" />
             <source>this port</source>
             <translation>דער דאָזיקער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="190" />
             <location filename="../src/support/troubleshoot.cpp" line="198" />
             <location filename="../src/support/troubleshoot.cpp" line="206" />
+            <location filename="../src/support/troubleshoot.cpp" line="214" />
             <source>The port exists and is open</source>
             <translation>דער פּאָרט עקזיסטירט און איז אָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="192" />
-            <location filename="../src/support/troubleshoot.cpp" line="232" />
-            <location filename="../src/support/troubleshoot.cpp" line="314" />
+            <location filename="../src/support/troubleshoot.cpp" line="200" />
+            <location filename="../src/support/troubleshoot.cpp" line="240" />
+            <location filename="../src/support/troubleshoot.cpp" line="322" />
             <source>Studio has no port to check.</source>
             <translation>Studio האָט קיין פּאָרט נישט צו קאָנטראָלירן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="200" />
+            <location filename="../src/support/troubleshoot.cpp" line="208" />
             <source>%1 is open on %2.</source>
             <translation>%1 איז אָפֿן אויף %2.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="208" />
+            <location filename="../src/support/troubleshoot.cpp" line="216" />
             <source>%1 is not open.</source>
             <translation>%1 איז נישט אָפֿן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="230" />
             <location filename="../src/support/troubleshoot.cpp" line="238" />
-            <location filename="../src/support/troubleshoot.cpp" line="248" />
+            <location filename="../src/support/troubleshoot.cpp" line="246" />
+            <location filename="../src/support/troubleshoot.cpp" line="256" />
             <source>The port is linked to the device</source>
             <translation>דער פּאָרט איז פֿאַרבונדן מיטן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="240" />
+            <location filename="../src/support/troubleshoot.cpp" line="248" />
             <source>This port has no link. Connect it to a device.</source>
             <translation>דער דאָזיקער פּאָרט האָט קיין פֿאַרבינדונג נישט. פֿאַרבינדט אים מיט אַן אַפּאַראַט.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="258" />
+            <location filename="../src/support/troubleshoot.cpp" line="266" />
             <source>The device is sending</source>
             <translation>דער אַפּאַראַט שיקט</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="263" />
+            <location filename="../src/support/troubleshoot.cpp" line="271" />
             <source>Connect the port to a device first.</source>
             <translation>פֿאַרבינדט פֿריִער דעם פּאָרט מיט אַן אַפּאַראַט.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="270" />
+            <location filename="../src/support/troubleshoot.cpp" line="278" />
             <source>Studio cannot tell when %1 last sent data.</source>
             <translation>Studio קען נישט זאָגן ווען %1 האָט צום לעצטן מאָל געשיקט דאַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="279" />
+            <location filename="../src/support/troubleshoot.cpp" line="287" />
             <source>%1 received data in the last minute.</source>
             <translation>%1 האָט באַקומען דאַטן אין דער לעצטער מינוט.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="289" />
+            <location filename="../src/support/troubleshoot.cpp" line="297" />
             <source>Studio is still listening for the first bytes.</source>
             <translation>Studio הערט זיך נאָך אַלץ צו צו די ערשטע בײַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="297" />
+            <location filename="../src/support/troubleshoot.cpp" line="305" />
             <source>%1 has not sent anything in the last minute. Check the cable and the device's power.</source>
             <translation>%1 האָט גאָרנישט געשיקט אין דער לעצטער מינוט. קאָנטראָלירט דעם קאַבל און דעם שטראָם פֿון דעם אַפּאַראַט.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="307" />
+            <location filename="../src/support/troubleshoot.cpp" line="315" />
             <source>A program has opened %1</source>
             <translation>אַ פּראָגראַם האָט געעפֿנט %1</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="312" />
+            <location filename="../src/support/troubleshoot.cpp" line="320" />
             <source>A program has opened the port</source>
             <translation>אַ פּראָגראַם האָט געעפֿנט דעם פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="321" />
+            <location filename="../src/support/troubleshoot.cpp" line="329" />
             <source>Studio cannot tell whether a program has opened %1 in this build.</source>
             <translation>Studio קען נישט זאָגן צי אַ פּראָגראַם האָט געעפֿנט %1 אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="330" />
+            <location filename="../src/support/troubleshoot.cpp" line="338" />
             <source>A program has opened %1.</source>
             <translation>אַ פּראָגראַם האָט געעפֿנט %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="338" />
+            <location filename="../src/support/troubleshoot.cpp" line="346" />
             <source>No program has opened %1 yet, so nothing can arrive.</source>
             <translation>קיין פּראָגראַם האָט נאָך נישט געעפֿנט %1, דעריבער קען גאָרנישט אָנקומען.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="351" />
-            <location filename="../src/support/troubleshoot.cpp" line="360" />
+            <location filename="../src/support/troubleshoot.cpp" line="359" />
+            <location filename="../src/support/troubleshoot.cpp" line="368" />
             <source>Data reaches the program</source>
             <translation>דאַטן דערגרייכן דעם פּראָגראַם</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="353" />
+            <location filename="../src/support/troubleshoot.cpp" line="361" />
             <source>Studio cannot see whether the program read the data.</source>
             <translation>Studio קען נישט זען צי דער פּראָגראַם האָט געלייענט די דאַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="362" />
+            <location filename="../src/support/troubleshoot.cpp" line="370" />
             <source>Checked once a program connects.</source>
             <translation>ווערט קאָנטראָלירט ווען אַ פּראָגראַם פֿאַרבינדט זיך.</translation>
         </message>
@@ -8801,7 +8916,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="319" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>די צוויי פּאָרטן זענען פֿאַרבונדן אין Studio. טרענט זיי פֿריִער אָפּ.</translation>
         </message>
@@ -8827,38 +8942,38 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Sent</source>
             <translation>געשיקט</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Received</source>
             <translation>באקומען</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="418" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
             <source>Lost</source>
             <translation>פֿאַרלוירן</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="419" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
             <source>Throughput</source>
             <translation>דורכגאַנג</translation>
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
             <source>Not run</source>
             <translation>נישט אָפּגעלאָפֿן</translation>
         </message>
@@ -8879,7 +8994,7 @@
         </message>
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="385" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
@@ -8902,78 +9017,78 @@
         <message>
             <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="405" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
             <source>Run</source>
             <translation>לויפֿן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="311" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>לייגט צו צוויי פּאָרטן כדי צו בענטשמאַרקירן אַ פֿאַרבינדונג.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
             <source>Choose two different ports.</source>
             <translation>קלײַבט אויס צוויי פֿאַרשידענע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="397" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="468" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
             <source>Running</source>
             <translation>לויפֿט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="470" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="522" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
             <source>Benchmark result: %1</source>
             <translation>בענטשמאַרק־רעזולטאַט: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="506" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
             <source>%1 of %2 received</source>
             <translation>%1 פֿון %2 באקומען</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="527" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Failed</source>
             <translation>דורכגעפֿאַלן</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="529" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
             <source>Could not finish: %1</source>
             <translation>נישט געקענט ענדיקן: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="547" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="548" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
             <source>Cancelled</source>
             <translation>אַנולירט</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Passed</source>
             <translation>דורכגעגאַנגען</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
             <source>Finished at %1</source>
             <translation>פֿאַרענדיקט אום %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="560" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: געשיקט %2, באקומען %3, פֿאַרלוירן %4, דורכגאַנג %5.</translation>
         </message>
@@ -9132,286 +9247,344 @@
             <translation>פֿאַרבינדונג־אָפּציעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="241" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="243" />
             <source>Link mode</source>
             <translation>פֿאַרבינדונג־מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="245" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="247" />
             <source>Two-way</source>
             <translation>צוויי־וועגיק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="246" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
             <source>Like a null-modem cable. Both ports see everything.</source>
             <translation>ווי אַ נאַל־מאָדעם־קאַבל. ביידע פּאָרטן זען אַלעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="248" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="250" />
             <source>One-way redirect</source>
             <translation>איין־וועגיקע אומלייטונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="249" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
             <source>Data flows from A to B only. B cannot reply.</source>
             <translation>דאַטן גייען נאָר פֿון A קיין B. B קען נישט ענטפֿערן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="251" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="253" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="252" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="254" />
             <source>Watch traffic without disturbing it. Never drives modem lines.</source>
             <translation>באַטראַכט טראַפֿיק אָן אים צו שטערן. טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="255" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="257" />
             <source>Split one port to many</source>
             <translation>צעטיילן איין פּאָרט אויף פֿילע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="256" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
             <source>Several programs see the same device.</source>
             <translation>עטלעכע פּראָגראַמען זען דעם זעלבן אַפּאַראַט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="258" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="260" />
             <source>Join many ports into one</source>
             <translation>פֿאַראייניקן פֿילע פּאָרטן אין איינעם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="259" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="261" />
             <source>Several sources feed one target.</source>
             <translation>עטלעכע קוואַלן שפּײַזן איין ציל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="290" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="263" />
+            <source>Shared bus</source>
+            <translation>געמיינזאַמער באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="264" />
+            <source>Several programs on one wire. Each hears all the others.</source>
+            <translation>עטלעכע פּראָגראַמען אויף איין דראָט. יעדער הערט אַלע אַנדערע.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="296" />
             <source>From</source>
             <translation>פֿון</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="291" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="297" />
             <source>To</source>
             <translation>צו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="316" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="322" />
             <source>Port to split</source>
             <translation>פּאָרט צום צעטיילן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="319" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="325" />
             <source>Send copies to, choose at least 2</source>
             <translation>שיקט קאָפּיעס צו, קלײַבט אויס לפּחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="357" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="363" />
             <source>Ports that send, choose at least 2</source>
             <translation>פּאָרטן וואָס שיקן, קלײַבט אויס לפּחות 2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="375" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="381" />
             <source>Send everything to</source>
             <translation>שיקט אַלעס צו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="389" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
             <source>More options</source>
             <translation>מער אָפּציעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="392" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
             <source>ADVANCED</source>
             <translation>אַוואַנסירט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="394" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="395" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="400" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="401" />
             <source>Choose one owner at a time</source>
             <translation>קלײַבט אויס איין באַזיצער אויף אײן מאָל</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="398" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="404" />
             <source>Turn on Advanced mode</source>
             <translation>אָנשאַלטן דעם אַוואַנסירטן מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="430" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <source>Ports on the bus, choose at least 2</source>
+            <translation>פּאָרטן אויפֿן באַס, קלײַבט אויס לפּחות 2</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="462" />
             <source>Shortcut: Ctrl+L</source>
             <translation>שאָרטקאַט: Ctrl+L</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="435" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="467" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="439" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="471" />
             <source>Connect</source>
             <translation>פֿאַרבינדן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="547" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="579" />
             <source>This is the port being split.</source>
             <translation>דאָס איז דער פּאָרט וואָס ווערט צעטיילט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="556" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="595" />
             <source>This is the port everything is sent to.</source>
             <translation>דאָס איז דער פּאָרט צו וועלכן אַלעס ווערט געשיקט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="650" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="846" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>פּאָרטן נאָר אין Studio ווידערהילכן וואָס זיי באַקומען, דעריבער וואָלט אַ צוויי־וועגיקע פֿאַרבינדונג צווישן זיי איבערחזרן דאַטן. ניצט איין־וועגיק, אָדער פֿאַרבינדט אַ פֿיזישן פּאָרט אָדער אַ פּאָרט פֿון אַ פּאָר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="678" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>%1 פּאָרטן אויסגעקליבן. דאָס איז גענוג פֿאַר אַ %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="682" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
             <source>Choose at least 2 ports.</source>
             <translation>קלײַבט אויס לפּחות 2 פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
             <source>split</source>
             <translation>צעטיילונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>join</source>
             <translation>פֿאַראייניקונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="737" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="744" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <source>bus</source>
+            <translation>באַס</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>קלײַבט אויס צוויי פּאָרטן כדי צו זען וואָס די פֿאַרבינדונג וועט טאָן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>אַלעס וואָס %1 שיקט קומט אָן ביי %2, און פֿאַרקערט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="739" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>אַלעס וואָס %1 שיקט קומט אָן ביי %2. %2 קען נישט ענטפֿערן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="746" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2 באַקומט אַ נאָר־לייענען־קאָפּיע פֿון וואָס %1 שיקט. עס טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="754" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
             <source>Choose a port to split.</source>
             <translation>קלײַבט אויס אַ פּאָרט צום צעטיילן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="755" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>אַלעס וואָס %1 באַקומט ווערט קאָפּירט אויף די פּאָרטן וואָס איר קלײַבט אויס. אַלעס וואָס זיי שרײַבן גייט צוריק צו %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="764" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>אַלעס וואָס %1 באַקומט ווערט קאָפּירט אויף %2. אַלעס וואָס %3 פֿון זיי שרײַבט גייט צוריק צו %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>either</source>
             <translation>איינער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="767" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
             <source>any</source>
             <translation>יעדער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="774" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
             <source>Choose a port to send everything to.</source>
             <translation>קלײַבט אויס אַ פּאָרט צו וועלכן אַלעס זאָל גיין.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="775" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>אַלעס וואָס די אויסגעקליבענע פּאָרטן שרײַבן גייט צו %1. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>אַלעס וואָס %1 שרײַבן גייט צו %2. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן. %2 שיקט גאָרנישט צוריק צו זיי.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="828" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <source>Choose the ports to put on the bus.</source>
+            <translation>קלײַבט אויס די פּאָרטן וואָס קומען אויפֿן באַס.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
+            <translation>יעדער פֿון %1 הערט וואָס די אַנדערע שרײַבן, און קיינער הערט נישט זיך אַלײן. זייערע בײַטן ווערן געמישט אין דער סדר ווי זיי קומען אָן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
             <source>Links are not available in this build.</source>
             <translation>פֿאַרבינדונגען זענען נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="837" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <source>A bus takes at most %1 ports.</source>
+            <translation>אַ באַס נעמט אָן העכסטנס %1 פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
             <source>Choose two ports.</source>
             <translation>קלײַבט אויס צוויי פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="839" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>אַ פּאָרט קען זיך נישט פֿאַרבינדן מיט זיך אַליין. קלײַבט אויס אַן אַנדערן פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="915" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="974" />
             <source>Not available in Simple mode</source>
             <translation>נישט פֿאַראַנען אין פּשוטן מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1042" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1120" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1137" />
             <source>That link would create a loop</source>
             <translation>די פֿאַרבינדונג וואָלט באַשאַפֿן אַ שלײַף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1043" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1121" />
+            <source>A path leads out of the bus and back into it, so data would go round forever. Nothing was changed. Remove that link first, or choose different ports.</source>
+            <translation>אַ וועג גייט אַרויס פֿון באַס און צוריק אַרײַן, דעריבער וואָלטן דאַטן גיין אין אַ קרײַז אויף אײביק. גאָרנישט איז געביטן געוואָרן. נעמט אַוועק יענע פֿאַרבינדונג צו ערשט, אָדער קלײַבט אויס אַנדערע פּאָרטן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1130" />
+            <source>One of these ports is already on a bus. A port can be on one bus only. Nothing was changed.</source>
+            <translation>איינער פֿון די פּאָרטן איז שוין אויף אַ באַס. אַ פּאָרט קען זײַן נאָר אויף איין באַס. גאָרנישט איז געביטן געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
             <source>Data would travel from %1 to %2 and back to %1 forever. Nothing was changed. Remove a link first, or choose different ports.</source>
             <translation>דאַטן וואָלטן אויף אײביק גיין פֿון %1 קיין %2 און צוריק קיין %1. גאָרנישט איז געענדערט געוואָרן. נעמט פֿריִער אַוועק אַ פֿאַרבינדונג, אָדער קלײַבט אויס אַנדערע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1051" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1247" />
+            <source>Put %1 on a shared bus.</source>
+            <translation>%1 איז אַרײַנגעלייגט אויף אַ געמיינזאַמען באַס.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1146" />
             <source>Could not create the link</source>
             <translation>נישט געקענט באַשאַפֿן די פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1052" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1147" />
             <source>Nothing was changed. Check the ports and try again.</source>
             <translation>גאָרנישט איז געענדערט געוואָרן. קאָנטראָלירט די פּאָרטן און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1129" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1232" />
             <source>Connected %1 and %2.</source>
             <translation>%1 און %2 זענען פֿאַרבונדן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1132" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1235" />
             <source>Redirected %1 to %2.</source>
             <translation>%1 איז אומגעלייט צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1135" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1238" />
             <source>Monitoring %1 on %2.</source>
             <translation>מאָניטאָרירט %1 אויף %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1138" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1241" />
             <source>Split %1 to %2.</source>
             <translation>%1 איז צעטיילט אויף %2.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="1141" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="1244" />
             <source>Joined %1 into %2.</source>
             <translation>%1 איז פֿאַראייניקט אין %2.</translation>
         </message>

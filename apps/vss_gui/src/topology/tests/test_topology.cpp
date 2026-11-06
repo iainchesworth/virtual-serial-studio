@@ -970,3 +970,51 @@ TEST_CASE("shell: topology actions name the next work package")
     window.close();
     clear_settings();
 }
+
+TEST_CASE("topology: a bus hangs its members off one bar on their left")
+{
+    const topo::topology_metrics metrics;
+    const QVector<topo::topo_link_input> links{
+        {1, vss::gui::link_shape::bus, {1, 2, 3}, {}, false}};
+    const topo::topology_layout layout =
+        topo::compute_topology_layout(equal_nodes(3), links, metrics);
+
+    REQUIRE_EQ(layout.links.size(), 1);
+    const topo::topo_link_placement& bus = layout.links.first();
+    REQUIRE(!bus.bar.isNull());
+    REQUIRE_EQ(bus.segments.size(), 3);
+    REQUIRE(bus.arrows.isEmpty());
+
+    // The members share a column and the bar is clear of all of them.
+    qreal leftmost = layout.node_rect(1).left();
+    for (const vss::endpoint_id id : {1, 2, 3})
+    {
+        REQUIRE_NEAR(layout.node_rect(id).left(), layout.node_rect(1).left(),
+                     0.01);
+        leftmost = std::min(leftmost, layout.node_rect(id).left());
+    }
+    REQUIRE(bus.bar.x1() < leftmost);
+    REQUIRE(layout.content.left() <= bus.bar.x1());
+
+    // The label sits at the top of the bar, away from the nodes.
+    REQUIRE_NEAR(bus.primary_anchor.x(), bus.bar.x1(), 0.01);
+    REQUIRE_EQ(
+        vss::gui::topology_text::link_primary_label(vss::gui::link_shape::bus),
+        QStringLiteral("Bus"));
+}
+
+TEST_CASE("topology: a bus has its own name and phrase")
+{
+    vss::gui::link_view bus;
+    bus.shape = vss::gui::link_shape::bus;
+    bus.mode = vss::link_mode::bus;
+    bus.sources = {1, 2, 3};
+    const QHash<vss::endpoint_id, QString> names{{1, QStringLiteral("master")},
+                                                 {2, QStringLiteral("panel")},
+                                                 {3, QStringLiteral("meter")}};
+
+    REQUIRE_EQ(vss::gui::topology_text::link_name(bus, names),
+               QStringLiteral("Bus link, 3 ports"));
+    REQUIRE(vss::gui::topology_text::link_phrase(bus, names)
+                .contains(QStringLiteral("master")));
+}

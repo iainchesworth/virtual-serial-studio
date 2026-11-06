@@ -405,7 +405,7 @@ QString json_validation::status_text() const
     return QCoreApplication::translate("TopologyJson", "Not valid");
 }
 
-json_validation validate_json_document(const QString& text)
+json_validation validate_json_document(const QString& text, bool shared_bus)
 {
     json_validation out;
 
@@ -762,6 +762,7 @@ json_validation validate_json_document(const QString& text)
     out.ports = static_cast<int>(ports.size());
     out.links = static_cast<int>(links.size());
     QHash<QString, QSet<QString>> edges;
+    QSet<QString> bus_members;
     for (int index = 0; index < links.size(); ++index)
     {
         const QJsonValue value = links.at(index);
@@ -842,11 +843,127 @@ json_validation validate_json_document(const QString& text)
             {
                 problem.detail = QCoreApplication::translate(
                     "TopologyJson",
-                    "Use duplex, split, join, redirect or monitor. Nothing was "
-                    "applied.");
+                    "Use duplex, split, join, redirect, monitor or bus. "
+                    "Nothing was applied.");
             }
             out.problem = problem;
             return out;
+        }
+
+        if (mode == QLatin1String("bus"))
+        {
+            const auto reject =
+                [&out](int line, const QString& summary, const QString& detail)
+            {
+                out.checks = {{QCoreApplication::translate(
+                                   "TopologyJson", "Valid JSON, version 1"),
+                               check_state::passed},
+                              {QCoreApplication::translate(
+                                   "TopologyJson", "Ports, all names unique"),
+                               check_state::passed},
+                              {QCoreApplication::translate("TopologyJson",
+                                                           "Links, no loops"),
+                               check_state::failed}};
+                out.problem = json_problem{
+                    with_line(line, summary), detail, {}, {}, line};
+            };
+
+            if (!shared_bus)
+            {
+                reject(link_line,
+                       QCoreApplication::translate(
+                           "TopologyJson",
+                           "Bus links are not available in this build"),
+                       QCoreApplication::translate(
+                           "TopologyJson",
+                           "This build cannot put ports on a shared bus. "
+                           "Nothing was applied."));
+                return out;
+            }
+
+            QStringList members;
+            bool members_ok = link.value(QStringLiteral("members")).isArray();
+            if (members_ok)
+            {
+                for (const QJsonValue& entry :
+                     link.value(QStringLiteral("members")).toArray())
+                {
+                    if (!entry.isString())
+                        members_ok = false;
+                    else
+                        members << entry.toString();
+                }
+            }
+            const int members_line =
+                lines.line(QStringLiteral("links/%1/members").arg(index));
+            if (!members_ok || members.size() < 2 ||
+                members.size() > static_cast<qsizetype>(vss::max_bus_members))
+            {
+                reject(members_line > 0 ? members_line : link_line,
+                       QCoreApplication::translate(
+                           "TopologyJson", "A bus needs between 2 and %1 ports")
+                           .arg(vss::max_bus_members),
+                       QCoreApplication::translate(
+                           "TopologyJson",
+                           "List the ports of the bus in \"members\". Nothing "
+                           "was applied."));
+                return out;
+            }
+
+            for (qsizetype at = 0; at < members.size(); ++at)
+            {
+                const QString& name = members.at(at);
+                const int member_line = lines.line(
+                    QStringLiteral("links/%1/members/%2").arg(index).arg(at));
+                if (!port_names.contains(name))
+                {
+                    reject(member_line,
+                           QCoreApplication::translate(
+                               "TopologyJson", "No port is called \"%1\"")
+                               .arg(name),
+                           QCoreApplication::translate("TopologyJson",
+                                                       "Nothing was applied."));
+                    return out;
+                }
+                if (bus_members.contains(name))
+                {
+                    reject(member_line,
+                           QCoreApplication::translate(
+                               "TopologyJson", "A port can be on one bus only"),
+                           QCoreApplication::translate("TopologyJson",
+                                                       "Nothing was applied."));
+                    return out;
+                }
+                bus_members.insert(name);
+            }
+
+            // A route that already joins two members, directly or through
+            // other ports, would be a loop through the bus.
+            for (const QString& first : members)
+            {
+                for (const QString& second : members)
+                {
+                    if (first == second || !reachable(edges, first, second))
+                        continue;
+                    reject(link_line,
+                           QCoreApplication::translate(
+                               "TopologyJson", "These links create a loop"),
+                           QCoreApplication::translate(
+                               "TopologyJson",
+                               "Bytes would go round forever, so the hub "
+                               "refuses a loop and nothing was applied."));
+                    return out;
+                }
+            }
+            for (const QString& first : members)
+            {
+                for (const QString& second : members)
+                {
+                    if (first != second)
+                        edges[first].insert(second);
+                }
+            }
+            continue;
         }
 
         QStringList sources;

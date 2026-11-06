@@ -107,6 +107,14 @@ public:
              const vss::link_options& options) = 0;
     virtual vss::result<vss::link_id> monitor(vss::endpoint_id from,
                                               vss::endpoint_id to) = 0;
+    /// Puts the ports on one shared multi-drop bus (capability:
+    /// shared_bus).  The default is `unsupported`: a build without the
+    /// capability never fakes a bus out of other links.
+    virtual vss::result<vss::link_id>
+    bus(const std::vector<vss::endpoint_id>& /*members*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
     virtual vss::result<void> disconnect(vss::link_id id) = 0;
     virtual vss::result<void> set_owner(vss::link_id id,
                                         vss::endpoint_id owner) = 0;

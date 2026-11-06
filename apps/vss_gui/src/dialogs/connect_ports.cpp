@@ -189,6 +189,7 @@ void ConnectPortsDialog::build()
     stack_->addWidget(build_pair_page());
     stack_->addWidget(build_split_page());
     stack_->addWidget(build_join_page());
+    stack_->addWidget(build_bus_page());
     right->addWidget(stack_);
     columns->addLayout(right, 1);
     body_layout->addLayout(columns);
@@ -207,7 +208,7 @@ void ConnectPortsDialog::build()
     outer->addWidget(scroll, 1);
     build_footer(outer);
 
-    for (int index = 0; index < 5; ++index)
+    for (int index = 0; index < 6; ++index)
     {
         connect(cards_[index], &PickCard::selected, this,
                 [this, index] { on_mode_selected(static_cast<mode>(index)); });
@@ -223,7 +224,8 @@ void ConnectPortsDialog::build()
     QDialog::setTabOrder(cards_[1]->radio(), cards_[2]->radio());
     QDialog::setTabOrder(cards_[2]->radio(), cards_[3]->radio());
     QDialog::setTabOrder(cards_[3]->radio(), cards_[4]->radio());
-    QDialog::setTabOrder(cards_[4]->radio(), from_combo_);
+    QDialog::setTabOrder(cards_[4]->radio(), cards_[5]->radio());
+    QDialog::setTabOrder(cards_[5]->radio(), from_combo_);
     QDialog::setTabOrder(from_combo_, to_combo_);
     QDialog::setTabOrder(to_combo_, split_source_combo_);
     QDialog::setTabOrder(split_source_combo_, join_target_combo_);
@@ -258,6 +260,10 @@ QWidget* ConnectPortsDialog::build_modes()
     add_mode_card(layout, mode::join, tr("Join many ports into one"),
                   tr("Several sources feed one target."),
                   QStringLiteral("A, B \u2192 C"));
+    add_mode_card(layout, mode::bus, tr("Shared bus"),
+                  tr("Several programs on one wire. Each hears all the "
+                     "others."),
+                  QStringLiteral("A \u21c4 B \u21c4 C"));
     layout->addStretch(1);
     return modes;
 }
@@ -422,6 +428,32 @@ QWidget* ConnectPortsDialog::build_join_page()
     return page;
 }
 
+QWidget* ConnectPortsDialog::build_bus_page()
+{
+    auto* page = new QWidget(this);
+    auto* layout = new QVBoxLayout(page);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(10);
+
+    layout->addWidget(
+        make_field_label(tr("Ports on the bus, choose at least 2"), page));
+    auto* card = new QFrame(page);
+    card->setProperty("card", true);
+    polish(card);
+    bus_layout_ = new QVBoxLayout(card);
+    bus_layout_->setContentsMargins(0, 0, 0, 0);
+    bus_layout_->setSpacing(0);
+    bus_card_ = card;
+    layout->addWidget(card);
+
+    bus_count_ = new QLabel(page);
+    bus_count_->setFont(Theme::instance().font(text_style::caption));
+    bus_count_->setWordWrap(true);
+    layout->addWidget(bus_count_);
+    layout->addStretch(1);
+    return page;
+}
+
 void ConnectPortsDialog::build_footer(QVBoxLayout* outer)
 {
     QHBoxLayout* layout = nullptr;
@@ -510,34 +542,34 @@ void ConnectPortsDialog::reload_ports()
     };
     keep_existing(split_targets_);
     keep_existing(join_sources_);
+    keep_existing(bus_members_);
     split_targets_.removeAll(source);
     join_sources_.removeAll(target);
 
     if (split_targets_.isEmpty())
-    {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != source)
-                split_targets_.push_back(port.id);
-            if (split_targets_.size() >= 2)
-                break;
-        }
-    }
+        choose_first_two(split_targets_, source);
     if (join_sources_.isEmpty())
-    {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != target)
-                join_sources_.push_back(port.id);
-            if (join_sources_.size() >= 2)
-                break;
-        }
-    }
+        choose_first_two(join_sources_, target);
+    if (bus_members_.isEmpty())
+        choose_first_two(bus_members_, 0);
 
     rebuild_split_list();
     rebuild_join_list();
+    rebuild_bus_list();
     updating_ = false;
     update_ui();
+}
+
+void ConnectPortsDialog::choose_first_two(QVector<vss::endpoint_id>& list,
+                                          vss::endpoint_id avoid) const
+{
+    for (const port_view& port : ports_)
+    {
+        if (port.id != avoid)
+            list.push_back(port.id);
+        if (list.size() >= 2)
+            break;
+    }
 }
 
 void ConnectPortsDialog::rebuild_split_list()
@@ -545,6 +577,13 @@ void ConnectPortsDialog::rebuild_split_list()
     updating_ = true;
     rebuild_checklist(split_card_, split_layout_, true, split_targets_,
                       split_source_id(), tr("This is the port being split."));
+    updating_ = false;
+}
+
+void ConnectPortsDialog::rebuild_bus_list()
+{
+    updating_ = true;
+    rebuild_checklist(bus_card_, bus_layout_, false, bus_members_, 0, {});
     updating_ = false;
 }
 
@@ -557,10 +596,11 @@ void ConnectPortsDialog::rebuild_join_list()
     updating_ = false;
 }
 
-void ConnectPortsDialog::rebuild_checklist(
-    QWidget* card, QVBoxLayout* layout, bool split,
-    const QVector<vss::endpoint_id>& checked, vss::endpoint_id excluded,
-    const QString& excluded_reason)
+void ConnectPortsDialog::rebuild_checklist(QWidget* card, QVBoxLayout* layout,
+                                           bool split,
+                                           QVector<vss::endpoint_id>& list,
+                                           vss::endpoint_id excluded,
+                                           const QString& excluded_reason)
 {
     Q_UNUSED(card);
     clear_layout(layout);
@@ -572,7 +612,7 @@ void ConnectPortsDialog::rebuild_checklist(
         auto* row = new PortCheckRow(port, layout->parentWidget());
         {
             const QSignalBlocker blocker(row->check());
-            row->check()->setChecked(checked.contains(port.id));
+            row->check()->setChecked(list.contains(port.id));
         }
         if (split && port.id == excluded)
             row->set_reason(excluded_reason);
@@ -580,15 +620,13 @@ void ConnectPortsDialog::rebuild_checklist(
 
         const vss::endpoint_id id = port.id;
         connect(row->check(), &QCheckBox::toggled, this,
-                [this, id, split](bool on)
+                [this, id, &list](bool on)
                 {
                     if (updating_)
                         return;
-                    QVector<vss::endpoint_id>& ids =
-                        split ? split_targets_ : join_sources_;
-                    ids.removeAll(id);
+                    list.removeAll(id);
                     if (on)
-                        ids.push_back(id);
+                        list.push_back(id);
                     clear_error();
                     update_ui();
                 });
@@ -599,7 +637,8 @@ void ConnectPortsDialog::on_mode_selected(mode value)
 {
     if (updating_)
         return;
-    if (value == mode::two_way && !two_way_allowed())
+    if ((value == mode::two_way && !two_way_allowed()) ||
+        (value == mode::bus && !backend_.caps().shared_bus))
     {
         update_ui();
         return;
@@ -607,25 +646,18 @@ void ConnectPortsDialog::on_mode_selected(mode value)
     mode_ = value;
     if (mode_ == mode::split && split_targets_.isEmpty())
     {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != split_source_id())
-                split_targets_.push_back(port.id);
-            if (split_targets_.size() >= 2)
-                break;
-        }
+        choose_first_two(split_targets_, split_source_id());
         rebuild_split_list();
     }
     else if (mode_ == mode::join && join_sources_.isEmpty())
     {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != join_target_id())
-                join_sources_.push_back(port.id);
-            if (join_sources_.size() >= 2)
-                break;
-        }
+        choose_first_two(join_sources_, join_target_id());
         rebuild_join_list();
+    }
+    else if (mode_ == mode::bus && bus_members_.isEmpty())
+    {
+        choose_first_two(bus_members_, 0);
+        rebuild_bus_list();
     }
     clear_error();
     update_ui();
@@ -640,6 +672,8 @@ void ConnectPortsDialog::update_ui()
             index = 1;
         else if (mode_ == mode::join)
             index = 2;
+        else if (mode_ == mode::bus)
+            index = 3;
         stack_->setCurrentIndex(index);
     }
 
@@ -650,6 +684,11 @@ void ConnectPortsDialog::update_ui()
                 : tr("Studio-only ports echo what they receive, so a two-way "
                      "link between them would repeat data. Use one-way, or "
                      "link a real or paired port."));
+
+    const bool bus_available = backend_.caps().shared_bus;
+    cards_[static_cast<int>(mode::bus)]->radio()->setEnabled(bus_available);
+    cards_[static_cast<int>(mode::bus)]->setToolTip(
+        bus_available ? QString() : tr("Not available in this build"));
 
     const QString block = block_reason();
     if (!block.isEmpty())
@@ -689,6 +728,7 @@ void ConnectPortsDialog::update_count()
     };
     set_count(count_, static_cast<int>(split_targets_.size()), tr("split"));
     set_count(join_count_, static_cast<int>(join_sources_.size()), tr("join"));
+    set_count(bus_count_, static_cast<int>(bus_members_.size()), tr("bus"));
 }
 
 QString ConnectPortsDialog::single_name(vss::endpoint_id id) const
@@ -719,8 +759,9 @@ void ConnectPortsDialog::update_result()
     const QString to = single_name(to_id());
     const QString source = single_name(split_source_id());
     const QString target = single_name(join_target_id());
-    const QVector<vss::endpoint_id> targets = checked_ids(true);
-    const QVector<vss::endpoint_id> sources = checked_ids(false);
+    const QVector<vss::endpoint_id> targets = checked_ids(mode::split);
+    const QVector<vss::endpoint_id> sources = checked_ids(mode::join);
+    const QVector<vss::endpoint_id> members = checked_ids(mode::bus);
 
     switch (mode_)
     {
@@ -788,6 +829,22 @@ void ConnectPortsDialog::update_result()
                     .arg(join_dialog_names(source_rich), bold_name(target));
         }
         break;
+    case mode::bus:
+        if (members.size() < 2)
+        {
+            rich = tr("Choose the ports to put on the bus.");
+        }
+        else
+        {
+            QStringList member_rich;
+            for (const vss::endpoint_id id : members)
+                member_rich << bold_name(single_name(id));
+            rich = tr("Each of %1 hears what the others write, and none hears "
+                      "itself. Their bytes are mixed in the order they "
+                      "arrive.")
+                       .arg(join_dialog_names(member_rich));
+        }
+        break;
     }
 
     result_->set_result_text(
@@ -800,6 +857,8 @@ QString ConnectPortsDialog::count_text() const
         return count_->text();
     if (mode_ == mode::join && join_count_ != nullptr)
         return join_count_->text();
+    if (mode_ == mode::bus && bus_count_ != nullptr)
+        return bus_count_->text();
     return {};
 }
 
@@ -826,6 +885,15 @@ QString ConnectPortsDialog::block_reason() const
 {
     if (!backend_.caps().links)
         return tr("Links are not available in this build.");
+    if (mode_ == mode::bus)
+    {
+        if (!backend_.caps().shared_bus)
+            return tr("Not available in this build");
+        if (bus_members_.size() > static_cast<qsizetype>(vss::max_bus_members))
+            return tr("A bus takes at most %1 ports.")
+                .arg(vss::max_bus_members);
+        return {};
+    }
     if (mode_ != mode::two_way && mode_ != mode::redirect &&
         mode_ != mode::monitor)
     {
@@ -862,9 +930,11 @@ bool ConnectPortsDialog::primary_enabled() const
     case mode::monitor:
         return block_reason().isEmpty();
     case mode::split:
-        return block_reason().isEmpty() && checked_ids(true).size() >= 2;
+        return block_reason().isEmpty() && checked_ids(mode::split).size() >= 2;
     case mode::join:
-        return block_reason().isEmpty() && checked_ids(false).size() >= 2;
+        return block_reason().isEmpty() && checked_ids(mode::join).size() >= 2;
+    case mode::bus:
+        return block_reason().isEmpty() && checked_ids(mode::bus).size() >= 2;
     }
     return false;
 }
@@ -873,33 +943,22 @@ bool ConnectPortsDialog::set_mode(mode value)
 {
     if (value == mode::two_way && !two_way_allowed())
         return false;
+    if (value == mode::bus && !backend_.caps().shared_bus)
+        return false;
     mode_ = value;
     updating_ = true;
     if (cards_[static_cast<int>(value)] != nullptr)
         cards_[static_cast<int>(value)]->set_selected(true);
     updating_ = false;
     if (value == mode::split && split_targets_.isEmpty())
-    {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != split_source_id())
-                split_targets_.push_back(port.id);
-            if (split_targets_.size() >= 2)
-                break;
-        }
-    }
+        choose_first_two(split_targets_, split_source_id());
     else if (value == mode::join && join_sources_.isEmpty())
-    {
-        for (const port_view& port : ports_)
-        {
-            if (port.id != join_target_id())
-                join_sources_.push_back(port.id);
-            if (join_sources_.size() >= 2)
-                break;
-        }
-    }
+        choose_first_two(join_sources_, join_target_id());
+    else if (value == mode::bus && bus_members_.isEmpty())
+        choose_first_two(bus_members_, 0);
     rebuild_split_list();
     rebuild_join_list();
+    rebuild_bus_list();
     clear_error();
     update_ui();
     return true;
@@ -966,10 +1025,12 @@ void ConnectPortsDialog::select_join_target(vss::endpoint_id id)
     update_ui();
 }
 
-QVector<vss::endpoint_id> ConnectPortsDialog::checked_ids(bool split) const
+QVector<vss::endpoint_id> ConnectPortsDialog::checked_ids(mode kind) const
 {
     const QVector<vss::endpoint_id>& wanted =
-        split ? split_targets_ : join_sources_;
+        kind == mode::split ? split_targets_
+        : kind == mode::bus ? bus_members_
+                            : join_sources_;
     QVector<vss::endpoint_id> ids;
     for (const port_view& port : ports_)
     {
@@ -981,12 +1042,29 @@ QVector<vss::endpoint_id> ConnectPortsDialog::checked_ids(bool split) const
 
 QVector<vss::endpoint_id> ConnectPortsDialog::target_ids() const
 {
-    return checked_ids(true);
+    return checked_ids(mode::split);
 }
 
 QVector<vss::endpoint_id> ConnectPortsDialog::source_ids() const
 {
-    return checked_ids(false);
+    return checked_ids(mode::join);
+}
+
+QVector<vss::endpoint_id> ConnectPortsDialog::member_ids() const
+{
+    return checked_ids(mode::bus);
+}
+
+void ConnectPortsDialog::set_member_ids(const QVector<vss::endpoint_id>& ids)
+{
+    bus_members_.clear();
+    for (const vss::endpoint_id id : ids)
+    {
+        if (find_port(id))
+            bus_members_.push_back(id);
+    }
+    rebuild_bus_list();
+    update_ui();
 }
 
 void ConnectPortsDialog::set_target_ids(const QVector<vss::endpoint_id>& ids)
@@ -1036,7 +1114,24 @@ void ConnectPortsDialog::show_backend_error(const vss::error_code& error,
                                             const QString& to)
 {
     last_error_ = error_text(error);
-    if (error == vss::errc::cycle_detected)
+    if (mode_ == mode::bus && error == vss::errc::cycle_detected)
+    {
+        error_->show_error(
+            tr("That link would create a loop"),
+            tr("A path leads out of the bus and back into it, so data would "
+               "go round forever. Nothing was changed. Remove that link "
+               "first, or choose different ports."),
+            last_error_);
+    }
+    else if (mode_ == mode::bus && error == vss::errc::already_exists)
+    {
+        error_->show_error(
+            tr("Could not create the link"),
+            tr("One of these ports is already on a bus. A port can be on one "
+               "bus only. Nothing was changed."),
+            last_error_);
+    }
+    else if (error == vss::errc::cycle_detected)
     {
         error_->show_error(
             tr("That link would create a loop"),
@@ -1096,7 +1191,7 @@ bool ConnectPortsDialog::submit()
     case mode::split:
     {
         from = single_name(split_source_id());
-        const QVector<vss::endpoint_id> targets = checked_ids(true);
+        const QVector<vss::endpoint_id> targets = checked_ids(mode::split);
         to = names_for(targets);
         linked = backend_.split(
             split_source_id(),
@@ -1106,12 +1201,20 @@ bool ConnectPortsDialog::submit()
     }
     case mode::join:
     {
-        const QVector<vss::endpoint_id> sources = checked_ids(false);
+        const QVector<vss::endpoint_id> sources = checked_ids(mode::join);
         from = names_for(sources);
         to = single_name(join_target_id());
         linked = backend_.join(
             std::vector<vss::endpoint_id>(sources.begin(), sources.end()),
             join_target_id(), options);
+        break;
+    }
+    case mode::bus:
+    {
+        const QVector<vss::endpoint_id> members = checked_ids(mode::bus);
+        from = names_for(members);
+        linked = backend_.bus(
+            std::vector<vss::endpoint_id>(members.begin(), members.end()));
         break;
     }
     }
@@ -1139,6 +1242,9 @@ bool ConnectPortsDialog::submit()
         break;
     case mode::join:
         result_summary_ = tr("Joined %1 into %2.").arg(from, to);
+        break;
+    case mode::bus:
+        result_summary_ = tr("Put %1 on a shared bus.").arg(from);
         break;
     }
     QDialog::accept();

@@ -995,3 +995,83 @@ TEST_CASE("shell: advanced docks follow the mode and the owner bar appears")
     REQUIRE(log_dock->isHidden());
     REQUIRE(json_dock->isHidden());
 }
+
+namespace
+{
+
+QString bus_document(const QString& links)
+{
+    return QStringLiteral(
+               "{\"version\":1,\"name\":\"lab\",\"ports\":["
+               "{\"name\":\"a\",\"kind\":\"virtual\"},"
+               "{\"name\":\"b\",\"kind\":\"virtual\"},"
+               "{\"name\":\"c\",\"kind\":\"virtual\"},"
+               "{\"name\":\"tap\",\"kind\":\"virtual\"}],\"links\":[") +
+           links + QStringLiteral("]}");
+}
+
+} // namespace
+
+TEST_CASE("json: a bus with a tap is valid and round trips")
+{
+    using namespace vss::gui;
+    const json_validation good =
+        validate_json_document(bus_document(QStringLiteral(
+            "{\"mode\":\"bus\",\"members\":[\"a\",\"b\",\"c\"]},"
+            "{\"mode\":\"join\",\"sources\":[\"a\",\"b\",\"c\"],"
+            "\"targets\":[\"tap\"],\"emulate_modem_lines\":false}")));
+    REQUIRE(good.valid());
+    REQUIRE_EQ(good.links, 2);
+    REQUIRE(good.formatted.contains(QStringLiteral("\"mode\": \"bus\"")));
+    REQUIRE(good.formatted.contains(QStringLiteral("\"members\"")));
+}
+
+TEST_CASE("json: a bus is checked for size, names, membership and loops")
+{
+    using namespace vss::gui;
+    const auto problem_of = [](const QString& links)
+    {
+        const json_validation checked =
+            validate_json_document(bus_document(links));
+        REQUIRE(!checked.valid());
+        REQUIRE(checked.problem.has_value());
+        return *checked.problem;
+    };
+
+    REQUIRE(problem_of(QStringLiteral("{\"mode\":\"bus\",\"members\":[\"a\"]}"))
+                .summary.contains(QStringLiteral("between 2 and 64 ports")));
+    REQUIRE(problem_of(QStringLiteral("{\"mode\":\"bus\"}"))
+                .summary.contains(QStringLiteral("between 2 and 64 ports")));
+    REQUIRE(problem_of(QStringLiteral(
+                           "{\"mode\":\"bus\",\"members\":[\"a\",\"zzz\"]}"))
+                .summary.contains(QStringLiteral("No port is called \"zzz\"")));
+    REQUIRE(problem_of(QStringLiteral("{\"mode\":\"bus\",\"members\":[\"a\","
+                                      "\"b\"]},"
+                                      "{\"mode\":\"bus\",\"members\":[\"b\","
+                                      "\"c\"]}"))
+                .summary.contains(QStringLiteral("one bus only")));
+    // A route out of the bus and back into it is a loop.
+    REQUIRE(problem_of(
+                QStringLiteral("{\"mode\":\"redirect\",\"sources\":[\"a\"],"
+                               "\"targets\":[\"tap\"]},"
+                               "{\"mode\":\"redirect\",\"sources\":[\"tap\"],"
+                               "\"targets\":[\"b\"]},"
+                               "{\"mode\":\"bus\",\"members\":[\"a\",\"b\"]}"))
+                .summary.contains(QStringLiteral("loop")));
+}
+
+TEST_CASE("json: a bus is refused plainly where the build has no bus")
+{
+    using namespace vss::gui;
+    const json_validation refused = validate_json_document(
+        bus_document(
+            QStringLiteral("{\"mode\":\"bus\",\"members\":[\"a\",\"b\"]}")),
+        false);
+    REQUIRE(!refused.valid());
+    REQUIRE(refused.problem.has_value());
+    REQUIRE(refused.problem->summary.contains(
+        QStringLiteral("Bus links are not available in this build")));
+
+    // A file without a bus is unaffected.
+    REQUIRE(validate_json_document(valid_document(), false).valid());
+}

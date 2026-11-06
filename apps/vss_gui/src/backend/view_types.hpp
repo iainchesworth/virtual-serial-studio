@@ -45,7 +45,9 @@ enum class link_shape
     split,
     join,
     one_way,
-    monitor
+    monitor,
+    /// A shared bus.  The members are `sources`; `targets` is empty.
+    bus
 };
 
 /// One endpoint as the GUI needs it.  Engine snapshots are converted here,

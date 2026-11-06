@@ -12,6 +12,7 @@ Put one narrow interface between the GUI and the engine, for example `StudioBack
 | Enumerate serial devices and com0com pairs | Known (`vss_cli devices`) | Use directly. |
 | Links: connect, split, join, redirect, monitor, merge policy interleave or owner | Known | Use directly. |
 | Owner arbitration: set owner, release owner | Known (`set_owner`, `release_owner` on the hub) | Verify the studio facade exposes it. |
+| **Shared bus link** (several ports on one wire, each hears all the others) | Provided by `vss_core` (`link_mode::bus`, `hub::bus`) and `vss::studio::bus`; `"mode": "bus"` with `members` in the JSON | The engine backend sets `Capabilities::shared_bus`. A backend without it keeps the star (a split from the master with a join tap): the Connect dialog shows "Shared bus" disabled with the tooltip "Not available in this build", the JSON editor says "Bus links are not available in this build" for a file that has one, and nothing simulates a bus out of other links. A bus has no modem lines and no owner, so the Line wiring and Owner tools skip it. |
 | Cycle refusal on add link | Known (engine refuses) | Map the error to the loop pattern. "Show the loop" computes the cycle from the link graph in the GUI. |
 | Events, counters, bounded traffic ring buffer | Known | Subscribe through the sink, marshal to the GUI thread, batch by refresh interval. |
 | Set DTR, RTS, BREAK. Read CTS, DSR, DCD, RI | Known | Use directly. Unsupported lines return an error, show a disabled control. |

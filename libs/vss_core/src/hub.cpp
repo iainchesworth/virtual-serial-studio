@@ -21,6 +21,10 @@ bool contains(const std::vector<endpoint_id>& values, endpoint_id value)
     return std::find(values.begin(), values.end(), value) != values.end();
 }
 
+/// Marks a node of the cycle graph as a bus rather than an endpoint.  Endpoint
+/// and link ids count up from one, so they never reach this bit.
+constexpr endpoint_id bus_node_tag = endpoint_id{1} << 63;
+
 unsigned default_thread_count()
 {
     const unsigned hardware = std::thread::hardware_concurrency();
@@ -152,8 +156,33 @@ result<void> hub::remove_endpoint(endpoint_id id)
 
         for (auto link = links_.begin(); link != links_.end();)
         {
-            const auto& record = *link->second;
-            if (contains(record.sources, id) || contains(record.targets, id))
+            auto& record = *link->second;
+            if (record.mode == link_mode::bus)
+            {
+                // A bus loses the member and goes on; with fewer than two
+                // left it is not a bus any more.
+                if (!contains(record.sources, id))
+                {
+                    ++link;
+                    continue;
+                }
+                record.sources.erase(std::remove(record.sources.begin(),
+                                                 record.sources.end(), id),
+                                     record.sources.end());
+                bus_of_.erase(id);
+                if (record.sources.size() >= 2)
+                {
+                    ++link;
+                    continue;
+                }
+                for (endpoint_id member : record.sources)
+                    bus_of_.erase(member);
+                const link_id removed = link->first;
+                link = links_.erase(link);
+                erase_routes(removed);
+            }
+            else if (contains(record.sources, id) ||
+                     contains(record.targets, id))
             {
                 const link_id removed = link->first;
                 link = links_.erase(link);
@@ -263,6 +292,55 @@ result<link_id> hub::monitor(endpoint_id from, endpoint_id to)
     return add_link(link_mode::one_way, {from}, {to}, options);
 }
 
+result<link_id> hub::bus(const std::vector<endpoint_id>& members,
+                         link_options options)
+{
+    if (members.size() < 2 || members.size() > max_bus_members)
+        return make_error_code(errc::invalid_argument);
+    if (options.policy != merge_policy::interleave)
+        return make_error_code(errc::unsupported);
+
+    const std::unordered_set<endpoint_id> unique(members.begin(),
+                                                 members.end());
+    if (unique.size() != members.size())
+        return make_error_code(errc::invalid_argument);
+
+    // A multi-drop wire pair has no modem lines to cross.
+    options.emulate_modem_lines = false;
+
+    std::unique_lock lock(mutex_);
+
+    for (endpoint_id id : members)
+    {
+        if (endpoints_.find(id) == endpoints_.end())
+            return make_error_code(errc::not_found);
+        if (bus_of_.find(id) != bus_of_.end())
+            return make_error_code(errc::already_exists);
+    }
+    if (bus_would_create_cycle(members))
+        return make_error_code(errc::cycle_detected);
+
+    auto record = std::make_shared<link_record>();
+    record->id = next_link_id_++;
+    record->mode = link_mode::bus;
+    record->options = options;
+    record->sources = members;
+
+    links_.emplace(record->id, record);
+
+    for (endpoint_id from : members)
+    {
+        bus_of_.emplace(from, record->id);
+        for (endpoint_id to : members)
+        {
+            if (from != to)
+                add_route(record->id, from, to);
+        }
+    }
+
+    return record->id;
+}
+
 result<link_id> hub::add_link(link_mode mode,
                               const std::vector<endpoint_id>& sources,
                               const std::vector<endpoint_id>& targets,
@@ -319,27 +397,73 @@ result<link_id> hub::add_link(link_mode mode,
     return record->id;
 }
 
-bool hub::would_create_cycle(endpoint_id from, endpoint_id to) const
+endpoint_id hub::cycle_node(endpoint_id id) const
 {
-    if (from == to)
-        return true;
+    const auto it = bus_of_.find(id);
+    return it == bus_of_.end() ? id : (bus_node_tag | it->second);
+}
 
+bool hub::reaches(endpoint_id start,
+                  const std::unordered_set<endpoint_id>& goals) const
+{
     std::unordered_set<endpoint_id> visited;
-    std::vector<endpoint_id> pending{to};
+    std::vector<endpoint_id> pending{start};
 
     while (!pending.empty())
     {
         const endpoint_id current = pending.back();
         pending.pop_back();
-        if (current == from)
+        if (goals.count(current) != 0)
             return true;
         if (!visited.insert(current).second)
             continue;
-        auto it = routes_.find(current);
+
+        // A bus node stands for all of its members; any of them may leave it.
+        std::vector<endpoint_id> members{current};
+        if ((current & bus_node_tag) != 0)
+        {
+            const auto bus = links_.find(current & ~bus_node_tag);
+            if (bus == links_.end())
+                continue;
+            members = bus->second->sources;
+        }
+
+        for (endpoint_id member : members)
+        {
+            const auto it = routes_.find(member);
+            if (it == routes_.end())
+                continue;
+            for (const auto& route : it->second)
+                pending.push_back(cycle_node(route.to));
+        }
+    }
+    return false;
+}
+
+bool hub::would_create_cycle(endpoint_id from, endpoint_id to) const
+{
+    // Endpoints of one bus are one node, so a route between two of them
+    // (which would deliver twice) is refused like a route to itself.
+    return reaches(cycle_node(to), {cycle_node(from)});
+}
+
+bool hub::bus_would_create_cycle(const std::vector<endpoint_id>& members) const
+{
+    // The members become one node.  Any existing route that leaves one of
+    // them and arrives at one of them again, directly or through other links,
+    // would be a loop through the bus.  None of the members is in a bus yet,
+    // so each stands for itself.
+    const std::unordered_set<endpoint_id> goals(members.begin(), members.end());
+    for (endpoint_id member : members)
+    {
+        const auto it = routes_.find(member);
         if (it == routes_.end())
             continue;
         for (const auto& route : it->second)
-            pending.push_back(route.to);
+        {
+            if (reaches(cycle_node(route.to), goals))
+                return true;
+        }
     }
     return false;
 }
@@ -365,9 +489,15 @@ void hub::erase_routes(link_id link)
 result<void> hub::disconnect(link_id id)
 {
     std::unique_lock lock(mutex_);
-    if (links_.find(id) == links_.end())
+    const auto found = links_.find(id);
+    if (found == links_.end())
         return make_error_code(errc::not_found);
-    links_.erase(id);
+    if (found->second->mode == link_mode::bus)
+    {
+        for (endpoint_id member : found->second->sources)
+            bus_of_.erase(member);
+    }
+    links_.erase(found);
     erase_routes(id);
     return {};
 }
@@ -415,6 +545,8 @@ result<void> hub::set_owner(link_id id, endpoint_id owner)
     if (it == links_.end())
         return make_error_code(errc::not_found);
     auto& record = *it->second;
+    if (record.mode == link_mode::bus)
+        return make_error_code(errc::unsupported);
     if (!contains(record.sources, owner))
         return make_error_code(errc::invalid_argument);
     record.owner.store(owner);
@@ -439,6 +571,8 @@ result<void> hub::set_link_wiring(link_id id, const modem_wiring& wiring)
         auto it = links_.find(id);
         if (it == links_.end())
             return make_error_code(errc::not_found);
+        if (it->second->mode == link_mode::bus)
+            return make_error_code(errc::unsupported);
         it->second->options.wiring = wiring;
 
         for (const auto& [from, routes] : routes_)

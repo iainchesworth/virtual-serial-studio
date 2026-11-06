@@ -17,7 +17,7 @@ Screen-specific strings are in `docs/screens/`. Take them exactly. This page hol
 | Program | An application that opens a port. |
 | Device | A real serial device on this PC. |
 | Linked pair | Two virtual ports wired like a null-modem cable. |
-| Link | A connection between ports: two-way, one-way, monitor, split, join. |
+| Link | A connection between ports: two-way, one-way, monitor, split, join, shared bus. |
 | Studio only | An in-process port that other programs cannot open. |
 | Fixture | A mock device for testing. |
 | Advanced mode | The same window with more tools. Not a separate edition. |

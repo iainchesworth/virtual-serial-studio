@@ -280,6 +280,31 @@ error_code validate(const document& value)
     {
         if (!contains_link_mode(link.mode))
             return make_error_code(errc::config_error);
+
+        if (link.mode == "bus")
+        {
+            // One broadcast domain: members only, no modem lines, no owner.
+            if (!link.sources.empty() || !link.targets.empty())
+                return make_error_code(errc::config_error);
+            if (link.members.size() < 2 ||
+                link.members.size() > max_bus_members)
+                return make_error_code(errc::config_error);
+            if (link.emulate_modem_lines ||
+                link.policy != merge_policy::interleave)
+                return make_error_code(errc::config_error);
+
+            std::set<std::string> members;
+            for (const auto& name : link.members)
+            {
+                if (names.find(name) == names.end())
+                    return make_error_code(errc::not_found);
+                if (!members.insert(name).second)
+                    return make_error_code(errc::config_error);
+            }
+            continue;
+        }
+        if (!link.members.empty())
+            return make_error_code(errc::config_error);
         if (link.sources.empty() || link.targets.empty())
             return make_error_code(errc::config_error);
 
@@ -351,6 +376,17 @@ result<std::string> to_json(const document& value, bool pretty)
     {
         json::object object;
         object["mode"] = link.mode;
+        if (link.mode == "bus")
+        {
+            json::array members;
+            for (const auto& name : link.members)
+                members.push_back(json::value(name));
+            object["members"] = std::move(members);
+            object["emulate_modem_lines"] = false;
+            object["policy"] = to_string(link.policy);
+            links.push_back(std::move(object));
+            continue;
+        }
         json::array sources;
         for (const auto& name : link.sources)
             sources.push_back(json::value(name));
@@ -436,8 +472,9 @@ result<document> from_json(std::string_view text)
 
             link_entry link;
             link.mode = string_member(entry, "mode", "duplex");
+            // A bus has no modem lines, so absent means off there.
             link.emulate_modem_lines =
-                bool_member(entry, "emulate_modem_lines", true);
+                bool_member(entry, "emulate_modem_lines", link.mode != "bus");
 
             auto sources = string_array(entry, "sources");
             if (!sources)
@@ -448,6 +485,11 @@ result<document> from_json(std::string_view text)
             if (!targets)
                 return make_error_code(errc::config_error);
             link.targets = std::move(*targets);
+
+            auto members = string_array(entry, "members");
+            if (!members)
+                return make_error_code(errc::config_error);
+            link.members = std::move(*members);
 
             const std::string policy = string_member(entry, "policy", "interleave");
             if (policy == "owner")

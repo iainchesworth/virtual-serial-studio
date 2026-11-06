@@ -686,6 +686,15 @@ result<link_id> studio::monitor(std::string_view from, std::string_view to)
     return hub_->monitor(first->id(), second->id());
 }
 
+result<link_id> studio::bus(const std::vector<std::string>& members)
+{
+    error_code ec;
+    const auto ids = resolve_all(members, ec);
+    if (ec)
+        return ec;
+    return hub_->bus(ids);
+}
+
 result<void> studio::disconnect(link_id id)
 {
     return hub_->disconnect(id);
@@ -844,19 +853,25 @@ result<void> studio::apply(const config::document& value,
     {
         std::vector<endpoint_id> sources;
         std::vector<endpoint_id> targets;
+        std::vector<endpoint_id> members;
         sources.reserve(link.sources.size());
         targets.reserve(link.targets.size());
+        members.reserve(link.members.size());
         for (const auto& name : link.sources)
             sources.push_back(ids.at(name));
         for (const auto& name : link.targets)
             targets.push_back(ids.at(name));
+        for (const auto& name : link.members)
+            members.push_back(ids.at(name));
 
         link_options options;
         options.emulate_modem_lines = link.emulate_modem_lines;
         options.policy = link.policy;
 
         result<link_id> added = make_error_code(errc::config_error);
-        if (link.mode == "duplex")
+        if (link.mode == "bus")
+            added = hub_->bus(members);
+        else if (link.mode == "duplex")
             added = hub_->connect(sources[0], targets[0], options);
         else if (link.mode == "split")
             added = hub_->split(sources[0], targets, options);
@@ -906,20 +921,27 @@ config::document studio::snapshot() const
                              : "split";
             break;
         case link_mode::one_way:
-            if (!link.options.emulate_modem_lines)
-                entry.mode = "monitor";
-            else if (link.sources.size() > 1)
+            // Many sources are a join whether or not it carries modem lines;
+            // a tap on a bus is one without.
+            if (link.sources.size() > 1)
                 entry.mode = "join";
+            else if (!link.options.emulate_modem_lines)
+                entry.mode = "monitor";
             else
                 entry.mode = "redirect";
             break;
+        case link_mode::bus:
+            entry.mode = "bus";
+            break;
         }
 
+        const bool bus = link.mode == link_mode::bus;
         for (const endpoint_id id : link.sources)
         {
             auto it = names.find(id);
-            if (it != names.end())
-                entry.sources.push_back(it->second);
+            if (it == names.end())
+                continue;
+            (bus ? entry.members : entry.sources).push_back(it->second);
         }
         for (const endpoint_id id : link.targets)
         {
@@ -928,7 +950,8 @@ config::document studio::snapshot() const
                 entry.targets.push_back(it->second);
         }
 
-        if (entry.sources.empty() || entry.targets.empty())
+        if (bus ? entry.members.size() < 2
+                : entry.sources.empty() || entry.targets.empty())
             continue;
 
         entry.emulate_modem_lines = link.options.emulate_modem_lines;

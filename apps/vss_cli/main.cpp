@@ -77,9 +77,20 @@ void print_usage()
         "  vss_cli join <uri> <uri> [<uri>...] --target=<uri>\n"
         "      Merge several publishers into one serial port.\n"
         "\n"
+        "  vss_cli bus [<uri>...] [--virtual=N] [--tap=<uri>|virtual]\n"
+        "              [--kind=auto|loopback|pty|windows-driver] "
+        "[--seconds=N]\n"
+        "      Put ports on one shared multi-drop bus: each hears every other\n"
+        "      and none hears itself.  Each <uri> is a port to attach; "
+        "--virtual\n"
+        "      adds N virtual ports for other programs to open.  --tap adds a\n"
+        "      listen-only port that hears every member and sends to none.\n"
+        "      Runs until Ctrl-C or SIGTERM, or for N seconds.\n"
+        "\n"
         "  vss_cli bridge <uri> <uri>\n"
         "      Join two transports back to back (for example serial to tcp).\n"
-        "      tcp-listen://host:port and udp-listen://host:port wait for other\n"
+        "      tcp-listen://host:port and udp-listen://host:port wait for "
+        "other\n"
         "      computers to connect instead of connecting out.\n"
         "\n"
         "  vss_cli loopback [--seconds=N]\n"
@@ -135,6 +146,15 @@ void print_topology(studio& app)
     std::printf("links: %zu\n", links.size());
     for (const auto& link : links)
     {
+        if (link.mode == vss::link_mode::bus)
+        {
+            std::printf("  [%llu] %-8s %zu members  bytes=%llu dropped=%llu\n",
+                        static_cast<unsigned long long>(link.id),
+                        vss::to_string(link.mode), link.sources.size(),
+                        static_cast<unsigned long long>(link.stats.bytes),
+                        static_cast<unsigned long long>(link.stats.dropped));
+            continue;
+        }
         std::printf("  [%llu] %-8s %zu -> %zu  bytes=%llu dropped=%llu\n",
                     static_cast<unsigned long long>(link.id),
                     vss::to_string(link.mode), link.sources.size(),
@@ -299,6 +319,115 @@ int command_join(const arguments& args)
     std::printf("joined %zu publisher(s) into %s (link %llu)\n", sources.size(),
                 target.c_str(), static_cast<unsigned long long>(*link));
     run_for(app, args.number("--seconds", 0), args.has("--verbose"));
+    return 0;
+}
+
+bool parse_virtual_kind(const std::string& kind, vss::virtual_port_kind& out)
+{
+    if (kind == "auto" || kind == "pty")
+        out = vss::virtual_port_kind::pty;
+    else if (kind == "loopback")
+        out = vss::virtual_port_kind::loopback;
+    else if (kind == "windows-driver")
+        out = vss::virtual_port_kind::windows_driver;
+    else
+        return false;
+    return true;
+}
+
+int command_bus(const arguments& args)
+{
+    catch_stop_signals();
+
+    vss::virtual_port_kind kind = vss::virtual_port_kind::pty;
+    if (!parse_virtual_kind(args.get("--kind", "auto"), kind))
+    {
+        std::fprintf(stderr, "unknown --kind=%s\n", args.get("--kind").c_str());
+        return 2;
+    }
+
+    const int virtual_count = args.number("--virtual", 0);
+    const std::size_t uri_count = args.positional.size() - 1;
+    if (virtual_count < 0 ||
+        uri_count + static_cast<std::size_t>(virtual_count) < 2)
+    {
+        std::fprintf(stderr, "bus needs at least two members: give URIs or "
+                             "--virtual=N\n");
+        return 2;
+    }
+
+    studio app;
+    std::vector<std::string> members;
+
+    for (std::size_t index = 1; index < args.positional.size(); ++index)
+    {
+        const std::string name = "member-" + std::to_string(members.size() + 1);
+        const auto attached = app.attach_serial(name, args.positional[index]);
+        if (!attached)
+        {
+            std::fprintf(stderr, "cannot open %s: %s\n",
+                         args.positional[index].c_str(),
+                         attached.error().message().c_str());
+            return 1;
+        }
+        members.push_back((*attached)->name());
+        std::printf("%s -> %s\n", (*attached)->name().c_str(),
+                    args.positional[index].c_str());
+    }
+
+    for (int index = 0; index < virtual_count; ++index)
+    {
+        const std::string name = "member-" + std::to_string(members.size() + 1);
+        const auto created = app.create_virtual_port(name, kind);
+        if (!created)
+        {
+            std::fprintf(stderr, "cannot create %s: %s\n", name.c_str(),
+                         created.error().message().c_str());
+            return 1;
+        }
+        members.push_back((*created)->name());
+        std::printf("%s -> %s\n", (*created)->name().c_str(),
+                    app.advertised_path((*created)->id()).c_str());
+    }
+
+    const auto bus = app.bus(members);
+    if (!bus)
+    {
+        std::fprintf(stderr, "bus failed: %s\n", bus.error().message().c_str());
+        return 1;
+    }
+
+    // The tap is outside the bus: a join from every member that the bus does
+    // not feed back, so the program on it hears everything and sends nothing.
+    const std::string tap = args.get("--tap");
+    if (!tap.empty())
+    {
+        const auto opened = tap == "virtual"
+                                ? app.create_virtual_port("tap", kind)
+                                : app.attach_serial("tap", tap);
+        if (!opened)
+        {
+            std::fprintf(stderr, "cannot open the tap: %s\n",
+                         opened.error().message().c_str());
+            return 1;
+        }
+        const auto tapped = app.join(members, (*opened)->name());
+        if (!tapped)
+        {
+            std::fprintf(stderr, "cannot tap the bus: %s\n",
+                         tapped.error().message().c_str());
+            return 1;
+        }
+        std::printf("tap -> %s\n",
+                    tap == "virtual"
+                        ? app.advertised_path((*opened)->id()).c_str()
+                        : tap.c_str());
+    }
+
+    std::printf("bus of %zu members (link %llu)\n", members.size(),
+                static_cast<unsigned long long>(*bus));
+    std::fflush(stdout);
+    run_until_stopped(app, args.number("--seconds", 0), args.has("--verbose"));
     return 0;
 }
 
@@ -691,6 +820,8 @@ int main(int argc, char** argv)
             return command_share(args);
         if (command == "join")
             return command_join(args);
+        if (command == "bus")
+            return command_bus(args);
         if (command == "bridge")
             return command_bridge(args);
         if (command == "loopback")
