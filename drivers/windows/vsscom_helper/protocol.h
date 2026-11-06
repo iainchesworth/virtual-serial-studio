@@ -85,7 +85,7 @@ enum
 enum
 {
     // The numbers a port may be given. The COM name database holds 256 ports by
-    // default, and a name above 9 needs the \.COMn form to open.
+    // default, and a name above 9 needs the \\.\COMn form to open.
     VSSCOM_HELPER_MIN_COM_NUMBER = 1,
     VSSCOM_HELPER_MAX_COM_NUMBER = 255
 };
@@ -138,7 +138,7 @@ typedef struct _VSSCOM_HELPER_REPLY
 // helper, which runs as SYSTEM and so may do what Device Manager does:
 //
 //   1. claim the new number in ComDB (refused if another device holds it, or if
-//      \.\COMn already exists);
+//      \\.\COMn already exists);
 //   2. write it as PortName in the device's hardware key and update its friendly
 //      name;
 //   3. restart the device, so that the driver reads the new PortName;

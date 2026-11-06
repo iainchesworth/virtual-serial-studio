@@ -288,7 +288,7 @@ Number* does, ask the helper service (`vsscom_helper`, installed with
 | Rule | How it is kept |
 |---|---|
 | 1 to 255 | The COM name database holds 256 ports by default. |
-| A number another device has is refused (`ERROR_ALREADY_ASSIGNED`) | The helper claims the number in the COM name database without forcing it, and also refuses a number whose `\.\COMn` already resolves. Real ports, com0com and ports that have gone but keep their name are all covered. |
+| A number another device has is refused (`ERROR_ALREADY_ASSIGNED`) | The helper claims the number in the COM name database without forcing it, and also refuses a number whose `\\.\COMn` already resolves. Real ports, com0com and ports that have gone but keep their name are all covered. |
 | Nothing changes unless all of it works | The number is claimed, `PortName` and the friendly name are written, the port is restarted and its name checked; a failure puts the old values back. The old number is released last. |
 | A program that has the port open makes it fail (`ERROR_BUSY`) | The helper opens the COM port itself for an instant before it restarts. A restart with a handle open fails and leaves the port unable to restart until it is removed and made again, so it is not tried. The hub handle must be closed by the caller; `create_driver_port` and `set_driver_com_number` in the studio do that. |
 | Only the user who made the port may change it | A user-mode port must be the pipe's own; a kernel-mode port's maker must be the caller's SID. |

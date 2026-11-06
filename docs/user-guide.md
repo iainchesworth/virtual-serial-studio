@@ -387,7 +387,7 @@ What to know:
   loops back, and bytes that are waiting carry on afterwards. If a program
   opens the port at that instant, Windows will not restart it again until the
   port is removed and made again.
-- Names above `COM9` must be written `\.\COM12` by programs that open ports by
+- Names above `COM9` must be written `\\.\COM12` by programs that open ports by
   name, which most do not. A program that opens `"COM%d"` fails above 9, so
   choose a number from 1 to 9 for such a program.
 

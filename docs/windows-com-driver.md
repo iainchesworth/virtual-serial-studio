@@ -174,7 +174,7 @@ for a port of the user-mode driver that the pipe made, and
 `VSSCOM_HELPER_OP_SET_COM_NUMBER_KM` for a port of the kernel-mode driver, where
 the helper asks the control device who made the port,
 `IOCTL_VSSCOM_CTL_GET_OWNER`, and compares the caller's SID). A number is taken
-if `ComDB` holds it or `\.\COMn` resolves, which covers real ports, com0com and
+if `ComDB` holds it or `\\.\COMn` resolves, which covers real ports, com0com and
 ports that have gone but keep their name. The range is 1 to 255.
 
 The studio asks for a number in `create_driver_port(..., com_number)`: it makes
