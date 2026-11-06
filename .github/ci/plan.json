@@ -35,11 +35,57 @@
     "cmake/**",
     "drivers/windows/vsscom/core/**"
   ],
-  "gui": [],
+  "gui": [
+    "apps/**",
+    "libs/**",
+    "cmake/**",
+    "CMakeLists.txt",
+    "CMakePresets.json",
+    "vcpkg.json",
+    "**/*.qml",
+    "**/*.ui",
+    "**/*.ts"
+  ],
   "machinery": [
     ".github/workflows/**",
     ".github/actions/**",
     ".github/ci/**",
-    ".github/toolchain-versions.json"
-  ]
+    ".github/toolchain-versions.json",
+    "tools/ci/**"
+  ],
+  "driver": [
+    "drivers/windows/**"
+  ],
+  "perf": [
+    "libs/**",
+    "perf/**",
+    "cmake/**",
+    "CMakeLists.txt",
+    "CMakePresets.json",
+    "vcpkg.json",
+    "drivers/windows/vsscom/core/**"
+  ],
+  "platform": [
+    "libs/**/platform/**",
+    "apps/**/platform/**",
+    "tests/**/platform/**",
+    "cmake/**",
+    "CMakeLists.txt",
+    "CMakePresets.json",
+    "vcpkg.json",
+    "tools/pty_loopback.py"
+  ],
+  "threads_always": [
+    "cmake/**",
+    "CMakeLists.txt",
+    "CMakePresets.json",
+    "vcpkg.json"
+  ],
+  "threads_scan": [
+    "libs/**",
+    "apps/**",
+    "tests/**",
+    "perf/**"
+  ],
+  "threads_tokens": "std::(thread|jthread|mutex|shared_mutex|recursive_mutex|timed_mutex|condition_variable|atomic|stop_token|stop_source|future|promise|async|latch|barrier|counting_semaphore|lock_guard|unique_lock|scoped_lock|memory_order)|\\bstrand\\b|co_spawn|io_context|boost::asio::(post|dispatch)|\\bQThread|\\bQMutex|QtConcurrent|thread_local"
 }

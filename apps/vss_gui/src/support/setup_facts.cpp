@@ -121,6 +121,12 @@ setup_row devices_row(const setup_facts& facts, const QStringList& paths,
     return row;
 }
 
+/// Either driver is enough for other programs to see Studio's ports.
+bool windows_ports_ready(const setup_facts& facts)
+{
+    return facts.driver_found || facts.com0com_found;
+}
+
 void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
                       const platform_facts& platform, bool checks_available,
                       const QStringList& paths)
@@ -136,6 +142,29 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             QCoreApplication::translate(
                 "SetupCheck", "Studio did not check for the virtual port "
                               "driver.")));
+    }
+    else if (facts.driver_found)
+    {
+        QString sentence = QCoreApplication::translate(
+            "SetupCheck", "The Virtual Serial Studio driver is installed, so "
+                          "other programs can see ports Studio makes as COM "
+                          "ports.");
+        if (!facts.driver_version.isEmpty())
+        {
+            sentence += QLatin1Char(' ');
+            sentence +=
+                QCoreApplication::translate("SetupCheck", "Driver version %1.")
+                    .arg(facts.driver_version);
+        }
+        if (facts.com0com_found)
+        {
+            sentence += QLatin1Char(' ');
+            sentence += QCoreApplication::translate(
+                "SetupCheck",
+                "com0com is also installed, and Studio tries its own driver "
+                "first.");
+        }
+        rows.push_back(ok_row(driver.title, sentence));
     }
     else if (facts.com0com_found)
     {
@@ -156,9 +185,10 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
     {
         driver.state = setup_state::attention;
         driver.sentence = QCoreApplication::translate(
-            "SetupCheck", "com0com was not found. Windows needs a driver "
-                          "before other programs can see virtual ports as "
-                          "COM ports.");
+            "SetupCheck", "Neither the Virtual Serial Studio driver nor "
+                          "com0com was found. Windows needs a driver before "
+                          "other programs can see virtual ports as COM "
+                          "ports.");
         driver.chip =
             QCoreApplication::translate("SetupCheck", "Needs attention");
         driver.action_text =
@@ -179,6 +209,14 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             QCoreApplication::translate(
                 "SetupCheck",
                 "Studio could not check for administrator rights.")));
+    }
+    else if (facts.driver_found)
+    {
+        rows.push_back(ok_row(
+            administrator.title,
+            QCoreApplication::translate(
+                "SetupCheck", "The Virtual Serial Studio driver makes ports "
+                              "without administrator rights.")));
     }
     else if (platform.elevated)
     {
@@ -436,7 +474,7 @@ setup_report build_setup_report(const setup_facts& facts,
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "All set");
 
-    if (windows && checks_available && !normalised.com0com_found)
+    if (windows && checks_available && !windows_ports_ready(normalised))
     {
         report.driver_note = QCoreApplication::translate(
             "SetupCheck",
@@ -454,7 +492,7 @@ setup_report build_setup_report(const setup_facts& facts,
     if (!checks_available)
         report.ports_ready = false;
     else if (windows)
-        report.ports_ready = normalised.com0com_found;
+        report.ports_ready = windows_ports_ready(normalised);
     else
         report.ports_ready = platform.pty_known && platform.pty_available;
 

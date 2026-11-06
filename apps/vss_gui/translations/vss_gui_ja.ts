@@ -441,8 +441,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>「最適なものを使う」は、Windows では Studio ドライバーまたは com0com を、Linux と macOS では疑似端末を使います。同時に最大 32 個まで作れます。複数のポートは port-1、port-2 のように名前が付きます。</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>最適なものを自動選択では、Windowsではcom0com、LinuxとmacOSでは疑似端末を使います。一度に最大32個まで作成できます。複数のポートには port-1、port-2 のような名前が付きます。</translation>
+            <translation type="vanished">最適なものを自動選択では、Windowsではcom0com、LinuxとmacOSでは疑似端末を使います。一度に最大32個まで作成できます。複数のポートには port-1、port-2 のような名前が付きます。</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -2271,7 +2275,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>セットアップチェックを表示</translation>
         </message>
@@ -2378,7 +2382,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>セットアップチェックを開く</translation>
         </message>
@@ -2393,17 +2397,22 @@ Networks: %5</source>
             <translation>セットアップに注意が必要です。新しいポートを他のプログラムが使えない可能性があります。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>準備完了。この PC は他のプログラムが開けるポートを作成できます (Virtual Serial Studio ドライバーを検出しました)。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>準備ができました。このPCは、他のプログラムが開けるポートを作成できます (com0comを検出)。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>セットアップに注意が必要です。ドライバーをインストールするまで、他のプログラムは新しいポートを認識できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>保存済みセットアップ</translation>
         </message>
@@ -2958,12 +2967,12 @@ Networks: %5</source>
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="194" />
+            <location filename="../src/dialogs/network_uri.cpp" line="213" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>tcp://192.168.1.50:4001 のようなアドレスを入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="200" />
+            <location filename="../src/dialogs/network_uri.cpp" line="219" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>1から65535までのポートを選んでください。</translation>
         </message>
@@ -3072,116 +3081,121 @@ Networks: %5</source>
             <translation>Windows ファイアウォールがこのポートをどう扱うかを表示します。同意するまで何も変更されません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>RFC 2217 にはパスワードがありません。このポートに届く人は誰でもデバイスを使えます。「このPCのみ (127.0.0.1)」を選ぶか、「詳細」でアドレスに ?allow=192.168.1.0/24 を付けて、接続できる相手を指定してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
             <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="706" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>アドレス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="300" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>アドレスを編集</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="323" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>アドレスを編集している間は、上の項目よりアドレスが優先されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="333" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>コマンドラインでの同じ操作</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="335" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="707" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="348" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>まずこのPCでテスト</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="350" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="353" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>ブリッジを開始</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="506" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>利用できるシリアルデバイスがありません。デバイスを接続してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="516" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1、%2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="517" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>実デバイス</translation>
         </message>
         <message>
             <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="572" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="586" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="630" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="640" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>他のコンピューターは、ポート%1でこのPCに接続し、%2と通信できます。データは双方向に流れ、モニターには両方向が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="648" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studioはポート%2で%1に接続し、%3と通信します。データは双方向に流れ、モニターには両方向が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="650" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>サーバー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="741" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>共有するデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="785" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>このビルドではネットワーク機能は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="786" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="812" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="821" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>ブリッジを開始できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="813" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>ポート%1はすでに使用されています。別のポートを選ぶか、使用しているプログラムを停止してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="822" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>アドレスが使用中か、相手のコンピューターが接続を拒否した可能性があります。アドレスを確認して、もう一度やり直してください。</translation>
         </message>
@@ -3378,11 +3392,13 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>名前は空いているCOM番号から提案されます。このビルドでは、上に表示された空きポートが選ばれます。LinuxとmacOSでは、ポートは /dev/pts/3 のようなパスで、自動的に選ばれます。</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windowsではこのペアに空いているcom0comのペアを使うため、管理者権限は求められません。</translation>
         </message>
@@ -3457,121 +3473,131 @@ Networks: %5</source>
             <translation>ポートの種類</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>Studio ドライバーがこのペアのポートを作成するため、Windows は管理者の許可を求めません。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>ペアを作成すると、Studio ドライバーが 2 つのポートを作成します。COM 番号は Windows が選びます。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>1つ目のプログラム用の空きCOMポートがありません</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>2つ目のプログラム用の空きCOMポートがありません</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>ペアの作成時に選ばれます</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>このビルドではリンクペアは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>リンクペアにはドライバーが必要です。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>空いているドライバーのペアが足りません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>&lt;b&gt;%1&lt;/b&gt;が送信したものは&lt;b&gt;%2&lt;/b&gt;に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>%1が送信したものは%2に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>&lt;b&gt;%1&lt;/b&gt;が送信したものは&lt;b&gt;%2&lt;/b&gt;に届き、その逆も同様です。モデム制御線はクロスされません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>%1が送信したものは%2に届き、その逆も同様です。モデム制御線はクロスされません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>1つ目のポートが送信したものは2つ目に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>ペアの名前を入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>別の空きCOMポート</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1はすでに使用されています。%2を試してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>ペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Studioが他のプログラムから開けるペアを作成するには、Windowsにシリアルドライバーが必要です。何も変更されていません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>このビルドではリンクペアを作成できません。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studioは1つ目のポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation>セットアップを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studioは2つ目のポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>このPCは、他のプログラムが開ける2つのポートをペアに提供できなくなりました。何も変更されていません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studioは2つのポートをリンクできませんでした。何も変更されていません。</translation>
         </message>
@@ -3904,145 +3930,155 @@ Networks: %5</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>他のプログラムはこのポートを開けません。Studio の中にだけ存在します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>他のプログラムはこのポートを開けません。ドライバーをインストールして、開けるポートを作成してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>セットアップチェックを開く</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>プログラムで、シリアルポートとして&lt;b&gt;%1&lt;/b&gt;を選んでください。ボーレートなどの設定は、そのプログラムで選びます。Virtual Serial Studioの実行中は、ポートは利用可能なままです。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>プログラムで、シリアルポートとして%1を選んでください。ボーレートなどの設定は、そのプログラムで選びます。Virtual Serial Studioの実行中は、ポートは利用可能なままです。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>このパスはVirtual Serial Studioの実行中に存在します。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>詳細を表示</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>名前</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>種類</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>パス</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>保存済みセットアップ内のエントリ (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>コマンドラインでの同じ操作</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>%1を何かに接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>別のものを作成</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>完了</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>待機中</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>%1を開いたプログラムはまだありません。開かれると、このパネルが更新されます。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>プログラム接続済み</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>プログラムが%1を使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>詳細を隠す</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>プロセス内ループバック</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>疑似端末</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>Windowsドライバー</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>自動 (Studio ドライバーに解決)</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>自動 (com0comに解決)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>実デバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>自動</translation>
         </message>
@@ -4281,37 +4317,47 @@ Networks: %5</source>
             <translation>%1と%2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="141" />
+            <location filename="../src/dialogs/share_plan.cpp" line="156" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>Studioは、他のプログラムが開けるポートを作成できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="147" />
+            <location filename="../src/dialogs/share_plan.cpp" line="162" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>%2個のプログラムのうち、ポートを開けるのは%1個だけです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="155" />
+            <location filename="../src/dialogs/share_plan.cpp" line="171" />
+            <source>The Studio driver gives one user at most 16 ports, and Studio already holds %1.</source>
+            <translation>Studio ドライバーが 1 人のユーザーに与えるポートは最大 16 個で、Studio はすでに %1 個を保持しています。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="174" />
+            <source>The Studio driver gives one user at most 16 ports.</source>
+            <translation>Studio ドライバーが 1 人のユーザーに与えるポートは最大 16 個です。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="179" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>外部のプログラムごとに専用のドライバーペアが必要ですが、Studioが見つけた空きペアは1つです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="184" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>外部のプログラムごとに専用のドライバーペアが必要ですが、Studioは空きペアを見つけられませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="165" />
+            <location filename="../src/dialogs/share_plan.cpp" line="189" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>外部のプログラムごとに専用のドライバーペアが必要ですが、Studioが見つけた空きペアは%1個です。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="180" />
+            <location filename="../src/dialogs/share_plan.cpp" line="204" />
             <source>The %1 port works only inside Studio.</source>
             <translation>%1のポートはStudio内でのみ動作します。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="186" />
+            <location filename="../src/dialogs/share_plan.cpp" line="210" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>残りの%1個のポートはStudio内でのみ動作します。</translation>
         </message>
@@ -4909,8 +4955,8 @@ Networks: %5</source>
             <location filename="../src/support/permission_rows.cpp" line="145" />
             <location filename="../src/support/permission_rows.cpp" line="279" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
-            <location filename="../src/support/setup_facts.cpp" line="423" />
-            <location filename="../src/support/setup_facts.cpp" line="434" />
+            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="472" />
             <source>Not checked yet</source>
             <translation>未確認</translation>
         </message>
@@ -4930,172 +4976,196 @@ Networks: %5</source>
             <translation>Studioはシリアルデバイスを確認しませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="130" />
+            <location filename="../src/support/setup_facts.cpp" line="136" />
             <source>Virtual port driver</source>
             <translation>仮想ポートのドライバー</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="136" />
+            <location filename="../src/support/setup_facts.cpp" line="142" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>Studioは仮想ポートのドライバーを確認しませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="144" />
+            <location filename="../src/support/setup_facts.cpp" line="148" />
+            <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
+            <translation>Virtual Serial Studio ドライバーがインストールされているため、他のプログラムは Studio が作るポートを COM ポートとして認識できます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="156" />
+            <source>Driver version %1.</source>
+            <translation>ドライバーのバージョン: %1。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="162" />
+            <source>com0com is also installed, and Studio tries its own driver first.</source>
+            <translation>com0com もインストールされていますが、Studio は先に自分のドライバーを試します。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="173" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0comが%nペアでインストールされているため、他のプログラムから仮想ポートがCOMポートとして見えます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="149" />
+            <location filename="../src/support/setup_facts.cpp" line="178" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0comがインストールされているため、他のプログラムから仮想ポートがCOMポートとして見えます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="158" />
             <source>com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
-            <translation>com0comが見つかりません。他のプログラムから仮想ポートをCOMポートとして見るには、Windowsにドライバーが必要です。</translation>
+            <translation type="vanished">com0comが見つかりません。他のプログラムから仮想ポートをCOMポートとして見るには、Windowsにドライバーが必要です。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="187" />
+            <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
+            <translation>Virtual Serial Studio ドライバーも com0com も見つかりませんでした。他のプログラムが仮想ポートを COM ポートとして認識するには、Windows にドライバーが必要です。</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="84" />
             <location filename="../src/support/permission_rows.cpp" line="161" />
-            <location filename="../src/support/setup_facts.cpp" line="163" />
-            <location filename="../src/support/setup_facts.cpp" line="262" />
-            <location filename="../src/support/setup_facts.cpp" line="302" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="340" />
             <source>Needs attention</source>
             <translation>要対応</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="165" />
+            <location filename="../src/support/setup_facts.cpp" line="195" />
             <source>Install com0com</source>
             <translation>com0comをインストール</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="173" />
+            <location filename="../src/support/setup_facts.cpp" line="203" />
             <source>Administrator rights</source>
             <translation>管理者権限</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="179" />
+            <location filename="../src/support/setup_facts.cpp" line="209" />
             <source>Studio could not check for administrator rights.</source>
             <translation>Studioは管理者権限を確認できませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="187" />
+            <location filename="../src/support/setup_facts.cpp" line="217" />
+            <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
+            <translation>Virtual Serial Studio ドライバーは管理者権限なしでポートを作成します。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="225" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>Studioは管理者として実行されているため、リンクペアを作成できます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="195" />
+            <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>新しいリンクペアの作成には、ペアごとに1回、管理者権限が必要です。それ以外の操作は管理者権限なしで動作します。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="205" />
+            <location filename="../src/support/setup_facts.cpp" line="243" />
             <source>Needed later</source>
             <translation>後で必要</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="206" />
+            <location filename="../src/support/setup_facts.cpp" line="244" />
             <source>Restart as administrator</source>
             <translation>管理者として再起動</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="218" />
+            <location filename="../src/support/setup_facts.cpp" line="256" />
             <source>Carry on without a driver</source>
             <translation>ドライバーなしで続ける</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="219" />
+            <location filename="../src/support/setup_facts.cpp" line="257" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>Studio内のみのポート、モニター、送信パネルは、そのまま試用できます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="223" />
+            <location filename="../src/support/setup_facts.cpp" line="261" />
             <source>Continue in test mode</source>
             <translation>テストモードで続ける</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="236" />
+            <location filename="../src/support/setup_facts.cpp" line="274" />
             <source>Pseudo terminals</source>
             <translation>疑似端末</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="242" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>Studioは疑似端末が利用できるかを確認しませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="249" />
+            <location filename="../src/support/setup_facts.cpp" line="287" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>疑似端末が利用できるため、他のプログラムが新しい仮想ポートを開けます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="257" />
+            <location filename="../src/support/setup_facts.cpp" line="295" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>疑似端末が利用できません。他のプログラムは新しい仮想ポートを開けません。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="269" />
+            <location filename="../src/support/setup_facts.cpp" line="307" />
             <source>Serial port access</source>
             <translation>シリアルポートへのアクセス</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="270" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Serial port group membership</source>
             <translation>シリアルポートのグループ所属</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="277" />
+            <location filename="../src/support/setup_facts.cpp" line="315" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>StudioにはmacOS用のグループ確認がありません。デバイスを開けない場合は、/dev 内のアクセス許可を確認してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="281" />
+            <location filename="../src/support/setup_facts.cpp" line="319" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>Studioはdialoutグループへの所属を確認しませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="290" />
+            <location filename="../src/support/setup_facts.cpp" line="328" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>dialoutグループに所属しているため、プログラムからシリアルデバイスを開けます。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="298" />
+            <location filename="../src/support/setup_facts.cpp" line="336" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>お使いのアカウントはdialoutグループに所属していないため、プログラムからシリアルデバイスを開けない場合があります。</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="176" />
-            <location filename="../src/support/setup_facts.cpp" line="304" />
+            <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>追加方法</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="428" />
+            <location filename="../src/support/setup_facts.cpp" line="466" />
             <source>1 thing to fix</source>
             <translation>対処が必要な項目: 1件</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="429" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>%n things to fix</source>
             <translation>対処が必要な項目: %n件</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="441" />
+            <location filename="../src/support/setup_facts.cpp" line="479" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>ドライバーをインストールするまで、新しいポートはVirtual Serial Studio内でのみ動作します。他のプログラムからは見えません。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="499" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>LinuxとmacOSでは、このチェックは代わりに疑似端末と、シリアルポートのグループへの所属状況を確認します。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="526" />
+            <location filename="../src/support/setup_facts.cpp" line="564" />
             <source>The application path is not known.</source>
             <translation>アプリケーションのパスがわかりません。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="547" />
+            <location filename="../src/support/setup_facts.cpp" line="585" />
             <source>You declined the Windows permission prompt, so Studio keeps running as before. Nothing was changed.</source>
             <translation>Windows の許可の確認を拒否したため、Studio はこれまでどおり動作します。何も変更されていません。</translation>
         </message>
@@ -5104,12 +5174,12 @@ Networks: %5</source>
             <translation type="vanished">Windowsが昇格での再起動を許可しませんでした。スタートメニューからもう一度お試しください。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="551" />
+            <location filename="../src/support/setup_facts.cpp" line="589" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>WindowsがVirtual Serial Studioを管理者として再起動できませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="559" />
+            <location filename="../src/support/setup_facts.cpp" line="597" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>管理者としての再起動はWindowsでのみ利用できます。</translation>
         </message>
@@ -5199,7 +5269,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/setup_check_dialog.cpp" line="225" />
-            <location filename="../src/support/setup_facts.cpp" line="437" />
+            <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>準備完了</translation>
         </message>
@@ -5281,12 +5351,13 @@ Networks: %5</source>
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="213" />
+            <location filename="../src/dialogs/share_plan.cpp" line="237" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="222" />
+            <location filename="../src/dialogs/share_plan.cpp" line="243" />
+            <location filename="../src/dialogs/share_plan.cpp" line="251" />
             <source>A free port</source>
             <translation>空いているポート</translation>
         </message>
@@ -5314,13 +5385,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>デバイスを複数のプログラムで共有</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studioはデバイスを一度だけ開き、各プログラムに専用のポートを提供します。</translation>
         </message>
@@ -5443,7 +5514,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>代わりにネットワークデバイス</translation>
         </message>
@@ -5586,213 +5657,219 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>これは仮想ポートで、デバイスではありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>シリアルデバイスです。Studioがすでに使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>代わりにデバイスを使う</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>%1を複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>各プログラムに専用のポートが割り当てられます。Studioはデバイスのデータをそのすべてにコピーします。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>各プログラムで、これらのポートのうち1つを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>ターミナル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>テストツール</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>ロガー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>プログラム-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>プログラム%1の名前</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>はい</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>いいえ、Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>警告: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windowsが管理者権限を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>%1をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>残りの%1個をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて1つのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2個すべてのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>別のペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windowsがドライバーのペアを作成しませんでした。管理者権限を許可してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>このビルドでは共有は利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>%1を共有できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>以前の共有は削除されました。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>セットアップは変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1は1個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1は%2個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>他のプログラム用ではありません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>コピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>%1をコピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1が受信するものはすべて、1つのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1が受信するものはすべて、%2個すべてのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>各プログラムがポートを開くと、「待機中」の表示が「プログラム接続済み」に変わります。</translation>
         </message>
@@ -8238,162 +8315,162 @@ Networks: %5</source>
     <context>
         <name>ordinal</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
             <source>first</source>
             <translation>1番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
             <source>second</source>
             <translation>2番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
             <source>third</source>
             <translation>3番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
             <source>fourth</source>
             <translation>4番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
             <source>fifth</source>
             <translation>5番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
             <source>sixth</source>
             <translation>6番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
             <source>seventh</source>
             <translation>7番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
             <source>eighth</source>
             <translation>8番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
             <source>ninth</source>
             <translation>9番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
             <source>tenth</source>
             <translation>10番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
             <source>eleventh</source>
             <translation>11番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
             <source>twelfth</source>
             <translation>12番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
             <source>thirteenth</source>
             <translation>13番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
             <source>fourteenth</source>
             <translation>14番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
             <source>fifteenth</source>
             <translation>15番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
             <source>sixteenth</source>
             <translation>16番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
             <source>seventeenth</source>
             <translation>17番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <location filename="../src/dialogs/share_plan.cpp" line="128" />
             <source>eighteenth</source>
             <translation>18番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <location filename="../src/dialogs/share_plan.cpp" line="129" />
             <source>nineteenth</source>
             <translation>19番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="130" />
             <source>twentieth</source>
             <translation>20番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <location filename="../src/dialogs/share_plan.cpp" line="131" />
             <source>twenty-first</source>
             <translation>21番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <location filename="../src/dialogs/share_plan.cpp" line="132" />
             <source>twenty-second</source>
             <translation>22番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <location filename="../src/dialogs/share_plan.cpp" line="133" />
             <source>twenty-third</source>
             <translation>23番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <location filename="../src/dialogs/share_plan.cpp" line="134" />
             <source>twenty-fourth</source>
             <translation>24番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <location filename="../src/dialogs/share_plan.cpp" line="135" />
             <source>twenty-fifth</source>
             <translation>25番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="136" />
             <source>twenty-sixth</source>
             <translation>26番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <location filename="../src/dialogs/share_plan.cpp" line="137" />
             <source>twenty-seventh</source>
             <translation>27番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <location filename="../src/dialogs/share_plan.cpp" line="138" />
             <source>twenty-eighth</source>
             <translation>28番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <location filename="../src/dialogs/share_plan.cpp" line="139" />
             <source>twenty-ninth</source>
             <translation>29番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <location filename="../src/dialogs/share_plan.cpp" line="140" />
             <source>thirtieth</source>
             <translation>30番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>thirty-first</source>
             <translation>31番目</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <location filename="../src/dialogs/share_plan.cpp" line="142" />
             <source>thirty-second</source>
             <translation>32番目</translation>
         </message>
@@ -8920,8 +8997,12 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>「最適なものを使う」は、Windows では Studio ドライバーまたは com0com を、Linux と macOS では疑似端末を使います。同時に最大 32 個まで作れます。複数のポートは port-1、port-2 のように名前が付きます。</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>最適なものを自動選択では、Windowsではcom0com、LinuxとmacOSでは疑似端末を使います。一度に最大32個まで作成できます。複数のポートには port-1、port-2 のような名前が付きます。</translation>
+            <translation type="vanished">最適なものを自動選択では、Windowsではcom0com、LinuxとmacOSでは疑似端末を使います。一度に最大32個まで作成できます。複数のポートには port-1、port-2 のような名前が付きます。</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -10297,7 +10378,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>セットアップチェックを表示</translation>
         </message>
@@ -10404,7 +10485,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>セットアップチェックを開く</translation>
         </message>
@@ -10419,17 +10500,22 @@ Networks: %5</source>
             <translation>セットアップに注意が必要です。新しいポートを他のプログラムが使えない可能性があります。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>準備完了。この PC は他のプログラムが開けるポートを作成できます (Virtual Serial Studio ドライバーを検出しました)。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>準備ができました。このPCは、他のプログラムが開けるポートを作成できます (com0comを検出)。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>セットアップに注意が必要です。ドライバーをインストールするまで、他のプログラムは新しいポートを認識できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>保存済みセットアップ</translation>
         </message>
@@ -10982,116 +11068,121 @@ Networks: %5</source>
             <translation>Windows ファイアウォールがこのポートをどう扱うかを表示します。同意するまで何も変更されません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>RFC 2217 にはパスワードがありません。このポートに届く人は誰でもデバイスを使えます。「このPCのみ (127.0.0.1)」を選ぶか、「詳細」でアドレスに ?allow=192.168.1.0/24 を付けて、接続できる相手を指定してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
             <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="706" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>アドレス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="300" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>アドレスを編集</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="323" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>アドレスを編集している間は、上の項目よりアドレスが優先されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="333" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>コマンドラインでの同じ操作</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="335" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="707" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="348" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>まずこのPCでテスト</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="350" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="353" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>ブリッジを開始</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="506" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>利用できるシリアルデバイスがありません。デバイスを接続してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="516" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1、%2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="517" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>実デバイス</translation>
         </message>
         <message>
             <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="572" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="586" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="630" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="640" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>他のコンピューターは、ポート%1でこのPCに接続し、%2と通信できます。データは双方向に流れ、モニターには両方向が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="648" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studioはポート%2で%1に接続し、%3と通信します。データは双方向に流れ、モニターには両方向が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="650" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>サーバー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="741" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>共有するデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="785" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>このビルドではネットワーク機能は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="786" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="812" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="821" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>ブリッジを開始できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="813" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>ポート%1はすでに使用されています。別のポートを選ぶか、使用しているプログラムを停止してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="822" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>アドレスが使用中か、相手のコンピューターが接続を拒否した可能性があります。アドレスを確認して、もう一度やり直してください。</translation>
         </message>
@@ -11176,11 +11267,13 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>名前は空いているCOM番号から提案されます。このビルドでは、上に表示された空きポートが選ばれます。LinuxとmacOSでは、ポートは /dev/pts/3 のようなパスで、自動的に選ばれます。</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windowsではこのペアに空いているcom0comのペアを使うため、管理者権限は求められません。</translation>
         </message>
@@ -11255,121 +11348,131 @@ Networks: %5</source>
             <translation>ポートの種類</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>Studio ドライバーがこのペアのポートを作成するため、Windows は管理者の許可を求めません。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>ペアを作成すると、Studio ドライバーが 2 つのポートを作成します。COM 番号は Windows が選びます。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>1つ目のプログラム用の空きCOMポートがありません</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>2つ目のプログラム用の空きCOMポートがありません</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>ペアの作成時に選ばれます</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>このビルドではリンクペアは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>リンクペアにはドライバーが必要です。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>空いているドライバーのペアが足りません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>&lt;b&gt;%1&lt;/b&gt;が送信したものは&lt;b&gt;%2&lt;/b&gt;に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>%1が送信したものは%2に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>&lt;b&gt;%1&lt;/b&gt;が送信したものは&lt;b&gt;%2&lt;/b&gt;に届き、その逆も同様です。モデム制御線はクロスされません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>%1が送信したものは%2に届き、その逆も同様です。モデム制御線はクロスされません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>1つ目のポートが送信したものは2つ目に届き、その逆も同様です。標準のヌルモデムケーブルと同様に、DTRはDSRに、RTSはCTSに配線されています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>ペアの名前を入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>別の空きCOMポート</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1はすでに使用されています。%2を試してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>ペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Studioが他のプログラムから開けるペアを作成するには、Windowsにシリアルドライバーが必要です。何も変更されていません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>このビルドではリンクペアを作成できません。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studioは1つ目のポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation>セットアップを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studioは2つ目のポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>このPCは、他のプログラムが開ける2つのポートをペアに提供できなくなりました。何も変更されていません。セットアップチェックを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studioは2つのポートをリンクできませんでした。何も変更されていません。</translation>
         </message>
@@ -11548,145 +11651,155 @@ Networks: %5</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>他のプログラムはこのポートを開けません。Studio の中にだけ存在します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>他のプログラムはこのポートを開けません。ドライバーをインストールして、開けるポートを作成してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>セットアップチェックを開く</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>プログラムで、シリアルポートとして&lt;b&gt;%1&lt;/b&gt;を選んでください。ボーレートなどの設定は、そのプログラムで選びます。Virtual Serial Studioの実行中は、ポートは利用可能なままです。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>プログラムで、シリアルポートとして%1を選んでください。ボーレートなどの設定は、そのプログラムで選びます。Virtual Serial Studioの実行中は、ポートは利用可能なままです。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>このパスはVirtual Serial Studioの実行中に存在します。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>詳細を表示</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>名前</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>種類</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>パス</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>保存済みセットアップ内のエントリ (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>コマンドラインでの同じ操作</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>%1を何かに接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>別のものを作成</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>完了</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>待機中</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>%1を開いたプログラムはまだありません。開かれると、このパネルが更新されます。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>プログラム接続済み</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>プログラムが%1を使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>詳細を隠す</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>プロセス内ループバック</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>疑似端末</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>Windowsドライバー</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>自動 (Studio ドライバーに解決)</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>自動 (com0comに解決)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>実デバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>自動</translation>
         </message>
@@ -11877,13 +11990,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>デバイスを複数のプログラムで共有</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studioはデバイスを一度だけ開き、各プログラムに専用のポートを提供します。</translation>
         </message>
@@ -12006,7 +12119,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>代わりにネットワークデバイス</translation>
         </message>
@@ -12149,213 +12262,219 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>これは仮想ポートで、デバイスではありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>シリアルデバイスです。Studioがすでに使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>代わりにデバイスを使う</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>%1を複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>各プログラムに専用のポートが割り当てられます。Studioはデバイスのデータをそのすべてにコピーします。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>各プログラムで、これらのポートのうち1つを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>ターミナル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>テストツール</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>ロガー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>プログラム-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>プログラム%1の名前</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>はい</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>いいえ、Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>警告: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windowsが管理者権限を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>%1をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>残りの%1個をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて1つのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2個すべてのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>別のペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windowsがドライバーのペアを作成しませんでした。管理者権限を許可してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>このビルドでは共有は利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>%1を共有できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>以前の共有は削除されました。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>セットアップは変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1は1個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1は%2個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>他のプログラム用ではありません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>コピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>%1をコピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1が受信するものはすべて、1つのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1が受信するものはすべて、%2個すべてのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>各プログラムがポートを開くと、「待機中」の表示が「プログラム接続済み」に変わります。</translation>
         </message>

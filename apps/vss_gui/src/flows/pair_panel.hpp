@@ -102,6 +102,7 @@ private:
     bool advanced_ = false;
     bool can_create_ = false;
     bool driver_available_ = false;
+    bool studio_driver_ = false;
     int free_pair_count_ = 0;
 
     QLineEdit* pair_name_ = nullptr;
