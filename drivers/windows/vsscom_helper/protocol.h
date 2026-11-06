@@ -114,9 +114,10 @@ typedef struct _VSSCOM_HELPER_REQUEST
 //   ERROR_ALREADY_ASSIGNED    SET_COM_NUMBER: another device has that COM number: a real
 //                             port, com0com, or a port that is gone but keeps the
 //                             name; nothing was changed;
-//   ERROR_BUSY                SET_COM_NUMBER: a program has the port open, or its hub
-//                             end is open, so Windows could not restart it; nothing
-//                             was changed;
+//   ERROR_BUSY                SET_COM_NUMBER: a program has the port open (nothing was
+//                             changed), or its hub end was open, so Windows could not
+//                             restart it (the old values are back, but the port cannot
+//                             restart again until it is removed and made again);
 //   ERROR_NOT_FOUND           (also) SET_COM_NUMBER: no such port, or this pipe does not
 //                             hold it;
 //   ERROR_GEN_FAILURE         SET_COM_NUMBER: Windows would not take the change; the

@@ -41,6 +41,9 @@ driver builds in CI from the same sources; its guest results are in the section
 | Hub end: a second handle on each port that carries its bytes, line settings and lines, with flow control both ways | runs in both guests (tests D8 to D13) |
 | Control device: ports on demand, removed with the handle that made them | runs in both guests (tests D14 to D19) |
 | Write timeouts, and who may open the hub end and make how many ports | tests D18, D20 and D21 |
+| `SET_HANDFLOW` drives DTR and RTS: enable, disable, handshake on the receive buffer, RTS toggle | tests D23 to D25; the rules are unit-tested on the host |
+| Revoke: the hub takes the port back from a program, and the hub state names the process | tests D26 and D27 |
+| COM numbers: choose one when the port is made, change it later, refuse one that is taken (the helper service, for either driver) | tests D28 to D31 and the client test C2 |
 | Driver Verifier (standard settings) on `vsscom.sys` | the whole suite passes with it on in the Windows 11 guest |
 | The studio opening a port (`create_driver_port`) | runs in a guest with `test-client.ps1` (test C1) |
 | Signing | not done: the package is unsigned |
@@ -140,7 +143,7 @@ mode is on. The test certificate suffices for the second case only.
 | `vsscom/core/` | shared: the serial rules in plain C; built for the host and unit-tested |
 | `vsscom/vsscom.h`, `vsscom/public.h` | shared: the device context and the entry points; what user mode sees (interface GUIDs, control codes, the hub state, the control requests) |
 | `vsscom/driver.c` | kernel mode: driver entry, the name and type of the device object; tells a port from the control device |
-| `vsscom/control.c` | kernel mode: the control device, the bus that makes ports on demand |
+| `vsscom/control.c` | kernel mode: the control device, the bus that makes ports on demand, and who made which port (for the helper) |
 | `vsscom/access.c` | kernel mode: who opened a handle, and who may open a hub end |
 | `vsscom/km/vsscom_platform.h` | kernel mode: the headers and the clock the shared code uses |
 | `vsscom/vsscom.inf`, `vsscom/vsscomctl.inf` | kernel mode: the ports (class Ports) and the control device (class System) |
@@ -149,13 +152,14 @@ mode is on. The test certificate suffices for the second case only.
 | `vsscom_um/um/vsscom_platform.h` | user mode: the headers and the clock the shared code uses |
 | `vsscom_um/vsscom_um.inf` | user mode: the ports (class Ports) |
 | `vsscom_um/um/vsscom_um.h` | user mode: how the driver reads the owner of a port the helper made |
-| `vsscom_helper/main.cpp` | the helper service: the pipe, the checks and the software devices |
+| `vsscom_helper/main.cpp` | the helper service: the pipe, the checks, the software devices and the changes of COM number |
 | `vsscom_helper/lease_table.hpp` | the helper's slot and quota rules, with nothing of Windows in them; unit-tested |
+| `vsscom_helper/com_number.hpp` | the rules for COM numbers and friendly names, with nothing of Windows in them; unit-tested |
 | `vsscom_helper/protocol.h` | what the studio, the helper and the user-mode driver share: the pipe, the messages, the owner property |
 | `vsscom_helper/install-helper.ps1` | installs or removes the service |
 | `trust/install-trust.ps1` | makes a machine trust the owner's CA and the signer of a package, so a test-signed package installs with test signing off |
 | `build.ps1` | restore, build, `InfVerif`, `Inf2Cat`, for either driver, the helper or all |
-| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D22, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
+| `test/` | guest scripts, for either driver (`-Flavour kmdf` or `umdf`): `install-driver.ps1` (two ports made by hand, `-Count` for more, and for the kernel-mode driver the control device; `-Helper` installs the helper service), `test-driver.ps1` (tests D1 to D31, and H14 for the helper), `test-client.ps1` (the studio client against the driver), `uninstall-driver.ps1` |
 
 The two drivers include their own `vsscom_platform.h`, found first on the include
 path of each project, so the shared sources need no preprocessor conditionals.
@@ -191,6 +195,27 @@ the write stalls at the head of the queue, and a write that runs out completes
 with the bytes it had taken, which stay queued for the hub. With no write
 timeout set, a write waits for the hub for as long as it takes.
 
+`IOCTL_SERIAL_SET_HANDFLOW` is applied to DTR and RTS. DTR control enable or
+disable drives the line when the settings are given; handshake makes it follow
+the receive buffer (low when `XoffLimit` bytes or fewer are free, high again at
+`XonLimit` bytes waiting) and then `SET_DTR` and `SET_RTS` on it fail with
+`STATUS_INVALID_PARAMETER`, as on `serial.sys`; RTS toggle holds RTS high from
+the first queued byte until the last has had time to leave at the baud rate and
+frame in force. The settings go back to none each time the program closes the
+port. Stopping output on CTS or DSR, and XON/XOFF, are not applied. The rules
+are in `vsscom/core` and are unit-tested.
+
+The hub state names the process that has the COM port open (`AppProcessId`).
+`IOCTL_VSSCOM_HUB_REVOKE`, on the hub handle, takes the port back from that
+program: its waiting reads, writes and `WaitCommEvent` end with
+`STATUS_FILE_FORCED_CLOSED`, every later request on its handle fails the same
+way, `AppOpen` clears, the port resets as a close would reset it, and another
+program can open it at once. The old handle stays in the process, and closing it
+later changes nothing. Only the user who owns the port has a hub handle, so only
+that user can revoke (`access.c`). Both are version 3 of the interface
+(`VSSCOM_VERSION`); the studio refuses a driver of version 2.
+
+
 ## Ports on demand
 
 Install the package once and the control device appears in Device Manager under
@@ -209,10 +234,16 @@ above. The control requests and their structures are in `public.h`.
 | At most 32 ports exist at once, and one user holds at most 16 | The first is a limit for the whole machine, the second stops one user taking every slot. A slot is free again only when Windows has removed the device. |
 | Only the user who made a port can open its hub end | Another user cannot take the device side of the port. |
 | The control device is open to SYSTEM, administrators and signed-in users | A normal user can make a port without elevation. |
+| `IOCTL_VSSCOM_CTL_GET_OWNER` answers SYSTEM and administrators only | The helper service uses it to check who made a port before it changes the port's COM number; other users cannot read who owns a port. |
 
 The slot, and not a name, identifies the port while Windows builds it, because
 the `COMn` name comes from the Ports class installer at the end of the build.
 Programs find the port by its device instance id.
+
+The COM number is not part of the create request, which keeps `Flags` and
+`Reserved` at zero: a number can only be changed on a port that exists, by a
+program with administrator rights. The helper service does it for ports of either
+driver; see "COM numbers" below and `docs/windows-com-driver.md`.
 
 ## Ports on demand for the user-mode driver: the helper service
 
@@ -240,6 +271,31 @@ device first, then the helper, then takes a free port that already exists.
 The helper runs `vsscom_helper.exe --console` in the foreground (elevated) for a
 trial. It writes only short lines to the debugger. The protocol is in
 `vsscom_helper/protocol.h`.
+
+## COM numbers
+
+A port takes the lowest free COM number when Windows builds it, and keeps it for
+the slot from then on. To choose one, as Device Manager's *Advanced > COM Port
+Number* does, ask the helper service (`vsscom_helper`, installed with
+`install-helper.ps1`; it serves ports of either driver):
+
+| Request | What it does |
+|---|---|
+| `VSSCOM_HELPER_OP_SET_COM_NUMBER` | The port is one of the user-mode driver's that this pipe made (`Slot`, `Argument` = the number). |
+| `VSSCOM_HELPER_OP_SET_COM_NUMBER_KM` | The port is one of the kernel-mode driver's. The helper asks the control device who made it (`IOCTL_VSSCOM_CTL_GET_OWNER`) and compares that with the caller. |
+
+| Rule | How it is kept |
+|---|---|
+| 1 to 255 | The COM name database holds 256 ports by default. |
+| A number another device has is refused (`ERROR_ALREADY_ASSIGNED`) | The helper claims the number in the COM name database without forcing it, and also refuses a number whose `\.\COMn` already resolves. Real ports, com0com and ports that have gone but keep their name are all covered. |
+| Nothing changes unless all of it works | The number is claimed, `PortName` and the friendly name are written, the port is restarted and its name checked; a failure puts the old values back. The old number is released last. |
+| A program that has the port open makes it fail (`ERROR_BUSY`) | The helper opens the COM port itself for an instant before it restarts. A restart with a handle open fails and leaves the port unable to restart until it is removed and made again, so it is not tried. The hub handle must be closed by the caller; `create_driver_port` and `set_driver_com_number` in the studio do that. |
+| Only the user who made the port may change it | A user-mode port must be the pipe's own; a kernel-mode port's maker must be the caller's SID. |
+| The reply comes when the port is running again under the new name | The studio can open the hub end at once. |
+
+A `PortName` written into the device's key before the port is built does not
+work: the install then fails. The change is therefore always made on a port that
+exists.
 
 ## Try it in a guest
 

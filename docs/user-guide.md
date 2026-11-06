@@ -347,6 +347,50 @@ have no physical wires.
 Some of these depend on what the engine can do; see
 [what this build cannot do](#what-this-build-cannot-do).
 
+## Choosing a COM number (Windows)
+
+Many older programs open one fixed port, `COM3` for example, and keep it in a
+setting file, or list only `COM1` to `COM4`. A port from the Studio driver can
+be given the number you choose, as in Device Manager's *Advanced > COM Port
+Number*, so the program always finds it.
+
+From the command line:
+
+```
+vss_cli virtual --kind=windows-driver --com=3
+```
+
+or in a saved topology, as an optional field on a virtual port (1 to 255):
+
+```json
+{ "name": "master", "kind": "virtual", "virtual_kind": "windows-driver", "com_number": 3 }
+```
+
+Studio also remembers the number it was asked for and saves it with the topology.
+A port with no `com_number` takes the lowest free number, and the same slot keeps
+its number from one run to the next, but a different order of creation can give a
+different one. The Studio window does not offer to choose or change a number
+yet; the library does (`set_driver_com_number`, `studio::set_com_number`).
+
+What to know:
+
+- **The helper service is needed.** A COM number is held in Windows' COM name
+  database, which only an administrator may change. The service
+  `vsscom_helper` does what Device Manager does for you; install it with
+  `install-helper.ps1`. Without it, a port without a number is made as before,
+  and a request for a number fails with a message that says so.
+- **A number that another device has is refused.** A real port, a com0com port
+  or a port that has gone but still keeps its name, are all "taken". Studio makes
+  no port and says which number was refused, and the number stays free.
+- **To change the number of a port that exists, close the program using it
+  first.** The port restarts, which takes a second or two. For that moment it
+  loops back, and bytes that are waiting carry on afterwards. If a program
+  opens the port at that instant, Windows will not restart it again until the
+  port is removed and made again.
+- Names above `COM9` must be written `\.\COM12` by programs that open ports by
+  name, which most do not. A program that opens `"COM%d"` fails above 9, so
+  choose a number from 1 to 9 for such a program.
+
 ## Saving, opening and templates
 
 A setup is a JSON document that lists the ports and links.
@@ -490,9 +534,11 @@ available in this build". It never pretends. At the moment:
   cannot, so a busy device fails when you attach it.
 - **Real-device templates**: they need the attach dialog to open from a
   template.
-- **"Waiting for a program" and "Program connected" on Windows and macOS**:
-  Studio can see whether a program has opened a port only for a pseudo terminal
-  on Linux. Everywhere else a port reads **Open** and no more.
+- **"Waiting for a program" and "Program connected" on macOS, and for any
+  Windows port that is not from the Studio driver**: Studio can see whether a
+  program has opened a port for a pseudo terminal on Linux and for a port of the
+  Studio driver on Windows (it also logs each time with the process). Everywhere
+  else a port reads **Open** and no more.
 - An **RFC 2217 server**: Studio can connect to one but cannot act as one.
 
 The reasons and the plan for each are in
@@ -504,6 +550,13 @@ The reasons and the plan for each are in
 Open **Tools → Setup check**. Without com0com, *Best available* falls back to an
 in-process loopback, whose path is `loopback:<name>` and which other
 applications cannot open. Pseudo terminals do not exist on Windows.
+
+**A COM number was refused.** `COM7 is already used by another device` means a
+real port, com0com or a port that was removed but keeps the name has it; pick
+another number, or remove the old device in Device Manager (*View > Show hidden
+devices*). `COM numbers need the Virtual Serial Studio driver and its helper
+service` means `vsscom_helper` is not installed or is older than the driver.
+`a program has COM7 open` means close it, then ask again.
 
 **A pseudo terminal path is shown but another program cannot open it.** On
 Linux the path is `/dev/pts/N`; it exists only while the studio is running.
@@ -531,6 +584,7 @@ again.
 | Task | Command |
 |---|---|
 | Create one virtual port | `vss_cli virtual --kind=auto` |
+| Create a Windows port with the COM number you choose | `vss_cli virtual --kind=windows-driver --com=3` |
 | Create a port with a stable name (Linux, macOS) | `vss_cli vport --name=ttyVSS0` |
 | Create and hold a topology | `vss_cli run topology.json` |
 | Share a device | `vss_cli share serial://COM3 --listeners=3` |
