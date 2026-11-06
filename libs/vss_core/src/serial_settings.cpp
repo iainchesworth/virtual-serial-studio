@@ -160,6 +160,8 @@ result<flow_control_mode> parse_flow_control(std::string_view text)
 std::string to_label(const line_format& format)
 {
     std::string out = std::to_string(format.baud_rate);
+    if (!format.framing_known)
+        return out;
     out.push_back(' ');
     out.push_back(static_cast<char>('0' + (format.data_bits % 10)));
     out.push_back(parity_letter(format.parity));

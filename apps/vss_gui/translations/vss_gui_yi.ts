@@ -12229,6 +12229,26 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortModel</name>
         <message>
+            <location filename="../src/panes/port_model.cpp" line="364" />
+            <source>Program set %1</source>
+            <translation>דאס פּראָגראַם האָט באַשטימט: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="372" />
+            <source>Clients connected: %1</source>
+            <translation>פֿאַרבונדענע קליענטן: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="370" />
+            <source>No remote connected</source>
+            <translation>קיין ווײַטער קאָמפּיוטער איז נישט פֿאַרבונדן</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="375" />
+            <source>Differs from %1 in baud rate or framing</source>
+            <translation>אַנדערש ווי %1 אין גיכקייט אָדער פֿאָרמאַט</translation>
+        </message>
+        <message>
             <location filename="../src/panes/port_model.cpp" line="182" />
             <source>%1, %2, %3</source>
             <translation>%1, %2, %3</translation>

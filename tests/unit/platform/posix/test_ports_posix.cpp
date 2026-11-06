@@ -205,21 +205,32 @@ TEST_CASE("pseudo terminal: the baud rate and framing a program sets are reporte
     settings.c_cflag |= CS7 | PARENB | CSTOPB;
     REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &settings), 0);
 
+    // The baud rate always comes through.  Whether the framing does is up to
+    // the system: Linux forces the slave to 8N1 whatever a program asks for,
+    // macOS keeps it.  The port says which it is, and never claims a framing
+    // the program did not choose.
     const auto reported = created->port->peer_format();
     REQUIRE(reported.has_value());
     REQUIRE_EQ(reported->baud_rate, 9600u);
-    REQUIRE_EQ(reported->data_bits, 7u);
-    REQUIRE(reported->parity == parity_mode::even);
-    REQUIRE(reported->stop_bits == stop_bits_mode::two);
+    if (reported->framing_known)
+    {
+        REQUIRE_EQ(reported->data_bits, 7u);
+        REQUIRE(reported->parity == parity_mode::even);
+        REQUIRE(reported->stop_bits == stop_bits_mode::two);
 
-    // Odd parity and one stop bit.
-    settings.c_cflag |= PARODD;
-    settings.c_cflag &= ~static_cast<tcflag_t>(CSTOPB);
-    REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &settings), 0);
-    const auto odd = created->port->peer_format();
-    REQUIRE(odd.has_value());
-    REQUIRE(odd->parity == parity_mode::odd);
-    REQUIRE(odd->stop_bits == stop_bits_mode::one);
+        // Odd parity and one stop bit.
+        settings.c_cflag |= PARODD;
+        settings.c_cflag &= ~static_cast<tcflag_t>(CSTOPB);
+        REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &settings), 0);
+        const auto odd = created->port->peer_format();
+        REQUIRE(odd.has_value());
+        REQUIRE(odd->parity == parity_mode::odd);
+        REQUIRE(odd->stop_bits == stop_bits_mode::one);
+    }
+    else
+    {
+        REQUIRE_EQ(to_label(*reported), std::string("9600"));
+    }
 
     // Back to where it started: no longer a program's choice.
     REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &original), 0);

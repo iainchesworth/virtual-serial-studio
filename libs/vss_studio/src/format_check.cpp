@@ -46,9 +46,13 @@ find_format_mismatches(const std::vector<endpoint_info>& endpoints,
             const auto it = known.find(id);
             if (it == known.end())
                 continue;
-            if (!mismatch.members.empty() &&
-                !(mismatch.members.front().format == it->second))
-                differs = true;
+            // Every pair counts: a member that knows only its baud rate agrees
+            // with two that differ in framing, and they still differ.
+            for (const auto& other : mismatch.members)
+            {
+                if (!same_format(other.format, it->second))
+                    differs = true;
+            }
             mismatch.members.push_back({id, it->second});
         }
         if (differs)

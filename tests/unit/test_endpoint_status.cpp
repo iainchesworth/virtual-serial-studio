@@ -288,3 +288,49 @@ TEST_CASE("format check: only the links that differ are listed")
     REQUIRE_EQ(found[0].link, link_id{2});
     REQUIRE_EQ(found[1].link, link_id{3});
 }
+
+TEST_CASE("line format: a side that knows only its baud rate agrees on framing")
+{
+    line_format baud_only = format(9600);
+    baud_only.framing_known = false;
+    baud_only.data_bits = 8;
+
+    // The label is the rate alone, so nothing is claimed about the framing.
+    REQUIRE_EQ(to_label(baud_only), std::string("9600"));
+
+    // Same rate: not a difference, whatever the other side's framing.
+    REQUIRE(same_format(baud_only, format(9600, 7, parity_mode::even)));
+    REQUIRE(same_format(format(9600, 7, parity_mode::even), baud_only));
+    // A different rate is a difference whether or not the framing is known.
+    REQUIRE(!same_format(baud_only, format(19200)));
+    // Two full formats compare on all four.
+    REQUIRE(same_format(format(9600), format(9600)));
+    REQUIRE(!same_format(format(9600, 8), format(9600, 7)));
+}
+
+TEST_CASE("format check: a member that knows only its baud rate")
+{
+    line_format baud_only = format(9600);
+    baud_only.framing_known = false;
+
+    const auto only = [&](line_format other)
+    {
+        const std::vector<endpoint_info> endpoints{
+            info_of(1, endpoint_kind::virtual_port, baud_only),
+            info_of(2, endpoint_kind::virtual_port, other)};
+        return find_format_mismatches(endpoints, {link_of(1, {1}, {2})}).size();
+    };
+    REQUIRE_EQ(only(format(9600, 7, parity_mode::even)), std::size_t{0});
+    REQUIRE_EQ(only(format(19200)), std::size_t{1});
+
+    // Two full formats that differ in framing still differ when a third member
+    // knows only its rate: every pair is compared, not just the first.
+    const std::vector<endpoint_info> three{
+        info_of(1, endpoint_kind::virtual_port, baud_only),
+        info_of(2, endpoint_kind::virtual_port, format(9600, 8)),
+        info_of(3, endpoint_kind::virtual_port, format(9600, 7))};
+    REQUIRE_EQ(find_format_mismatches(three, {link_of(1, {1, 2, 3}, {},
+                                                      link_mode::bus)})
+                   .size(),
+               std::size_t{1});
+}

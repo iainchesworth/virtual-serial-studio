@@ -794,7 +794,7 @@ void EngineStudioBackend::rebuild()
                 continue;
             for (const auto& other : mismatch.members)
             {
-                if (other.format == member.format)
+                if (vss::same_format(other.format, member.format))
                     continue;
                 const auto peer = std::find_if(
                     next_ports.begin(), next_ports.end(),

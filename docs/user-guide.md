@@ -375,11 +375,14 @@ about the program or the computer behind it:
 
 - **The speed a program set.** "Program set 19200 7E2" is the baud rate, data
   bits, parity and stop bits the program chose with `SetCommState` (Windows
-  driver ports) or `tcsetattr` (Linux and macOS pseudo terminals). Studio does
-  not guess: a port nobody has configured, a TCP or UDP pipe and a mock fixture
-  say nothing. On a pseudo terminal, a program that sets exactly 38400 8N1
-  cannot be told from one that set nothing, and the last setting stays after the
-  program closes the port.
+  driver ports) or `tcsetattr` (pseudo terminals). Studio does not guess: a port
+  nobody has configured, a TCP or UDP pipe and a mock fixture say nothing. On a
+  Linux pseudo terminal the kernel forces the slave to 8N1 whatever a program
+  asks for, so only the baud rate is known and the row says "Program set 19200"
+  with no framing; macOS keeps the framing. Studio asks the system which it is.
+  A program that sets exactly 38400 8N1 on a pseudo terminal cannot be told from
+  one that set nothing, and the last setting stays after the program closes the
+  port.
 - **Clients of a listener.** A `tcp-listen`, `udp-listen` or `rfc2217-listen`
   port says "Clients connected: 2", or "No remote connected" when nobody has
   joined. A device that has dropped off a bus is silent, as an unplugged one

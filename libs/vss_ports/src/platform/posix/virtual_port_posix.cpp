@@ -52,14 +52,20 @@ unsigned baud_from_speed(speed_t speed) noexcept
 }
 
 /// The baud rate and framing in `settings`, or empty when its rate is not one
-/// of those above.  Sticky (mark and space) parity is a Linux-only flag that
-/// is not read here, so it shows as odd or even.
-std::optional<line_format> format_from_termios(const struct termios& settings)
+/// of those above.  `framing_kept` says whether this system lets a program
+/// change the framing of a pseudo terminal (see #pty_keeps_framing); when it
+/// does not, only the baud rate is reported.  Sticky (mark and space) parity
+/// is a Linux-only flag that is not read here, so it shows as odd or even.
+std::optional<line_format> format_from_termios(const struct termios& settings,
+                                               bool framing_kept)
 {
     line_format out;
     out.baud_rate = baud_from_speed(::cfgetospeed(&settings));
     if (out.baud_rate == 0)
         return std::nullopt;
+    out.framing_known = framing_kept;
+    if (!framing_kept)
+        return out;
 
     switch (settings.c_cflag & CSIZE)
     {
@@ -80,15 +86,41 @@ std::optional<line_format> format_from_termios(const struct termios& settings)
     return out;
 }
 
+/// Whether a program's choice of data bits and parity survives on this
+/// system's pseudo terminals.  Linux forces the slave to 8 data bits and no
+/// parity whatever a program asks for; macOS keeps what is set.  Asked of the
+/// system itself, on the slave of a port nobody has opened yet, rather than
+/// assumed from its name; the slave is put back as it was.
+bool pty_keeps_framing(int slave)
+{
+    struct termios original{};
+    if (slave < 0 || ::tcgetattr(slave, &original) != 0)
+        return false;
+
+    struct termios probe = original;
+    probe.c_cflag &= ~static_cast<tcflag_t>(CSIZE | PARODD);
+    probe.c_cflag |= CS7 | PARENB;
+    bool kept = false;
+    if (::tcsetattr(slave, TCSANOW, &probe) == 0)
+    {
+        struct termios now{};
+        if (::tcgetattr(slave, &now) == 0)
+            kept = (now.c_cflag & CSIZE) == CS7 && (now.c_cflag & PARENB) != 0;
+    }
+    ::tcsetattr(slave, TCSANOW, &original);
+    return kept;
+}
+
 /// A pseudo terminal pair.  The master is ours; the slave path is handed to
 /// the rest of the world.
 class pty_transport final : public transport
 {
 public:
     pty_transport(const executor_type& executor, int master, int slave,
-                  std::string path, std::string name)
+                  std::string path, std::string name, bool framing_kept)
         : executor_(executor), descriptor_(executor, master), slave_fd_(slave),
-          path_(std::move(path)), name_(std::move(name))
+          path_(std::move(path)), name_(std::move(name)),
+          framing_kept_(framing_kept)
     {
         boost::system::error_code ignored;
         descriptor_.non_blocking(true, ignored);
@@ -178,7 +210,8 @@ public:
     /// from that start is a program's choice; a program that sets exactly 38400
     /// 8N1 is not told apart from none.  After the program closes the port the
     /// last setting stays, because Studio's own descriptor keeps the slave
-    /// open.
+    /// open.  Linux forces the slave to 8N1 whatever a program asks for, so
+    /// there only the baud rate is reported (`framing_known` is false).
     std::optional<line_format> peer_format() const override
     {
         const auto now = read_format();
@@ -195,13 +228,14 @@ private:
         struct termios settings{};
         if (::tcgetattr(descriptor_.native_handle(), &settings) != 0)
             return std::nullopt;
-        return format_from_termios(settings);
+        return format_from_termios(settings, framing_kept_);
     }
 
     executor_type executor_;
     // Mutable: asking for the native handle is not a const call in Asio.
     mutable boost::asio::posix::stream_descriptor descriptor_;
     std::optional<line_format> initial_format_;
+    bool framing_kept_ = false;
     int slave_fd_ = -1;
     std::string path_;
     std::string name_;
@@ -247,9 +281,10 @@ platform_create_pty(const transport::executor_type& executor,
             ::tcsetattr(slave, TCSANOW, &settings);
         }
     }
+    const bool framing_kept = pty_keeps_framing(slave);
 
     auto transport_port = std::make_shared<pty_transport>(
-        executor, master, slave, slave_path, name);
+        executor, master, slave, slave_path, name, framing_kept);
 
     virtual_port_result out;
     out.port = std::move(transport_port);
