@@ -15,6 +15,7 @@
 #include <vss/studio/benchmark.hpp>
 #include <vss/studio/capture.hpp>
 #include <vss/studio/replay.hpp>
+#include <vss/studio/responder.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
@@ -160,6 +161,16 @@ void print_usage()
         "      (the default) sends the bytes the recorded port received, W the\n"
         "      bytes written to it.  --from keeps the records of one recorded\n"
         "      port.  A loop lasts as long as the capture did.\n"
+        "\n"
+        "  vss_cli respond <script.json> [<topology.json>]\n"
+        "                  (--uri=<uri> | --port=<name>) [--seconds=N]\n"
+        "      Make one port act as a device, or as a master that polls.  The\n"
+        "      script is a JSON file of its own: rules (\"when these bytes\n"
+        "      arrive, exactly or under a mask, send those bytes after N ms,\n"
+        "      give or take some jitter\") and an optional timed poll list.  It\n"
+        "      is not part of the topology file.  The port is the one a program\n"
+        "      would open, as for play.  Runs until Ctrl-C or SIGTERM, or for N\n"
+        "      seconds.\n"
         "\n"
         "  vss_cli bench --from=<uri> --to=<uri> [--bytes=1MB] [--chunk=4KB]\n"
         "      Measure a real end-to-end transfer.\n"
@@ -994,6 +1005,72 @@ int command_play(const arguments& args)
     return 0;
 }
 
+int command_respond(const arguments& args)
+{
+    if (args.positional.size() < 2)
+    {
+        std::fprintf(stderr, "respond needs a script file\n");
+        return 2;
+    }
+    const std::string& file = args.positional[1];
+
+    std::string detail;
+    const auto script = vss::load_responder_script(file, &detail);
+    if (!script)
+    {
+        std::fprintf(stderr, "cannot use %s: %s\n", file.c_str(),
+                     detail.c_str());
+        return 1;
+    }
+
+    catch_stop_signals();
+    studio app;
+    if (const int code = open_ports(app, args, 2); code >= 0)
+        return code;
+    const auto port = chosen_port(app, args, "respond");
+    if (!port)
+        return 2;
+
+    auto running = vss::responder::start(app.engine(), port, *script);
+    if (!running)
+    {
+        std::fprintf(stderr, "cannot start the responder: %s\n",
+                     running.error().message().c_str());
+        return 1;
+    }
+
+    std::printf("%s answers on %s: %zu rule(s)%s\n", file.c_str(),
+                port->name().c_str(), script->rules.size(),
+                script->poll ? ", with a poll list" : "");
+    std::fflush(stdout);
+
+    const int seconds = args.number("--seconds", 0);
+    const auto started = std::chrono::steady_clock::now();
+    while (!g_stop_requested.load())
+    {
+        if (seconds > 0 &&
+            std::chrono::steady_clock::now() - started >=
+                std::chrono::seconds(seconds))
+            break;
+        // A script that only polls, for a limited number of cycles, is done
+        // when its last step has gone.
+        if (script->rules.empty() && (*running)->poll_finished())
+        {
+            std::this_thread::sleep_for(200ms);
+            break;
+        }
+        std::this_thread::sleep_for(20ms);
+    }
+
+    (*running)->stop();
+    std::printf("matched %llu request(s), sent %llu repl(ies) and %llu poll "
+                "step(s)\n",
+                static_cast<unsigned long long>((*running)->matches()),
+                static_cast<unsigned long long>((*running)->replies_sent()),
+                static_cast<unsigned long long>((*running)->polls_sent()));
+    return 0;
+}
+
 int command_bench(const arguments& args)
 {
     const std::string from = args.get("--from");
@@ -1176,6 +1253,8 @@ int main(int argc, char** argv)
             return command_capture(args);
         if (command == "play")
             return command_play(args);
+        if (command == "respond")
+            return command_respond(args);
         if (command == "bench")
             return command_bench(args);
         if (command == "selftest")

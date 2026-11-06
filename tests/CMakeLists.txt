@@ -24,6 +24,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_benchmark.cpp
   unit/test_capture.cpp
   unit/test_replay.cpp
+  unit/test_responder.cpp
   unit/test_studio.cpp
   unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp
