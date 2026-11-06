@@ -309,8 +309,10 @@ TEST_CASE("studio: a link's delay and jitter apply and snapshot, on a bus and a 
 
     // A bus made in code takes the same options.
     studio direct;
-    REQUIRE(direct.apply(config::document{
-        .name = "x", .ports = {document.ports[0], document.ports[1]}}));
+    config::document pair;
+    pair.name = "x";
+    pair.ports = {document.ports[0], document.ports[1]};
+    REQUIRE(direct.apply(pair));
     link_options options;
     options.delay_ms = 40;
     const auto made = direct.bus({"a", "b"}, options);

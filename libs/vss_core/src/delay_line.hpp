@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_CORE_DELAY_LINE_HPP
-#define VSS_CORE_DELAY_LINE_HPP
+#pragma once
 
 #include <vss/core/bytes.hpp>
 #include <vss/core/endpoint.hpp>
@@ -68,5 +67,3 @@ private:
 };
 
 } // namespace vss
-
-#endif // VSS_CORE_DELAY_LINE_HPP
