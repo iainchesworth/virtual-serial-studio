@@ -152,6 +152,21 @@ QString remove_link_action()
     return QCoreApplication::translate("Topology", "Remove link");
 }
 
+QString tidy_layout_action()
+{
+    return QCoreApplication::translate("Topology", "Tidy layout");
+}
+
+QString fit_action()
+{
+    return QCoreApplication::translate("Topology", "Fit");
+}
+
+QString layout_tidied()
+{
+    return QCoreApplication::translate("Topology", "Layout tidied.");
+}
+
 QString port_count(int count)
 {
     return count == 1

@@ -348,6 +348,13 @@ void ShellWindow::build_actions()
             if (topology_ != nullptr)
                 topology_->fit_content();
         });
+    add(QStringLiteral("topology.tidy"), tr("Tidy layout"),
+        tr("arrange align overlap"), {}, {}, action_level::advanced,
+        [this]
+        {
+            if (topology_ != nullptr)
+                topology_->tidy_layout();
+        });
 
     // Tools
     add(QStringLiteral("tools.search"), tr("Search actions"),
@@ -559,6 +566,7 @@ void ShellWindow::build_menus()
     add(topology, QStringLiteral("topology.wiring"));
     add(topology, QStringLiteral("topology.owner"));
     topology->addSeparator();
+    add(topology, QStringLiteral("topology.tidy"));
     add(topology, QStringLiteral("topology.fit"));
 
     QMenu* tools = add_menu(tr("&Tools"));

@@ -9,6 +9,7 @@
 #include "theme/theme.hpp"
 #include "topology/topology_text.hpp"
 
+#include <QApplication>
 #include <QFontMetricsF>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -107,7 +108,7 @@ NodeItem::NodeItem(node_data data, const QSizeF& size,
 {
     setAcceptedMouseButtons(Qt::LeftButton);
     setAcceptHoverEvents(true);
-    setCursor(Qt::PointingHandCursor);
+    setCursor(Qt::OpenHandCursor);
     setToolTip(data_.tooltip);
     setZValue(1.0);
 }
@@ -258,12 +259,61 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
+        pressed_ = true;
+        dragging_ = false;
+        press_scene_ = event->scenePos();
+        press_position_ = pos();
         if (callbacks_.pressed)
             callbacks_.pressed(data_.id);
         event->accept();
         return;
     }
     QGraphicsItem::mousePressEvent(event);
+}
+
+void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (!pressed_ || !(event->buttons() & Qt::LeftButton))
+    {
+        QGraphicsItem::mouseMoveEvent(event);
+        return;
+    }
+
+    const QPointF delta = event->scenePos() - press_scene_;
+    if (!dragging_)
+    {
+        if (QPointF::dotProduct(delta, delta) <
+            static_cast<qreal>(QApplication::startDragDistance()) *
+                QApplication::startDragDistance())
+        {
+            event->accept();
+            return;
+        }
+        dragging_ = true;
+        setCursor(Qt::ClosedHandCursor);
+    }
+    if (callbacks_.dragged)
+        callbacks_.dragged(data_.id, press_position_ + delta);
+    event->accept();
+}
+
+void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton && pressed_)
+    {
+        const bool was_dragging = dragging_;
+        pressed_ = false;
+        dragging_ = false;
+        if (was_dragging)
+        {
+            setCursor(Qt::OpenHandCursor);
+            if (callbacks_.drag_finished)
+                callbacks_.drag_finished(data_.id);
+        }
+        event->accept();
+        return;
+    }
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)

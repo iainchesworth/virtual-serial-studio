@@ -452,8 +452,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes a free number above the ports this PC already has, never COM1 or COM2. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. Automatique choisit un numéro libre au-dessus des ports que ce PC possède déjà, jamais COM1 ni COM2. Un numéro nécessite le pilote Studio et son service d'assistance, et s'applique quand un seul port est créé.</translation>
+        </message>
+        <message>
             <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
-            <translation>Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. « Automatique » prend le plus petit numéro libre. Un numéro demande le pilote Studio et son service d’assistance, et s’applique quand un seul port est créé.</translation>
+            <translation type="vanished">Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. « Automatique » prend le plus petit numéro libre. Un numéro demande le pilote Studio et son service d’assistance, et s’applique quand un seul port est créé.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="311" />
@@ -2294,137 +2298,157 @@ Réseaux : %5</translation>
     <context>
         <name>InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="115" />
+            <location filename="../src/panes/inspector_panel.cpp" line="117" />
             <source>Inspector</source>
             <translation>Inspecteur</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="136" />
+            <location filename="../src/panes/inspector_panel.cpp" line="138" />
             <source>Select a port to inspect it.</source>
             <translation>Sélectionnez un port pour l'inspecter.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="167" />
+            <location filename="../src/panes/inspector_panel.cpp" line="169" />
             <source>State</source>
             <translation>État</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="171" />
+            <location filename="../src/panes/inspector_panel.cpp" line="173" />
             <source>Path</source>
             <translation>Chemin</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="386" />
+            <location filename="../src/panes/inspector_panel.cpp" line="183" />
+            <location filename="../src/panes/inspector_panel.cpp" line="403" />
             <source>path</source>
             <translation>chemin</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="188" />
             <source>COM number</source>
             <translation>Numéro COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <location filename="../src/panes/inspector_panel.cpp" line="196" />
             <source>Change...</source>
             <translation>Modifier...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change COM number</source>
             <translation>Changer le numéro COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="210" />
+            <location filename="../src/panes/inspector_panel.cpp" line="212" />
             <source>Traffic</source>
             <translation>Trafic</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="219" />
+            <location filename="../src/panes/inspector_panel.cpp" line="221" />
             <source>Serial</source>
             <translation>Série</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="236" />
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="238" />
+            <location filename="../src/panes/inspector_panel.cpp" line="422" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;Pourquoi rien n'arrive ?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <source>Copy name</source>
+            <translation>Copier le nom</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <source>%1 copied.</source>
+            <translation>%1 copié.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="262" />
             <source>Release port...</source>
             <translation>Libérer le port...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port</source>
             <translation>Libérer le port</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="258" />
+            <location filename="../src/panes/inspector_panel.cpp" line="275" />
             <source>Control lines</source>
             <translation>Lignes de contrôle</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="280" />
+            <location filename="../src/panes/inspector_panel.cpp" line="297" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="281" />
+            <location filename="../src/panes/inspector_panel.cpp" line="298" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="282" />
+            <location filename="../src/panes/inspector_panel.cpp" line="299" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="305" />
+            <location filename="../src/panes/inspector_panel.cpp" line="322" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;Ouvrir la matrice des lignes et les défauts&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="383" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>The engine reported a failure.</source>
             <translation>Le moteur a signalé une défaillance.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="387" />
+            <location filename="../src/panes/inspector_panel.cpp" line="404" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="397" />
-            <source>No program has opened %1 yet.</source>
-            <translation>Aucun programme n'a encore ouvert %1.</translation>
+            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
+            <translation>Aucun programme n'a encore ouvert %1. Le programme doit ouvrir exactement %1 ; un autre port ne recevra rien.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="412" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <source>Copy name, %1</source>
+            <translation>Copier le nom, %1</translation>
+        </message>
+        <message>
+            <source>No program has opened %1 yet.</source>
+            <translation type="vanished">Aucun programme n'a encore ouvert %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="434" />
+            <location filename="../src/panes/inspector_panel.cpp" line="440" />
             <source>Not available in this build</source>
             <translation>Non disponible dans cette version</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="430" />
+            <location filename="../src/panes/inspector_panel.cpp" line="452" />
             <source>This port does not support control lines.</source>
             <translation>Ce port ne prend pas en charge les lignes de contrôle.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="458" />
-            <location filename="../src/panes/inspector_panel.cpp" line="472" />
+            <location filename="../src/panes/inspector_panel.cpp" line="480" />
+            <location filename="../src/panes/inspector_panel.cpp" line="494" />
             <source>%1 on</source>
             <translation>%1 activé</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="459" />
-            <location filename="../src/panes/inspector_panel.cpp" line="473" />
+            <location filename="../src/panes/inspector_panel.cpp" line="481" />
+            <location filename="../src/panes/inspector_panel.cpp" line="495" />
             <source>%1 off</source>
             <translation>%1 désactivé</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="492" />
+            <location filename="../src/panes/inspector_panel.cpp" line="514" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -4262,8 +4286,12 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
+            <translation>Aucun programme n'a encore ouvert %1. Dans votre programme, choisissez exactement %1. Ce panneau se met à jour dès qu'un programme l'ouvre.</translation>
+        </message>
+        <message>
             <source>No program has opened %1 yet. This panel updates when one does.</source>
-            <translation>Aucun programme n'a encore ouvert %1. Ce panneau se met à jour quand un programme l'ouvre.</translation>
+            <translation type="vanished">Aucun programme n'a encore ouvert %1. Ce panneau se met à jour quand un programme l'ouvre.</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
@@ -4417,53 +4445,53 @@ Réseaux : %5</translation>
             <translation>Étape %1 sur %2, %3</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="55" />
+            <location filename="../src/panes/inspector_panel.cpp" line="57" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="57" />
+            <location filename="../src/panes/inspector_panel.cpp" line="59" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="59" />
+            <location filename="../src/panes/inspector_panel.cpp" line="61" />
             <source>CTS</source>
             <translation>CTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="61" />
+            <location filename="../src/panes/inspector_panel.cpp" line="63" />
             <source>DSR</source>
             <translation>DSR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="63" />
+            <location filename="../src/panes/inspector_panel.cpp" line="65" />
             <source>DCD</source>
             <translation>DCD</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="65" />
+            <location filename="../src/panes/inspector_panel.cpp" line="67" />
             <source>RI</source>
             <translation>RI</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="67" />
+            <location filename="../src/panes/inspector_panel.cpp" line="69" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="100" />
+            <location filename="../src/panes/inspector_panel.cpp" line="102" />
             <location filename="../src/dialogs/common.cpp" line="100" />
             <source>no flow control</source>
             <translation>aucun contrôle de flux</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="102" />
+            <location filename="../src/panes/inspector_panel.cpp" line="104" />
             <source>software flow control</source>
             <translation>contrôle de flux logiciel</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="104" />
+            <location filename="../src/panes/inspector_panel.cpp" line="106" />
             <source>hardware flow control</source>
             <translation>contrôle de flux matériel</translation>
         </message>
@@ -6435,7 +6463,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2474" />
+            <location filename="../src/shell/shell_window.cpp" line="2482" />
             <source>Save</source>
             <translation>Enregistrer</translation>
         </message>
@@ -6486,7 +6514,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1162" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>Undo</source>
             <translation>Annuler</translation>
         </message>
@@ -6497,7 +6525,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redo</source>
             <translation>Rétablir</translation>
         </message>
@@ -6585,7 +6613,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2024" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>Rename port</source>
             <translation>Renommer le port</translation>
         </message>
@@ -6596,13 +6624,13 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1853" />
+            <location filename="../src/shell/shell_window.cpp" line="1861" />
             <source>Remove port</source>
             <translation>Supprimer le port</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1924" />
+            <location filename="../src/shell/shell_window.cpp" line="1932" />
             <source>Remove setup</source>
             <translation>Supprimer la configuration</translation>
         </message>
@@ -6613,7 +6641,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1345" />
+            <location filename="../src/shell/shell_window.cpp" line="1353" />
             <source>Connect ports</source>
             <translation>Connecter des ports</translation>
         </message>
@@ -6656,9 +6684,9 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1750" />
-            <location filename="../src/shell/shell_window.cpp" line="1754" />
-            <location filename="../src/shell/shell_window.cpp" line="1768" />
+            <location filename="../src/shell/shell_window.cpp" line="1758" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1776" />
             <source>Remove link</source>
             <translation>Supprimer le lien</translation>
         </message>
@@ -6698,346 +6726,356 @@ Réseaux : %5</translation>
             <translation>zoom</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="353" />
-            <location filename="../src/shell/shell_window.cpp" line="633" />
-            <location filename="../src/shell/shell_window.cpp" line="634" />
+            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <source>Tidy layout</source>
+            <translation>Ranger la disposition</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <source>arrange align overlap</source>
+            <translation>organiser aligner chevauchement</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="641" />
+            <location filename="../src/shell/shell_window.cpp" line="642" />
             <source>Search actions</source>
             <translation>Rechercher des actions</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="361" />
             <source>command palette</source>
             <translation>palette commandes</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="357" />
+            <location filename="../src/shell/shell_window.cpp" line="364" />
             <source>Setup check</source>
             <translation>Vérification de la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="358" />
+            <location filename="../src/shell/shell_window.cpp" line="365" />
             <source>driver com0com permissions</source>
             <translation>pilote com0com autorisations</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>Benchmark</source>
             <translation>Test de performances</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="368" />
             <source>throughput speed</source>
             <translation>débit vitesse</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Refresh now</source>
             <translation>Actualiser maintenant</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>reload</source>
             <translation>recharger</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>Refreshed.</source>
             <translation>Actualisé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="372" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>Settings</source>
             <translation>Paramètres</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="373" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>preferences theme density refresh baud</source>
             <translation>préférences thème densité actualisation bauds</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="386" />
             <source>Advanced mode</source>
             <translation>Mode Avancé</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="387" />
             <source>simple expert level</source>
             <translation>simple expert niveau</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
-            <location filename="../src/shell/shell_window.cpp" line="761" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="769" />
             <source>Monitor</source>
             <translation>Moniteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>traffic</source>
             <translation>trafic</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>Show links as a list</source>
             <translation>Afficher les liens sous forme de liste</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="395" />
             <source>links topology list accessible</source>
             <translation>liens topologie liste accessible</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="910" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="918" />
             <source>Log</source>
             <translation>Journal</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>events</source>
             <translation>événements</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
-            <location filename="../src/shell/shell_window.cpp" line="926" />
+            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="934" />
             <source>Topology JSON</source>
             <translation>JSON de topologie</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="401" />
             <source>editor schema</source>
             <translation>éditeur schéma</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="397" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
             <source>Follow the system</source>
             <translation>Suivre le système</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>theme colour scheme</source>
             <translation>thème jeu couleurs</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="407" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>Light</source>
             <translation>Clair</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="407" />
-            <location filename="../src/shell/shell_window.cpp" line="417" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>theme</source>
             <translation>thème</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="417" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>Dark</source>
             <translation>Sombre</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="427" />
+            <location filename="../src/shell/shell_window.cpp" line="434" />
             <source>Comfortable</source>
             <translation>Confortable</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="428" />
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>density spacing</source>
             <translation>densité espacement</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="444" />
             <source>Compact</source>
             <translation>Compact</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="453" />
             <source>Reset layout</source>
             <translation>Réinitialiser la disposition</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="447" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>docks window</source>
             <translation>ancrages fenêtre</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="449" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>Show launcher</source>
             <translation>Afficher le lanceur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="450" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>empty start</source>
             <translation>démarrage vide</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="461" />
             <source>Help contents</source>
             <translation>Sommaire de l'aide</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>manual help topics</source>
             <translation>manuel aide sujets</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Why is nothing arriving?</source>
             <translation>Pourquoi rien n'arrive ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="458" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>troubleshoot no data</source>
             <translation>dépannage aucune donnée</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Keyboard shortcuts</source>
             <translation>Raccourcis clavier</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>keys</source>
             <translation>touches</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="469" />
             <source>Copy environment</source>
             <translation>Copier l'environnement</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="470" />
             <source>build bug report</source>
             <translation>build rapport bogue</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>About</source>
             <translation>À propos</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="466" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>version licence copyright</source>
             <translation>version licence copyright</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="480" />
-            <location filename="../src/shell/shell_window.cpp" line="485" />
-            <location filename="../src/shell/shell_window.cpp" line="1173" />
+            <location filename="../src/shell/shell_window.cpp" line="487" />
+            <location filename="../src/shell/shell_window.cpp" line="492" />
+            <location filename="../src/shell/shell_window.cpp" line="1181" />
             <source>Not available in this build</source>
             <translation>Non disponible dans cette version</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="691" />
+            <location filename="../src/shell/shell_window.cpp" line="699" />
             <source>Change owner</source>
             <translation>Changer le propriétaire</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1787" />
             <source>1 port</source>
             <translation>1 port</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="1788" />
             <source>%1 ports</source>
             <translation>%1 ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1785" />
+            <location filename="../src/shell/shell_window.cpp" line="1793" />
             <source>1 link</source>
             <translation>1 lien</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1786" />
+            <location filename="../src/shell/shell_window.cpp" line="1794" />
             <source>%1 links</source>
             <translation>%1 liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1819" />
+            <location filename="../src/shell/shell_window.cpp" line="1827" />
             <source>Remove only %1</source>
             <translation>Supprimer seulement %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1820" />
+            <location filename="../src/shell/shell_window.cpp" line="1828" />
             <source>Remove the whole setup</source>
             <translation>Supprimer toute la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1823" />
+            <location filename="../src/shell/shell_window.cpp" line="1831" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 est l'un des %2 programmes qui partagent un appareil, dans une configuration avec %3 : %4. Supprimez seulement %1 et les autres continuent de partager, ou fermez toute la configuration. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="1839" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 fait partie d'une configuration avec %2 : %3. Supprimez seulement %1 et ses liens, ou fermez toute la configuration. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1903" />
+            <location filename="../src/shell/shell_window.cpp" line="1911" />
             <source>%1 and %2</source>
             <translation>%1 et %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1919" />
+            <location filename="../src/shell/shell_window.cpp" line="1927" />
             <source>Remove this setup?</source>
             <translation>Supprimer cette configuration ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <location filename="../src/shell/shell_window.cpp" line="1929" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>Cela ferme %1 : %2. Un programme qui a l'un de ces ports ouvert le perd. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1943" />
+            <location filename="../src/shell/shell_window.cpp" line="1951" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>Une partie de la configuration est encore ouverte. Fermez ce qui l'utilise, puis choisissez de nouveau Supprimer la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1953" />
+            <location filename="../src/shell/shell_window.cpp" line="1961" />
             <source>Removed the setup (%1).</source>
             <translation>Configuration supprimée (%1).</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1955" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
             <source>Removed %1 of %2.</source>
             <translation>%1 sur %2 supprimés.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1989" />
+            <location filename="../src/shell/shell_window.cpp" line="1997" />
             <source>the device</source>
             <translation>l'appareil</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1996" />
+            <location filename="../src/shell/shell_window.cpp" line="2004" />
             <source>Could not add a program port to %1</source>
             <translation>Impossible d'ajouter un port de programme à %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2005" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>La configuration est inchangée. Vérifiez l'appareil, puis réessayez.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2006" />
+            <location filename="../src/shell/shell_window.cpp" line="2014" />
             <source>Added %1 to %2.</source>
             <translation>%1 ajouté à %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2007" />
+            <location filename="../src/shell/shell_window.cpp" line="2015" />
             <source>a port</source>
             <translation>un port</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <location filename="../src/shell/shell_window.cpp" line="2662" />
             <source>Close Studio?</source>
             <translation>Fermer Studio ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <location filename="../src/shell/shell_window.cpp" line="2662" />
             <source>Close Studio</source>
             <translation>Fermer Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2655" />
+            <location filename="../src/shell/shell_window.cpp" line="2663" />
             <source>Keep Studio open</source>
             <translation>Garder Studio ouvert</translation>
         </message>
@@ -7046,52 +7084,52 @@ Réseaux : %5</translation>
             <translation type="vanished">Annuler nécessite une restauration exacte, que cette version ne peut pas garantir.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="516" />
+            <location filename="../src/shell/shell_window.cpp" line="523" />
             <source>&amp;File</source>
             <translation>&amp;Fichier</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="530" />
+            <location filename="../src/shell/shell_window.cpp" line="537" />
             <source>&amp;Edit</source>
             <translation>É&amp;dition</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="544" />
             <source>&amp;Ports</source>
             <translation>&amp;Ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="552" />
+            <location filename="../src/shell/shell_window.cpp" line="559" />
             <source>&amp;Topology</source>
             <translation>&amp;Topologie</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="564" />
+            <location filename="../src/shell/shell_window.cpp" line="572" />
             <source>&amp;Tools</source>
             <translation>&amp;Outils</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="580" />
             <source>&amp;View</source>
             <translation>&amp;Affichage</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="588" />
             <source>Theme</source>
             <translation>Thème</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="584" />
+            <location filename="../src/shell/shell_window.cpp" line="592" />
             <source>Density</source>
             <translation>Densité</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="591" />
+            <location filename="../src/shell/shell_window.cpp" line="599" />
             <source>&amp;Help</source>
             <translation>Ai&amp;de</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="601" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>Main toolbar</source>
             <translation>Barre d'outils principale</translation>
         </message>
@@ -7100,100 +7138,100 @@ Réseaux : %5</translation>
             <translation type="vanished">Non disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="756" />
+            <location filename="../src/shell/shell_window.cpp" line="764" />
             <source>Ports</source>
             <translation>Ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="758" />
-            <location filename="../src/shell/shell_window.cpp" line="1215" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
+            <location filename="../src/shell/shell_window.cpp" line="1223" />
             <source>Inspector</source>
             <translation>Inspecteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="759" />
+            <location filename="../src/shell/shell_window.cpp" line="767" />
             <source>Send</source>
             <translation>Envoyer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="794" />
-            <location filename="../src/shell/shell_window.cpp" line="1268" />
+            <location filename="../src/shell/shell_window.cpp" line="802" />
+            <location filename="../src/shell/shell_window.cpp" line="1276" />
             <source>Copied %1.</source>
             <translation>%1 copié.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="814" />
+            <location filename="../src/shell/shell_window.cpp" line="822" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 octets mis en file d'attente vers %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="870" />
+            <location filename="../src/shell/shell_window.cpp" line="878" />
             <source>Links</source>
             <translation>Liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="925" />
+            <location filename="../src/shell/shell_window.cpp" line="933" />
             <source>Applied the topology JSON.</source>
             <translation>JSON de topologie appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1140" />
+            <location filename="../src/shell/shell_window.cpp" line="1148" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1162" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>Undo %1</source>
             <translation>Annuler %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redo %1</source>
             <translation>Rétablir %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1175" />
+            <location filename="../src/shell/shell_window.cpp" line="1183" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>Annule la création ou la suppression d'une liaison, le changement de propriétaire et le renommage d'un port.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1177" />
+            <location filename="../src/shell/shell_window.cpp" line="1185" />
             <source>This build cannot reverse changes.</source>
             <translation>Cette version ne peut pas annuler les modifications.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1193" />
             <source>Undid %1.</source>
             <translation>%1 annulé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1188" />
+            <location filename="../src/shell/shell_window.cpp" line="1196" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>Impossible d'annuler %1. La configuration a changé depuis.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1204" />
             <source>Redid %1.</source>
             <translation>%1 rétabli.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1199" />
+            <location filename="../src/shell/shell_window.cpp" line="1207" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>Impossible de rétablir %1. La configuration a changé depuis.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1214" />
+            <location filename="../src/shell/shell_window.cpp" line="1222" />
             <source>Ports %1</source>
             <translation>Ports %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1219" />
+            <location filename="../src/shell/shell_window.cpp" line="1227" />
             <source>Inspector %1</source>
             <translation>Inspecteur %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1836" />
-            <location filename="../src/shell/shell_window.cpp" line="1849" />
+            <location filename="../src/shell/shell_window.cpp" line="1844" />
+            <location filename="../src/shell/shell_window.cpp" line="1857" />
             <source>Remove %1?</source>
             <translation>Supprimer %1 ?</translation>
         </message>
@@ -7202,214 +7240,214 @@ Réseaux : %5</translation>
             <translation type="vanished">Le port et ses liens seront supprimés. Cette action est irréversible.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1754" />
-            <location filename="../src/shell/shell_window.cpp" line="1818" />
-            <location filename="../src/shell/shell_window.cpp" line="1853" />
-            <location filename="../src/shell/shell_window.cpp" line="1924" />
-            <location filename="../src/shell/shell_window.cpp" line="2344" />
-            <location filename="../src/shell/shell_window.cpp" line="2473" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1826" />
+            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="2352" />
+            <location filename="../src/shell/shell_window.cpp" line="2481" />
             <source>Cancel</source>
             <translation>Annuler</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1871" />
-            <location filename="../src/shell/shell_window.cpp" line="1942" />
+            <location filename="../src/shell/shell_window.cpp" line="1879" />
+            <location filename="../src/shell/shell_window.cpp" line="1950" />
             <source>Could not remove %1</source>
             <translation>Impossible de supprimer %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1880" />
+            <location filename="../src/shell/shell_window.cpp" line="1888" />
             <source>Removed %1.</source>
             <translation>%1 supprimé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1356" />
+            <location filename="../src/shell/shell_window.cpp" line="1364" />
             <source>Sharing is not available in this build.</source>
             <translation>Le partage n'est pas disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1383" />
+            <location filename="../src/shell/shell_window.cpp" line="1391" />
             <source>Networking is not available in this build.</source>
             <translation>Le réseau n'est pas disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1405" />
+            <location filename="../src/shell/shell_window.cpp" line="1413" />
             <source>Bridge is running on port %1.</source>
             <translation>Le pont fonctionne sur le port %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1406" />
+            <location filename="../src/shell/shell_window.cpp" line="1414" />
             <source>Open monitor</source>
             <translation>Ouvrir le moniteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1427" />
-            <location filename="../src/shell/shell_window.cpp" line="2385" />
-            <location filename="../src/shell/shell_window.cpp" line="2397" />
+            <location filename="../src/shell/shell_window.cpp" line="1435" />
+            <location filename="../src/shell/shell_window.cpp" line="2393" />
+            <location filename="../src/shell/shell_window.cpp" line="2405" />
             <source>Could not open %1</source>
             <translation>Impossible d'ouvrir %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1428" />
+            <location filename="../src/shell/shell_window.cpp" line="1436" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>La configuration nécessite un appareil ou un point de terminaison réseau qui n'est pas disponible sur ce PC. Rien n'a été modifié. Vérifiez l'appareil, puis réessayez.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1451" />
-            <location filename="../src/shell/shell_window.cpp" line="2409" />
-            <location filename="../src/shell/shell_window.cpp" line="2437" />
+            <location filename="../src/shell/shell_window.cpp" line="1459" />
+            <location filename="../src/shell/shell_window.cpp" line="2417" />
+            <location filename="../src/shell/shell_window.cpp" line="2445" />
             <source>%1 ports, %2 links</source>
             <translation>%1 ports, %2 liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1543" />
-            <location filename="../src/shell/shell_window.cpp" line="1566" />
+            <location filename="../src/shell/shell_window.cpp" line="1551" />
+            <location filename="../src/shell/shell_window.cpp" line="1574" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>Paire liée créée. Le programme A ouvre %1 ; le programme B ouvre %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1610" />
+            <location filename="../src/shell/shell_window.cpp" line="1618" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>Surveillance de %1. L'observateur est %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1660" />
+            <location filename="../src/shell/shell_window.cpp" line="1668" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 fait partie d'un lot de travail ultérieur.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1666" />
+            <location filename="../src/shell/shell_window.cpp" line="1674" />
             <source>%1 arrives with %2.</source>
             <translation>%1 arrive avec %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1751" />
+            <location filename="../src/shell/shell_window.cpp" line="1759" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>Supprimer ce lien ? %1. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1770" />
             <source>Could not remove the link</source>
             <translation>Impossible de supprimer le lien</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1771" />
+            <location filename="../src/shell/shell_window.cpp" line="1779" />
             <source>Removed the link.</source>
             <translation>Lien supprimé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1850" />
+            <location filename="../src/shell/shell_window.cpp" line="1858" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>Supprimer %1 et ses liens ? Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2035" />
             <source>Renamed %1 to %2.</source>
             <translation>%1 renommé en %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2047" />
+            <location filename="../src/shell/shell_window.cpp" line="2055" />
             <source>%1 is now %2.</source>
             <translation>%1 est maintenant %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2070" />
             <source>Released %1.</source>
             <translation>%1 libéré.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2119" />
+            <location filename="../src/shell/shell_window.cpp" line="2127" />
             <source>Add a port before opening the line matrix.</source>
             <translation>Ajoutez un port avant d'ouvrir la matrice des lignes.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2154" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>Sélectionnez la cible d'une fusion avec la règle de propriétaire pour contrôler qui écrit.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2235" />
+            <location filename="../src/shell/shell_window.cpp" line="2243" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>Mode test. Les nouveaux ports fonctionnent uniquement dans Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2256" />
+            <location filename="../src/shell/shell_window.cpp" line="2264" />
             <source>Could not restart as administrator</source>
             <translation>Impossible de redémarrer en tant qu'administrateur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2334" />
+            <location filename="../src/shell/shell_window.cpp" line="2342" />
             <source>Environment copied.</source>
             <translation>Environnement copié.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <location filename="../src/shell/shell_window.cpp" line="2351" />
             <source>Start a new setup?</source>
             <translation>Commencer une nouvelle configuration ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <location filename="../src/shell/shell_window.cpp" line="2351" />
             <source>Start new</source>
             <translation>Commencer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2360" />
+            <location filename="../src/shell/shell_window.cpp" line="2368" />
             <source>Started a new setup.</source>
             <translation>Nouvelle configuration démarrée.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2370" />
+            <location filename="../src/shell/shell_window.cpp" line="2378" />
             <source>Open setup</source>
             <translation>Ouvrir une configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2371" />
+            <location filename="../src/shell/shell_window.cpp" line="2379" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Configurations Virtual Serial Studio (*.json);;Tous les fichiers (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2412" />
+            <location filename="../src/shell/shell_window.cpp" line="2420" />
             <source>Opened %1.</source>
             <translation>%1 ouvert.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2428" />
+            <location filename="../src/shell/shell_window.cpp" line="2436" />
             <source>Could not save this setup</source>
             <translation>Impossible d'enregistrer cette configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2441" />
-            <location filename="../src/shell/shell_window.cpp" line="2442" />
+            <location filename="../src/shell/shell_window.cpp" line="2449" />
+            <location filename="../src/shell/shell_window.cpp" line="2450" />
             <source>Saved %1.</source>
             <translation>%1 enregistré.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2448" />
+            <location filename="../src/shell/shell_window.cpp" line="2456" />
             <source>Save setup</source>
             <translation>Enregistrer la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2458" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Configurations Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2468" />
+            <location filename="../src/shell/shell_window.cpp" line="2476" />
             <source>Save changes to %1?</source>
             <translation>Enregistrer les modifications de %1 ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2469" />
+            <location filename="../src/shell/shell_window.cpp" line="2477" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>Vos ports et liens ont changé depuis le dernier enregistrement. Vous pouvez désactiver cette invite dans les Paramètres.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2472" />
+            <location filename="../src/shell/shell_window.cpp" line="2480" />
             <source>Don't save</source>
             <translation>Ne pas enregistrer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2537" />
+            <location filename="../src/shell/shell_window.cpp" line="2545" />
             <source>Layout reset.</source>
             <translation>Disposition réinitialisée.</translation>
         </message>
@@ -7795,14 +7833,14 @@ Réseaux : %5</translation>
         <name>Topology</name>
         <message>
             <location filename="../src/topology/topology_text.cpp" line="46" />
-            <location filename="../src/topology/topology_text.cpp" line="231" />
-            <location filename="../src/topology/topology_text.cpp" line="249" />
+            <location filename="../src/topology/topology_text.cpp" line="246" />
+            <location filename="../src/topology/topology_text.cpp" line="264" />
             <source>two-way</source>
             <translation>bidirectionnel</translation>
         </message>
         <message>
             <location filename="../src/topology/topology_text.cpp" line="49" />
-            <location filename="../src/topology/topology_text.cpp" line="245" />
+            <location filename="../src/topology/topology_text.cpp" line="260" />
             <source>owner</source>
             <translation>propriétaire</translation>
         </message>
@@ -7902,163 +7940,178 @@ Réseaux : %5</translation>
             <translation>Supprimer le lien</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="158" />
+            <location filename="../src/topology/topology_text.cpp" line="157" />
+            <source>Tidy layout</source>
+            <translation>Ranger la disposition</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="162" />
+            <source>Fit</source>
+            <translation>Ajuster</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="167" />
+            <source>Layout tidied.</source>
+            <translation>Disposition rangée.</translation>
+        </message>
+        <message>
+            <location filename="../src/topology/topology_text.cpp" line="173" />
             <source>1 port</source>
             <translation>1 port</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="159" />
+            <location filename="../src/topology/topology_text.cpp" line="174" />
             <source>%1 ports</source>
             <translation>%1 ports</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="165" />
+            <location filename="../src/topology/topology_text.cpp" line="180" />
             <source>1 link</source>
             <translation>1 lien</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="166" />
+            <location filename="../src/topology/topology_text.cpp" line="181" />
             <source>%1 links</source>
             <translation>%1 liens</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="176" />
-            <location filename="../src/topology/topology_text.cpp" line="178" />
+            <location filename="../src/topology/topology_text.cpp" line="191" />
+            <location filename="../src/topology/topology_text.cpp" line="193" />
             <source>%1 and %2</source>
             <translation>%1 et %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="188" />
+            <location filename="../src/topology/topology_text.cpp" line="203" />
             <source>Real device, %1</source>
             <translation>Appareil réel, %1</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="191" />
+            <location filename="../src/topology/topology_text.cpp" line="206" />
             <source>Fixture (mock)</source>
             <translation>Fixture (simulée)</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="199" />
+            <location filename="../src/topology/topology_text.cpp" line="214" />
             <source>Studio only</source>
             <translation>Studio uniquement</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="217" />
+            <location filename="../src/topology/topology_text.cpp" line="232" />
             <source>Not linked to another port.</source>
             <translation>Non lié à un autre port.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="227" />
+            <location filename="../src/topology/topology_text.cpp" line="242" />
             <source>Split</source>
             <translation>Répartir</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="229" />
+            <location filename="../src/topology/topology_text.cpp" line="244" />
             <source>Join</source>
             <translation>Fusion</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="233" />
+            <location filename="../src/topology/topology_text.cpp" line="248" />
             <source>monitor</source>
             <translation>moniteur</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="235" />
+            <location filename="../src/topology/topology_text.cpp" line="250" />
             <source>Bus</source>
             <translation>Bus</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="258" />
+            <location filename="../src/topology/topology_text.cpp" line="273" />
             <source>No ports yet. Add a port to see it here.</source>
             <translation>Aucun port pour l'instant. Ajoutez un port pour le voir ici.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="267" />
+            <location filename="../src/topology/topology_text.cpp" line="282" />
             <source>%1, no links</source>
             <translation>%1, aucun lien</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="273" />
+            <location filename="../src/topology/topology_text.cpp" line="288" />
             <source>%1, %2: %3</source>
             <translation>%1, %2 : %3</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="290" />
+            <location filename="../src/topology/topology_text.cpp" line="305" />
             <source>Split link, %1 to %2 ports</source>
             <translation>Lien de répartition, %1 vers %2 ports</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="298" />
+            <location filename="../src/topology/topology_text.cpp" line="313" />
             <source>Split link, %1 to %2</source>
             <translation>Lien de répartition, %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="305" />
+            <location filename="../src/topology/topology_text.cpp" line="320" />
             <source>Join link, %1 ports into %2</source>
             <translation>Lien de fusion, %1 ports dans %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="313" />
+            <location filename="../src/topology/topology_text.cpp" line="328" />
             <source>Join link, %1 into %2</source>
             <translation>Lien de fusion, %1 dans %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="318" />
+            <location filename="../src/topology/topology_text.cpp" line="333" />
             <source>Two-way link, %1 to %2</source>
             <translation>Lien bidirectionnel, %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="322" />
+            <location filename="../src/topology/topology_text.cpp" line="337" />
             <source>One-way link, %1 to %2</source>
             <translation>Lien unidirectionnel, %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="326" />
+            <location filename="../src/topology/topology_text.cpp" line="341" />
             <source>Monitor link, %1 to %2</source>
             <translation>Lien de moniteur, %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="330" />
+            <location filename="../src/topology/topology_text.cpp" line="345" />
             <source>Bus link, %1 ports</source>
             <translation>Lien bus, %1 ports</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="346" />
+            <location filename="../src/topology/topology_text.cpp" line="361" />
             <source>split from %1 to %2</source>
             <translation>répartition de %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="349" />
+            <location filename="../src/topology/topology_text.cpp" line="364" />
             <source>join from %1 into %2</source>
             <translation>fusion de %1 dans %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="352" />
+            <location filename="../src/topology/topology_text.cpp" line="367" />
             <source>two-way between %1 and %2</source>
             <translation>bidirectionnel entre %1 et %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="356" />
+            <location filename="../src/topology/topology_text.cpp" line="371" />
             <source>one-way from %1 to %2</source>
             <translation>unidirectionnel de %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="359" />
+            <location filename="../src/topology/topology_text.cpp" line="374" />
             <source>monitor from %1 to %2</source>
             <translation>moniteur de %1 vers %2</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="362" />
+            <location filename="../src/topology/topology_text.cpp" line="377" />
             <source>bus of %1</source>
             <translation>bus de %1</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="369" />
+            <location filename="../src/topology/topology_text.cpp" line="384" />
             <source>Copied %1.</source>
             <translation>%1 copié.</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="374" />
+            <location filename="../src/topology/topology_text.cpp" line="389" />
             <source>Selected %1.</source>
             <translation>%1 sélectionné.</translation>
         </message>
@@ -8730,22 +8783,26 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/support/troubleshoot.cpp" line="346" />
-            <source>No program has opened %1 yet, so nothing can arrive.</source>
-            <translation>Aucun programme n'a encore ouvert %1, donc rien ne peut arriver.</translation>
+            <source>No program has opened %1 yet, so nothing can arrive. The program has to open exactly %1; a different COM port will not receive anything.</source>
+            <translation>Aucun programme n'a encore ouvert %1, donc rien ne peut arriver. Le programme doit ouvrir exactement %1 ; un autre port COM ne recevra rien.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="359" />
-            <location filename="../src/support/troubleshoot.cpp" line="368" />
+            <source>No program has opened %1 yet, so nothing can arrive.</source>
+            <translation type="vanished">Aucun programme n'a encore ouvert %1, donc rien ne peut arriver.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="361" />
+            <location filename="../src/support/troubleshoot.cpp" line="370" />
             <source>Data reaches the program</source>
             <translation>Les données parviennent au programme</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="361" />
+            <location filename="../src/support/troubleshoot.cpp" line="363" />
             <source>Studio cannot see whether the program read the data.</source>
             <translation>Studio ne peut pas voir si le programme a lu les données.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="370" />
+            <location filename="../src/support/troubleshoot.cpp" line="372" />
             <source>Checked once a program connects.</source>
             <translation>Vérifié une fois qu'un programme se connecte.</translation>
         </message>
@@ -9747,8 +9804,12 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes a free number above the ports this PC already has, never COM1 or COM2. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. Automatique choisit un numéro libre au-dessus des ports que ce PC possède déjà, jamais COM1 ni COM2. Un numéro nécessite le pilote Studio et son service d'assistance, et s'applique quand un seul port est créé.</translation>
+        </message>
+        <message>
             <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
-            <translation>Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. « Automatique » prend le plus petit numéro libre. Un numéro demande le pilote Studio et son service d’assistance, et s’applique quand un seul port est créé.</translation>
+            <translation type="vanished">Les programmes qui ouvrent un nom fixe comme COM3 retrouvent le port à chaque exécution. « Automatique » prend le plus petit numéro libre. Un numéro demande le pilote Studio et son service d’assistance, et s’applique quand un seul port est créé.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="311" />
@@ -11136,137 +11197,157 @@ Réseaux : %5</translation>
     <context>
         <name>vss::gui::InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="115" />
+            <location filename="../src/panes/inspector_panel.cpp" line="117" />
             <source>Inspector</source>
             <translation>Inspecteur</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="136" />
+            <location filename="../src/panes/inspector_panel.cpp" line="138" />
             <source>Select a port to inspect it.</source>
             <translation>Sélectionnez un port pour l'inspecter.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="167" />
+            <location filename="../src/panes/inspector_panel.cpp" line="169" />
             <source>State</source>
             <translation>État</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="171" />
+            <location filename="../src/panes/inspector_panel.cpp" line="173" />
             <source>Path</source>
             <translation>Chemin</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="386" />
+            <location filename="../src/panes/inspector_panel.cpp" line="183" />
+            <location filename="../src/panes/inspector_panel.cpp" line="403" />
             <source>path</source>
             <translation>chemin</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="188" />
             <source>COM number</source>
             <translation>Numéro COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <location filename="../src/panes/inspector_panel.cpp" line="196" />
             <source>Change...</source>
             <translation>Modifier...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change COM number</source>
             <translation>Changer le numéro COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="210" />
+            <location filename="../src/panes/inspector_panel.cpp" line="212" />
             <source>Traffic</source>
             <translation>Trafic</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="219" />
+            <location filename="../src/panes/inspector_panel.cpp" line="221" />
             <source>Serial</source>
             <translation>Série</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="236" />
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="238" />
+            <location filename="../src/panes/inspector_panel.cpp" line="422" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;Pourquoi rien n'arrive ?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <source>Copy name</source>
+            <translation>Copier le nom</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <source>%1 copied.</source>
+            <translation>%1 copié.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="262" />
             <source>Release port...</source>
             <translation>Libérer le port...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port</source>
             <translation>Libérer le port</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="258" />
+            <location filename="../src/panes/inspector_panel.cpp" line="275" />
             <source>Control lines</source>
             <translation>Lignes de contrôle</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="280" />
+            <location filename="../src/panes/inspector_panel.cpp" line="297" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="281" />
+            <location filename="../src/panes/inspector_panel.cpp" line="298" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="282" />
+            <location filename="../src/panes/inspector_panel.cpp" line="299" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="305" />
+            <location filename="../src/panes/inspector_panel.cpp" line="322" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;Ouvrir la matrice des lignes et les défauts&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="383" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>The engine reported a failure.</source>
             <translation>Le moteur a signalé une défaillance.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="387" />
+            <location filename="../src/panes/inspector_panel.cpp" line="404" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="397" />
-            <source>No program has opened %1 yet.</source>
-            <translation>Aucun programme n'a encore ouvert %1.</translation>
+            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
+            <translation>Aucun programme n'a encore ouvert %1. Le programme doit ouvrir exactement %1 ; un autre port ne recevra rien.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="412" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <source>Copy name, %1</source>
+            <translation>Copier le nom, %1</translation>
+        </message>
+        <message>
+            <source>No program has opened %1 yet.</source>
+            <translation type="vanished">Aucun programme n'a encore ouvert %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="434" />
+            <location filename="../src/panes/inspector_panel.cpp" line="440" />
             <source>Not available in this build</source>
             <translation>Non disponible dans cette version</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="430" />
+            <location filename="../src/panes/inspector_panel.cpp" line="452" />
             <source>This port does not support control lines.</source>
             <translation>Ce port ne prend pas en charge les lignes de contrôle.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="458" />
-            <location filename="../src/panes/inspector_panel.cpp" line="472" />
+            <location filename="../src/panes/inspector_panel.cpp" line="480" />
+            <location filename="../src/panes/inspector_panel.cpp" line="494" />
             <source>%1 on</source>
             <translation>%1 activé</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="459" />
-            <location filename="../src/panes/inspector_panel.cpp" line="473" />
+            <location filename="../src/panes/inspector_panel.cpp" line="481" />
+            <location filename="../src/panes/inspector_panel.cpp" line="495" />
             <source>%1 off</source>
             <translation>%1 désactivé</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="492" />
+            <location filename="../src/panes/inspector_panel.cpp" line="514" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -12661,8 +12742,12 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
+            <translation>Aucun programme n'a encore ouvert %1. Dans votre programme, choisissez exactement %1. Ce panneau se met à jour dès qu'un programme l'ouvre.</translation>
+        </message>
+        <message>
             <source>No program has opened %1 yet. This panel updates when one does.</source>
-            <translation>Aucun programme n'a encore ouvert %1. Ce panneau se met à jour quand un programme l'ouvre.</translation>
+            <translation type="vanished">Aucun programme n'a encore ouvert %1. Ce panneau se met à jour quand un programme l'ouvre.</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
@@ -13596,7 +13681,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2474" />
+            <location filename="../src/shell/shell_window.cpp" line="2482" />
             <source>Save</source>
             <translation>Enregistrer</translation>
         </message>
@@ -13647,7 +13732,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1162" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>Undo</source>
             <translation>Annuler</translation>
         </message>
@@ -13658,7 +13743,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redo</source>
             <translation>Rétablir</translation>
         </message>
@@ -13746,7 +13831,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2024" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>Rename port</source>
             <translation>Renommer le port</translation>
         </message>
@@ -13757,13 +13842,13 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1853" />
+            <location filename="../src/shell/shell_window.cpp" line="1861" />
             <source>Remove port</source>
             <translation>Supprimer le port</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1924" />
+            <location filename="../src/shell/shell_window.cpp" line="1932" />
             <source>Remove setup</source>
             <translation>Supprimer la configuration</translation>
         </message>
@@ -13774,7 +13859,7 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1345" />
+            <location filename="../src/shell/shell_window.cpp" line="1353" />
             <source>Connect ports</source>
             <translation>Connecter des ports</translation>
         </message>
@@ -13817,9 +13902,9 @@ Réseaux : %5</translation>
         </message>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1750" />
-            <location filename="../src/shell/shell_window.cpp" line="1754" />
-            <location filename="../src/shell/shell_window.cpp" line="1768" />
+            <location filename="../src/shell/shell_window.cpp" line="1758" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1776" />
             <source>Remove link</source>
             <translation>Supprimer le lien</translation>
         </message>
@@ -13859,346 +13944,356 @@ Réseaux : %5</translation>
             <translation>zoom</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="353" />
-            <location filename="../src/shell/shell_window.cpp" line="633" />
-            <location filename="../src/shell/shell_window.cpp" line="634" />
+            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <source>Tidy layout</source>
+            <translation>Ranger la disposition</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <source>arrange align overlap</source>
+            <translation>organiser aligner chevauchement</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="641" />
+            <location filename="../src/shell/shell_window.cpp" line="642" />
             <source>Search actions</source>
             <translation>Rechercher des actions</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="361" />
             <source>command palette</source>
             <translation>palette commandes</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="357" />
+            <location filename="../src/shell/shell_window.cpp" line="364" />
             <source>Setup check</source>
             <translation>Vérification de la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="358" />
+            <location filename="../src/shell/shell_window.cpp" line="365" />
             <source>driver com0com permissions</source>
             <translation>pilote com0com autorisations</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>Benchmark</source>
             <translation>Test de performances</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="368" />
             <source>throughput speed</source>
             <translation>débit vitesse</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Refresh now</source>
             <translation>Actualiser maintenant</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>reload</source>
             <translation>recharger</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>Refreshed.</source>
             <translation>Actualisé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="372" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>Settings</source>
             <translation>Paramètres</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="373" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>preferences theme density refresh baud</source>
             <translation>préférences thème densité actualisation bauds</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="386" />
             <source>Advanced mode</source>
             <translation>Mode Avancé</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="387" />
             <source>simple expert level</source>
             <translation>simple expert niveau</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
-            <location filename="../src/shell/shell_window.cpp" line="761" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="769" />
             <source>Monitor</source>
             <translation>Moniteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>traffic</source>
             <translation>trafic</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>Show links as a list</source>
             <translation>Afficher les liens sous forme de liste</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="395" />
             <source>links topology list accessible</source>
             <translation>liens topologie liste accessible</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="910" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="918" />
             <source>Log</source>
             <translation>Journal</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>events</source>
             <translation>événements</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
-            <location filename="../src/shell/shell_window.cpp" line="926" />
+            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="934" />
             <source>Topology JSON</source>
             <translation>JSON de topologie</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="401" />
             <source>editor schema</source>
             <translation>éditeur schéma</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="397" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
             <source>Follow the system</source>
             <translation>Suivre le système</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>theme colour scheme</source>
             <translation>thème jeu couleurs</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="407" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>Light</source>
             <translation>Clair</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="407" />
-            <location filename="../src/shell/shell_window.cpp" line="417" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>theme</source>
             <translation>thème</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="417" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>Dark</source>
             <translation>Sombre</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="427" />
+            <location filename="../src/shell/shell_window.cpp" line="434" />
             <source>Comfortable</source>
             <translation>Confortable</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="428" />
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>density spacing</source>
             <translation>densité espacement</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="444" />
             <source>Compact</source>
             <translation>Compact</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="453" />
             <source>Reset layout</source>
             <translation>Réinitialiser la disposition</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="447" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>docks window</source>
             <translation>ancrages fenêtre</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="449" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>Show launcher</source>
             <translation>Afficher le lanceur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="450" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>empty start</source>
             <translation>démarrage vide</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="461" />
             <source>Help contents</source>
             <translation>Sommaire de l'aide</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>manual help topics</source>
             <translation>manuel aide sujets</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Why is nothing arriving?</source>
             <translation>Pourquoi rien n'arrive ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="458" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>troubleshoot no data</source>
             <translation>dépannage aucune donnée</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Keyboard shortcuts</source>
             <translation>Raccourcis clavier</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>keys</source>
             <translation>touches</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="469" />
             <source>Copy environment</source>
             <translation>Copier l'environnement</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="470" />
             <source>build bug report</source>
             <translation>build rapport bogue</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>About</source>
             <translation>À propos</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="466" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>version licence copyright</source>
             <translation>version licence copyright</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="480" />
-            <location filename="../src/shell/shell_window.cpp" line="485" />
-            <location filename="../src/shell/shell_window.cpp" line="1173" />
+            <location filename="../src/shell/shell_window.cpp" line="487" />
+            <location filename="../src/shell/shell_window.cpp" line="492" />
+            <location filename="../src/shell/shell_window.cpp" line="1181" />
             <source>Not available in this build</source>
             <translation>Non disponible dans cette version</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="691" />
+            <location filename="../src/shell/shell_window.cpp" line="699" />
             <source>Change owner</source>
             <translation>Changer le propriétaire</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1787" />
             <source>1 port</source>
             <translation>1 port</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="1788" />
             <source>%1 ports</source>
             <translation>%1 ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1785" />
+            <location filename="../src/shell/shell_window.cpp" line="1793" />
             <source>1 link</source>
             <translation>1 lien</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1786" />
+            <location filename="../src/shell/shell_window.cpp" line="1794" />
             <source>%1 links</source>
             <translation>%1 liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1819" />
+            <location filename="../src/shell/shell_window.cpp" line="1827" />
             <source>Remove only %1</source>
             <translation>Supprimer seulement %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1820" />
+            <location filename="../src/shell/shell_window.cpp" line="1828" />
             <source>Remove the whole setup</source>
             <translation>Supprimer toute la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1823" />
+            <location filename="../src/shell/shell_window.cpp" line="1831" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 est l'un des %2 programmes qui partagent un appareil, dans une configuration avec %3 : %4. Supprimez seulement %1 et les autres continuent de partager, ou fermez toute la configuration. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="1839" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 fait partie d'une configuration avec %2 : %3. Supprimez seulement %1 et ses liens, ou fermez toute la configuration. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1903" />
+            <location filename="../src/shell/shell_window.cpp" line="1911" />
             <source>%1 and %2</source>
             <translation>%1 et %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1919" />
+            <location filename="../src/shell/shell_window.cpp" line="1927" />
             <source>Remove this setup?</source>
             <translation>Supprimer cette configuration ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <location filename="../src/shell/shell_window.cpp" line="1929" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>Cela ferme %1 : %2. Un programme qui a l'un de ces ports ouvert le perd. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1943" />
+            <location filename="../src/shell/shell_window.cpp" line="1951" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>Une partie de la configuration est encore ouverte. Fermez ce qui l'utilise, puis choisissez de nouveau Supprimer la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1953" />
+            <location filename="../src/shell/shell_window.cpp" line="1961" />
             <source>Removed the setup (%1).</source>
             <translation>Configuration supprimée (%1).</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1955" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
             <source>Removed %1 of %2.</source>
             <translation>%1 sur %2 supprimés.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1989" />
+            <location filename="../src/shell/shell_window.cpp" line="1997" />
             <source>the device</source>
             <translation>l'appareil</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1996" />
+            <location filename="../src/shell/shell_window.cpp" line="2004" />
             <source>Could not add a program port to %1</source>
             <translation>Impossible d'ajouter un port de programme à %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2005" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>La configuration est inchangée. Vérifiez l'appareil, puis réessayez.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2006" />
+            <location filename="../src/shell/shell_window.cpp" line="2014" />
             <source>Added %1 to %2.</source>
             <translation>%1 ajouté à %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2007" />
+            <location filename="../src/shell/shell_window.cpp" line="2015" />
             <source>a port</source>
             <translation>un port</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <location filename="../src/shell/shell_window.cpp" line="2662" />
             <source>Close Studio?</source>
             <translation>Fermer Studio ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <location filename="../src/shell/shell_window.cpp" line="2662" />
             <source>Close Studio</source>
             <translation>Fermer Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2655" />
+            <location filename="../src/shell/shell_window.cpp" line="2663" />
             <source>Keep Studio open</source>
             <translation>Garder Studio ouvert</translation>
         </message>
@@ -14207,52 +14302,52 @@ Réseaux : %5</translation>
             <translation type="vanished">Annuler nécessite une restauration exacte, que cette version ne peut pas garantir.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="516" />
+            <location filename="../src/shell/shell_window.cpp" line="523" />
             <source>&amp;File</source>
             <translation>&amp;Fichier</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="530" />
+            <location filename="../src/shell/shell_window.cpp" line="537" />
             <source>&amp;Edit</source>
             <translation>É&amp;dition</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="544" />
             <source>&amp;Ports</source>
             <translation>&amp;Ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="552" />
+            <location filename="../src/shell/shell_window.cpp" line="559" />
             <source>&amp;Topology</source>
             <translation>&amp;Topologie</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="564" />
+            <location filename="../src/shell/shell_window.cpp" line="572" />
             <source>&amp;Tools</source>
             <translation>&amp;Outils</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="580" />
             <source>&amp;View</source>
             <translation>&amp;Affichage</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="588" />
             <source>Theme</source>
             <translation>Thème</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="584" />
+            <location filename="../src/shell/shell_window.cpp" line="592" />
             <source>Density</source>
             <translation>Densité</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="591" />
+            <location filename="../src/shell/shell_window.cpp" line="599" />
             <source>&amp;Help</source>
             <translation>Ai&amp;de</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="601" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>Main toolbar</source>
             <translation>Barre d'outils principale</translation>
         </message>
@@ -14261,100 +14356,100 @@ Réseaux : %5</translation>
             <translation type="vanished">Non disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="756" />
+            <location filename="../src/shell/shell_window.cpp" line="764" />
             <source>Ports</source>
             <translation>Ports</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="758" />
-            <location filename="../src/shell/shell_window.cpp" line="1215" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
+            <location filename="../src/shell/shell_window.cpp" line="1223" />
             <source>Inspector</source>
             <translation>Inspecteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="759" />
+            <location filename="../src/shell/shell_window.cpp" line="767" />
             <source>Send</source>
             <translation>Envoyer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="794" />
-            <location filename="../src/shell/shell_window.cpp" line="1268" />
+            <location filename="../src/shell/shell_window.cpp" line="802" />
+            <location filename="../src/shell/shell_window.cpp" line="1276" />
             <source>Copied %1.</source>
             <translation>%1 copié.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="814" />
+            <location filename="../src/shell/shell_window.cpp" line="822" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 octets mis en file d'attente vers %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="870" />
+            <location filename="../src/shell/shell_window.cpp" line="878" />
             <source>Links</source>
             <translation>Liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="925" />
+            <location filename="../src/shell/shell_window.cpp" line="933" />
             <source>Applied the topology JSON.</source>
             <translation>JSON de topologie appliqué.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1140" />
+            <location filename="../src/shell/shell_window.cpp" line="1148" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1162" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>Undo %1</source>
             <translation>Annuler %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1171" />
             <source>Redo %1</source>
             <translation>Rétablir %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1175" />
+            <location filename="../src/shell/shell_window.cpp" line="1183" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>Annule la création ou la suppression d'une liaison, le changement de propriétaire et le renommage d'un port.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1177" />
+            <location filename="../src/shell/shell_window.cpp" line="1185" />
             <source>This build cannot reverse changes.</source>
             <translation>Cette version ne peut pas annuler les modifications.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1193" />
             <source>Undid %1.</source>
             <translation>%1 annulé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1188" />
+            <location filename="../src/shell/shell_window.cpp" line="1196" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>Impossible d'annuler %1. La configuration a changé depuis.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1204" />
             <source>Redid %1.</source>
             <translation>%1 rétabli.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1199" />
+            <location filename="../src/shell/shell_window.cpp" line="1207" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>Impossible de rétablir %1. La configuration a changé depuis.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1214" />
+            <location filename="../src/shell/shell_window.cpp" line="1222" />
             <source>Ports %1</source>
             <translation>Ports %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1219" />
+            <location filename="../src/shell/shell_window.cpp" line="1227" />
             <source>Inspector %1</source>
             <translation>Inspecteur %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1836" />
-            <location filename="../src/shell/shell_window.cpp" line="1849" />
+            <location filename="../src/shell/shell_window.cpp" line="1844" />
+            <location filename="../src/shell/shell_window.cpp" line="1857" />
             <source>Remove %1?</source>
             <translation>Supprimer %1 ?</translation>
         </message>
@@ -14363,214 +14458,214 @@ Réseaux : %5</translation>
             <translation type="vanished">Le port et ses liens seront supprimés. Cette action est irréversible.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1754" />
-            <location filename="../src/shell/shell_window.cpp" line="1818" />
-            <location filename="../src/shell/shell_window.cpp" line="1853" />
-            <location filename="../src/shell/shell_window.cpp" line="1924" />
-            <location filename="../src/shell/shell_window.cpp" line="2344" />
-            <location filename="../src/shell/shell_window.cpp" line="2473" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1826" />
+            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="2352" />
+            <location filename="../src/shell/shell_window.cpp" line="2481" />
             <source>Cancel</source>
             <translation>Annuler</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1871" />
-            <location filename="../src/shell/shell_window.cpp" line="1942" />
+            <location filename="../src/shell/shell_window.cpp" line="1879" />
+            <location filename="../src/shell/shell_window.cpp" line="1950" />
             <source>Could not remove %1</source>
             <translation>Impossible de supprimer %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1880" />
+            <location filename="../src/shell/shell_window.cpp" line="1888" />
             <source>Removed %1.</source>
             <translation>%1 supprimé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1356" />
+            <location filename="../src/shell/shell_window.cpp" line="1364" />
             <source>Sharing is not available in this build.</source>
             <translation>Le partage n'est pas disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1383" />
+            <location filename="../src/shell/shell_window.cpp" line="1391" />
             <source>Networking is not available in this build.</source>
             <translation>Le réseau n'est pas disponible dans cette version.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1405" />
+            <location filename="../src/shell/shell_window.cpp" line="1413" />
             <source>Bridge is running on port %1.</source>
             <translation>Le pont fonctionne sur le port %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1406" />
+            <location filename="../src/shell/shell_window.cpp" line="1414" />
             <source>Open monitor</source>
             <translation>Ouvrir le moniteur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1427" />
-            <location filename="../src/shell/shell_window.cpp" line="2385" />
-            <location filename="../src/shell/shell_window.cpp" line="2397" />
+            <location filename="../src/shell/shell_window.cpp" line="1435" />
+            <location filename="../src/shell/shell_window.cpp" line="2393" />
+            <location filename="../src/shell/shell_window.cpp" line="2405" />
             <source>Could not open %1</source>
             <translation>Impossible d'ouvrir %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1428" />
+            <location filename="../src/shell/shell_window.cpp" line="1436" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>La configuration nécessite un appareil ou un point de terminaison réseau qui n'est pas disponible sur ce PC. Rien n'a été modifié. Vérifiez l'appareil, puis réessayez.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1451" />
-            <location filename="../src/shell/shell_window.cpp" line="2409" />
-            <location filename="../src/shell/shell_window.cpp" line="2437" />
+            <location filename="../src/shell/shell_window.cpp" line="1459" />
+            <location filename="../src/shell/shell_window.cpp" line="2417" />
+            <location filename="../src/shell/shell_window.cpp" line="2445" />
             <source>%1 ports, %2 links</source>
             <translation>%1 ports, %2 liens</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1543" />
-            <location filename="../src/shell/shell_window.cpp" line="1566" />
+            <location filename="../src/shell/shell_window.cpp" line="1551" />
+            <location filename="../src/shell/shell_window.cpp" line="1574" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>Paire liée créée. Le programme A ouvre %1 ; le programme B ouvre %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1610" />
+            <location filename="../src/shell/shell_window.cpp" line="1618" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>Surveillance de %1. L'observateur est %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1660" />
+            <location filename="../src/shell/shell_window.cpp" line="1668" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 fait partie d'un lot de travail ultérieur.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1666" />
+            <location filename="../src/shell/shell_window.cpp" line="1674" />
             <source>%1 arrives with %2.</source>
             <translation>%1 arrive avec %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1751" />
+            <location filename="../src/shell/shell_window.cpp" line="1759" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>Supprimer ce lien ? %1. Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
+            <location filename="../src/shell/shell_window.cpp" line="1770" />
             <source>Could not remove the link</source>
             <translation>Impossible de supprimer le lien</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1771" />
+            <location filename="../src/shell/shell_window.cpp" line="1779" />
             <source>Removed the link.</source>
             <translation>Lien supprimé.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1850" />
+            <location filename="../src/shell/shell_window.cpp" line="1858" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>Supprimer %1 et ses liens ? Rien n'est enregistré tant que vous n'enregistrez pas la configuration.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2035" />
             <source>Renamed %1 to %2.</source>
             <translation>%1 renommé en %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2047" />
+            <location filename="../src/shell/shell_window.cpp" line="2055" />
             <source>%1 is now %2.</source>
             <translation>%1 est maintenant %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2070" />
             <source>Released %1.</source>
             <translation>%1 libéré.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2119" />
+            <location filename="../src/shell/shell_window.cpp" line="2127" />
             <source>Add a port before opening the line matrix.</source>
             <translation>Ajoutez un port avant d'ouvrir la matrice des lignes.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2154" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>Sélectionnez la cible d'une fusion avec la règle de propriétaire pour contrôler qui écrit.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2235" />
+            <location filename="../src/shell/shell_window.cpp" line="2243" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>Mode test. Les nouveaux ports fonctionnent uniquement dans Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2256" />
+            <location filename="../src/shell/shell_window.cpp" line="2264" />
             <source>Could not restart as administrator</source>
             <translation>Impossible de redémarrer en tant qu'administrateur</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2334" />
+            <location filename="../src/shell/shell_window.cpp" line="2342" />
             <source>Environment copied.</source>
             <translation>Environnement copié.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <location filename="../src/shell/shell_window.cpp" line="2351" />
             <source>Start a new setup?</source>
             <translation>Commencer une nouvelle configuration ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <location filename="../src/shell/shell_window.cpp" line="2351" />
             <source>Start new</source>
             <translation>Commencer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2360" />
+            <location filename="../src/shell/shell_window.cpp" line="2368" />
             <source>Started a new setup.</source>
             <translation>Nouvelle configuration démarrée.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2370" />
+            <location filename="../src/shell/shell_window.cpp" line="2378" />
             <source>Open setup</source>
             <translation>Ouvrir une configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2371" />
+            <location filename="../src/shell/shell_window.cpp" line="2379" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Configurations Virtual Serial Studio (*.json);;Tous les fichiers (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2412" />
+            <location filename="../src/shell/shell_window.cpp" line="2420" />
             <source>Opened %1.</source>
             <translation>%1 ouvert.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2428" />
+            <location filename="../src/shell/shell_window.cpp" line="2436" />
             <source>Could not save this setup</source>
             <translation>Impossible d'enregistrer cette configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2441" />
-            <location filename="../src/shell/shell_window.cpp" line="2442" />
+            <location filename="../src/shell/shell_window.cpp" line="2449" />
+            <location filename="../src/shell/shell_window.cpp" line="2450" />
             <source>Saved %1.</source>
             <translation>%1 enregistré.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2448" />
+            <location filename="../src/shell/shell_window.cpp" line="2456" />
             <source>Save setup</source>
             <translation>Enregistrer la configuration</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2458" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Configurations Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2468" />
+            <location filename="../src/shell/shell_window.cpp" line="2476" />
             <source>Save changes to %1?</source>
             <translation>Enregistrer les modifications de %1 ?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2469" />
+            <location filename="../src/shell/shell_window.cpp" line="2477" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>Vos ports et liens ont changé depuis le dernier enregistrement. Vous pouvez désactiver cette invite dans les Paramètres.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2472" />
+            <location filename="../src/shell/shell_window.cpp" line="2480" />
             <source>Don't save</source>
             <translation>Ne pas enregistrer</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2537" />
+            <location filename="../src/shell/shell_window.cpp" line="2545" />
             <source>Layout reset.</source>
             <translation>Disposition réinitialisée.</translation>
         </message>

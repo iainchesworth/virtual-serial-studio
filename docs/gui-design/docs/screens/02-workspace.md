@@ -13,7 +13,7 @@ Header "Ports" with a count. Selection is shared with the Topology and Inspector
 
 ## Inspector
 Header "Inspector" and the port name.
-- Simple: State (chip), Path (mono with copy), Traffic ("RX 0 B, TX 1.2 kB"). When waiting: "No program has opened COM7 yet." and the link "Why is nothing arriving?" (opens the troubleshoot dialog). "Control lines" label and six read-only chips in a 3 by 2 grid: DTR, RTS, CTS, DSR, DCD, RI, each "<name> on" (ok, filled) or "<name> off" (hollow).
+- Simple: State (chip), Path (mono with copy), Traffic ("RX 0 B, TX 1.2 kB"). When waiting: "No program has opened COM7 yet. The program has to open exactly COM7; a different port will not receive anything.", a quiet small button "Copy name" (copies the path, toast "COM7 copied.") and the link "Why is nothing arriving?" (opens the troubleshoot dialog). "Control lines" label and six read-only chips in a 3 by 2 grid: DTR, RTS, CTS, DSR, DCD, RI, each "<name> on" (ok, filled) or "<name> off" (hollow).
 - Advanced: also Serial ("115200 8N1, no flow control") for real devices. DTR and RTS become Switches ("DTR on", "RTS off"), a "Break" button, input chips CTS, DSR, DCD, RI, and a link "Open line matrix and faults".
 - Virtual ports accept the operations and report their own state. Unsupported operations are disabled with a tooltip, never silent.
 
