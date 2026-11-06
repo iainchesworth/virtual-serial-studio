@@ -16,6 +16,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <optional>
 #include <system_error>
 #include <vector>
 
@@ -58,11 +59,17 @@ bool collect(const fs::path& root, std::vector<fs::path>& found)
     return true;
 }
 
-std::vector<char> read_file(const fs::path& path)
+// An unreadable input must fail the replay, not run as an empty one.
+std::optional<std::vector<char>> read_file(const fs::path& path)
 {
     std::ifstream in(path, std::ios::binary);
-    return {std::istreambuf_iterator<char>(in),
-            std::istreambuf_iterator<char>()};
+    if (!in)
+        return std::nullopt;
+    std::vector<char> bytes{std::istreambuf_iterator<char>(in),
+                            std::istreambuf_iterator<char>()};
+    if (in.bad())
+        return std::nullopt;
+    return bytes;
 }
 
 } // namespace
@@ -87,7 +94,13 @@ int main(int argc, char** argv)
 
     for (const auto& file : files)
     {
-        const auto bytes = read_file(file);
+        const auto contents = read_file(file);
+        if (!contents)
+        {
+            std::cerr << "fuzz replay: cannot read " << file.string() << '\n';
+            return 1;
+        }
+        const auto& bytes = *contents;
         static const std::uint8_t empty = 0;
         const auto* data =
             bytes.empty() ? &empty
