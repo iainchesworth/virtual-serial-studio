@@ -1,4 +1,4 @@
-A listening address can say who may connect: `?allow=` after the port, then
+**A listening address can say who may connect, and sends at once.** A listening address can say who may connect: `?allow=` after the port, then
 addresses or ranges such as `192.168.1.0/24`, for `tcp-listen://`,
 `udp-listen://` and `rfc2217-listen://`. A TCP or RFC 2217 client outside the
 list is closed as soon as it connects, and a UDP datagram from outside it is

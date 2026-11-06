@@ -141,8 +141,12 @@ bool rules_admit(const std::vector<allow_rule>& rules,
 {
     if (rules.empty())
         return true;
-    return std::any_of(rules.begin(), rules.end(), [&](const allow_rule& rule)
-                       { return rule_admits(rule, peer); });
+    for (const allow_rule& rule : rules)
+    {
+        if (rule_admits(rule, peer))
+            return true;
+    }
+    return false;
 }
 
 } // namespace
