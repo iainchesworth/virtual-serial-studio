@@ -21,8 +21,8 @@
 #include <chrono>
 #include <future>
 #include <memory>
-#include <optional>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <thread>
 #include <vector>
@@ -66,45 +66,53 @@ public:
     /// Hangs up on the client, as a server that restarted would.
     void drop()
     {
-        asio::post(io_, [this] {
-            boost::system::error_code ignored;
-            if (socket_)
-                socket_->close(ignored);
-            socket_.reset();
-        });
+        asio::post(io_,
+                   [this]
+                   {
+                       boost::system::error_code ignored;
+                       if (socket_)
+                           socket_->close(ignored);
+                       socket_.reset();
+                   });
     }
 
     /// Refuses new connections until #resume.
     void pause()
     {
         std::promise<void> done;
-        asio::post(io_, [this, &done] {
-            boost::system::error_code ignored;
-            acceptor_->close(ignored);
-            done.set_value();
-        });
+        asio::post(io_,
+                   [this, &done]
+                   {
+                       boost::system::error_code ignored;
+                       acceptor_->close(ignored);
+                       done.set_value();
+                   });
         done.get_future().wait();
     }
 
     void resume()
     {
         std::promise<void> done;
-        asio::post(io_, [this, &done] {
-            listen(port_);
-            done.set_value();
-        });
+        asio::post(io_,
+                   [this, &done]
+                   {
+                       listen(port_);
+                       done.set_value();
+                   });
         done.get_future().wait();
     }
 
     void send(const std::string& text)
     {
         std::promise<void> done;
-        asio::post(io_, [this, &text, &done] {
-            boost::system::error_code ignored;
-            if (socket_)
-                asio::write(*socket_, asio::buffer(text), ignored);
-            done.set_value();
-        });
+        asio::post(io_,
+                   [this, &text, &done]
+                   {
+                       boost::system::error_code ignored;
+                       if (socket_)
+                           asio::write(*socket_, asio::buffer(text), ignored);
+                       done.set_value();
+                   });
         done.get_future().wait();
     }
 
@@ -117,9 +125,9 @@ private:
         REQUIRE(!error);
         acceptor_->set_option(asio::socket_base::reuse_address(true), error);
         // Loopback only: a bind to every address makes Windows Firewall ask.
-        acceptor_->bind(asio::ip::tcp::endpoint(
-                            asio::ip::address_v4::loopback(), port),
-                        error);
+        acceptor_->bind(
+            asio::ip::tcp::endpoint(asio::ip::address_v4::loopback(), port),
+            error);
         REQUIRE(!error);
         port_ = acceptor_->local_endpoint().port();
         acceptor_->listen(asio::socket_base::max_listen_connections, error);
@@ -130,7 +138,9 @@ private:
     void accept()
     {
         acceptor_->async_accept(
-            [this](boost::system::error_code error, asio::ip::tcp::socket socket) {
+            [this](boost::system::error_code error,
+                   asio::ip::tcp::socket socket)
+            {
                 if (error)
                     return;
                 socket_ = std::move(socket);
@@ -146,7 +156,8 @@ private:
             return;
         socket_->async_read_some(
             asio::buffer(buffer_),
-            [this](boost::system::error_code error, std::size_t count) {
+            [this](boost::system::error_code error, std::size_t count)
+            {
                 if (error)
                     return;
                 {
@@ -195,7 +206,8 @@ struct log_watch
     {
         id = app.engine().subscribe(
             event_filter{std::nullopt, event_kind::log_message},
-            [mutex = mutex, lines = lines](const endpoint_event& event) {
+            [mutex = mutex, lines = lines](const endpoint_event& event)
+            {
                 std::lock_guard lock(*mutex);
                 lines->push_back(event.message);
             });
@@ -277,23 +289,29 @@ TEST_CASE("reopen: the links of the port stay")
     studio app;
     const auto remote = app.attach_serial("remote", uri_of(server));
     REQUIRE(remote);
-    const auto local = app.create_virtual_port("local", virtual_port_kind::loopback);
+    const auto local =
+        app.create_virtual_port("local", virtual_port_kind::loopback);
     REQUIRE(local);
     const auto link = app.connect("remote", "local");
     REQUIRE(link);
+    REQUIRE(wait_until([&] { return server.accepted() == 1; }, 5000ms));
 
     server.drop();
     REQUIRE(wait_for_state(*remote, endpoint_state::closed));
     REQUIRE(app.reopen((*remote)->id()));
+    // The server sends to the client it accepted last, so wait for the new
+    // connection before sending; otherwise the bytes go to the dropped one.
+    REQUIRE(wait_until([&] { return server.accepted() == 2; }, 5000ms));
 
     // A link made before the loss still joins the two.
     REQUIRE_EQ(app.link_infos().size(), std::size_t{1});
     server.send("through");
-    REQUIRE(wait_until(
-        [&] { return (*local)->stats().bytes_tx >= 7; }, 5000ms));
+    REQUIRE(
+        wait_until([&] { return (*local)->stats().bytes_tx >= 7; }, 5000ms));
 }
 
-TEST_CASE("reopen: a server that is still down reports why and the port stays down")
+TEST_CASE(
+    "reopen: a server that is still down reports why and the port stays down")
 {
     tcp_server server;
     studio app;
@@ -326,7 +344,8 @@ TEST_CASE("reopen: what cannot be made again says so")
 
     const auto fixture = app.create_mock_port("fixture");
     REQUIRE(fixture);
-    REQUIRE_EQ(app.reopen((*fixture)->id()), make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.reopen((*fixture)->id()),
+               make_error_code(errc::unsupported));
 }
 
 TEST_CASE("reopen: a listener binds its address again")
@@ -398,7 +417,8 @@ TEST_CASE("reconnect: it keeps trying while the server is down")
 
     server.pause();
     server.drop();
-    REQUIRE(wait_until([&] { return watch.saw("could not reconnect"); }, 5000ms));
+    REQUIRE(
+        wait_until([&] { return watch.saw("could not reconnect"); }, 5000ms));
     REQUIRE((*port)->state() == endpoint_state::closed);
 
     server.resume();
