@@ -281,10 +281,15 @@ TEST_CASE("reopen: the links of the port stay")
     REQUIRE(local);
     const auto link = app.connect("remote", "local");
     REQUIRE(link);
+    // The server must hold the connection before it can hang up on it.
+    REQUIRE(wait_until([&] { return server.accepted() == 1; }, 5000ms));
 
     server.drop();
     REQUIRE(wait_for_state(*remote, endpoint_state::closed));
     REQUIRE(app.reopen((*remote)->id()));
+    // The client side connects first: until the server has accepted the new
+    // connection, what it sends goes nowhere.
+    REQUIRE(wait_until([&] { return server.accepted() == 2; }, 5000ms));
 
     // A link made before the loss still joins the two.
     REQUIRE_EQ(app.link_infos().size(), std::size_t{1});
