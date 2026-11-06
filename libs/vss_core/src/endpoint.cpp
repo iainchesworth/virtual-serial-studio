@@ -611,6 +611,11 @@ endpoint_info endpoint::info() const
     const auto current = active_transport();
     out.supports_control_lines = current && current->supports_control_lines();
     out.open = is_open();
+    if (transport_)
+    {
+        out.peer_format = transport_->peer_format();
+        out.clients = transport_->client_count();
+    }
     return out;
 }
 

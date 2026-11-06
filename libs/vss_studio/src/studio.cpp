@@ -908,6 +908,11 @@ studio::recreate_report studio::recreate_lost_ports()
     return report;
 }
 
+std::vector<format_mismatch> studio::format_mismatches() const
+{
+    return find_format_mismatches(endpoint_infos(), link_infos());
+}
+
 std::string studio::advertised_path(endpoint_id id) const
 {
     std::lock_guard lock(record_mutex_);

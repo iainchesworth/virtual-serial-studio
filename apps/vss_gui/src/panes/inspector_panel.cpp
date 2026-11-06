@@ -409,12 +409,16 @@ void InspectorPanel::update_content()
     serial_label_->setText(serial_description());
 
     const bool waiting = port.open && port.peer == peer_state::not_open;
-    help_text_->setVisible(waiting);
-    help_text_->setText(
+    QString note =
         waiting ? tr("No program has opened %1 yet. The program has to open "
                      "exactly %1; a different port will not receive anything.")
                       .arg(port.path)
-                : QString());
+                : QString();
+    const QString status = PortModel::status_text(port);
+    if (!status.isEmpty())
+        note = note.isEmpty() ? status : note + QStringLiteral(" ") + status;
+    help_text_->setVisible(!note.isEmpty());
+    help_text_->setText(note);
     help_copy_->setVisible(waiting);
     help_copy_->setAccessibleName(tr("Copy name, %1").arg(port.path));
     help_copy_->setToolTip(tr("Copy name"));

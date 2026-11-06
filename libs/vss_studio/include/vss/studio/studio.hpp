@@ -13,6 +13,7 @@
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/serial_enumeration.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/studio/format_check.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/ports/stable_link.hpp>
 #include <vss/ports/vcom_driver.hpp>
@@ -202,6 +203,10 @@ public:
     /// the rest go on.  Blocks for as long as the driver takes to make the
     /// ports, a second or two each.
     recreate_report recreate_lost_ports();
+    /// The links whose members run at different baud rates or framing, from
+    /// what each port reports now (see #find_format_mismatches).  Cheap; the
+    /// window and `vss_cli run` ask on every refresh.
+    std::vector<format_mismatch> format_mismatches() const;
 
     /// What other applications should open for this endpoint.
     std::string advertised_path(endpoint_id id) const;

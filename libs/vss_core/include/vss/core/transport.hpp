@@ -8,6 +8,7 @@
 #define VSS_CORE_TRANSPORT_HPP
 
 #include <vss/core/control_lines.hpp>
+#include <vss/core/serial_settings.hpp>
 
 #include <boost/asio/any_io_executor.hpp>
 #include <boost/asio/buffer.hpp>
@@ -15,6 +16,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <optional>
 #include <string>
 
 namespace vss {
@@ -61,6 +63,21 @@ public:
 
     /// Re-reads the lines from the device, for transports that poll.
     virtual void refresh_lines() {}
+
+    /// The baud rate and framing the program on the other side of this
+    /// transport has set, when the transport can tell: the driver reports what
+    /// the program chose with `SetCommState`, a pseudo terminal what it set
+    /// with `tcsetattr`.  Empty when it cannot, or when no program has chosen
+    /// yet.  May be called from any thread.
+    virtual std::optional<line_format> peer_format() const { return std::nullopt; }
+
+    /// How many remote clients are connected, for a transport that waits for
+    /// them (a listener).  Empty for every other kind, so "none connected" and
+    /// "not a listener" stay different answers.  May be called from any thread.
+    virtual std::optional<std::size_t> client_count() const noexcept
+    {
+        return std::nullopt;
+    }
 
     /// Something a transport has to say about its device that belongs in the
     /// log, such as that a program opened or closed it.  The endpoint hands the

@@ -21,6 +21,7 @@
 #include <signal.h>
 #include <spawn.h>
 #include <sys/wait.h>
+#include <termios.h>
 #include <unistd.h>
 
 #include <chrono>
@@ -179,6 +180,66 @@ TEST_CASE("peer open: another process holding a pty open is noticed")
     REQUIRE(vss::testkit::wait_until(
         [&] { return peer_open(paths)[0] == peer_open_state::not_open; },
         5000ms));
+}
+
+TEST_CASE("pseudo terminal: the baud rate and framing a program sets are reported")
+{
+    boost::asio::io_context io;
+    const auto created =
+        create_virtual_port(io.get_executor(), virtual_port_kind::pty, "fmt");
+    REQUIRE(created);
+    REQUIRE(created->port != nullptr);
+
+    // Nobody has chosen anything yet: Studio's own raw start is not a choice.
+    REQUIRE(!created->port->peer_format().has_value());
+
+    const int slave = ::open(created->path.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
+    REQUIRE(slave >= 0);
+
+    struct termios settings{};
+    REQUIRE_EQ(::tcgetattr(slave, &settings), 0);
+    const struct termios original = settings;
+    ::cfsetispeed(&settings, B9600);
+    ::cfsetospeed(&settings, B9600);
+    settings.c_cflag &= ~static_cast<tcflag_t>(CSIZE | PARODD);
+    settings.c_cflag |= CS7 | PARENB | CSTOPB;
+    REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &settings), 0);
+
+    // The baud rate always comes through.  Whether the framing does is up to
+    // the system: Linux forces the slave to 8N1 whatever a program asks for,
+    // macOS keeps it.  The port says which it is, and never claims a framing
+    // the program did not choose.
+    const auto reported = created->port->peer_format();
+    REQUIRE(reported.has_value());
+    REQUIRE_EQ(reported->baud_rate, 9600u);
+    if (reported->framing_known)
+    {
+        REQUIRE_EQ(reported->data_bits, 7u);
+        REQUIRE(reported->parity == parity_mode::even);
+        REQUIRE(reported->stop_bits == stop_bits_mode::two);
+
+        // Odd parity and one stop bit.
+        settings.c_cflag |= PARODD;
+        settings.c_cflag &= ~static_cast<tcflag_t>(CSTOPB);
+        REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &settings), 0);
+        const auto odd = created->port->peer_format();
+        REQUIRE(odd.has_value());
+        REQUIRE(odd->parity == parity_mode::odd);
+        REQUIRE(odd->stop_bits == stop_bits_mode::one);
+    }
+    else
+    {
+        REQUIRE_EQ(to_label(*reported), std::string("9600"));
+    }
+
+    // Back to where it started: no longer a program's choice.
+    REQUIRE_EQ(::tcsetattr(slave, TCSANOW, &original), 0);
+    REQUIRE(!created->port->peer_format().has_value());
+
+    ::close(slave);
+    created->port->close();
+    // A closed port reports nothing.
+    REQUIRE(!created->port->peer_format().has_value());
 }
 
 TEST_CASE("process control: there is nothing to ask where there is no driver")

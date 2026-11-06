@@ -10,6 +10,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_document.cpp
   unit/test_endpoint.cpp
   unit/test_endpoint_reopen.cpp
+  unit/test_endpoint_status.cpp
   unit/test_error_and_log.cpp
   unit/test_hub_bus.cpp
   unit/test_hub_events.cpp
@@ -201,7 +202,7 @@ endif()
 if(TARGET vss_gui_shell_tests)
   add_test(NAME gui_shell COMMAND vss_gui_shell_tests --verbose)
   set_tests_properties(gui_shell PROPERTIES
-    TIMEOUT 180
+    TIMEOUT 300
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 

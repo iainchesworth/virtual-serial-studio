@@ -157,19 +157,26 @@ result<flow_control_mode> parse_flow_control(std::string_view text)
     return make_error_code(errc::invalid_argument);
 }
 
-std::string to_label(const serial_settings& settings)
+std::string to_label(const line_format& format)
 {
-    std::string out = std::to_string(settings.baud_rate);
+    std::string out = std::to_string(format.baud_rate);
+    if (!format.framing_known)
+        return out;
     out.push_back(' ');
-    out.push_back(static_cast<char>('0' + (settings.data_bits % 10)));
-    out.push_back(parity_letter(settings.parity));
-    switch (settings.stop_bits)
+    out.push_back(static_cast<char>('0' + (format.data_bits % 10)));
+    out.push_back(parity_letter(format.parity));
+    switch (format.stop_bits)
     {
     case stop_bits_mode::one: out.push_back('1'); break;
     case stop_bits_mode::one_point_five: out.append("1.5"); break;
     case stop_bits_mode::two: out.push_back('2'); break;
     }
     return out;
+}
+
+std::string to_label(const serial_settings& settings)
+{
+    return to_label(format_of(settings));
 }
 
 } // namespace vss

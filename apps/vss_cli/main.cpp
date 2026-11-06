@@ -13,6 +13,7 @@
 
 #include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
+#include <vss/studio/format_check.hpp>
 #include <vss/studio/capture.hpp>
 #include <vss/studio/replay.hpp>
 #include <vss/studio/responder.hpp>
@@ -29,6 +30,7 @@
 #include <iterator>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <thread>
 #include <vector>
@@ -197,6 +199,49 @@ void print_usage()
         vss_cli::permissions_usage());
 }
 
+/// The sentence for a link whose members run at different speeds, such as
+/// `link 3: members run at different speeds: modem 9600 8N1, terminal 19200
+/// 8N1`.  Studio carries the bytes across anyway, so this is the only place
+/// the difference shows.
+std::string describe_format_mismatch(
+    const vss::format_mismatch& mismatch,
+    const std::vector<vss::endpoint_info>& endpoints)
+{
+    std::string text = "link " + std::to_string(mismatch.link) +
+                       ": members run at different baud rates or framing:";
+    bool first = true;
+    for (const auto& member : mismatch.members)
+    {
+        std::string name = std::to_string(member.endpoint);
+        for (const auto& info : endpoints)
+        {
+            if (info.id == member.endpoint)
+                name = info.name;
+        }
+        text += first ? " " : ", ";
+        first = false;
+        text += name + " " + vss::to_label(member.format);
+    }
+    return text;
+}
+
+/// Prints each new format mismatch once, to the error stream.  A program sets
+/// its baud rate after it opens the port, so a mismatch can appear while the
+/// topology runs.
+void announce_format_mismatches(studio& app, std::set<std::string>& announced)
+{
+    const auto endpoints = app.endpoint_infos();
+    for (const auto& mismatch : app.format_mismatches())
+    {
+        const std::string text = describe_format_mismatch(mismatch, endpoints);
+        if (announced.insert(text).second)
+        {
+            std::fprintf(stderr, "warning: %s\n", text.c_str());
+            std::fflush(stderr);
+        }
+    }
+}
+
 void print_topology(studio& app)
 {
     const auto endpoints = app.endpoint_infos();
@@ -211,6 +256,18 @@ void print_topology(studio& app)
                     vss::format_byte_size(info.stats.bytes_rx).c_str(),
                     vss::format_byte_size(info.stats.bytes_tx).c_str(),
                     vss::format_byte_size(info.stats.total_bytes()).c_str());
+        // What the program on the port set, and who is connected to a listener.
+        if (info.peer_format)
+            std::printf("        program set %s\n",
+                        vss::to_label(*info.peer_format).c_str());
+        if (info.clients)
+            std::printf("        %zu connected\n", *info.clients);
+        if (info.stats.last_activity != vss::time_point{})
+            std::printf("        last data %.1f s ago\n",
+                        std::chrono::duration<double>(
+                            std::chrono::steady_clock::now() -
+                            info.stats.last_activity)
+                            .count());
     }
 
     const auto links = app.link_infos();
@@ -234,6 +291,11 @@ void print_topology(studio& app)
                     static_cast<unsigned long long>(link.stats.dropped));
     }
 
+    const auto mismatches = app.format_mismatches();
+    for (const auto& mismatch : mismatches)
+        std::printf("warning: %s\n",
+                    describe_format_mismatch(mismatch, endpoints).c_str());
+
     // A script that reads this through a pipe needs the table at once, not when
     // the process exits.
     std::fflush(stdout);
@@ -244,10 +306,12 @@ void run_for(studio& app, int seconds, bool verbose)
     if (seconds <= 0)
         return;
 
+    std::set<std::string> announced;
     const auto started = std::chrono::steady_clock::now();
     while (std::chrono::steady_clock::now() - started < std::chrono::seconds(seconds))
     {
         std::this_thread::sleep_for(500ms);
+        announce_format_mismatches(app, announced);
         if (verbose)
             print_topology(app);
     }
@@ -278,10 +342,17 @@ void catch_stop_signals()
 bool run_until_stopped(studio& app, int seconds, bool verbose)
 {
     const auto started = std::chrono::steady_clock::now();
+    std::set<std::string> announced;
+    auto last_check = started;
     auto last_print = started;
     while (!g_stop_requested.load())
     {
         const auto now = std::chrono::steady_clock::now();
+        if (now - last_check >= 500ms)
+        {
+            announce_format_mismatches(app, announced);
+            last_check = now;
+        }
         if (seconds > 0 && now - started >= std::chrono::seconds(seconds))
             break;
         if (verbose && now - last_print >= 500ms)

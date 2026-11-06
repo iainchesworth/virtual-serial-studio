@@ -6,6 +6,7 @@
 
 #include "dialogs/share_wizard.hpp"
 
+#include "backend/share_edit.hpp"
 #include "dialogs/common.hpp"
 #include "dialogs/network_uri.hpp"
 #include "dialogs/share_plan.hpp"
@@ -15,6 +16,7 @@
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/pick_row.hpp"
 
 #include <QAbstractButton>
 #include <QButtonGroup>
@@ -32,7 +34,9 @@
 #include <QPalette>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QScreen>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QSettings>
 #include <QSignalBlocker>
 #include <QStackedWidget>
@@ -85,25 +89,27 @@ QString peer_text(peer_state peer)
 }
 
 /// A device radio row with the mono path, a description and a state chip.
-class DeviceRow final : public QFrame
+///
+/// A click anywhere on an available row selects it, and a double-click goes
+/// to the next step (`PickRow`).
+class DeviceRow final : public PickRow
 {
 public:
     DeviceRow(const device_view& device, const QString& description,
               const QString& chip_text, StatusChip::kind chip, bool selectable,
               int index, QWidget* parent)
-        : QFrame(parent)
+        : PickRow(parent)
     {
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         auto* layout = new QHBoxLayout(this);
         layout->setContentsMargins(12, 8, 12, 8);
         layout->setSpacing(10);
 
-        radio_ = new QRadioButton(this);
-        radio_->setAccessibleName(
-            ShareWizard::tr("%1, %2, %3")
-                .arg(device.path, description, chip_text));
-        radio_->setEnabled(selectable);
-        layout->addWidget(radio_, 0, Qt::AlignVCenter);
+        auto* radio = new QRadioButton(this);
+        set_radio(radio);
+        radio->setAccessibleName(ShareWizard::tr("%1, %2, %3")
+                                     .arg(device.path, description, chip_text));
+        radio->setEnabled(selectable);
+        layout->addWidget(radio, 0, Qt::AlignVCenter);
 
         auto* column = new QVBoxLayout();
         column->setContentsMargins(0, 0, 0, 0);
@@ -120,27 +126,16 @@ public:
 
         chip_ = new StatusChip(chip_text, chip, this);
         layout->addWidget(chip_, 0, Qt::AlignVCenter);
-        setAccessibleName(radio_->accessibleName());
+        setAccessibleName(radio->accessibleName());
         setEnabled(selectable);
+        setCursor(selectable ? Qt::PointingHandCursor : Qt::ArrowCursor);
         index_ = index;
+        pass_clicks_through();
     }
 
-    QRadioButton* radio() const { return radio_; }
     int index() const { return index_; }
 
-protected:
-    void mouseReleaseEvent(QMouseEvent* event) override
-    {
-        if (event->button() == Qt::LeftButton && radio_->isEnabled() &&
-            rect().contains(event->position().toPoint()))
-        {
-            radio_->setChecked(true);
-        }
-        QFrame::mouseReleaseEvent(event);
-    }
-
 private:
-    QRadioButton* radio_ = nullptr;
     StatusChip* chip_ = nullptr;
     int index_ = 0;
 };
@@ -185,7 +180,9 @@ ShareWizard::ShareWizard(StudioBackend& backend, bool advanced, QWidget* parent)
 void ShareWizard::build()
 {
     prepare_dialog(this, tr("Share a device with several programs"), 760, 700);
-    setMinimumWidth(640);
+    // prepare_dialog fixes a minimum height.  Drop it so the layout's own
+    // minimum applies: the page scrolls and the footer is always on screen.
+    setMinimumSize(640, 0);
 
     auto* outer = new QVBoxLayout(this);
     outer->setContentsMargins(20, 20, 20, 0);
@@ -215,7 +212,23 @@ void ShareWizard::build()
     pages_->addWidget(build_device_page());
     pages_->addWidget(build_programs_page());
     pages_->addWidget(build_ready_page());
-    outer->addWidget(pages_, 1);
+
+    // The pages scroll, so a small screen or large text never pushes the
+    // footer buttons out of the dialog.
+    auto* scroll = new QScrollArea(this);
+    scroll->setObjectName(QStringLiteral("shareScroll"));
+    scroll->setFrameShape(QFrame::NoFrame);
+    scroll->setWidgetResizable(true);
+    scroll->setFocusPolicy(Qt::NoFocus);
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scroll->verticalScrollBar()->setAccessibleName(tr("Scroll"));
+    scroll->horizontalScrollBar()->setAccessibleName(tr("Scroll"));
+    scroll->setStyleSheet(
+        QStringLiteral("QScrollArea { background: transparent; border: 0; }"));
+    scroll->setWidget(pages_);
+    pages_->setAutoFillBackground(false);
+    scroll->viewport()->setAutoFillBackground(false);
+    outer->addWidget(scroll, 1);
 
     build_footer();
 
@@ -466,11 +479,13 @@ void ShareWizard::update_step1_info()
     const QString name = source_name();
     const QString rich =
         tr("Your programs will open the ports Studio creates, not %1 itself. "
-           "Next you choose how many programs there are.")
+           "Next you choose how many programs there are. You can add more "
+           "afterwards.")
             .arg(bold_name(name));
     step1_info_plain_ =
         tr("Your programs will open the ports Studio creates, not %1 itself. "
-           "Next you choose how many programs there are.")
+           "Next you choose how many programs there are. You can add more "
+           "afterwards.")
             .arg(name);
     info->set_text(rich, step1_info_plain_);
 }
@@ -516,6 +531,15 @@ QWidget* ShareWizard::build_programs_page()
     count_row->addWidget(limit);
     count_row->addStretch(1);
     layout->addLayout(count_row);
+    auto* later = new QLabel(
+        tr("You can add another program after sharing, and remove any "
+           "program's port later with Remove port."),
+        page);
+    later->setObjectName(QStringLiteral("shareCountLater"));
+    later->setFont(Theme::instance().font(text_style::caption));
+    later->setProperty("muted", true);
+    later->setWordWrap(true);
+    layout->addWidget(later);
     connect(minus, &QToolButton::clicked, this,
             [this] { set_programs(programs_ - 1); });
     connect(plus, &QToolButton::clicked, this,
@@ -774,7 +798,11 @@ void ShareWizard::update_device_list()
                                   selectable, index, device_card_);
         device_layout_->addWidget(row);
         if (selectable)
+        {
             device_group_->addButton(row->radio(), index);
+            connect(row, &PickRow::activated, this,
+                    [this] { static_cast<void>(next()); });
+        }
         if (row->radio()->isEnabled())
         {
             connect(
@@ -986,7 +1014,7 @@ void ShareWizard::set_step(int step)
     pages_->setCurrentIndex(step_);
     stepper_->set_current(step_);
     update_step();
-    resize(760, step_ == 1 ? 760 : (step_ == 2 ? 640 : 700));
+    fit_to_screen(760, step_ == 1 ? 760 : (step_ == 2 ? 640 : 700));
     QTimer::singleShot(
         0, this,
         [this]
@@ -1007,6 +1035,22 @@ void ShareWizard::set_step(int step)
                     edit->setFocus(Qt::OtherFocusReason);
             }
         });
+}
+
+void ShareWizard::fit_to_screen(int width, int height)
+{
+    const QScreen* screen = parentWidget() != nullptr
+                                ? parentWidget()->screen()
+                                : QGuiApplication::primaryScreen();
+    if (screen != nullptr)
+    {
+        const QRect available = screen->availableGeometry();
+        // Leave room for the title bar and the taskbar.
+        height = std::min(height, std::max(320, available.height() - 80));
+        width =
+            std::min(width, std::max(minimumWidth(), available.width() - 40));
+    }
+    resize(width, height);
 }
 
 int ShareWizard::current_step() const
@@ -1354,26 +1398,62 @@ bool ShareWizard::share()
     for (const vss::endpoint_id id : shared_.listeners)
         listener_ids_.push_back(id);
     shared_programs_ = names;
-    step3_title_ = programs_ == 1
-                       ? tr("%1 is shared with 1 program").arg(source_name())
-                       : tr("%1 is shared with %2 programs")
-                             .arg(source_name())
-                             .arg(programs_);
+    step3_title_ = shared_title(programs_);
     set_step(2);
     update_ready_table();
     update_ready_note();
     return true;
 }
 
+QString ShareWizard::shared_title(int programs) const
+{
+    return programs == 1 ? tr("%1 is shared with 1 program").arg(source_name())
+                         : tr("%1 is shared with %2 programs")
+                               .arg(source_name())
+                               .arg(programs);
+}
+
 bool ShareWizard::add_another_program()
 {
-    if (step_ != 2)
+    if (step_ != 2 || shared_.source == 0)
         return false;
-    programs_ = std::min(32, programs_ + 1);
-    acknowledged_ = false;
-    set_step(1);
-    update_warning();
+    if (listener_ids_.size() >= 32)
+    {
+        error_->show_error(
+            tr("The most Studio can share is 32 programs"),
+            tr("Remove a program's port first if you need a different one."));
+        return false;
+    }
+
+    // The share stays as it is. The device and the programs' ports are not
+    // touched, so a program that has its port open keeps it.
+    clear_error();
+    share_ref share;
+    share.link = shared_.link;
+    share.device = shared_.source;
+    share.programs = listener_ids_;
+    const auto added = vss::gui::add_program_port(
+        backend_, share, next_program_name(backend_.ports()), true);
+    if (!added)
+    {
+        last_error_ = error_text(added.error());
+        error_->show_error(
+            tr("Could not add another program"),
+            tr("The share is as it was. Check the device, then try again."),
+            last_error_);
+        return false;
+    }
+
+    shared_.link = added->link;
+    shared_.listeners.push_back(added->port);
+    listener_ids_.push_back(added->port);
+    shared_programs_ << program_default(static_cast<int>(listener_ids_.size()) -
+                                        1);
+    programs_ = static_cast<int>(listener_ids_.size());
+    step3_title_ = shared_title(programs_);
     update_step();
+    update_ready_table();
+    update_ready_note();
     return true;
 }
 

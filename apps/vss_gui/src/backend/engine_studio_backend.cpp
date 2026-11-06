@@ -110,6 +110,8 @@ port_view make_port(
     view.stats = info.stats;
     view.supports_control_lines = info.supports_control_lines;
     view.open = info.open;
+    view.peer_format = info.peer_format;
+    view.clients = info.clients;
     view.studio_only = info.kind == vss::endpoint_kind::mock ||
                        view.path.startsWith(QStringLiteral("loopback:"));
     // Only a pseudo terminal on a platform that can inspect other processes has
@@ -168,6 +170,9 @@ bool same_port(const port_view& left, const port_view& right)
            left.lines == right.lines && left.open == right.open &&
            left.supports_control_lines == right.supports_control_lines &&
            left.studio_only == right.studio_only && left.peer == right.peer &&
+           left.peer_format == right.peer_format &&
+           left.clients == right.clients &&
+           left.format_conflicts == right.format_conflicts &&
            left.driver_port == right.driver_port &&
            left.com_number == right.com_number &&
            left.stats.bytes_rx == right.stats.bytes_rx &&
@@ -255,6 +260,7 @@ capabilities EngineStudioBackend::caps() const
     // A pseudo terminal on Linux can be checked for a program that has it
     // open; every other port reads as unknown and the GUI says nothing.
     caps.peer_open = vss::peer_open_supported();
+    caps.line_format = true;
     // The Studio driver takes a COM number when a port is made or afterwards,
     // and its revoke request takes a port back from a program.
     caps.com_numbers = driver_installed();
@@ -834,6 +840,32 @@ void EngineStudioBackend::rebuild()
 
     std::vector<link_view> next_links;
     const auto links = studio_.link_infos();
+
+    // Name, on each port, the others on its links that run at another speed.
+    for (const auto& mismatch : vss::find_format_mismatches(infos, links))
+    {
+        for (const auto& member : mismatch.members)
+        {
+            const auto port = std::find_if(
+                next_ports.begin(), next_ports.end(),
+                [&member](const port_view& view)
+                { return view.id == member.endpoint; });
+            if (port == next_ports.end())
+                continue;
+            for (const auto& other : mismatch.members)
+            {
+                if (vss::same_format(other.format, member.format))
+                    continue;
+                const auto peer = std::find_if(
+                    next_ports.begin(), next_ports.end(),
+                    [&other](const port_view& view)
+                    { return view.id == other.endpoint; });
+                if (peer != next_ports.end() &&
+                    !port->format_conflicts.contains(peer->name))
+                    port->format_conflicts << peer->name;
+            }
+        }
+    }
     next_links.reserve(links.size());
     for (const auto& info : links)
         next_links.push_back(make_link(info));

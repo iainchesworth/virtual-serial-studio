@@ -53,6 +53,13 @@ struct capabilities
     /// A backend without it shows no banner and does not claim the ports are
     /// fine.
     bool recreate_ports = false;
+    /// The baud rate and framing a program set, the clients of a listener and
+    /// a warning when the ports of a link run at different speeds
+    /// (`endpoint_info::peer_format`, `clients`).  The engine backend provides
+    /// them; which ports can say depends on the platform (a Windows driver port
+    /// and a Linux or macOS pseudo terminal can, a TCP pipe has no format).  A
+    /// backend without it shows no format or client line and no warning.
+    bool line_format = false;
     /// Rename a port.  The engine backend provides it through
     /// `vss::studio::rename_port`, which keeps the hub, the studio's records
     /// and a saved setup in step.
