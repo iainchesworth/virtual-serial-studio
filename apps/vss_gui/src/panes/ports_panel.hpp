@@ -10,12 +10,15 @@
 #include "backend/studio_backend.hpp"
 #include "panes/selection_service.hpp"
 
+#include <QStringList>
 #include <QWidget>
 
+class QLabel;
 class QLineEdit;
 class QListView;
 class QStackedWidget;
 class QTableView;
+class QTimer;
 
 namespace vss::gui
 {
@@ -37,6 +40,8 @@ public:
     void refresh();
 
     vss::endpoint_id selected_port() const { return selection_.port(); }
+    /// The note under the list about ports another program made, or null.
+    QLabel* other_program_note() const noexcept { return others_; }
     void select_port(vss::endpoint_id id);
 
 Q_SIGNALS:
@@ -51,6 +56,7 @@ protected:
 
 private:
     void build();
+    void refresh_others();
     void on_current_changed(const QModelIndex& current);
     void sync_views(vss::endpoint_id id);
     void copy_selected_path();
@@ -63,6 +69,9 @@ private:
     QTableView* table_ = nullptr;
     QStackedWidget* stack_ = nullptr;
     QLineEdit* filter_ = nullptr;
+    QLabel* others_ = nullptr;
+    QTimer* others_timer_ = nullptr;
+    QStringList known_paths_;
     PortDelegate* simple_delegate_ = nullptr;
     PortDelegate* table_delegate_ = nullptr;
     bool advanced_ = false;

@@ -17,6 +17,7 @@ class QComboBox;
 class QComboBox;
 class QLabel;
 class QLineEdit;
+class QVBoxLayout;
 
 namespace vss::gui
 {
@@ -42,6 +43,13 @@ public:
     vss::endpoint_id source_id() const noexcept { return source_; }
     vss::endpoint_id watcher_id() const noexcept { return watcher_; }
     vss::link_id link_id() const noexcept { return link_; }
+    /// The note shown when the list of ports is empty, or null.
+    NoteBanner* empty_note() const noexcept { return empty_; }
+    /// True when the user chose "Create a port" from the empty note.
+    bool create_port_requested() const noexcept
+    {
+        return create_port_requested_;
+    }
     bool open_monitor_requested() const noexcept
     {
         return open_monitor_ != nullptr && open_monitor_->isChecked();
@@ -49,9 +57,12 @@ public:
 
 Q_SIGNALS:
     void error_shown(const QString& title);
+    void create_port_requested();
 
 private:
     void build();
+    void show_empty_state(const std::vector<device_view>& others,
+                          QVBoxLayout* layout);
     void update_for_source();
     void update_primary_state();
     void start_watching();
@@ -64,6 +75,8 @@ private:
     QCheckBox* open_monitor_ = nullptr;
     QLabel* info_ = nullptr;
     NoteBanner* unavailable_ = nullptr;
+    NoteBanner* empty_ = nullptr;
+    bool create_port_requested_ = false;
     bool name_auto_ = true;
     vss::endpoint_id source_ = 0;
     vss::endpoint_id watcher_ = 0;

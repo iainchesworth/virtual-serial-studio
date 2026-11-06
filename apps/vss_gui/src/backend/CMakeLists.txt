@@ -15,6 +15,7 @@ add_library(vss_gui_backend STATIC
   fake_studio_backend.hpp
   event_bridge.hpp
   capabilities.hpp
+  other_ports.hpp
   view_types.hpp)
 
 target_include_directories(vss_gui_backend PUBLIC
