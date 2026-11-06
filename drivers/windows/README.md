@@ -41,9 +41,9 @@ driver builds in CI from the same sources; its guest results are in the section
 | Hub end: a second handle on each port that carries its bytes, line settings and lines, with flow control both ways | runs in both guests (tests D8 to D13) |
 | Control device: ports on demand, removed with the handle that made them | runs in both guests (tests D14 to D19) |
 | Write timeouts, and who may open the hub end and make how many ports | tests D18, D20 and D21 |
-| `SET_HANDFLOW` drives DTR and RTS: enable, disable, handshake on the receive buffer, RTS toggle | tests D23 to D25; the rules are unit-tested on the host |
-| Revoke: the hub takes the port back from a program, and the hub state names the process | tests D26 and D27 |
-| COM numbers: choose one when the port is made, change it later, refuse one that is taken (the helper service, for either driver) | tests D28 to D31 and the client test C2 |
+| `SET_HANDFLOW` drives DTR and RTS: enable, disable, handshake on the receive buffer, RTS toggle | tests D23 to D25 pass for both drivers in the Windows 10 22H2 guest; the rules are also unit-tested on the host. Not yet run in the Windows 11 guest or on ARM64 |
+| Revoke: the hub takes the port back from a program, and the hub state names the process | tests D26 and D27 pass for both drivers in the Windows 10 22H2 guest; not yet run in the Windows 11 guest or on ARM64 |
+| COM numbers: choose one when the port is made, change it later, refuse one that is taken (the helper service, for either driver) | tests D28 to D31 and the client test C2 pass for both drivers in the Windows 10 22H2 guest (with the helper installed); not yet run in the Windows 11 guest or on ARM64 |
 | Driver Verifier (standard settings) on `vsscom.sys` | the whole suite passes with it on in the Windows 11 guest |
 | The studio opening a port (`create_driver_port`) | runs in a guest with `test-client.ps1` (test C1) |
 | A 32-bit program (WOW64) and a hung or killed program | the client and `test-wow64.ps1` (W1 to W4, T1 to T7) are written and the client builds in CI; the guest results are in the pull request that added them, and are not yet in this table |
