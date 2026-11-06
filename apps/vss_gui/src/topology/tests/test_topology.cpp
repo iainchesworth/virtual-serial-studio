@@ -987,7 +987,8 @@ TEST_CASE("topology: a bus hangs its members off one bar on their left")
 
     // The members share a column and the bar is clear of all of them.
     qreal leftmost = layout.node_rect(1).left();
-    for (const vss::endpoint_id id : {1, 2, 3})
+    for (const vss::endpoint_id id :
+         {vss::endpoint_id{1}, vss::endpoint_id{2}, vss::endpoint_id{3}})
     {
         REQUIRE_NEAR(layout.node_rect(id).left(), layout.node_rect(1).left(),
                      0.01);
