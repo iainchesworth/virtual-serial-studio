@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_WIDGETS_PICK_ROW_HPP
-#define VSS_GUI_WIDGETS_PICK_ROW_HPP
+#pragma once
 
 #include <QFrame>
 
@@ -55,5 +54,3 @@ private:
 };
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_WIDGETS_PICK_ROW_HPP

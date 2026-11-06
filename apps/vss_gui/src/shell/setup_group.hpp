@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SHELL_SETUP_GROUP_HPP
-#define VSS_GUI_SHELL_SETUP_GROUP_HPP
+#pragma once
 
 #include "backend/view_types.hpp"
 
@@ -50,5 +49,3 @@ QString setup_port_names(const setup_group& group,
                          const std::vector<port_view>& ports);
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_SHELL_SETUP_GROUP_HPP

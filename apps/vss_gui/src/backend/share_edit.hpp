@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_BACKEND_SHARE_EDIT_HPP
-#define VSS_GUI_BACKEND_SHARE_EDIT_HPP
+#pragma once
 
 #include "backend/studio_backend.hpp"
 #include "backend/view_types.hpp"
@@ -74,5 +73,3 @@ vss::result<vss::link_id> remove_program_port(StudioBackend& backend,
                                               vss::endpoint_id program);
 
 } // namespace vss::gui
-
-#endif // VSS_GUI_BACKEND_SHARE_EDIT_HPP
