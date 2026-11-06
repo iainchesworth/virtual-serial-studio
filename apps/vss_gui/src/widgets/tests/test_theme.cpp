@@ -60,14 +60,14 @@ TEST_CASE("theme: resolves tokens in both themes")
 {
     auto& theme = vss::gui::Theme::instance();
     theme.set_mode(vss::gui::theme_mode::light);
-    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0x18, 0x21, 0x2D));
+    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0x14, 0x17, 0x1C));
     REQUIRE_EQ(theme.colour(QStringLiteral("panel")), QColor(0xFF, 0xFF, 0xFF));
     REQUIRE(theme.colour_names().size() >= 30);
 
     theme.set_mode(vss::gui::theme_mode::dark);
-    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0xE8, 0xED, 0xF3));
+    REQUIRE_EQ(theme.colour(QStringLiteral("ink")), QColor(0xEC, 0xED, 0xEF));
     REQUIRE_EQ(theme.colour(QStringLiteral("ground")),
-               QColor(0x11, 0x16, 0x1D));
+               QColor(0x0E, 0x0F, 0x12));
     REQUIRE(theme.has_colour(QStringLiteral("accent")));
     REQUIRE(!theme.has_colour(QStringLiteral("not-a-token")));
 }
@@ -262,11 +262,11 @@ TEST_CASE("theme: fonts, metrics, spacing and density")
             theme.font(vss::gui::text_style::body).pointSizeF());
     REQUIRE(theme.font(vss::gui::text_style::title).pointSizeF() >
             theme.font(vss::gui::text_style::body).pointSizeF());
-    REQUIRE_EQ(theme.metric(QStringLiteral("button")), 34);
+    REQUIRE_EQ(theme.metric(QStringLiteral("button")), 32);
     REQUIRE_EQ(theme.metric(QStringLiteral("minTarget")), 24);
-    REQUIRE_EQ(theme.metric(QStringLiteral("layout.ports.default")), 360);
+    REQUIRE_EQ(theme.metric(QStringLiteral("layout.ports.default")), 300);
     REQUIRE_EQ(theme.space(2), 12);
-    REQUIRE_EQ(theme.radius(QStringLiteral("control")), 6);
+    REQUIRE_EQ(theme.radius(QStringLiteral("control")), 8);
     REQUIRE_EQ(theme.size(QStringLiteral("toggleTrack")), QSize(34, 18));
     REQUIRE_EQ(theme.size(QStringLiteral("layout.windowMin")), QSize(960, 640));
 

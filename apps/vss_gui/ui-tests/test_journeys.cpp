@@ -417,8 +417,9 @@ TEST_CASE("journey: remove a port with the Delete key, in Advanced mode")
 
     REQUIRE(confirm.ran());
     REQUIRE(session.backend.ports().empty());
+    // Advanced mode builds on the canvas: the empty setup stays on it.
+    REQUIRE(ports_dock->isVisible());
     auto* card = launcher_card(window, QStringLiteral("Give my program a "
                                                       "serial port"));
-    REQUIRE(card != nullptr);
-    REQUIRE(card->isVisible());
+    REQUIRE(card == nullptr || !card->isVisible());
 }

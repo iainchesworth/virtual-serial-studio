@@ -16,7 +16,11 @@ add_library(vss_gui_topology STATIC
   topology_view.cpp
   topology_view.hpp
   links_list.cpp
-  links_list.hpp)
+  links_list.hpp
+  toolbox.cpp
+  toolbox.hpp
+  add_sheet.cpp
+  add_sheet.hpp)
 
 target_include_directories(vss_gui_topology PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/..)

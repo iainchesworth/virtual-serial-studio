@@ -19,7 +19,9 @@ add_library(vss_gui_widgets STATIC
   gallery.cpp
   gallery.hpp
   pick_row.cpp
-  pick_row.hpp)
+  pick_row.hpp
+  surfaces.cpp
+  surfaces.hpp)
 
 target_link_libraries(vss_gui_widgets PUBLIC vss_gui_theme)
 

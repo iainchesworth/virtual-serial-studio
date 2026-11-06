@@ -3,6 +3,16 @@
   <qresource prefix="/">
     <file alias="tokens/tokens.json">resources/tokens.json</file>
     <file alias="tokens/style.qss.in">resources/style.qss.in</file>
+    <file alias="icons/port.svg">resources/icons/port.svg</file>
+    <file alias="icons/loopback.svg">resources/icons/loopback.svg</file>
+    <file alias="icons/network.svg">resources/icons/network.svg</file>
+    <file alias="icons/pair.svg">resources/icons/pair.svg</file>
+    <file alias="icons/split.svg">resources/icons/split.svg</file>
+    <file alias="icons/join.svg">resources/icons/join.svg</file>
+    <file alias="icons/bus.svg">resources/icons/bus.svg</file>
+    <file alias="icons/switch.svg">resources/icons/switch.svg</file>
+    <file alias="icons/redirect.svg">resources/icons/redirect.svg</file>
+    <file alias="icons/bench.svg">resources/icons/bench.svg</file>
     <file alias="icons/add.svg">resources/icons/add.svg</file>
     <file alias="icons/chevron-down.svg">resources/icons/chevron-down.svg</file>
     <file alias="icons/connect.svg">resources/icons/connect.svg</file>

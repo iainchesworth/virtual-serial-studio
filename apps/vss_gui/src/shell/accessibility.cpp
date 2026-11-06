@@ -129,6 +129,9 @@ public:
     void run(QWidget& root, const QString& label)
     {
         root.show();
+        // A dialog shown and closed before the check can leave no active
+        // window, and then nothing can take focus.
+        root.activateWindow();
         QApplication::processEvents();
         Theme::instance().set_mode(theme_mode::light);
         QApplication::processEvents();

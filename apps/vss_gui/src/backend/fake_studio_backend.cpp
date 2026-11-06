@@ -189,8 +189,9 @@ FakeStudioBackend::create_virtual_port(const QString& name,
     return id;
 }
 
-vss::result<vss::endpoint_id> FakeStudioBackend::create_driver_port(
-    const QString& name, bool capture, unsigned com_number)
+vss::result<vss::endpoint_id>
+FakeStudioBackend::create_driver_port(const QString& name, bool capture,
+                                      unsigned com_number)
 {
     if (com_number > 255)
         return vss::make_error_code(vss::errc::invalid_argument);
@@ -243,8 +244,8 @@ vss::result<QString> FakeStudioBackend::set_com_number(vss::endpoint_id id,
     return view->path;
 }
 
-std::optional<holder_view> FakeStudioBackend::port_holder(
-    vss::endpoint_id id) const
+std::optional<holder_view>
+FakeStudioBackend::port_holder(vss::endpoint_id id) const
 {
     const auto found = holders_.constFind(id);
     if (found == holders_.constEnd())
@@ -380,13 +381,34 @@ vss::result<void> FakeStudioBackend::rename_port(vss::endpoint_id id,
         return vss::make_error_code(vss::errc::not_found);
     if (it->name == name)
         return {};
-    const bool taken = std::any_of(
-        ports_.begin(), ports_.end(),
-        [&name](const port_view& view) { return view.name == name; });
+    const bool taken =
+        std::any_of(ports_.begin(), ports_.end(), [&name](const port_view& view)
+                    { return view.name == name; });
     if (taken)
         return vss::make_error_code(vss::errc::already_exists);
     it->name = name;
     refresh();
+    return {};
+}
+
+vss::result<void>
+FakeStudioBackend::set_port_settings(vss::endpoint_id id,
+                                     const vss::serial_settings& settings)
+{
+    if (const auto error = take_error())
+        return *error;
+    if (const auto invalid = vss::validate(settings))
+        return invalid;
+    const auto it =
+        std::find_if(ports_.begin(), ports_.end(),
+                     [id](const port_view& view) { return view.id == id; });
+    if (it == ports_.end())
+        return vss::make_error_code(vss::errc::not_found);
+    if (it->kind == vss::endpoint_kind::tcp ||
+        it->kind == vss::endpoint_kind::udp)
+        return vss::make_error_code(vss::errc::unsupported);
+    // Like the engine, no refresh: the caller may be a worker thread.
+    it->serial = settings;
     return {};
 }
 
@@ -623,8 +645,7 @@ vss::result<vss::benchmark_result> FakeStudioBackend::run_benchmark(
         }
         std::this_thread::sleep_for(benchmark_duration_ / steps);
         result.sent = options.bytes * static_cast<std::uint64_t>(step) / steps;
-        result.received =
-            arriving * static_cast<std::uint64_t>(step) / steps;
+        result.received = arriving * static_cast<std::uint64_t>(step) / steps;
         if (progress)
             progress({result.sent, result.received, options.bytes});
     }

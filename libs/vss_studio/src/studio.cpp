@@ -7,8 +7,8 @@
 #include <vss/studio/studio.hpp>
 
 #include <vss/ports/listen_transport.hpp>
-#include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/serial_transport.hpp>
+#include <vss/ports/vcom_driver.hpp>
 
 #include "reconnector.hpp"
 
@@ -72,10 +72,10 @@ open_transport(const transport::executor_type& executor, const std::string& uri,
         return listening;
     }
 
-    auto serial = settings != nullptr
-                      ? std::make_shared<serial_transport>(executor, uri,
-                                                           *settings, ec)
-                      : std::make_shared<serial_transport>(executor, uri, ec);
+    auto serial =
+        settings != nullptr
+            ? std::make_shared<serial_transport>(executor, uri, *settings, ec)
+            : std::make_shared<serial_transport>(executor, uri, ec);
     if (ec)
         return nullptr;
     return serial;
@@ -300,7 +300,6 @@ studio::register_port(port_record record, std::shared_ptr<transport> transport,
     if (reconnects(record) && reconnector_)
         reconnector_->allow(record.id);
     return *created;
-
 }
 
 result<std::shared_ptr<endpoint>>
@@ -363,9 +362,9 @@ studio::create_auto_virtual_port(const std::string& name,
                                  options);
         }
 
-        // A number was asked for and cannot be had: another port, or com0com, or a
-        // pseudo terminal would not be what the topology says, and the number
-        // is the point. Without a number any port will do.
+        // A number was asked for and cannot be had: another port, or com0com,
+        // or a pseudo terminal would not be what the topology says, and the
+        // number is the point. Without a number any port will do.
         if (com_number != 0)
             return created.error();
     }
@@ -501,6 +500,7 @@ studio::create_mock_port(const std::string& name,
     record.serial = settings;
     record.capture = options.capture_traffic;
     record.fixture = transport;
+    record.mock_target = target;
 
     return register_port(std::move(record), std::move(transport), options);
 }
@@ -554,8 +554,8 @@ result<void> studio::inject_fault(endpoint_id id, fault_kind fault)
     return {};
 }
 
-result<std::shared_ptr<serial_transport>> studio::fixture_for(
-    endpoint_id id) const
+result<std::shared_ptr<serial_transport>>
+studio::fixture_for(endpoint_id id) const
 {
     std::shared_ptr<serial_transport> fixture;
     {
@@ -570,7 +570,8 @@ result<std::shared_ptr<serial_transport>> studio::fixture_for(
     return fixture;
 }
 
-namespace {
+namespace
+{
 
 /// Puts bytes in a fixture's receive path.  The fixture is not thread safe and
 /// the endpoint reads from it on its strand, so this runs there; the lambda
@@ -578,13 +579,12 @@ namespace {
 void post_inject(const std::shared_ptr<endpoint>& target,
                  std::shared_ptr<serial_transport> fixture, byte_buffer data)
 {
-    boost::asio::post(
-        target->get_executor(),
-        [fixture = std::move(fixture), data = std::move(data)]
-        {
-            if (auto* mock = fixture->mock(); mock != nullptr)
-                mock->inject_read(data.data(), data.size());
-        });
+    boost::asio::post(target->get_executor(),
+                      [fixture = std::move(fixture), data = std::move(data)]
+                      {
+                          if (auto* mock = fixture->mock(); mock != nullptr)
+                              mock->inject_read(data.data(), data.size());
+                      });
 }
 
 } // namespace
@@ -660,6 +660,101 @@ bool studio::fixture_echo(endpoint_id id) const
     std::lock_guard lock(record_mutex_);
     const auto it = records_.find(id);
     return it != records_.end() && it->second.echo != 0;
+}
+
+std::optional<serial_settings> studio::port_settings(endpoint_id id) const
+{
+    std::lock_guard lock(record_mutex_);
+    const auto it = records_.find(id);
+    if (it == records_.end())
+        return std::nullopt;
+    return it->second.serial;
+}
+
+result<void> studio::reconfigure_port(endpoint_id id,
+                                      const serial_settings& settings)
+{
+    if (const auto invalid = validate(settings))
+        return invalid;
+
+    port_record record;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        record = it->second;
+    }
+    const auto found = hub_->find_endpoint(id);
+    if (!found)
+        return make_error_code(errc::not_found);
+
+    const auto store = [this, id, &settings](bool given)
+    {
+        std::lock_guard lock(record_mutex_);
+        if (const auto it = records_.find(id); it != records_.end())
+        {
+            it->second.serial = settings;
+            if (given)
+                it->second.settings_given = true;
+        }
+    };
+
+    if (record.kind == "mock")
+    {
+        boost::system::error_code ec;
+        auto fresh = serial_transport::make_mock(hub_->executor(), settings,
+                                                 record.mock_target, ec);
+        if (ec)
+            return ec;
+        if (!fresh)
+            return make_error_code(errc::internal);
+
+        // The echo holds the old fixture; it is made again on the new one.
+        const bool echo = record.echo != 0;
+        if (echo)
+            static_cast<void>(set_fixture_echo(id, false));
+        const std::weak_ptr<serial_transport> fixture = fresh;
+        if (const auto reopened = found->reopen(std::move(fresh)); !reopened)
+        {
+            if (echo)
+                static_cast<void>(set_fixture_echo(id, true));
+            return reopened.error();
+        }
+        {
+            std::lock_guard lock(record_mutex_);
+            if (const auto it = records_.find(id); it != records_.end())
+                it->second.fixture = fixture;
+        }
+        store(false);
+        if (echo)
+            static_cast<void>(set_fixture_echo(id, true));
+        return {};
+    }
+
+    if (record.uri.empty())
+    {
+        // A virtual port or a loopback: the program on the other side sets
+        // the line itself, so only the saved values change.
+        store(false);
+        return {};
+    }
+
+    const std::string_view uri = record.uri;
+    if (is_listen_uri(record.uri) || uri.starts_with("tcp://") ||
+        uri.starts_with("udp://"))
+        return make_error_code(errc::unsupported);
+
+    boost::system::error_code ec;
+    auto fresh = open_transport(hub_->executor(), record.uri, &settings, ec);
+    if (ec)
+        return ec;
+    if (!fresh)
+        return make_error_code(errc::internal);
+    if (const auto reopened = found->reopen(std::move(fresh)); !reopened)
+        return reopened.error();
+    store(true);
+    return {};
 }
 
 result<void> studio::remove_port(endpoint_id id)
@@ -945,9 +1040,9 @@ result<void> studio::reopen(endpoint_id id)
     }
 
     boost::system::error_code ec;
-    auto fresh = open_transport(hub_->executor(), record.uri,
-                                record.settings_given ? &record.serial : nullptr,
-                                ec);
+    auto fresh =
+        open_transport(hub_->executor(), record.uri,
+                       record.settings_given ? &record.serial : nullptr, ec);
     if (ec)
         return ec;
     return found->reopen(std::move(fresh));
@@ -1132,7 +1227,7 @@ result<link_id> studio::monitor(std::string_view from, std::string_view to)
 }
 
 result<link_id> studio::bus(const std::vector<std::string>& members,
-                           link_options options)
+                            link_options options)
 {
     error_code ec;
     const auto ids = resolve_all(members, ec);
@@ -1274,9 +1369,9 @@ result<void> studio::apply(const config::document& value,
                 added = create_virtual_port(
                     port.name, virtual_port_kind::named_pipe, options);
             else if (port.virtual_kind == "windows-driver")
-                added = create_virtual_port(
-                    port.name, virtual_port_kind::windows_driver, options,
-                    port.com_number);
+                added = create_virtual_port(port.name,
+                                            virtual_port_kind::windows_driver,
+                                            options, port.com_number);
         }
         else if (port.kind == "mock")
         {

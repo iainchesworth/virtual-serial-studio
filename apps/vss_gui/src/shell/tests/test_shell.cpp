@@ -4,26 +4,26 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include "test_framework.hpp"
 #include "qt_wait.hpp"
+#include "test_framework.hpp"
 
 #include "backend/fake_studio_backend.hpp"
 #include "dialogs/connect_ports.hpp"
 #include "dialogs/network_endpoint.hpp"
 #include "dialogs/share_wizard.hpp"
 #include "dialogs/templates_dialog.hpp"
+#include "panes/ports_panel.hpp"
+#include "panes/selection_service.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/launcher.hpp"
-#include "panes/selection_service.hpp"
-#include "panes/ports_panel.hpp"
 #include "shell/level_service.hpp"
-#include "shell/setup_group.hpp"
-#include "simple/simple_page.hpp"
 #include "shell/port_warnings.hpp"
+#include "shell/setup_group.hpp"
 #include "shell/shell_window.hpp"
 #include "shell/undo_service.hpp"
 #include "shell/undo_steps.hpp"
+#include "simple/simple_page.hpp"
 #include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
@@ -212,7 +212,15 @@ TEST_CASE("shell: launcher, workspace, level and layout")
 
     backend.remove_port(*port);
     QApplication::processEvents();
-    REQUIRE(launcher->isVisible());
+    // Advanced mode builds on the canvas: an empty setup is the empty canvas.
+    REQUIRE(!launcher->isVisible());
+    REQUIRE(!simple->isVisible());
+    REQUIRE(window.run_selftest());
+    // Simple mode is the setups page again, never the launcher.
+    advanced->trigger();
+    QApplication::processEvents();
+    REQUIRE(simple->isVisible());
+    REQUIRE(!launcher->isVisible());
     REQUIRE(!ports_dock->isVisible());
     REQUIRE(window.run_selftest());
 
@@ -417,10 +425,10 @@ TEST_CASE("undo: the history reverses and repeats steps in order")
 TEST_CASE("undo: a step that cannot be applied clears the history")
 {
     vss::gui::UndoService history;
-    history.push({QStringLiteral("first"), [] { return true; },
-                  [] { return true; }});
-    history.push({QStringLiteral("second"), [] { return false; },
-                  [] { return true; }});
+    history.push(
+        {QStringLiteral("first"), [] { return true; }, [] { return true; }});
+    history.push(
+        {QStringLiteral("second"), [] { return false; }, [] { return true; }});
     REQUIRE(!history.undo());
     // The step after the failure assumed it, so nothing is left.
     REQUIRE(!history.can_undo());
@@ -428,8 +436,8 @@ TEST_CASE("undo: a step that cannot be applied clears the history")
 
     for (std::size_t count = 0; count < vss::gui::UndoService::max_depth + 5;
          ++count)
-        history.push({QStringLiteral("step"), [] { return true; },
-                      [] { return true; }});
+        history.push(
+            {QStringLiteral("step"), [] { return true; }, [] { return true; }});
     std::size_t undone = 0;
     while (history.undo())
         ++undone;
@@ -788,7 +796,8 @@ void answer_next_confirm(const QString& answer, confirm_seen* seen,
             vss::gui::ConfirmDialog* dialog = nullptr;
             for (QWidget* widget : QApplication::topLevelWidgets())
             {
-                if (auto* found = qobject_cast<vss::gui::ConfirmDialog*>(widget);
+                if (auto* found =
+                        qobject_cast<vss::gui::ConfirmDialog*>(widget);
                     found != nullptr && found->isVisible())
                     dialog = found;
             }
@@ -1025,7 +1034,7 @@ struct remove_probe
 };
 
 void answer_next_remove_confirm(remove_probe* probe, const QString& button,
-                         int remaining_ms = 30000)
+                                int remaining_ms = 30000)
 {
     QTimer::singleShot(
         10,
@@ -1036,7 +1045,8 @@ void answer_next_remove_confirm(remove_probe* probe, const QString& button,
             if (dialog == nullptr)
             {
                 if (remaining_ms > 10)
-                    answer_next_remove_confirm(probe, button, remaining_ms - 10);
+                    answer_next_remove_confirm(probe, button,
+                                               remaining_ms - 10);
                 return;
             }
             probe->seen = true;
@@ -1205,7 +1215,8 @@ TEST_CASE("shell: Delete then the whole setup closes a share in one go")
     auto* remove = window.findChild<QAction*>(QStringLiteral("edit.remove"));
     REQUIRE(remove != nullptr);
     remove_probe probe;
-    answer_next_remove_confirm(&probe, QStringLiteral("Remove the whole setup"));
+    answer_next_remove_confirm(&probe,
+                               QStringLiteral("Remove the whole setup"));
     remove->trigger();
     QApplication::processEvents();
     REQUIRE(probe.seen);
@@ -1237,7 +1248,8 @@ TEST_CASE("shell: removing one program of a share keeps the others sharing")
     REQUIRE(remove != nullptr);
     const QString name = backend.port(shared->listeners.at(1))->name;
     remove_probe probe;
-    answer_next_remove_confirm(&probe, QStringLiteral("Remove only %1").arg(name));
+    answer_next_remove_confirm(&probe,
+                               QStringLiteral("Remove only %1").arg(name));
     remove->trigger();
     QApplication::processEvents();
     REQUIRE(probe.seen);
@@ -1319,7 +1331,8 @@ vss::gui::NoteBanner* find_lost_banner(QWidget& window)
     const auto banners = window.findChildren<vss::gui::NoteBanner*>();
     for (auto* banner : banners)
     {
-        if (banner->text().startsWith(QStringLiteral("Some COM ports were lost")))
+        if (banner->text().startsWith(
+                QStringLiteral("Some COM ports were lost")))
             return banner;
     }
     return nullptr;
@@ -1352,11 +1365,11 @@ TEST_CASE("shell: a banner offers to recreate ports the driver lost")
     QApplication::processEvents();
     REQUIRE(banner->isVisible());
     REQUIRE(banner->action_button() != nullptr);
-    REQUIRE_EQ(banner->action_button()->text(), QStringLiteral("Recreate ports"));
+    REQUIRE_EQ(banner->action_button()->text(),
+               QStringLiteral("Recreate ports"));
 
     banner->action_button()->click();
-    REQUIRE(vss_test::wait_until(
-        [&] { return !banner->isVisible(); }, 5000));
+    REQUIRE(vss_test::wait_until([&] { return !banner->isVisible(); }, 5000));
     REQUIRE(backend.lost_ports().empty());
     REQUIRE(banner->action_button()->isEnabled());
 }

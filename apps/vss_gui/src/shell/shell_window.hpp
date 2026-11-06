@@ -39,6 +39,8 @@ struct setup_group;
 class MonitorPanel;
 class NoteBanner;
 class OwnerBar;
+class CanvasController;
+class PaneHeader;
 class PortsPanel;
 class SendPanel;
 class StatusBar;
@@ -48,6 +50,7 @@ namespace topology
 {
 class LinksList;
 class TopologyView;
+class Toolbox;
 } // namespace topology
 
 namespace simple
@@ -151,6 +154,7 @@ private:
     void show_owner_controls();
     void update_owner_bar();
     void sync_advanced_docks();
+    void sync_canvas_editing();
     void log_local(const QString& text);
 
     void open_setup_check();
@@ -200,6 +204,8 @@ private:
     simple::SimplePage* simple_page_ = nullptr;
     QWidget* workspace_ = nullptr;
     topology::TopologyView* topology_ = nullptr;
+    topology::Toolbox* toolbox_ = nullptr;
+    CanvasController* canvas_ = nullptr;
     topology::LinksList* links_ = nullptr;
     QDockWidget* ports_dock_ = nullptr;
     QDockWidget* inspector_dock_ = nullptr;
@@ -209,6 +215,10 @@ private:
     QDockWidget* log_dock_ = nullptr;
     QDockWidget* json_dock_ = nullptr;
     QToolBar* toolbar_ = nullptr;
+    PaneHeader* ports_header_ = nullptr;
+    PaneHeader* inspector_header_ = nullptr;
+    PaneHeader* send_header_ = nullptr;
+    PaneHeader* monitor_header_ = nullptr;
     QLineEdit* search_ = nullptr;
     StatusBar* status_ = nullptr;
     PortsPanel* ports_panel_ = nullptr;

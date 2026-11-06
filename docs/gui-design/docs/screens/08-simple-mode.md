@@ -1,8 +1,8 @@
 # Screens 08: Simple mode
 
 Mockup: `reference/mockups/SimpleGoals.html`. Visual language: `10-design-language.md`. This screen replaces the
-launcher and the dock grid in Simple mode. Advanced mode is unchanged: the canvas with the Ports, Inspector, Send and
-Monitor panes. Both modes show the same studio, and switching never changes anything already built.
+launcher and the dock grid in Simple mode. Advanced mode is the canvas editor of `07-canvas-editor.md`, with the Ports, Inspector,
+Send and Monitor panes. Both modes show the same studio, and switching never changes anything already built.
 
 ## Why
 

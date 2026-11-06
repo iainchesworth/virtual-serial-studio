@@ -22,8 +22,8 @@
 #include "dialogs/templates_dialog.hpp"
 #include "flows/add_port_dialog.hpp"
 #include "flows/attach_dialog.hpp"
-#include "flows/common.hpp"
 #include "flows/com_number_dialog.hpp"
+#include "flows/common.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
 #include "flows/release_port_dialog.hpp"
@@ -34,11 +34,12 @@
 #include "panes/monitor_panel.hpp"
 #include "panes/ports_panel.hpp"
 #include "panes/send_panel.hpp"
+#include "shell/canvas_controller.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
-#include "shell/setup_group.hpp"
 #include "shell/port_warnings.hpp"
+#include "shell/setup_group.hpp"
 #include "shell/status_bar.hpp"
 #include "shell/undo_steps.hpp"
 #include "simple/simple_page.hpp"
@@ -55,12 +56,14 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "topology/links_list.hpp"
+#include "topology/toolbox.hpp"
 #include "topology/topology_text.hpp"
 #include "topology/topology_view.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/surfaces.hpp"
 
 #include <memory>
 #include <vss/config/document.hpp>
@@ -359,6 +362,50 @@ void ShellWindow::build_actions()
             if (topology_ != nullptr)
                 topology_->fit_content();
         });
+    add(QStringLiteral("topology.addPort"), tr("Add port"),
+        tr("canvas new port"), QStringLiteral("port"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::port);
+        });
+    add(QStringLiteral("topology.addFixture"), tr("Add fixture"),
+        tr("canvas new mock fixture"), QStringLiteral("fixture"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::fixture);
+        });
+    add(QStringLiteral("topology.addPair"), tr("Add pair"),
+        tr("canvas bundle two ports null modem"), QStringLiteral("pair"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::pair);
+        });
+    add(
+        QStringLiteral("edit.duplicate"), tr("Duplicate"),
+        tr("copy ports canvas"), {}, QKeySequence(QStringLiteral("Ctrl+D")),
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr && topology_ != nullptr)
+                canvas_->duplicate(topology_->selected_ports());
+        },
+        false,
+        [this]
+        {
+            return topology_ != nullptr &&
+                   !topology_->selected_ports().isEmpty();
+        });
+    add(
+        QStringLiteral("view.toolbox"), tr("Show toolbox"),
+        tr("canvas tiles palette"), {},
+        QKeySequence(QStringLiteral("Ctrl+Shift+B")), action_level::advanced,
+        [] {}, true);
     add(QStringLiteral("topology.tidy"), tr("Tidy layout"),
         tr("arrange align overlap"), {}, {}, action_level::advanced,
         [this]
@@ -491,6 +538,12 @@ void ShellWindow::build_actions()
     links_action_ = registry_.action(QStringLiteral("view.links"));
     log_action_ = registry_.action(QStringLiteral("view.log"));
     json_action_ = registry_.action(QStringLiteral("view.json"));
+    if (QAction* toolbox = registry_.action(QStringLiteral("view.toolbox")))
+    {
+        toolbox->setChecked(true);
+        connect(toolbox, &QAction::toggled, this,
+                [this] { sync_canvas_editing(); });
+    }
     if (QAction* network = registry_.action(QStringLiteral("ports.network"));
         network != nullptr && !backend_.caps().bridge)
     {
@@ -549,6 +602,7 @@ void ShellWindow::build_menus()
     add(edit, QStringLiteral("edit.redo"));
     edit->addSeparator();
     add(edit, QStringLiteral("edit.remove"));
+    add(edit, QStringLiteral("edit.duplicate"));
     add(edit, QStringLiteral("topology.removeSetup"));
 
     QMenu* ports = add_menu(tr("&Ports"));
@@ -576,6 +630,10 @@ void ShellWindow::build_menus()
     add(topology, QStringLiteral("topology.wiring"));
     add(topology, QStringLiteral("topology.owner"));
     topology->addSeparator();
+    add(topology, QStringLiteral("topology.addPort"));
+    add(topology, QStringLiteral("topology.addFixture"));
+    add(topology, QStringLiteral("topology.addPair"));
+    topology->addSeparator();
     add(topology, QStringLiteral("topology.tidy"));
     add(topology, QStringLiteral("topology.fit"));
 
@@ -592,6 +650,7 @@ void ShellWindow::build_menus()
     view->addSeparator();
     add(view, QStringLiteral("view.monitor"));
     add(view, QStringLiteral("view.links"));
+    add(view, QStringLiteral("view.toolbox"));
     add(view, QStringLiteral("view.log"));
     add(view, QStringLiteral("view.json"));
     view->addSeparator();
@@ -616,42 +675,47 @@ void ShellWindow::build_menus()
 
 void ShellWindow::build_toolbar()
 {
+    // The tool row sits at the top of the topology pane, next to what it acts
+    // on; it is not a window-wide toolbar.  New, Open and Save live in File
+    // with their shortcuts.  See docs/10-design-language.md.
     toolbar_ = new QToolBar(tr("Main toolbar"), this);
     toolbar_->setObjectName(QStringLiteral("mainToolbar"));
     toolbar_->setMovable(false);
     toolbar_->setFloatable(false);
     toolbar_->setIconSize(QSize(16, 16));
     toolbar_->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    addToolBar(Qt::TopToolBarArea, toolbar_);
+    toolbar_->setStyleSheet(QStringLiteral(
+        "QToolBar#mainToolbar { background: transparent; padding: 0; }"));
 
     const auto add = [this](const QString& id)
     {
         if (QAction* action = registry_.action(id))
             toolbar_->addAction(action);
     };
-    add(QStringLiteral("file.new"));
-    add(QStringLiteral("file.open"));
-    add(QStringLiteral("file.save"));
-    toolbar_->addSeparator();
-    add(QStringLiteral("ports.add"));
     add(QStringLiteral("ports.attach"));
     add(QStringLiteral("topology.connect"));
-    add(QStringLiteral("ports.remove"));
-    add(QStringLiteral("topology.removeSetup"));
     toolbar_->addSeparator();
     add(QStringLiteral("ports.mock"));
     add(QStringLiteral("topology.shareToolbar"));
     add(QStringLiteral("topology.fit"));
+    toolbar_->addSeparator();
+    add(QStringLiteral("ports.remove"));
+    add(QStringLiteral("topology.removeSetup"));
 
-    auto* spacer = new QWidget(toolbar_);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    toolbar_->addWidget(spacer);
+    // Menus, the action search and the mode switch share one row: the search
+    // and the switch are the menu bar's right-hand corner widget.
+    auto* corner = new QWidget(this);
+    corner->setObjectName(QStringLiteral("headerCorner"));
+    auto* corner_layout = new QHBoxLayout(corner);
+    corner_layout->setContentsMargins(0, 0, Theme::instance().space(1), 0);
+    corner_layout->setSpacing(Theme::instance().space(2));
 
-    search_ = new QLineEdit(toolbar_);
+    search_ = new QLineEdit(corner);
+    search_->setProperty("search", true);
     search_->setPlaceholderText(tr("Search actions"));
     search_->setAccessibleName(tr("Search actions"));
     search_->setClearButtonEnabled(true);
-    search_->setFixedWidth(220);
+    search_->setFixedWidth(280);
     search_->setFont(Theme::instance().font(text_style::body));
     // The search field leads with the magnifier from the icon set.
     search_
@@ -659,9 +723,10 @@ void ShellWindow::build_toolbar()
                                                   colour_role::ink3, 16),
                     QLineEdit::LeadingPosition)
         ->setText(tr("Search actions"));
-    toolbar_->addWidget(search_);
+    corner_layout->addWidget(search_);
     connect(search_, &QLineEdit::returnPressed, this,
             [this] { open_palette(); });
+    menuBar()->setCornerWidget(corner, Qt::TopRightCorner);
 }
 
 void ShellWindow::build_central()
@@ -737,19 +802,43 @@ void ShellWindow::build_central()
 
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
-    layout->setContentsMargins(8, 8, 8, 8);
+    // The main window separators give the 8 px gap between panes.
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(Theme::instance().space(1));
 
 
     auto* card = new QFrame(workspace_);
 
-    card->setProperty("card", true);
+    card->setObjectName(QStringLiteral("topologyPane"));
+    card->setProperty("pane", true);
     polish(card);
     auto* card_layout = new QVBoxLayout(card);
-    card_layout->setContentsMargins(0, 0, 0, 0);
+    card_layout->setContentsMargins(1, 1, 1, 1);
+    card_layout->setSpacing(0);
+
+    // The tool row heads the pane, where a dock would have its title.
+    auto* tools = new QWidget(card);
+    auto* tools_layout = new QHBoxLayout(tools);
+    tools_layout->setContentsMargins(Theme::instance().space(1), 6,
+                                     Theme::instance().space(1), 6);
+    tools_layout->setSpacing(0);
+    toolbar_->setParent(tools);
+    tools_layout->addWidget(toolbar_, 1);
+    card_layout->addWidget(tools);
 
     topology_ = new topology::TopologyView(card);
     topology_->set_capabilities(backend_.caps());
-    card_layout->addWidget(topology_);
+    // Inset the diagram so its square view stays inside the pane's corners.
+    // In Advanced mode the toolbox rail sits on the left of the canvas.
+    auto* canvas_layout = new QHBoxLayout;
+    const int inset = Theme::instance().space(1);
+    canvas_layout->setContentsMargins(inset, 0, inset, inset);
+    canvas_layout->setSpacing(inset);
+    toolbox_ = new topology::Toolbox(card);
+    toolbox_->setVisible(false);
+    canvas_layout->addWidget(toolbox_);
+    canvas_layout->addWidget(topology_, 1);
+    card_layout->addLayout(canvas_layout, 1);
     layout->addWidget(card, 1);
 
     // The link bar under the diagram.  WP4 owns the diagram; the bar and its
@@ -813,17 +902,69 @@ void ShellWindow::build_central()
             [this](vss::endpoint_id id) { show_rename(id); });
     connect(topology_, &topology::TopologyView::status_message, this,
             [this](const QString& text) { status_->showMessage(text, 4000); });
+    connect(topology_, &topology::TopologyView::selection_changed, this,
+            [this](int) { update_actions(); });
+
+    canvas_ = new CanvasController(backend_, undo_, topology_, toolbox_, this);
+    connect(canvas_, &CanvasController::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    connect(canvas_, &CanvasController::batch_finished, this,
+            [this]
+            {
+                // A canvas step keeps the history: it was recorded by name.
+                std::vector<vss::endpoint_id> ports;
+                for (const auto& port : backend_.ports())
+                    ports.push_back(port.id);
+                std::sort(ports.begin(), ports.end());
+                history_ports_ = std::move(ports);
+                on_backend_changed();
+            });
+    canvas_->set_flow_opener(
+        [this](canvas_item item)
+        {
+            switch (item)
+            {
+            case canvas_item::device:
+                show_attach_device();
+                break;
+            case canvas_item::network:
+                open_network_endpoint();
+                break;
+            case canvas_item::share:
+                open_share_wizard();
+                break;
+            default:
+                break;
+            }
+        });
+    sync_canvas_editing();
 }
 
 void ShellWindow::build_docks()
 {
-    const auto make_dock =
-        [this](const QString& object_name, const QString& title, QWidget* page)
+    // Every dock is drawn as a pane: a rounded surface on the window ground
+    // with its own header.  The dock's title bar is replaced by an empty
+    // widget, so there are no float or close buttons; View shows and hides
+    // the panes and Reset layout puts them back.
+    const auto make_pane_dock = [this](const QString& object_name,
+                                       const QString& title, QWidget* page,
+                                       PaneHeader** header)
     {
         auto* dock = new QDockWidget(title, this);
         dock->setObjectName(object_name);
         dock->setAllowedAreas(Qt::AllDockWidgetAreas);
-        dock->setWidget(page);
+        dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        dock->setTitleBarWidget(new QWidget(dock));
+        auto* pane = new Pane(title, dock);
+        pane->setObjectName(object_name + QStringLiteral("Pane"));
+        pane->set_body(page);
+        if (header != nullptr)
+            *header = pane->header();
+        dock->setWidget(pane);
         return dock;
     };
 
@@ -834,13 +975,26 @@ void ShellWindow::build_docks()
     behaviours_ = new FixtureBehaviours(backend_, this);
     inspector_panel_->set_behaviours(behaviours_);
 
-    ports_dock_ =
-        make_dock(QStringLiteral("portsDock"), tr("Ports"), ports_panel_);
-    inspector_dock_ = make_dock(QStringLiteral("inspectorDock"),
-                                tr("Inspector"), inspector_panel_);
-    send_dock_ = make_dock(QStringLiteral("sendDock"), tr("Send"), send_panel_);
-    monitor_dock_ =
-        make_dock(QStringLiteral("monitorDock"), tr("Monitor"), monitor_panel_);
+    ports_dock_ = make_pane_dock(QStringLiteral("portsDock"), tr("Ports"),
+                                 ports_panel_, &ports_header_);
+    inspector_dock_ =
+        make_pane_dock(QStringLiteral("inspectorDock"), tr("Inspector"),
+                       inspector_panel_, &inspector_header_);
+    send_dock_ = make_pane_dock(QStringLiteral("sendDock"), tr("Send"),
+                                send_panel_, &send_header_);
+    monitor_dock_ = make_pane_dock(QStringLiteral("monitorDock"), tr("Monitor"),
+                                   monitor_panel_, &monitor_header_);
+
+    // The Ports pane carries its own Add port button.
+    if (QAction* add = registry_.action(QStringLiteral("ports.add")))
+    {
+        auto* button = new QToolButton(ports_header_);
+        button->setDefaultAction(add);
+        button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        button->setObjectName(QStringLiteral("portsAddButton"));
+        button->setProperty("role", QStringLiteral("secondary"));
+        ports_header_->add_action(button);
+    }
 
     ports_dock_->setMinimumWidth(
         Theme::instance().metric(QStringLiteral("layout.ports.default")));
@@ -871,10 +1025,10 @@ void ShellWindow::build_docks()
                 selection_.select_port(id);
                 remove_selected_port();
             });
-    ports_panel_->set_menu_state_provider(
-        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
-    topology_->set_menu_state_provider(
-        [this](vss::endpoint_id id) { return port_menu_state_for(id); });
+    ports_panel_->set_menu_state_provider([this](vss::endpoint_id id)
+                                          { return port_menu_state_for(id); });
+    topology_->set_menu_state_provider([this](vss::endpoint_id id)
+                                       { return port_menu_state_for(id); });
     connect(ports_panel_, &PortsPanel::port_action_requested, this,
             [this](vss::endpoint_id id, port_menu_action action)
             { run_port_action(id, action); });
@@ -1085,10 +1239,21 @@ void ShellWindow::build_status()
             [this](bool advanced) { level_.set_advanced(advanced); });
     status_->set_advanced(level_.advanced());
     menuBar()->setFont(Theme::instance().font(text_style::body));
+    // One header row: the menus on the left, the action search and the
+    // Simple and Advanced switch on the right.
     menuBar()->setFixedHeight(
-        Theme::instance().metric(QStringLiteral("menuBar")));
+        Theme::instance().metric(QStringLiteral("header")));
+    if (QWidget* corner = menuBar()->cornerWidget(Qt::TopRightCorner))
+    {
+        if (auto* corner_layout = qobject_cast<QHBoxLayout*>(corner->layout()))
+            corner_layout->addWidget(status_->release_level_switch(corner));
+    }
     toolbar_->setFixedHeight(
-        Theme::instance().metric(QStringLiteral("toolbar")));
+        Theme::instance().metric(QStringLiteral("buttonSmall")) + 4);
+    // The panes sit 8 px in from the window edge, like the gaps between
+    // them.
+    const int gutter = Theme::instance().space(1);
+    setContentsMargins(gutter, 0, gutter, 0);
     status_->setFixedHeight(
         Theme::instance().metric(QStringLiteral("statusBar")));
 }
@@ -1120,6 +1285,8 @@ void ShellWindow::connect_backend()
 
 void ShellWindow::on_backend_changed()
 {
+    if (canvas_ != nullptr && canvas_->in_batch())
+        return;
     // A port that is added or removed has an identity the history cannot
     // restore, so the history only ever describes the ports it was made on.
     std::vector<vss::endpoint_id> ports;
@@ -1156,6 +1323,7 @@ void ShellWindow::on_level_changed(bool advanced)
         advanced_action_->setChecked(advanced);
     }
     status_->set_advanced(advanced);
+    sync_canvas_editing();
     if (ports_panel_ != nullptr)
         ports_panel_->set_advanced(advanced);
     if (inspector_panel_ != nullptr)
@@ -1206,9 +1374,10 @@ void ShellWindow::update_content()
         status_->refresh();
         return;
     }
-    const bool has_ports = !backend_.ports().empty();
-    const bool show_launcher_page = launcher_forced_ || !has_ports;
-    if (show_launcher_page)
+    // Advanced mode builds on the canvas, so an empty setup shows the empty
+    // canvas with its toolbox; the launcher appears only from View, Show
+    // launcher.
+    if (launcher_forced_)
     {
         central_->setCurrentWidget(launcher_);
         launcher_->refresh();
@@ -1264,8 +1433,8 @@ void ShellWindow::recreate_lost_ports()
         lost_banner_->action_button()->setEnabled(false);
     auto outcome = std::make_shared<vss::result<std::size_t>>(
         vss::make_error_code(vss::errc::unsupported));
-    recreate_thread_ = QThread::create([this, outcome]
-                                       { *outcome = backend_.recreate_lost_ports(); });
+    recreate_thread_ = QThread::create(
+        [this, outcome] { *outcome = backend_.recreate_lost_ports(); });
     connect(recreate_thread_, &QThread::finished, this,
             [this, outcome]
             {
@@ -1371,6 +1540,11 @@ void ShellWindow::update_dock_titles()
             inspector = tr("Inspector %1").arg(port->name);
     }
     inspector_dock_->setWindowTitle(inspector);
+
+    // The Ports pane header shows the count as a badge rather than running
+    // it into the title.  The inspector shows the port's name in its body.
+    if (ports_header_ != nullptr)
+        ports_header_->set_count(static_cast<int>(ports.size()));
 }
 
 QString ShellWindow::document_signature() const
@@ -2296,8 +2470,8 @@ void ShellWindow::show_com_number(vss::endpoint_id id)
     last_signature_ = document_signature();
     set_dirty(true);
     selection_.select_port(id);
-    status_->showMessage(
-        tr("%1 is now %2.").arg(port->name, dialog.com_name()), 3000);
+    status_->showMessage(tr("%1 is now %2.").arg(port->name, dialog.com_name()),
+                         3000);
 }
 
 void ShellWindow::show_release_port(vss::endpoint_id id)
@@ -2591,7 +2765,8 @@ void ShellWindow::new_document()
 {
     if (!confirm_discard())
         return;
-    if (const QString warning = new_setup_warning(ports_in_use(backend_.ports()));
+    if (const QString warning =
+            new_setup_warning(ports_in_use(backend_.ports()));
         !warning.isEmpty() &&
         !ConfirmDialog::ask(tr("Start a new setup?"), warning, tr("Start new"),
                             tr("Cancel"), true, this))
@@ -2931,8 +3106,14 @@ bool ShellWindow::run_selftest()
     show();
     QApplication::processEvents();
 
-    if (central_->currentWidget() != launcher_)
-        fail(QStringLiteral("the empty studio did not show the launcher"));
+    // Simple mode is always the setups page; an empty setup in Advanced mode
+    // is the empty canvas.
+    if (!level_.advanced() && central_->currentWidget() != simple_page_)
+        fail(QStringLiteral("Simple mode did not show the setups page"));
+    if (level_.advanced() && backend_.ports().empty() &&
+        central_->currentWidget() != workspace_)
+        fail(QStringLiteral(
+            "the empty Advanced studio did not show the canvas"));
     if (registry_.actions().isEmpty())
         fail(QStringLiteral("the action registry is empty"));
     if (!registry_.shortcuts_unique())
@@ -2967,24 +3148,38 @@ bool ShellWindow::run_selftest()
     {
         backend_.refresh();
         QApplication::processEvents();
-        if (central_->currentWidget() != workspace_)
-            fail(QStringLiteral("the workspace did not replace the launcher"));
-        if (!ports_dock_->isVisible())
-            fail(QStringLiteral("the Ports dock is not visible"));
-        if (topology_->node_count() != 1)
+        if (!level_.advanced())
         {
-            fail(QStringLiteral("the topology did not draw the created port"));
+            // Simple mode keeps the setups page; the canvas is Advanced.
+            if (central_->currentWidget() != simple_page_)
+                fail(QStringLiteral("Simple mode left the setups page"));
         }
-        if (!topology_->summary().contains(QStringLiteral("1 port")))
-            fail(QStringLiteral("the topology summary did not update"));
+        else
+        {
+            if (central_->currentWidget() != workspace_)
+                fail(QStringLiteral(
+                    "the workspace did not replace the launcher"));
+            if (!ports_dock_->isVisible())
+                fail(QStringLiteral("the Ports dock is not visible"));
+            if (topology_->node_count() != 1)
+            {
+                fail(QStringLiteral(
+                    "the topology did not draw the created port"));
+            }
+            if (!topology_->summary().contains(QStringLiteral("1 port")))
+                fail(QStringLiteral("the topology summary did not update"));
+        }
         const auto removed = backend_.remove_port(*created);
         if (!removed)
             fail(QStringLiteral("remove_port: %1")
                      .arg(error_text(removed.error())));
         backend_.refresh();
         QApplication::processEvents();
-        if (central_->currentWidget() != launcher_)
-            fail(QStringLiteral("the launcher did not return after removal"));
+        if (!level_.advanced() && central_->currentWidget() != simple_page_)
+            fail(QStringLiteral(
+                "the setups page did not stay after removal"));
+        if (level_.advanced() && central_->currentWidget() != workspace_)
+            fail(QStringLiteral("the empty canvas did not stay after removal"));
     }
 
     if (backend_.caps().shared_bus)
@@ -3057,6 +3252,25 @@ bool ShellWindow::run_selftest()
         return false;
     }
     return true;
+}
+
+} // namespace vss::gui
+
+namespace vss::gui
+{
+
+void ShellWindow::sync_canvas_editing()
+{
+    if (canvas_ == nullptr)
+        return;
+    const bool advanced = level_.advanced();
+    canvas_->set_editing(advanced);
+    QAction* toolbox = registry_.action(QStringLiteral("view.toolbox"));
+    if (toolbox_ != nullptr)
+    {
+        const bool shown = toolbox == nullptr || toolbox->isChecked();
+        toolbox_->setVisible(advanced && shown);
+    }
 }
 
 } // namespace vss::gui
