@@ -96,6 +96,49 @@ tools/vm/make-bundle.sh . /mnt/d/bundle-ubuntu
 
 The guest scripts install what the program needs on Ubuntu (cmake for `ctest`, the OpenGL, EGL and fontconfig libraries Qt loads, and Xvfb with the xcb libraries for T9). On Windows the bundle carries a Python, PowerShell 7 for the `vm_*` suites, the Visual C++ runtime and the Qt offscreen plugin. `tools/vm/test-guest-cell.ps1` checks the order of the `vmrun` calls with `-DryRun`.
 
+## Running the driver tests: a 32-bit program and a hung program
+
+The Windows guests also run the driver. `drivers/windows/test/test-wow64.ps1` drives it with a small
+C client (`drivers/windows/test/client32`), as a 32-bit program and as a native one, and holds a port
+the way a hung program does. The programs that matter on Windows are old 32-bit ones, so the first
+question is whether one of them works against the driver, and the second, when one hangs, whether
+the driver or the program holds the port.
+
+**There is no 32-bit guest.** The driver is x64 and ARM64 only, so a 32-bit Windows cannot load it,
+and an x86 driver build does not exist. The Windows 10 and Windows 11 guests are 64-bit, and the 32-bit
+client runs in them under WOW64, which is how a 32-bit program meets the driver on any 64-bit Windows.
+
+```powershell
+# Build the driver and the packages (drivers/windows/build.ps1), then the bundle. The script builds the
+# client with MSVC as Win32 and x64, or takes the CI artifact vss-com-client-x64 with -Client.
+./drivers/windows/build.ps1 -Driver all
+./tools/vm/make-driver-bundle.ps1 -Repository . -Out D:\bundle-driver\driver-bundle.zip
+
+# From the clean snapshot to the evidence. It signs the packages in the guest with a throwaway
+# certificate, installs each driver, runs the tests and uninstalls. Add -DriverSuite for test-driver.ps1.
+./tools/vm/guest-cell.ps1 -Guest windows11 -DriverBundle D:\bundle-driver\driver-bundle.zip -Out out\driver
+./tools/vm/guest-cell.ps1 -Guest windows10 -DriverBundle D:\bundle-driver\driver-bundle.zip -Out out\driver
+```
+
+`-Bundle` and `-DriverBundle` can be given together; the cell runs first and the driver tests after it, in
+the same guest. The evidence comes back to `<Out>\<guest>\driver-out\<kmdf|umdf>`: one JSON file per step
+(`result-wow64.json` holds W1 to W4 and T1 to T7), a log per step, and the JSON the client printed
+(`exercise-x86.json`, `probe-x86-busy.json` and the others). The script exits with 1 when a test failed.
+A test that ends `unexpected` is a result to read, not a pass: the detail says what the driver did that the
+design did not predict. `skip` carries its reason (T5 waits for the driver's revoke request, T7 is for the
+user-mode driver). `tools/vm/test-guest-cell.ps1` checks the order of the `vmrun` calls of all of this with
+`-DryRun`, and it runs in CI.
+
+Run the tests by hand in a guest that is already prepared with the folders `make-driver-bundle.ps1`
+makes (`kmdf\` and `umdf\`):
+
+```powershell
+./prepare-test-signing.ps1 -ConfirmDisposableGuest
+./install-driver.ps1 -ResultPath C:\vss\install.json            # -Flavour umdf -Helper for the user-mode driver
+./test-wow64.ps1 -ResultPath C:\vss\wow64.json                  # -Only T2 runs one test
+./uninstall-driver.ps1
+```
+
 ## Safety
 
 - Never load a driver or turn on test signing on the development machine.
