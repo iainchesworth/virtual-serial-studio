@@ -225,8 +225,9 @@ the setup, log and environment, with traffic contents off unless chosen.
    endpoint identities exactly. Link, owner and name changes can be undone now.
 2. Saving the line wiring in the setup file. The matrix and fault
    injection are done.
-3. A way to see whether another program has opened a port, which would turn on
-   the *Waiting* and *Program connected* states.
+3. Showing whether another program has opened a port on Windows and macOS.
+   Linux shows the *Waiting* and *Program connected* states for a pseudo
+   terminal already.
 4. Reconnect for a port that failed, with the note and button the design
    specifies.
 5. Real-device templates that open the attach dialog.

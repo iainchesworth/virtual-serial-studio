@@ -580,6 +580,35 @@ result<void> studio::rename_port(endpoint_id id, const std::string& name)
     return {};
 }
 
+std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
+{
+    std::vector<endpoint_id> ids;
+    std::vector<std::string> paths;
+    {
+        std::lock_guard lock(record_mutex_);
+        for (const auto& [id, record] : records_)
+        {
+            if (record.kind == "virtual" &&
+                record.virtual_kind == to_string(virtual_port_kind::pty) &&
+                !record.target.empty())
+            {
+                ids.push_back(id);
+                paths.push_back(record.target);
+            }
+        }
+    }
+
+    std::unordered_map<endpoint_id, peer_open_state> out;
+    const std::vector<peer_open_state> states = peer_open(paths);
+    for (std::size_t index = 0; index < ids.size() && index < states.size();
+         ++index)
+    {
+        if (states[index] != peer_open_state::unknown)
+            out.emplace(ids[index], states[index]);
+    }
+    return out;
+}
+
 std::string studio::advertised_path(endpoint_id id) const
 {
     std::lock_guard lock(record_mutex_);
