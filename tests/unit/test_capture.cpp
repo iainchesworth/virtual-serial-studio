@@ -37,7 +37,6 @@ capture_header fixture_header()
 {
     capture_header header;
     header.started = fixture_start();
-    header.local_time = false;
     return header;
 }
 
@@ -104,22 +103,12 @@ TEST_CASE("capture: a .cap file matches Automate's format byte for byte")
     REQUIRE_EQ(out.str(), expected);
 }
 
-TEST_CASE("capture: the header time is the local time unless asked for UTC")
+TEST_CASE("capture: the header time is the start in UTC, in the layout of ctime")
 {
     std::ostringstream utc;
     capture_writer writer(utc, capture_format::cap, fixture_header());
     REQUIRE(utc.str().rfind("# Serial recording started at: Mon Jun  8 "
-                            "12:00:00 2026\n", 0) == 0);
-
-    capture_header local;
-    local.started = fixture_start();
-    std::ostringstream text;
-    capture_writer local_writer(text, capture_format::cap, local);
-    // Whatever the zone, it is the same layout as ctime().
-    const auto line = text.str().substr(0, text.str().find('\n'));
-    REQUIRE(line.rfind("# Serial recording started at: ", 0) == 0);
-    REQUIRE_EQ(line.size(), std::string("# Serial recording started at: Mon "
-                                        "Jun  8 12:00:00 2026").size());
+                            "12:00:00 2026 UTC\n", 0) == 0);
 }
 
 TEST_CASE("capture: CSV carries the port, direction, all bytes and the time")

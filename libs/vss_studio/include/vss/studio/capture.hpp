@@ -4,15 +4,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_STUDIO_CAPTURE_HPP
-#define VSS_STUDIO_CAPTURE_HPP
+#pragma once
 
 #include <vss/core/bytes.hpp>
 #include <vss/core/error.hpp>
 #include <vss/core/hub.hpp>
 #include <vss/core/types.hpp>
 
-#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <iosfwd>
@@ -84,9 +82,6 @@ struct capture_header
     /// so the absolute time of a record is the start plus its offset.
     std::chrono::system_clock::time_point started =
         std::chrono::system_clock::now();
-    /// Writes the `.cap` header in local time, as Automate does.  Off writes
-    /// UTC, which a test needs to get the same file in every time zone.
-    bool local_time = true;
 };
 
 /// Writes records in one format.  Not thread safe: a `capture_session` puts
@@ -155,8 +150,6 @@ struct capture_options
     capture_format format = capture_format::cap;
     /// Only these ports, by name.  Empty keeps every port.
     std::vector<std::string> ports;
-    /// Local time in the `.cap` header (see #capture_header).
-    bool local_time = true;
 };
 
 /// Subscribes to a hub and writes every data event it sees, until `stop()` or
@@ -209,5 +202,3 @@ private:
 };
 
 } // namespace vss
-
-#endif // VSS_STUDIO_CAPTURE_HPP
