@@ -435,8 +435,9 @@ registry on Windows, a configuration file on Linux and macOS).
 
 - **Help → Why is nothing arriving?** walks the steps between the device and
   your program (the port is open, it is linked, the device is sending) and
-  suggests what to try. Studio cannot see whether a program has opened the
-  port, so the last two checks read "Not checked yet".
+  suggests what to try. On Linux Studio can see whether a program has opened
+  a pseudo terminal, so those checks say so. Everywhere else it cannot, and the
+  last two checks read "Not checked yet".
 
 ![The Why is nothing arriving dialog: the port is open, it has no link, and the later checks are not yet run](images/troubleshoot-light.png)
 
@@ -496,9 +497,9 @@ available in this build". It never pretends. At the moment:
   cannot, so a busy device fails when you attach it.
 - **Real-device templates**: they need the attach dialog to open from a
   template.
-- **"Waiting for a program" and "Program connected"**: the engine cannot see
-  whether another program has opened a port, so a port reads **Open** and no
-  more.
+- **"Waiting for a program" and "Program connected" on Windows and macOS**:
+  Studio can see whether a program has opened a port only for a pseudo terminal
+  on Linux. Everywhere else a port reads **Open** and no more.
 - **Settings sent by an RFC 2217 client** (baud rate, data bits, parity, stop
   bits, flow control): the server accepts and reports them but does not apply
   them to a real device linked to it. DTR, RTS and break from the client are

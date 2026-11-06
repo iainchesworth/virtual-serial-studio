@@ -7,7 +7,7 @@ name: Static Analysis
 # but take longer. It builds first, because clang-tidy reads the compile database and the
 # generated files. A finding fails the job and opens or updates one `nightly-analysis` issue.
 #
-# Four checks are left out on purpose:
+# Five checks are left out on purpose:
 #   misc-const-correctness       asks for const on almost every local; it is style, not a defect.
 #   performance-enum-size        asks for narrower enum bases; the saving is a few bytes.
 #   bugprone-unused-return-value flags the error_code out-parameter calls that ignore a result
@@ -15,6 +15,10 @@ name: Static Analysis
 #   bugprone-signed-bitwise      flags the POSIX flag macros (`O_RDWR | O_NOCTTY`, termios bits) and
 #                                byte arithmetic that C++ promotes to int. Neither can be written
 #                                another way.
+#   portability-avoid-pragma-once asks for include guards. The standard (section 4.4) allows
+#                                `#pragma once` and counts every guard directive against the
+#                                ratchet in tools/preprocessor-baseline.json, so a new header
+#                                uses the pragma and a guard would fail the policy job.
 
 on:
   schedule:
@@ -48,6 +52,7 @@ jobs:
         performance-*,
         -performance-enum-size,
         portability-*,
+        -portability-avoid-pragma-once,
         clang-analyzer-*,
         misc-*,
         -misc-include-cleaner,

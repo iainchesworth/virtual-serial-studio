@@ -97,24 +97,75 @@ def download(url: str, target: pathlib.Path, attempts: int = 6) -> None:
     )
 
 
+class UnsafeArchive(Exception):
+    """An archive member that would land outside the destination, or is not a plain file."""
+
+
+def destination_for(name: str, dest: pathlib.Path) -> pathlib.Path:
+    """Return where member `name` is written, or raise UnsafeArchive.
+
+    `dest` must already be resolved. A name is refused when it is absolute (POSIX or
+    Windows form), has a ``..`` part, holds a NUL, or resolves outside `dest`.
+    """
+    parts = name.replace("\\", "/").split("/")
+    if (
+        not name
+        or "\x00" in name
+        or name.startswith(("/", "\\"))
+        or (len(name) > 1 and name[1] == ":")
+        or ".." in parts
+    ):
+        raise UnsafeArchive(f"refusing archive member {name!r}")
+    target = (dest / name).resolve()
+    try:
+        target.relative_to(dest)
+    except ValueError:
+        raise UnsafeArchive(f"refusing archive member {name!r}: outside {dest}") from None
+    return target
+
+
+def unpack(tar: tarfile.TarFile, prefix: str, dest: pathlib.Path) -> int:
+    """Write the files under `prefix` in `tar` into `dest`, without the prefix.
+
+    Only directories and regular files are accepted. A link, device or any other member
+    under the prefix stops the unpack with UnsafeArchive, as does a name that leaves
+    `dest`. The members are written by hand rather than with ``TarFile.extract``, so the
+    check does not depend on the Python version (the ``data`` filter needs 3.12, or a
+    late patch release of an older one). The Boost header tree holds no links.
+    """
+    dest.mkdir(parents=True, exist_ok=True)
+    root = dest.resolve()
+    count = 0
+    for member in tar:
+        if not member.name.startswith(prefix):
+            continue
+        relative = member.name[len(prefix):]
+        if not relative:
+            continue
+        target = destination_for(relative, root)
+        if member.isdir():
+            target.mkdir(parents=True, exist_ok=True)
+            continue
+        if not member.isreg():
+            raise UnsafeArchive(f"refusing archive member {member.name!r}: not a plain file")
+        source = tar.extractfile(member)
+        if source is None:
+            raise UnsafeArchive(f"refusing archive member {member.name!r}: no data")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with source, open(target, "wb") as out:
+            shutil.copyfileobj(source, out)
+        count += 1
+        if count % 2000 == 0:
+            sys.stdout.write(f"\r  {count} files")
+            sys.stdout.flush()
+    return count
+
+
 def extract(archive: pathlib.Path, prefix: str, dest: pathlib.Path) -> None:
     print(f"extracting {prefix} -> {dest}", flush=True)
-    dest.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
-    count = 0
     with tarfile.open(archive, "r:bz2") as tar:
-        members = [m for m in tar if m.name.startswith(prefix)]
-        print(f"  {len(members)} members", flush=True)
-        for member in members:
-            relative = member.name[len(prefix):]
-            if not relative:
-                continue
-            member.name = relative
-            tar.extract(member, path=dest, set_attrs=False)
-            count += 1
-            if count % 2000 == 0:
-                sys.stdout.write(f"\r  {count} files")
-                sys.stdout.flush()
+        count = unpack(tar, prefix, dest)
     print(f"\r  {count} files in {time.monotonic() - started:.1f}s", flush=True)
 
 

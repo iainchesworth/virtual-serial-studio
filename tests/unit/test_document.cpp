@@ -324,6 +324,10 @@ TEST_CASE("document: save and load a file")
     REQUIRE_EQ(load_file(path.string()).error(),
                make_error_code(errc::not_found));
 
+    REQUIRE_EQ(load_file(std::filesystem::current_path().string()).error(),
+               make_error_code(errc::invalid_argument));
+    REQUIRE_EQ(load_file("").error(), make_error_code(errc::not_found));
+
     const auto missing_directory =
         (std::filesystem::current_path() / "no-such-directory" / "file.json")
             .string();

@@ -11,13 +11,16 @@
 
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
+#include <vss/ports/peer_open.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QMetaObject>
 #include <QString>
+#include <QTimer>
 
 #include <algorithm>
 #include <cstddef>
+#include <unordered_map>
 #include <utility>
 
 namespace vss::gui
@@ -34,7 +37,23 @@ QVector<vss::endpoint_id> to_vector(const std::vector<vss::endpoint_id>& ids)
     return out;
 }
 
-port_view make_port(const vss::endpoint_info& info)
+peer_state to_peer_state(vss::peer_open_state state)
+{
+    switch (state)
+    {
+    case vss::peer_open_state::open:
+        return peer_state::open;
+    case vss::peer_open_state::not_open:
+        return peer_state::not_open;
+    case vss::peer_open_state::unknown:
+        break;
+    }
+    return peer_state::unknown;
+}
+
+port_view make_port(
+    const vss::endpoint_info& info,
+    const std::unordered_map<vss::endpoint_id, vss::peer_open_state>& peers)
 {
     port_view view;
     view.id = info.id;
@@ -50,9 +69,11 @@ port_view make_port(const vss::endpoint_info& info)
     view.open = info.open;
     view.studio_only = info.kind == vss::endpoint_kind::mock ||
                        view.path.startsWith(QStringLiteral("loopback:"));
-    // The engine cannot observe a program opening the advertised path.  The
-    // GUI must not claim what it cannot know.
-    view.peer = peer_state::unknown;
+    // Only a pseudo terminal on a platform that can inspect other processes has
+    // a definite answer.  Every other port stays unknown, and the GUI must
+    // not claim what it cannot know.
+    if (const auto found = peers.find(info.id); found != peers.end())
+        view.peer = to_peer_state(found->second);
     return view;
 }
 
@@ -143,6 +164,17 @@ EngineStudioBackend::EngineStudioBackend(vss::studio& studio, QObject* parent)
                 rebuild();
             });
     bridge_->start();
+
+    // Opening a pseudo terminal raises no engine event, so a program that
+    // connects or goes away is noticed by looking again once a second.
+    if (vss::peer_open_supported())
+    {
+        peer_timer_ = new QTimer(this);
+        peer_timer_->setInterval(1000);
+        connect(peer_timer_, &QTimer::timeout, this,
+                [this] { rebuild(); });
+        peer_timer_->start();
+    }
     rebuild();
 }
 
@@ -164,6 +196,9 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // A pseudo terminal on Linux can be checked for a program that has it
+    // open; every other port reads as unknown and the GUI says nothing.
+    caps.peer_open = vss::peer_open_supported();
     // The window's Undo history reverses changes with exact inverse
     // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
     caps.undo = true;
@@ -582,8 +617,11 @@ void EngineStudioBackend::rebuild()
     std::vector<port_view> next_ports;
     const auto infos = studio_.endpoint_infos();
     next_ports.reserve(infos.size());
+    std::unordered_map<vss::endpoint_id, vss::peer_open_state> peers;
+    if (vss::peer_open_supported())
+        peers = studio_.peer_states();
     for (const auto& info : infos)
-        next_ports.push_back(make_port(info));
+        next_ports.push_back(make_port(info, peers));
 
     std::vector<link_view> next_links;
     const auto links = studio_.link_infos();

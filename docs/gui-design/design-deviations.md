@@ -211,12 +211,27 @@ final compact/200 percent pass.
 
 ### Peer-open honesty
 
-`EngineStudioBackend` reports `peer_state::unknown` because the engine cannot
-observe an external opener. Ports therefore show "Open" and Inspector omits the
-"No program has opened ..." sentence. "Waiting for program" and "Program
-connected" are exercised by the fake in tests and will appear if a later engine
-capability reports the state. No waiting text is shown for Unknown. The design
-now says the same: Open is the normal state, and the two refinements belong to
+`EngineStudioBackend` reports `peer_state::unknown` for every port it cannot
+observe, so those ports show "Open" and Inspector omits the "No program has
+opened ..." sentence. The one case it can observe is a pseudo terminal on
+Linux: `vss::peer_open()` in `vss_ports` reads `/proc/<pid>/fd` of the other
+processes it may inspect and looks for a descriptor that points at the slave
+device. `studio::peer_states()` asks for every pseudo terminal in one pass, and
+the backend maps the answer to `peer_state` and sets `Capabilities::peer_open`
+where the platform supports it. A port the platform cannot observe has no
+entry, which reads as unknown and never as "not open".
+
+Three limits are stated rather than hidden. The scan sees only processes whose
+descriptors this process may read, so a program run by another user, or a
+privileged one, can be missed; a pseudo terminal slave belongs to the user who
+made it, so the programs that open it are almost always that user's. Opening a
+pseudo terminal raises no engine event, so the backend looks again once a
+second with a timer, and the Ports list can lag a program by up to that long.
+macOS and Windows return unknown: macOS has `libproc` for this but it is not
+built here, and the Windows driver would need a call to say whether a handle is
+open. "Waiting for program" and "Program connected" are also exercised by the
+fake in tests. No waiting text is shown for Unknown. The design says the same:
+Open is the normal state, and the two refinements belong to
 `Capabilities::peer_open`.
 
 ### F2 rename
@@ -726,13 +741,13 @@ dialog returns their documents once WP5 supplies the device flow.
 
 ### Share step 3 shows Open until the engine can see a program
 
-`Capabilities::peer_open` is false, so a real backend reports
-`peer_state::unknown`. The Ready table then shows the "Open" chip and the
+Where `Capabilities::peer_open` is false (Windows and macOS), a real backend
+reports `peer_state::unknown`. The Ready table then shows the "Open" chip and the
 result note omits the sentence about Waiting labels changing, following
 `08-engine-gaps.md`. A backend that reports a definite `not_open` or `open`
 shows "Waiting for program" or "Program connected"; the fake backend and the
-tests cover both mappings. The engine work to detect an outside program is
-unchanged.
+tests cover both mappings, and a pseudo terminal on Linux reports them for real
+(see "Peer-open honesty").
 
 ### Add another program re-runs the one-step share
 
@@ -971,8 +986,9 @@ reopens the server on the same address.
 
 ### Remaining limits carried past WP9
 
-The capability-gated features stay visible: peer-open and the editable line
-matrix. Rename (see "Rename" above) is no longer one of them. Benchmark
+The capability-gated feature that stays visible is the editable line matrix.
+Peer-open is built for a pseudo terminal on Linux and reads unknown elsewhere
+(see "Peer-open honesty"). Rename (see "Rename" above) is no longer one of them. Benchmark
 extraction (see "Benchmark" above) and fault injection (see
 "Fault injection" above) are no longer among them. The network server role is no
 longer one of them: `vss_ports` listens for `tcp-listen://` and

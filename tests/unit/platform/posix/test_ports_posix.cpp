@@ -6,7 +6,10 @@
 
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/native_lines.hpp>
+#include <vss/ports/peer_open.hpp>
 #include <vss/ports/virtual_port.hpp>
+
+#include <vss/testkit/harness.hpp>
 
 #include "test_framework.hpp"
 
@@ -14,9 +17,16 @@
 
 #include <fcntl.h>
 #include <poll.h>
+#include <signal.h>
+#include <spawn.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
+#include <chrono>
 #include <string>
+#include <vector>
+
+extern char** environ;
 
 using namespace vss;
 
@@ -121,4 +131,51 @@ TEST_CASE("virtual ports: a pty carries data in both directions")
     ::close(slave);
     created->port->close();
     REQUIRE(!created->port->is_open());
+}
+
+TEST_CASE("peer open: another process holding a pty open is noticed")
+{
+    using namespace std::chrono_literals;
+
+    boost::asio::io_context io;
+    const auto created =
+        create_virtual_port(io.get_executor(), virtual_port_kind::pty, "peer");
+    REQUIRE(created);
+    const std::vector<std::string> paths{created->path};
+    REQUIRE(peer_open({}).empty());
+
+    if (!peer_open_supported())
+    {
+        // A platform that cannot tell must say so for every path.
+        const auto states = peer_open(paths);
+        REQUIRE_EQ(states.size(), std::size_t{1});
+        REQUIRE(states[0] == peer_open_state::unknown);
+        return;
+    }
+
+    // This process holds the master, and the slave is not open anywhere.
+    REQUIRE(peer_open(paths)[0] == peer_open_state::not_open);
+
+    // A shell runs sleep with the pseudo terminal as its standard input.
+    std::string shell = "/bin/sh";
+    std::string flag = "-c";
+    std::string script = "exec sleep 30 < \"$0\"";
+    std::string device = created->path;
+    char* const arguments[] = {shell.data(), flag.data(), script.data(),
+                               device.data(), nullptr};
+    pid_t child = 0;
+    REQUIRE_EQ(::posix_spawn(&child, shell.c_str(), nullptr, nullptr,
+                             arguments, environ),
+               0);
+
+    const bool seen = vss::testkit::wait_until(
+        [&] { return peer_open(paths)[0] == peer_open_state::open; }, 5000ms);
+    ::kill(child, SIGKILL);
+    int status = 0;
+    ::waitpid(child, &status, 0);
+    REQUIRE(seen);
+
+    REQUIRE(vss::testkit::wait_until(
+        [&] { return peer_open(paths)[0] == peer_open_state::not_open; },
+        5000ms));
 }
