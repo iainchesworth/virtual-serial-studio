@@ -821,3 +821,20 @@ TEST_CASE("studio: an automatic port takes a COM number only where the driver is
     REQUIRE_EQ(app.endpoint_infos().size(), std::size_t{1});
     REQUIRE_EQ(app.snapshot().ports[0].com_number, 0u);
 }
+
+TEST_CASE("studio: a port that is not a driver port has no holder to release")
+{
+    studio app;
+    const auto created =
+        app.create_virtual_port("plain", virtual_port_kind::loopback, {}, 0);
+    REQUIRE(created);
+
+    REQUIRE(app.driver_ports().empty());
+    REQUIRE(!app.driver_holder((*created)->id()).has_value());
+    REQUIRE(!app.driver_holder(9999).has_value());
+
+    const auto revoked = app.revoke_port((*created)->id());
+    REQUIRE(!revoked.has_value());
+    REQUIRE_EQ(revoked.error(), make_error_code(errc::unsupported));
+    REQUIRE_EQ(app.revoke_port(9999).error(), make_error_code(errc::not_found));
+}

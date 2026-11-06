@@ -49,6 +49,11 @@ result<std::string> set_driver_com_number(transport& port, unsigned com_number)
     return detail::platform_set_driver_com_number(port, com_number);
 }
 
+result<std::uint32_t> revoke_driver_port(transport& port)
+{
+    return detail::platform_revoke_driver_port(port);
+}
+
 std::optional<driver_peer_info> driver_peer(const std::string& com_name)
 {
     return detail::platform_driver_peer(com_name);

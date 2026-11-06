@@ -69,6 +69,45 @@ public:
 
     virtual vss::result<void> remove_port(vss::endpoint_id id) = 0;
 
+    // -- Windows driver ports (capability: com_numbers, release_port) ------
+
+    /// Makes a port of the Windows driver with the COM number `com_number`
+    /// (1 to 255; 0 takes whichever Windows picks).  The default is
+    /// `unsupported`.  A number that another device has fails with
+    /// `errc::already_exists`, and a number with no helper service to give it
+    /// with `errc::unsupported`.
+    virtual vss::result<vss::endpoint_id>
+    create_driver_port(const QString& /*name*/, bool /*capture*/,
+                       unsigned /*com_number*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
+    /// Gives a driver port another COM number and returns the new COM name.
+    /// The port restarts, which takes a second or two, so the call belongs on
+    /// a worker thread and touches no GUI state; call `refresh()` on the GUI
+    /// thread afterwards.  Errors: see `vss::set_driver_com_number`.  The
+    /// default is `unsupported`.
+    virtual vss::result<QString> set_com_number(vss::endpoint_id /*id*/,
+                                                unsigned /*com_number*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
+    /// The program that has the driver port open, or none.
+    virtual std::optional<holder_view> port_holder(vss::endpoint_id /*id*/) const
+    {
+        return std::nullopt;
+    }
+
+    /// Makes the program that has a driver port open let go of it.  The
+    /// default is `unsupported`.
+    virtual vss::result<void> release_port(vss::endpoint_id /*id*/,
+                                           release_method /*method*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     /// Renames a port everywhere the studio keeps its name.  The default is
     /// `unsupported`: a build without `Capabilities::rename_port` never
     /// changes only part of the records.

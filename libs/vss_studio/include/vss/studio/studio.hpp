@@ -15,6 +15,7 @@
 #include <vss/ports/peer_open.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/ports/stable_link.hpp>
+#include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/virtual_port.hpp>
 
 #include <memory>
@@ -133,6 +134,22 @@ public:
     /// name, `errc::already_exists` when another port has the name and
     /// `errc::not_found` for an unknown port.
     result<void> rename_port(endpoint_id id, const std::string& name);
+
+    /// The ports the studio made through the Windows driver, with the COM name
+    /// each has now.  Empty everywhere but Windows.
+    std::unordered_map<endpoint_id, std::string> driver_ports() const;
+
+    /// What the driver says about the program that has the driver port `id` open:
+    /// its process and line settings.  Empty for a port that is not a driver
+    /// port, and for one the driver has not yet reported on.
+    std::optional<driver_peer_info> driver_holder(endpoint_id id) const;
+
+    /// Takes the driver port `id` back from the program that has it open: the
+    /// program keeps running, but its handle stops working and another program can
+    /// open the port.  The answer is the process that had it, or 0 when none did.
+    /// `errc::not_found` for an unknown port and `errc::unsupported` for a port
+    /// that is not a driver port; see `revoke_driver_port` for the rest.
+    result<std::uint32_t> revoke_port(endpoint_id id);
 
     /// For each pseudo terminal port, whether a program other than the studio
     /// has its device open.  A port the platform cannot observe is left out,

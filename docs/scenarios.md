@@ -111,6 +111,80 @@ A bus has no modem lines, no owner policy, and a port can be on one bus only.
 A route out of the bus and back into it is refused as a loop. The listener is
 outside the bus on purpose: a port that is not a member cannot send onto it.
 
+## Put a device from another computer on the bus
+
+A device program on another computer can be one more station on the bus. Studio
+waits for it as an RFC 2217 server, and the bus treats that port like any other.
+
+```json
+{
+  "version": 1,
+  "name": "remote-bus",
+  "ports": [
+    { "name": "master",   "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "device-1", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "remote",   "kind": "rfc2217",
+      "uri": "rfc2217-listen://127.0.0.1:7001" }
+  ],
+  "links": [
+    { "mode": "bus", "members": ["master", "device-1", "remote"] }
+  ]
+}
+```
+
+It listens on `127.0.0.1`, so nothing but this computer can reach it. On the
+other computer, forward a port to it with SSH and open the forwarded port with
+any RFC 2217 client:
+
+```bash
+ssh -N -L 7001:127.0.0.1:7001 user@studio-computer
+python -m serial.tools.miniterm rfc2217://127.0.0.1:7001 9600
+```
+
+With a VPN instead, listen on the address the VPN gives this computer and add the
+VPN's range: `rfc2217-listen://10.8.0.1:7001?allow=10.8.0.0/24`. There is no
+password and nothing is encrypted, so do not listen on `0.0.0.0` on a network you
+do not control; [Keeping it safe](user-guide.md#keeping-it-safe) lists the
+choices. When the other computer is not connected, the member is silent, like a
+device that is unplugged.
+
+The master's reply window includes the network. Add `delay_ms` to the link to
+rehearse a slow hop, and `capture` the master's port to read the time of each poll
+and its answer; they are stamped by Studio's clock, not the other computer's.
+
+## Model RS-422 and RS-485
+
+A port has no electrical mode, but the wiring decides who hears whom, and links
+model that. Four-wire RS-422, or four-wire RS-485 multi-drop, is a split: the
+master reaches every device, the devices answer to the master alone and do not
+hear each other.
+
+```json
+{ "mode": "split", "sources": ["master"], "targets": ["device-1", "device-2"],
+  "emulate_modem_lines": false }
+```
+
+Two-wire RS-485 is a bus, where every station hears every other (see above). A
+bus does not enforce one station at a time, report overlap or carry RTS; see
+[RS-232, RS-422 and RS-485](user-guide.md#rs-232-rs-422-and-rs-485).
+
+Do not add a one-way join from the devices back to the master after a split: that
+is a loop and is refused. The split already carries the answers back.
+
+## Run an old program against a fixed COM port
+
+Many old programs open one COM number kept in a setting file. Make the port with
+that number before the program starts:
+
+```bash
+vss_cli virtual --kind=windows-driver --com=3
+```
+
+or put `"com_number": 3` on a virtual port in the topology. Names above `COM9`
+fail in programs that build the name as `"COM%d"`, so keep to 1 to 9 where you can.
+[Old programs on Windows](user-guide.md#old-programs-on-windows) covers 32-bit
+programs and programs that try every port.
+
 ## Watch traffic without disturbing the device
 
 `monitor` links are one-way and do not emulate modem lines, so the observer

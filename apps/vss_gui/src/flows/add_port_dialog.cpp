@@ -289,6 +289,23 @@ void AddPortDialog::build_virtual_page()
             }
         }
     }
+    com_ = new QSpinBox(virtual_page_);
+    com_->setObjectName(QStringLiteral("addPortCom"));
+    com_->setRange(0, 255);
+    com_->setSpecialValueText(tr("Automatic"));
+    com_->setPrefix(QStringLiteral("COM"));
+    com_->setValue(0);
+    com_->setMinimumWidth(150);
+    com_->setAccessibleName(tr("COM number"));
+    com_row_ = new FormRow(
+        tr("COM number"), com_,
+        tr("Programs that open a fixed name such as COM3 find the port again "
+           "every run. Automatic takes the lowest free number. A number needs "
+           "the Studio driver and its helper service, and is used when one "
+           "port is made."),
+        virtual_page_);
+    layout->addWidget(com_row_);
+
     layout->addWidget(new FormRow(
         tr("Kind"), kind_,
         tr("Best available uses the Studio driver or com0com on Windows, and a "
@@ -311,10 +328,22 @@ void AddPortDialog::build_virtual_page()
             [this]
             {
                 validate_count();
+                refresh_com_row();
                 refresh_result();
             });
     connect(kind_, &QComboBox::currentIndexChanged, this,
-            [this] { refresh_result(); });
+            [this]
+            {
+                refresh_com_row();
+                refresh_result();
+            });
+    connect(com_, &QSpinBox::valueChanged, this,
+            [this]
+            {
+                com_row_->clear_error();
+                refresh_result();
+            });
+    refresh_com_row();
     refresh_result();
 }
 
@@ -496,6 +525,24 @@ void AddPortDialog::refresh_result()
             .arg(display));
 }
 
+bool AddPortDialog::com_number_visible() const
+{
+    return windows_platform(platform_) && backend_.caps().com_numbers &&
+           kind_ != nullptr && kind_->currentData().toInt() == 0;
+}
+
+void AddPortDialog::refresh_com_row()
+{
+    if (com_row_ == nullptr)
+        return;
+    com_row_->setVisible(com_number_visible());
+    // One number names one port, so a batch takes Automatic.
+    const bool single = count_ == nullptr || count_->value() == 1;
+    com_->setEnabled(single);
+    if (!single)
+        com_->setValue(0);
+}
+
 void AddPortDialog::validate_count()
 {
     if (count_row_ == nullptr)
@@ -563,12 +610,18 @@ void AddPortDialog::create_virtual_ports()
     }
 
     const int kind = kind_->currentData().toInt();
+    const unsigned com_number = com_number_visible() && com_->isEnabled()
+                                    ? static_cast<unsigned>(com_->value())
+                                    : 0U;
+    com_row_->clear_error();
     const QVector<QString> names = planned_names();
     QVector<vss::endpoint_id> created;
     for (const QString& target : names)
     {
         vss::result<vss::endpoint_id> added =
-            kind == 1 ? backend_.create_virtual_port(
+            com_number != 0
+                ? backend_.create_driver_port(target, true, com_number)
+            : kind == 1 ? backend_.create_virtual_port(
                             target, vss::virtual_port_kind::pty, true)
             : kind == 2 ? backend_.create_virtual_port(
                               target, vss::virtual_port_kind::loopback, true)
@@ -577,6 +630,16 @@ void AddPortDialog::create_virtual_ports()
         {
             for (const vss::endpoint_id id : created)
                 static_cast<void>(backend_.remove_port(id));
+            if (com_number != 0)
+            {
+                // The refusal is about the number, so it is said beside the
+                // number and the form stays as it was.
+                com_row_->set_error(
+                    com_number_refusal(added.error(), com_number, false));
+                com_->setFocus(Qt::OtherFocusReason);
+                Q_EMIT error_shown(tr("Could not create the port"));
+                return;
+            }
             flow_error error;
             error.title = created.size() + 1 == 1
                               ? tr("Could not create the port")

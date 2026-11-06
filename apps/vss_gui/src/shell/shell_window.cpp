@@ -21,8 +21,10 @@
 #include "dialogs/templates_dialog.hpp"
 #include "flows/add_port_dialog.hpp"
 #include "flows/attach_dialog.hpp"
+#include "flows/com_number_dialog.hpp"
 #include "flows/pair_dialog.hpp"
 #include "flows/port_ready_dialog.hpp"
+#include "flows/release_port_dialog.hpp"
 #include "flows/rename_dialog.hpp"
 #include "flows/watch_dialog.hpp"
 #include "panes/inspector_panel.hpp"
@@ -32,6 +34,7 @@
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
+#include "shell/port_warnings.hpp"
 #include "shell/status_bar.hpp"
 #include "shell/undo_steps.hpp"
 #include "support/about_dialog.hpp"
@@ -786,6 +789,10 @@ void ShellWindow::build_docks()
             [this] { open_troubleshoot(); });
     connect(inspector_panel_, &InspectorPanel::advanced_tools_requested, this,
             [this] { open_wiring(); });
+    connect(inspector_panel_, &InspectorPanel::com_number_requested, this,
+            [this](vss::endpoint_id id) { show_com_number(id); });
+    connect(inspector_panel_, &InspectorPanel::release_port_requested, this,
+            [this](vss::endpoint_id id) { show_release_port(id); });
     connect(inspector_panel_, &InspectorPanel::error_message, this,
             [this](const QString& message)
             { ToastManager::instance().show(this, message); });
@@ -1242,11 +1249,12 @@ void ShellWindow::remove_selected_port()
     const auto port = backend_.port(id);
     if (!port)
         return;
-    if (!ConfirmDialog::ask(
-            tr("Remove %1?").arg(port->name),
-            tr("The port and its links will be removed. This cannot "
-               "be undone."),
-            tr("Remove port"), tr("Cancel"), true, this))
+    QString body = tr("The port and its links will be removed. This cannot "
+                      "be undone.");
+    if (const QString warning = removal_warning(*port); !warning.isEmpty())
+        body = warning + QLatin1Char(' ') + body;
+    if (!ConfirmDialog::ask(tr("Remove %1?").arg(port->name), body,
+                            tr("Remove port"), tr("Cancel"), true, this))
     {
         return;
     }
@@ -1780,12 +1788,13 @@ void ShellWindow::remove_port(vss::endpoint_id id)
     if (!port)
         return;
 
-    if (!ConfirmDialog::ask(
-            tr("Remove port"),
-            tr("Remove %1 and its links? Nothing is saved until "
-               "you save the setup.")
-                .arg(port->name),
-            tr("Remove port"), tr("Cancel"), true, this))
+    QString body = tr("Remove %1 and its links? Nothing is saved until "
+                      "you save the setup.")
+                       .arg(port->name);
+    if (const QString warning = removal_warning(*port); !warning.isEmpty())
+        body = warning + QLatin1Char(' ') + body;
+    if (!ConfirmDialog::ask(tr("Remove port"), body, tr("Remove port"),
+                            tr("Cancel"), true, this))
     {
         return;
     }
@@ -1821,6 +1830,41 @@ void ShellWindow::show_rename(vss::endpoint_id id)
     selection_.select_port(id);
     status_->showMessage(
         tr("Renamed %1 to %2.").arg(port->name, dialog.new_name()), 3000);
+}
+
+void ShellWindow::show_com_number(vss::endpoint_id id)
+{
+    if (id == 0 || !backend_.caps().com_numbers)
+        return;
+    const auto port = backend_.port(id);
+    if (!port || !port->driver_port)
+        return;
+
+    ComNumberDialog dialog(backend_, id, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    // The number is part of the saved setup.
+    last_signature_ = document_signature();
+    set_dirty(true);
+    selection_.select_port(id);
+    status_->showMessage(
+        tr("%1 is now %2.").arg(port->name, dialog.com_name()), 3000);
+}
+
+void ShellWindow::show_release_port(vss::endpoint_id id)
+{
+    if (id == 0 || !backend_.caps().release_port)
+        return;
+    const auto port = backend_.port(id);
+    if (!port || !port->driver_port)
+        return;
+
+    ReleasePortDialog dialog(backend_, id, this);
+    if (dialog.exec() != QDialog::Accepted || !dialog.released())
+        return;
+    selection_.select_port(id);
+    status_->showMessage(tr("Released %1.").arg(port->name), 3000);
 }
 
 void ShellWindow::show_links_dock(bool shown)
@@ -2099,6 +2143,13 @@ void ShellWindow::new_document()
 {
     if (!confirm_discard())
         return;
+    if (const QString warning = new_setup_warning(ports_in_use(backend_.ports()));
+        !warning.isEmpty() &&
+        !ConfirmDialog::ask(tr("Start a new setup?"), warning, tr("Start new"),
+                            tr("Cancel"), true, this))
+    {
+        return;
+    }
     loading_ = true;
     const auto ports = backend_.ports();
     for (const auto& port : ports)
@@ -2400,9 +2451,18 @@ void ShellWindow::showEvent(QShowEvent* event)
     apply_compact();
 }
 
+bool ShellWindow::confirm_exit()
+{
+    const QString warning = exit_warning(ports_in_use(backend_.ports()));
+    if (warning.isEmpty())
+        return true;
+    return ConfirmDialog::ask(tr("Close Studio?"), warning, tr("Close Studio"),
+                              tr("Keep Studio open"), true, this);
+}
+
 void ShellWindow::closeEvent(QCloseEvent* event)
 {
-    if (!restarting_ && !confirm_discard())
+    if (!restarting_ && (!confirm_discard() || !confirm_exit()))
     {
         event->ignore();
         return;

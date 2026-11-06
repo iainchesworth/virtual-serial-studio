@@ -414,3 +414,127 @@ TEST_CASE("inspector: waiting sentence and control line chips")
     }
     REQUIRE(has_dtr);
 }
+
+namespace
+{
+
+vss::endpoint_id make_driver_port(vss::gui::FakeStudioBackend& backend)
+{
+    vss::gui::capabilities caps;
+    caps.com_numbers = true;
+    caps.release_port = true;
+    caps.peer_open = true;
+    backend.set_capabilities(caps);
+    const auto id =
+        backend.create_driver_port(QStringLiteral("meter"), true, 7);
+    REQUIRE(id.has_value());
+    return *id;
+}
+
+} // namespace
+
+TEST_CASE("ports: a driver port shows both program states and nothing else")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto id = make_driver_port(backend);
+
+    // The backend says nothing about a program: the port is plainly open.
+    auto port = *backend.port(id);
+    REQUIRE(port.peer == vss::gui::peer_state::unknown);
+    REQUIRE_EQ(vss::gui::PortModel::state_text(port), QStringLiteral("Open"));
+
+    backend.set_peer_state(id, vss::gui::peer_state::not_open);
+    port = *backend.port(id);
+    REQUIRE_EQ(vss::gui::PortModel::state_text(port),
+               QStringLiteral("Waiting for program"));
+    REQUIRE(vss::gui::PortModel::state_kind(port) ==
+            vss::gui::port_state_kind::waiting);
+
+    backend.set_peer_state(id, vss::gui::peer_state::open);
+    port = *backend.port(id);
+    REQUIRE_EQ(vss::gui::PortModel::state_text(port),
+               QStringLiteral("Program connected"));
+    REQUIRE(vss::gui::PortModel::state_kind(port) ==
+            vss::gui::port_state_kind::connected);
+}
+
+TEST_CASE("inspector: a driver port has a COM number that can be changed")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto id = make_driver_port(backend);
+    vss::gui::InspectorPanel panel(backend);
+    vss::endpoint_id asked = 0;
+    QObject::connect(&panel, &vss::gui::InspectorPanel::com_number_requested,
+                     [&asked](vss::endpoint_id value) { asked = value; });
+    panel.set_selected_port(id);
+    panel.show();
+    QApplication::processEvents();
+
+    REQUIRE(panel.com_change_button()->isVisibleTo(&panel));
+    REQUIRE(panel.com_change_button()->isEnabled());
+    REQUIRE(!panel.com_change_button()->accessibleName().isEmpty());
+    bool shows_number = false;
+    for (QLabel* label : panel.findChildren<QLabel*>())
+    {
+        if (label->text() == QStringLiteral("COM7"))
+            shows_number = true;
+    }
+    REQUIRE(shows_number);
+    panel.com_change_button()->click();
+    REQUIRE_EQ(asked, id);
+
+    // Without the capability the button is there but off, with the reason.
+    backend.set_capabilities({});
+    panel.refresh();
+    QApplication::processEvents();
+    REQUIRE(!panel.com_change_button()->isEnabled());
+    REQUIRE_EQ(panel.com_change_button()->toolTip(),
+               QStringLiteral("Not available in this build"));
+
+    // A port that is not a driver port has no COM number row.
+    const auto other = backend.create_virtual_port(
+        QStringLiteral("other"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(other.has_value());
+    panel.set_selected_port(*other);
+    QApplication::processEvents();
+    REQUIRE(!panel.com_change_button()->isVisibleTo(&panel));
+}
+
+TEST_CASE("inspector: Release port is an Advanced action for a held port")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto id = make_driver_port(backend);
+    vss::gui::InspectorPanel panel(backend);
+    vss::endpoint_id asked = 0;
+    QObject::connect(&panel, &vss::gui::InspectorPanel::release_port_requested,
+                     [&asked](vss::endpoint_id value) { asked = value; });
+    panel.set_selected_port(id);
+    panel.show();
+
+    // Nobody has the port, or Advanced is off: no button.
+    backend.set_peer_state(id, vss::gui::peer_state::open);
+    panel.refresh();
+    QApplication::processEvents();
+    REQUIRE(!panel.release_button()->isVisibleTo(&panel));
+
+    panel.set_advanced(true);
+    QApplication::processEvents();
+    REQUIRE(panel.release_button()->isVisibleTo(&panel));
+    REQUIRE(panel.release_button()->isEnabled());
+    REQUIRE(!panel.release_button()->accessibleName().isEmpty());
+    panel.release_button()->click();
+    REQUIRE_EQ(asked, id);
+
+    backend.set_peer_state(id, vss::gui::peer_state::not_open);
+    panel.refresh();
+    QApplication::processEvents();
+    REQUIRE(!panel.release_button()->isVisibleTo(&panel));
+
+    // A port the studio cannot see into is never offered for release.
+    backend.set_peer_state(id, vss::gui::peer_state::open);
+    vss::gui::capabilities none;
+    backend.set_capabilities(none);
+    panel.refresh();
+    QApplication::processEvents();
+    REQUIRE(!panel.release_button()->isEnabled());
+}
