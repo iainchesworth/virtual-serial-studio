@@ -153,10 +153,15 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: ${{ matrix.compiler }}
+          ccache: ${{ matrix.ccache }}
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
         with:
           preset: ${{ matrix.preset }}
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
 
   macos:
     runs-on: macos-26
@@ -173,10 +178,16 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup-toolchain
+        with:
+          ccache: macos-appleclang
       - uses: ./.github/actions/prepare-deps
       - uses: ./.github/actions/build-and-test
         with:
           preset: macos-release
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
 
   gui:
     runs-on: ubuntu-26.04
@@ -197,6 +208,7 @@ jobs:
         with:
           compiler: gcc
           qt: "true"
+          ccache: linux-gcc-gui
 
       - uses: ./.github/actions/prepare-deps
 
@@ -211,6 +223,10 @@ jobs:
 
       - name: GUI self-test
         run: QT_QPA_PLATFORM=offscreen ./build/linux-release-gui/bin/vss_gui --selftest
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
 
   coverage:
     runs-on: ubuntu-26.04
@@ -230,6 +246,7 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          ccache: linux-clang-coverage
 
       - uses: ./.github/actions/prepare-deps
 
@@ -276,6 +293,10 @@ jobs:
             --markdown coverage.md
           cat coverage.md >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
   performance:
     runs-on: ubuntu-26.04
     name: Performance floors
@@ -294,6 +315,7 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: gcc
+          ccache: linux-gcc-release
 
       - uses: ./.github/actions/prepare-deps
 
@@ -317,6 +339,10 @@ jobs:
             perf-results.json
             perf.md
 
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
   profiling:
     runs-on: ubuntu-26.04
     name: End-to-end profiling (Tracy)
@@ -336,6 +362,7 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: gcc
+          ccache: linux-gcc-tracy
 
       - uses: ./.github/actions/prepare-deps
 
@@ -428,6 +455,11 @@ jobs:
         if: always()
         continue-on-error: true
         uses: iainchesworthlabs/icl-common-infra/actions/save-vcpkg-cache@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
   asan-ubsan:
     runs-on: ubuntu-26.04
     name: AddressSanitizer and UBSan
@@ -448,6 +480,7 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          ccache: linux-clang-asan
 
       - uses: ./.github/actions/prepare-deps
 
@@ -457,6 +490,11 @@ jobs:
 
   # Builds the libFuzzer targets and replays the seed corpus and the regression inputs under AddressSanitizer
   # and UBSan. The fuzz workflow does the fuzzing itself, on pushes to develop and at night.
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
   fuzz-regress:
     runs-on: ubuntu-26.04
     name: Fuzz regression replay
@@ -475,6 +513,7 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          ccache: linux-clang-fuzz
 
       - uses: ./.github/actions/prepare-deps
 
@@ -492,6 +531,11 @@ jobs:
 
   # Threading findings come from timing: this leg runs on a pull request that changed threading code
   # and on every merge-queue entry.
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
   tsan:
     runs-on: ubuntu-26.04
     name: ThreadSanitizer
@@ -511,12 +555,17 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          ccache: linux-clang-tsan
 
       - uses: ./.github/actions/prepare-deps
 
       - uses: ./.github/actions/build-and-test
         with:
           preset: linux-tsan
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
 
   driver:
     name: Windows driver (${{ matrix.platform }})

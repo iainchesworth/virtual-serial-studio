@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Save ccache
+description: >
+  Show the ccache statistics and, on a run from develop that is not a push (the nightly seed and
+  a manual run), save the cache under the key setup-ccache exported. Pull requests, merge-queue
+  entries and pushes only restore: a cache entry is readable from its own ref, a pull request's
+  base and the default branch, so a copy saved from a pull request or a queue ref could not be
+  restored by anything else and would only spend the 10 GB quota. Call it with `if: always()`.
+
+runs:
+  using: composite
+  steps:
+    - name: Show the ccache statistics
+      shell: bash
+      run: ccache --show-stats || true
+
+    - name: Save ccache
+      if: github.ref == 'refs/heads/develop' && github.event_name != 'push'
+      continue-on-error: true
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ${{ env.CCACHE_SAVE_KEY }}

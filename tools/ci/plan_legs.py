@@ -53,9 +53,9 @@ JOBS = (
     "driver",
 )
 
-GCC = {"os": "ubuntu-26.04", "name": "linux-gcc", "compiler": "gcc", "preset": "linux-release"}
-CLANG = {"os": "ubuntu-26.04", "name": "linux-clang", "compiler": "clang", "preset": "linux-release"}
-MSVC = {"os": "windows-2025", "name": "windows-msvc", "compiler": "msvc", "preset": "windows-msvc-release"}
+GCC = {"os": "ubuntu-26.04", "name": "linux-gcc", "compiler": "gcc", "preset": "linux-release", "ccache": "linux-gcc-release"}
+CLANG = {"os": "ubuntu-26.04", "name": "linux-clang", "compiler": "clang", "preset": "linux-release", "ccache": "linux-clang-release"}
+MSVC = {"os": "windows-2025", "name": "windows-msvc", "compiler": "msvc", "preset": "windows-msvc-release", "ccache": "windows-msvc-release"}
 
 CPP_SUFFIXES = (".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx", ".inl", ".mm")
 

@@ -17,6 +17,11 @@ inputs:
   llvm-version:
     description: LLVM major version. Empty uses the `llvm` pin; the nightly newest-compiler leg passes `llvm_newest`.
     default: ""
+  ccache:
+    description: >
+      The ccache lineage for this job (for example linux-gcc-release). Empty leaves ccache off. The
+      job saves the cache with the save-ccache action, which does so only from develop.
+    default: ""
 
 runs:
   using: composite
@@ -44,3 +49,9 @@ runs:
     - name: Set up Qt
       if: inputs.qt == 'true'
       uses: iainchesworthlabs/icl-common-infra/actions/setup-qt@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+
+    - name: Set up ccache
+      if: inputs.ccache != ''
+      uses: iainchesworthlabs/icl-common-infra/actions/setup-ccache@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+      with:
+        key: ${{ inputs.ccache }}
