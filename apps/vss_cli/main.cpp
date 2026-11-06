@@ -14,6 +14,7 @@
 #include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
 #include <vss/studio/capture.hpp>
+#include <vss/studio/replay.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
@@ -26,6 +27,7 @@
 #include <cstdlib>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
@@ -137,6 +139,17 @@ void print_usage()
         "      message.\n"
         "      The format comes from the file name when --format is left out.\n"
         "      Runs until Ctrl-C or SIGTERM, or for N seconds.\n"
+        "\n"
+        "  vss_cli play <file> [<topology.json>] (--uri=<uri> | --port=<name>)\n"
+        "               [--speed=X] [--loop] [--direction=R|W] [--from=<name>]\n"
+        "               [--seconds=N]\n"
+        "      Write the records of a .cap or .jsonl capture into one port at\n"
+        "      the times they were recorded, so a recorded master or device can\n"
+        "      drive a bus without the original program.  --uri opens the port\n"
+        "      a program would open; --port names a port of the topology.  R\n"
+        "      (the default) sends the bytes the recorded port received, W the\n"
+        "      bytes written to it.  --from keeps the records of one recorded\n"
+        "      port.  A loop lasts as long as the capture did.\n"
         "\n"
         "  vss_cli bench --from=<uri> --to=<uri> [--bytes=1MB] [--chunk=4KB]\n"
         "      Measure a real end-to-end transfer.\n"
@@ -722,6 +735,137 @@ int command_capture(const arguments& args)
     return good ? 0 : 1;
 }
 
+/// The endpoint a `play` or `respond` command acts on: `--port` names a port
+/// of the topology, and a single `--uri` stands for itself.
+std::shared_ptr<vss::endpoint> chosen_port(studio& app, const arguments& args,
+                                           const char* command)
+{
+    const std::string name = args.get("--port");
+    const auto uris = args.all("--uri");
+    if (name.empty() && uris.size() != 1)
+    {
+        std::fprintf(stderr,
+                     "%s needs --uri=<uri> or --port=<name> to say which "
+                     "port to use\n",
+                     command);
+        return nullptr;
+    }
+    const std::string wanted = name.empty() ? uris.front() : name;
+    auto port = app.find(wanted);
+    if (!port)
+    {
+        std::fprintf(stderr, "there is no port named %s; the ports are:\n",
+                     wanted.c_str());
+        for (const auto& info : app.endpoint_infos())
+            std::fprintf(stderr, "  %s\n", info.name.c_str());
+    }
+    return port;
+}
+
+int command_play(const arguments& args)
+{
+    if (args.positional.size() < 2)
+    {
+        std::fprintf(stderr, "play needs a capture file\n");
+        return 2;
+    }
+    const std::string& file = args.positional[1];
+
+    vss::replay_options options;
+    if (args.options.count("--direction") != 0)
+    {
+        const std::string letter = args.get("--direction");
+        if (letter == "R" || letter == "r")
+            options.direction = vss::data_direction::rx;
+        else if (letter == "W" || letter == "w")
+            options.direction = vss::data_direction::tx;
+        else
+        {
+            std::fprintf(stderr, "--direction is R or W, not %s\n",
+                         letter.c_str());
+            return 2;
+        }
+    }
+    if (args.options.count("--speed") != 0)
+    {
+        try
+        {
+            options.speed = std::stod(args.get("--speed"));
+        }
+        catch (const std::exception&)
+        {
+            options.speed = 0.0;
+        }
+        if (!(options.speed > 0.0))
+        {
+            std::fprintf(stderr, "--speed must be a number above zero\n");
+            return 2;
+        }
+    }
+    options.loop = args.has("--loop");
+    options.from_port = args.get("--from");
+
+    const auto capture = vss::read_capture_file(file);
+    if (!capture)
+    {
+        std::fprintf(stderr, "cannot read %s: %s\n", file.c_str(),
+                     capture.error().message().c_str());
+        return 1;
+    }
+    if (capture->skipped_lines > 0)
+        std::fprintf(stderr, "%zu line(s) of %s could not be read and were skipped\n",
+                     capture->skipped_lines, file.c_str());
+
+    catch_stop_signals();
+    studio app;
+    if (const int code = open_ports(app, args, 2); code >= 0)
+        return code;
+    const auto port = chosen_port(app, args, "play");
+    if (!port)
+        return 2;
+
+    auto player = vss::replay_player::start(app.engine(), port,
+                                            capture->records, options);
+    if (!player)
+    {
+        std::fprintf(stderr, "nothing to play: %s has no %c records%s\n",
+                     file.c_str(), vss::direction_letter(options.direction),
+                     options.from_port.empty() ? "" : " from that port");
+        return 1;
+    }
+
+    std::printf("playing %zu record(s) of %s into %s%s\n",
+                (*player)->records_per_pass(), file.c_str(),
+                port->name().c_str(), options.loop ? " in a loop" : "");
+    std::fflush(stdout);
+
+    const int seconds = args.number("--seconds", 0);
+    const auto started = std::chrono::steady_clock::now();
+    while (!g_stop_requested.load() && !(*player)->finished())
+    {
+        if (seconds > 0 &&
+            std::chrono::steady_clock::now() - started >=
+                std::chrono::seconds(seconds))
+            break;
+        std::this_thread::sleep_for(20ms);
+    }
+    // The last write is queued on the port; give it a moment to leave.
+    if ((*player)->finished())
+        std::this_thread::sleep_for(200ms);
+
+    (*player)->stop();
+    std::printf("sent %llu record(s), %llu byte(s)\n",
+                static_cast<unsigned long long>((*player)->records_sent()),
+                static_cast<unsigned long long>((*player)->bytes_sent()));
+    if ((*player)->write_errors() > 0)
+    {
+        std::fprintf(stderr, "%llu write(s) failed\n",
+                     static_cast<unsigned long long>((*player)->write_errors()));
+        return 1;
+    }
+    return 0;
+}
+
 int command_bench(const arguments& args)
 {
     const std::string from = args.get("--from");
@@ -827,8 +971,9 @@ int command_selftest()
 /// Options that take a value, so `--out file` means the same as `--out=file`.
 bool takes_value(const std::string& name)
 {
-    static const char* const names[] = {"--out", "--format", "--port",
-                                        "--uri", "--seconds"};
+    static const char* const names[] = {"--out",       "--format", "--port",
+                                        "--uri",       "--seconds", "--speed",
+                                        "--direction", "--from"};
     return std::find(std::begin(names), std::end(names), name) !=
            std::end(names);
 }
@@ -899,6 +1044,8 @@ int main(int argc, char** argv)
             return command_run(args);
         if (command == "capture")
             return command_capture(args);
+        if (command == "play")
+            return command_play(args);
         if (command == "bench")
             return command_bench(args);
         if (command == "selftest")
