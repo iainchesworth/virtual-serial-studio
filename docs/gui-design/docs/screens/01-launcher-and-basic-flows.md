@@ -45,11 +45,11 @@ Title "Connect two programs". Sub "Create a linked pair of ports. Whatever one p
 Acceptance: names validated for uniqueness with the inline error "COM3 is already used. Try COM9."; elevation failure shows the error pattern in screens/06.
 
 ## Attach a real device (Attach.html), width 760
-Title "Attach a real device". Sub "Studio opens the device once. Your programs then open the port Studio creates for them."
-- Device list (radio rows, enumerated when the dialog opens): mono name, description, chip. Rows: "Serial device" with chip Available; "Serial device. Another program is using it." chip "In use", disabled; "com0com pair end. This is a virtual port, not a device." chip "Virtual", disabled. Button Refresh re-enumerates. Hint: "The list is read when this window opens. Plug a device in, then choose Refresh."
+Title "Attach a real device". Sub "Studio holds the real device open. Your programs connect to a new virtual port that Studio creates, and Studio passes the data between the two."
+- Device list (radio rows, enumerated when the dialog opens). A click anywhere on an available row selects it, not only on the radio circle. A double-click selects the row and moves focus to Name. Enter runs the primary action. Each row: mono name, description, chip. Rows: "Serial device" with chip Available; "Serial device. Another program is using it." chip "In use", disabled; "com0com pair end. This is a virtual port, not a device." chip "Virtual", disabled. Button Refresh re-enumerates. Hint: "The list is read when this window opens. Plug a device in, then choose Refresh."
 - Device settings (collapsible, collapsed in Simple with a one-line summary, open in Advanced): Baud rate (default 115200), Data bits (8), Parity (None), Stop bits (1), Flow control (None, Hardware (RTS and CTS), Software (XON and XOFF)). Button "Use common defaults". Hint: "Most devices use these settings. If you see garbled text, check the device's manual."
 - Name (default `device`), checkbox "Capture traffic in the monitor" (default on).
-- ResultSentence: "Studio will open **COM3** at 115200 baud and keep it open. Your programs should open the port Studio creates, not COM3."
+- ResultSentence: "Studio will hold **COM3** open at 115200 baud. Your programs should not open COM3. They open the new virtual port that Studio creates, and Studio passes data between that port and COM3." Why this wording: a first-time user has to learn that the real device is taken by Studio and that their program connects to a different, new port. The Port ready dialog that follows names that port.
 - Address CodeBlock `serial://COM3?baud=115200`, button "Edit address" (in Advanced the address becomes editable and wins over the fields; in Simple it is read-only).
 - Footer: Cancel, "Attach device".
 Acceptance: unavailable devices cannot be selected and the reason is visible as text; failure to open shows the "Could not open COM3" error pattern with Try again and Choose another.

@@ -11,16 +11,19 @@
 #include "dialogs/network_endpoint.hpp"
 #include "dialogs/share_wizard.hpp"
 #include "dialogs/templates_dialog.hpp"
+#include "panes/ports_panel.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/launcher.hpp"
 #include "shell/level_service.hpp"
+#include "shell/setup_group.hpp"
 #include "shell/shell_window.hpp"
 #include "shell/undo_service.hpp"
 #include "shell/undo_steps.hpp"
 #include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
+#include "widgets/dialogs.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -28,6 +31,8 @@
 #include <QDir>
 #include <QDockWidget>
 #include <QLabel>
+#include <QMenu>
+#include <QPushButton>
 #include <QSettings>
 #include <QTimer>
 #include <QToolBar>
@@ -746,4 +751,304 @@ TEST_CASE("shell: WP6 actions open the real dialogs")
 
     window.close();
     QApplication::processEvents();
+}
+
+namespace
+{
+
+/// Presses `button` in the next confirmation that opens and records what it
+/// said.  It looks again until the dialog is up, so a slow machine does not
+/// leave the test waiting in the dialog's event loop.
+struct confirm_probe
+{
+    QString title;
+    QString body;
+    QStringList buttons;
+    bool seen = false;
+};
+
+void answer_next_confirm(confirm_probe* probe, const QString& button,
+                         int remaining_ms = 30000)
+{
+    QTimer::singleShot(
+        10,
+        [probe, button, remaining_ms]
+        {
+            auto* dialog = qobject_cast<vss::gui::ConfirmDialog*>(
+                QApplication::activeModalWidget());
+            if (dialog == nullptr)
+            {
+                if (remaining_ms > 10)
+                    answer_next_confirm(probe, button, remaining_ms - 10);
+                return;
+            }
+            probe->seen = true;
+            probe->title = dialog->windowTitle();
+            for (auto* label : dialog->findChildren<QLabel*>())
+                probe->body += label->text() + QLatin1Char(' ');
+            QPushButton* chosen = nullptr;
+            for (auto* push : dialog->findChildren<QPushButton*>())
+            {
+                probe->buttons << push->text();
+                if (push->text() == button)
+                    chosen = push;
+            }
+            if (chosen != nullptr)
+                chosen->click();
+            else
+                dialog->reject();
+        });
+}
+
+struct setup_fixture
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::endpoint_id first = 0;
+    vss::endpoint_id second = 0;
+    vss::endpoint_id lone = 0;
+
+    setup_fixture()
+    {
+        first = *backend.create_auto_port(QStringLiteral("alpha"), true);
+        second = *backend.create_auto_port(QStringLiteral("beta"), true);
+        lone = *backend.create_auto_port(QStringLiteral("gamma"), true);
+        REQUIRE(backend.connect_ports(first, second, {}).has_value());
+        backend.refresh();
+    }
+};
+
+} // namespace
+
+TEST_CASE("setup group: a pair, a share and a lone port")
+{
+    setup_fixture fixture;
+    const auto ports = fixture.backend.ports();
+    const auto links = fixture.backend.links();
+
+    const auto pair = vss::gui::find_setup(ports, links, fixture.second);
+    REQUIRE_EQ(pair.ports.size(), 2);
+    REQUIRE(pair.ports.contains(fixture.first));
+    REQUIRE(pair.ports.contains(fixture.second));
+    REQUIRE_EQ(pair.links.size(), 1);
+    REQUIRE(pair.has_company());
+    const QString names = vss::gui::setup_port_names(pair, ports);
+    REQUIRE(names.startsWith(QStringLiteral("alpha")));
+    REQUIRE(names.contains(QStringLiteral(" and beta")));
+
+    const auto lone = vss::gui::find_setup(ports, links, fixture.lone);
+    REQUIRE_EQ(lone.ports.size(), 1);
+    REQUIRE(lone.links.isEmpty());
+    REQUIRE(!lone.has_company());
+
+    REQUIRE(vss::gui::find_setup(ports, links, 9999).empty());
+    const auto by_link =
+        vss::gui::find_setup_of_link(ports, links, links.front().id);
+    REQUIRE_EQ(by_link.ports.size(), 2);
+    REQUIRE(vss::gui::find_setup_of_link(ports, links, 9999).empty());
+
+    // A share is the device and every program port, joined by one link.
+    const auto shared = fixture.backend.share_serial(
+        QStringLiteral("serial://COM3?baud=9600"), 3);
+    REQUIRE(shared.has_value());
+    const auto group =
+        vss::gui::find_setup(fixture.backend.ports(), fixture.backend.links(),
+                             shared->listeners.at(1));
+    REQUIRE_EQ(group.ports.size(), 4);
+    REQUIRE(group.ports.contains(shared->source));
+    REQUIRE_EQ(group.links.size(), 1);
+    // The pair and the lone port are not part of it.
+    REQUIRE(!group.ports.contains(fixture.first));
+    REQUIRE(!group.ports.contains(fixture.lone));
+}
+
+TEST_CASE("shell: Remove setup names what closes and removes the whole pair")
+{
+    clear_settings();
+    setup_fixture fixture;
+    vss::gui::ShellWindow window(fixture.backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    auto* action =
+        window.findChild<QAction*>(QStringLiteral("topology.removeSetup"));
+    REQUIRE(action != nullptr);
+    REQUIRE(action->isEnabled());
+
+    // Cancel keeps everything and still names the ports.
+    confirm_probe cancelled;
+    answer_next_confirm(&cancelled, QStringLiteral("Cancel"));
+    action->trigger();
+    QApplication::processEvents();
+    REQUIRE(cancelled.seen);
+    REQUIRE_EQ(cancelled.title, QStringLiteral("Remove this setup?"));
+    REQUIRE(cancelled.body.contains(QStringLiteral("2 ports and 1 link")));
+    REQUIRE(cancelled.body.contains(QStringLiteral("alpha")));
+    REQUIRE(cancelled.body.contains(QStringLiteral(" and beta")));
+    REQUIRE(!cancelled.body.contains(QStringLiteral("gamma")));
+    REQUIRE_EQ(fixture.backend.ports().size(), std::size_t{3});
+
+    confirm_probe confirmed;
+    answer_next_confirm(&confirmed, QStringLiteral("Remove setup"));
+    action->trigger();
+    QApplication::processEvents();
+    REQUIRE(confirmed.seen);
+    REQUIRE_EQ(fixture.backend.ports().size(), std::size_t{1});
+    REQUIRE_EQ(fixture.backend.ports().front().name, QStringLiteral("gamma"));
+    REQUIRE(fixture.backend.links().empty());
+}
+
+TEST_CASE("shell: Delete on a port in a setup offers the whole setup")
+{
+    clear_settings();
+    setup_fixture fixture;
+    vss::gui::ShellWindow window(fixture.backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    auto* remove = window.findChild<QAction*>(QStringLiteral("edit.remove"));
+    REQUIRE(remove != nullptr);
+    REQUIRE_EQ(remove->shortcut(), QKeySequence(Qt::Key_Delete));
+
+    confirm_probe offered;
+    answer_next_confirm(&offered, QStringLiteral("Remove only alpha"));
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(offered.seen);
+    REQUIRE_EQ(offered.title, QStringLiteral("Remove alpha?"));
+    REQUIRE(offered.buttons.contains(QStringLiteral("Remove the whole setup")));
+    REQUIRE(offered.buttons.contains(QStringLiteral("Cancel")));
+    REQUIRE(offered.body.contains(QStringLiteral("beta")));
+    REQUIRE_EQ(fixture.backend.ports().size(), std::size_t{2});
+    REQUIRE(!fixture.backend.port(fixture.first).has_value());
+}
+
+TEST_CASE("shell: Delete then the whole setup closes a share in one go")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    const auto shared =
+        backend.share_serial(QStringLiteral("serial://COM3?baud=9600"), 3);
+    REQUIRE(shared.has_value());
+    const auto lone = backend.create_auto_port(QStringLiteral("gamma"), true);
+    REQUIRE(lone.has_value());
+    backend.refresh();
+
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    // Delete on the device asks about the whole setup.
+    auto* ports_panel = window.findChild<vss::gui::PortsPanel*>();
+    REQUIRE(ports_panel != nullptr);
+    ports_panel->select_port(shared->source);
+    QApplication::processEvents();
+    auto* remove = window.findChild<QAction*>(QStringLiteral("edit.remove"));
+    REQUIRE(remove != nullptr);
+    confirm_probe probe;
+    answer_next_confirm(&probe, QStringLiteral("Remove the whole setup"));
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(probe.seen);
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+    REQUIRE_EQ(backend.ports().front().name, QStringLiteral("gamma"));
+}
+
+TEST_CASE("shell: removing one program of a share keeps the others sharing")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    const auto shared =
+        backend.share_serial(QStringLiteral("serial://COM3?baud=9600"), 3);
+    REQUIRE(shared.has_value());
+    backend.refresh();
+
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    // Select the middle program port through the Ports dock.
+    auto* ports_panel = window.findChild<vss::gui::PortsPanel*>();
+    REQUIRE(ports_panel != nullptr);
+    ports_panel->select_port(shared->listeners.at(1));
+    QApplication::processEvents();
+
+    auto* remove = window.findChild<QAction*>(QStringLiteral("edit.remove"));
+    REQUIRE(remove != nullptr);
+    const QString name = backend.port(shared->listeners.at(1))->name;
+    confirm_probe probe;
+    answer_next_confirm(&probe, QStringLiteral("Remove only %1").arg(name));
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(probe.seen);
+    REQUIRE(probe.body.contains(QStringLiteral("one of 3 programs")));
+    REQUIRE(!backend.port(shared->listeners.at(1)).has_value());
+    REQUIRE_EQ(backend.ports().size(), std::size_t{3});
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+    REQUIRE_EQ(backend.links().front().targets.size(), 2);
+}
+
+TEST_CASE("shell: Add a program port extends the share of the selection")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    const auto shared =
+        backend.share_serial(QStringLiteral("serial://COM3?baud=9600"), 2);
+    REQUIRE(shared.has_value());
+    const auto lone = backend.create_auto_port(QStringLiteral("gamma"), true);
+    REQUIRE(lone.has_value());
+    backend.refresh();
+
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    auto* add =
+        window.findChild<QAction*>(QStringLiteral("topology.addProgram"));
+    REQUIRE(add != nullptr);
+    auto* ports_panel = window.findChild<vss::gui::PortsPanel*>();
+    REQUIRE(ports_panel != nullptr);
+
+    // A port that is not in a share cannot take another program.
+    ports_panel->select_port(*lone);
+    QApplication::processEvents();
+    REQUIRE(!add->isEnabled());
+
+    ports_panel->select_port(shared->listeners.at(0));
+    QApplication::processEvents();
+    REQUIRE(add->isEnabled());
+    add->trigger();
+    QApplication::processEvents();
+    REQUIRE_EQ(backend.ports().size(), std::size_t{5});
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+    REQUIRE_EQ(backend.links().front().targets.size(), 3);
+}
+
+TEST_CASE("shell: Remove setup is on the toolbar and the Edit menu")
+{
+    clear_settings();
+    setup_fixture fixture;
+    vss::gui::ShellWindow window(fixture.backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+
+    auto* action =
+        window.findChild<QAction*>(QStringLiteral("topology.removeSetup"));
+    REQUIRE(action != nullptr);
+    bool on_toolbar = false;
+    for (auto* toolbar : window.findChildren<QToolBar*>())
+        on_toolbar = on_toolbar || toolbar->actions().contains(action);
+    REQUIRE(on_toolbar);
+    bool in_edit_menu = false;
+    for (auto* menu : window.findChildren<QMenu*>())
+    {
+        if (menu->title().remove(QLatin1Char('&')) == QStringLiteral("Edit"))
+            in_edit_menu = menu->actions().contains(action);
+    }
+    REQUIRE(in_edit_menu);
 }

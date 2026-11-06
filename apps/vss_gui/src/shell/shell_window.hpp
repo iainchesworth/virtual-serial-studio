@@ -32,6 +32,7 @@ namespace vss::gui
 class EventLogPanel;
 class InspectorPanel;
 class Launcher;
+struct setup_group;
 class MonitorPanel;
 class OwnerBar;
 class PortsPanel;
@@ -110,6 +111,10 @@ private:
     void redo_last();
     void update_undo_actions();
     void remove_port(vss::endpoint_id id);
+    void remove_selected_setup();
+    void remove_setup(const setup_group& group, bool confirm = true);
+    void add_program_port();
+    vss::link_id share_link_of_selection() const;
     void show_rename(vss::endpoint_id id);
     void show_links_dock(bool shown);
     void connect_from_port(vss::endpoint_id id);

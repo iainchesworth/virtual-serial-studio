@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
+<!-- Translation origin: Written by Claude for the flow usability pass -->
 <TS version="2.1" language="ja">
     <context>
         <name>About</name>
@@ -566,295 +567,307 @@
     <context>
         <name>AttachDialog</name>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="75" />
+            <location filename="../src/flows/attach_dialog.cpp" line="76" />
             <source>Attach a real device</source>
             <translation>実デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="76" />
             <source>Studio opens the device once. Your programs then open the port Studio creates for them.</source>
-            <translation>Studioはデバイスを一度だけ開きます。プログラムは、Studioが作成したポートを開きます。</translation>
+            <translation type="vanished">Studioはデバイスを一度だけ開きます。プログラムは、Studioが作成したポートを開きます。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="83" />
+            <location filename="../src/flows/attach_dialog.cpp" line="77" />
+            <source>Studio holds the real device open. Your programs connect to a new virtual port that Studio creates, and Studio passes the data between the two.</source>
+            <translation>Studio は実際のデバイスを開いたままにします。プログラムは Studio が作成する新しい仮想ポートに接続し、Studio が両者の間でデータを受け渡します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/attach_dialog.cpp" line="85" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="86" />
+            <location filename="../src/flows/attach_dialog.cpp" line="88" />
             <source>Attach device</source>
             <translation>デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="121" />
-            <location filename="../src/flows/attach_dialog.cpp" line="122" />
+            <location filename="../src/flows/attach_dialog.cpp" line="123" />
+            <location filename="../src/flows/attach_dialog.cpp" line="124" />
             <source>Name</source>
             <translation>名前</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="124" />
-            <location filename="../src/flows/attach_dialog.cpp" line="127" />
+            <location filename="../src/flows/attach_dialog.cpp" line="126" />
+            <location filename="../src/flows/attach_dialog.cpp" line="129" />
             <source>Capture traffic in the monitor</source>
             <translation>モニターでトラフィックをキャプチャ</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="135" />
-            <location filename="../src/flows/attach_dialog.cpp" line="159" />
-            <location filename="../src/flows/attach_dialog.cpp" line="160" />
+            <location filename="../src/flows/attach_dialog.cpp" line="137" />
+            <location filename="../src/flows/attach_dialog.cpp" line="161" />
+            <location filename="../src/flows/attach_dialog.cpp" line="162" />
             <source>Address</source>
             <translation>アドレス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="142" />
-            <location filename="../src/flows/attach_dialog.cpp" line="145" />
+            <location filename="../src/flows/attach_dialog.cpp" line="144" />
+            <location filename="../src/flows/attach_dialog.cpp" line="147" />
             <source>Edit address</source>
             <translation>アドレスを編集</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="208" />
+            <location filename="../src/flows/attach_dialog.cpp" line="210" />
             <source>Device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="212" />
-            <location filename="../src/flows/attach_dialog.cpp" line="215" />
+            <location filename="../src/flows/attach_dialog.cpp" line="214" />
+            <location filename="../src/flows/attach_dialog.cpp" line="217" />
             <source>Refresh</source>
             <translation>更新</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="234" />
+            <location filename="../src/flows/attach_dialog.cpp" line="236" />
             <source>No serial devices found. Plug one in, then choose Refresh.</source>
             <translation>シリアルデバイスが見つかりません。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="240" />
+            <location filename="../src/flows/attach_dialog.cpp" line="242" />
             <source>The list is read when this window opens. Plug a device in, then choose Refresh.</source>
             <translation>一覧はこのウィンドウを開いたときに読み込まれます。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="249" />
-            <location filename="../src/flows/attach_dialog.cpp" line="252" />
+            <location filename="../src/flows/attach_dialog.cpp" line="251" />
+            <location filename="../src/flows/attach_dialog.cpp" line="254" />
             <source>Enter a path instead</source>
             <translation>代わりにパスを入力</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="262" />
+            <location filename="../src/flows/attach_dialog.cpp" line="264" />
             <source>COM3 or /dev/ttyUSB0</source>
             <translation>COM3 または /dev/ttyUSB0</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="263" />
-            <location filename="../src/flows/attach_dialog.cpp" line="264" />
+            <location filename="../src/flows/attach_dialog.cpp" line="265" />
+            <location filename="../src/flows/attach_dialog.cpp" line="266" />
             <source>Device path</source>
             <translation>デバイスのパス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="265" />
+            <location filename="../src/flows/attach_dialog.cpp" line="267" />
             <source>For example, COM3 or /dev/ttyUSB0.</source>
             <translation>例: COM3 または /dev/ttyUSB0</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="299" />
+            <location filename="../src/flows/attach_dialog.cpp" line="301" />
             <source>Device settings</source>
             <translation>デバイスの設定</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="308" />
-            <location filename="../src/flows/attach_dialog.cpp" line="311" />
+            <location filename="../src/flows/attach_dialog.cpp" line="310" />
+            <location filename="../src/flows/attach_dialog.cpp" line="313" />
             <source>Use common defaults</source>
             <translation>一般的な既定値を使う</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="327" />
-            <location filename="../src/flows/attach_dialog.cpp" line="328" />
+            <location filename="../src/flows/attach_dialog.cpp" line="329" />
+            <location filename="../src/flows/attach_dialog.cpp" line="330" />
             <source>Baud rate</source>
             <translation>ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="335" />
-            <location filename="../src/flows/attach_dialog.cpp" line="336" />
+            <location filename="../src/flows/attach_dialog.cpp" line="337" />
+            <location filename="../src/flows/attach_dialog.cpp" line="338" />
             <source>Data bits</source>
             <translation>データビット</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="341" />
-            <location filename="../src/flows/attach_dialog.cpp" line="359" />
+            <location filename="../src/flows/attach_dialog.cpp" line="343" />
+            <location filename="../src/flows/attach_dialog.cpp" line="361" />
             <source>None</source>
             <translation>なし</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="342" />
+            <location filename="../src/flows/attach_dialog.cpp" line="344" />
             <source>Even</source>
             <translation>偶数</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="343" />
+            <location filename="../src/flows/attach_dialog.cpp" line="345" />
             <source>Odd</source>
             <translation>奇数</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="344" />
-            <location filename="../src/flows/attach_dialog.cpp" line="345" />
+            <location filename="../src/flows/attach_dialog.cpp" line="346" />
+            <location filename="../src/flows/attach_dialog.cpp" line="347" />
             <source>Parity</source>
             <translation>パリティ</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="353" />
-            <location filename="../src/flows/attach_dialog.cpp" line="354" />
+            <location filename="../src/flows/attach_dialog.cpp" line="355" />
+            <location filename="../src/flows/attach_dialog.cpp" line="356" />
             <source>Stop bits</source>
             <translation>ストップビット</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="360" />
+            <location filename="../src/flows/attach_dialog.cpp" line="362" />
             <source>Hardware (RTS and CTS)</source>
             <translation>ハードウェア (RTSとCTS)</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="362" />
+            <location filename="../src/flows/attach_dialog.cpp" line="364" />
             <source>Software (XON and XOFF)</source>
             <translation>ソフトウェア (XONとXOFF)</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="364" />
-            <location filename="../src/flows/attach_dialog.cpp" line="365" />
+            <location filename="../src/flows/attach_dialog.cpp" line="366" />
+            <location filename="../src/flows/attach_dialog.cpp" line="367" />
             <source>Flow control</source>
             <translation>フロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="370" />
+            <location filename="../src/flows/attach_dialog.cpp" line="372" />
             <source>Most devices use these settings. If you see garbled text, check the device's manual.</source>
             <translation>ほとんどのデバイスはこの設定を使います。文字化けする場合は、デバイスのマニュアルを確認してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="448" />
+            <location filename="../src/flows/attach_dialog.cpp" line="450" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0comのペアの片側です。これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="449" />
-            <location filename="../src/flows/attach_dialog.cpp" line="455" />
+            <location filename="../src/flows/attach_dialog.cpp" line="451" />
+            <location filename="../src/flows/attach_dialog.cpp" line="457" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="454" />
+            <location filename="../src/flows/attach_dialog.cpp" line="456" />
             <source>This is a virtual port, not a device.</source>
             <translation>これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="460" />
+            <location filename="../src/flows/attach_dialog.cpp" line="462" />
             <source>Serial device. Another program is using it.</source>
             <translation>シリアルデバイスです。別のプログラムが使用中です。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="461" />
+            <location filename="../src/flows/attach_dialog.cpp" line="463" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="466" />
+            <location filename="../src/flows/attach_dialog.cpp" line="468" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="467" />
+            <location filename="../src/flows/attach_dialog.cpp" line="469" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="479" />
+            <location filename="../src/flows/attach_dialog.cpp" line="483" />
             <source>%1, %2</source>
             <translation>%1、%2</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="594" />
+            <location filename="../src/flows/attach_dialog.cpp" line="606" />
             <source>Choose a device to attach.</source>
             <translation>接続するデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="599" />
+            <location filename="../src/flows/attach_dialog.cpp" line="611" />
+            <source>Studio will hold &lt;b&gt;%1&lt;/b&gt; open at %2 baud. Your programs should not open %1. They open the new virtual port that Studio creates, and Studio passes data between that port and %1.</source>
+            <translation>Studio は &lt;b&gt;%1&lt;/b&gt; を %2 ボーで開いたままにします。プログラムは %1 を開かないでください。Studio が作成する新しい仮想ポートを開き、Studio がそのポートと %1 の間でデータを受け渡します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/attach_dialog.cpp" line="616" />
+            <source>Studio will hold %1 open at %2 baud. Your programs should not open %1. They open the new virtual port that Studio creates, and Studio passes data between that port and %1.</source>
+            <translation>Studio は %1 を %2 ボーで開いたままにします。プログラムは %1 を開かないでください。Studio が作成する新しい仮想ポートを開き、Studio がそのポートと %1 の間でデータを受け渡します。</translation>
+        </message>
+        <message>
             <source>Studio will open &lt;b&gt;%1&lt;/b&gt; at %2 baud and keep it open. Your programs should open the port Studio creates, not %1.</source>
-            <translation>Studioは&lt;b&gt;%1&lt;/b&gt;を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
+            <translation type="vanished">Studioは&lt;b&gt;%1&lt;/b&gt;を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="603" />
             <source>Studio will open %1 at %2 baud and keep it open. Your programs should open the port Studio creates, not %1.</source>
-            <translation>Studioは%1を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
+            <translation type="vanished">Studioは%1を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="618" />
+            <location filename="../src/flows/attach_dialog.cpp" line="632" />
             <source>hardware flow control</source>
             <translation>ハードウェアフロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="621" />
+            <location filename="../src/flows/attach_dialog.cpp" line="635" />
             <source>software flow control</source>
             <translation>ソフトウェアフロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="624" />
+            <location filename="../src/flows/attach_dialog.cpp" line="638" />
             <source>no flow control</source>
             <translation>フロー制御なし</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="627" />
+            <location filename="../src/flows/attach_dialog.cpp" line="641" />
             <source>%1 %2%3%4, %5</source>
             <translation>%1 %2%3%4, %5</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="726" />
+            <location filename="../src/flows/attach_dialog.cpp" line="740" />
             <source>Enter a name for the port.</source>
             <translation>ポートの名前を入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="736" />
+            <location filename="../src/flows/attach_dialog.cpp" line="750" />
             <source>Choose a device or enter a path.</source>
             <translation>デバイスを選ぶか、パスを入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="751" />
+            <location filename="../src/flows/attach_dialog.cpp" line="765" />
             <source>open</source>
             <translation>オープン</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="754" />
+            <location filename="../src/flows/attach_dialog.cpp" line="768" />
             <source>Another program may be using the device, or it may have been unplugged.</source>
             <translation>別のプログラムがデバイスを使用中か、デバイスが取り外された可能性があります。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="756" />
+            <location filename="../src/flows/attach_dialog.cpp" line="770" />
             <source> Close the other program or check the cable, then try again.</source>
             <translation>他のプログラムを閉じるかケーブルを確認してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="767" />
-            <location filename="../src/flows/attach_dialog.cpp" line="785" />
+            <location filename="../src/flows/attach_dialog.cpp" line="781" />
+            <location filename="../src/flows/attach_dialog.cpp" line="799" />
             <source>Could not create the port for %1</source>
             <translation>%1のポートを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="770" />
+            <location filename="../src/flows/attach_dialog.cpp" line="784" />
             <source>Studio opened the device but could not create the port your programs open. Nothing was changed.</source>
             <translation>Studioはデバイスを開きましたが、プログラムが開くポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="772" />
-            <location filename="../src/flows/attach_dialog.cpp" line="790" />
+            <location filename="../src/flows/attach_dialog.cpp" line="786" />
+            <location filename="../src/flows/attach_dialog.cpp" line="804" />
             <source> Try again, or choose another device.</source>
             <translation>もう一度やり直すか、別のデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="788" />
+            <location filename="../src/flows/attach_dialog.cpp" line="802" />
             <source>Studio opened the device but could not give your programs a port. Nothing was changed.</source>
             <translation>Studioはデバイスを開きましたが、プログラムにポートを提供できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="808" />
+            <location filename="../src/flows/attach_dialog.cpp" line="822" />
             <source>Try again</source>
             <translation>やり直す</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="809" />
+            <location filename="../src/flows/attach_dialog.cpp" line="823" />
             <source>Choose another</source>
             <translation>別のものを選ぶ</translation>
         </message>
@@ -1594,131 +1607,131 @@
             <translation>これはすべてのデータの送信先となるポートです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="684" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="914" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>Studio内のみのポートは受信したデータをエコーするため、それらの間で双方向リンクを作るとデータが繰り返されます。一方向にするか、実ポートまたはペアのポートとリンクしてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="891" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="717" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>%1個のポートを選択しました。%2に十分な数です。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="721" />
             <source>Choose at least 2 ports.</source>
             <translation>2つ以上のポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>split</source>
             <translation>分割</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
             <source>join</source>
             <translation>結合</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
             <source>bus</source>
             <translation>バス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="770" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="778" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>2つのポートを選ぶと、リンクの動作が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="772" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>%1が送信するものはすべて%2に届き、その逆も同様です。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="780" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>%1が送信するものはすべて%2に届きます。%2は返信できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="787" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2は、%1が送信するものの読み取り専用のコピーを受け取ります。モデム制御線は駆動しません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Choose a port to split.</source>
             <translation>分割するポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="796" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>%1が受信するものはすべて、選んだポートにコピーされます。それらが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="805" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2にコピーされます。それらの%3が書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="808" />
             <source>either</source>
             <translation>どちらか</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="808" />
             <source>any</source>
             <translation>いずれか</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Choose a port to send everything to.</source>
             <translation>すべてを送信するポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="816" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>選んだポートが書き込むものはすべて%1に送られます。バイトは届いた順に混ざります。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="826" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>%1が書き込むものはすべて%2に送られます。バイトは届いた順に混ざります。%2からそれらに何も送り返されません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="835" />
             <source>Choose the ports to put on the bus.</source>
             <translation>バスに載せるポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="842" />
             <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
             <translation>%1 のそれぞれが他のポートの書き込みを受信し、自分自身の書き込みは受信しません。バイトは到着順に混ざります。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="887" />
             <source>Links are not available in this build.</source>
             <translation>このビルドではリンクは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="893" />
             <source>A bus takes at most %1 ports.</source>
             <translation>1つのバスには最大 %1 個のポートを載せられます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="905" />
             <source>Choose two ports.</source>
             <translation>2つのポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="907" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>ポートをそれ自身にリンクすることはできません。別のポートを選んでください。</translation>
         </message>
@@ -1813,12 +1826,12 @@
     <context>
         <name>Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="646" />
+            <location filename="../src/widgets/controls.cpp" line="659" />
             <source>%1, expanded</source>
             <translation>%1、展開済み</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="647" />
+            <location filename="../src/widgets/controls.cpp" line="660" />
             <source>%1, collapsed</source>
             <translation>%1、折りたたみ済み</translation>
         </message>
@@ -4263,17 +4276,17 @@ Networks: %5</source>
             <translation>破棄</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="328" />
+            <location filename="../src/widgets/controls.cpp" line="341" />
             <source>%1 on</source>
             <translation>%1 オン</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="329" />
+            <location filename="../src/widgets/controls.cpp" line="342" />
             <source>%1 off</source>
             <translation>%1 オフ</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="422" />
+            <location filename="../src/widgets/controls.cpp" line="435" />
             <source>Step %1 of %2, %3</source>
             <translation>ステップ %1/%2、%3</translation>
         </message>
@@ -4425,6 +4438,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/dialogs/common.cpp" line="166" />
+            <location filename="../src/shell/setup_group.cpp" line="120" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
@@ -4556,7 +4570,7 @@ Networks: %5</source>
             <translation>別のプログラムがデバイスを使用中の可能性があります。何も変更されていません。そのプログラムを閉じて、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="108" />
+            <location filename="../src/shell/shell_window.cpp" line="111" />
             <source>untitled</source>
             <translation>無題</translation>
         </message>
@@ -5537,514 +5551,549 @@ Networks: %5</source>
             <translation>空いているポート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="78" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="82" />
             <source>Waiting for program</source>
             <translation>プログラムを待機中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="80" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="84" />
             <source>Program connected</source>
             <translation>プログラム接続済み</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="82" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="84" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="86" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="88" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="103" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="109" />
             <source>%1, %2, %3</source>
             <translation>%1、%2、%3</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="187" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="182" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="195" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
             <source>Share a device with several programs</source>
             <translation>デバイスを複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="197" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studioはデバイスを一度だけ開き、各プログラムに専用のポートを提供します。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Programs</source>
             <translation>プログラム</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Ready</source>
             <translation>準備完了</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="225" />
+            <source>Scroll</source>
+            <translation>スクロール</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="253" />
             <source>Which device?</source>
             <translation>どのデバイスですか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="242" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="255" />
             <source>Refresh</source>
             <translation>更新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="245" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
             <source>Refresh the device list</source>
             <translation>デバイス一覧を更新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="256" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
             <source>Devices</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>利用できるシリアルデバイスがありません。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="286" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
             <source>Device settings</source>
             <translation>デバイスの設定</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="296" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
             <source>Change</source>
             <translation>変更</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="300" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
             <source>Change device settings</source>
             <translation>デバイス設定を変更</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="323" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
             <source>None</source>
             <translation>なし</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="324" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
             <source>Odd</source>
             <translation>奇数</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="325" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
             <source>Even</source>
             <translation>偶数</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="326" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Mark</source>
             <translation>マーク</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="327" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Space</source>
             <translation>スペース</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
             <source>Hardware (RTS and CTS)</source>
             <translation>ハードウェア (RTSとCTS)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="343" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Software (XON and XOFF)</source>
             <translation>ソフトウェア (XONとXOFF)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="347" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
             <source>Baud rate</source>
             <translation>ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="350" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
             <source>Data bits</source>
             <translation>データビット</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="351" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
             <source>Parity</source>
             <translation>パリティ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
             <source>Stop bits</source>
             <translation>ストップビット</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
             <source>Flow control</source>
             <translation>フロー制御</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="404" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="419" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
             <source>A network device instead</source>
             <translation>代わりにネットワークデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="408" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
             <source>ADVANCED</source>
             <translation>高度</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>TCP、UDP、またはRFC 2217のアドレス。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="437" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
             <source>Device address</source>
             <translation>デバイスのアドレス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="438" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>TCP、UDP、またはRFC 2217を使うシリアルサーバーのアドレスです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="468" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="472" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are.</source>
-            <translation>プログラムは%1自体ではなく、Studioが作成するポートを開きます。次に、プログラムの数を選びます。</translation>
+            <translation type="vanished">プログラムは%1自体ではなく、Studioが作成するポートを開きます。次に、プログラムの数を選びます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
+            <translation>プログラムは %1 自体ではなく、Studio が作成するポートを開きます。次に、プログラムの数を選びます。あとから追加することもできます。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
             <source>How many programs?</source>
             <translation>プログラムはいくつですか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="497" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
             <source>Fewer programs</source>
             <translation>プログラムを減らす</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="501" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
             <source>More programs</source>
             <translation>プログラムを増やす</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="513" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
             <source>Up to 32</source>
             <translation>最大32</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="525" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
+            <translation>共有したあとでプログラムを追加できます。各プログラムのポートは、あとから「ポートを削除」で削除できます。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
             <source>What each program will open</source>
             <translation>各プログラムが開くもの</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>Program name</source>
             <translation>プログラム名</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>Port to open</source>
             <translation>開くポート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="531" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
             <source>Can other programs open it?</source>
             <translation>他のプログラムから開けますか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
             <source>Create another pair</source>
             <translation>別のペアを作成</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
             <source>Keep the third as Studio only</source>
             <translation>3つ目はStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="618" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
             <source>Shared ports</source>
             <translation>共有ポート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Program</source>
             <translation>プログラム</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Open this port</source>
             <translation>このポートを開く</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>State</source>
             <translation>状態</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="663" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
             <source>Add another program</source>
             <translation>別のプログラムを追加</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="668" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
             <source>Back</source>
             <translation>戻る</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="673" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="677" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
             <source>Next</source>
             <translation>次へ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="682" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
             <source>Share device</source>
             <translation>デバイスを共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="688" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
             <source>Open monitor</source>
             <translation>モニターを開く</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
             <source>Done</source>
             <translation>完了</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="740" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0comのペアの片側です。これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="742" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
             <source>This is a virtual port, not a device.</source>
             <translation>これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
             <source>Serial device. Studio is already using it.</source>
             <translation>シリアルデバイスです。Studioがすでに使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
             <source>Use a device instead</source>
             <translation>代わりにデバイスを使う</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
             <source>Share %1 with several programs</source>
             <translation>%1を複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>各プログラムに専用のポートが割り当てられます。Studioはデバイスのデータをそのすべてにコピーします。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
             <source>Open one of these ports in each program.</source>
             <translation>各プログラムで、これらのポートのうち1つを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
             <source>terminal</source>
             <translation>ターミナル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>test-tool</source>
             <translation>テストツール</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>logger</source>
             <translation>ロガー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>program-%1</source>
             <translation>プログラム-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
             <source>Name of program %1</source>
             <translation>プログラム%1の名前</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
             <source>Yes</source>
             <translation>はい</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
             <source>No, Studio only</source>
             <translation>いいえ、Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
             <source>Warning: %1</source>
             <translation>警告: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windowsが管理者権限を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
             <source>Keep the %1 as Studio only</source>
             <translation>%1をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>残りの%1個をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて1つのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2個すべてのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
             <source>Could not create another pair</source>
             <translation>別のペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windowsがドライバーのペアを作成しませんでした。管理者権限を許可してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
             <source>Sharing is not available in this build</source>
             <translation>このビルドでは共有は利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
             <source>Nothing was changed.</source>
             <translation>何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
             <source>Could not share %1</source>
             <translation>%1を共有できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>以前の共有は削除されました。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>セットアップは変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
             <source>%1 is shared with 1 program</source>
             <translation>%1は1個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1は%2個のプログラムと共有されています</translation>
         </message>
         <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <source>The most Studio can share is 32 programs</source>
+            <translation>Studio が共有できるプログラムは最大 32 個です</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <source>Remove a program's port first if you need a different one.</source>
+            <translation>別の数が必要な場合は、先にプログラムのポートを削除してください。</translation>
+        </message>
+        <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
+            <source>Could not add another program</source>
+            <translation>プログラムを追加できませんでした</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <source>The share is as it was. Check the device, then try again.</source>
+            <translation>共有は元のままです。デバイスを確認して、もう一度お試しください。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
             <source>Studio only</source>
             <translation>Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
             <source>Not for other programs</source>
             <translation>他のプログラム用ではありません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
             <source>Copy</source>
             <translation>コピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
             <source>Copy %1</source>
             <translation>%1をコピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
             <source>%1 copied.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1が受信するものはすべて、1つのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1が受信するものはすべて、%2個すべてのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>各プログラムがポートを開くと、「待機中」の表示が「プログラム接続済み」に変わります。</translation>
         </message>
@@ -6052,521 +6101,540 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>New</source>
             <translation>新規</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>new document setup</source>
             <translation>新規 ドキュメント セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>open file setup</source>
             <translation>開く ファイル セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>Open recent</source>
             <translation>最近使ったファイルを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>recent file</source>
             <translation>最近 ファイル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="218" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
             <source>Setups and templates</source>
             <translation>セットアップとテンプレート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="219" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>template setup</source>
             <translation>テンプレート セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
-            <location filename="../src/shell/shell_window.cpp" line="2220" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="2400" />
             <source>Save</source>
             <translation>保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>save file setup</source>
             <translation>保存 ファイル セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>Save as</source>
             <translation>名前を付けて保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>save as file</source>
             <translation>名前を付けて保存 ファイル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Export as command</source>
             <translation>コマンドとしてエクスポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="228" />
+            <location filename="../src/shell/shell_window.cpp" line="231" />
             <source>cli command</source>
             <translation>コマンドライン コマンド</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Diagnostic bundle</source>
             <translation>診断バンドル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="231" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>support zip</source>
             <translation>サポート zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>Quit</source>
             <translation>終了</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>exit</source>
             <translation>終了 閉じる</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="242" />
-            <location filename="../src/shell/shell_window.cpp" line="1137" />
+            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="1155" />
             <source>Undo</source>
             <translation>元に戻す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="242" />
+            <location filename="../src/shell/shell_window.cpp" line="245" />
             <source>undo stack restore</source>
             <translation>元に戻す 履歴 復元</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="246" />
-            <location filename="../src/shell/shell_window.cpp" line="1138" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="1156" />
             <source>Redo</source>
             <translation>やり直し</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="246" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>redo stack restore</source>
             <translation>やり直し 履歴 復元</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="250" />
+            <location filename="../src/shell/shell_window.cpp" line="253" />
             <source>Remove selected</source>
             <translation>選択したものを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="251" />
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="254" />
+            <location filename="../src/shell/shell_window.cpp" line="293" />
             <source>delete remove</source>
             <translation>削除 除去</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
             <source>Add port</source>
             <translation>ポートを追加</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="261" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="264" />
             <source>new virtual create</source>
             <translation>新規 仮想 作成</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Virtual port</source>
             <translation>仮想ポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Linked pair</source>
             <translation>リンクペア</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="264" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>pair two null modem</source>
             <translation>ペア 2つ ヌルモデム</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="269" />
             <source>Attach real device</source>
             <translation>実デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>serial device</source>
             <translation>シリアル デバイス</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Network endpoint</source>
             <translation>ネットワークエンドポイント</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="271" />
+            <location filename="../src/shell/shell_window.cpp" line="274" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>Mock fixture</source>
             <translation>モックフィクスチャ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="275" />
+            <location filename="../src/shell/shell_window.cpp" line="278" />
             <source>fixture mock script</source>
             <translation>フィクスチャ モック スクリプト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="281" />
             <source>Copy port name</source>
             <translation>ポート名をコピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="279" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>clipboard path</source>
             <translation>クリップボード パス</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="283" />
-            <location filename="../src/shell/shell_window.cpp" line="1812" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
+            <location filename="../src/shell/shell_window.cpp" line="1992" />
             <source>Rename port</source>
             <translation>ポート名を変更</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>name change relabel</source>
             <translation>名前 変更 リネーム</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
-            <location filename="../src/shell/shell_window.cpp" line="1241" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="293" />
+            <location filename="../src/shell/shell_window.cpp" line="1833" />
             <source>Remove port</source>
             <translation>ポートを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1346" />
+            <location filename="../src/shell/shell_window.cpp" line="297" />
+            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <source>Remove setup</source>
+            <translation>セットアップを削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="298" />
+            <source>delete remove teardown close pair share attach everything</source>
+            <translation>削除 取り外し 解体 閉じる ペア 共有 接続 すべて</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="305" />
+            <location filename="../src/shell/shell_window.cpp" line="1338" />
             <source>Connect ports</source>
             <translation>ポートを接続</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="297" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>link split join redirect monitor</source>
             <translation>リンク 分割 結合 リダイレクト モニター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="302" />
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="318" />
             <source>Share a device</source>
             <translation>デバイスを共有</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="303" />
-            <location filename="../src/shell/shell_window.cpp" line="310" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
             <source>split listeners</source>
             <translation>分割 リスナー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="313" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>Watch traffic</source>
             <translation>トラフィックを監視</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="323" />
             <source>monitor copy</source>
             <translation>モニター コピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="317" />
-            <location filename="../src/shell/shell_window.cpp" line="1743" />
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
-            <location filename="../src/shell/shell_window.cpp" line="1761" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <source>Add a program port</source>
+            <translation>プログラム用ポートを追加</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="327" />
+            <source>share attach more listener another</source>
+            <translation>共有 接続 追加 もう一つ リスナー</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="331" />
+            <location filename="../src/shell/shell_window.cpp" line="1735" />
+            <location filename="../src/shell/shell_window.cpp" line="1739" />
+            <location filename="../src/shell/shell_window.cpp" line="1753" />
             <source>Remove link</source>
             <translation>リンクを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>delete disconnect</source>
             <translation>削除 切断</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="335" />
             <source>Link wiring</source>
             <translation>リンクの配線</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>line matrix faults</source>
             <translation>ライン配線 マトリクス 障害</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="324" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>Owner</source>
             <translation>所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="324" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>policy arbitration</source>
             <translation>ポリシー 調停</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Fit</source>
             <translation>全体表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>zoom</source>
             <translation>ズーム 拡大縮小</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
-            <location filename="../src/shell/shell_window.cpp" line="612" />
-            <location filename="../src/shell/shell_window.cpp" line="613" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
+            <location filename="../src/shell/shell_window.cpp" line="630" />
+            <location filename="../src/shell/shell_window.cpp" line="631" />
             <source>Search actions</source>
             <translation>アクションを検索</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="337" />
+            <location filename="../src/shell/shell_window.cpp" line="351" />
             <source>command palette</source>
             <translation>コマンドパレット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Setup check</source>
             <translation>セットアップチェック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="355" />
             <source>driver com0com permissions</source>
             <translation>ドライバー com0com 権限</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="357" />
             <source>Benchmark</source>
             <translation>ベンチマーク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="344" />
+            <location filename="../src/shell/shell_window.cpp" line="358" />
             <source>throughput speed</source>
             <translation>スループット 速度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="346" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>Refresh now</source>
             <translation>今すぐ更新</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="346" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>reload</source>
             <translation>再読み込み</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="353" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>Refreshed.</source>
             <translation>更新しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="369" />
             <source>Settings</source>
             <translation>設定</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="356" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>preferences theme density refresh baud</source>
             <translation>環境設定 テーマ 密度 更新 ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="362" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>Advanced mode</source>
             <translation>高度モード</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>simple expert level</source>
             <translation>シンプル 上級者 レベル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
-            <location filename="../src/shell/shell_window.cpp" line="740" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="758" />
             <source>Monitor</source>
             <translation>モニター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>traffic</source>
             <translation>トラフィック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
             <source>Show links as a list</source>
             <translation>リンクを一覧で表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="385" />
             <source>links topology list accessible</source>
             <translation>リンク トポロジー 一覧 アクセシビリティ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="374" />
-            <location filename="../src/shell/shell_window.cpp" line="885" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="903" />
             <source>Log</source>
             <translation>ログ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="374" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>events</source>
             <translation>イベント</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
-            <location filename="../src/shell/shell_window.cpp" line="901" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="919" />
             <source>Topology JSON</source>
             <translation>トポロジーJSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>editor schema</source>
             <translation>エディター スキーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>Follow the system</source>
             <translation>システムに合わせる</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="395" />
             <source>theme colour scheme</source>
             <translation>テーマ 配色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="390" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
             <source>Light</source>
             <translation>ライト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="390" />
-            <location filename="../src/shell/shell_window.cpp" line="400" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>theme</source>
             <translation>テーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="400" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>Dark</source>
             <translation>ダーク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="410" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>Comfortable</source>
             <translation>ゆったり</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="411" />
-            <location filename="../src/shell/shell_window.cpp" line="421" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>density spacing</source>
             <translation>密度 間隔</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="420" />
+            <location filename="../src/shell/shell_window.cpp" line="434" />
             <source>Compact</source>
             <translation>コンパクト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="429" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>Reset layout</source>
             <translation>レイアウトをリセット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="430" />
+            <location filename="../src/shell/shell_window.cpp" line="444" />
             <source>docks window</source>
             <translation>ドック ウィンドウ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="432" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>Show launcher</source>
             <translation>ランチャーを表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="433" />
+            <location filename="../src/shell/shell_window.cpp" line="447" />
             <source>empty start</source>
             <translation>空 開始</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="451" />
             <source>Help contents</source>
             <translation>ヘルプの目次</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="452" />
             <source>manual help topics</source>
             <translation>マニュアル ヘルプ トピック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="440" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>Why is nothing arriving?</source>
             <translation>なぜ何も届かないのですか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="441" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>troubleshoot no data</source>
             <translation>トラブルシューティング データなし</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>Keyboard shortcuts</source>
             <translation>キーボードショートカット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>keys</source>
             <translation>キー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="459" />
             <source>Copy environment</source>
             <translation>環境情報をコピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>build bug report</source>
             <translation>ビルド 不具合報告</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="448" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>About</source>
             <translation>バージョン情報</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="449" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
             <source>version licence copyright</source>
             <translation>バージョン ライセンス 著作権</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
-            <location filename="../src/shell/shell_window.cpp" line="468" />
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="477" />
+            <location filename="../src/shell/shell_window.cpp" line="482" />
+            <location filename="../src/shell/shell_window.cpp" line="1166" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="670" />
+            <location filename="../src/shell/shell_window.cpp" line="688" />
             <source>Change owner</source>
             <translation>所有者を変更</translation>
         </message>
@@ -6575,52 +6643,52 @@ Networks: %5</source>
             <translation type="vanished">元に戻すには正確な復元が必要ですが、このビルドではそれを保証できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="499" />
+            <location filename="../src/shell/shell_window.cpp" line="513" />
             <source>&amp;File</source>
             <translation>ファイル(&amp;F)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="513" />
+            <location filename="../src/shell/shell_window.cpp" line="527" />
             <source>&amp;Edit</source>
             <translation>編集(&amp;E)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="519" />
+            <location filename="../src/shell/shell_window.cpp" line="534" />
             <source>&amp;Ports</source>
             <translation>ポート(&amp;P)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="533" />
+            <location filename="../src/shell/shell_window.cpp" line="549" />
             <source>&amp;Topology</source>
             <translation>トポロジー(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="561" />
             <source>&amp;Tools</source>
             <translation>ツール(&amp;L)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="552" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;View</source>
             <translation>表示(&amp;V)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="560" />
+            <location filename="../src/shell/shell_window.cpp" line="577" />
             <source>Theme</source>
             <translation>テーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="564" />
+            <location filename="../src/shell/shell_window.cpp" line="581" />
             <source>Density</source>
             <translation>密度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="571" />
+            <location filename="../src/shell/shell_window.cpp" line="588" />
             <source>&amp;Help</source>
             <translation>ヘルプ(&amp;H)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="581" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Main toolbar</source>
             <translation>メインツールバー</translation>
         </message>
@@ -6629,295 +6697,390 @@ Networks: %5</source>
             <translation type="vanished">このビルドでは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="735" />
+            <location filename="../src/shell/shell_window.cpp" line="753" />
             <source>Ports</source>
             <translation>ポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="737" />
-            <location filename="../src/shell/shell_window.cpp" line="1190" />
+            <location filename="../src/shell/shell_window.cpp" line="755" />
+            <location filename="../src/shell/shell_window.cpp" line="1208" />
             <source>Inspector</source>
             <translation>インスペクター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="738" />
+            <location filename="../src/shell/shell_window.cpp" line="756" />
             <source>Send</source>
             <translation>送信</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="773" />
-            <location filename="../src/shell/shell_window.cpp" line="1269" />
+            <location filename="../src/shell/shell_window.cpp" line="791" />
+            <location filename="../src/shell/shell_window.cpp" line="1261" />
             <source>Copied %1.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="789" />
+            <location filename="../src/shell/shell_window.cpp" line="807" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1バイトを%2の送信キューに追加しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="845" />
+            <location filename="../src/shell/shell_window.cpp" line="863" />
             <source>Links</source>
             <translation>リンク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="900" />
+            <location filename="../src/shell/shell_window.cpp" line="918" />
             <source>Applied the topology JSON.</source>
             <translation>トポロジーJSONを適用しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1115" />
+            <location filename="../src/shell/shell_window.cpp" line="1133" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1137" />
+            <location filename="../src/shell/shell_window.cpp" line="1155" />
             <source>Undo %1</source>
             <translation>%1 を元に戻す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1138" />
+            <location filename="../src/shell/shell_window.cpp" line="1156" />
             <source>Redo %1</source>
             <translation>%1 をやり直す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1150" />
+            <location filename="../src/shell/shell_window.cpp" line="1168" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>リンクの接続や削除、所有者の変更、ポート名の変更を元に戻します。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1152" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>This build cannot reverse changes.</source>
             <translation>このビルドでは変更を元に戻せません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1160" />
+            <location filename="../src/shell/shell_window.cpp" line="1178" />
             <source>Undid %1.</source>
             <translation>%1 を元に戻しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1181" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>%1 を元に戻せませんでした。その後、設定が変更されています。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1189" />
             <source>Redid %1.</source>
             <translation>%1 をやり直しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1174" />
+            <location filename="../src/shell/shell_window.cpp" line="1192" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>%1 をやり直せませんでした。その後、設定が変更されています。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1189" />
+            <location filename="../src/shell/shell_window.cpp" line="1207" />
             <source>Ports %1</source>
             <translation>ポート %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1194" />
+            <location filename="../src/shell/shell_window.cpp" line="1212" />
             <source>Inspector %1</source>
             <translation>インスペクター %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1238" />
+            <location filename="../src/shell/shell_window.cpp" line="1816" />
+            <location filename="../src/shell/shell_window.cpp" line="1829" />
             <source>Remove %1?</source>
             <translation>%1を削除しますか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1239" />
             <source>The port and its links will be removed. This cannot be undone.</source>
-            <translation>このポートとそのリンクが削除されます。この操作は元に戻せません。</translation>
+            <translation type="vanished">このポートとそのリンクが削除されます。この操作は元に戻せません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1241" />
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
-            <location filename="../src/shell/shell_window.cpp" line="2219" />
+            <location filename="../src/shell/shell_window.cpp" line="1739" />
+            <location filename="../src/shell/shell_window.cpp" line="1798" />
+            <location filename="../src/shell/shell_window.cpp" line="1833" />
+            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <location filename="../src/shell/shell_window.cpp" line="2399" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1248" />
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1851" />
+            <location filename="../src/shell/shell_window.cpp" line="1910" />
             <source>Could not remove %1</source>
             <translation>%1を削除できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1257" />
-            <location filename="../src/shell/shell_window.cpp" line="1796" />
+            <location filename="../src/shell/shell_window.cpp" line="1860" />
             <source>Removed %1.</source>
             <translation>%1を削除しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1357" />
+            <location filename="../src/shell/shell_window.cpp" line="1349" />
             <source>Sharing is not available in this build.</source>
             <translation>このビルドでは共有は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1384" />
+            <location filename="../src/shell/shell_window.cpp" line="1376" />
             <source>Networking is not available in this build.</source>
             <translation>このビルドではネットワーク機能は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1406" />
+            <location filename="../src/shell/shell_window.cpp" line="1398" />
             <source>Bridge is running on port %1.</source>
             <translation>ブリッジはポート%1で実行中です。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1407" />
+            <location filename="../src/shell/shell_window.cpp" line="1399" />
             <source>Open monitor</source>
             <translation>モニターを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1428" />
-            <location filename="../src/shell/shell_window.cpp" line="2131" />
-            <location filename="../src/shell/shell_window.cpp" line="2143" />
+            <location filename="../src/shell/shell_window.cpp" line="1420" />
+            <location filename="../src/shell/shell_window.cpp" line="2311" />
+            <location filename="../src/shell/shell_window.cpp" line="2323" />
             <source>Could not open %1</source>
             <translation>%1を開けませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1429" />
+            <location filename="../src/shell/shell_window.cpp" line="1421" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>セットアップに必要なデバイスまたはネットワークエンドポイントが、このPCで利用できません。何も変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1452" />
-            <location filename="../src/shell/shell_window.cpp" line="2155" />
-            <location filename="../src/shell/shell_window.cpp" line="2183" />
+            <location filename="../src/shell/shell_window.cpp" line="1444" />
+            <location filename="../src/shell/shell_window.cpp" line="2335" />
+            <location filename="../src/shell/shell_window.cpp" line="2363" />
             <source>%1 ports, %2 links</source>
             <translation>%1個のポート、%2個のリンク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1544" />
-            <location filename="../src/shell/shell_window.cpp" line="1567" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>リンクペアを作成しました。プログラムAは%1、プログラムBは%2を開きます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1603" />
+            <location filename="../src/shell/shell_window.cpp" line="1595" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>%1を監視しています。監視側は%2です。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1653" />
+            <location filename="../src/shell/shell_window.cpp" line="1645" />
             <source>%1 is part of a later work package.</source>
             <translation>%1は今後のワークパッケージで提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1659" />
+            <location filename="../src/shell/shell_window.cpp" line="1651" />
             <source>%1 arrives with %2.</source>
             <translation>%1は%2で提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1744" />
+            <location filename="../src/shell/shell_window.cpp" line="1736" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>このリンクを削除しますか? %1。セットアップを保存するまで、何も保存されません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1755" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
             <source>Could not remove the link</source>
             <translation>リンクを削除できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1764" />
+            <location filename="../src/shell/shell_window.cpp" line="1756" />
             <source>Removed the link.</source>
             <translation>リンクを削除しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1777" />
+            <location filename="../src/shell/shell_window.cpp" line="1764" />
+            <source>1 port</source>
+            <translation>1個のポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1765" />
+            <source>%1 ports</source>
+            <translation>%1個のポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <source>1 link</source>
+            <translation>1個のリンク</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1771" />
+            <source>%1 links</source>
+            <translation>%1個のリンク</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1799" />
+            <source>Remove only %1</source>
+            <translation>%1 だけを削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1800" />
+            <source>Remove the whole setup</source>
+            <translation>セットアップ全体を削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1803" />
+            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 は、デバイスを共有する %2 個のプログラムの 1 つで、%3 を含むセットアップに属しています (%4)。%1 だけを削除すると、ほかのプログラムは共有を続けます。セットアップ全体を閉じることもできます。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1811" />
+            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 は %2 を含むセットアップに属しています (%3)。%1 とそのリンクだけを削除するか、セットアップ全体を閉じてください。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1830" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>%1とそのリンクを削除しますか? セットアップを保存するまで、何も保存されません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1815" />
+            <location filename="../src/shell/shell_window.cpp" line="1883" />
+            <source>%1 and %2</source>
+            <translation>%1と%2</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <source>Remove this setup?</source>
+            <translation>このセットアップを削除しますか?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1889" />
+            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
+            <translation>%1 を閉じます (%2)。これらのポートのいずれかを開いているプログラムは、そのポートを失います。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
+            <translation>セットアップの一部がまだ開いています。使用中のものを閉じてから、もう一度「セットアップを削除」を選んでください。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <source>Removed the setup (%1).</source>
+            <translation>セットアップを削除しました (%1)。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1923" />
+            <source>Removed %1 of %2.</source>
+            <translation>%2 のうち %1 を削除しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1957" />
+            <source>the device</source>
+            <translation>デバイス</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1964" />
+            <source>Could not add a program port to %1</source>
+            <translation>%1 にプログラム用ポートを追加できませんでした</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1965" />
+            <source>The setup is as it was. Check the device, then try again.</source>
+            <translation>セットアップは元のままです。デバイスを確認して、もう一度お試しください。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1974" />
+            <source>Added %1 to %2.</source>
+            <translation>%1 を %2 に追加しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1975" />
+            <source>a port</source>
+            <translation>ポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>Renamed %1 to %2.</source>
             <translation>%1 の名前を %2 に変更しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1872" />
+            <location filename="../src/shell/shell_window.cpp" line="2052" />
             <source>Add a port before opening the line matrix.</source>
             <translation>ライン配線マトリクスを開く前に、ポートを追加してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1907" />
+            <location filename="../src/shell/shell_window.cpp" line="2087" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>書き込めるポートを制御するには、所有者ポリシーを持つ結合の宛先を選択してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1988" />
+            <location filename="../src/shell/shell_window.cpp" line="2168" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>テストモードです。新しいポートはVirtual Serial Studio内でのみ動作します。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2009" />
+            <location filename="../src/shell/shell_window.cpp" line="2189" />
             <source>Could not restart as administrator</source>
             <translation>管理者として再起動できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2087" />
+            <location filename="../src/shell/shell_window.cpp" line="2267" />
             <source>Environment copied.</source>
             <translation>環境情報をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2106" />
+            <location filename="../src/shell/shell_window.cpp" line="2286" />
             <source>Started a new setup.</source>
             <translation>新しいセットアップを開始しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2116" />
+            <location filename="../src/shell/shell_window.cpp" line="2296" />
             <source>Open setup</source>
             <translation>セットアップを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2117" />
+            <location filename="../src/shell/shell_window.cpp" line="2297" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studioのセットアップ (*.json);;すべてのファイル (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2158" />
+            <location filename="../src/shell/shell_window.cpp" line="2338" />
             <source>Opened %1.</source>
             <translation>%1を開きました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2174" />
+            <location filename="../src/shell/shell_window.cpp" line="2354" />
             <source>Could not save this setup</source>
             <translation>このセットアップを保存できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2187" />
-            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
+            <location filename="../src/shell/shell_window.cpp" line="2368" />
             <source>Saved %1.</source>
             <translation>%1を保存しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2194" />
+            <location filename="../src/shell/shell_window.cpp" line="2374" />
             <source>Save setup</source>
             <translation>セットアップを保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2196" />
+            <location filename="../src/shell/shell_window.cpp" line="2376" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studioのセットアップ (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2214" />
+            <location filename="../src/shell/shell_window.cpp" line="2394" />
             <source>Save changes to %1?</source>
             <translation>%1への変更を保存しますか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2215" />
+            <location filename="../src/shell/shell_window.cpp" line="2395" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>前回の保存以降、ポートとリンクが変更されています。このメッセージは設定でオフにできます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2218" />
+            <location filename="../src/shell/shell_window.cpp" line="2398" />
             <source>Don't save</source>
             <translation>保存しない</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2283" />
+            <location filename="../src/shell/shell_window.cpp" line="2463" />
             <source>Layout reset.</source>
             <translation>レイアウトをリセットしました。</translation>
         </message>
@@ -7561,12 +7724,12 @@ Networks: %5</source>
             <translation>%1 のバス</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="370" />
+            <location filename="../src/topology/topology_text.cpp" line="369" />
             <source>Copied %1.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/topology/topology_text.cpp" line="375" />
+            <location filename="../src/topology/topology_text.cpp" line="374" />
             <source>Selected %1.</source>
             <translation>%1を選択しました。</translation>
         </message>
@@ -7614,237 +7777,237 @@ Networks: %5</source>
             <translation>%1個のリンク、ループが見つかりました</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="402" />
+            <location filename="../src/advanced/json_validation.cpp" line="431" />
             <source>Valid, version 1</source>
             <translation>有効、バージョン1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="405" />
+            <location filename="../src/advanced/json_validation.cpp" line="434" />
             <source>Not valid</source>
             <translation>無効</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="420" />
-            <location filename="../src/advanced/json_validation.cpp" line="445" />
-            <location filename="../src/advanced/json_validation.cpp" line="473" />
-            <location filename="../src/advanced/json_validation.cpp" line="506" />
-            <location filename="../src/advanced/json_validation.cpp" line="533" />
-            <location filename="../src/advanced/json_validation.cpp" line="560" />
-            <location filename="../src/advanced/json_validation.cpp" line="588" />
-            <location filename="../src/advanced/json_validation.cpp" line="629" />
-            <location filename="../src/advanced/json_validation.cpp" line="670" />
-            <location filename="../src/advanced/json_validation.cpp" line="705" />
-            <location filename="../src/advanced/json_validation.cpp" line="741" />
-            <location filename="../src/advanced/json_validation.cpp" line="774" />
-            <location filename="../src/advanced/json_validation.cpp" line="809" />
-            <location filename="../src/advanced/json_validation.cpp" line="859" />
-            <location filename="../src/advanced/json_validation.cpp" line="992" />
-            <location filename="../src/advanced/json_validation.cpp" line="1032" />
-            <location filename="../src/advanced/json_validation.cpp" line="1066" />
-            <location filename="../src/advanced/json_validation.cpp" line="1122" />
-            <location filename="../src/advanced/json_validation.cpp" line="1159" />
+            <location filename="../src/advanced/json_validation.cpp" line="449" />
+            <location filename="../src/advanced/json_validation.cpp" line="474" />
+            <location filename="../src/advanced/json_validation.cpp" line="502" />
+            <location filename="../src/advanced/json_validation.cpp" line="535" />
+            <location filename="../src/advanced/json_validation.cpp" line="562" />
+            <location filename="../src/advanced/json_validation.cpp" line="589" />
+            <location filename="../src/advanced/json_validation.cpp" line="617" />
+            <location filename="../src/advanced/json_validation.cpp" line="658" />
+            <location filename="../src/advanced/json_validation.cpp" line="699" />
+            <location filename="../src/advanced/json_validation.cpp" line="734" />
+            <location filename="../src/advanced/json_validation.cpp" line="770" />
+            <location filename="../src/advanced/json_validation.cpp" line="803" />
+            <location filename="../src/advanced/json_validation.cpp" line="838" />
+            <location filename="../src/advanced/json_validation.cpp" line="887" />
+            <location filename="../src/advanced/json_validation.cpp" line="1020" />
+            <location filename="../src/advanced/json_validation.cpp" line="1060" />
+            <location filename="../src/advanced/json_validation.cpp" line="1094" />
+            <location filename="../src/advanced/json_validation.cpp" line="1150" />
+            <location filename="../src/advanced/json_validation.cpp" line="1187" />
             <source>Valid JSON, version 1</source>
             <translation>有効なJSON、バージョン1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="423" />
-            <location filename="../src/advanced/json_validation.cpp" line="448" />
-            <location filename="../src/advanced/json_validation.cpp" line="476" />
-            <location filename="../src/advanced/json_validation.cpp" line="509" />
-            <location filename="../src/advanced/json_validation.cpp" line="536" />
-            <location filename="../src/advanced/json_validation.cpp" line="563" />
-            <location filename="../src/advanced/json_validation.cpp" line="591" />
-            <location filename="../src/advanced/json_validation.cpp" line="632" />
-            <location filename="../src/advanced/json_validation.cpp" line="673" />
-            <location filename="../src/advanced/json_validation.cpp" line="708" />
-            <location filename="../src/advanced/json_validation.cpp" line="744" />
-            <location filename="../src/advanced/json_validation.cpp" line="777" />
-            <location filename="../src/advanced/json_validation.cpp" line="812" />
-            <location filename="../src/advanced/json_validation.cpp" line="862" />
-            <location filename="../src/advanced/json_validation.cpp" line="995" />
-            <location filename="../src/advanced/json_validation.cpp" line="1035" />
-            <location filename="../src/advanced/json_validation.cpp" line="1069" />
-            <location filename="../src/advanced/json_validation.cpp" line="1125" />
+            <location filename="../src/advanced/json_validation.cpp" line="452" />
+            <location filename="../src/advanced/json_validation.cpp" line="477" />
+            <location filename="../src/advanced/json_validation.cpp" line="505" />
+            <location filename="../src/advanced/json_validation.cpp" line="538" />
+            <location filename="../src/advanced/json_validation.cpp" line="565" />
+            <location filename="../src/advanced/json_validation.cpp" line="592" />
+            <location filename="../src/advanced/json_validation.cpp" line="620" />
+            <location filename="../src/advanced/json_validation.cpp" line="661" />
+            <location filename="../src/advanced/json_validation.cpp" line="702" />
+            <location filename="../src/advanced/json_validation.cpp" line="737" />
+            <location filename="../src/advanced/json_validation.cpp" line="773" />
+            <location filename="../src/advanced/json_validation.cpp" line="806" />
+            <location filename="../src/advanced/json_validation.cpp" line="841" />
+            <location filename="../src/advanced/json_validation.cpp" line="890" />
+            <location filename="../src/advanced/json_validation.cpp" line="1023" />
+            <location filename="../src/advanced/json_validation.cpp" line="1063" />
+            <location filename="../src/advanced/json_validation.cpp" line="1097" />
+            <location filename="../src/advanced/json_validation.cpp" line="1153" />
             <source>Ports, all names unique</source>
             <translation>ポート、すべての名前が一意</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="426" />
-            <location filename="../src/advanced/json_validation.cpp" line="451" />
-            <location filename="../src/advanced/json_validation.cpp" line="479" />
-            <location filename="../src/advanced/json_validation.cpp" line="512" />
-            <location filename="../src/advanced/json_validation.cpp" line="539" />
-            <location filename="../src/advanced/json_validation.cpp" line="566" />
-            <location filename="../src/advanced/json_validation.cpp" line="594" />
-            <location filename="../src/advanced/json_validation.cpp" line="635" />
-            <location filename="../src/advanced/json_validation.cpp" line="676" />
-            <location filename="../src/advanced/json_validation.cpp" line="711" />
-            <location filename="../src/advanced/json_validation.cpp" line="747" />
-            <location filename="../src/advanced/json_validation.cpp" line="780" />
-            <location filename="../src/advanced/json_validation.cpp" line="815" />
-            <location filename="../src/advanced/json_validation.cpp" line="865" />
-            <location filename="../src/advanced/json_validation.cpp" line="998" />
-            <location filename="../src/advanced/json_validation.cpp" line="1038" />
-            <location filename="../src/advanced/json_validation.cpp" line="1072" />
-            <location filename="../src/advanced/json_validation.cpp" line="1128" />
+            <location filename="../src/advanced/json_validation.cpp" line="455" />
+            <location filename="../src/advanced/json_validation.cpp" line="480" />
+            <location filename="../src/advanced/json_validation.cpp" line="508" />
+            <location filename="../src/advanced/json_validation.cpp" line="541" />
+            <location filename="../src/advanced/json_validation.cpp" line="568" />
+            <location filename="../src/advanced/json_validation.cpp" line="595" />
+            <location filename="../src/advanced/json_validation.cpp" line="623" />
+            <location filename="../src/advanced/json_validation.cpp" line="664" />
+            <location filename="../src/advanced/json_validation.cpp" line="705" />
+            <location filename="../src/advanced/json_validation.cpp" line="740" />
+            <location filename="../src/advanced/json_validation.cpp" line="776" />
+            <location filename="../src/advanced/json_validation.cpp" line="809" />
+            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <location filename="../src/advanced/json_validation.cpp" line="893" />
+            <location filename="../src/advanced/json_validation.cpp" line="1026" />
+            <location filename="../src/advanced/json_validation.cpp" line="1066" />
+            <location filename="../src/advanced/json_validation.cpp" line="1100" />
+            <location filename="../src/advanced/json_validation.cpp" line="1156" />
             <source>Links, no loops</source>
             <translation>リンク、ループなし</translation>
         </message>
         <message>
             <location filename="../src/advanced/json_validation.cpp" line="292" />
-            <location filename="../src/advanced/json_validation.cpp" line="429" />
+            <location filename="../src/advanced/json_validation.cpp" line="458" />
             <source>Line %1: %2</source>
             <translation>%1行目: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="432" />
+            <location filename="../src/advanced/json_validation.cpp" line="461" />
             <source>The line is highlighted and nothing was applied.</source>
             <translation>該当行が強調表示され、何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="454" />
+            <location filename="../src/advanced/json_validation.cpp" line="483" />
             <source>Line 1: the document must be a JSON object</source>
             <translation>1行目: ドキュメントはJSONオブジェクトである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="456" />
+            <location filename="../src/advanced/json_validation.cpp" line="485" />
             <source>A setup file starts with a { and ends with a }.</source>
             <translation>セットアップファイルは { で始まり、} で終わります。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="484" />
+            <location filename="../src/advanced/json_validation.cpp" line="513" />
             <source>Line %1: version must be 1</source>
             <translation>%1行目: version は 1 である必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="487" />
+            <location filename="../src/advanced/json_validation.cpp" line="516" />
             <source>The document needs "version": 1</source>
             <translation>ドキュメントには "version": 1 が必要です</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="490" />
             <location filename="../src/advanced/json_validation.cpp" line="519" />
-            <location filename="../src/advanced/json_validation.cpp" line="547" />
-            <location filename="../src/advanced/json_validation.cpp" line="754" />
-            <location filename="../src/advanced/json_validation.cpp" line="792" />
-            <location filename="../src/advanced/json_validation.cpp" line="925" />
-            <location filename="../src/advanced/json_validation.cpp" line="934" />
-            <location filename="../src/advanced/json_validation.cpp" line="1096" />
+            <location filename="../src/advanced/json_validation.cpp" line="548" />
+            <location filename="../src/advanced/json_validation.cpp" line="576" />
+            <location filename="../src/advanced/json_validation.cpp" line="783" />
+            <location filename="../src/advanced/json_validation.cpp" line="821" />
+            <location filename="../src/advanced/json_validation.cpp" line="953" />
+            <location filename="../src/advanced/json_validation.cpp" line="962" />
+            <location filename="../src/advanced/json_validation.cpp" line="1124" />
             <source>Nothing was applied.</source>
             <translation>何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="517" />
+            <location filename="../src/advanced/json_validation.cpp" line="546" />
             <source>"ports" must be a list</source>
             <translation>"ports" はリストである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="545" />
+            <location filename="../src/advanced/json_validation.cpp" line="574" />
             <source>Each port must be an object</source>
             <translation>各ポートはオブジェクトである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="572" />
+            <location filename="../src/advanced/json_validation.cpp" line="601" />
             <source>Line %1: a port has no name</source>
             <translation>%1行目: 名前のないポートがあります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="575" />
+            <location filename="../src/advanced/json_validation.cpp" line="604" />
             <source>A port has no name</source>
             <translation>名前のないポートがあります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="577" />
+            <location filename="../src/advanced/json_validation.cpp" line="606" />
             <source>Every port needs a name so links can refer to it.</source>
             <translation>リンクから参照できるように、すべてのポートに名前が必要です。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="599" />
+            <location filename="../src/advanced/json_validation.cpp" line="628" />
             <source>Line %1: the name "%2" is used twice</source>
             <translation>%1行目: 名前 "%2" が重複しています</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="604" />
+            <location filename="../src/advanced/json_validation.cpp" line="633" />
             <source>The name "%1" is used twice</source>
             <translation>名前 "%1" が重複しています</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="607" />
+            <location filename="../src/advanced/json_validation.cpp" line="636" />
             <source>Port names identify ports in links, so each name must be unique. Nothing was applied.</source>
             <translation>ポート名はリンク内でポートを識別するため、各名前は一意である必要があります。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="641" />
+            <location filename="../src/advanced/json_validation.cpp" line="670" />
             <source>Line %1: unknown port kind "%2"</source>
             <translation>%1行目: 不明なポートの種類 "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="645" />
+            <location filename="../src/advanced/json_validation.cpp" line="674" />
             <source>Unknown port kind "%1"</source>
             <translation>不明なポートの種類 "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="648" />
+            <location filename="../src/advanced/json_validation.cpp" line="677" />
             <source>Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was applied.</source>
             <translation>virtual、physical、tcp、udp、rfc2217、mock のいずれかを使用してください。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="683" />
+            <location filename="../src/advanced/json_validation.cpp" line="712" />
             <source>Line %1: unknown virtual kind "%2"</source>
             <translation>%1行目: 不明な仮想の種類 "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="688" />
+            <location filename="../src/advanced/json_validation.cpp" line="717" />
             <source>Unknown virtual kind "%1"</source>
             <translation>不明な仮想の種類 "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="691" />
+            <location filename="../src/advanced/json_validation.cpp" line="720" />
             <source>Use auto, pty, named-pipe, loopback or windows-driver. Nothing was applied.</source>
             <translation>auto、pty、named-pipe、loopback、windows-driver のいずれかを使用してください。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="718" />
+            <location filename="../src/advanced/json_validation.cpp" line="747" />
             <source>Line %1: port "%2" has no address</source>
             <translation>%1行目: ポート "%2" にアドレスがありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="723" />
+            <location filename="../src/advanced/json_validation.cpp" line="752" />
             <source>Port "%1" has no address</source>
             <translation>ポート "%1" にアドレスがありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="726" />
+            <location filename="../src/advanced/json_validation.cpp" line="755" />
             <source>A physical or network port needs a uri. Nothing was applied.</source>
             <translation>physical またはネットワークのポートには uri が必要です。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="752" />
+            <location filename="../src/advanced/json_validation.cpp" line="781" />
             <source>"links" must be a list</source>
             <translation>"links" はリストである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="786" />
+            <location filename="../src/advanced/json_validation.cpp" line="815" />
             <source>Line %1: each link must be an object</source>
             <translation>%1行目: 各リンクはオブジェクトである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="790" />
+            <location filename="../src/advanced/json_validation.cpp" line="819" />
             <source>Each link must be an object</source>
             <translation>各リンクはオブジェクトである必要があります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="823" />
+            <location filename="../src/advanced/json_validation.cpp" line="852" />
             <source>Line %1: unknown link mode "%2"</source>
             <translation>%1行目: 不明なリンクモード "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="827" />
+            <location filename="../src/advanced/json_validation.cpp" line="856" />
             <source>Unknown link mode "%1"</source>
             <translation>不明なリンクモード "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="834" />
+            <location filename="../src/advanced/json_validation.cpp" line="863" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
             <translation>"%1" のことですか? 該当行が強調表示され、何も適用されていません。</translation>
         </message>
@@ -7853,97 +8016,97 @@ Networks: %5</source>
             <translation type="vanished">duplex、split、join、redirect、monitor のいずれかを使用してください。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1004" />
+            <location filename="../src/advanced/json_validation.cpp" line="1032" />
             <source>Line %1: a link needs ports on both sides</source>
             <translation>%1行目: リンクには両側にポートが必要です</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1008" />
+            <location filename="../src/advanced/json_validation.cpp" line="1036" />
             <source>A link needs ports on both sides</source>
             <translation>リンクには両側にポートが必要です</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1010" />
+            <location filename="../src/advanced/json_validation.cpp" line="1038" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
             <translation>sources と targets は、ポート名の空でないリストである必要があります。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1044" />
+            <location filename="../src/advanced/json_validation.cpp" line="1072" />
             <source>Line %1: "%2" has the wrong number of ports</source>
             <translation>%1行目: "%2" のポート数が正しくありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1049" />
+            <location filename="../src/advanced/json_validation.cpp" line="1077" />
             <source>"%1" has the wrong number of ports</source>
             <translation>"%1" のポート数が正しくありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1053" />
+            <location filename="../src/advanced/json_validation.cpp" line="1081" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
             <translation>duplex、redirect、monitor のリンクは1つのポートを1つのポートに接続します。split の送信元は1つ、join の宛先は1つです。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1088" />
+            <location filename="../src/advanced/json_validation.cpp" line="1116" />
             <source>Line %1: no port is called "%2"</source>
             <translation>%1行目: "%2" という名前のポートはありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="922" />
-            <location filename="../src/advanced/json_validation.cpp" line="1093" />
+            <location filename="../src/advanced/json_validation.cpp" line="950" />
+            <location filename="../src/advanced/json_validation.cpp" line="1121" />
             <source>No port is called "%1"</source>
             <translation>"%1" という名前のポートはありません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1134" />
+            <location filename="../src/advanced/json_validation.cpp" line="1162" />
             <source>Line %1: these links create a loop</source>
             <translation>%1行目: これらのリンクはループを作ります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="950" />
-            <location filename="../src/advanced/json_validation.cpp" line="1137" />
+            <location filename="../src/advanced/json_validation.cpp" line="978" />
+            <location filename="../src/advanced/json_validation.cpp" line="1165" />
             <source>These links create a loop</source>
             <translation>これらのリンクはループを作ります</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <location filename="../src/advanced/json_validation.cpp" line="873" />
             <source>Use duplex, split, join, redirect, monitor or bus. Nothing was applied.</source>
             <translation>duplex、split、join、redirect、monitor、bus のいずれかを使ってください。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="875" />
+            <location filename="../src/advanced/json_validation.cpp" line="903" />
             <source>Bus links are not available in this build</source>
             <translation>このビルドではバスリンクは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="878" />
+            <location filename="../src/advanced/json_validation.cpp" line="906" />
             <source>This build cannot put ports on a shared bus. Nothing was applied.</source>
             <translation>このビルドでは共有バスにポートを載せられません。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="904" />
+            <location filename="../src/advanced/json_validation.cpp" line="932" />
             <source>A bus needs between 2 and %1 ports</source>
             <translation>バスには2〜%1個のポートが必要です</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="907" />
+            <location filename="../src/advanced/json_validation.cpp" line="935" />
             <source>List the ports of the bus in "members". Nothing was applied.</source>
             <translation>バスのポートを "members" に列挙してください。何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="932" />
+            <location filename="../src/advanced/json_validation.cpp" line="960" />
             <source>A port can be on one bus only</source>
             <translation>1つのポートは1つのバスにしか載せられません</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="952" />
-            <location filename="../src/advanced/json_validation.cpp" line="1139" />
+            <location filename="../src/advanced/json_validation.cpp" line="980" />
+            <location filename="../src/advanced/json_validation.cpp" line="1167" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
             <translation>バイトが永久に回り続けてしまうため、ハブはループを拒否し、何も適用されていません。</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1168" />
-            <location filename="../src/advanced/json_validation.cpp" line="1174" />
-            <location filename="../src/advanced/json_validation.cpp" line="1194" />
+            <location filename="../src/advanced/json_validation.cpp" line="1196" />
+            <location filename="../src/advanced/json_validation.cpp" line="1202" />
+            <location filename="../src/advanced/json_validation.cpp" line="1222" />
             <source>The setup format rejected this document</source>
             <translation>セットアップ形式がこのドキュメントを受け付けませんでした</translation>
         </message>
@@ -9342,295 +9505,307 @@ Networks: %5</source>
     <context>
         <name>vss::gui::AttachDialog</name>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="75" />
+            <location filename="../src/flows/attach_dialog.cpp" line="76" />
             <source>Attach a real device</source>
             <translation>実デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="76" />
             <source>Studio opens the device once. Your programs then open the port Studio creates for them.</source>
-            <translation>Studioはデバイスを一度だけ開きます。プログラムは、Studioが作成したポートを開きます。</translation>
+            <translation type="vanished">Studioはデバイスを一度だけ開きます。プログラムは、Studioが作成したポートを開きます。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="83" />
+            <location filename="../src/flows/attach_dialog.cpp" line="77" />
+            <source>Studio holds the real device open. Your programs connect to a new virtual port that Studio creates, and Studio passes the data between the two.</source>
+            <translation>Studio は実際のデバイスを開いたままにします。プログラムは Studio が作成する新しい仮想ポートに接続し、Studio が両者の間でデータを受け渡します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/attach_dialog.cpp" line="85" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="86" />
+            <location filename="../src/flows/attach_dialog.cpp" line="88" />
             <source>Attach device</source>
             <translation>デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="121" />
-            <location filename="../src/flows/attach_dialog.cpp" line="122" />
+            <location filename="../src/flows/attach_dialog.cpp" line="123" />
+            <location filename="../src/flows/attach_dialog.cpp" line="124" />
             <source>Name</source>
             <translation>名前</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="124" />
-            <location filename="../src/flows/attach_dialog.cpp" line="127" />
+            <location filename="../src/flows/attach_dialog.cpp" line="126" />
+            <location filename="../src/flows/attach_dialog.cpp" line="129" />
             <source>Capture traffic in the monitor</source>
             <translation>モニターでトラフィックをキャプチャ</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="135" />
-            <location filename="../src/flows/attach_dialog.cpp" line="159" />
-            <location filename="../src/flows/attach_dialog.cpp" line="160" />
+            <location filename="../src/flows/attach_dialog.cpp" line="137" />
+            <location filename="../src/flows/attach_dialog.cpp" line="161" />
+            <location filename="../src/flows/attach_dialog.cpp" line="162" />
             <source>Address</source>
             <translation>アドレス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="142" />
-            <location filename="../src/flows/attach_dialog.cpp" line="145" />
+            <location filename="../src/flows/attach_dialog.cpp" line="144" />
+            <location filename="../src/flows/attach_dialog.cpp" line="147" />
             <source>Edit address</source>
             <translation>アドレスを編集</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="208" />
+            <location filename="../src/flows/attach_dialog.cpp" line="210" />
             <source>Device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="212" />
-            <location filename="../src/flows/attach_dialog.cpp" line="215" />
+            <location filename="../src/flows/attach_dialog.cpp" line="214" />
+            <location filename="../src/flows/attach_dialog.cpp" line="217" />
             <source>Refresh</source>
             <translation>更新</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="234" />
+            <location filename="../src/flows/attach_dialog.cpp" line="236" />
             <source>No serial devices found. Plug one in, then choose Refresh.</source>
             <translation>シリアルデバイスが見つかりません。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="240" />
+            <location filename="../src/flows/attach_dialog.cpp" line="242" />
             <source>The list is read when this window opens. Plug a device in, then choose Refresh.</source>
             <translation>一覧はこのウィンドウを開いたときに読み込まれます。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="249" />
-            <location filename="../src/flows/attach_dialog.cpp" line="252" />
+            <location filename="../src/flows/attach_dialog.cpp" line="251" />
+            <location filename="../src/flows/attach_dialog.cpp" line="254" />
             <source>Enter a path instead</source>
             <translation>代わりにパスを入力</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="262" />
+            <location filename="../src/flows/attach_dialog.cpp" line="264" />
             <source>COM3 or /dev/ttyUSB0</source>
             <translation>COM3 または /dev/ttyUSB0</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="263" />
-            <location filename="../src/flows/attach_dialog.cpp" line="264" />
+            <location filename="../src/flows/attach_dialog.cpp" line="265" />
+            <location filename="../src/flows/attach_dialog.cpp" line="266" />
             <source>Device path</source>
             <translation>デバイスのパス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="265" />
+            <location filename="../src/flows/attach_dialog.cpp" line="267" />
             <source>For example, COM3 or /dev/ttyUSB0.</source>
             <translation>例: COM3 または /dev/ttyUSB0</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="299" />
+            <location filename="../src/flows/attach_dialog.cpp" line="301" />
             <source>Device settings</source>
             <translation>デバイスの設定</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="308" />
-            <location filename="../src/flows/attach_dialog.cpp" line="311" />
+            <location filename="../src/flows/attach_dialog.cpp" line="310" />
+            <location filename="../src/flows/attach_dialog.cpp" line="313" />
             <source>Use common defaults</source>
             <translation>一般的な既定値を使う</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="327" />
-            <location filename="../src/flows/attach_dialog.cpp" line="328" />
+            <location filename="../src/flows/attach_dialog.cpp" line="329" />
+            <location filename="../src/flows/attach_dialog.cpp" line="330" />
             <source>Baud rate</source>
             <translation>ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="335" />
-            <location filename="../src/flows/attach_dialog.cpp" line="336" />
+            <location filename="../src/flows/attach_dialog.cpp" line="337" />
+            <location filename="../src/flows/attach_dialog.cpp" line="338" />
             <source>Data bits</source>
             <translation>データビット</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="341" />
-            <location filename="../src/flows/attach_dialog.cpp" line="359" />
+            <location filename="../src/flows/attach_dialog.cpp" line="343" />
+            <location filename="../src/flows/attach_dialog.cpp" line="361" />
             <source>None</source>
             <translation>なし</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="342" />
+            <location filename="../src/flows/attach_dialog.cpp" line="344" />
             <source>Even</source>
             <translation>偶数</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="343" />
+            <location filename="../src/flows/attach_dialog.cpp" line="345" />
             <source>Odd</source>
             <translation>奇数</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="344" />
-            <location filename="../src/flows/attach_dialog.cpp" line="345" />
+            <location filename="../src/flows/attach_dialog.cpp" line="346" />
+            <location filename="../src/flows/attach_dialog.cpp" line="347" />
             <source>Parity</source>
             <translation>パリティ</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="353" />
-            <location filename="../src/flows/attach_dialog.cpp" line="354" />
+            <location filename="../src/flows/attach_dialog.cpp" line="355" />
+            <location filename="../src/flows/attach_dialog.cpp" line="356" />
             <source>Stop bits</source>
             <translation>ストップビット</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="360" />
+            <location filename="../src/flows/attach_dialog.cpp" line="362" />
             <source>Hardware (RTS and CTS)</source>
             <translation>ハードウェア (RTSとCTS)</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="362" />
+            <location filename="../src/flows/attach_dialog.cpp" line="364" />
             <source>Software (XON and XOFF)</source>
             <translation>ソフトウェア (XONとXOFF)</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="364" />
-            <location filename="../src/flows/attach_dialog.cpp" line="365" />
+            <location filename="../src/flows/attach_dialog.cpp" line="366" />
+            <location filename="../src/flows/attach_dialog.cpp" line="367" />
             <source>Flow control</source>
             <translation>フロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="370" />
+            <location filename="../src/flows/attach_dialog.cpp" line="372" />
             <source>Most devices use these settings. If you see garbled text, check the device's manual.</source>
             <translation>ほとんどのデバイスはこの設定を使います。文字化けする場合は、デバイスのマニュアルを確認してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="448" />
+            <location filename="../src/flows/attach_dialog.cpp" line="450" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0comのペアの片側です。これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="449" />
-            <location filename="../src/flows/attach_dialog.cpp" line="455" />
+            <location filename="../src/flows/attach_dialog.cpp" line="451" />
+            <location filename="../src/flows/attach_dialog.cpp" line="457" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="454" />
+            <location filename="../src/flows/attach_dialog.cpp" line="456" />
             <source>This is a virtual port, not a device.</source>
             <translation>これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="460" />
+            <location filename="../src/flows/attach_dialog.cpp" line="462" />
             <source>Serial device. Another program is using it.</source>
             <translation>シリアルデバイスです。別のプログラムが使用中です。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="461" />
+            <location filename="../src/flows/attach_dialog.cpp" line="463" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="466" />
+            <location filename="../src/flows/attach_dialog.cpp" line="468" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="467" />
+            <location filename="../src/flows/attach_dialog.cpp" line="469" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="479" />
+            <location filename="../src/flows/attach_dialog.cpp" line="483" />
             <source>%1, %2</source>
             <translation>%1、%2</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="594" />
+            <location filename="../src/flows/attach_dialog.cpp" line="606" />
             <source>Choose a device to attach.</source>
             <translation>接続するデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="599" />
+            <location filename="../src/flows/attach_dialog.cpp" line="611" />
+            <source>Studio will hold &lt;b&gt;%1&lt;/b&gt; open at %2 baud. Your programs should not open %1. They open the new virtual port that Studio creates, and Studio passes data between that port and %1.</source>
+            <translation>Studio は &lt;b&gt;%1&lt;/b&gt; を %2 ボーで開いたままにします。プログラムは %1 を開かないでください。Studio が作成する新しい仮想ポートを開き、Studio がそのポートと %1 の間でデータを受け渡します。</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/attach_dialog.cpp" line="616" />
+            <source>Studio will hold %1 open at %2 baud. Your programs should not open %1. They open the new virtual port that Studio creates, and Studio passes data between that port and %1.</source>
+            <translation>Studio は %1 を %2 ボーで開いたままにします。プログラムは %1 を開かないでください。Studio が作成する新しい仮想ポートを開き、Studio がそのポートと %1 の間でデータを受け渡します。</translation>
+        </message>
+        <message>
             <source>Studio will open &lt;b&gt;%1&lt;/b&gt; at %2 baud and keep it open. Your programs should open the port Studio creates, not %1.</source>
-            <translation>Studioは&lt;b&gt;%1&lt;/b&gt;を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
+            <translation type="vanished">Studioは&lt;b&gt;%1&lt;/b&gt;を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="603" />
             <source>Studio will open %1 at %2 baud and keep it open. Your programs should open the port Studio creates, not %1.</source>
-            <translation>Studioは%1を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
+            <translation type="vanished">Studioは%1を%2ボーで開き、開いたままにします。プログラムはStudioが作成したポートを開いてください。%1は開かないでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="618" />
+            <location filename="../src/flows/attach_dialog.cpp" line="632" />
             <source>hardware flow control</source>
             <translation>ハードウェアフロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="621" />
+            <location filename="../src/flows/attach_dialog.cpp" line="635" />
             <source>software flow control</source>
             <translation>ソフトウェアフロー制御</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="624" />
+            <location filename="../src/flows/attach_dialog.cpp" line="638" />
             <source>no flow control</source>
             <translation>フロー制御なし</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="627" />
+            <location filename="../src/flows/attach_dialog.cpp" line="641" />
             <source>%1 %2%3%4, %5</source>
             <translation>%1 %2%3%4, %5</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="726" />
+            <location filename="../src/flows/attach_dialog.cpp" line="740" />
             <source>Enter a name for the port.</source>
             <translation>ポートの名前を入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="736" />
+            <location filename="../src/flows/attach_dialog.cpp" line="750" />
             <source>Choose a device or enter a path.</source>
             <translation>デバイスを選ぶか、パスを入力してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="751" />
+            <location filename="../src/flows/attach_dialog.cpp" line="765" />
             <source>open</source>
             <translation>オープン</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="754" />
+            <location filename="../src/flows/attach_dialog.cpp" line="768" />
             <source>Another program may be using the device, or it may have been unplugged.</source>
             <translation>別のプログラムがデバイスを使用中か、デバイスが取り外された可能性があります。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="756" />
+            <location filename="../src/flows/attach_dialog.cpp" line="770" />
             <source> Close the other program or check the cable, then try again.</source>
             <translation>他のプログラムを閉じるかケーブルを確認してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="767" />
-            <location filename="../src/flows/attach_dialog.cpp" line="785" />
+            <location filename="../src/flows/attach_dialog.cpp" line="781" />
+            <location filename="../src/flows/attach_dialog.cpp" line="799" />
             <source>Could not create the port for %1</source>
             <translation>%1のポートを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="770" />
+            <location filename="../src/flows/attach_dialog.cpp" line="784" />
             <source>Studio opened the device but could not create the port your programs open. Nothing was changed.</source>
             <translation>Studioはデバイスを開きましたが、プログラムが開くポートを作成できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="772" />
-            <location filename="../src/flows/attach_dialog.cpp" line="790" />
+            <location filename="../src/flows/attach_dialog.cpp" line="786" />
+            <location filename="../src/flows/attach_dialog.cpp" line="804" />
             <source> Try again, or choose another device.</source>
             <translation>もう一度やり直すか、別のデバイスを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="788" />
+            <location filename="../src/flows/attach_dialog.cpp" line="802" />
             <source>Studio opened the device but could not give your programs a port. Nothing was changed.</source>
             <translation>Studioはデバイスを開きましたが、プログラムにポートを提供できませんでした。何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="808" />
+            <location filename="../src/flows/attach_dialog.cpp" line="822" />
             <source>Try again</source>
             <translation>やり直す</translation>
         </message>
         <message>
-            <location filename="../src/flows/attach_dialog.cpp" line="809" />
+            <location filename="../src/flows/attach_dialog.cpp" line="823" />
             <source>Choose another</source>
             <translation>別のものを選ぶ</translation>
         </message>
@@ -10155,131 +10330,131 @@ Networks: %5</source>
             <translation>これはすべてのデータの送信先となるポートです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="683" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="913" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="684" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="914" />
             <source>Studio-only ports echo what they receive, so a two-way link between them would repeat data. Use one-way, or link a real or paired port.</source>
             <translation>Studio内のみのポートは受信したデータをエコーするため、それらの間で双方向リンクを作るとデータが繰り返されます。一方向にするか、実ポートまたはペアのポートとリンクしてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="690" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="890" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="691" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="891" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="716" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="717" />
             <source>%1 ports chosen. That is enough for a %2.</source>
             <translation>%1個のポートを選択しました。%2に十分な数です。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="720" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="721" />
             <source>Choose at least 2 ports.</source>
             <translation>2つ以上のポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="728" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
             <source>split</source>
             <translation>分割</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="729" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
             <source>join</source>
             <translation>結合</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="730" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="731" />
             <source>bus</source>
             <translation>バス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="769" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="777" />
-            <location filename="../src/dialogs/connect_ports.cpp" line="784" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="770" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="778" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="785" />
             <source>Choose two ports to see what the link will do.</source>
             <translation>2つのポートを選ぶと、リンクの動作が表示されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="771" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="772" />
             <source>Everything %1 sends arrives at %2, and the other way round.</source>
             <translation>%1が送信するものはすべて%2に届き、その逆も同様です。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="779" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="780" />
             <source>Everything %1 sends arrives at %2. %2 cannot reply.</source>
             <translation>%1が送信するものはすべて%2に届きます。%2は返信できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="786" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="787" />
             <source>%2 receives a read-only copy of what %1 sends. It never drives modem lines.</source>
             <translation>%2は、%1が送信するものの読み取り専用のコピーを受け取ります。モデム制御線は駆動しません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="794" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
             <source>Choose a port to split.</source>
             <translation>分割するポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="795" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="796" />
             <source>Everything %1 receives is copied to the ports you choose. Whatever they write goes back to %1.</source>
             <translation>%1が受信するものはすべて、選んだポートにコピーされます。それらが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="804" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="805" />
             <source>Everything %1 receives is copied to %2. Whatever %3 of them writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2にコピーされます。それらの%3が書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="808" />
             <source>either</source>
             <translation>どちらか</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="807" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="808" />
             <source>any</source>
             <translation>いずれか</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="814" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
             <source>Choose a port to send everything to.</source>
             <translation>すべてを送信するポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="815" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="816" />
             <source>Everything the ports you choose write goes to %1. Their bytes are mixed in the order they arrive.</source>
             <translation>選んだポートが書き込むものはすべて%1に送られます。バイトは届いた順に混ざります。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="825" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="826" />
             <source>Everything %1 write goes to %2. Their bytes are mixed in the order they arrive. %2 does not send anything back to them.</source>
             <translation>%1が書き込むものはすべて%2に送られます。バイトは届いた順に混ざります。%2からそれらに何も送り返されません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="834" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="835" />
             <source>Choose the ports to put on the bus.</source>
             <translation>バスに載せるポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="841" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="842" />
             <source>Each of %1 hears what the others write, and none hears itself. Their bytes are mixed in the order they arrive.</source>
             <translation>%1 のそれぞれが他のポートの書き込みを受信し、自分自身の書き込みは受信しません。バイトは到着順に混ざります。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="886" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="887" />
             <source>Links are not available in this build.</source>
             <translation>このビルドではリンクは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="892" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="893" />
             <source>A bus takes at most %1 ports.</source>
             <translation>1つのバスには最大 %1 個のポートを載せられます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="904" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="905" />
             <source>Choose two ports.</source>
             <translation>2つのポートを選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/connect_ports.cpp" line="906" />
+            <location filename="../src/dialogs/connect_ports.cpp" line="907" />
             <source>A port cannot link to itself. Choose a different port.</source>
             <translation>ポートをそれ自身にリンクすることはできません。別のポートを選んでください。</translation>
         </message>
@@ -10374,12 +10549,12 @@ Networks: %5</source>
     <context>
         <name>vss::gui::Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="646" />
+            <location filename="../src/widgets/controls.cpp" line="659" />
             <source>%1, expanded</source>
             <translation>%1、展開済み</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="647" />
+            <location filename="../src/widgets/controls.cpp" line="660" />
             <source>%1, collapsed</source>
             <translation>%1、折りたたみ済み</translation>
         </message>
@@ -12257,514 +12432,549 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="78" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="82" />
             <source>Waiting for program</source>
             <translation>プログラムを待機中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="80" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="84" />
             <source>Program connected</source>
             <translation>プログラム接続済み</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="82" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="84" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="86" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="88" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="103" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="109" />
             <source>%1, %2, %3</source>
             <translation>%1、%2、%3</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="187" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="182" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="195" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
             <source>Share a device with several programs</source>
             <translation>デバイスを複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="197" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studioはデバイスを一度だけ開き、各プログラムに専用のポートを提供します。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Programs</source>
             <translation>プログラム</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="208" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="205" />
             <source>Ready</source>
             <translation>準備完了</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="225" />
+            <source>Scroll</source>
+            <translation>スクロール</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="253" />
             <source>Which device?</source>
             <translation>どのデバイスですか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="242" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="255" />
             <source>Refresh</source>
             <translation>更新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="245" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
             <source>Refresh the device list</source>
             <translation>デバイス一覧を更新</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="256" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
             <source>Devices</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>利用できるシリアルデバイスがありません。デバイスを接続してから「更新」を選んでください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="286" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
             <source>Device settings</source>
             <translation>デバイスの設定</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="296" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
             <source>Change</source>
             <translation>変更</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="300" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
             <source>Change device settings</source>
             <translation>デバイス設定を変更</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="323" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
             <source>None</source>
             <translation>なし</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="324" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
             <source>Odd</source>
             <translation>奇数</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="325" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
             <source>Even</source>
             <translation>偶数</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="326" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Mark</source>
             <translation>マーク</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="327" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Space</source>
             <translation>スペース</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
             <source>Hardware (RTS and CTS)</source>
             <translation>ハードウェア (RTSとCTS)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="343" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Software (XON and XOFF)</source>
             <translation>ソフトウェア (XONとXOFF)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="347" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
             <source>Baud rate</source>
             <translation>ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="350" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
             <source>Data bits</source>
             <translation>データビット</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="351" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
             <source>Parity</source>
             <translation>パリティ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
             <source>Stop bits</source>
             <translation>ストップビット</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
             <source>Flow control</source>
             <translation>フロー制御</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="404" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="419" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
             <source>A network device instead</source>
             <translation>代わりにネットワークデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="408" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
             <source>ADVANCED</source>
             <translation>高度</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>TCP、UDP、またはRFC 2217のアドレス。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="437" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
             <source>Device address</source>
             <translation>デバイスのアドレス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="438" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>TCP、UDP、またはRFC 2217を使うシリアルサーバーのアドレスです。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="468" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="472" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are.</source>
-            <translation>プログラムは%1自体ではなく、Studioが作成するポートを開きます。次に、プログラムの数を選びます。</translation>
+            <translation type="vanished">プログラムは%1自体ではなく、Studioが作成するポートを開きます。次に、プログラムの数を選びます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
+            <translation>プログラムは %1 自体ではなく、Studio が作成するポートを開きます。次に、プログラムの数を選びます。あとから追加することもできます。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
             <source>How many programs?</source>
             <translation>プログラムはいくつですか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="497" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
             <source>Fewer programs</source>
             <translation>プログラムを減らす</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="501" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
             <source>More programs</source>
             <translation>プログラムを増やす</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="513" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
             <source>Up to 32</source>
             <translation>最大32</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="525" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
+            <translation>共有したあとでプログラムを追加できます。各プログラムのポートは、あとから「ポートを削除」で削除できます。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
             <source>What each program will open</source>
             <translation>各プログラムが開くもの</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>Program name</source>
             <translation>プログラム名</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>Port to open</source>
             <translation>開くポート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="531" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
             <source>Can other programs open it?</source>
             <translation>他のプログラムから開けますか?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
             <source>Create another pair</source>
             <translation>別のペアを作成</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
             <source>Keep the third as Studio only</source>
             <translation>3つ目はStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="618" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
             <source>Shared ports</source>
             <translation>共有ポート</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Program</source>
             <translation>プログラム</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Open this port</source>
             <translation>このポートを開く</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="620" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>State</source>
             <translation>状態</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="663" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
             <source>Add another program</source>
             <translation>別のプログラムを追加</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="668" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
             <source>Back</source>
             <translation>戻る</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="673" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="677" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
             <source>Next</source>
             <translation>次へ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="682" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
             <source>Share device</source>
             <translation>デバイスを共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="688" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
             <source>Open monitor</source>
             <translation>モニターを開く</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
             <source>Done</source>
             <translation>完了</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="740" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>com0comのペアの片側です。これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="742" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
             <source>Virtual</source>
             <translation>仮想</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
             <source>This is a virtual port, not a device.</source>
             <translation>これは仮想ポートで、デバイスではありません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
             <source>Serial device. Studio is already using it.</source>
             <translation>シリアルデバイスです。Studioがすでに使用しています。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
             <source>In use</source>
             <translation>使用中</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
             <source>Serial device</source>
             <translation>シリアルデバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
             <source>Available</source>
             <translation>利用可能</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
             <source>Use a device instead</source>
             <translation>代わりにデバイスを使う</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
             <source>Share %1 with several programs</source>
             <translation>%1を複数のプログラムで共有</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>各プログラムに専用のポートが割り当てられます。Studioはデバイスのデータをそのすべてにコピーします。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
             <source>Open one of these ports in each program.</source>
             <translation>各プログラムで、これらのポートのうち1つを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
             <source>the device</source>
             <translation>デバイス</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
             <source>terminal</source>
             <translation>ターミナル</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>test-tool</source>
             <translation>テストツール</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>logger</source>
             <translation>ロガー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>program-%1</source>
             <translation>プログラム-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
             <source>Name of program %1</source>
             <translation>プログラム%1の名前</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
             <source>Yes</source>
             <translation>はい</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
             <source>No, Studio only</source>
             <translation>いいえ、Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
             <source>Warning: %1</source>
             <translation>警告: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windowsが管理者権限を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
             <source>Keep the %1 as Studio only</source>
             <translation>%1をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>残りの%1個をStudio内のみのままにする</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて1つのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>%1が受信するものはすべて%2個すべてのポートにコピーされます。プログラムが書き込んだものは%1に戻されます。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
             <source>Could not create another pair</source>
             <translation>別のペアを作成できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windowsがドライバーのペアを作成しませんでした。管理者権限を許可してから、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
             <source>Sharing is not available in this build</source>
             <translation>このビルドでは共有は利用できません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
             <source>Nothing was changed.</source>
             <translation>何も変更されていません。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
             <source>Could not share %1</source>
             <translation>%1を共有できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>以前の共有は削除されました。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>セットアップは変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
             <source>%1 is shared with 1 program</source>
             <translation>%1は1個のプログラムと共有されています</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1は%2個のプログラムと共有されています</translation>
         </message>
         <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <source>The most Studio can share is 32 programs</source>
+            <translation>Studio が共有できるプログラムは最大 32 個です</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <source>Remove a program's port first if you need a different one.</source>
+            <translation>別の数が必要な場合は、先にプログラムのポートを削除してください。</translation>
+        </message>
+        <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
+            <source>Could not add another program</source>
+            <translation>プログラムを追加できませんでした</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <source>The share is as it was. Check the device, then try again.</source>
+            <translation>共有は元のままです。デバイスを確認して、もう一度お試しください。</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
             <source>Studio only</source>
             <translation>Studio内のみ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
             <source>Not for other programs</source>
             <translation>他のプログラム用ではありません</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
             <source>Copy</source>
             <translation>コピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
             <source>Copy %1</source>
             <translation>%1をコピー</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
             <source>%1 copied.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>%1が受信するものはすべて、1つのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>%1が受信するものはすべて、%2個すべてのポートにコピーされるようになりました。</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>各プログラムがポートを開くと、「待機中」の表示が「プログラム接続済み」に変わります。</translation>
         </message>
@@ -12772,521 +12982,540 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>New</source>
             <translation>新規</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
+            <location filename="../src/shell/shell_window.cpp" line="206" />
             <source>new document setup</source>
             <translation>新規 ドキュメント セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>Open</source>
             <translation>開いている</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>open file setup</source>
             <translation>開く ファイル セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>Open recent</source>
             <translation>最近使ったファイルを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>recent file</source>
             <translation>最近 ファイル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="218" />
+            <location filename="../src/shell/shell_window.cpp" line="221" />
             <source>Setups and templates</source>
             <translation>セットアップとテンプレート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="219" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>template setup</source>
             <translation>テンプレート セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
-            <location filename="../src/shell/shell_window.cpp" line="2220" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="2400" />
             <source>Save</source>
             <translation>保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>save file setup</source>
             <translation>保存 ファイル セットアップ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>Save as</source>
             <translation>名前を付けて保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>save as file</source>
             <translation>名前を付けて保存 ファイル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Export as command</source>
             <translation>コマンドとしてエクスポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="228" />
+            <location filename="../src/shell/shell_window.cpp" line="231" />
             <source>cli command</source>
             <translation>コマンドライン コマンド</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Diagnostic bundle</source>
             <translation>診断バンドル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="231" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>support zip</source>
             <translation>サポート zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>Quit</source>
             <translation>終了</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>exit</source>
             <translation>終了 閉じる</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="242" />
-            <location filename="../src/shell/shell_window.cpp" line="1137" />
+            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="1155" />
             <source>Undo</source>
             <translation>元に戻す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="242" />
+            <location filename="../src/shell/shell_window.cpp" line="245" />
             <source>undo stack restore</source>
             <translation>元に戻す 履歴 復元</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="246" />
-            <location filename="../src/shell/shell_window.cpp" line="1138" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="1156" />
             <source>Redo</source>
             <translation>やり直し</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="246" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>redo stack restore</source>
             <translation>やり直し 履歴 復元</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="250" />
+            <location filename="../src/shell/shell_window.cpp" line="253" />
             <source>Remove selected</source>
             <translation>選択したものを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="251" />
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="254" />
+            <location filename="../src/shell/shell_window.cpp" line="293" />
             <source>delete remove</source>
             <translation>削除 除去</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
             <source>Add port</source>
             <translation>ポートを追加</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="261" />
+            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="264" />
             <source>new virtual create</source>
             <translation>新規 仮想 作成</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Virtual port</source>
             <translation>仮想ポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Linked pair</source>
             <translation>リンクペア</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="264" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>pair two null modem</source>
             <translation>ペア 2つ ヌルモデム</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="269" />
             <source>Attach real device</source>
             <translation>実デバイスを接続</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>serial device</source>
             <translation>シリアル デバイス</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Network endpoint</source>
             <translation>ネットワークエンドポイント</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="271" />
+            <location filename="../src/shell/shell_window.cpp" line="274" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>Mock fixture</source>
             <translation>モックフィクスチャ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="275" />
+            <location filename="../src/shell/shell_window.cpp" line="278" />
             <source>fixture mock script</source>
             <translation>フィクスチャ モック スクリプト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="281" />
             <source>Copy port name</source>
             <translation>ポート名をコピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="279" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>clipboard path</source>
             <translation>クリップボード パス</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="283" />
-            <location filename="../src/shell/shell_window.cpp" line="1812" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
+            <location filename="../src/shell/shell_window.cpp" line="1992" />
             <source>Rename port</source>
             <translation>ポート名を変更</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>name change relabel</source>
             <translation>名前 変更 リネーム</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
-            <location filename="../src/shell/shell_window.cpp" line="1241" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <location filename="../src/shell/shell_window.cpp" line="293" />
+            <location filename="../src/shell/shell_window.cpp" line="1833" />
             <source>Remove port</source>
             <translation>ポートを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1346" />
+            <location filename="../src/shell/shell_window.cpp" line="297" />
+            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <source>Remove setup</source>
+            <translation>セットアップを削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="298" />
+            <source>delete remove teardown close pair share attach everything</source>
+            <translation>削除 取り外し 解体 閉じる ペア 共有 接続 すべて</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="305" />
+            <location filename="../src/shell/shell_window.cpp" line="1338" />
             <source>Connect ports</source>
             <translation>ポートを接続</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="297" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>link split join redirect monitor</source>
             <translation>リンク 分割 結合 リダイレクト モニター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="302" />
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="318" />
             <source>Share a device</source>
             <translation>デバイスを共有</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="303" />
-            <location filename="../src/shell/shell_window.cpp" line="310" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
             <source>split listeners</source>
             <translation>分割 リスナー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="313" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>Watch traffic</source>
             <translation>トラフィックを監視</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="323" />
             <source>monitor copy</source>
             <translation>モニター コピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="317" />
-            <location filename="../src/shell/shell_window.cpp" line="1743" />
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
-            <location filename="../src/shell/shell_window.cpp" line="1761" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <source>Add a program port</source>
+            <translation>プログラム用ポートを追加</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="327" />
+            <source>share attach more listener another</source>
+            <translation>共有 接続 追加 もう一つ リスナー</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="331" />
+            <location filename="../src/shell/shell_window.cpp" line="1735" />
+            <location filename="../src/shell/shell_window.cpp" line="1739" />
+            <location filename="../src/shell/shell_window.cpp" line="1753" />
             <source>Remove link</source>
             <translation>リンクを削除</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>delete disconnect</source>
             <translation>削除 切断</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="335" />
             <source>Link wiring</source>
             <translation>リンクの配線</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>line matrix faults</source>
             <translation>ライン配線 マトリクス 障害</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="324" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>Owner</source>
             <translation>所有者</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="324" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>policy arbitration</source>
             <translation>ポリシー 調停</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Fit</source>
             <translation>全体表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>zoom</source>
             <translation>ズーム 拡大縮小</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
-            <location filename="../src/shell/shell_window.cpp" line="612" />
-            <location filename="../src/shell/shell_window.cpp" line="613" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
+            <location filename="../src/shell/shell_window.cpp" line="630" />
+            <location filename="../src/shell/shell_window.cpp" line="631" />
             <source>Search actions</source>
             <translation>アクションを検索</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="337" />
+            <location filename="../src/shell/shell_window.cpp" line="351" />
             <source>command palette</source>
             <translation>コマンドパレット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Setup check</source>
             <translation>セットアップチェック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="355" />
             <source>driver com0com permissions</source>
             <translation>ドライバー com0com 権限</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="357" />
             <source>Benchmark</source>
             <translation>ベンチマーク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="344" />
+            <location filename="../src/shell/shell_window.cpp" line="358" />
             <source>throughput speed</source>
             <translation>スループット 速度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="346" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>Refresh now</source>
             <translation>今すぐ更新</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="346" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>reload</source>
             <translation>再読み込み</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="353" />
+            <location filename="../src/shell/shell_window.cpp" line="367" />
             <source>Refreshed.</source>
             <translation>更新しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="369" />
             <source>Settings</source>
             <translation>設定</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="356" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>preferences theme density refresh baud</source>
             <translation>環境設定 テーマ 密度 更新 ボーレート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="362" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>Advanced mode</source>
             <translation>高度モード</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="363" />
+            <location filename="../src/shell/shell_window.cpp" line="377" />
             <source>simple expert level</source>
             <translation>シンプル 上級者 レベル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
-            <location filename="../src/shell/shell_window.cpp" line="740" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="758" />
             <source>Monitor</source>
             <translation>モニター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>traffic</source>
             <translation>トラフィック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
             <source>Show links as a list</source>
             <translation>リンクを一覧で表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="385" />
             <source>links topology list accessible</source>
             <translation>リンク トポロジー 一覧 アクセシビリティ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="374" />
-            <location filename="../src/shell/shell_window.cpp" line="885" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="903" />
             <source>Log</source>
             <translation>ログ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="374" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>events</source>
             <translation>イベント</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
-            <location filename="../src/shell/shell_window.cpp" line="901" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="919" />
             <source>Topology JSON</source>
             <translation>トポロジーJSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>editor schema</source>
             <translation>エディター スキーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>Follow the system</source>
             <translation>システムに合わせる</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="395" />
             <source>theme colour scheme</source>
             <translation>テーマ 配色</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="390" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
             <source>Light</source>
             <translation>ライト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="390" />
-            <location filename="../src/shell/shell_window.cpp" line="400" />
+            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>theme</source>
             <translation>テーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="400" />
+            <location filename="../src/shell/shell_window.cpp" line="414" />
             <source>Dark</source>
             <translation>ダーク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="410" />
+            <location filename="../src/shell/shell_window.cpp" line="424" />
             <source>Comfortable</source>
             <translation>ゆったり</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="411" />
-            <location filename="../src/shell/shell_window.cpp" line="421" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>density spacing</source>
             <translation>密度 間隔</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="420" />
+            <location filename="../src/shell/shell_window.cpp" line="434" />
             <source>Compact</source>
             <translation>コンパクト</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="429" />
+            <location filename="../src/shell/shell_window.cpp" line="443" />
             <source>Reset layout</source>
             <translation>レイアウトをリセット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="430" />
+            <location filename="../src/shell/shell_window.cpp" line="444" />
             <source>docks window</source>
             <translation>ドック ウィンドウ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="432" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>Show launcher</source>
             <translation>ランチャーを表示</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="433" />
+            <location filename="../src/shell/shell_window.cpp" line="447" />
             <source>empty start</source>
             <translation>空 開始</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="437" />
+            <location filename="../src/shell/shell_window.cpp" line="451" />
             <source>Help contents</source>
             <translation>ヘルプの目次</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="438" />
+            <location filename="../src/shell/shell_window.cpp" line="452" />
             <source>manual help topics</source>
             <translation>マニュアル ヘルプ トピック</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="440" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>Why is nothing arriving?</source>
             <translation>なぜ何も届かないのですか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="441" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>troubleshoot no data</source>
             <translation>トラブルシューティング データなし</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>Keyboard shortcuts</source>
             <translation>キーボードショートカット</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>keys</source>
             <translation>キー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="459" />
             <source>Copy environment</source>
             <translation>環境情報をコピー</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>build bug report</source>
             <translation>ビルド 不具合報告</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="448" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>About</source>
             <translation>バージョン情報</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="449" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
             <source>version licence copyright</source>
             <translation>バージョン ライセンス 著作権</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
-            <location filename="../src/shell/shell_window.cpp" line="468" />
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="477" />
+            <location filename="../src/shell/shell_window.cpp" line="482" />
+            <location filename="../src/shell/shell_window.cpp" line="1166" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="670" />
+            <location filename="../src/shell/shell_window.cpp" line="688" />
             <source>Change owner</source>
             <translation>所有者を変更</translation>
         </message>
@@ -13295,52 +13524,52 @@ Networks: %5</source>
             <translation type="vanished">元に戻すには正確な復元が必要ですが、このビルドではそれを保証できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="499" />
+            <location filename="../src/shell/shell_window.cpp" line="513" />
             <source>&amp;File</source>
             <translation>ファイル(&amp;F)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="513" />
+            <location filename="../src/shell/shell_window.cpp" line="527" />
             <source>&amp;Edit</source>
             <translation>編集(&amp;E)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="519" />
+            <location filename="../src/shell/shell_window.cpp" line="534" />
             <source>&amp;Ports</source>
             <translation>ポート(&amp;P)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="533" />
+            <location filename="../src/shell/shell_window.cpp" line="549" />
             <source>&amp;Topology</source>
             <translation>トポロジー(&amp;T)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="561" />
             <source>&amp;Tools</source>
             <translation>ツール(&amp;L)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="552" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;View</source>
             <translation>表示(&amp;V)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="560" />
+            <location filename="../src/shell/shell_window.cpp" line="577" />
             <source>Theme</source>
             <translation>テーマ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="564" />
+            <location filename="../src/shell/shell_window.cpp" line="581" />
             <source>Density</source>
             <translation>密度</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="571" />
+            <location filename="../src/shell/shell_window.cpp" line="588" />
             <source>&amp;Help</source>
             <translation>ヘルプ(&amp;H)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="581" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Main toolbar</source>
             <translation>メインツールバー</translation>
         </message>
@@ -13349,295 +13578,390 @@ Networks: %5</source>
             <translation type="vanished">このビルドでは利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="735" />
+            <location filename="../src/shell/shell_window.cpp" line="753" />
             <source>Ports</source>
             <translation>ポート</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="737" />
-            <location filename="../src/shell/shell_window.cpp" line="1190" />
+            <location filename="../src/shell/shell_window.cpp" line="755" />
+            <location filename="../src/shell/shell_window.cpp" line="1208" />
             <source>Inspector</source>
             <translation>インスペクター</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="738" />
+            <location filename="../src/shell/shell_window.cpp" line="756" />
             <source>Send</source>
             <translation>送信</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="773" />
-            <location filename="../src/shell/shell_window.cpp" line="1269" />
+            <location filename="../src/shell/shell_window.cpp" line="791" />
+            <location filename="../src/shell/shell_window.cpp" line="1261" />
             <source>Copied %1.</source>
             <translation>%1をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="789" />
+            <location filename="../src/shell/shell_window.cpp" line="807" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1バイトを%2の送信キューに追加しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="845" />
+            <location filename="../src/shell/shell_window.cpp" line="863" />
             <source>Links</source>
             <translation>リンク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="900" />
+            <location filename="../src/shell/shell_window.cpp" line="918" />
             <source>Applied the topology JSON.</source>
             <translation>トポロジーJSONを適用しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1115" />
+            <location filename="../src/shell/shell_window.cpp" line="1133" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1137" />
+            <location filename="../src/shell/shell_window.cpp" line="1155" />
             <source>Undo %1</source>
             <translation>%1 を元に戻す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1138" />
+            <location filename="../src/shell/shell_window.cpp" line="1156" />
             <source>Redo %1</source>
             <translation>%1 をやり直す</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1150" />
+            <location filename="../src/shell/shell_window.cpp" line="1168" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>リンクの接続や削除、所有者の変更、ポート名の変更を元に戻します。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1152" />
+            <location filename="../src/shell/shell_window.cpp" line="1170" />
             <source>This build cannot reverse changes.</source>
             <translation>このビルドでは変更を元に戻せません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1160" />
+            <location filename="../src/shell/shell_window.cpp" line="1178" />
             <source>Undid %1.</source>
             <translation>%1 を元に戻しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1181" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>%1 を元に戻せませんでした。その後、設定が変更されています。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1189" />
             <source>Redid %1.</source>
             <translation>%1 をやり直しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1174" />
+            <location filename="../src/shell/shell_window.cpp" line="1192" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>%1 をやり直せませんでした。その後、設定が変更されています。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1189" />
+            <location filename="../src/shell/shell_window.cpp" line="1207" />
             <source>Ports %1</source>
             <translation>ポート %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1194" />
+            <location filename="../src/shell/shell_window.cpp" line="1212" />
             <source>Inspector %1</source>
             <translation>インスペクター %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1238" />
+            <location filename="../src/shell/shell_window.cpp" line="1816" />
+            <location filename="../src/shell/shell_window.cpp" line="1829" />
             <source>Remove %1?</source>
             <translation>%1を削除しますか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1239" />
             <source>The port and its links will be removed. This cannot be undone.</source>
-            <translation>このポートとそのリンクが削除されます。この操作は元に戻せません。</translation>
+            <translation type="vanished">このポートとそのリンクが削除されます。この操作は元に戻せません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1241" />
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
-            <location filename="../src/shell/shell_window.cpp" line="1780" />
-            <location filename="../src/shell/shell_window.cpp" line="2219" />
+            <location filename="../src/shell/shell_window.cpp" line="1739" />
+            <location filename="../src/shell/shell_window.cpp" line="1798" />
+            <location filename="../src/shell/shell_window.cpp" line="1833" />
+            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <location filename="../src/shell/shell_window.cpp" line="2399" />
             <source>Cancel</source>
             <translation>キャンセル</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1248" />
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1851" />
+            <location filename="../src/shell/shell_window.cpp" line="1910" />
             <source>Could not remove %1</source>
             <translation>%1を削除できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1257" />
-            <location filename="../src/shell/shell_window.cpp" line="1796" />
+            <location filename="../src/shell/shell_window.cpp" line="1860" />
             <source>Removed %1.</source>
             <translation>%1を削除しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1357" />
+            <location filename="../src/shell/shell_window.cpp" line="1349" />
             <source>Sharing is not available in this build.</source>
             <translation>このビルドでは共有は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1384" />
+            <location filename="../src/shell/shell_window.cpp" line="1376" />
             <source>Networking is not available in this build.</source>
             <translation>このビルドではネットワーク機能は利用できません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1406" />
+            <location filename="../src/shell/shell_window.cpp" line="1398" />
             <source>Bridge is running on port %1.</source>
             <translation>ブリッジはポート%1で実行中です。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1407" />
+            <location filename="../src/shell/shell_window.cpp" line="1399" />
             <source>Open monitor</source>
             <translation>モニターを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1428" />
-            <location filename="../src/shell/shell_window.cpp" line="2131" />
-            <location filename="../src/shell/shell_window.cpp" line="2143" />
+            <location filename="../src/shell/shell_window.cpp" line="1420" />
+            <location filename="../src/shell/shell_window.cpp" line="2311" />
+            <location filename="../src/shell/shell_window.cpp" line="2323" />
             <source>Could not open %1</source>
             <translation>%1を開けませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1429" />
+            <location filename="../src/shell/shell_window.cpp" line="1421" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>セットアップに必要なデバイスまたはネットワークエンドポイントが、このPCで利用できません。何も変更されていません。デバイスを確認して、もう一度やり直してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1452" />
-            <location filename="../src/shell/shell_window.cpp" line="2155" />
-            <location filename="../src/shell/shell_window.cpp" line="2183" />
+            <location filename="../src/shell/shell_window.cpp" line="1444" />
+            <location filename="../src/shell/shell_window.cpp" line="2335" />
+            <location filename="../src/shell/shell_window.cpp" line="2363" />
             <source>%1 ports, %2 links</source>
             <translation>%1個のポート、%2個のリンク</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1544" />
-            <location filename="../src/shell/shell_window.cpp" line="1567" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>リンクペアを作成しました。プログラムAは%1、プログラムBは%2を開きます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1603" />
+            <location filename="../src/shell/shell_window.cpp" line="1595" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>%1を監視しています。監視側は%2です。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1653" />
+            <location filename="../src/shell/shell_window.cpp" line="1645" />
             <source>%1 is part of a later work package.</source>
             <translation>%1は今後のワークパッケージで提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1659" />
+            <location filename="../src/shell/shell_window.cpp" line="1651" />
             <source>%1 arrives with %2.</source>
             <translation>%1は%2で提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1744" />
+            <location filename="../src/shell/shell_window.cpp" line="1736" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>このリンクを削除しますか? %1。セットアップを保存するまで、何も保存されません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1755" />
+            <location filename="../src/shell/shell_window.cpp" line="1747" />
             <source>Could not remove the link</source>
             <translation>リンクを削除できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1764" />
+            <location filename="../src/shell/shell_window.cpp" line="1756" />
             <source>Removed the link.</source>
             <translation>リンクを削除しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1777" />
+            <location filename="../src/shell/shell_window.cpp" line="1764" />
+            <source>1 port</source>
+            <translation>1個のポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1765" />
+            <source>%1 ports</source>
+            <translation>%1個のポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <source>1 link</source>
+            <translation>1個のリンク</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1771" />
+            <source>%1 links</source>
+            <translation>%1個のリンク</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1799" />
+            <source>Remove only %1</source>
+            <translation>%1 だけを削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1800" />
+            <source>Remove the whole setup</source>
+            <translation>セットアップ全体を削除</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1803" />
+            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 は、デバイスを共有する %2 個のプログラムの 1 つで、%3 を含むセットアップに属しています (%4)。%1 だけを削除すると、ほかのプログラムは共有を続けます。セットアップ全体を閉じることもできます。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1811" />
+            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 は %2 を含むセットアップに属しています (%3)。%1 とそのリンクだけを削除するか、セットアップ全体を閉じてください。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1830" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>%1とそのリンクを削除しますか? セットアップを保存するまで、何も保存されません。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1815" />
+            <location filename="../src/shell/shell_window.cpp" line="1883" />
+            <source>%1 and %2</source>
+            <translation>%1と%2</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <source>Remove this setup?</source>
+            <translation>このセットアップを削除しますか?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1889" />
+            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
+            <translation>%1 を閉じます (%2)。これらのポートのいずれかを開いているプログラムは、そのポートを失います。セットアップを保存するまで何も保存されません。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
+            <translation>セットアップの一部がまだ開いています。使用中のものを閉じてから、もう一度「セットアップを削除」を選んでください。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <source>Removed the setup (%1).</source>
+            <translation>セットアップを削除しました (%1)。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1923" />
+            <source>Removed %1 of %2.</source>
+            <translation>%2 のうち %1 を削除しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1957" />
+            <source>the device</source>
+            <translation>デバイス</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1964" />
+            <source>Could not add a program port to %1</source>
+            <translation>%1 にプログラム用ポートを追加できませんでした</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1965" />
+            <source>The setup is as it was. Check the device, then try again.</source>
+            <translation>セットアップは元のままです。デバイスを確認して、もう一度お試しください。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1974" />
+            <source>Added %1 to %2.</source>
+            <translation>%1 を %2 に追加しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1975" />
+            <source>a port</source>
+            <translation>ポート</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>Renamed %1 to %2.</source>
             <translation>%1 の名前を %2 に変更しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1872" />
+            <location filename="../src/shell/shell_window.cpp" line="2052" />
             <source>Add a port before opening the line matrix.</source>
             <translation>ライン配線マトリクスを開く前に、ポートを追加してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1907" />
+            <location filename="../src/shell/shell_window.cpp" line="2087" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>書き込めるポートを制御するには、所有者ポリシーを持つ結合の宛先を選択してください。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1988" />
+            <location filename="../src/shell/shell_window.cpp" line="2168" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>テストモードです。新しいポートはVirtual Serial Studio内でのみ動作します。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2009" />
+            <location filename="../src/shell/shell_window.cpp" line="2189" />
             <source>Could not restart as administrator</source>
             <translation>管理者として再起動できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2087" />
+            <location filename="../src/shell/shell_window.cpp" line="2267" />
             <source>Environment copied.</source>
             <translation>環境情報をコピーしました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2106" />
+            <location filename="../src/shell/shell_window.cpp" line="2286" />
             <source>Started a new setup.</source>
             <translation>新しいセットアップを開始しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2116" />
+            <location filename="../src/shell/shell_window.cpp" line="2296" />
             <source>Open setup</source>
             <translation>セットアップを開く</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2117" />
+            <location filename="../src/shell/shell_window.cpp" line="2297" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studioのセットアップ (*.json);;すべてのファイル (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2158" />
+            <location filename="../src/shell/shell_window.cpp" line="2338" />
             <source>Opened %1.</source>
             <translation>%1を開きました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2174" />
+            <location filename="../src/shell/shell_window.cpp" line="2354" />
             <source>Could not save this setup</source>
             <translation>このセットアップを保存できませんでした</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2187" />
-            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
+            <location filename="../src/shell/shell_window.cpp" line="2368" />
             <source>Saved %1.</source>
             <translation>%1を保存しました。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2194" />
+            <location filename="../src/shell/shell_window.cpp" line="2374" />
             <source>Save setup</source>
             <translation>セットアップを保存</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2196" />
+            <location filename="../src/shell/shell_window.cpp" line="2376" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studioのセットアップ (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2214" />
+            <location filename="../src/shell/shell_window.cpp" line="2394" />
             <source>Save changes to %1?</source>
             <translation>%1への変更を保存しますか?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2215" />
+            <location filename="../src/shell/shell_window.cpp" line="2395" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>前回の保存以降、ポートとリンクが変更されています。このメッセージは設定でオフにできます。</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2218" />
+            <location filename="../src/shell/shell_window.cpp" line="2398" />
             <source>Don't save</source>
             <translation>保存しない</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2283" />
+            <location filename="../src/shell/shell_window.cpp" line="2463" />
             <source>Layout reset.</source>
             <translation>レイアウトをリセットしました。</translation>
         </message>

@@ -1,0 +1,4 @@
+- Flow and wizard dialogs keep their Next, Cancel and primary buttons inside the window on small screens and at large text: the Share a device wizard now scrolls its pages instead of letting the footer fall below the window edge.
+- A click anywhere on a device row (Attach a real device, Share a device) or an option card (Add a port) now selects it, not only the small radio circle. A double-click on a device row goes on to the next step.
+- The Attach a real device text now says what happens: Studio holds the real device open, and programs open a new virtual port instead.
+- Removing one program port of a shared device no longer leaves the other programs unlinked.

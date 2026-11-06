@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include "qt_input.hpp"
 #include "qt_wait.hpp"
 #include "test_framework.hpp"
 
@@ -45,6 +46,7 @@
 #include <QSpinBox>
 #include <QStringList>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include <algorithm>
 
@@ -670,7 +672,7 @@ TEST_CASE("flows: attach enumerates, explains rows and refreshes")
             QStringLiteral("serial://COM3?baud=115200"));
     REQUIRE(!dialog.settings_disclosure()->is_expanded());
     REQUIRE(dialog.result_sentence()->accessibleName().contains(
-        QStringLiteral("Studio will open COM3 at 115200 baud")));
+        QStringLiteral("Studio will hold COM3 open at 115200 baud")));
     REQUIRE(dialog.result_sentence()->text().contains(
         QStringLiteral("<b>COM3</b>")));
 
@@ -1151,4 +1153,149 @@ TEST_CASE("flows: review screenshots for both themes")
     shoot(ready, QStringLiteral("ready"), true);
 
     vss::gui::Theme::instance().set_mode(vss::gui::theme_mode::light);
+}
+
+TEST_CASE(
+    "flows: attach rows select on a click anywhere and double-click moves on")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    backend.set_devices(
+        {make_device(QStringLiteral("COM3"), false, false, false, -1, {}),
+         make_device(QStringLiteral("COM4"), false, false, true, -1, {}),
+         make_device(QStringLiteral("COM6"), false, false, false, -1, {})});
+    vss::gui::AttachDialog dialog(backend, false,
+                                  vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    REQUIRE_EQ(dialog.device_row_count(), 3);
+    REQUIRE(dialog.device_radio(0)->isChecked());
+
+    const auto row_centre = [&dialog](int index)
+    {
+        QWidget* row = dialog.device_radio(index)->parentWidget();
+        return row->mapTo(&dialog, QPoint(row->width() / 2, row->height() / 2));
+    };
+
+    // A click on the empty middle of the row, not on the radio circle.
+    vss_test::click_at(&dialog, row_centre(2));
+    REQUIRE(dialog.device_radio(2)->isChecked());
+    REQUIRE_EQ(dialog.address_block()->text(),
+               QStringLiteral("serial://COM6?baud=115200"));
+
+    // A click on the device name does the same.
+    QLabel* name = nullptr;
+    for (auto* label :
+         dialog.device_radio(0)->parentWidget()->findChildren<QLabel*>())
+    {
+        if (label->text() == QStringLiteral("COM3"))
+            name = label;
+    }
+    REQUIRE(name != nullptr);
+    vss_test::click_at(
+        &dialog,
+        name->mapTo(&dialog, QPoint(name->width() / 2, name->height() / 2)));
+    REQUIRE(dialog.device_radio(0)->isChecked());
+
+    // A row that cannot be used stays unselected.
+    vss_test::click_at(&dialog, row_centre(1));
+    REQUIRE(!dialog.device_radio(1)->isChecked());
+    REQUIRE(dialog.device_radio(0)->isChecked());
+
+    // A double-click selects and moves to the next field.
+    vss_test::double_click_at(&dialog, row_centre(2));
+    REQUIRE(dialog.device_radio(2)->isChecked());
+    REQUIRE(dialog.focusWidget() == dialog.name_edit());
+    REQUIRE_EQ(dialog.result(), QDialog::Rejected);
+}
+
+TEST_CASE("flows: attach copy says what Studio holds and what programs open")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    backend.set_devices(
+        {make_device(QStringLiteral("COM3"), false, false, false, -1, {})});
+    vss::gui::AttachDialog dialog(backend, false,
+                                  vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    const QString sentence = dialog.result_sentence()->accessibleName();
+    REQUIRE(sentence.contains(QStringLiteral("Studio will hold COM3 open")));
+    REQUIRE(sentence.contains(QStringLiteral("should not open COM3")));
+    REQUIRE(sentence.contains(QStringLiteral("new virtual port")));
+    bool subtitle_found = false;
+    for (auto* label : dialog.findChildren<QLabel*>())
+    {
+        if (label->text().startsWith(QStringLiteral("Studio holds the real "
+                                                    "device open.")))
+            subtitle_found = true;
+    }
+    REQUIRE(subtitle_found);
+}
+
+TEST_CASE(
+    "flows: the footer buttons stay inside the dialog at 200 percent text")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    use_two_free_pairs(backend);
+    backend.set_devices(
+        {make_device(QStringLiteral("COM3"), false, false, false, -1, {}),
+         make_device(QStringLiteral("COM7"), true, true, false, 1,
+                     QStringLiteral("A")),
+         make_device(QStringLiteral("COM8"), true, true, false, 1,
+                     QStringLiteral("B"))});
+    const auto port = backend.create_auto_port(QStringLiteral("port-1"), true);
+    REQUIRE(port.has_value());
+
+    QVector<QDialog*> dialogs;
+    dialogs << new vss::gui::AddPortDialog(
+        backend, true, vss::gui::AddPortDialog::mode::virtual_port,
+        vss::gui::platform_kind::windows);
+    dialogs << new vss::gui::PairDialog(backend, true,
+                                        vss::gui::platform_kind::windows);
+    dialogs << new vss::gui::AttachDialog(backend, true,
+                                          vss::gui::platform_kind::windows);
+    dialogs << new vss::gui::WatchDialog(backend, *port,
+                                         vss::gui::platform_kind::linux);
+    dialogs << new vss::gui::PortReadyDialog(backend, *port,
+                                             QStringLiteral("auto"), true,
+                                             vss::gui::platform_kind::linux);
+    for (QDialog* dialog : dialogs)
+    {
+        dialog->show();
+        settle();
+        REQUIRE(vss_test::footer_fully_visible(*dialog));
+        vss_test::scale_text(dialog, 2.0);
+        settle();
+        REQUIRE(vss_test::footer_fully_visible(*dialog));
+        // The smallest window the layout allows keeps the buttons in view.
+        vss_test::shrink_to_minimum(*dialog);
+        REQUIRE(vss_test::footer_fully_visible(*dialog));
+        dialog->close();
+        delete dialog;
+    }
+}
+
+TEST_CASE("flows: a click anywhere on a pick card selects it")
+{
+    clear_settings();
+    QWidget host;
+    auto* first = new vss::gui::PickCard(QStringLiteral("Virtual port"),
+                                         QStringLiteral("A port."), &host);
+    auto* second = new vss::gui::PickCard(QStringLiteral("Linked pair"),
+                                          QStringLiteral("Two ports."), &host);
+    auto* layout = new QVBoxLayout(&host);
+    layout->addWidget(first);
+    layout->addWidget(second);
+    host.resize(500, 300);
+    host.show();
+    settle();
+    first->set_selected(true);
+    REQUIRE(first->radio()->isChecked());
+
+    const QPoint inside =
+        second->mapTo(&host, QPoint(second->width() / 2, second->height() / 2));
+    vss_test::click_at(&host, inside);
+    REQUIRE(second->radio()->isChecked());
 }

@@ -1,0 +1,2 @@
+- Remove setup closes a whole linked pair, shared device or attached device in one step, from the toolbar, the Edit, Ports and Topology menus and the command palette. Delete on a port in a setup offers to remove only that port or the whole setup, and the confirmation names every port that closes.
+- Add a program port (Topology menu) and Add another program (last step of the Share wizard) add a program to a share or an attached device without touching the ports already shared. The Share wizard says the number of programs can change later.

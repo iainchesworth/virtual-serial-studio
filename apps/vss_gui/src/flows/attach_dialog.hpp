@@ -29,11 +29,13 @@ class CodeBlock;
 class Disclosure;
 class FormRow;
 class NoteBanner;
+class PickRow;
 class ResultSentence;
 
 /// "Attach a real device": enumerate, refresh, show unavailable reasons,
 /// optionally edit the address, then open the device once and create the
-/// virtual port the user's programs open.
+/// virtual port the user's programs open.  A click anywhere on a device row
+/// selects it, and a double-click moves on to the Name field.
 class AttachDialog final : public FlowDialog
 {
     Q_OBJECT
@@ -66,7 +68,7 @@ Q_SIGNALS:
 private:
     struct device_row
     {
-        QWidget* frame = nullptr;
+        PickRow* frame = nullptr;
         QRadioButton* radio = nullptr;
         QString path;
         bool available = false;

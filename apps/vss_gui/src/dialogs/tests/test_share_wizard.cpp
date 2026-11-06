@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include "qt_input.hpp"
 #include "test_framework.hpp"
 
 #include "backend/fake_studio_backend.hpp"
@@ -11,6 +12,8 @@
 #include "dialogs/share_wizard.hpp"
 
 #include <QApplication>
+#include <QKeyEvent>
+#include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
 
@@ -434,4 +437,158 @@ TEST_CASE("share wizard: device settings reach the share URI")
     REQUIRE_EQ(wizard.source_uri(),
                QStringLiteral("serial://COM3?baud=9600&data=7&parity=even&"
                               "stop=2&flow=hardware"));
+}
+
+TEST_CASE("share wizard: a click anywhere on a device row selects it")
+{
+    vss::gui::FakeStudioBackend backend;
+    use_windows(backend, 0);
+    backend.set_devices({serial_device(QStringLiteral("COM3")),
+                         serial_device(QStringLiteral("COM4"))});
+    vss::gui::ShareWizard wizard(backend);
+    show(wizard);
+    REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM3"));
+
+    const auto radios = wizard.findChildren<QRadioButton*>();
+    REQUIRE_EQ(radios.size(), 2);
+    const auto centre_of_row = [&wizard](QRadioButton* radio)
+    {
+        QWidget* row = radio->parentWidget();
+        return row->mapTo(&wizard, QPoint(row->width() / 2, row->height() / 2));
+    };
+
+    // The middle of the row is not the radio circle.
+    vss_test::click_at(&wizard, centre_of_row(radios.at(1)));
+    REQUIRE(radios.at(1)->isChecked());
+    REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM4"));
+
+    // So is the device name.
+    QLabel* name = nullptr;
+    for (auto* label : radios.at(0)->parentWidget()->findChildren<QLabel*>())
+    {
+        if (label->text() == QStringLiteral("COM3"))
+            name = label;
+    }
+    REQUIRE(name != nullptr);
+    vss_test::click_at(
+        &wizard,
+        name->mapTo(&wizard, QPoint(name->width() / 2, name->height() / 2)));
+    REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM3"));
+    REQUIRE_EQ(wizard.current_step(), 0);
+}
+
+TEST_CASE("share wizard: a double-click or Enter on a device row goes on")
+{
+    vss::gui::FakeStudioBackend backend;
+    use_windows(backend, 0);
+    backend.set_devices({serial_device(QStringLiteral("COM3")),
+                         serial_device(QStringLiteral("COM4"))});
+    {
+        vss::gui::ShareWizard wizard(backend);
+        show(wizard);
+        const auto radios = wizard.findChildren<QRadioButton*>();
+        REQUIRE_EQ(radios.size(), 2);
+        QWidget* row = radios.at(1)->parentWidget();
+        vss_test::double_click_at(
+            &wizard,
+            row->mapTo(&wizard, QPoint(row->width() / 2, row->height() / 2)));
+        REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM4"));
+        REQUIRE_EQ(wizard.current_step(), 1);
+    }
+    {
+        vss::gui::ShareWizard wizard(backend);
+        show(wizard);
+        auto* radio = wizard.findChildren<QRadioButton*>().at(1);
+        vss_test::click_at(
+            &wizard,
+            radio->parentWidget()->mapTo(
+                &wizard, QPoint(radio->parentWidget()->width() / 2, 4)));
+        REQUIRE(radio->isChecked());
+        QKeyEvent enter(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+        QApplication::sendEvent(radio, &enter);
+        QApplication::processEvents();
+        REQUIRE_EQ(wizard.current_step(), 1);
+        REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM4"));
+    }
+}
+
+TEST_CASE("share wizard: the buttons stay inside the dialog at every step")
+{
+    for (const double factor : {1.0, 2.0})
+    {
+        vss::gui::FakeStudioBackend backend;
+        const auto wizard = make_wizard(backend, 3, 3);
+        if (factor != 1.0)
+            vss_test::scale_text(wizard.get(), factor);
+        QApplication::processEvents();
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        REQUIRE(wizard->next());
+        QApplication::processEvents();
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        wizard->set_programs(8);
+        QApplication::processEvents();
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        vss_test::shrink_to_minimum(*wizard);
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        REQUIRE(wizard->share());
+        QApplication::processEvents();
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        vss_test::shrink_to_minimum(*wizard);
+        REQUIRE(vss_test::footer_fully_visible(*wizard));
+        wizard->close();
+    }
+}
+
+TEST_CASE("share wizard: the count page says it can change later")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto wizard = make_wizard(backend, 3, 3);
+    REQUIRE(wizard->step1_info_text().contains(
+        QStringLiteral("You can add more afterwards.")));
+    bool found = false;
+    for (auto* label : wizard->findChildren<QLabel*>())
+    {
+        if (label->objectName() == QStringLiteral("shareCountLater"))
+        {
+            found = true;
+            REQUIRE(label->text().contains(
+                QStringLiteral("add another program after sharing")));
+        }
+    }
+    REQUIRE(found);
+}
+
+TEST_CASE("share wizard: Add another program keeps the ports already shared")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto wizard = make_wizard(backend, 3, 3);
+    wizard->set_programs(2);
+    REQUIRE(wizard->next());
+    REQUIRE(wizard->share());
+    REQUIRE_EQ(wizard->listener_count(), 2);
+    const auto before = wizard->listener_ids();
+    const std::size_t ports_before = backend.ports().size();
+
+    REQUIRE(wizard->add_another_program());
+    REQUIRE_EQ(wizard->current_step(), 2);
+    REQUIRE_EQ(wizard->listener_count(), 3);
+    REQUIRE_EQ(backend.ports().size(), ports_before + 1);
+    REQUIRE_EQ(wizard->listener_ids().at(0), before.at(0));
+    REQUIRE_EQ(wizard->listener_ids().at(1), before.at(1));
+    REQUIRE_EQ(wizard->step3_title(),
+               QStringLiteral("COM3 is shared with 3 programs"));
+    REQUIRE_EQ(wizard->row_program(2), QStringLiteral("logger"));
+
+    // One link still joins the device to all three ports.
+    REQUIRE_EQ(backend.links().size(), std::size_t{1});
+    REQUIRE_EQ(backend.links().front().targets.size(), 3);
+    REQUIRE_EQ(backend.links().front().sources.size(), 1);
+
+    // A failure leaves the share as it was.
+    backend.fail_next(vss::make_error_code(vss::errc::io_error));
+    const std::size_t ports_now = backend.ports().size();
+    REQUIRE(!wizard->add_another_program());
+    REQUIRE_EQ(backend.ports().size(), ports_now);
+    REQUIRE_EQ(wizard->listener_count(), 3);
+    wizard->close();
 }
