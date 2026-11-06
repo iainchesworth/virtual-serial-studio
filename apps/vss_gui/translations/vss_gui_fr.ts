@@ -4012,6 +4012,26 @@ Réseaux : %5</translation>
     <context>
         <name>PortModel</name>
         <message>
+            <location filename="../src/panes/port_model.cpp" line="365" />
+            <source>Program set %1</source>
+            <translation>Réglé par le programme : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="373" />
+            <source>Clients connected: %1</source>
+            <translation>Clients connectés : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="371" />
+            <source>No remote connected</source>
+            <translation>Aucun poste distant connecté</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="376" />
+            <source>Differs from %1 in baud rate or framing</source>
+            <translation>Diffère de %1 par la vitesse ou le format</translation>
+        </message>
+        <message>
             <location filename="../src/panes/port_model.cpp" line="182" />
             <source>%1, %2, %3</source>
             <translation>%1, %2, %3</translation>
@@ -12290,6 +12310,26 @@ Réseaux : %5</translation>
     </context>
     <context>
         <name>vss::gui::PortModel</name>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="364" />
+            <source>Program set %1</source>
+            <translation>Réglé par le programme : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="372" />
+            <source>Clients connected: %1</source>
+            <translation>Clients connectés : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="370" />
+            <source>No remote connected</source>
+            <translation>Aucun poste distant connecté</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="375" />
+            <source>Differs from %1 in baud rate or framing</source>
+            <translation>Diffère de %1 par la vitesse ou le format</translation>
+        </message>
         <message>
             <location filename="../src/panes/port_model.cpp" line="182" />
             <source>%1, %2, %3</source>

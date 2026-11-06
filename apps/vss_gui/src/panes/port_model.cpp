@@ -177,11 +177,21 @@ QVariant PortModel::data(const QModelIndex& index, int item_role) const
             return QVariant::fromValue(Qt::AlignRight | Qt::AlignVCenter);
         return QVariant::fromValue(Qt::AlignLeft | Qt::AlignVCenter);
     case Qt::ToolTipRole:
-        return port.path;
+    {
+        const QString status = status_text(port);
+        return status.isEmpty() ? port.path
+                                : port.path + QLatin1Char('\n') + status;
+    }
     case Qt::AccessibleTextRole:
-        return tr("%1, %2, %3")
-            .arg(port.name, port.path.isEmpty() ? state_text(port) : port.path,
-                 state_text(port));
+    {
+        const QString text =
+            tr("%1, %2, %3")
+                .arg(port.name,
+                     port.path.isEmpty() ? state_text(port) : port.path,
+                     state_text(port));
+        const QString status = status_text(port);
+        return status.isEmpty() ? text : text + QStringLiteral(", ") + status;
+    }
     case port_id_role:
         return QVariant::fromValue<qulonglong>(port.id);
     case name_role:
@@ -202,6 +212,10 @@ QVariant PortModel::data(const QModelIndex& index, int item_role) const
         return format_bytes(port.stats.dropped);
     case serial_role:
         return serial_text(port);
+    case status_role:
+        return status_text(port);
+    case format_warning_role:
+        return has_format_warning(port);
     default:
         return {};
     }
@@ -334,6 +348,33 @@ QString PortModel::serial_text(const port_view& port)
     if (port.kind != vss::endpoint_kind::physical)
         return {};
     return QString::fromStdString(vss::to_label(port.serial));
+}
+
+bool PortModel::has_format_warning(const port_view& port)
+{
+    return !port.format_conflicts.isEmpty();
+}
+
+QString PortModel::status_text(const port_view& port)
+{
+    QStringList parts;
+    // A real device already shows the settings it runs at (serial_text), so
+    // the format here is only what a program set on a port Studio made.
+    if (port.peer_format && port.kind != vss::endpoint_kind::physical)
+        parts << tr("Program set %1")
+                     .arg(QString::fromStdString(
+                         vss::to_label(*port.peer_format)));
+    if (port.clients)
+    {
+        if (*port.clients == 0)
+            parts << tr("No remote connected");
+        else
+            parts << tr("Clients connected: %1").arg(*port.clients);
+    }
+    if (has_format_warning(port))
+        parts << tr("Differs from %1 in baud rate or framing")
+                     .arg(port.format_conflicts.join(QStringLiteral(", ")));
+    return parts.join(QStringLiteral(". "));
 }
 
 } // namespace vss::gui

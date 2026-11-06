@@ -123,6 +123,9 @@ public:
     /// TCP clients connected now, or UDP senders heard from.
     std::size_t peer_count() const noexcept;
 
+    /// The same count, as #transport::client_count.
+    std::optional<std::size_t> client_count() const noexcept override;
+
     /// TCP connections closed, and UDP datagrams ignored, because the allow
     /// list did not admit the sender.
     std::size_t refused_count() const noexcept;

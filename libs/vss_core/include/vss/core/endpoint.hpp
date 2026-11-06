@@ -22,6 +22,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 
 namespace vss {
@@ -57,6 +58,12 @@ struct endpoint_info
     endpoint_stats stats;
     bool supports_control_lines = false;
     bool open = false;
+    /// The baud rate and framing the program on the other side has set, where
+    /// the transport can tell (see #transport::peer_format).
+    std::optional<line_format> peer_format;
+    /// Connected remote clients, for a listening endpoint; empty for any other.
+    std::optional<std::size_t> clients;
+    /// The last time bytes moved through the endpoint is `stats.last_activity`.
 };
 
 using write_handler =
