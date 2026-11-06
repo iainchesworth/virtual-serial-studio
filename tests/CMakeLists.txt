@@ -30,6 +30,7 @@ if(WIN32)
   list(APPEND VSS_UNIT_TEST_SOURCES
     unit/platform/windows/test_driver_client_windows.cpp
     unit/platform/windows/test_helper_windows.cpp
+    unit/platform/windows/test_manifest_windows.cpp
     unit/platform/windows/test_ports_windows.cpp)
 elseif(UNIX)
   list(APPEND VSS_UNIT_TEST_SOURCES unit/platform/posix/test_ports_posix.cpp)

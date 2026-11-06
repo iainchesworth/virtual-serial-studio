@@ -37,7 +37,10 @@ public:
         boost::system::error_code error;
         socket_.open(boost::asio::ip::udp::v4(), error);
         REQUIRE(!error);
-        socket_.bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0),
+        // Loopback only: a bind to every address makes Windows Firewall ask
+        // whether to allow the test program, which ends in a UAC prompt.
+        socket_.bind(boost::asio::ip::udp::endpoint(
+                         boost::asio::ip::address_v4::loopback(), 0),
                      error);
         REQUIRE(!error);
         port_ = socket_.local_endpoint().port();
