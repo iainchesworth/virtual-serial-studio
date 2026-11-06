@@ -209,7 +209,7 @@ are in `vsscom/core` and are unit-tested.
 The hub state names the process that has the COM port open (`AppProcessId`).
 `IOCTL_VSSCOM_HUB_REVOKE`, on the hub handle, takes the port back from that
 program: its waiting reads, writes and `WaitCommEvent` end with
-`STATUS_FILE_FORCED_CLOSED`, every later request on its handle fails the same
+`STATUS_DEVICE_REMOVED`, every later request on its handle fails the same
 way, `AppOpen` clears, the port resets as a close would reset it, and another
 program can open it at once. The old handle stays in the process, and closing it
 later changes nothing. Only the user who owns the port has a hub handle, so only

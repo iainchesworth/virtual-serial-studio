@@ -197,7 +197,7 @@ sees the change.
   XON/XOFF) is not applied.
 * **Revoke.** `IOCTL_VSSCOM_HUB_REVOKE`, on the hub handle, ends the waiting
   requests of the program that has the COM port, marks its handle so that every
-  later request on it fails with `STATUS_FILE_FORCED_CLOSED`, clears `AppOpen`,
+  later request on it fails with `STATUS_DEVICE_REMOVED`, clears `AppOpen`,
   resets the port as a close would, and lets a new program open it. Only the user
   who owns the port has a hub handle (`access.c`), so only that user can revoke.
   The program keeps its handle, and closing it later changes nothing.

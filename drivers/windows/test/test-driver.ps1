@@ -1766,9 +1766,14 @@ Add-Test 'D26' 'revoke takes the port from a program that holds it, and a new pr
         Assert ([VssComm]::Write($app, [byte[]](1, 2, 3)) -le 0) 'a write on the revoked handle worked'
         Assert (([VssFlow]::Escape($app, $SETDTR)) -ne 0) 'EscapeCommFunction on the revoked handle worked'
         Assert ($null -eq [VssComm]::GetState($app)) 'GetCommState on the revoked handle worked'
-        $failed = $false
-        try { $again = [PendingIo]::BeginRead($app, 4); $again.Dispose() } catch { $failed = $true }
-        Assert $failed 'a read on the revoked handle was accepted'
+        $again = $null
+        try { $again = [PendingIo]::BeginRead($app, 4) } catch { $again = $null }
+        if ($again) {
+            Assert ($again.Completed(3000)) 'a read on the revoked handle waited'
+            $againError = 0; $again.Finish($false, [ref]$againError) | Out-Null
+            $again.Dispose()
+            Assert ($againError -ne 0) 'a read on the revoked handle was accepted'
+        }
 
         # A new program opens the port at once and it carries bytes.
         $new = Open-Port $port

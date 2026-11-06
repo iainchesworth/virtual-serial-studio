@@ -222,7 +222,7 @@ VOID VssComRaise(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ ULONG Events);
 // Ends the waiting WaitCommEvent request, if there is one, with `Status`.
 VOID VssComFinishWaitWith(_In_ PVSSCOM_DEVICE_CONTEXT Context, _In_ NTSTATUS Status);
 // True when the request is from an application handle that IOCTL_VSSCOM_HUB_REVOKE took
-// back; a request that was waiting then ends with STATUS_FILE_FORCED_CLOSED.
+// back; a request that was waiting then ends with STATUS_DEVICE_REMOVED.
 BOOLEAN VssComRequestRevoked(_In_ WDFREQUEST Request);
 // Runs the DTR and RTS rules of the flow control settings. `Set` is TRUE when the
 // application has just given the settings (enable and disable then move the lines);

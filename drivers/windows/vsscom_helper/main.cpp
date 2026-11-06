@@ -369,6 +369,17 @@ bool restart_device(const std::wstring& instance)
                                        &data) != FALSE;
     if (ok)
         ok = ::SetupDiRestartDevices(set, &data) != FALSE;
+    // Windows can answer yes and still not have restarted the port, because a
+    // handle is open: it sets a flag instead. Device Manager would ask for a
+    // restart of the machine.
+    if (ok)
+    {
+        SP_DEVINSTALL_PARAMS_W parameters{};
+        parameters.cbSize = sizeof(parameters);
+        if (::SetupDiGetDeviceInstallParamsW(set, &data, &parameters) != FALSE
+            && (parameters.Flags & (DI_NEEDRESTART | DI_NEEDREBOOT)) != 0)
+            ok = false;
+    }
     ::SetupDiDestroyDeviceInfoList(set);
     return ok;
 }

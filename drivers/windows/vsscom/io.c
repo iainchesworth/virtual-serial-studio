@@ -150,7 +150,7 @@ static VOID VssComServiceOnce(_In_ PVSSCOM_DEVICE_CONTEXT Context,
         if (VssComRequestRevoked(request))
         {
             VssComStopReadTimers(Context);
-            VssComFinishRead(request, STATUS_FILE_FORCED_CLOSED);
+            VssComFinishRead(request, STATUS_DEVICE_REMOVED);
             continue;
         }
 
@@ -573,8 +573,8 @@ ULONG VssComRevokeApplication(_In_ PVSSCOM_DEVICE_CONTEXT Context)
         return 0;
 
     // The wait goes first, so that the reset does not complete it as a success.
-    VssComFinishWaitWith(Context, STATUS_FILE_FORCED_CLOSED);
-    VssComAbortAppWrites(Context, STATUS_FILE_FORCED_CLOSED);
+    VssComFinishWaitWith(Context, STATUS_DEVICE_REMOVED);
+    VssComAbortAppWrites(Context, STATUS_DEVICE_REMOVED);
     VssComResetPort(Context);
     VssComBumpState(Context);
     // The reads of the old handle are in the read queue: the pump ends them.
@@ -617,7 +617,7 @@ static VOID VssComEvtIoRead(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     }
     if (kind == VssComFileRevoked)
     {
-        WdfRequestComplete(Request, STATUS_FILE_FORCED_CLOSED);
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
         return;
     }
     if (kind != VSSCOM_FILE_APP)
@@ -681,7 +681,7 @@ static VOID VssComEvtIoWrite(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
     }
     if (kind == VssComFileRevoked)
     {
-        WdfRequestComplete(Request, STATUS_FILE_FORCED_CLOSED);
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
         return;
     }
     if (kind != VSSCOM_FILE_APP)
@@ -796,7 +796,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
     }
     if (kind == VssComFileRevoked)
     {
-        WdfRequestComplete(Request, STATUS_FILE_FORCED_CLOSED);
+        WdfRequestComplete(Request, STATUS_DEVICE_REMOVED);
         return;
     }
     if (kind != VSSCOM_FILE_APP)
@@ -1169,7 +1169,7 @@ static VOID VssComEvtIoDeviceControl(_In_ WDFQUEUE Queue,
         ready = context->RevokeCount != epoch;
         VssComLockRelease(context->Lock);
         if (ready)
-            VssComFinishWaitWith(context, STATUS_FILE_FORCED_CLOSED);
+            VssComFinishWaitWith(context, STATUS_DEVICE_REMOVED);
         return;
     }
 

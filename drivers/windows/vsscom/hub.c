@@ -523,7 +523,7 @@ BOOLEAN VssComServiceAppWrites(_In_ PVSSCOM_DEVICE_CONTEXT Context)
             VssComLockAcquire(Context->Lock);
             Context->AppWritesPending--;
             VssComLockRelease(Context->Lock);
-            VssComFinishPipe(request, STATUS_FILE_FORCED_CLOSED);
+            VssComFinishPipe(request, STATUS_DEVICE_REMOVED);
             moved = TRUE;
             continue;
         }
