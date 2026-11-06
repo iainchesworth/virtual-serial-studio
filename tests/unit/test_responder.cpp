@@ -338,6 +338,14 @@ TEST_CASE("responder: a poll list sends its steps in every cycle")
     REQUIRE(wait_until([&] { return (*running)->polls_sent() == 6; }, 2000ms));
     REQUIRE_EQ(master.written(), std::string("\x01\x02\x01\x02\x01\x02", 6));
 
+    // The recorder sees events on the hub's dispatcher strand, after the
+    // responder has written, so wait for all six before reading them.
+    REQUIRE(wait_until(
+        [&] {
+            return times_of(events, "master", data_direction::tx).size() == 6;
+        },
+        2000ms));
+
     // Steps at 50, 130, 250, 330, 450, 530 ms.
     const auto times = times_of(events, "master", data_direction::tx);
     REQUIRE_EQ(times.size(), std::size_t{6});
