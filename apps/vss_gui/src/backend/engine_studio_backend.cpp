@@ -257,6 +257,9 @@ capabilities EngineStudioBackend::caps() const
     caps.benchmark = true;
     // `vss::studio::inject_fault` reaches the mock fixture behind a port.
     caps.faults = true;
+    // `vss::studio::set_fixture_echo` sends every byte written to a fixture
+    // back as if the device had sent it.
+    caps.fixture_echo = true;
     // A pseudo terminal on Linux can be checked for a program that has it
     // open; every other port reads as unknown and the GUI says nothing.
     caps.peer_open = vss::peer_open_supported();
@@ -344,6 +347,16 @@ vss::result<void> EngineStudioBackend::inject_fault(vss::endpoint_id id,
                                                     vss::fault_kind fault)
 {
     return studio_.inject_fault(id, fault);
+}
+
+vss::result<void> EngineStudioBackend::set_echo(vss::endpoint_id id, bool on)
+{
+    return studio_.set_fixture_echo(id, on);
+}
+
+bool EngineStudioBackend::echo(vss::endpoint_id id) const
+{
+    return studio_.fixture_echo(id);
 }
 
 vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(
@@ -714,6 +727,12 @@ vss::result<void> EngineStudioBackend::send(vss::endpoint_id id,
     const vss::bytes_view bytes(
         reinterpret_cast<const vss::byte*>(data.constData()),
         static_cast<std::size_t>(data.size()));
+    // A mock fixture is a pretend device.  Writing to it hands the bytes to
+    // the device, which only records them, so "send from the fixture" is the
+    // device speaking: the bytes arrive on the fixture and the hub carries
+    // them along its links.
+    if (endpoint->kind() == vss::endpoint_kind::mock)
+        return studio_.inject_data(id, bytes);
     // A queue-full rejection is published as a hub error event and reaches
     // the GUI through the coalesced batch.  There is deliberately no
     // per-write callback into the backend: it would have to touch a QObject

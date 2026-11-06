@@ -14,7 +14,7 @@ Mockups: Workspace, Advanced, Compact. Implemented with `QGraphicsView`/`QGraphi
 
 ## Behaviour
 - Click a node: select the port. Click a line (8px hit tolerance): select the link. Double-click a node: focus the Inspector.
-- Keyboard (required, WCAG 2.5.7): Tab moves through nodes then links. Enter inspects. Delete removes with confirmation and Undo. Arrow keys move the focused node by 8px (Shift 32px). Ctrl+0 fits. Shift+F10 or the menu key opens the context menu: Inspect, Copy name, Rename, Connect from here, Remove.
+- Keyboard (required, WCAG 2.5.7): Tab moves through nodes then links. Enter inspects. Delete removes with confirmation and Undo. Arrow keys move the focused node by 8px (Shift 32px). Ctrl+0 fits. Shift+F10 or the menu key opens the context menu: Inspect, the port actions (Send bytes, Start or Stop repeat in Advanced, Open in monitor, and for a mock fixture in Advanced Start or Stop generator and Echo received bytes; see `screens/02-workspace.md`), Copy name, Rename, Connect from here, Remove.
 - Zoom with Ctrl+wheel and Ctrl+plus or minus. Fit (toolbar, Topology menu, Ctrl+0, canvas menu) centres and scales all items into view with a 24px margin, from any zoom or scroll position, and hands control back to automatic fitting. Zoom is limited to 25 to 200 percent; Fit never enlarges past 125 percent.
 - Right-click empty canvas, or press Shift+F10 or the menu key with nothing focused: Tidy layout, Fit. Tidy layout (also in the Topology menu and the command palette) throws away every moved position, runs the automatic layout again and fits.
 

@@ -4,6 +4,10 @@
 #
 
 add_library(vss_gui_panes STATIC
+  fixture_behaviour.cpp
+  fixture_behaviour.hpp
+  fixture_panel.cpp
+  fixture_panel.hpp
   format.hpp
   inspector_panel.cpp
   inspector_panel.hpp

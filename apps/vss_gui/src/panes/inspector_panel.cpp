@@ -6,6 +6,8 @@
 
 #include "panes/inspector_panel.hpp"
 
+#include "panes/fixture_behaviour.hpp"
+#include "panes/fixture_panel.hpp"
 #include "panes/format.hpp"
 #include "panes/port_model.hpp"
 #include "theme/theme.hpp"
@@ -152,6 +154,7 @@ void InspectorPanel::build()
     root->addWidget(scroll_, 1);
 
     auto* layout = new QVBoxLayout(content_);
+    content_layout_ = layout;
     layout->setContentsMargins(12, 10, 12, 10);
     layout->setSpacing(8);
 
@@ -365,6 +368,16 @@ void InspectorPanel::set_advanced(bool advanced)
     update_content();
 }
 
+void InspectorPanel::set_behaviours(FixtureBehaviours* behaviours)
+{
+    if (behaviours == nullptr || fixture_panel_ != nullptr)
+        return;
+    fixture_panel_ = new FixturePanel(*behaviours, content_);
+    content_layout_->insertWidget(content_layout_->indexOf(advanced_link_),
+                                  fixture_panel_);
+    update_content();
+}
+
 void InspectorPanel::set_selected_port(vss::endpoint_id id)
 {
     selected_ = id;
@@ -446,6 +459,15 @@ void InspectorPanel::update_content()
     simple_lines_->setVisible(!advanced_);
     advanced_lines_->setVisible(advanced_);
     advanced_link_->setVisible(advanced_);
+
+    if (fixture_panel_ != nullptr)
+    {
+        // The behaviours are an Advanced control of a mock fixture.
+        const bool fixture =
+            advanced_ && port.kind == vss::endpoint_kind::mock;
+        fixture_panel_->set_port(fixture ? port.id : 0);
+        fixture_panel_->setVisible(fixture);
+    }
 
     update_lines();
     const bool can_drive = port.supports_control_lines;

@@ -313,3 +313,60 @@ TEST_CASE("engine backend: the line wiring of a link can be read and changed")
     REQUIRE(!backend.set_link_wiring(vss::link_id{9999}, wiring).has_value());
     REQUIRE(!backend.link_wiring(vss::link_id{9999}).has_value());
 }
+
+TEST_CASE("engine backend: a send from a fixture reaches the far end of its link")
+{
+    vss::studio studio;
+    vss::gui::EngineStudioBackend backend(studio);
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    const auto peer = backend.create_virtual_port(
+        QStringLiteral("peer"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(fixture.has_value());
+    REQUIRE(peer.has_value());
+    REQUIRE(backend.connect_ports(*fixture, *peer, vss::link_options{})
+                .has_value());
+
+    // The fixture is the device: its bytes arrive on it and the hub writes
+    // them to the peer.
+    REQUIRE(backend.send(*fixture, QByteArrayLiteral("hello")).has_value());
+    REQUIRE(wait_until(
+        [&]
+        {
+            backend.refresh();
+            return backend.port(*fixture)->stats.bytes_rx >= 5 &&
+                   backend.port(*peer)->stats.bytes_tx >= 5;
+        }));
+}
+
+TEST_CASE("engine backend: a fixture can echo, and a plain port cannot")
+{
+    vss::studio studio;
+    vss::gui::EngineStudioBackend backend(studio);
+    REQUIRE(backend.caps().fixture_echo);
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    const auto plain = backend.create_virtual_port(
+        QStringLiteral("plain"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(fixture.has_value());
+    REQUIRE(plain.has_value());
+
+    REQUIRE(!backend.set_echo(*plain, true).has_value());
+    REQUIRE(!backend.echo(*plain));
+    REQUIRE(backend.set_echo(*fixture, true).has_value());
+    REQUIRE(backend.echo(*fixture));
+
+    // A byte written to the fixture comes back from it.
+    studio.engine().find_endpoint(*fixture)->write(vss::as_bytes("ab"));
+    REQUIRE(wait_until(
+        [&]
+        {
+            backend.refresh();
+            return backend.port(*fixture)->stats.bytes_rx >= 2;
+        }));
+
+    REQUIRE(backend.set_echo(*fixture, false).has_value());
+    REQUIRE(!backend.echo(*fixture));
+}

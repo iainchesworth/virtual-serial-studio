@@ -7,6 +7,8 @@
 #include "test_framework.hpp"
 
 #include "backend/fake_studio_backend.hpp"
+#include "panes/fixture_behaviour.hpp"
+#include "panes/fixture_panel.hpp"
 #include "panes/inspector_panel.hpp"
 #include "panes/monitor_model.hpp"
 #include "panes/monitor_panel.hpp"
@@ -14,6 +16,7 @@
 #include "panes/ports_panel.hpp"
 #include "panes/selection_service.hpp"
 #include "panes/send_panel.hpp"
+#include "widgets/port_menu.hpp"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -22,9 +25,13 @@
 #include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QLabel>
+#include <QAction>
+#include <QLineEdit>
 #include <QListView>
+#include <QMenu>
 #include <QPushButton>
 #include <QSettings>
+#include <QSpinBox>
 #include <QTableView>
 
 #include <algorithm>
@@ -542,6 +549,16 @@ TEST_CASE("inspector: waiting sentence and control line chips")
 namespace
 {
 
+QPushButton* find_button(QWidget& parent, const QString& text)
+{
+    for (QPushButton* button : parent.findChildren<QPushButton*>())
+    {
+        if (button->text() == text)
+            return button;
+    }
+    return nullptr;
+}
+
 vss::endpoint_id make_driver_port(vss::gui::FakeStudioBackend& backend)
 {
     vss::gui::capabilities caps;
@@ -556,6 +573,334 @@ vss::endpoint_id make_driver_port(vss::gui::FakeStudioBackend& backend)
 }
 
 } // namespace
+
+TEST_CASE("send: a running repeat stays on the port it started on")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto first = backend.create_virtual_port(
+        QStringLiteral("one"), vss::virtual_port_kind::pty, true);
+    const auto second = backend.create_virtual_port(
+        QStringLiteral("two"), vss::virtual_port_kind::pty, true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+
+    vss::gui::SendPanel panel(backend);
+    panel.set_advanced(true);
+    panel.set_selected_port(*second);
+    panel.set_text(QStringLiteral("ping"));
+    panel.set_repeat(true, 50);
+    REQUIRE(panel.repeating());
+    REQUIRE_EQ(panel.repeat_port(), *second);
+    REQUIRE(panel.repeat_text().contains(QStringLiteral("two")));
+
+    // The selection moves to the other port: new sends follow it, the repeat
+    // does not.
+    panel.set_selected_port(*first);
+    REQUIRE_EQ(panel.selected_port(), *first);
+    REQUIRE(panel.target_text().contains(QStringLiteral("one")));
+    REQUIRE_EQ(panel.repeat_port(), *second);
+    REQUIRE(panel.repeat_text().contains(QStringLiteral("two")));
+
+    panel.repeat_tick();
+    REQUIRE_EQ(backend.sent_to().size(), 1);
+    REQUIRE_EQ(backend.sent_to().back(), *second);
+    panel.send_now();
+    REQUIRE_EQ(backend.sent_to().back(), *first);
+    panel.repeat_tick();
+    REQUIRE_EQ(backend.sent_to().back(), *second);
+
+    // Stop is offered next to the status.
+    QPushButton* stop = find_button(panel, QStringLiteral("Stop repeat"));
+    REQUIRE(stop != nullptr);
+    stop->click();
+    REQUIRE(!panel.repeating());
+    REQUIRE(panel.repeat_text().isEmpty());
+    const auto count = backend.sent_to().size();
+    panel.repeat_tick();
+    REQUIRE_EQ(backend.sent_to().size(), count);
+}
+
+TEST_CASE("send: a repeat stops when its port goes away")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto first = backend.create_virtual_port(
+        QStringLiteral("one"), vss::virtual_port_kind::pty, true);
+    const auto second = backend.create_virtual_port(
+        QStringLiteral("two"), vss::virtual_port_kind::pty, true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+
+    vss::gui::SendPanel panel(backend);
+    panel.set_advanced(true);
+    panel.set_selected_port(*second);
+    panel.set_text(QStringLiteral("ping"));
+    panel.set_repeat(true, 50);
+    REQUIRE(panel.repeating());
+
+    QString error;
+    QObject::connect(&panel, &vss::gui::SendPanel::error_message,
+                     [&error](const QString& message) { error = message; });
+    REQUIRE(backend.remove_port(*second).has_value());
+    QApplication::processEvents();
+    REQUIRE(!panel.repeating());
+    REQUIRE(error.contains(QStringLiteral("two")));
+    // It did not move to the other port.
+    panel.repeat_tick();
+    REQUIRE(backend.sent().empty());
+}
+
+TEST_CASE("send: a pinned target ignores the selection")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto first = backend.create_virtual_port(
+        QStringLiteral("one"), vss::virtual_port_kind::pty, true);
+    const auto second = backend.create_virtual_port(
+        QStringLiteral("two"), vss::virtual_port_kind::pty, true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+
+    vss::gui::SendPanel panel(backend);
+    panel.set_selected_port(*first);
+    panel.set_pinned(true);
+    panel.set_selected_port(*second);
+    REQUIRE_EQ(panel.selected_port(), *first);
+    REQUIRE(panel.target_text().contains(QStringLiteral("one")));
+    // A menu action is explicit and wins over the pin.
+    panel.send_from(*second);
+    REQUIRE_EQ(panel.selected_port(), *second);
+    REQUIRE(panel.target_text().contains(QStringLiteral("two")));
+    panel.set_pinned(false);
+    panel.set_selected_port(*first);
+    REQUIRE_EQ(panel.selected_port(), *first);
+}
+
+TEST_CASE("send: the menu starts and stops a repeat on one port")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto first = backend.create_virtual_port(
+        QStringLiteral("one"), vss::virtual_port_kind::pty, true);
+    const auto second = backend.create_virtual_port(
+        QStringLiteral("two"), vss::virtual_port_kind::pty, true);
+    REQUIRE(first.has_value());
+    REQUIRE(second.has_value());
+
+    vss::gui::SendPanel panel(backend);
+    // A repeat is an Advanced control.
+    panel.toggle_repeat(*second);
+    REQUIRE(!panel.repeating());
+
+    panel.set_advanced(true);
+    QString status;
+    QObject::connect(&panel, &vss::gui::SendPanel::status_message,
+                     [&status](const QString& message) { status = message; });
+    panel.toggle_repeat(*second);
+    // Nothing typed yet: it asks for the bytes and does not start.
+    REQUIRE(!panel.repeating());
+    REQUIRE(status.contains(QStringLiteral("Type the bytes")));
+    REQUIRE_EQ(panel.selected_port(), *second);
+
+    panel.set_text(QStringLiteral("ping"));
+    panel.toggle_repeat(*second);
+    REQUIRE_EQ(panel.repeat_port(), *second);
+    panel.toggle_repeat(*first);
+    REQUIRE_EQ(panel.repeat_port(), *first);
+    panel.toggle_repeat(*first);
+    REQUIRE(!panel.repeating());
+}
+
+TEST_CASE("fixture behaviours: the generator is bound to its fixture")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    const auto other = backend.create_virtual_port(
+        QStringLiteral("plain"), vss::virtual_port_kind::pty, true);
+    REQUIRE(fixture.has_value());
+    REQUIRE(other.has_value());
+
+    vss::gui::FixtureBehaviours behaviours(backend);
+    REQUIRE(behaviours.is_fixture(*fixture));
+    REQUIRE(!behaviours.is_fixture(*other));
+
+    QString error;
+    QObject::connect(&behaviours, &vss::gui::FixtureBehaviours::error_message,
+                     [&error](const QString& message) { error = message; });
+    // Only a fixture has one.
+    REQUIRE(!behaviours.start_generator(*other));
+    REQUIRE(!error.isEmpty());
+
+    vss::gui::generator_config config;
+    config.kind = vss::gui::generator_kind::text_line;
+    config.text = QStringLiteral("hi");
+    config.per_second = 10;
+    behaviours.set_config(*fixture, config);
+    REQUIRE(behaviours.start_generator(*fixture));
+    REQUIRE(behaviours.generating(*fixture));
+    behaviours.tick(*fixture);
+    REQUIRE_EQ(backend.sent().size(), 1);
+    REQUIRE_EQ(backend.sent().front(), QByteArrayLiteral("hi\r\n"));
+    REQUIRE_EQ(backend.sent_to().front(), *fixture);
+    REQUIRE_EQ(behaviours.generated_bytes(*fixture), 4u);
+
+    behaviours.stop_generator(*fixture);
+    REQUIRE(!behaviours.generating(*fixture));
+    behaviours.tick(*fixture);
+    REQUIRE_EQ(backend.sent().size(), 1);
+}
+
+TEST_CASE("fixture behaviours: pattern, counter and random bytes")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    REQUIRE(fixture.has_value());
+    vss::gui::FixtureBehaviours behaviours(backend);
+
+    QString error;
+    QObject::connect(&behaviours, &vss::gui::FixtureBehaviours::error_message,
+                     [&error](const QString& message) { error = message; });
+
+    vss::gui::generator_config config;
+    config.kind = vss::gui::generator_kind::fixed_pattern;
+    config.text = QStringLiteral("5G");
+    behaviours.set_config(*fixture, config);
+    REQUIRE(!behaviours.start_generator(*fixture));
+    REQUIRE(error.contains(QStringLiteral("hex")));
+
+    config.text = QStringLiteral("55 AA");
+    behaviours.set_config(*fixture, config);
+    REQUIRE_EQ(behaviours.next_payload(*fixture), QByteArray::fromHex("55AA"));
+
+    config.kind = vss::gui::generator_kind::counter;
+    config.chunk = 3;
+    behaviours.set_config(*fixture, config);
+    REQUIRE_EQ(behaviours.next_payload(*fixture), QByteArray::fromHex("000102"));
+    REQUIRE_EQ(behaviours.next_payload(*fixture), QByteArray::fromHex("030405"));
+
+    config.kind = vss::gui::generator_kind::random_bytes;
+    config.chunk = 16;
+    behaviours.set_config(*fixture, config);
+    REQUIRE_EQ(behaviours.next_payload(*fixture).size(), 16);
+}
+
+TEST_CASE("fixture behaviours: a removed fixture loses its generator")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    REQUIRE(fixture.has_value());
+    vss::gui::FixtureBehaviours behaviours(backend);
+    REQUIRE(behaviours.start_generator(*fixture));
+    REQUIRE(backend.remove_port(*fixture).has_value());
+    QApplication::processEvents();
+    REQUIRE(!behaviours.generating(*fixture));
+}
+
+TEST_CASE("fixture behaviours: echo is refused where the build has none")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    REQUIRE(fixture.has_value());
+    vss::gui::FixtureBehaviours behaviours(backend);
+
+    REQUIRE(!behaviours.echo_available());
+    QString error;
+    QObject::connect(&behaviours, &vss::gui::FixtureBehaviours::error_message,
+                     [&error](const QString& message) { error = message; });
+    REQUIRE(!behaviours.set_echo(*fixture, true));
+    REQUIRE(!error.isEmpty());
+    REQUIRE(!behaviours.echoing(*fixture));
+
+    vss::gui::capabilities caps;
+    caps.fixture_echo = true;
+    backend.set_capabilities(caps);
+    REQUIRE(behaviours.echo_available());
+    REQUIRE(behaviours.set_echo(*fixture, true));
+    REQUIRE(behaviours.echoing(*fixture));
+    behaviours.toggle_echo(*fixture);
+    REQUIRE(!behaviours.echoing(*fixture));
+}
+
+TEST_CASE("fixture panel: start, stop and the degraded echo")
+{
+    vss::gui::FakeStudioBackend backend;
+    const auto fixture = backend.create_mock_port(
+        QStringLiteral("modem"), vss::serial_settings{},
+        QStringLiteral("scripted"));
+    REQUIRE(fixture.has_value());
+    vss::gui::FixtureBehaviours behaviours(backend);
+    vss::gui::FixturePanel panel(behaviours);
+    panel.set_port(*fixture);
+    panel.show();
+
+    // No echo in this build: shown, disabled, with the reason.
+    REQUIRE(!panel.echo_box()->isEnabled());
+    REQUIRE_EQ(panel.echo_box()->toolTip(),
+               QStringLiteral("Not available in this build"));
+
+    REQUIRE_EQ(panel.generator_button()->text(),
+               QStringLiteral("Start generator"));
+    panel.generator_button()->click();
+    REQUIRE(behaviours.generating(*fixture));
+    REQUIRE_EQ(panel.generator_button()->text(),
+               QStringLiteral("Stop generator"));
+    panel.generator_button()->click();
+    REQUIRE(!behaviours.generating(*fixture));
+
+    // The rate is written through to the behaviour.
+    panel.rate_box()->setValue(20);
+    REQUIRE_EQ(behaviours.config(*fixture).per_second, 20);
+}
+
+TEST_CASE("port menu: Send, Monitor, repeat and the fixture actions")
+{
+    vss::gui::port_menu_state plain;
+    REQUIRE_EQ(vss::gui::port_menu_labels(plain),
+               QStringList({QStringLiteral("Send bytes"),
+                            QStringLiteral("Open in monitor")}));
+
+    vss::gui::port_menu_state advanced;
+    advanced.advanced = true;
+    REQUIRE_EQ(vss::gui::port_menu_labels(advanced),
+               QStringList({QStringLiteral("Send bytes"),
+                            QStringLiteral("Start repeat"),
+                            QStringLiteral("Open in monitor")}));
+    advanced.repeating = true;
+    REQUIRE(vss::gui::port_menu_labels(advanced)
+                .contains(QStringLiteral("Stop repeat")));
+
+    vss::gui::port_menu_state fixture;
+    fixture.advanced = true;
+    fixture.fixture = true;
+    REQUIRE_EQ(vss::gui::port_menu_labels(fixture),
+               QStringList({QStringLiteral("Send bytes"),
+                            QStringLiteral("Start repeat"),
+                            QStringLiteral("Open in monitor"),
+                            QStringLiteral("Start generator"),
+                            QStringLiteral("Echo received bytes")}));
+    fixture.generating = true;
+    REQUIRE(vss::gui::port_menu_labels(fixture)
+                .contains(QStringLiteral("Stop generator")));
+
+    // Echo is present but disabled when the build cannot do it.
+    QMenu menu;
+    vss::gui::add_port_menu_actions(&menu, &menu, fixture,
+                                    [](vss::gui::port_menu_action) {});
+    QAction* echo = nullptr;
+    for (QAction* action : menu.actions())
+    {
+        if (action->text() == QStringLiteral("Echo received bytes"))
+            echo = action;
+    }
+    REQUIRE(echo != nullptr);
+    REQUIRE(!echo->isEnabled());
+    REQUIRE_EQ(echo->toolTip(), QStringLiteral("Not available in this build"));
+}
 
 TEST_CASE("ports: a driver port shows both program states and nothing else")
 {

@@ -124,6 +124,24 @@ public:
     /// fixture.
     result<void> inject_fault(endpoint_id id, fault_kind fault);
 
+    /// Makes a mock fixture speak: `data` arrives on the fixture as if the
+    /// device had sent it, so the hub carries it along the fixture's links.
+    /// (`endpoint::write` is the other way round: it hands bytes to the
+    /// device, which a mock only records.)  Like `inject_fault` the call is
+    /// queued on the endpoint's strand, so it is safe from any thread.
+    /// `errc::not_found` for an unknown endpoint and `errc::unsupported` for a
+    /// port that is not a fixture.
+    result<void> inject_data(endpoint_id id, bytes_view data);
+
+    /// Makes a mock fixture answer every byte the hub writes to it with the
+    /// same byte, as if the device had sent it back, or stops that.  The
+    /// same errors as `inject_data`.  Two echoing fixtures linked to each
+    /// other pass a byte back and forth for ever.
+    result<void> set_fixture_echo(endpoint_id id, bool on);
+
+    /// True while the fixture echoes.
+    bool fixture_echo(endpoint_id id) const;
+
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
 
@@ -241,12 +259,18 @@ private:
         bool capture = true;
         /// The fixture behind a mock port, or empty for every other kind.
         std::weak_ptr<serial_transport> fixture;
+        /// The hub subscription of a fixture's echo, or 0.
+        subscriber_id echo = 0;
         /// For a port of the Windows driver: the number it was asked to have
         /// (0 for whichever Windows picked), and its transport, which the
         /// number is changed through.
         unsigned com_number = 0;
         std::weak_ptr<transport> driver;
     };
+
+    /// The transport behind a mock port: `errc::not_found` for an unknown id
+    /// and `errc::unsupported` for a port that is not a fixture.
+    result<std::shared_ptr<serial_transport>> fixture_for(endpoint_id id) const;
 
     result<std::shared_ptr<endpoint>> register_port(
         port_record record, std::shared_ptr<transport> transport,

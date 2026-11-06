@@ -324,6 +324,7 @@ vss::result<void> FakeStudioBackend::remove_port(vss::endpoint_id id)
     if (it == ports_.end())
         return vss::make_error_code(vss::errc::not_found);
     ports_.erase(it);
+    std::erase(echoing_, id);
 
     std::vector<vss::link_id> removed_links;
     for (const auto& view : links_)
@@ -609,6 +610,26 @@ vss::result<vss::benchmark_result> FakeStudioBackend::run_benchmark(
     return result;
 }
 
+vss::result<void> FakeStudioBackend::set_echo(vss::endpoint_id id, bool on)
+{
+    if (const auto error = take_error())
+        return *error;
+    const port_view* view = find_port(id);
+    if (view == nullptr)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!caps_.fixture_echo || view->kind != vss::endpoint_kind::mock)
+        return vss::make_error_code(vss::errc::unsupported);
+    std::erase(echoing_, id);
+    if (on)
+        echoing_.push_back(id);
+    return {};
+}
+
+bool FakeStudioBackend::echo(vss::endpoint_id id) const
+{
+    return std::find(echoing_.begin(), echoing_.end(), id) != echoing_.end();
+}
+
 vss::result<void> FakeStudioBackend::inject_fault(vss::endpoint_id id,
                                                   vss::fault_kind fault)
 {
@@ -638,6 +659,7 @@ vss::result<void> FakeStudioBackend::send(vss::endpoint_id id,
     if (!view->open)
         return vss::make_error_code(vss::errc::not_open);
     sent_.push_back(data);
+    sent_to_.push_back(id);
     view->stats.bytes_tx += static_cast<std::uint64_t>(data.size());
     view->stats.last_activity = vss::clock_type::now();
     traffic_view record;

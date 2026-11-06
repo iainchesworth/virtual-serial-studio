@@ -35,6 +35,13 @@ struct capabilities
     /// through `vss::studio::inject_fault`; a backend that cannot reach the
     /// fixture leaves it false.
     bool faults = false;
+    /// A fixture can echo every byte written to it.  The engine has no echo
+    /// mode of its own; `vss::studio::set_fixture_echo` builds one from the
+    /// mock's receive path, so `vss_core` does not change.  A backend without
+    /// it leaves this false: the Inspector and the menus show Echo disabled
+    /// with "Not available in this build" and nothing simulates it.  The byte
+    /// generator is not gated: it is plain sends on a timer in the GUI.
+    bool fixture_echo = false;
     /// Per-line wiring matrix.  False: the engine only has a boolean
     /// null-modem crossing.
     bool line_matrix = false;

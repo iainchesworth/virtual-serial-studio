@@ -73,10 +73,24 @@ void SendPanel::build()
     layout->setContentsMargins(8, 8, 8, 8);
     layout->setSpacing(6);
 
+    auto* heading = new QHBoxLayout();
+    heading->setSpacing(8);
+    target_ = new QLabel(this);
+    target_->setFont(Theme::instance().font(text_style::caption));
+    target_->setWordWrap(true);
+    target_->setAccessibleName(tr("Sending from"));
+    heading->addWidget(target_, 1);
+    pin_ = new QCheckBox(tr("Pin"), this);
+    pin_->setToolTip(tr("Keep sending from this port when you select another."));
+    pin_->setAccessibleDescription(
+        tr("Keep sending from this port when you select another."));
+    heading->addWidget(pin_);
+    layout->addLayout(heading);
+
     auto* top = new QHBoxLayout();
     top->setSpacing(8);
     ports_ = new QComboBox(this);
-    ports_->setAccessibleName(tr("Send to port"));
+    ports_->setAccessibleName(tr("Send from port"));
     ports_->setSizeAdjustPolicy(
         QComboBox::AdjustToMinimumContentsLengthWithIcon);
     ports_->setMinimumContentsLength(8);
@@ -124,6 +138,21 @@ void SendPanel::build()
     options->addStretch(1);
     layout->addLayout(options);
 
+    repeat_row_ = new QWidget(this);
+    auto* repeat_layout = new QHBoxLayout(repeat_row_);
+    repeat_layout->setContentsMargins(0, 0, 0, 0);
+    repeat_layout->setSpacing(8);
+    repeat_status_ = new QLabel(repeat_row_);
+    repeat_status_->setFont(Theme::instance().font(text_style::caption));
+    repeat_status_->setWordWrap(true);
+    repeat_status_->setAccessibleName(tr("Repeat status"));
+    repeat_layout->addWidget(repeat_status_, 1);
+    repeat_stop_ = new QPushButton(tr("Stop repeat"), repeat_row_);
+    repeat_stop_->setAccessibleName(tr("Stop repeat"));
+    repeat_layout->addWidget(repeat_stop_);
+    repeat_row_->setVisible(false);
+    layout->addWidget(repeat_row_);
+
     auto* saved_row = new QHBoxLayout();
     saved_row->setSpacing(8);
     saved_label_ = new QLabel(tr("Saved sends"), this);
@@ -139,7 +168,7 @@ void SendPanel::build()
 
     repeat_timer_ = new QTimer(this);
     repeat_timer_->setInterval(interval_->value());
-    connect(repeat_timer_, &QTimer::timeout, this, [this] { send_now(); });
+    connect(repeat_timer_, &QTimer::timeout, this, [this] { send_repeat(); });
 
     connect(send_, &QPushButton::clicked, this, [this] { send_now(); });
     connect(input_, &QLineEdit::textChanged, this,
@@ -165,7 +194,19 @@ void SendPanel::build()
                     stop_repeat();
             });
     connect(interval_, &QSpinBox::valueChanged, this,
-            [this](int value) { repeat_timer_->setInterval(value); });
+            [this](int value)
+            {
+                repeat_timer_->setInterval(value);
+                update_repeat_status();
+            });
+    connect(repeat_stop_, &QPushButton::clicked, this,
+            [this] { stop_repeat(); });
+    connect(ports_, &QComboBox::currentIndexChanged, this,
+            [this]
+            {
+                update_target();
+                update_send_enabled();
+            });
     connect(saved_, qOverload<int>(&QComboBox::activated), this,
             [this](int index)
             {
@@ -191,6 +232,14 @@ void SendPanel::set_advanced(bool advanced)
 
 void SendPanel::refresh_ports()
 {
+    if (repeat_port_ != 0 && !backend_.port(repeat_port_))
+    {
+        const QString name = repeat_name_;
+        stop_repeat();
+        Q_EMIT error_message(
+            tr("The repeat stopped because %1 is gone.").arg(name));
+    }
+
     QStringList signature;
     for (const auto& port : backend_.ports())
         signature << QStringLiteral("%1|%2|%3")
@@ -198,6 +247,7 @@ void SendPanel::refresh_ports()
                          .arg(port.name, port.path);
     if (signature == port_signature_)
     {
+        update_target();
         update_send_enabled();
         return;
     }
@@ -221,6 +271,7 @@ void SendPanel::refresh_ports()
             ports_->setCurrentIndex(index);
     }
     refreshing_ = false;
+    update_target();
     update_send_enabled();
 }
 
@@ -233,6 +284,10 @@ vss::endpoint_id SendPanel::selected_port() const
 
 void SendPanel::set_selected_port(vss::endpoint_id id)
 {
+    // Only new sends follow the selection.  A pinned target stays put, and a
+    // running repeat is bound to the port it started on (`repeat_port_`).
+    if (pinned())
+        return;
     const int index = ports_->findData(QVariant::fromValue<qulonglong>(id));
     if (index >= 0)
     {
@@ -301,38 +356,176 @@ void SendPanel::send_now()
     const vss::endpoint_id id = selected_port();
     if (id == 0)
         return;
+    send_to(id);
+}
+
+SendPanel::send_outcome SendPanel::send_to(vss::endpoint_id id)
+{
     bool ok = false;
     const QByteArray bytes = payload(ok);
     if (!ok)
     {
         validate_hex();
-        return;
+        return send_outcome::skipped;
     }
     if (bytes.isEmpty())
-        return;
+        return send_outcome::skipped;
     const auto sent_result = backend_.send(id, bytes);
     if (!sent_result)
     {
         Q_EMIT error_message(error_text(sent_result.error()));
-        return;
+        return send_outcome::failed;
     }
-    const QString name = ports_->currentText();
+    const QString name = port_label(id);
     remember_send(input_->text());
     Q_EMIT sent(static_cast<int>(bytes.size()), name);
     Q_EMIT status_message(
         tr("Queued %n bytes to %1.", "", static_cast<int>(bytes.size()))
             .arg(name));
+    return send_outcome::sent;
+}
+
+void SendPanel::send_repeat()
+{
+    if (refreshing_ || repeat_port_ == 0 || input_->text().isEmpty())
+        return;
+    // The bytes go to the port the repeat started on, whatever is selected now.
+    if (send_to(repeat_port_) == send_outcome::failed)
+        stop_repeat();
 }
 
 void SendPanel::start_repeat()
 {
-    if (repeat_->isChecked())
-        repeat_timer_->start(interval_->value());
+    if (!repeat_->isChecked())
+        return;
+    const vss::endpoint_id id = selected_port();
+    if (id == 0)
+    {
+        const QSignalBlocker blocker(repeat_);
+        repeat_->setChecked(false);
+        interval_->setVisible(false);
+        return;
+    }
+    repeat_port_ = id;
+    repeat_name_ = port_label(id);
+    repeat_timer_->start(interval_->value());
+    update_repeat_status();
+    Q_EMIT repeat_changed(id);
 }
 
 void SendPanel::stop_repeat()
 {
+    const bool was_running = repeat_port_ != 0;
     repeat_timer_->stop();
+    repeat_port_ = 0;
+    if (repeat_->isChecked())
+    {
+        const QSignalBlocker blocker(repeat_);
+        repeat_->setChecked(false);
+        interval_->setVisible(false);
+    }
+    update_repeat_status();
+    repeat_name_.clear();
+    if (was_running)
+        Q_EMIT repeat_changed(0);
+}
+
+void SendPanel::send_from(vss::endpoint_id id)
+{
+    refresh_ports();
+    const int index = ports_->findData(QVariant::fromValue<qulonglong>(id));
+    if (index >= 0 && ports_->currentIndex() != index)
+        ports_->setCurrentIndex(index);
+    focus_input();
+}
+
+void SendPanel::toggle_repeat(vss::endpoint_id id)
+{
+    if (!advanced_)
+        return;
+    if (repeat_port_ == id && id != 0)
+    {
+        stop_repeat();
+        return;
+    }
+    send_from(id);
+    if (selected_port() != id)
+        return;
+    if (input_->text().isEmpty())
+    {
+        Q_EMIT status_message(
+            tr("Type the bytes to repeat, then start the repeat."));
+        return;
+    }
+    if (repeating())
+        stop_repeat();
+    repeat_->setChecked(true);
+}
+
+void SendPanel::focus_input()
+{
+    input_->setFocus(Qt::OtherFocusReason);
+}
+
+bool SendPanel::pinned() const
+{
+    return pin_ != nullptr && pin_->isChecked();
+}
+
+void SendPanel::set_pinned(bool pinned)
+{
+    pin_->setChecked(pinned);
+}
+
+void SendPanel::set_repeat(bool on, int interval_ms)
+{
+    interval_->setValue(interval_ms);
+    repeat_->setChecked(on);
+}
+
+QString SendPanel::port_label(vss::endpoint_id id) const
+{
+    const auto port = backend_.port(id);
+    if (!port)
+        return {};
+    return port->path.isEmpty() ? port->name
+                                : tr("%1 (%2)").arg(port->name, port->path);
+}
+
+QString SendPanel::target_text() const
+{
+    return target_->text();
+}
+
+QString SendPanel::repeat_text() const
+{
+    return repeat_port_ == 0 ? QString() : repeat_status_->text();
+}
+
+void SendPanel::update_target()
+{
+    if (target_ == nullptr)
+        return;
+    target_->setText(selected_port() == 0
+                         ? tr("Sending from: no port selected")
+                         : tr("Sending from: %1").arg(ports_->currentText()));
+}
+
+void SendPanel::update_repeat_status()
+{
+    if (repeat_row_ == nullptr)
+        return;
+    repeat_row_->setVisible(repeat_port_ != 0);
+    if (repeat_port_ == 0)
+    {
+        repeat_status_->clear();
+        return;
+    }
+    const QString label = port_label(repeat_port_);
+    repeat_status_->setText(
+        tr("Repeating every %1 ms from %2.")
+            .arg(interval_->value())
+            .arg(label.isEmpty() ? repeat_name_ : label));
 }
 
 void SendPanel::remember_send(const QString& text)
