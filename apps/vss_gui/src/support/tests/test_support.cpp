@@ -391,8 +391,8 @@ TEST_CASE("support: setup report degrades and never fakes a check")
     REQUIRE_EQ(missing.rows.at(0).chip, QStringLiteral("Needs attention"));
     REQUIRE_EQ(missing.rows.at(0).action_text,
                QStringLiteral("Install com0com"));
-    REQUIRE(missing.rows.at(0).sentence.contains(
-        QStringLiteral("com0com was not found")));
+    REQUIRE(missing.rows.at(0).sentence.contains(QStringLiteral(
+        "Neither the Virtual Serial Studio driver nor com0com was found")));
     REQUIRE_EQ(missing.rows.at(1).chip, QStringLiteral("Needed later"));
     REQUIRE_EQ(missing.rows.at(2).chip, QStringLiteral("OK"));
     REQUIRE(missing.rows.at(2).sentence.contains(QStringLiteral("COM3")));
@@ -408,6 +408,53 @@ TEST_CASE("support: setup report degrades and never fakes a check")
     REQUIRE_EQ(ready.header_chip, QStringLiteral("All set"));
     REQUIRE(ready.driver_note.isEmpty());
     REQUIRE_EQ(ready.rows.at(0).chip, QStringLiteral("OK"));
+
+    // The Studio driver alone is enough: no com0com, no pair count.
+    vss::gui::setup_facts studio = facts;
+    studio.driver_found = true;
+    studio.driver_version = QStringLiteral("2");
+    const support::setup_report studio_report =
+        support::build_setup_report(studio, platform, devices);
+    REQUIRE_EQ(studio_report.state, support::setup_report::readiness::ready);
+    REQUIRE(studio_report.ports_ready);
+    REQUIRE_EQ(studio_report.header_chip, QStringLiteral("All set"));
+    REQUIRE(studio_report.driver_note.isEmpty());
+    REQUIRE_EQ(studio_report.rows.at(0).chip, QStringLiteral("OK"));
+    REQUIRE(studio_report.rows.at(0).action_text.isEmpty());
+    REQUIRE_EQ(studio_report.rows.at(0).sentence,
+               QStringLiteral("The Virtual Serial Studio driver is installed, "
+                              "so other programs can see ports Studio makes as "
+                              "COM ports. Driver version 2."));
+    REQUIRE_EQ(
+        find_row(studio_report, QStringLiteral("Administrator rights"))->chip,
+        QStringLiteral("OK"));
+    REQUIRE(find_row(studio_report, QStringLiteral("Administrator rights"))
+                ->sentence.contains(QStringLiteral("without administrator")));
+
+    // An unreadable version is left out rather than guessed.
+    vss::gui::setup_facts no_version = studio;
+    no_version.driver_version.clear();
+    REQUIRE(!support::build_setup_report(no_version, platform, devices)
+                 .rows.at(0)
+                 .sentence.contains(QStringLiteral("version")));
+
+    // With both installed the row says which one Studio tries first.
+    vss::gui::setup_facts both = studio;
+    both.com0com_found = true;
+    both.com0com_pairs = 2;
+    const support::setup_report both_report =
+        support::build_setup_report(both, platform, devices);
+    REQUIRE(both_report.ports_ready);
+    REQUIRE(both_report.rows.at(0).sentence.contains(
+        QStringLiteral("com0com is also installed, and Studio tries its own "
+                       "driver first.")));
+
+    // Linux has no Windows driver row, whatever the facts say.
+    vss::gui::setup_facts linux_driver = studio;
+    linux_driver.platform = QStringLiteral("linux");
+    REQUIRE_EQ(support::build_setup_report(linux_driver, platform, devices)
+                   .rows.size(),
+               3);
 
     vss::gui::setup_facts unknown = facts;
     support::platform_facts unknown_platform = platform;
@@ -477,6 +524,15 @@ TEST_CASE("support: setup check dialog reads engine facts")
     backend.set_facts(present);
     dialog.recheck();
     REQUIRE_EQ(dialog.report().header_chip, QStringLiteral("All set"));
+
+    vss::gui::setup_facts studio = windows_facts();
+    studio.driver_found = true;
+    studio.driver_version = QStringLiteral("2");
+    backend.set_facts(studio);
+    dialog.recheck();
+    REQUIRE_EQ(dialog.report().header_chip, QStringLiteral("All set"));
+    REQUIRE(dialog.report().ports_ready);
+    check_accessible(dialog);
 
     vss::gui::capabilities caps;
     caps.setup_check = false;

@@ -9,6 +9,7 @@
 // can be scripted, measured and put in CI.
 //
 
+#include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
 #include <vss/studio/capture.hpp>
 #include <vss/studio/studio.hpp>
@@ -103,6 +104,14 @@ void print_usage()
         "      tcp-listen://host:port and udp-listen://host:port wait for "
         "other\n"
         "      computers to connect instead of connecting out.\n"
+        "      ?allow=a,b,c after the port (addresses or ranges such as\n"
+        "      192.168.1.0/24) lets only those computers in; the others are\n"
+        "      closed at once. For example:\n"
+        "        vss_cli bridge serial://COM3 "
+        "rfc2217-listen://192.168.1.10:7001?allow=192.168.1.0/24\n"
+        "      RFC 2217 carries the baud rate, framing and modem lines. It "
+        "has\n"
+        "      no password: listen on 127.0.0.1, or add allow=.\n"
         "\n"
         "  vss_cli loopback [--seconds=N]\n"
         "      A virtual port, a redirect and a monitor: no hardware needed.\n"
@@ -455,6 +464,24 @@ int command_bus(const arguments& args)
     return 0;
 }
 
+/// RFC 2217 has no password, so a server that other computers can reach, and
+/// that has no allow list, is worth a line of warning.
+void warn_if_reachable(const std::string& uri)
+{
+    if (!uri.starts_with("rfc2217-listen://"))
+        return;
+    const auto address = vss::parse_listen_uri(uri);
+    if (!address || !address->allow.empty() ||
+        vss::listens_on_loopback(*address))
+        return;
+    std::fprintf(stderr,
+                 "warning: %s can be reached from other computers, and RFC "
+                 "2217 has no password. Anyone who can reach the port can use "
+                 "the serial port. Listen on 127.0.0.1, or add "
+                 "?allow=192.168.1.0/24 (the addresses that may connect).\n",
+                 uri.c_str());
+}
+
 int command_bridge(const arguments& args)
 {
     if (args.positional.size() < 3)
@@ -462,6 +489,9 @@ int command_bridge(const arguments& args)
         std::fprintf(stderr, "bridge needs two URIs\n");
         return 2;
     }
+
+    warn_if_reachable(args.positional[1]);
+    warn_if_reachable(args.positional[2]);
 
     studio app;
     const auto link = app.bridge(args.positional[1], args.positional[2]);

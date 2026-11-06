@@ -138,6 +138,92 @@ TEST_CASE("connect: every mode makes the right link")
     }
 }
 
+TEST_CASE("connect: a real device links in every mode")
+{
+    // "Real device" attaches a port of kind physical. The connect dialog does
+    // not filter by kind, so it takes part in each mode like any other port.
+    using mode = vss::gui::ConnectPortsDialog::mode;
+    const auto with_device =
+        [](vss::gui::FakeStudioBackend& backend, vss::endpoint_id& device,
+           vss::endpoint_id& first, vss::endpoint_id& second)
+    {
+        const auto attached =
+            backend.attach_serial(QStringLiteral("device"),
+                                  QStringLiteral("serial://COM3"), {}, true);
+        REQUIRE(attached.has_value());
+        device = *attached;
+        REQUIRE(backend.port(device)->kind == vss::endpoint_kind::physical);
+        first = *backend.create_virtual_port(QStringLiteral("first"),
+                                             vss::virtual_port_kind::pty, true);
+        second = *backend.create_virtual_port(
+            QStringLiteral("second"), vss::virtual_port_kind::loopback, true);
+        backend.refresh();
+    };
+
+    for (const mode chosen : {mode::two_way, mode::redirect, mode::monitor})
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(chosen));
+        dialog.select_from(device);
+        dialog.select_to(first);
+        REQUIRE(dialog.primary_enabled());
+        REQUIRE(dialog.submit());
+        const vss::gui::link_view link = only_link(backend);
+        REQUIRE_EQ(link.sources.front(), device);
+        REQUIRE_EQ(link.targets.front(), first);
+    }
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(mode::split));
+        dialog.select_split_source(device);
+        dialog.set_target_ids({first, second});
+        REQUIRE(dialog.submit());
+        REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::split);
+        REQUIRE_EQ(only_link(backend).sources.front(), device);
+    }
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(mode::join));
+        dialog.select_join_target(device);
+        dialog.set_source_ids({first, second});
+        REQUIRE(dialog.submit());
+        REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::join);
+        REQUIRE_EQ(only_link(backend).targets.front(), device);
+    }
+    {
+        // A real device and a loopback are not both Studio only, so the pair
+        // is allowed, unlike two loopbacks.
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        dialog.select_from(device);
+        dialog.select_to(second);
+        REQUIRE(dialog.primary_enabled());
+    }
+}
+
 TEST_CASE("connect: result sentences and the live count line")
 {
     vss::gui::FakeStudioBackend backend;

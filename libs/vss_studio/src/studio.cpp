@@ -569,7 +569,7 @@ result<void> studio::rename_port(endpoint_id id, const std::string& name)
         return {};
     }
     it->second.name = name;
-    if (new_link)
+    if (new_link && old_link)
     {
         claimed_paths_.erase(it->second.advertised);
         it->second.link = *new_link;

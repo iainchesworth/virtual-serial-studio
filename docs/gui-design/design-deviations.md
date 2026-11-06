@@ -656,8 +656,8 @@ ready" and "Setup needs attention". Both surfaces, and the dialog, read the
 same `query_setup_report()` provider, so they cannot disagree.
 
 The readiness strip and status chip consider only whether new virtual ports
-can be opened by other programs (com0com on Windows, a pseudo terminal
-elsewhere). A Linux dialout problem is still shown in the setup check as
+can be opened by other programs (the Virtual Serial Studio driver or com0com
+on Windows, a pseudo terminal elsewhere). A Linux dialout problem is still shown in the setup check as
 "Needs attention", but it does not turn the launcher / status bar warning on,
 because it does not stop port creation.
 
@@ -719,6 +719,17 @@ is therefore not shown in this build; it appears when a backend reports the
 capability. URI preview, validation and the client bridge are real. The
 bundled "Device on the network" template uses a loopback client target
 (`tcp://127.0.0.1:4001`) for the same reason and still validates.
+
+### A warning for an RFC 2217 server that other computers can reach
+
+RFC 2217 has no password, and the spec has no text for that. The network
+dialog shows a warn note, a new string wrapped in `tr()`, when the address of
+an RFC 2217 server is not this computer (`0.0.0.0` or any other address) and
+has no `?allow=` list: "RFC 2217 has no password. Anyone who can reach this
+port can use the device. Choose This PC only (127.0.0.1), or in Advanced add
+?allow=192.168.1.0/24 to the address to say who may connect." It follows the
+Advanced address too. TCP and UDP servers get no such note; their default
+stays "All network interfaces".
 
 ### Create another pair is a GUI adapter method
 
@@ -842,9 +853,46 @@ placeholders because the pseudo-terminal paths do not exist until creation.
 The inline uniqueness message still exists for a stale or duplicate free-pair
 value, but a user normally cannot edit the fields to reach it; the free-pair
 filter and the disabled "There are not enough free driver pairs" state are the
-visible degradation. The pair result sentence still names the free ports, and
+visible degradation. With the Studio driver the fields instead read "Chosen
+when you create the pair" and nothing is filtered, because the driver makes
+the ports when asked. The pair result sentence still names the free ports, and
 the status-bar summary after creation names the paths the engine actually
 advertised.
+
+### The Studio driver counts as a virtual port driver
+
+The designs were drawn when com0com was the only Windows driver, so every
+Windows row, note and count speaks of com0com. The repository now ships its own
+driver (`vsscom`, `vsscom_um`), and `studio` tries it before com0com. The GUI
+therefore reads one more fact, `setup_facts::driver_found` (with
+`driver_version`), from `vss::driver_available()` and `vss::driver_version()`,
+and treats either driver as "virtual ports ready" in the setup check, the
+launcher strip, the status chip, the pair panel, the share wizard and the
+port-ready dialog. The copy deck has no strings for this, so the new sentences
+are written to the same pattern and say which driver was found and its version:
+
+- Setup check, driver row: "The Virtual Serial Studio driver is installed, so
+  other programs can see ports Studio makes as COM ports. Driver version 2."
+  With com0com as well, it adds that Studio tries its own driver first. With
+  neither, the row reads "Neither the Virtual Serial Studio driver nor com0com
+  was found." and keeps the "Install com0com" action and instructions, which
+  are shown only in that case.
+- Administrator row: the driver makes ports without administrator rights (a
+  normal user may ask the control device for a port), so the row is OK.
+- The driver makes a port when asked, up to 16 for a user and 32 in all, so
+  the com0com "free pairs" rule is not applied to it. The pair form shows
+  "Chosen when you create the pair" in both fields, because Windows picks the
+  COM numbers (the COM number editor is a follow-up), and is enabled without a
+  pair count. The share wizard lists "A free port" for each program and warns
+  only above the per-user limit, hiding "Create another pair", which cannot
+  raise it.
+- A port the driver made is listed by the system as a serial port. The adapter
+  marks one whose hardware id starts with `VSSCOM\` as a virtual device, so the
+  attach dialog and the share wizard show it as *Virtual* and do not offer it as
+  a real device.
+- Limit: the Studio driver stops at 16 ports for one user. The wizard counts
+  the non-loopback virtual ports Studio already holds as driver ports, which
+  over-counts when some of them came from com0com; it errs towards warning.
 
 ### Linked pairs use existing driver pairs and do not elevate
 
