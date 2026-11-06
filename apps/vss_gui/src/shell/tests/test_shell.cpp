@@ -204,6 +204,11 @@ TEST_CASE("shell: launcher, workspace, level and layout")
 
     backend.remove_port(*port);
     QApplication::processEvents();
+    // Advanced mode builds on the canvas: an empty setup is the empty canvas.
+    REQUIRE(!launcher->isVisible());
+    // Simple mode starts from the launcher.
+    advanced->trigger();
+    QApplication::processEvents();
     REQUIRE(launcher->isVisible());
     REQUIRE(!ports_dock->isVisible());
     REQUIRE(window.run_selftest());

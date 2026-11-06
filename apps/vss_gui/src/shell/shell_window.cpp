@@ -55,7 +55,9 @@
 #include "theme/theme.hpp"
 #include "topology/links_list.hpp"
 #include "topology/topology_text.hpp"
+#include "topology/toolbox.hpp"
 #include "topology/topology_view.hpp"
+#include "shell/canvas_controller.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
@@ -358,6 +360,47 @@ void ShellWindow::build_actions()
             if (topology_ != nullptr)
                 topology_->fit_content();
         });
+    add(QStringLiteral("topology.addPort"), tr("Add port"),
+        tr("canvas new port"), QStringLiteral("port"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::port);
+        });
+    add(QStringLiteral("topology.addFixture"), tr("Add fixture"),
+        tr("canvas new mock fixture"), QStringLiteral("fixture"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::fixture);
+        });
+    add(QStringLiteral("topology.addPair"), tr("Add pair"),
+        tr("canvas bundle two ports null modem"), QStringLiteral("pair"), {},
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr)
+                canvas_->add_item(canvas_item::pair);
+        });
+    add(QStringLiteral("edit.duplicate"), tr("Duplicate"),
+        tr("copy ports canvas"), {}, QKeySequence(QStringLiteral("Ctrl+D")),
+        action_level::advanced,
+        [this]
+        {
+            if (canvas_ != nullptr && topology_ != nullptr)
+                canvas_->duplicate(topology_->selected_ports());
+        },
+        false,
+        [this]
+        {
+            return topology_ != nullptr && !topology_->selected_ports().isEmpty();
+        });
+    add(QStringLiteral("view.toolbox"), tr("Show toolbox"),
+        tr("canvas tiles palette"), {},
+        QKeySequence(QStringLiteral("Ctrl+Shift+B")), action_level::advanced,
+        [] {}, true);
     add(QStringLiteral("topology.tidy"), tr("Tidy layout"),
         tr("arrange align overlap"), {}, {}, action_level::advanced,
         [this]
@@ -490,6 +533,12 @@ void ShellWindow::build_actions()
     links_action_ = registry_.action(QStringLiteral("view.links"));
     log_action_ = registry_.action(QStringLiteral("view.log"));
     json_action_ = registry_.action(QStringLiteral("view.json"));
+    if (QAction* toolbox = registry_.action(QStringLiteral("view.toolbox")))
+    {
+        toolbox->setChecked(true);
+        connect(toolbox, &QAction::toggled, this,
+                [this] { sync_canvas_editing(); });
+    }
     if (QAction* network = registry_.action(QStringLiteral("ports.network"));
         network != nullptr && !backend_.caps().bridge)
     {
@@ -548,6 +597,7 @@ void ShellWindow::build_menus()
     add(edit, QStringLiteral("edit.redo"));
     edit->addSeparator();
     add(edit, QStringLiteral("edit.remove"));
+    add(edit, QStringLiteral("edit.duplicate"));
     add(edit, QStringLiteral("topology.removeSetup"));
 
     QMenu* ports = add_menu(tr("&Ports"));
@@ -575,6 +625,10 @@ void ShellWindow::build_menus()
     add(topology, QStringLiteral("topology.wiring"));
     add(topology, QStringLiteral("topology.owner"));
     topology->addSeparator();
+    add(topology, QStringLiteral("topology.addPort"));
+    add(topology, QStringLiteral("topology.addFixture"));
+    add(topology, QStringLiteral("topology.addPair"));
+    topology->addSeparator();
     add(topology, QStringLiteral("topology.tidy"));
     add(topology, QStringLiteral("topology.fit"));
 
@@ -591,6 +645,7 @@ void ShellWindow::build_menus()
     view->addSeparator();
     add(view, QStringLiteral("view.monitor"));
     add(view, QStringLiteral("view.links"));
+    add(view, QStringLiteral("view.toolbox"));
     add(view, QStringLiteral("view.log"));
     add(view, QStringLiteral("view.json"));
     view->addSeparator();
@@ -727,10 +782,15 @@ void ShellWindow::build_central()
     topology_ = new topology::TopologyView(card);
     topology_->set_capabilities(backend_.caps());
     // Inset the diagram so its square view stays inside the pane's corners.
-    auto* canvas_layout = new QVBoxLayout;
+    // In Advanced mode the toolbox rail sits on the left of the canvas.
+    auto* canvas_layout = new QHBoxLayout;
     const int inset = Theme::instance().space(1);
     canvas_layout->setContentsMargins(inset, 0, inset, inset);
-    canvas_layout->addWidget(topology_);
+    canvas_layout->setSpacing(inset);
+    toolbox_ = new topology::Toolbox(card);
+    toolbox_->setVisible(false);
+    canvas_layout->addWidget(toolbox_);
+    canvas_layout->addWidget(topology_, 1);
     card_layout->addLayout(canvas_layout, 1);
     layout->addWidget(card, 1);
 
@@ -795,6 +855,46 @@ void ShellWindow::build_central()
             [this](vss::endpoint_id id) { show_rename(id); });
     connect(topology_, &topology::TopologyView::status_message, this,
             [this](const QString& text) { status_->showMessage(text, 4000); });
+    connect(topology_, &topology::TopologyView::selection_changed, this,
+            [this](int) { update_actions(); });
+
+    canvas_ = new CanvasController(backend_, undo_, topology_, toolbox_, this);
+    connect(canvas_, &CanvasController::message, this,
+            [this](const QString& text)
+            {
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    connect(canvas_, &CanvasController::batch_finished, this,
+            [this]
+            {
+                // A canvas step keeps the history: it was recorded by name.
+                std::vector<vss::endpoint_id> ports;
+                for (const auto& port : backend_.ports())
+                    ports.push_back(port.id);
+                std::sort(ports.begin(), ports.end());
+                history_ports_ = std::move(ports);
+                on_backend_changed();
+            });
+    canvas_->set_flow_opener(
+        [this](canvas_item item)
+        {
+            switch (item)
+            {
+            case canvas_item::device:
+                show_attach_device();
+                break;
+            case canvas_item::network:
+                open_network_endpoint();
+                break;
+            case canvas_item::share:
+                open_share_wizard();
+                break;
+            default:
+                break;
+            }
+        });
+    sync_canvas_editing();
 }
 
 void ShellWindow::build_docks()
@@ -1138,6 +1238,8 @@ void ShellWindow::connect_backend()
 
 void ShellWindow::on_backend_changed()
 {
+    if (canvas_ != nullptr && canvas_->in_batch())
+        return;
     // A port that is added or removed has an identity the history cannot
     // restore, so the history only ever describes the ports it was made on.
     std::vector<vss::endpoint_id> ports;
@@ -1174,6 +1276,7 @@ void ShellWindow::on_level_changed(bool advanced)
         advanced_action_->setChecked(advanced);
     }
     status_->set_advanced(advanced);
+    sync_canvas_editing();
     if (ports_panel_ != nullptr)
         ports_panel_->set_advanced(advanced);
     if (inspector_panel_ != nullptr)
@@ -1211,7 +1314,10 @@ void ShellWindow::update_level_ui()
 void ShellWindow::update_content()
 {
     const bool has_ports = !backend_.ports().empty();
-    const bool show_launcher_page = launcher_forced_ || !has_ports;
+    // Advanced mode builds on the canvas, so an empty setup shows the empty
+    // canvas with its toolbox; Simple mode starts from the launcher.
+    const bool show_launcher_page =
+        launcher_forced_ || (!has_ports && !level_.advanced());
     if (show_launcher_page)
     {
         central_->setCurrentWidget(launcher_);
@@ -2896,8 +3002,13 @@ bool ShellWindow::run_selftest()
     show();
     QApplication::processEvents();
 
-    if (central_->currentWidget() != launcher_)
+    // An empty setup is the launcher in Simple mode and the empty canvas in
+    // Advanced mode.
+    if (!level_.advanced() && central_->currentWidget() != launcher_)
         fail(QStringLiteral("the empty studio did not show the launcher"));
+    if (level_.advanced() && backend_.ports().empty() &&
+        central_->currentWidget() != workspace_)
+        fail(QStringLiteral("the empty Advanced studio did not show the canvas"));
     if (registry_.actions().isEmpty())
         fail(QStringLiteral("the action registry is empty"));
     if (!registry_.shortcuts_unique())
@@ -2948,8 +3059,10 @@ bool ShellWindow::run_selftest()
                      .arg(error_text(removed.error())));
         backend_.refresh();
         QApplication::processEvents();
-        if (central_->currentWidget() != launcher_)
+        if (!level_.advanced() && central_->currentWidget() != launcher_)
             fail(QStringLiteral("the launcher did not return after removal"));
+        if (level_.advanced() && central_->currentWidget() != workspace_)
+            fail(QStringLiteral("the empty canvas did not stay after removal"));
     }
 
     if (backend_.caps().shared_bus)
@@ -3022,6 +3135,25 @@ bool ShellWindow::run_selftest()
         return false;
     }
     return true;
+}
+
+} // namespace vss::gui
+
+namespace vss::gui
+{
+
+void ShellWindow::sync_canvas_editing()
+{
+    if (canvas_ == nullptr)
+        return;
+    const bool advanced = level_.advanced();
+    canvas_->set_editing(advanced);
+    QAction* toolbox = registry_.action(QStringLiteral("view.toolbox"));
+    if (toolbox_ != nullptr)
+    {
+        const bool shown = toolbox == nullptr || toolbox->isChecked();
+        toolbox_->setVisible(advanced && shown);
+    }
 }
 
 } // namespace vss::gui

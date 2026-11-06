@@ -131,6 +131,46 @@ void NodeItem::set_in_loop(bool value)
     update();
 }
 
+void NodeItem::set_editing(bool value)
+{
+    if (editing_ == value)
+        return;
+    editing_ = value;
+    update();
+}
+
+void NodeItem::set_wiring(bool value, bool source)
+{
+    if (wiring_ == value && wire_source_ == source)
+        return;
+    wiring_ = value;
+    wire_source_ = source;
+    update();
+}
+
+void NodeItem::set_drop_state(drop_state value)
+{
+    if (drop_ == value)
+        return;
+    drop_ = value;
+    update();
+}
+
+bool NodeItem::handles_visible() const noexcept
+{
+    return editing_ && (wiring_ || hovered_ || selected_ || focused_);
+}
+
+QPointF NodeItem::left_handle() const
+{
+    return {0.0, size_.height() / 2.0};
+}
+
+QPointF NodeItem::right_handle() const
+{
+    return {size_.width(), size_.height() / 2.0};
+}
+
 QRectF NodeItem::boundingRect() const
 {
     return QRectF(-6.0, -6.0, size_.width() + 12.0, size_.height() + 12.0);
@@ -159,20 +199,43 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     }
 
     QColor edge = theme.colour(colour_role::control);
-    if (in_loop_)
+    if (in_loop_ || drop_ == drop_state::refuse)
         edge = theme.colour(colour_role::bad);
-    else if (selected_)
+    else if (selected_ || drop_ == drop_state::accept)
         edge = theme.colour(colour_role::accent);
     else if (hovered_)
         edge = theme.colour(colour_role::accentLine);
 
-    QPen body_pen(edge, in_loop_ ? 2.0 : 1.0);
-    if (data_.unlinked && !selected_ && !in_loop_)
+    const bool strong = in_loop_ || drop_ != drop_state::none;
+    QPen body_pen(edge, strong ? 2.0 : 1.0);
+    if (data_.unlinked && !selected_ && !strong)
         body_pen.setStyle(Qt::DashLine);
     painter->setPen(body_pen);
-    painter->setBrush(
-        theme.colour(data_.device ? colour_role::sunken : colour_role::panel));
+    QColor fill =
+        theme.colour(data_.device ? colour_role::sunken : colour_role::panel);
+    if (drop_ == drop_state::accept)
+        fill = theme.colour(colour_role::accentSoft);
+    else if (drop_ == drop_state::refuse)
+        fill = theme.colour(colour_role::badSoft);
+    painter->setBrush(fill);
     painter->drawRoundedRect(body, radius, radius);
+
+    if (handles_visible())
+    {
+        // The wiring handles: a ring on each side edge, filled on the node a
+        // wire starts from.
+        constexpr qreal handle_radius = 5.0;
+        for (const QPointF& centre : {left_handle(), right_handle()})
+        {
+            painter->setPen(QPen(theme.colour(wire_source_
+                                                  ? colour_role::accent
+                                                  : colour_role::control),
+                                 1.5));
+            painter->setBrush(theme.colour(wire_source_ ? colour_role::accent
+                                                        : colour_role::panel));
+            painter->drawEllipse(centre, handle_radius, handle_radius);
+        }
+    }
 
     if (focused_)
     {

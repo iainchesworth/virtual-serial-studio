@@ -80,6 +80,25 @@ public:
     void set_in_loop(bool value);
     bool in_loop() const noexcept { return in_loop_; }
 
+    /// What a wire being dragged over the node would do.
+    enum class drop_state
+    {
+        none,
+        accept,
+        refuse
+    };
+    /// Advanced canvas: the node can show its wiring handles.  They show
+    /// while it is hovered, selected or focused, or on every node while a
+    /// wire is out (`set_wiring`).
+    void set_editing(bool value);
+    void set_wiring(bool value, bool source);
+    void set_drop_state(drop_state value);
+    drop_state drop() const noexcept { return drop_; }
+    bool handles_visible() const noexcept;
+    /// The centres of the left and right handles, in item coordinates.
+    QPointF left_handle() const;
+    QPointF right_handle() const;
+
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                QWidget* widget) override;
@@ -100,6 +119,10 @@ private:
     bool focused_ = false;
     bool hovered_ = false;
     bool in_loop_ = false;
+    bool editing_ = false;
+    bool wiring_ = false;
+    bool wire_source_ = false;
+    drop_state drop_ = drop_state::none;
 
     /// Set while the left button is down on the node; the drag starts only
     /// after the pointer has moved past the platform drag distance, so a click

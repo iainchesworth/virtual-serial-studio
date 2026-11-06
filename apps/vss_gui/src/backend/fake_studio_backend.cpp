@@ -406,8 +406,8 @@ FakeStudioBackend::set_port_settings(vss::endpoint_id id,
     if (it->kind == vss::endpoint_kind::tcp ||
         it->kind == vss::endpoint_kind::udp)
         return vss::make_error_code(vss::errc::unsupported);
+    // Like the engine, no refresh: the caller may be a worker thread.
     it->serial = settings;
-    refresh();
     return {};
 }
 

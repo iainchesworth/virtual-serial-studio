@@ -5,6 +5,7 @@ Mockup: `reference/mockups/CanvasEditor.html`. Extends `03-topology-view.md`, wh
 - **Simple is the wizard.** "I want this set up and go." The launcher and the flows (Pair, Share, Connect, Add fixture, Attach device) ask a few questions and build a whole setup. The topology view shows the result: select, inspect, move, rename, remove, Fit and Tidy layout work as in `03`. There is no toolbox, no port handles and no Settings item.
 - **Advanced is the canvas.** Everything Simple has, plus a toolbox of ports and bundles to put on the board, handles to wire nodes by dragging, Settings for ports and links, multi-select, Duplicate, and undo of every change made on the canvas.
 - Both modes build with the same backend calls. Switching mode never changes the setup, and a setup made in one mode opens in the other. Toolbox items appear in the command palette in both modes; in Simple they say "Needs Advanced mode", as other Advanced items do.
+- An empty setup in Simple mode shows the launcher. In Advanced mode it shows the empty canvas with its toolbox and the text "Drag a port or bundle from the toolbox, or press Enter on one."; File, New and the launcher's own entry points still reach the launcher.
 - The flows stay in Advanced too. A toolbox bundle is the quick way; a flow is the guided way, for example Share, which has to find the real device first.
 
 ## Layout

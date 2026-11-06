@@ -9,6 +9,8 @@ add_library(vss_gui_shell STATIC
   accessibility.hpp
   action_registry.cpp
   action_registry.hpp
+  canvas_controller.cpp
+  canvas_controller.hpp
   command_palette.cpp
   command_palette.hpp
   format.hpp

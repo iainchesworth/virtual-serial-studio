@@ -542,11 +542,8 @@ vss::result<void>
 EngineStudioBackend::set_port_settings(vss::endpoint_id id,
                                        const vss::serial_settings& settings)
 {
-    const auto changed = studio_.reconfigure_port(id, settings);
-    if (!changed)
-        return changed.error();
-    rebuild();
-    return {};
+    // Called from a worker thread: the caller refreshes on the GUI thread.
+    return studio_.reconfigure_port(id, settings);
 }
 
 std::vector<vss::endpoint_id> EngineStudioBackend::lost_ports() const
