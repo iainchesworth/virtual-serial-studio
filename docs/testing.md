@@ -21,7 +21,7 @@ ctest --test-dir build --output-on-failure
   pair fails the job instead of quietly reducing what is tested. Linux and
   macOS CI create the pair with `tools/pty_loopback.py`, so the physical
   backend runs on every platform.
-* **Polled bus** — one system case runs the whole bus scenario on every
+* **Polled bus** - one system case runs the whole bus scenario on every
   operating system, with no hardware: a master replayed from a recording, two
   devices answering from scripts (one labelled as a real serial device), and a
   device on another computer played by an RFC 2217 client over loopback, all on
