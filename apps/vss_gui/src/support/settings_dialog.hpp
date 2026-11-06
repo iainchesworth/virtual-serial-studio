@@ -13,6 +13,7 @@
 
 #include <QDialog>
 
+class QButtonGroup;
 class QCheckBox;
 class QComboBox;
 class QLabel;
@@ -38,6 +39,9 @@ public:
     /// Restores every preference to its default and applies it immediately.
     void reset_to_defaults();
 
+    /// Opens on a page: 0 General, 1 Running, 2 Appearance, 3 Performance.
+    void show_page(int index);
+
 Q_SIGNALS:
     /// The shell owns the LevelService; advanced mode is applied by its owner.
     void advanced_changed(bool advanced);
@@ -61,9 +65,13 @@ private:
     QRadioButton* theme_light_ = nullptr;
     QRadioButton* theme_dark_ = nullptr;
     SegmentedControl* density_ = nullptr;
+    QRadioButton* close_background_ = nullptr;
+    QRadioButton* close_quit_ = nullptr;
+    Switch* sign_in_ = nullptr;
     QSlider* refresh_ = nullptr;
     QLabel* refresh_value_ = nullptr;
     QStackedWidget* pages_ = nullptr;
+    QButtonGroup* nav_ = nullptr;
 };
 
 } // namespace vss::gui::support

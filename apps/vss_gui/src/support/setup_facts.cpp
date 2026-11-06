@@ -575,6 +575,8 @@ bool relaunch_as_administrator(QString* error)
     info.fMask = SEE_MASK_FLAG_NO_UI;
     info.lpVerb = L"runas";
     info.lpFile = path.c_str();
+    // The new Studio waits for this one to quit and starts the same ports.
+    info.lpParameters = L"--replace";
     info.nShow = SW_SHOWNORMAL;
     if (ShellExecuteExW(&info) != 0)
         return true;

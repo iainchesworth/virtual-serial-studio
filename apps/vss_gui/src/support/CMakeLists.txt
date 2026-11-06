@@ -29,6 +29,8 @@ add_library(vss_gui_support STATIC
   permission_rows.hpp
   redact.cpp
   redact.hpp
+  running_setup.cpp
+  running_setup.hpp
   settings.cpp
   settings.hpp
   settings_dialog.cpp
@@ -38,6 +40,8 @@ add_library(vss_gui_support STATIC
   setup_facts.cpp
   setup_facts.hpp
   shortcuts_dialog.cpp
+  sign_in_start.cpp
+  sign_in_start.hpp
   shortcuts_dialog.hpp
   troubleshoot.cpp
   troubleshoot.hpp

@@ -22,8 +22,12 @@ add_library(vss_gui_shell STATIC
   setup_group.hpp
   shell_window.cpp
   shell_window.hpp
+  single_instance.cpp
+  single_instance.hpp
   status_bar.cpp
   status_bar.hpp
+  studio_tray.cpp
+  studio_tray.hpp
   undo_service.cpp
   undo_service.hpp
   undo_steps.cpp
@@ -39,6 +43,7 @@ target_link_libraries(vss_gui_shell PUBLIC
   vss_gui_backend
   vss_gui_theme
   vss_gui_support
+  Qt6::Network
   Qt6::Widgets)
 
 target_compile_features(vss_gui_shell PUBLIC cxx_std_23)
