@@ -51,10 +51,8 @@ public sealed class WowHub : IDisposable
     const uint IOCTL_GET_STATE = 0x80002004;
     const uint IOCTL_WAIT_STATE = 0x80002008;
     const uint IOCTL_SET_LINES = 0x8000200C;
-    // 11 words up to VSSCOM_VERSION 2; version 3 adds AppProcessId as the 12th. The buffer is
-    // sized for 12 and either answer is accepted; AppProcessId reads 0 from an older driver.
+    // VSSCOM_HUB_STATE as of VSSCOM_VERSION 3: twelve words, AppProcessId last.
     const int StateWords = 12;
-    const int OldStateWords = 11;
     public const int TimedOut = 258;
 
     // Indexes into the state words.
@@ -178,9 +176,9 @@ public sealed class WowHub : IDisposable
             bool started = DeviceIoControl(handle, code, hasInput ? input : IntPtr.Zero, hasInput ? 4u : 0u,
                                            output, StateWords * 4, IntPtr.Zero, ov);
             int n = Finish(ov, signal, started, ms, out error);
-            if (n != StateWords * 4 && n != OldStateWords * 4) return null;
+            if (n != StateWords * 4) return null;
             var words = new uint[StateWords];
-            for (int i = 0; i < n / 4; i++) words[i] = (uint)Marshal.ReadInt32(output, i * 4);
+            for (int i = 0; i < StateWords; i++) words[i] = (uint)Marshal.ReadInt32(output, i * 4);
             return words;
         }
         finally { CloseHandle(signal); Marshal.FreeHGlobal(ov); Marshal.FreeHGlobal(input); Marshal.FreeHGlobal(output); }
