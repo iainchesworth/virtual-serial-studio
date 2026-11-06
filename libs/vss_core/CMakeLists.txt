@@ -6,6 +6,7 @@
 add_library(vss_core
   src/bytes.cpp
   src/control_lines.cpp
+  src/delay_line.cpp
   src/endpoint.cpp
   src/error.cpp
   src/hub.cpp

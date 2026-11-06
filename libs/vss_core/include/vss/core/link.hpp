@@ -12,6 +12,7 @@
 #include <vss/core/types.hpp>
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 
 namespace vss {
@@ -19,6 +20,10 @@ namespace vss {
 /// The most members one bus takes.  A bus of `n` members holds `n * (n - 1)`
 /// routes, so the limit keeps a saved file from asking for millions of them.
 inline constexpr std::size_t max_bus_members = 64;
+
+/// The longest `delay_ms` a link takes, one minute.  A saved file cannot ask
+/// for a delay that holds bytes for hours.
+inline constexpr std::uint32_t max_link_delay_ms = 60'000;
 
 /// Tuning for one link.
 struct link_options
@@ -37,7 +42,32 @@ struct link_options
     /// Arbitration between concurrent publishers into the same target.  A
     /// bus supports `interleave` only.
     merge_policy policy = merge_policy::interleave;
+
+    /// How long each chunk is held between its source and its target, in
+    /// milliseconds, to rehearse a slow wire or a network hop.  Zero (the
+    /// default) forwards at once, as before.  It applies to every route of
+    /// the link, so on a bus each receiving member hears a byte this long
+    /// after it was sent.
+    std::uint32_t delay_ms = 0;
+
+    /// Each chunk's delay varies by up to this much either side of
+    /// `delay_ms`, drawn uniformly.  It must not exceed `delay_ms`, so a delay
+    /// is never negative.  Bytes of one route stay in order whatever the
+    /// draw: a chunk never overtakes the one before it.
+    std::uint32_t jitter_ms = 0;
+
+    bool has_latency() const noexcept
+    {
+        return delay_ms != 0 || jitter_ms != 0;
+    }
 };
+
+/// True when the link's delay and jitter are within the limits.
+inline constexpr bool valid_latency(const link_options& options) noexcept
+{
+    return options.delay_ms <= max_link_delay_ms &&
+           options.jitter_ms <= options.delay_ms;
+}
 
 /// Snapshot of a link for the GUI and the CLI.
 struct link_info

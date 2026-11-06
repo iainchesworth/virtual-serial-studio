@@ -549,3 +549,86 @@ TEST_CASE("document: a COM number must be a number a COM port can have, on a por
     value.ports[0].com_number = 256;
     REQUIRE(validate(value) == make_error_code(errc::config_error));
 }
+
+TEST_CASE("document: a link's delay and jitter round trip and stay out when zero")
+{
+    document value = bus_document();
+    value.links[0].delay_ms = 100;
+    value.links[0].jitter_ms = 20;
+    value.links[1].delay_ms = 5;
+
+    const auto text = to_json(value);
+    REQUIRE(text);
+    REQUIRE(text->find("\"delay_ms\": 100") != std::string::npos);
+    REQUIRE(text->find("\"jitter_ms\": 20") != std::string::npos);
+    REQUIRE(text->find("\"delay_ms\": 5") != std::string::npos);
+    // The version is still 1.
+    REQUIRE(text->find("\"version\": 1") != std::string::npos);
+
+    const auto parsed = from_json(*text);
+    REQUIRE(parsed);
+    REQUIRE(*parsed == value);
+    REQUIRE_EQ(parsed->links[0].delay_ms, std::uint32_t{100});
+    REQUIRE_EQ(parsed->links[0].jitter_ms, std::uint32_t{20});
+    REQUIRE_EQ(parsed->links[1].jitter_ms, std::uint32_t{0});
+
+    // A link without latency writes neither field, so an old file is stable.
+    const auto plain = to_json(bus_document());
+    REQUIRE(plain);
+    REQUIRE(plain->find("delay_ms") == std::string::npos);
+    REQUIRE(plain->find("jitter_ms") == std::string::npos);
+}
+
+TEST_CASE("document: delay and jitter are checked")
+{
+    const auto parse = [](const std::string& link)
+    {
+        return from_json(
+            R"({"version":1,"ports":[{"name":"a","kind":"virtual"},)"
+            R"({"name":"b","kind":"virtual"}],"links":[)" +
+            link + "]}");
+    };
+
+    const auto ok = parse(
+        R"({"mode":"duplex","sources":["a"],"targets":["b"],)"
+        R"("delay_ms":200,"jitter_ms":10})");
+    REQUIRE(ok);
+    REQUIRE_EQ(ok->links[0].delay_ms, std::uint32_t{200});
+
+    const auto bus = parse(
+        R"({"mode":"bus","members":["a","b"],"delay_ms":30})");
+    REQUIRE(bus);
+    REQUIRE_EQ(bus->links[0].delay_ms, std::uint32_t{30});
+
+    const auto expect_invalid = [&](const std::string& fields)
+    {
+        const auto parsed = parse(
+            R"({"mode":"duplex","sources":["a"],"targets":["b"],)" + fields +
+            "}");
+        REQUIRE(!parsed);
+        REQUIRE_EQ(parsed.error(), make_error_code(errc::config_error));
+    };
+
+    expect_invalid(R"("delay_ms":-1)");
+    expect_invalid(R"("delay_ms":"100")");
+    expect_invalid(R"("delay_ms":1.5)");
+    expect_invalid(R"("delay_ms":60001)");
+    expect_invalid(R"("delay_ms":true)");
+    expect_invalid(R"("jitter_ms":-1,"delay_ms":10)");
+    // Jitter cannot exceed the delay, or a chunk would be due before it left.
+    expect_invalid(R"("delay_ms":10,"jitter_ms":11)");
+    expect_invalid(R"("jitter_ms":5)");
+
+    const auto edge = parse(
+        R"({"mode":"duplex","sources":["a"],"targets":["b"],)"
+        R"("delay_ms":60000,"jitter_ms":60000})");
+    REQUIRE(edge);
+
+    // The same limits hold for a document built in code.
+    document value = bus_document();
+    value.links[0].delay_ms = max_link_delay_ms + 1;
+    REQUIRE_EQ(validate(value), make_error_code(errc::config_error));
+    value.links[0].delay_ms = 10;
+    value.links[0].jitter_ms = 11;
+    REQUIRE_EQ(validate(value), make_error_code(errc::config_error));
+}

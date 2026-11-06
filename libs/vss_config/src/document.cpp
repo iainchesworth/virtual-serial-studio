@@ -140,6 +140,37 @@ result<std::vector<std::string>> string_array(const json::object& object,
     return out;
 }
 
+/// Writes `delay_ms` and `jitter_ms` only when they are set, so a file
+/// without latency is the same as before.
+void latency_to_json(const link_entry& link, json::object& object)
+{
+    if (link.delay_ms != 0)
+        object["delay_ms"] = link.delay_ms;
+    if (link.jitter_ms != 0)
+        object["jitter_ms"] = link.jitter_ms;
+}
+
+error_code milliseconds_member(const json::object& object, std::string_view key,
+                               std::uint32_t& out)
+{
+    const auto* item = object.if_contains(key);
+    if (!item)
+        return {};
+    if (!item->is_int64() || item->as_int64() < 0 ||
+        item->as_int64() > static_cast<std::int64_t>(max_link_delay_ms))
+        return make_error_code(errc::config_error);
+    out = static_cast<std::uint32_t>(item->as_int64());
+    return {};
+}
+
+error_code latency_from_json(const json::object& object, link_entry& link)
+{
+    if (const error_code error =
+            milliseconds_member(object, "delay_ms", link.delay_ms))
+        return error;
+    return milliseconds_member(object, "jitter_ms", link.jitter_ms);
+}
+
 bool contains_kind(std::string_view value)
 {
     for (const char* kind : port_kinds)
@@ -292,6 +323,9 @@ error_code validate(const document& value)
     {
         if (!contains_link_mode(link.mode))
             return make_error_code(errc::config_error);
+        if (link.delay_ms > max_link_delay_ms ||
+            link.jitter_ms > link.delay_ms)
+            return make_error_code(errc::config_error);
 
         if (link.mode == "bus")
         {
@@ -398,6 +432,7 @@ result<std::string> to_json(const document& value, bool pretty)
             object["members"] = std::move(members);
             object["emulate_modem_lines"] = false;
             object["policy"] = to_string(link.policy);
+            latency_to_json(link, object);
             links.push_back(std::move(object));
             continue;
         }
@@ -411,6 +446,7 @@ result<std::string> to_json(const document& value, bool pretty)
         object["targets"] = std::move(targets);
         object["emulate_modem_lines"] = link.emulate_modem_lines;
         object["policy"] = to_string(link.policy);
+        latency_to_json(link, object);
         links.push_back(std::move(object));
     }
     root["links"] = std::move(links);
@@ -520,6 +556,10 @@ result<document> from_json(std::string_view text)
                 link.policy = merge_policy::interleave;
             else
                 return make_error_code(errc::config_error);
+
+            if (const error_code latency_error =
+                    latency_from_json(entry, link))
+                return latency_error;
 
             out.links.push_back(std::move(link));
         }

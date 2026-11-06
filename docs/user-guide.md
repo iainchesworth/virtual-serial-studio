@@ -362,6 +362,36 @@ What to expect:
 - **Ports on other computers.** A TCP, UDP or RFC 2217 port can be a member too,
   so a device on another machine can sit on the same bus.
 
+## Delay and jitter on a link
+
+A real wire is not instant, and a network hop adds more. A link can hold what it
+carries for a set time, so a program that waits for a reply for a fixed window
+can be tried with a reply that comes early, late or just on the edge. In a
+topology file, add `delay_ms` (0 to 60000) to any link, and `jitter_ms` to vary
+each chunk by up to that much either side of the delay:
+
+```json
+{ "mode": "bus", "members": ["master", "device-1", "device-2"],
+  "delay_ms": 190, "jitter_ms": 10 }
+```
+
+Here every byte takes between 180 and 200 ms to reach each other member.
+
+- **Jitter cannot exceed the delay**, so a byte is never due before it was sent.
+  Studio refuses the file otherwise, and with `jitter_ms` alone.
+- **Order is kept.** A chunk never overtakes the one before it on the same
+  route, however the delays fall, so the extra wait may pile up behind a slow
+  chunk but the stream is never shuffled.
+- **Both ways.** On a duplex link each direction waits the full delay, so a
+  round trip takes twice `delay_ms`. On a bus the delay is the time from a
+  member sending to each other member hearing it.
+- **Only the link is slowed.** The ports at either end, and any other link
+  they are on, are not.
+- **Removing the link drops what is still on the way.**
+- The delay is a timer in Studio, not a model of baud rate: it adds to the time
+  the ports themselves take. It is accurate to a few milliseconds, and a busy
+  machine can make a byte late but never early.
+
 ## Watching traffic
 
 **Topology → Watch traffic** makes a read-only copy of a port. Choose the port

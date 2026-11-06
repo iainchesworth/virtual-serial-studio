@@ -12,6 +12,7 @@
 #include <vss/core/serial_settings.hpp>
 #include <vss/core/types.hpp>
 
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -56,6 +57,12 @@ struct link_entry
     bool emulate_modem_lines = true;
     /// A `bus` supports `interleave` only.
     merge_policy policy = merge_policy::interleave;
+    /// Milliseconds each chunk is held on the link, 0 to
+    /// `vss::max_link_delay_ms`.  Left out of the file when zero, on every
+    /// mode including `bus`.
+    std::uint32_t delay_ms = 0;
+    /// Up to this much either side of `delay_ms`; at most `delay_ms`.
+    std::uint32_t jitter_ms = 0;
 
     friend bool operator==(const link_entry&, const link_entry&) = default;
 };
