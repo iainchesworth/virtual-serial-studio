@@ -440,8 +440,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>«Mejor disponible» usa el controlador de Studio o com0com en Windows, y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>Mejor disponible usa com0com en Windows y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
+            <translation type="vanished">Mejor disponible usa com0com en Windows y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -2158,7 +2162,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>Ver comprobación de configuración</translation>
         </message>
@@ -2265,7 +2269,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>Abrir comprobación de configuración</translation>
         </message>
@@ -2280,17 +2284,22 @@
             <translation>La configuración requiere atención. Es posible que otros programas no puedan usar los puertos nuevos.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>Listo. Este PC puede crear puertos que otros programas pueden abrir (controlador de Virtual Serial Studio detectado).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>Listo. Este PC puede crear puertos que otros programas pueden abrir (se detectó com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>La configuración requiere atención. Otros programas no verán los puertos nuevos hasta que se instale un controlador.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>Configuración guardada</translation>
         </message>
@@ -3224,11 +3233,13 @@
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>Los nombres se sugieren a partir de los números COM libres. Esta compilación elige los puertos libres mostrados arriba. En Linux y macOS los puertos son rutas como /dev/pts/3 y se eligen por usted.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windows usa pares de com0com libres para este par, por lo que no solicita permiso de administrador.</translation>
         </message>
@@ -3303,121 +3314,131 @@
             <translation>Tipo de puerto</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>El controlador de Studio crea los puertos de este par, así que Windows no pide permiso de administrador.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>El controlador de Studio crea los dos puertos al crear el par. Windows elige sus números COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>No hay ningún puerto COM libre para el primer programa</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>No hay ningún puerto COM libre para el segundo programa</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>Se elige al crear el par</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>Los pares enlazados no están disponibles en esta compilación.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>Los pares enlazados necesitan un controlador. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>No hay suficientes pares de controlador libres. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que &lt;b&gt;%1&lt;/b&gt; envía llega a &lt;b&gt;%2&lt;/b&gt;, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que %1 envía llega a %2, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>Todo lo que &lt;b&gt;%1&lt;/b&gt; envía llega a &lt;b&gt;%2&lt;/b&gt;, y viceversa. Las líneas del módem no están cruzadas.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>Todo lo que %1 envía llega a %2, y viceversa. Las líneas del módem no están cruzadas.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que envía el primer puerto llega al segundo, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>Introduzca un nombre para el par.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>otro puerto COM libre</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 ya está en uso. Pruebe con %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>No se pudo crear el par</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Windows necesita un controlador serie antes de que Studio pueda crear un par que otro programa pueda abrir. No se cambió nada. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>Esta compilación no puede crear un par enlazado. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studio no pudo crear el primer puerto. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> Compruebe la configuración e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studio no pudo crear el segundo puerto. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>Este PC ya no puede dar al par dos puertos que otros programas puedan abrir. No se cambió nada. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studio no pudo enlazar los dos puertos. No se cambió nada.</translation>
         </message>
@@ -3597,145 +3618,155 @@
             <translation>%1 copiado.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>Otros programas no pueden abrir este puerto. Solo existe dentro de Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>Otros programas no pueden abrir este puerto. Instale un controlador para crear puertos que puedan abrir.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
             <source>Open setup check</source>
             <translation>Abrir comprobación de configuración</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>En su programa, elija &lt;b&gt;%1&lt;/b&gt; como puerto serie. Ese programa elige la configuración, como la velocidad en baudios. El puerto permanece disponible mientras Virtual Serial Studio esté en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>En su programa, elija %1 como puerto serie. Ese programa elige la configuración, como la velocidad en baudios. El puerto permanece disponible mientras Virtual Serial Studio esté en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>Esta ruta existe mientras Virtual Serial Studio está en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
             <source>Open</source>
             <translation>Abierto</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
             <source>Show details</source>
             <translation>Mostrar detalles</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
             <source>Name</source>
             <translation>Nombre</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Kind</source>
             <translation>Tipo</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
             <source>Path</source>
             <translation>Ruta</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>Entrada en una configuración guardada (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
             <source>Same thing from the command line</source>
             <translation>Lo mismo desde la línea de comandos</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
             <source>Command</source>
             <translation>Comando</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
             <source>Connect %1 to something</source>
             <translation>Conectar %1 a algo</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
             <source>Create another</source>
             <translation>Crear otro</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
             <source>Done</source>
             <translation>Hecho</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
             <source>Waiting</source>
             <translation>Esperando</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>Ningún programa ha abierto %1 todavía. Este panel se actualiza cuando alguno lo haga.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>Program connected</source>
             <translation>Programa conectado</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
             <source>A program is using %1.</source>
             <translation>Un programa está usando %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Hide details</source>
             <translation>Ocultar detalles</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>In-process loopback</source>
             <translation>Bucle de retorno en proceso</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
             <source>Pseudo terminal</source>
             <translation>Pseudoterminal</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>Windows driver</source>
             <translation>Controlador de Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>Automático, resuelto al controlador de Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
             <source>Auto, resolved to com0com</source>
             <translation>Automático, resuelto a com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Real device</source>
             <translation>Dispositivo real</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
             <source>Auto</source>
             <translation>Automático</translation>
         </message>
@@ -3974,37 +4005,47 @@
             <translation>%1 y %2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="141" />
+            <location filename="../src/dialogs/share_plan.cpp" line="156" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>Studio no puede crear un puerto que otro programa pueda abrir.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="147" />
+            <location filename="../src/dialogs/share_plan.cpp" line="162" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>Solo %1 de los %2 programas pueden abrir su puerto.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="155" />
+            <location filename="../src/dialogs/share_plan.cpp" line="171" />
+            <source>The Studio driver gives one user at most 16 ports, and Studio already holds %1.</source>
+            <translation>El controlador de Studio da a un usuario como máximo 16 puertos, y Studio ya tiene %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="174" />
+            <source>The Studio driver gives one user at most 16 ports.</source>
+            <translation>El controlador de Studio da a un usuario como máximo 16 puertos.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="179" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio encontró 1 par libre.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="184" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio no encontró ningún par libre.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="165" />
+            <location filename="../src/dialogs/share_plan.cpp" line="189" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>Cada programa externo necesita su propio par de controladores, y Studio encontró %1 pares libres.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="180" />
+            <location filename="../src/dialogs/share_plan.cpp" line="204" />
             <source>The %1 port works only inside Studio.</source>
             <translation>El %1 puerto funciona solo dentro de Studio.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="186" />
+            <location filename="../src/dialogs/share_plan.cpp" line="210" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>Los %1 puertos restantes funcionan solo dentro de Studio.</translation>
         </message>
@@ -4408,8 +4449,8 @@
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="94" />
-            <location filename="../src/support/setup_facts.cpp" line="415" />
-            <location filename="../src/support/setup_facts.cpp" line="426" />
+            <location filename="../src/support/setup_facts.cpp" line="453" />
+            <location filename="../src/support/setup_facts.cpp" line="464" />
             <source>Not checked yet</source>
             <translation>Aún sin comprobar</translation>
         </message>
@@ -4429,179 +4470,203 @@
             <translation>Studio no comprobó los dispositivos serie.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="128" />
+            <location filename="../src/support/setup_facts.cpp" line="134" />
             <source>Virtual port driver</source>
             <translation>Controlador de puertos virtuales</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="134" />
+            <location filename="../src/support/setup_facts.cpp" line="140" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>Studio no comprobó el controlador de puertos virtuales.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="142" />
+            <location filename="../src/support/setup_facts.cpp" line="146" />
+            <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
+            <translation>El controlador de Virtual Serial Studio está instalado, así que otros programas pueden ver como puertos COM los puertos que crea Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="153" />
+            <source>Driver version %1.</source>
+            <translation>Versión del controlador: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="160" />
+            <source>com0com is also installed, and Studio tries its own driver first.</source>
+            <translation>com0com también está instalado, y Studio prueba primero su propio controlador.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="171" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0com está instalado con %n par(es), así que otros programas pueden ver los puertos virtuales como puertos COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="147" />
+            <location filename="../src/support/setup_facts.cpp" line="176" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0com está instalado, así que otros programas pueden ver los puertos virtuales como puertos COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="156" />
             <source>com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
-            <translation>No se encontró com0com. Windows necesita un controlador para que otros programas vean los puertos virtuales como puertos COM.</translation>
+            <translation type="vanished">No se encontró com0com. Windows necesita un controlador para que otros programas vean los puertos virtuales como puertos COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="161" />
-            <location filename="../src/support/setup_facts.cpp" line="255" />
-            <location filename="../src/support/setup_facts.cpp" line="295" />
+            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
+            <translation>No se encontró ni el controlador de Virtual Serial Studio ni com0com. Windows necesita un controlador para que otros programas vean los puertos virtuales como puertos COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="191" />
+            <location filename="../src/support/setup_facts.cpp" line="293" />
+            <location filename="../src/support/setup_facts.cpp" line="333" />
             <source>Needs attention</source>
             <translation>Requiere atención</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="163" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
             <source>Install com0com</source>
             <translation>Instalar com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="171" />
+            <location filename="../src/support/setup_facts.cpp" line="201" />
             <source>Administrator rights</source>
             <translation>Derechos de administrador</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="177" />
+            <location filename="../src/support/setup_facts.cpp" line="207" />
             <source>Studio could not check for administrator rights.</source>
             <translation>Studio no pudo comprobar los derechos de administrador.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <location filename="../src/support/setup_facts.cpp" line="215" />
+            <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
+            <translation>El controlador de Virtual Serial Studio crea puertos sin derechos de administrador.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="223" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>Studio se ejecuta como administrador, así que puede crear pares enlazados.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="231" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>Crear un par enlazado nuevo requiere derechos de administrador, una vez por par. Todo lo demás funciona sin ellos.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="198" />
+            <location filename="../src/support/setup_facts.cpp" line="236" />
             <source>Needed later</source>
             <translation>Necesario más adelante</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="199" />
+            <location filename="../src/support/setup_facts.cpp" line="237" />
             <source>Restart as administrator</source>
             <translation>Reiniciar como administrador</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="211" />
+            <location filename="../src/support/setup_facts.cpp" line="249" />
             <source>Carry on without a driver</source>
             <translation>Continuar sin controlador</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="212" />
+            <location filename="../src/support/setup_facts.cpp" line="250" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>Aun así puede usar puertos en proceso, el monitor y el panel Enviar para hacer pruebas.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="216" />
+            <location filename="../src/support/setup_facts.cpp" line="254" />
             <source>Continue in test mode</source>
             <translation>Continuar en modo de prueba</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="229" />
+            <location filename="../src/support/setup_facts.cpp" line="267" />
             <source>Pseudo terminals</source>
             <translation>Pseudoterminales</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="235" />
+            <location filename="../src/support/setup_facts.cpp" line="273" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>Studio no comprobó si hay pseudoterminales disponibles.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="242" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>Hay pseudoterminales disponibles, así que otros programas pueden abrir puertos virtuales nuevos.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="250" />
+            <location filename="../src/support/setup_facts.cpp" line="288" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>No hay pseudoterminales disponibles. Otros programas no podrán abrir puertos virtuales nuevos.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="262" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
             <source>Serial port access</source>
             <translation>Acceso a puertos serie</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="263" />
+            <location filename="../src/support/setup_facts.cpp" line="301" />
             <source>Serial port group membership</source>
             <translation>Pertenencia al grupo de puertos serie</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="270" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>Studio no tiene una comprobación de grupo para macOS. Si no se puede abrir un dispositivo, revise sus permisos en /dev.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="274" />
+            <location filename="../src/support/setup_facts.cpp" line="312" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>Studio no comprobó si usted pertenece al grupo dialout.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="283" />
+            <location filename="../src/support/setup_facts.cpp" line="321" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>Usted pertenece al grupo dialout, así que los programas pueden abrir dispositivos serie.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="291" />
+            <location filename="../src/support/setup_facts.cpp" line="329" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>Su cuenta no pertenece al grupo dialout, así que es posible que los programas no puedan abrir dispositivos serie.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="297" />
+            <location filename="../src/support/setup_facts.cpp" line="335" />
             <source>How to add me</source>
             <translation>Cómo agregarme</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="420" />
+            <location filename="../src/support/setup_facts.cpp" line="458" />
             <source>1 thing to fix</source>
             <translation>1 cosa por corregir</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="421" />
+            <location filename="../src/support/setup_facts.cpp" line="459" />
             <source>%n things to fix</source>
             <translation>%n cosas por corregir</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="433" />
+            <location filename="../src/support/setup_facts.cpp" line="471" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>Hasta que se instale un controlador, los puertos nuevos solo funcionan dentro de Virtual Serial Studio. Otros programas no los verán.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="453" />
+            <location filename="../src/support/setup_facts.cpp" line="491" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>En Linux y macOS, esta comprobación examina en su lugar los pseudoterminales y su pertenencia al grupo de puertos serie.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="516" />
+            <location filename="../src/support/setup_facts.cpp" line="554" />
             <source>The application path is not known.</source>
             <translation>Se desconoce la ruta de la aplicación.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="529" />
+            <location filename="../src/support/setup_facts.cpp" line="567" />
             <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
             <translation>Windows no permitió el reinicio con privilegios elevados. Inténtelo de nuevo desde el menú Inicio.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="533" />
+            <location filename="../src/support/setup_facts.cpp" line="571" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>Windows no pudo reiniciar Virtual Serial Studio como administrador.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="541" />
+            <location filename="../src/support/setup_facts.cpp" line="579" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>Reiniciar como administrador solo está disponible en Windows.</translation>
         </message>
@@ -4691,7 +4756,7 @@
         </message>
         <message>
             <location filename="../src/support/setup_check_dialog.cpp" line="221" />
-            <location filename="../src/support/setup_facts.cpp" line="429" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>All set</source>
             <translation>Todo listo</translation>
         </message>
@@ -4717,12 +4782,13 @@
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="213" />
+            <location filename="../src/dialogs/share_plan.cpp" line="237" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="222" />
+            <location filename="../src/dialogs/share_plan.cpp" line="243" />
+            <location filename="../src/dialogs/share_plan.cpp" line="251" />
             <source>A free port</source>
             <translation>Un puerto libre</translation>
         </message>
@@ -4750,13 +4816,13 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>Compartir un dispositivo con varios programas</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio abre el dispositivo una vez y luego da a cada programa su propio puerto.</translation>
         </message>
@@ -4879,7 +4945,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>Un dispositivo de red en su lugar</translation>
         </message>
@@ -5022,213 +5088,219 @@
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>Virtual</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>Es un puerto virtual, no un dispositivo.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>Dispositivo serie. Studio ya lo está usando.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>En uso</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>Dispositivo serie</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>Disponible</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>Usar un dispositivo en su lugar</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>Compartir %1 con varios programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>Cada programa recibe su propio puerto. Studio copia los datos del dispositivo en todos ellos.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>Abra uno de estos puertos en cada programa.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>el dispositivo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>herramienta-de-prueba</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>registrador</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>programa-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>Nombre del programa %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>Sí</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>No, solo Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>Advertencia: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows solicitará permiso de administrador.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>No disponible en esta compilación</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>Mantener el %1 puerto solo en Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>Mantener los %1 restantes solo en Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>Todo lo que %1 recibe se copia en 1 puerto. Lo que escriba el programa vuelve a %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>Todo lo que %1 recibe se copia en los %2 puertos. Lo que escriba un programa vuelve a %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>No se pudo crear otro par</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows no creó el par de controladores. Conceda el permiso de administrador e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>Compartir no está disponible en esta compilación</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>No se pudo compartir %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>Se quitó el recurso compartido anterior. Compruebe el dispositivo e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>La configuración no ha cambiado. Compruebe el dispositivo e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 se comparte con 1 programa</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 se comparte con %2 programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>Solo Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>No para otros programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>Copiar</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>Copiar %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1 copiado.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>Todo lo que %1 recibe ahora se copia en 1 puerto.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>Todo lo que %1 recibe ahora se copia en los %2 puertos.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>Las etiquetas Esperando cambian a Programa conectado a medida que cada programa abre su puerto.</translation>
         </message>
@@ -7674,162 +7746,162 @@
     <context>
         <name>ordinal</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
             <source>first</source>
             <translation>primer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
             <source>second</source>
             <translation>segundo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
             <source>third</source>
             <translation>tercer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
             <source>fourth</source>
             <translation>cuarto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
             <source>fifth</source>
             <translation>quinto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
             <source>sixth</source>
             <translation>sexto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
             <source>seventh</source>
             <translation>séptimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
             <source>eighth</source>
             <translation>octavo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
             <source>ninth</source>
             <translation>noveno</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
             <source>tenth</source>
             <translation>décimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
             <source>eleventh</source>
             <translation>undécimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
             <source>twelfth</source>
             <translation>duodécimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
             <source>thirteenth</source>
             <translation>decimotercer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
             <source>fourteenth</source>
             <translation>decimocuarto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
             <source>fifteenth</source>
             <translation>decimoquinto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
             <source>sixteenth</source>
             <translation>decimosexto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
             <source>seventeenth</source>
             <translation>decimoséptimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <location filename="../src/dialogs/share_plan.cpp" line="128" />
             <source>eighteenth</source>
             <translation>decimoctavo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <location filename="../src/dialogs/share_plan.cpp" line="129" />
             <source>nineteenth</source>
             <translation>decimonoveno</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="130" />
             <source>twentieth</source>
             <translation>vigésimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <location filename="../src/dialogs/share_plan.cpp" line="131" />
             <source>twenty-first</source>
             <translation>vigésimo primer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <location filename="../src/dialogs/share_plan.cpp" line="132" />
             <source>twenty-second</source>
             <translation>vigésimo segundo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <location filename="../src/dialogs/share_plan.cpp" line="133" />
             <source>twenty-third</source>
             <translation>vigésimo tercer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <location filename="../src/dialogs/share_plan.cpp" line="134" />
             <source>twenty-fourth</source>
             <translation>vigésimo cuarto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <location filename="../src/dialogs/share_plan.cpp" line="135" />
             <source>twenty-fifth</source>
             <translation>vigésimo quinto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="136" />
             <source>twenty-sixth</source>
             <translation>vigésimo sexto</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <location filename="../src/dialogs/share_plan.cpp" line="137" />
             <source>twenty-seventh</source>
             <translation>vigésimo séptimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <location filename="../src/dialogs/share_plan.cpp" line="138" />
             <source>twenty-eighth</source>
             <translation>vigésimo octavo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <location filename="../src/dialogs/share_plan.cpp" line="139" />
             <source>twenty-ninth</source>
             <translation>vigésimo noveno</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <location filename="../src/dialogs/share_plan.cpp" line="140" />
             <source>thirtieth</source>
             <translation>trigésimo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>thirty-first</source>
             <translation>trigésimo primer</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <location filename="../src/dialogs/share_plan.cpp" line="142" />
             <source>thirty-second</source>
             <translation>trigésimo segundo</translation>
         </message>
@@ -8356,8 +8428,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>«Mejor disponible» usa el controlador de Studio o com0com en Windows, y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>Mejor disponible usa com0com en Windows y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
+            <translation type="vanished">Mejor disponible usa com0com en Windows y un pseudoterminal en Linux y macOS. Hasta 32 a la vez. Varios puertos se llaman port-1, port-2 y así sucesivamente.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -9733,7 +9809,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>Ver comprobación de configuración</translation>
         </message>
@@ -9840,7 +9916,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>Abrir comprobación de configuración</translation>
         </message>
@@ -9855,17 +9931,22 @@
             <translation>La configuración requiere atención. Es posible que otros programas no puedan usar los puertos nuevos.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>Listo. Este PC puede crear puertos que otros programas pueden abrir (controlador de Virtual Serial Studio detectado).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>Listo. Este PC puede crear puertos que otros programas pueden abrir (se detectó com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>La configuración requiere atención. Otros programas no verán los puertos nuevos hasta que se instale un controlador.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>Configuración guardada</translation>
         </message>
@@ -10571,11 +10652,13 @@
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>Los nombres se sugieren a partir de los números COM libres. Esta compilación elige los puertos libres mostrados arriba. En Linux y macOS los puertos son rutas como /dev/pts/3 y se eligen por usted.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windows usa pares de com0com libres para este par, por lo que no solicita permiso de administrador.</translation>
         </message>
@@ -10650,121 +10733,131 @@
             <translation>Tipo de puerto</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>El controlador de Studio crea los puertos de este par, así que Windows no pide permiso de administrador.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>El controlador de Studio crea los dos puertos al crear el par. Windows elige sus números COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>No hay ningún puerto COM libre para el primer programa</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>No hay ningún puerto COM libre para el segundo programa</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>Se elige al crear el par</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>Los pares enlazados no están disponibles en esta compilación.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>Los pares enlazados necesitan un controlador. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>No hay suficientes pares de controlador libres. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que &lt;b&gt;%1&lt;/b&gt; envía llega a &lt;b&gt;%2&lt;/b&gt;, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que %1 envía llega a %2, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>Todo lo que &lt;b&gt;%1&lt;/b&gt; envía llega a &lt;b&gt;%2&lt;/b&gt;, y viceversa. Las líneas del módem no están cruzadas.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>Todo lo que %1 envía llega a %2, y viceversa. Las líneas del módem no están cruzadas.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>Todo lo que envía el primer puerto llega al segundo, y viceversa. DTR está conectado a DSR y RTS a CTS, como en un cable de módem nulo estándar.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>Introduzca un nombre para el par.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>otro puerto COM libre</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 ya está en uso. Pruebe con %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>No se pudo crear el par</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Windows necesita un controlador serie antes de que Studio pueda crear un par que otro programa pueda abrir. No se cambió nada. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>Esta compilación no puede crear un par enlazado. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studio no pudo crear el primer puerto. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> Compruebe la configuración e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studio no pudo crear el segundo puerto. No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>Este PC ya no puede dar al par dos puertos que otros programas puedan abrir. No se cambió nada. Abra la comprobación de configuración.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studio no pudo enlazar los dos puertos. No se cambió nada.</translation>
         </message>
@@ -10944,145 +11037,155 @@
             <translation>%1 copiado.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>Otros programas no pueden abrir este puerto. Solo existe dentro de Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>Otros programas no pueden abrir este puerto. Instale un controlador para crear puertos que puedan abrir.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
             <source>Open setup check</source>
             <translation>Abrir comprobación de configuración</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>En su programa, elija &lt;b&gt;%1&lt;/b&gt; como puerto serie. Ese programa elige la configuración, como la velocidad en baudios. El puerto permanece disponible mientras Virtual Serial Studio esté en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>En su programa, elija %1 como puerto serie. Ese programa elige la configuración, como la velocidad en baudios. El puerto permanece disponible mientras Virtual Serial Studio esté en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>Esta ruta existe mientras Virtual Serial Studio está en ejecución.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
             <source>Open</source>
             <translation>Abierto</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
             <source>Show details</source>
             <translation>Mostrar detalles</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
             <source>Name</source>
             <translation>Nombre</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Kind</source>
             <translation>Tipo</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
             <source>Path</source>
             <translation>Ruta</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>Entrada en una configuración guardada (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
             <source>Same thing from the command line</source>
             <translation>Lo mismo desde la línea de comandos</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
             <source>Command</source>
             <translation>Comando</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
             <source>Connect %1 to something</source>
             <translation>Conectar %1 a algo</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
             <source>Create another</source>
             <translation>Crear otro</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
             <source>Done</source>
             <translation>Hecho</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
             <source>Waiting</source>
             <translation>Esperando</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>Ningún programa ha abierto %1 todavía. Este panel se actualiza cuando alguno lo haga.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>Program connected</source>
             <translation>Programa conectado</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
             <source>A program is using %1.</source>
             <translation>Un programa está usando %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Hide details</source>
             <translation>Ocultar detalles</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>In-process loopback</source>
             <translation>Bucle de retorno en proceso</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
             <source>Pseudo terminal</source>
             <translation>Pseudoterminal</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>Windows driver</source>
             <translation>Controlador de Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>Automático, resuelto al controlador de Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
             <source>Auto, resolved to com0com</source>
             <translation>Automático, resuelto a com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Real device</source>
             <translation>Dispositivo real</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
             <source>Auto</source>
             <translation>Automático</translation>
         </message>
@@ -11274,13 +11377,13 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>Compartir un dispositivo con varios programas</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio abre el dispositivo una vez y luego da a cada programa su propio puerto.</translation>
         </message>
@@ -11403,7 +11506,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>Un dispositivo de red en su lugar</translation>
         </message>
@@ -11546,213 +11649,219 @@
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>Virtual</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>Es un puerto virtual, no un dispositivo.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>Dispositivo serie. Studio ya lo está usando.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>En uso</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>Dispositivo serie</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>Disponible</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>Usar un dispositivo en su lugar</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>Compartir %1 con varios programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>Cada programa recibe su propio puerto. Studio copia los datos del dispositivo en todos ellos.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>Abra uno de estos puertos en cada programa.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>el dispositivo</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>herramienta-de-prueba</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>registrador</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>programa-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>Nombre del programa %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>Sí</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>No, solo Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>Advertencia: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows solicitará permiso de administrador.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>No disponible en esta compilación</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>Mantener el %1 puerto solo en Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>Mantener los %1 restantes solo en Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>Todo lo que %1 recibe se copia en 1 puerto. Lo que escriba el programa vuelve a %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>Todo lo que %1 recibe se copia en los %2 puertos. Lo que escriba un programa vuelve a %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>No se pudo crear otro par</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows no creó el par de controladores. Conceda el permiso de administrador e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>Compartir no está disponible en esta compilación</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>No se cambió nada.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>No se pudo compartir %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>Se quitó el recurso compartido anterior. Compruebe el dispositivo e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>La configuración no ha cambiado. Compruebe el dispositivo e inténtelo de nuevo.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 se comparte con 1 programa</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 se comparte con %2 programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>Solo Studio</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>No para otros programas</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>Copiar</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>Copiar %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1 copiado.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>Todo lo que %1 recibe ahora se copia en 1 puerto.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>Todo lo que %1 recibe ahora se copia en los %2 puertos.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>Las etiquetas Esperando cambian a Programa conectado a medida que cada programa abre su puerto.</translation>
         </message>

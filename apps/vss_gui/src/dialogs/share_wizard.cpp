@@ -743,6 +743,13 @@ void ShareWizard::update_device_list()
             chip = StatusChip::kind::studio_only;
             selectable = false;
         }
+        else if (device.virtual_device)
+        {
+            description = tr("This is a virtual port, not a device.");
+            chip_text = tr("Virtual");
+            chip = StatusChip::kind::studio_only;
+            selectable = false;
+        }
         else if (claimed.contains(device.path, Qt::CaseInsensitive))
         {
             description = tr("Serial device. Studio is already using it.");
@@ -807,7 +814,8 @@ void ShareWizard::update_device_list()
         {
             for (const device_view& device : devices_)
             {
-                if (device.path == selected_device_ && !device.com0com)
+                if (device.path == selected_device_ && !device.com0com &&
+                    !device.virtual_device)
                     return true;
             }
             return false;
@@ -1149,10 +1157,28 @@ void ShareWizard::update_warning()
 {
     if (warn_note_ == nullptr)
         return;
-    const bool windows = windows_platform(backend_.facts());
+    const setup_facts facts = backend_.facts();
+    const bool windows = windows_platform(facts);
     free_pair_paths_ = free_com0com_pair_paths(devices_, backend_.ports());
-    plan_ = make_share_plan(programs_,
-                            static_cast<int>(free_pair_paths_.size()), windows);
+    if (windows && facts.driver_found)
+    {
+        // Driver ports are made on demand, so the com0com free-pair count
+        // does not apply.
+        int held = 0;
+        for (const port_view& port : backend_.ports())
+        {
+            if (port.kind == vss::endpoint_kind::virtual_port &&
+                !port.studio_only)
+                ++held;
+        }
+        free_pair_paths_.clear();
+        plan_ = make_driver_share_plan(programs_, held);
+    }
+    else
+    {
+        plan_ = make_share_plan(
+            programs_, static_cast<int>(free_pair_paths_.size()), windows);
+    }
     const bool show = plan_.needs_warning() && !acknowledged_;
     warn_text_->setText(share_warning_rich(plan_));
     warn_text_->setAccessibleName(share_warning_plain(plan_));
@@ -1163,6 +1189,8 @@ void ShareWizard::update_warning()
     if (create_pair_ != nullptr)
     {
         const bool capable = backend_.caps().com0com_pair_creation;
+        // More pairs cannot raise the Studio driver's per-user limit.
+        create_pair_->setVisible(!plan_.studio_driver);
         create_pair_->setEnabled(capable);
         create_pair_->setToolTip(
             capable ? tr("Windows will ask for administrator permission.")

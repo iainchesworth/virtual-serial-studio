@@ -440,8 +440,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>„הטוב ביותר הזמין“ משתמש במנהל ההתקן של Studio או ב-com0com ב-Windows, ובמסוף מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות נקראות port-1,‏ port-2 וכן הלאה.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>הטוב ביותר הזמין משתמש ב-com0com ב-Windows, ובטרמינל מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות מקבלות את השמות port-1, port-2 וכן הלאה.</translation>
+            <translation type="vanished">הטוב ביותר הזמין משתמש ב-com0com ב-Windows, ובטרמינל מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות מקבלות את השמות port-1, port-2 וכן הלאה.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -2158,7 +2162,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>הצגת בדיקת הגדרות</translation>
         </message>
@@ -2265,7 +2269,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
@@ -2280,17 +2284,22 @@
             <translation>ההגדרות דורשות תשומת לב. ייתכן שיציאות חדשות לא יהיו שמישות לתוכניות אחרות.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>מוכן. המחשב הזה יכול ליצור יציאות שתוכנות אחרות יכולות לפתוח (זוהה מנהל ההתקן של Virtual Serial Studio).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>מוכן. מחשב זה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח (זוהה com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>ההגדרות דורשות תשומת לב. תוכניות אחרות לא יראו יציאות חדשות עד שיותקן מנהל התקן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>תצורה שמורה</translation>
         </message>
@@ -3224,11 +3233,13 @@
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>השמות מוצעים ממספרי COM פנויים. גרסה זו בוחרת את היציאות הפנויות המוצגות למעלה. ב-Linux וב-macOS היציאות הן נתיבים כגון /dev/pts/3 ונבחרות עבורכם.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windows משתמש בזוגות com0com פנויים עבור זוג זה, ולכן אינו מבקש הרשאת מנהל.</translation>
         </message>
@@ -3303,121 +3314,131 @@
             <translation>סוג יציאה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>מנהל ההתקן של Studio יוצר את היציאות של הזוג הזה, ולכן Windows לא מבקש הרשאת מנהל מערכת.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>מנהל ההתקן של Studio יוצר את שתי היציאות כשיוצרים את הזוג. Windows בוחר את מספרי ה-COM שלהן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>אין יציאת COM פנויה לתוכנית הראשונה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>אין יציאת COM פנויה לתוכנית השנייה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>נבחר בעת יצירת הזוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>זוגות מקושרים אינם זמינים בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>זוגות מקושרים דורשים מנהל התקן. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>אין מספיק זוגות מנהל התקן פנויים. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחת מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחת מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. קווי המודם אינם מוצלבים.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך. קווי המודם אינם מוצלבים.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה שהיציאה הראשונה שולחת מגיע אל השנייה, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>יש להזין שם לזוג.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>יציאת COM פנויה אחרת</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 כבר בשימוש. נסו את %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>לא ניתן ליצור את הזוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Windows זקוק למנהל התקן טורי לפני ש-Studio יוכל ליצור זוג שתוכנית אחרת יכולה לפתוח. דבר לא השתנה. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>גרסה זו אינה יכולה ליצור זוג מקושר. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studio לא הצליח ליצור את היציאה הראשונה. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> בדקו את ההגדרות ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studio לא הצליח ליצור את היציאה השנייה. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>מחשב זה כבר אינו יכול לספק לזוג שתי יציאות שתוכניות אחרות יכולות לפתוח. דבר לא השתנה. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studio לא הצליח לקשר את שתי היציאות. דבר לא השתנה.</translation>
         </message>
@@ -3597,145 +3618,155 @@
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -3974,37 +4005,47 @@
             <translation>%1 ו-%2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="141" />
+            <location filename="../src/dialogs/share_plan.cpp" line="156" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>Studio אינו יכול ליצור יציאה שתוכנית אחרת יכולה לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="147" />
+            <location filename="../src/dialogs/share_plan.cpp" line="162" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>רק %1 מתוך %2 התוכניות יכולות לפתוח את היציאה שלהן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="155" />
+            <location filename="../src/dialogs/share_plan.cpp" line="171" />
+            <source>The Studio driver gives one user at most 16 ports, and Studio already holds %1.</source>
+            <translation>מנהל ההתקן של Studio נותן למשתמש אחד לכל היותר 16 יציאות, ו-Studio כבר מחזיק %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="174" />
+            <source>The Studio driver gives one user at most 16 ports.</source>
+            <translation>מנהל ההתקן של Studio נותן למשתמש אחד לכל היותר 16 יציאות.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="179" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio מצא זוג פנוי אחד.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="184" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio לא מצא זוגות פנויים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="165" />
+            <location filename="../src/dialogs/share_plan.cpp" line="189" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>כל תוכנית חיצונית זקוקה לזוג מנהל התקן משלה, ו-Studio מצא %1 זוגות פנויים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="180" />
+            <location filename="../src/dialogs/share_plan.cpp" line="204" />
             <source>The %1 port works only inside Studio.</source>
             <translation>היציאה %1 פועלת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="186" />
+            <location filename="../src/dialogs/share_plan.cpp" line="210" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>%1 היציאות הנותרות פועלות רק בתוך Studio.</translation>
         </message>
@@ -4408,8 +4449,8 @@
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="94" />
-            <location filename="../src/support/setup_facts.cpp" line="415" />
-            <location filename="../src/support/setup_facts.cpp" line="426" />
+            <location filename="../src/support/setup_facts.cpp" line="453" />
+            <location filename="../src/support/setup_facts.cpp" line="464" />
             <source>Not checked yet</source>
             <translation>טרם נבדק</translation>
         </message>
@@ -4429,179 +4470,203 @@
             <translation>Studio לא בדק את ההתקנים הטוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="128" />
+            <location filename="../src/support/setup_facts.cpp" line="134" />
             <source>Virtual port driver</source>
             <translation>מנהל התקן ליציאות וירטואליות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="134" />
+            <location filename="../src/support/setup_facts.cpp" line="140" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>Studio לא בדק אם קיים מנהל התקן ליציאות וירטואליות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="142" />
+            <location filename="../src/support/setup_facts.cpp" line="146" />
+            <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
+            <translation>מנהל ההתקן של Virtual Serial Studio מותקן, ולכן תוכנות אחרות יכולות לראות את היציאות ש-Studio יוצר כיציאות COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="153" />
+            <source>Driver version %1.</source>
+            <translation>גרסת מנהל ההתקן: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="160" />
+            <source>com0com is also installed, and Studio tries its own driver first.</source>
+            <translation>גם com0com מותקן, ו-Studio מנסה קודם את מנהל ההתקן שלו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="171" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0com מותקן, מספר הזוגות: %n, כך שתוכניות אחרות יכולות לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="147" />
+            <location filename="../src/support/setup_facts.cpp" line="176" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0com מותקן, כך שתוכניות אחרות יכולות לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="156" />
             <source>com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
-            <translation>com0com לא נמצא. Windows צריך מנהל התקן כדי שתוכניות אחרות יוכלו לראות יציאות וירטואליות כיציאות COM.</translation>
+            <translation type="vanished">com0com לא נמצא. Windows צריך מנהל התקן כדי שתוכניות אחרות יוכלו לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="161" />
-            <location filename="../src/support/setup_facts.cpp" line="255" />
-            <location filename="../src/support/setup_facts.cpp" line="295" />
+            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
+            <translation>לא נמצא לא מנהל ההתקן של Virtual Serial Studio ולא com0com. Windows צריך מנהל התקן כדי שתוכנות אחרות יראו יציאות וירטואליות כיציאות COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="191" />
+            <location filename="../src/support/setup_facts.cpp" line="293" />
+            <location filename="../src/support/setup_facts.cpp" line="333" />
             <source>Needs attention</source>
             <translation>דורש תשומת לב</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="163" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
             <source>Install com0com</source>
             <translation>התקנת com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="171" />
+            <location filename="../src/support/setup_facts.cpp" line="201" />
             <source>Administrator rights</source>
             <translation>הרשאות מנהל</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="177" />
+            <location filename="../src/support/setup_facts.cpp" line="207" />
             <source>Studio could not check for administrator rights.</source>
             <translation>Studio לא הצליח לבדוק הרשאות מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <location filename="../src/support/setup_facts.cpp" line="215" />
+            <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
+            <translation>מנהל ההתקן של Virtual Serial Studio יוצר יציאות בלי הרשאות מנהל מערכת.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="223" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>Studio פועל כמנהל, ולכן הוא יכול ליצור זוגות מקושרים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="231" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>יצירת זוג מקושר חדש דורשת הרשאות מנהל, פעם אחת לכל זוג. כל השאר פועל בלעדיהן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="198" />
+            <location filename="../src/support/setup_facts.cpp" line="236" />
             <source>Needed later</source>
             <translation>נדרש בהמשך</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="199" />
+            <location filename="../src/support/setup_facts.cpp" line="237" />
             <source>Restart as administrator</source>
             <translation>הפעלה מחדש כמנהל</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="211" />
+            <location filename="../src/support/setup_facts.cpp" line="249" />
             <source>Carry on without a driver</source>
             <translation>המשך ללא מנהל התקן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="212" />
+            <location filename="../src/support/setup_facts.cpp" line="250" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>עדיין אפשר להשתמש ביציאות בתוך התהליך, במוניטור ובחלונית השליחה כדי לנסות דברים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="216" />
+            <location filename="../src/support/setup_facts.cpp" line="254" />
             <source>Continue in test mode</source>
             <translation>המשך במצב בדיקה</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="229" />
+            <location filename="../src/support/setup_facts.cpp" line="267" />
             <source>Pseudo terminals</source>
             <translation>טרמינלים מדומים</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="235" />
+            <location filename="../src/support/setup_facts.cpp" line="273" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>Studio לא בדק אם טרמינלים מדומים זמינים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="242" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>טרמינלים מדומים זמינים, כך שתוכניות אחרות יכולות לפתוח יציאות וירטואליות חדשות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="250" />
+            <location filename="../src/support/setup_facts.cpp" line="288" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>טרמינלים מדומים אינם זמינים. תוכניות אחרות לא יוכלו לפתוח יציאות וירטואליות חדשות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="262" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
             <source>Serial port access</source>
             <translation>גישה ליציאות טוריות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="263" />
+            <location filename="../src/support/setup_facts.cpp" line="301" />
             <source>Serial port group membership</source>
             <translation>חברות בקבוצת היציאות הטוריות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="270" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>ל-Studio אין בדיקת קבוצות עבור macOS. אם לא ניתן לפתוח התקן, בדקו את ההרשאות שלו ב-/dev.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="274" />
+            <location filename="../src/support/setup_facts.cpp" line="312" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>Studio לא בדק אם אתם חברים בקבוצה dialout.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="283" />
+            <location filename="../src/support/setup_facts.cpp" line="321" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>אתם חברים בקבוצה dialout, ולכן תוכניות יכולות לפתוח התקנים טוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="291" />
+            <location filename="../src/support/setup_facts.cpp" line="329" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>החשבון שלכם אינו בקבוצה dialout, ולכן ייתכן שתוכניות לא יוכלו לפתוח התקנים טוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="297" />
+            <location filename="../src/support/setup_facts.cpp" line="335" />
             <source>How to add me</source>
             <translation>איך מוסיפים אותי</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="420" />
+            <location filename="../src/support/setup_facts.cpp" line="458" />
             <source>1 thing to fix</source>
             <translation>דבר אחד לתיקון</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="421" />
+            <location filename="../src/support/setup_facts.cpp" line="459" />
             <source>%n things to fix</source>
             <translation>מספר הדברים לתיקון: %n</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="433" />
+            <location filename="../src/support/setup_facts.cpp" line="471" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>עד שיותקן מנהל התקן, יציאות חדשות פועלות רק בתוך Virtual Serial Studio. תוכניות אחרות לא יראו אותן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="453" />
+            <location filename="../src/support/setup_facts.cpp" line="491" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>ב-Linux וב-macOS בדיקה זו בוחנת במקום זאת טרמינלים מדומים ואת החברות שלכם בקבוצת היציאות הטוריות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="516" />
+            <location filename="../src/support/setup_facts.cpp" line="554" />
             <source>The application path is not known.</source>
             <translation>נתיב היישום אינו ידוע.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="529" />
+            <location filename="../src/support/setup_facts.cpp" line="567" />
             <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
             <translation>Windows לא אישר את ההפעלה מחדש בהרשאות מוגבהות. נסו שוב מתפריט התחל.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="533" />
+            <location filename="../src/support/setup_facts.cpp" line="571" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>Windows לא הצליח להפעיל מחדש את Virtual Serial Studio כמנהל.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="541" />
+            <location filename="../src/support/setup_facts.cpp" line="579" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>הפעלה מחדש כמנהל זמינה רק ב-Windows.</translation>
         </message>
@@ -4691,7 +4756,7 @@
         </message>
         <message>
             <location filename="../src/support/setup_check_dialog.cpp" line="221" />
-            <location filename="../src/support/setup_facts.cpp" line="429" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>All set</source>
             <translation>הכול מוכן</translation>
         </message>
@@ -4717,12 +4782,13 @@
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="213" />
+            <location filename="../src/dialogs/share_plan.cpp" line="237" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="222" />
+            <location filename="../src/dialogs/share_plan.cpp" line="243" />
+            <location filename="../src/dialogs/share_plan.cpp" line="251" />
             <source>A free port</source>
             <translation>יציאה פנויה</translation>
         </message>
@@ -4750,13 +4816,13 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>שיתוף התקן עם כמה תוכניות</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio פותח את ההתקן פעם אחת, ואז נותן לכל תוכנית יציאה משלה.</translation>
         </message>
@@ -4879,7 +4945,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>התקן רשת במקום זאת</translation>
         </message>
@@ -5022,213 +5088,219 @@
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>וירטואלי</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>זוהי יציאה וירטואלית, לא התקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>התקן טורי. Studio כבר משתמש בו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>בשימוש</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>זמין</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>שימוש בהתקן במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>שיתוף %1 עם כמה תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>כל תוכנית מקבלת יציאה משלה. Studio מעתיק את נתוני ההתקן לכולן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>פתחו אחת מהיציאות האלה בכל תוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>שם תוכנית %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>כן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>לא, ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>אזהרה: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows יבקש הרשאת מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>השארת %1 ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>השארת %1 הנותרות ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאה אחת. מה שהתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק לכל %2 היציאות. מה שתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>לא ניתן ליצור זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows לא יצר את זוג מנהל ההתקן. אשרו הרשאת מנהל ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>שיתוף אינו זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>לא ניתן לשתף את %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>השיתוף הקודם הוסר. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>התצורה לא השתנתה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 משותף עם תוכנית אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 משותף עם %2 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>לא לתוכניות אחרות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>העתקה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>העתקת %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת ליציאה אחת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת לכל %2 היציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>התווית ממתין לתוכנית משתנה ל-תוכנית מחוברת כשכל תוכנית פותחת את היציאה שלה.</translation>
         </message>
@@ -7674,162 +7746,162 @@
     <context>
         <name>ordinal</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
             <source>first</source>
             <translation>הראשונה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
             <source>second</source>
             <translation>השנייה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
             <source>third</source>
             <translation>השלישית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
             <source>fourth</source>
             <translation>הרביעית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
             <source>fifth</source>
             <translation>החמישית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
             <source>sixth</source>
             <translation>השישית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
             <source>seventh</source>
             <translation>השביעית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
             <source>eighth</source>
             <translation>השמינית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
             <source>ninth</source>
             <translation>התשיעית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
             <source>tenth</source>
             <translation>העשירית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
             <source>eleventh</source>
             <translation>ה-11</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
             <source>twelfth</source>
             <translation>ה-12</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
             <source>thirteenth</source>
             <translation>ה-13</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
             <source>fourteenth</source>
             <translation>ה-14</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
             <source>fifteenth</source>
             <translation>ה-15</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
             <source>sixteenth</source>
             <translation>ה-16</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
             <source>seventeenth</source>
             <translation>ה-17</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <location filename="../src/dialogs/share_plan.cpp" line="128" />
             <source>eighteenth</source>
             <translation>ה-18</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <location filename="../src/dialogs/share_plan.cpp" line="129" />
             <source>nineteenth</source>
             <translation>ה-19</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="130" />
             <source>twentieth</source>
             <translation>ה-20</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <location filename="../src/dialogs/share_plan.cpp" line="131" />
             <source>twenty-first</source>
             <translation>ה-21</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <location filename="../src/dialogs/share_plan.cpp" line="132" />
             <source>twenty-second</source>
             <translation>ה-22</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <location filename="../src/dialogs/share_plan.cpp" line="133" />
             <source>twenty-third</source>
             <translation>ה-23</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <location filename="../src/dialogs/share_plan.cpp" line="134" />
             <source>twenty-fourth</source>
             <translation>ה-24</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <location filename="../src/dialogs/share_plan.cpp" line="135" />
             <source>twenty-fifth</source>
             <translation>ה-25</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="136" />
             <source>twenty-sixth</source>
             <translation>ה-26</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <location filename="../src/dialogs/share_plan.cpp" line="137" />
             <source>twenty-seventh</source>
             <translation>ה-27</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <location filename="../src/dialogs/share_plan.cpp" line="138" />
             <source>twenty-eighth</source>
             <translation>ה-28</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <location filename="../src/dialogs/share_plan.cpp" line="139" />
             <source>twenty-ninth</source>
             <translation>ה-29</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <location filename="../src/dialogs/share_plan.cpp" line="140" />
             <source>thirtieth</source>
             <translation>ה-30</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>thirty-first</source>
             <translation>ה-31</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <location filename="../src/dialogs/share_plan.cpp" line="142" />
             <source>thirty-second</source>
             <translation>ה-32</translation>
         </message>
@@ -8356,8 +8428,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>„הטוב ביותר הזמין“ משתמש במנהל ההתקן של Studio או ב-com0com ב-Windows, ובמסוף מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות נקראות port-1,‏ port-2 וכן הלאה.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>הטוב ביותר הזמין משתמש ב-com0com ב-Windows, ובטרמינל מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות מקבלות את השמות port-1, port-2 וכן הלאה.</translation>
+            <translation type="vanished">הטוב ביותר הזמין משתמש ב-com0com ב-Windows, ובטרמינל מדומה ב-Linux וב-macOS. עד 32 בו-זמנית. כמה יציאות מקבלות את השמות port-1, port-2 וכן הלאה.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -9733,7 +9809,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>הצגת בדיקת הגדרות</translation>
         </message>
@@ -9840,7 +9916,7 @@
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
@@ -9855,17 +9931,22 @@
             <translation>ההגדרות דורשות תשומת לב. ייתכן שיציאות חדשות לא יהיו שמישות לתוכניות אחרות.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>מוכן. המחשב הזה יכול ליצור יציאות שתוכנות אחרות יכולות לפתוח (זוהה מנהל ההתקן של Virtual Serial Studio).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>מוכן. מחשב זה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח (זוהה com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>ההגדרות דורשות תשומת לב. תוכניות אחרות לא יראו יציאות חדשות עד שיותקן מנהל התקן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>תצורה שמורה</translation>
         </message>
@@ -10571,11 +10652,13 @@
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>השמות מוצעים ממספרי COM פנויים. גרסה זו בוחרת את היציאות הפנויות המוצגות למעלה. ב-Linux וב-macOS היציאות הן נתיבים כגון /dev/pts/3 ונבחרות עבורכם.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>Windows משתמש בזוגות com0com פנויים עבור זוג זה, ולכן אינו מבקש הרשאת מנהל.</translation>
         </message>
@@ -10650,121 +10733,131 @@
             <translation>סוג יציאה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>מנהל ההתקן של Studio יוצר את היציאות של הזוג הזה, ולכן Windows לא מבקש הרשאת מנהל מערכת.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>מנהל ההתקן של Studio יוצר את שתי היציאות כשיוצרים את הזוג. Windows בוחר את מספרי ה-COM שלהן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>אין יציאת COM פנויה לתוכנית הראשונה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>אין יציאת COM פנויה לתוכנית השנייה</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>נבחר בעת יצירת הזוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>זוגות מקושרים אינם זמינים בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>זוגות מקושרים דורשים מנהל התקן. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>אין מספיק זוגות מנהל התקן פנויים. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחת מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחת מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. קווי המודם אינם מוצלבים.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>כל מה ש-%1 שולחת מגיע אל %2, ולהפך. קווי המודם אינם מוצלבים.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>כל מה שהיציאה הראשונה שולחת מגיע אל השנייה, ולהפך. DTR מחווט אל DSR ו-RTS אל CTS, כמו בכבל null-modem רגיל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>יש להזין שם לזוג.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>יציאת COM פנויה אחרת</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 כבר בשימוש. נסו את %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>לא ניתן ליצור את הזוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>Windows זקוק למנהל התקן טורי לפני ש-Studio יוכל ליצור זוג שתוכנית אחרת יכולה לפתוח. דבר לא השתנה. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>גרסה זו אינה יכולה ליצור זוג מקושר. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>Studio לא הצליח ליצור את היציאה הראשונה. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> בדקו את ההגדרות ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>Studio לא הצליח ליצור את היציאה השנייה. דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>מחשב זה כבר אינו יכול לספק לזוג שתי יציאות שתוכניות אחרות יכולות לפתוח. דבר לא השתנה. פתחו את בדיקת ההגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>Studio לא הצליח לקשר את שתי היציאות. דבר לא השתנה.</translation>
         </message>
@@ -10944,145 +11037,155 @@
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -11274,13 +11377,13 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>שיתוף התקן עם כמה תוכניות</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio פותח את ההתקן פעם אחת, ואז נותן לכל תוכנית יציאה משלה.</translation>
         </message>
@@ -11403,7 +11506,7 @@
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>התקן רשת במקום זאת</translation>
         </message>
@@ -11546,213 +11649,219 @@
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>וירטואלי</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>זוהי יציאה וירטואלית, לא התקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>התקן טורי. Studio כבר משתמש בו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>בשימוש</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>זמין</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>שימוש בהתקן במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>שיתוף %1 עם כמה תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>כל תוכנית מקבלת יציאה משלה. Studio מעתיק את נתוני ההתקן לכולן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>פתחו אחת מהיציאות האלה בכל תוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>שם תוכנית %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>כן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>לא, ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>אזהרה: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows יבקש הרשאת מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>השארת %1 ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>השארת %1 הנותרות ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאה אחת. מה שהתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק לכל %2 היציאות. מה שתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>לא ניתן ליצור זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows לא יצר את זוג מנהל ההתקן. אשרו הרשאת מנהל ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>שיתוף אינו זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>לא ניתן לשתף את %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>השיתוף הקודם הוסר. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>התצורה לא השתנתה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 משותף עם תוכנית אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 משותף עם %2 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>לא לתוכניות אחרות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>העתקה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>העתקת %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת ליציאה אחת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת לכל %2 היציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>התווית ממתין לתוכנית משתנה ל-תוכנית מחוברת כשכל תוכנית פותחת את היציאה שלה.</translation>
         </message>

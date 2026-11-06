@@ -132,6 +132,12 @@ struct device_view
 /// Facts the setup check, launcher strip and status chip read.
 struct setup_facts
 {
+    /// The Virtual Serial Studio COM port driver (`vsscom` or `vsscom_um`) is
+    /// installed.  Studio tries it before com0com, and it makes ports on
+    /// demand, so there is no pair count for it.
+    bool driver_found = false;
+    /// The driver's interface version, or empty when it could not be read.
+    QString driver_version;
     bool com0com_found = false;
     int com0com_pairs = 0;
     int serial_devices = 0;
