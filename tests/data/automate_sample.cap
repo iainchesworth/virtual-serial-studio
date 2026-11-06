@@ -1,4 +1,4 @@
-# Serial recording started at: Mon Jun  8 12:00:00 2026
+# Serial recording started at: Mon Jun  8 12:00:00 2026 UTC
 # Format: [timestamp_ms] direction byte|byte|byte|...
 # Direction: R=read (from device), W=write (to device)
 #

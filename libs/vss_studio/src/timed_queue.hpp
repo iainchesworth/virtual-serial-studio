@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_STUDIO_TIMED_QUEUE_HPP
-#define VSS_STUDIO_TIMED_QUEUE_HPP
+#pragma once
 
 #include <vss/core/stats.hpp>
 
@@ -128,4 +127,3 @@ private:
 
 } // namespace vss::detail
 
-#endif // VSS_STUDIO_TIMED_QUEUE_HPP

@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_STUDIO_REPLAY_HPP
-#define VSS_STUDIO_REPLAY_HPP
+#pragma once
 
 #include <vss/core/endpoint.hpp>
 #include <vss/core/error.hpp>
@@ -87,4 +86,3 @@ private:
 
 } // namespace vss
 
-#endif // VSS_STUDIO_REPLAY_HPP
