@@ -8,6 +8,10 @@ This file applies to any automated contributor. Read it before changing the repo
 
 - Work on a branch named `<prefix>/<slug>` with the prefix `feature`, `bugfix`, `docs`, `chore` or `agent`, and a
   lower-case slug with hyphens. Never commit to `develop` or `main` directly.
+- Open the pull request as a draft and mark it ready when the work is complete and `python3 tools/ci/precheck.py` is
+  clean. A draft runs the planner and the static checks only; a ready pull request starts the build jobs, and every push
+  to it starts them again. Push once the work is ready, not after each small step. `gh workflow run ci.yml --ref
+  <branch>` runs every leg before a change to threads, platform code or the build is queued.
 - Commit with `git commit -s`. Write the subject in the imperative, 72 characters or fewer, and the body as a plain
   description of what changed and why. Commit messages and pull request text carry no attribution of any kind.
 - Open pull requests against `develop`. Squash merge is the only method.
