@@ -720,6 +720,17 @@ capability. URI preview, validation and the client bridge are real. The
 bundled "Device on the network" template uses a loopback client target
 (`tcp://127.0.0.1:4001`) for the same reason and still validates.
 
+### A warning for an RFC 2217 server that other computers can reach
+
+RFC 2217 has no password, and the spec has no text for that. The network
+dialog shows a warn note, a new string wrapped in `tr()`, when the address of
+an RFC 2217 server is not this computer (`0.0.0.0` or any other address) and
+has no `?allow=` list: "RFC 2217 has no password. Anyone who can reach this
+port can use the device. Choose This PC only (127.0.0.1), or in Advanced add
+?allow=192.168.1.0/24 to the address to say who may connect." It follows the
+Advanced address too. TCP and UDP servers get no such note; their default
+stays "All network interfaces".
+
 ### Create another pair is a GUI adapter method
 
 The share wizard's "Create another pair" needs `vss::create_com0com_pair`,

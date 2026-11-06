@@ -400,6 +400,34 @@ listen on an interface they can reach (`0.0.0.0` for all interfaces). Try
 `127.0.0.1` first. Studio does not use the network unless you add an endpoint
 like these.
 
+### Who may connect
+
+A listening address can carry a list of the computers that may connect, after
+the port: `?allow=` and then addresses or ranges, separated by commas.
+
+```text
+rfc2217-listen://192.168.1.10:7001?allow=192.168.1.0/24,10.0.0.5
+tcp-listen://0.0.0.0:4001?allow=fd00::/8
+```
+
+A computer that is not on the list is disconnected as soon as it connects,
+before it can send or receive a byte, and a UDP datagram from one is ignored.
+An address alone means that computer; `a.b.c.d/n` is every address that shares
+the first `n` bits. IPv4 and IPv6 both work, and an IPv4 address that arrives
+written as IPv6 counts as the IPv4 one. The list is not a password and does not
+encrypt anything: an address can be forged, and the data crosses the network
+as it is. It keeps strangers on the same network away from a port. To use it in
+the network dialog, turn on Advanced and edit the address. Nothing in a saved
+setup changes: the list is part of the address.
+
+An RFC 2217 server has no password at all. The network dialog and `vss_cli
+bridge` warn when such a server can be reached from another computer and has no
+`allow=` list. Listen on `127.0.0.1` when the other program is on this computer.
+
+Every connection Studio accepts is set to send what it writes at once, so a
+short reply (a reply to a poll on a serial bus, for example) is not held back
+waiting for more data.
+
 ## Finding things: the command palette
 
 `Ctrl+K`, or the **Search actions** box in the toolbar, opens a list of every
