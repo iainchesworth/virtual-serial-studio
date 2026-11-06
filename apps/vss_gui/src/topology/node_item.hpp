@@ -37,6 +37,16 @@ struct node_data
     bool owner = false;
     bool dropped = false;
     QString tooltip;
+    /// The kind tile at the card's left (design language rule 8): the icon,
+    /// and its tint.  No tile in the compact size.
+    enum class tint
+    {
+        accent,
+        violet,
+        ok
+    };
+    QString icon;
+    tint tile = tint::accent;
 };
 
 /// The node size the design specifies, grown when the text needs more room.

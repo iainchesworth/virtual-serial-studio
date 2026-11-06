@@ -24,6 +24,7 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
+#include <algorithm>
 #include <utility>
 
 namespace vss::gui
@@ -126,23 +127,22 @@ PortSettingsDialog::~PortSettingsDialog()
 
 void PortSettingsDialog::build()
 {
-    const QString title =
-        before_.size() == 1
-            ? tr("Settings for %1").arg(before_.first().first)
-            : tr("Settings for %n ports", nullptr,
-                 static_cast<int>(before_.size()));
+    const QString title = before_.size() == 1
+                              ? tr("Settings for %1").arg(before_.first().first)
+                              : tr("Settings for %n ports", nullptr,
+                                   static_cast<int>(before_.size()));
     setWindowTitle(title);
     setAccessibleName(title);
     setObjectName(QStringLiteral("portSettingsDialog"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
-    setMinimumWidth(
-        Theme::instance().metric(QStringLiteral("layout.dialogWidths.small")));
+    setMinimumWidth(std::max(520, Theme::instance().metric(QStringLiteral(
+                                      "layout.dialogWidths.small"))));
 
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(20, 20, 20, 0);
     layout->setSpacing(14);
-    layout->addWidget(make_header(title, {}, this, true, {}));
+    layout->addWidget(make_header(title, {}, this, false, {}));
 
     QString note;
     switch (kind_)
@@ -236,9 +236,12 @@ void PortSettingsDialog::build()
     write_timeout_ = make_timeout(tr("Write timeout"));
 
     const QVector<QPair<QString, QWidget*>> rows = {
-        {tr("Baud rate"), baud_},         {tr("Data bits"), data_bits_},
-        {tr("Parity"), parity_},          {tr("Stop bits"), stop_bits_},
-        {tr("Flow control"), flow_},      {tr("Read timeout"), read_timeout_},
+        {tr("Baud rate"), baud_},
+        {tr("Data bits"), data_bits_},
+        {tr("Parity"), parity_},
+        {tr("Stop bits"), stop_bits_},
+        {tr("Flow control"), flow_},
+        {tr("Read timeout"), read_timeout_},
         {tr("Write timeout"), write_timeout_}};
     int row = 0;
     for (const auto& [label, field] : rows)
@@ -300,11 +303,10 @@ void PortSettingsDialog::build()
 
     // What a kind of port can use.
     const bool any = kind_ != settings_kind::network;
-    for (QWidget* field : {static_cast<QWidget*>(baud_),
-                           static_cast<QWidget*>(data_bits_),
-                           static_cast<QWidget*>(parity_),
-                           static_cast<QWidget*>(stop_bits_),
-                           static_cast<QWidget*>(flow_)})
+    for (QWidget* field :
+         {static_cast<QWidget*>(baud_), static_cast<QWidget*>(data_bits_),
+          static_cast<QWidget*>(parity_), static_cast<QWidget*>(stop_bits_),
+          static_cast<QWidget*>(flow_)})
         field->setEnabled(any);
     const bool timeouts =
         kind_ == settings_kind::device || kind_ == settings_kind::remote;
@@ -333,8 +335,7 @@ vss::serial_settings PortSettingsDialog::settings() const
     const int baud = baud_->currentText().trimmed().toInt(&ok);
     out.baud_rate = ok && baud > 0 ? static_cast<unsigned>(baud) : 0U;
     out.data_bits = static_cast<unsigned>(data_bits_->currentData().toInt());
-    out.parity =
-        static_cast<vss::parity_mode>(parity_->currentData().toInt());
+    out.parity = static_cast<vss::parity_mode>(parity_->currentData().toInt());
     out.stop_bits =
         static_cast<vss::stop_bits_mode>(stop_bits_->currentData().toInt());
     out.flow_control =
@@ -370,9 +371,8 @@ void PortSettingsDialog::update_summary()
     const vss::serial_settings value = settings();
     const bool valid = !vss::validate(value);
     summary_->setText(
-        valid ? tr("%1, %2")
-                    .arg(QString::fromStdString(vss::to_label(value)),
-                         flow_text(value.flow_control))
+        valid ? tr("%1, %2").arg(QString::fromStdString(vss::to_label(value)),
+                                 flow_text(value.flow_control))
               : tr("The baud rate must be a whole number from %1 to %2.")
                     .arg(kMinBaud)
                     .arg(kMaxBaud));
@@ -393,8 +393,7 @@ QString PortSettingsDialog::summary_text() const
 
 QString PortSettingsDialog::error_text() const
 {
-    return error_ == nullptr || error_->isHidden() ? QString()
-                                                   : error_->text();
+    return error_ == nullptr || error_->isHidden() ? QString() : error_->text();
 }
 
 bool PortSettingsDialog::fields_enabled() const
@@ -450,9 +449,8 @@ void PortSettingsDialog::on_finished(const vss::error_code& error)
     backend_.refresh();
     if (error)
     {
-        const QString text =
-            tr("The port could not take these settings: %1")
-                .arg(vss::gui::error_text(error));
+        const QString text = tr("The port could not take these settings: %1")
+                                 .arg(vss::gui::error_text(error));
         error_->setText(text);
         error_->show();
         update_summary();

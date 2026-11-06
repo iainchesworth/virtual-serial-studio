@@ -34,6 +34,7 @@
 #include "panes/monitor_panel.hpp"
 #include "panes/ports_panel.hpp"
 #include "panes/send_panel.hpp"
+#include "shell/canvas_controller.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/format.hpp"
 #include "shell/launcher.hpp"
@@ -54,10 +55,9 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "topology/links_list.hpp"
-#include "topology/topology_text.hpp"
 #include "topology/toolbox.hpp"
+#include "topology/topology_text.hpp"
 #include "topology/topology_view.hpp"
-#include "shell/canvas_controller.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
@@ -384,7 +384,8 @@ void ShellWindow::build_actions()
             if (canvas_ != nullptr)
                 canvas_->add_item(canvas_item::pair);
         });
-    add(QStringLiteral("edit.duplicate"), tr("Duplicate"),
+    add(
+        QStringLiteral("edit.duplicate"), tr("Duplicate"),
         tr("copy ports canvas"), {}, QKeySequence(QStringLiteral("Ctrl+D")),
         action_level::advanced,
         [this]
@@ -395,9 +396,11 @@ void ShellWindow::build_actions()
         false,
         [this]
         {
-            return topology_ != nullptr && !topology_->selected_ports().isEmpty();
+            return topology_ != nullptr &&
+                   !topology_->selected_ports().isEmpty();
         });
-    add(QStringLiteral("view.toolbox"), tr("Show toolbox"),
+    add(
+        QStringLiteral("view.toolbox"), tr("Show toolbox"),
         tr("canvas tiles palette"), {},
         QKeySequence(QStringLiteral("Ctrl+Shift+B")), action_level::advanced,
         [] {}, true);
@@ -3008,7 +3011,8 @@ bool ShellWindow::run_selftest()
         fail(QStringLiteral("the empty studio did not show the launcher"));
     if (level_.advanced() && backend_.ports().empty() &&
         central_->currentWidget() != workspace_)
-        fail(QStringLiteral("the empty Advanced studio did not show the canvas"));
+        fail(QStringLiteral(
+            "the empty Advanced studio did not show the canvas"));
     if (registry_.actions().isEmpty())
         fail(QStringLiteral("the action registry is empty"));
     if (!registry_.shortcuts_unique())

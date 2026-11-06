@@ -103,8 +103,8 @@ int slot_count(canvas_item item, int count);
 slot_kind default_slot_kind(canvas_item item, int index);
 
 /// A name no port uses and `taken` does not hold: `base-N`, counting from 1.
-QString next_free_name(const std::vector<port_view>& ports,
-                       const QString& base, const QStringList& taken = {});
+QString next_free_name(const std::vector<port_view>& ports, const QString& base,
+                       const QStringList& taken = {});
 
 /// Fills a request for a tile with fresh names, ready for the Add sheet.
 bundle_request default_request(canvas_item item,
@@ -151,13 +151,13 @@ std::optional<link_view> find_link(const StudioBackend& backend,
 
 /// The saved description of a port (kind, address, settings, COM number),
 /// from the backend's snapshot.
-std::optional<vss::config::port_entry> port_entry_of(
-    const StudioBackend& backend, const QString& name);
+std::optional<vss::config::port_entry>
+port_entry_of(const StudioBackend& backend, const QString& name);
 
 /// Makes a port from its saved description, with `name`.
-vss::result<vss::endpoint_id>
-make_port(StudioBackend& backend, const vss::config::port_entry& entry,
-          const QString& name);
+vss::result<vss::endpoint_id> make_port(StudioBackend& backend,
+                                        const vss::config::port_entry& entry,
+                                        const QString& name);
 
 /// False for a port only one program can open (a real device, a network
 /// client), which cannot be duplicated.
@@ -195,8 +195,7 @@ vss::result<QVector<QStringList>> restore_removal(StudioBackend& backend,
 /// Remakes a link with new options (delay, jitter, policy, modem lines): the
 /// engine cannot change them on a link that exists.  Restores the old link
 /// when the new one cannot be made.
-vss::result<vss::link_id> remake_link(StudioBackend& backend,
-                                      vss::link_id id,
+vss::result<vss::link_id> remake_link(StudioBackend& backend, vss::link_id id,
                                       const vss::link_options& options);
 
 } // namespace vss::gui

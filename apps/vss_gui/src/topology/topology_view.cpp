@@ -22,20 +22,20 @@
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <QGraphicsPathItem>
-#include <QGraphicsRectItem>
-#include <QMimeData>
-#include <QPainterPath>
-#include <QRubberBand>
 #include <QFocusEvent>
 #include <QFontMetricsF>
+#include <QGraphicsPathItem>
+#include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
+#include <QMimeData>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QResizeEvent>
+#include <QRubberBand>
 #include <QScrollBar>
 #include <QSet>
 #include <QWheelEvent>
@@ -286,6 +286,27 @@ void TopologyView::rebuild_items()
         node.owner = owners.contains(port.id);
         node.dropped = port.stats.dropped > 0;
         node.tooltip = topology_text::node_tooltip(port, node.unlinked);
+        switch (port.kind)
+        {
+        case vss::endpoint_kind::mock:
+            node.icon = QStringLiteral("fixture");
+            node.tile = node_data::tint::violet;
+            break;
+        case vss::endpoint_kind::physical:
+            node.icon = QStringLiteral("device");
+            node.tile = node_data::tint::ok;
+            break;
+        case vss::endpoint_kind::tcp:
+        case vss::endpoint_kind::udp:
+        case vss::endpoint_kind::rfc2217:
+            node.icon = QStringLiteral("network");
+            break;
+        case vss::endpoint_kind::virtual_port:
+            node.icon = port.path.startsWith(QStringLiteral("loopback:"))
+                            ? QStringLiteral("loopback")
+                            : QStringLiteral("port");
+            break;
+        }
 
         const QFont detail_font =
             node.detail_mono ? Theme::instance().font(text_style::data)
@@ -693,15 +714,16 @@ void TopologyView::update_overlays()
 void TopologyView::update_accessibility()
 {
     QString next = topology_text::summary(ports_, links_);
-    const qsizetype selected = selected_ports().size() + selected_links().size();
+    const qsizetype selected =
+        selected_ports().size() + selected_links().size();
     if (editing_ && selected > 1)
     {
         QStringList names;
         for (const vss::endpoint_id id : selected_ports())
             names.append(names_.value(id));
-        next += QLatin1Char(' ') + tr("%n selected: %1", nullptr,
-                                      static_cast<int>(selected))
-                                       .arg(names.join(QStringLiteral(", ")));
+        next += QLatin1Char(' ') +
+                tr("%n selected: %1", nullptr, static_cast<int>(selected))
+                    .arg(names.join(QStringLiteral(", ")));
     }
     if (next == summary_)
         return;
@@ -1171,8 +1193,9 @@ void TopologyView::mousePressEvent(QMouseEvent* event)
                 event->accept();
                 return;
             }
-            const bool adds = event->modifiers().testFlag(Qt::ControlModifier) ||
-                              event->modifiers().testFlag(Qt::ShiftModifier);
+            const bool adds =
+                event->modifiers().testFlag(Qt::ControlModifier) ||
+                event->modifiers().testFlag(Qt::ShiftModifier);
             QGraphicsItem* item = itemAt(point);
             if (adds && item != nullptr)
             {
@@ -1380,15 +1403,14 @@ void TopologyView::dropEvent(QDropEvent* event)
     const QPointF scene_point = mapToScene(event->position().toPoint());
     // A port tile dropped on a node is linked to it straight away.
     const vss::endpoint_id target = node_at(scene_point);
-    if (target != 0 && (*item == canvas_item::port ||
-                        *item == canvas_item::fixture ||
-                        *item == canvas_item::loopback))
+    if (target != 0 &&
+        (*item == canvas_item::port || *item == canvas_item::fixture ||
+         *item == canvas_item::loopback))
     {
-        const slot_kind kind = *item == canvas_item::fixture
-                                   ? slot_kind::new_fixture
-                               : *item == canvas_item::loopback
-                                   ? slot_kind::new_loopback
-                                   : slot_kind::new_port;
+        const slot_kind kind =
+            *item == canvas_item::fixture    ? slot_kind::new_fixture
+            : *item == canvas_item::loopback ? slot_kind::new_loopback
+                                             : slot_kind::new_port;
         Q_EMIT wire_new_requested(target, kind, wire_kind::two_way,
                                   node_rect(target).topRight() +
                                       QPointF(64.0, 0.0));
@@ -1483,7 +1505,24 @@ void TopologyView::wheelEvent(QWheelEvent* event)
 
 void TopologyView::drawBackground(QPainter* painter, const QRectF& rect)
 {
-    painter->fillRect(rect, Theme::instance().colour(colour_role::panel));
+    // The canvas is the sunken ground with a quiet dot grid, so the raised
+    // node cards stand out (design language, `10-design-language.md`).
+    const Theme& theme = Theme::instance();
+    painter->fillRect(rect, theme.colour(colour_role::sunken));
+    constexpr qreal grid = 16.0;
+    if (transform().m11() * grid < 6.0)
+        return;
+    painter->setPen(QPen(theme.colour(colour_role::line2), 1.5, Qt::SolidLine,
+                         Qt::RoundCap));
+    const qreal left = std::floor(rect.left() / grid) * grid;
+    const qreal top = std::floor(rect.top() / grid) * grid;
+    QVector<QPointF> dots;
+    for (qreal y = top; y <= rect.bottom(); y += grid)
+    {
+        for (qreal x = left; x <= rect.right(); x += grid)
+            dots.append(QPointF(x, y));
+    }
+    painter->drawPoints(dots.constData(), static_cast<int>(dots.size()));
 }
 
 bool TopologyView::eventFilter(QObject* watched, QEvent* event)
@@ -2017,7 +2056,8 @@ void TopologyView::emit_selection_count()
 
 void TopologyView::select_all()
 {
-    multi_ports_ = QSet<vss::endpoint_id>(node_order_.begin(), node_order_.end());
+    multi_ports_ =
+        QSet<vss::endpoint_id>(node_order_.begin(), node_order_.end());
     multi_links_ = QSet<vss::link_id>(link_order_.begin(), link_order_.end());
     if (selected_port_ == 0 && selected_link_ == 0 && !node_order_.isEmpty())
         select_port(node_order_.first());
@@ -2189,8 +2229,8 @@ void TopologyView::update_wire(const QPointF& scene_point)
         wire_item_->setZValue(4.0);
     }
     QPainterPath path(wire_start_);
-    const qreal bend = std::max(40.0, std::abs(scene_point.x() -
-                                               wire_start_.x()) / 2.0);
+    const qreal bend =
+        std::max(40.0, std::abs(scene_point.x() - wire_start_.x()) / 2.0);
     path.cubicTo(wire_start_ + QPointF(bend, 0.0),
                  scene_point - QPointF(bend, 0.0), scene_point);
     wire_item_->setPath(path);
@@ -2291,10 +2331,10 @@ void TopologyView::finish_wire_new(slot_kind kind, wire_kind wire,
 QStringList TopologyView::wire_menu_labels(vss::endpoint_id from,
                                            vss::endpoint_id to) const
 {
-    return {tr("Two-way"),
-            tr("One way, from %1 to %2")
-                .arg(names_.value(from), names_.value(to)),
-            tr("Monitor %1 on %2").arg(names_.value(from), names_.value(to))};
+    return {
+        tr("Two-way"),
+        tr("One way, from %1 to %2").arg(names_.value(from), names_.value(to)),
+        tr("Monitor %1 on %2").arg(names_.value(from), names_.value(to))};
 }
 
 void TopologyView::open_wire_menu(vss::endpoint_id to,
@@ -2323,9 +2363,9 @@ void TopologyView::open_wire_menu(vss::endpoint_id to,
     for (int index = 0; index < 3; ++index)
     {
         const wire_kind kind = kinds[index];
-        QAction* action = menu->addAction(
-            labels.value(index), this,
-            [this, from, to, kind] { Q_EMIT wire_requested(from, to, kind); });
+        QAction* action =
+            menu->addAction(labels.value(index), this, [this, from, to, kind]
+                            { Q_EMIT wire_requested(from, to, kind); });
         if (would_loop(from, to, kind))
         {
             action->setEnabled(false);
@@ -2363,28 +2403,26 @@ void TopologyView::open_wire_new_menu(const QPoint& viewport_position)
             {tr("Monitor on the new port"), wire_kind::monitor}};
         for (const auto& [wire_label, wire] : wires)
         {
-            sub->addAction(wire_label, this,
-                           [this, from, kind, wire, scene_point] {
-                               Q_EMIT wire_new_requested(from, kind, wire,
-                                                         scene_point);
-                           });
+            sub->addAction(
+                wire_label, this, [this, from, kind, wire, scene_point]
+                { Q_EMIT wire_new_requested(from, kind, wire, scene_point); });
         }
     }
     connect(menu, &QMenu::aboutToHide, this,
             [this]
             {
                 // A submenu hides its parent only after its action ran.
-                QMetaObject::invokeMethod(this, [this] { cancel_wire(); },
-                                          Qt::QueuedConnection);
+                QMetaObject::invokeMethod(
+                    this, [this] { cancel_wire(); }, Qt::QueuedConnection);
             });
     menu->popup(viewport()->mapToGlobal(viewport_position));
 }
 
 void TopologyView::populate_node_menu(QMenu* menu, vss::endpoint_id id)
 {
-    const auto port = std::find_if(ports_.begin(), ports_.end(),
-                                   [id](const port_view& view)
-                                   { return view.id == id; });
+    const auto port =
+        std::find_if(ports_.begin(), ports_.end(),
+                     [id](const port_view& view) { return view.id == id; });
     const bool network =
         port != ports_.end() && (port->kind == vss::endpoint_kind::tcp ||
                                  port->kind == vss::endpoint_kind::udp);
@@ -2400,10 +2438,10 @@ void TopologyView::populate_node_menu(QMenu* menu, vss::endpoint_id id)
     shortcut(menu->addAction(topology_text::inspect_action(), this,
                              [this, id] { Q_EMIT inspect_requested(id); }),
              QKeySequence(Qt::Key_Return));
-    QAction* settings = shortcut(
-        menu->addAction(tr("Settings..."), this,
-                        [this, id] { Q_EMIT settings_requested({id}); }),
-        QKeySequence(Qt::ALT | Qt::Key_Return));
+    QAction* settings =
+        shortcut(menu->addAction(tr("Settings..."), this, [this, id]
+                                 { Q_EMIT settings_requested({id}); }),
+                 QKeySequence(Qt::ALT | Qt::Key_Return));
     if (network)
     {
         settings->setEnabled(false);
@@ -2415,10 +2453,10 @@ void TopologyView::populate_node_menu(QMenu* menu, vss::endpoint_id id)
                                  [this, id] { Q_EMIT rename_requested(id); }),
                  QKeySequence(Qt::Key_F2));
     }
-    QAction* duplicate = shortcut(
-        menu->addAction(tr("Duplicate"), this,
-                        [this, id] { Q_EMIT duplicate_requested({id}); }),
-        QKeySequence(Qt::CTRL | Qt::Key_D));
+    QAction* duplicate =
+        shortcut(menu->addAction(tr("Duplicate"), this, [this, id]
+                                 { Q_EMIT duplicate_requested({id}); }),
+                 QKeySequence(Qt::CTRL | Qt::Key_D));
     if (!copyable)
     {
         duplicate->setEnabled(false);
@@ -2428,10 +2466,10 @@ void TopologyView::populate_node_menu(QMenu* menu, vss::endpoint_id id)
     shortcut(menu->addAction(topology_text::connect_from_here_action(), this,
                              [this, id] { begin_wire(id); }),
              QKeySequence(Qt::CTRL | Qt::Key_L));
-    add_port_menu_actions(
-        menu, this, menu_state_ ? menu_state_(id) : port_menu_state{},
-        [this, id](port_menu_action action)
-        { Q_EMIT port_action_requested(id, action); });
+    add_port_menu_actions(menu, this,
+                          menu_state_ ? menu_state_(id) : port_menu_state{},
+                          [this, id](port_menu_action action)
+                          { Q_EMIT port_action_requested(id, action); });
     menu->addSeparator();
     shortcut(menu->addAction(topology_text::copy_name_action(), this,
                              [this, id] { Q_EMIT copy_name_requested(id); }),
@@ -2449,11 +2487,9 @@ void TopologyView::add_link_selected_menu(QMenu* menu, vss::endpoint_id hub)
     const auto add = [this, sub, ports, hub](const QString& label,
                                              canvas_item shape, bool enabled)
     {
-        QAction* action = sub->addAction(label, this,
-                                         [this, ports, hub, shape] {
-                                             Q_EMIT link_selected_requested(
-                                                 ports, hub, shape);
-                                         });
+        QAction* action = sub->addAction(
+            label, this, [this, ports, hub, shape]
+            { Q_EMIT link_selected_requested(ports, hub, shape); });
         action->setEnabled(enabled);
         if (!enabled)
             action->setToolTip(QCoreApplication::translate(
@@ -2482,28 +2518,28 @@ void TopologyView::populate_selection_menu(QMenu* menu, vss::endpoint_id id)
                                        { return candidate.id == port; });
         copyable = copyable && view != ports_.end() && can_duplicate(*view);
     }
-    QAction* duplicate = menu->addAction(
-        tr("Duplicate"), this,
-        [this, ports] { Q_EMIT duplicate_requested(ports); });
+    QAction* duplicate =
+        menu->addAction(tr("Duplicate"), this,
+                        [this, ports] { Q_EMIT duplicate_requested(ports); });
     duplicate->setEnabled(copyable);
     if (!copyable)
         duplicate->setToolTip(tr("This port can only be opened once."));
-    menu->addAction(tr("Settings for %n ports...", nullptr,
-                       static_cast<int>(ports.size())),
-                    this, [this, ports] { Q_EMIT settings_requested(ports); });
+    menu->addAction(
+        tr("Settings for %n ports...", nullptr, static_cast<int>(ports.size())),
+        this, [this, ports] { Q_EMIT settings_requested(ports); });
     menu->addSeparator();
-    menu->addAction(tr("Delete"), this,
-                    [this, ports, links = selected_links()]
+    menu->addAction(tr("Delete"), this, [this, ports, links = selected_links()]
                     { Q_EMIT delete_requested(ports, links); });
 }
 
 void TopologyView::populate_link_menu(QMenu* menu, vss::link_id id)
 {
-    const auto link = std::find_if(links_.begin(), links_.end(),
-                                   [id](const link_view& view)
-                                   { return view.id == id; });
-    QAction* settings = menu->addAction(
-        tr("Settings..."), this, [this, id] { Q_EMIT link_settings_requested(id); });
+    const auto link =
+        std::find_if(links_.begin(), links_.end(),
+                     [id](const link_view& view) { return view.id == id; });
+    QAction* settings =
+        menu->addAction(tr("Settings..."), this,
+                        [this, id] { Q_EMIT link_settings_requested(id); });
     settings->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Return));
     settings->setShortcutVisibleInContextMenu(true);
     if (link != links_.end() && link->shape == link_shape::monitor)
@@ -2517,9 +2553,8 @@ void TopologyView::populate_link_menu(QMenu* menu, vss::link_id id)
                         [this, id] { Q_EMIT reverse_requested(id); });
     }
     menu->addSeparator();
-    QAction* remove = menu->addAction(
-        tr("Delete"), this,
-        [this, id] { Q_EMIT delete_requested({}, {id}); });
+    QAction* remove = menu->addAction(tr("Delete"), this, [this, id]
+                                      { Q_EMIT delete_requested({}, {id}); });
     remove->setShortcut(QKeySequence(Qt::Key_Delete));
     remove->setShortcutVisibleInContextMenu(true);
 }
@@ -2533,10 +2568,9 @@ void TopologyView::populate_canvas_menu(QMenu* menu, const QPointF& scene_point,
                                                        const QString& label,
                                                        canvas_item item)
         {
-            QAction* action =
-                target->addAction(label, this, [this, item, scene_point, at_point] {
-                    Q_EMIT add_requested(item, scene_point, at_point);
-                });
+            QAction* action = target->addAction(
+                label, this, [this, item, scene_point, at_point]
+                { Q_EMIT add_requested(item, scene_point, at_point); });
             action->setEnabled(item_available(caps_, item));
             if (!action->isEnabled())
                 action->setToolTip(QCoreApplication::translate(
@@ -2551,8 +2585,8 @@ void TopologyView::populate_canvas_menu(QMenu* menu, const QPointF& scene_point,
               canvas_item::bus, canvas_item::switch_link, canvas_item::redirect,
               canvas_item::monitor, canvas_item::share, canvas_item::bench})
             add(bundles, item_label(item), item);
-        QAction* all = menu->addAction(tr("Select all"), this,
-                                       [this] { select_all(); });
+        QAction* all =
+            menu->addAction(tr("Select all"), this, [this] { select_all(); });
         all->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_A));
         all->setShortcutVisibleInContextMenu(true);
         all->setEnabled(!ports_.empty());

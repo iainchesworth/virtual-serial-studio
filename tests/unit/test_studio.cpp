@@ -301,10 +301,9 @@ TEST_CASE("studio: a fixture takes new settings and keeps its links and echo")
 
     // The new settings are what a saved setup keeps.
     const auto saved = app.snapshot();
-    const auto entry =
-        std::find_if(saved.ports.begin(), saved.ports.end(),
-                     [](const config::port_entry& port)
-                     { return port.name == "device"; });
+    const auto entry = std::find_if(saved.ports.begin(), saved.ports.end(),
+                                    [](const config::port_entry& port)
+                                    { return port.name == "device"; });
     REQUIRE(entry != saved.ports.end());
     REQUIRE_EQ(entry->serial.baud_rate, 9600u);
 
@@ -319,7 +318,8 @@ TEST_CASE("studio: a fixture takes new settings and keeps its links and echo")
         2000ms));
 }
 
-TEST_CASE("studio: reconfigure saves a virtual port's values and refuses bad ones")
+TEST_CASE(
+    "studio: reconfigure saves a virtual port's values and refuses bad ones")
 {
     studio app;
     const auto loop = app.create_virtual_port("v", virtual_port_kind::loopback);

@@ -29,9 +29,9 @@ constexpr std::array kPorts = {canvas_item::port, canvas_item::fixture,
                                canvas_item::loopback, canvas_item::device,
                                canvas_item::network};
 constexpr std::array kBundles = {
-    canvas_item::pair,     canvas_item::split,   canvas_item::join,
-    canvas_item::bus,      canvas_item::switch_link, canvas_item::redirect,
-    canvas_item::monitor,  canvas_item::share,   canvas_item::bench};
+    canvas_item::pair,    canvas_item::split,       canvas_item::join,
+    canvas_item::bus,     canvas_item::switch_link, canvas_item::redirect,
+    canvas_item::monitor, canvas_item::share,       canvas_item::bench};
 
 } // namespace
 
@@ -222,18 +222,18 @@ void Toolbox::rebuild()
     {
         const bool enabled = item_available(caps_, item);
         auto* tile = new QListWidgetItem(
-            IconProvider::instance().icon(item_icon(item),
-                                          enabled ? colour_role::ink
-                                                  : colour_role::disabledText,
-                                          20),
+            IconProvider::instance().icon(
+                item_icon(item),
+                enabled ? colour_role::ink : colour_role::disabledText, 20),
             item_label(item), this);
         tile->setData(kRole, static_cast<int>(item));
         tile->setFont(label_font);
         tile->setTextAlignment(Qt::AlignCenter);
         tile->setSizeHint(QSize(kTileWidth, kTileHeight));
         tile->setData(Qt::AccessibleTextRole, item_label(item));
-        tile->setData(Qt::AccessibleDescriptionRole,
-                      tr("%1: %2").arg(item_label(item), item_description(item)));
+        tile->setData(
+            Qt::AccessibleDescriptionRole,
+            tr("%1: %2").arg(item_label(item), item_description(item)));
         if (enabled)
         {
             tile->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable |

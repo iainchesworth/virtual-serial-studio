@@ -17,6 +17,7 @@
 #include "shell/canvas_controller.hpp"
 #include "shell/shell_window.hpp"
 #include "shell/undo_service.hpp"
+#include "theme/theme.hpp"
 #include "topology/add_sheet.hpp"
 #include "topology/node_item.hpp"
 #include "topology/toolbox.hpp"
@@ -25,6 +26,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QContextMenuEvent>
+#include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QElapsedTimer>
@@ -126,7 +128,8 @@ TEST_CASE("canvas: editing adds Settings, Duplicate and Delete to the menus")
     view.set_topology(fixture.backend.ports(), fixture.backend.links());
     QApplication::processEvents();
 
-    REQUIRE(!view.node_menu_labels(fixture.rx).contains(QStringLiteral("Settings...")));
+    REQUIRE(!view.node_menu_labels(fixture.rx)
+                 .contains(QStringLiteral("Settings...")));
     view.set_editing(true);
     const QStringList labels = view.node_menu_labels(fixture.rx);
     REQUIRE_EQ(labels.first(), QStringLiteral("Inspect"));
@@ -142,7 +145,8 @@ TEST_CASE("canvas: editing adds Settings, Duplicate and Delete to the menus")
     REQUIRE_EQ(canvas.last(), QStringLiteral("Fit"));
 
     const vss::link_id link = fixture.backend.links().front().id;
-    REQUIRE(view.link_menu_labels(link).contains(QStringLiteral("Settings...")));
+    REQUIRE(
+        view.link_menu_labels(link).contains(QStringLiteral("Settings...")));
 
     // Right-click a node, choose Settings: the canvas asks for its settings.
     QVector<vss::endpoint_id> asked;
@@ -309,8 +313,8 @@ TEST_CASE("canvas: the toolbox lists every tile and degrades a missing one")
     REQUIRE(added == canvas_item::pair);
 
     QMimeData data;
-    data.setData(topo::toolbox_mime_type(), QByteArray::number(
-                                                static_cast<int>(canvas_item::bench)));
+    data.setData(topo::toolbox_mime_type(),
+                 QByteArray::number(static_cast<int>(canvas_item::bench)));
     REQUIRE(topo::item_from_mime(&data) == canvas_item::bench);
 }
 
@@ -334,8 +338,8 @@ TEST_CASE("canvas: a tile dropped on the canvas asks to add it there")
     data.setData(topo::toolbox_mime_type(),
                  QByteArray::number(static_cast<int>(canvas_item::pair)));
     const QPointF where(200.0, 150.0);
-    QDragEnterEvent enter(where, Qt::CopyAction, &data,
-                          Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent enter(where, Qt::CopyAction, &data, Qt::LeftButton,
+                          Qt::NoModifier);
     QApplication::sendEvent(view.viewport(), &enter);
     REQUIRE(enter.isAccepted());
     QDropEvent drop(where, Qt::CopyAction, &data, Qt::LeftButton,
@@ -346,8 +350,8 @@ TEST_CASE("canvas: a tile dropped on the canvas asks to add it there")
 
     // Not editing: the canvas takes no drops.
     view.set_editing(false);
-    QDragEnterEvent refused(where, Qt::CopyAction, &data,
-                            Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent refused(where, Qt::CopyAction, &data, Qt::LeftButton,
+                            Qt::NoModifier);
     QApplication::sendEvent(view.viewport(), &refused);
     REQUIRE(!refused.isAccepted());
 }
@@ -384,6 +388,8 @@ TEST_CASE("canvas: the Add sheet names its slots and refuses a clash")
     REQUIRE_EQ(pair.slot_rows(), 2);
     REQUIRE_EQ(pair.slot_row_label(0), QStringLiteral("End A"));
     pair.set_slot_kind(0, slot_kind::new_fixture);
+    // A made-up name follows the kind.
+    REQUIRE_EQ(pair.request().slots.at(0).name, QStringLiteral("fixture-1"));
     pair.set_slot_kind(1, slot_kind::new_fixture);
     pair.set_slot_name(0, QStringLiteral("rx-sim"));
     pair.set_slot_name(1, QStringLiteral("tx-sim"));
@@ -450,7 +456,8 @@ TEST_CASE("canvas: link Settings keep the jitter within the delay")
 {
     canvas_fixture fixture;
     const auto link = fixture.backend.links().front();
-    vss::gui::LinkSettingsDialog dialog(link, QStringLiteral("rx-sim and tx-sim"));
+    vss::gui::LinkSettingsDialog dialog(link,
+                                        QStringLiteral("rx-sim and tx-sim"));
     REQUIRE(dialog.modem_lines_shown());
     REQUIRE(!dialog.policy_shown());
     dialog.set_delay(10);
@@ -499,8 +506,9 @@ TEST_CASE("canvas: a pair of two fixtures is built from the canvas and undone")
         {
             vss::gui::bundle_request request;
             request.item = item;
-            request.slots = {{slot_kind::new_fixture, QStringLiteral("rx-sim")},
-                             {slot_kind::new_fixture, QStringLiteral("tx-sim")}};
+            request.slots = {
+                {slot_kind::new_fixture, QStringLiteral("rx-sim")},
+                {slot_kind::new_fixture, QStringLiteral("tx-sim")}};
             return std::optional<vss::gui::bundle_request>(request);
         });
     Q_EMIT toolbox->add_requested(canvas_item::pair);
@@ -583,14 +591,75 @@ TEST_CASE("canvas: wiring from the canvas links two ports and undoes it")
 
     // Link selected: three fresh fixtures joined into the first.
     QVector<vss::endpoint_id> fresh;
-    for (const QString& name : {QStringLiteral("a"), QStringLiteral("b"),
-                                QStringLiteral("c")})
+    for (const QString& name :
+         {QStringLiteral("a"), QStringLiteral("b"), QStringLiteral("c")})
         fresh.append(*fixture.backend.create_mock_port(
             name, {}, QStringLiteral("scripted")));
     const std::size_t before = fixture.backend.links().size();
     REQUIRE(canvas.link_selected(fresh, fresh.first(), canvas_item::join));
     REQUIRE_EQ(fixture.backend.links().size(), before + 1);
-    REQUIRE(fixture.backend.links().back().shape ==
-            vss::gui::link_shape::join);
+    REQUIRE(fixture.backend.links().back().shape == vss::gui::link_shape::join);
     REQUIRE_EQ(fixture.backend.links().back().targets.first(), fresh.first());
+}
+
+TEST_CASE("canvas: renders a review screenshot in both themes")
+{
+    clear_canvas_settings();
+    vss::gui::FakeStudioBackend backend;
+    {
+        vss::gui::capabilities caps = backend.caps();
+        caps.port_settings = true;
+        caps.shared_bus = true;
+        backend.set_capabilities(caps);
+    }
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QAction* advanced =
+        window.findChild<QAction*>(QStringLiteral("view.advanced"));
+    if (!advanced->isChecked())
+        advanced->trigger();
+    QApplication::processEvents();
+
+    auto* canvas = window.findChild<vss::gui::CanvasController*>();
+    auto* view = window.findChild<topo::TopologyView*>();
+    vss::gui::bundle_request pair;
+    pair.item = canvas_item::pair;
+    pair.slots = {{slot_kind::new_fixture, QStringLiteral("rx-sim")},
+                  {slot_kind::new_fixture, QStringLiteral("tx-sim")}};
+    REQUIRE(canvas->add_request(pair));
+    vss::gui::bundle_request port;
+    port.item = canvas_item::port;
+    port.slots = {{slot_kind::new_port, QStringLiteral("port-1")}};
+    REQUIRE(canvas->add_request(port));
+    QApplication::processEvents();
+    const auto lone = named(backend, QStringLiteral("port-1"));
+    view->setFocus();
+    view->begin_wire(lone->id);
+    QApplication::processEvents();
+
+    const QString directory = QDir(QCoreApplication::applicationDirPath())
+                                  .filePath(QStringLiteral("../gui-shots"));
+    REQUIRE(QDir().mkpath(directory));
+    REQUIRE(window.grab().save(
+        QDir(directory).filePath(QStringLiteral("canvas-light.png"))));
+    vss::gui::Theme::instance().set_mode(vss::gui::theme_mode::dark);
+    QApplication::processEvents();
+    REQUIRE(window.grab().save(
+        QDir(directory).filePath(QStringLiteral("canvas-dark.png"))));
+    vss::gui::Theme::instance().set_mode(vss::gui::theme_mode::light);
+    view->cancel_wire();
+
+    vss::gui::PortSettingsDialog settings(backend, {lone->id}, &window);
+    settings.show();
+    QApplication::processEvents();
+    REQUIRE(settings.grab().save(
+        QDir(directory).filePath(QStringLiteral("canvas-settings.png"))));
+    topo::AddSheet sheet(canvas_item::pair, backend.ports(), &window);
+    sheet.set_slot_kind(0, slot_kind::new_fixture);
+    sheet.show();
+    QApplication::processEvents();
+    REQUIRE(sheet.grab().save(
+        QDir(directory).filePath(QStringLiteral("canvas-add-sheet.png"))));
+    clear_canvas_settings();
 }

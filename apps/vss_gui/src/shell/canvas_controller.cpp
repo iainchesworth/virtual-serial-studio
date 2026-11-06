@@ -79,7 +79,8 @@ CanvasController::CanvasController(StudioBackend& backend, UndoService& undo,
             { wire(from, to, kind); });
     connect(view_, &topology::TopologyView::wire_new_requested, this,
             [this](vss::endpoint_id from, slot_kind kind, wire_kind link,
-                   const QPointF& point) { wire_new(from, kind, link, point); });
+                   const QPointF& point)
+            { wire_new(from, kind, link, point); });
     connect(view_, &topology::TopologyView::settings_requested, this,
             [this](const QVector<vss::endpoint_id>& ports)
             { open_settings(ports); });
@@ -88,10 +89,12 @@ CanvasController::CanvasController(StudioBackend& backend, UndoService& undo,
     connect(view_, &topology::TopologyView::reverse_requested, this,
             [this](vss::link_id id) { reverse(id); });
     connect(view_, &topology::TopologyView::duplicate_requested, this,
-            [this](const QVector<vss::endpoint_id>& ports) { duplicate(ports); });
+            [this](const QVector<vss::endpoint_id>& ports)
+            { duplicate(ports); });
     connect(view_, &topology::TopologyView::delete_requested, this,
             [this](const QVector<vss::endpoint_id>& ports,
-                   const QVector<vss::link_id>& links) { remove(ports, links); });
+                   const QVector<vss::link_id>& links)
+            { remove(ports, links); });
     connect(view_, &topology::TopologyView::link_selected_requested, this,
             [this](const QVector<vss::endpoint_id>& ports, vss::endpoint_id hub,
                    canvas_item shape) { link_selected(ports, hub, shape); });
@@ -129,26 +132,23 @@ void CanvasController::push_created(const QString& text,
     // Undo takes the new ports away (their links go with them); redo makes
     // them again from what undo saw, by name.
     auto saved = std::make_shared<removal>();
-    undo_.push({text,
-                [this, created, saved]
-                {
-                    return batch(
-                        [&]
-                        {
-                            *saved = describe_removal(backend_, ids_of(created),
-                                                      {});
-                            return saved->ports.size() == created.size() &&
-                                   apply_removal(backend_, *saved).has_value();
-                        });
-                },
-                [this, saved]
-                {
-                    return batch(
-                        [&] {
-                            return restore_removal(backend_, *saved)
-                                .has_value();
-                        });
-                }});
+    undo_.push(
+        {text,
+         [this, created, saved]
+         {
+             return batch(
+                 [&]
+                 {
+                     *saved = describe_removal(backend_, ids_of(created), {});
+                     return saved->ports.size() == created.size() &&
+                            apply_removal(backend_, *saved).has_value();
+                 });
+         },
+         [this, saved]
+         {
+             return batch(
+                 [&] { return restore_removal(backend_, *saved).has_value(); });
+         }});
 }
 
 bool CanvasController::add_item(canvas_item item, std::optional<QPointF> at)
@@ -186,8 +186,8 @@ bool CanvasController::add_item(canvas_item item, std::optional<QPointF> at)
             push_created(tr("Add %1").arg(topology::item_label(item).toLower()),
                          made->created);
             select_names(made->created);
-            Q_EMIT message(tr("Added %1.").arg(made->created.join(
-                QStringLiteral(", "))));
+            Q_EMIT message(
+                tr("Added %1.").arg(made->created.join(QStringLiteral(", "))));
             return QString();
         }();
         if (failure.isEmpty())
@@ -210,7 +210,8 @@ bool CanvasController::add_request(const bundle_request& request,
         });
     if (!made)
     {
-        Q_EMIT message(tr("Nothing was added: %1").arg(error_text(made.error())));
+        Q_EMIT message(
+            tr("Nothing was added: %1").arg(error_text(made.error())));
         return false;
     }
     push_created(tr("Add %1").arg(topology::item_label(request.item).toLower()),
@@ -226,8 +227,8 @@ bool CanvasController::wire(vss::endpoint_id from, vss::endpoint_id to,
         batch([&] { return make_wire(backend_, from, to, kind); });
     if (!made)
     {
-        Q_EMIT message(tr("Could not link the ports: %1")
-                           .arg(error_text(made.error())));
+        Q_EMIT message(
+            tr("Could not link the ports: %1").arg(error_text(made.error())));
         return false;
     }
     const auto link = backend_.link(*made);
@@ -247,18 +248,22 @@ bool CanvasController::wire(vss::endpoint_id from, vss::endpoint_id to,
                             return true;
                         });
                 },
-                [this, recipe] {
+                [this, recipe]
+                {
                     return batch(
-                        [&] { return make_link(backend_, recipe).has_value(); });
+                        [&]
+                        { return make_link(backend_, recipe).has_value(); });
                 }});
-    Q_EMIT message(tr("Linked %1.").arg(topology_text::link_name(
-        *link, [this]
-        {
-            QHash<vss::endpoint_id, QString> names;
-            for (const port_view& port : backend_.ports())
-                names.insert(port.id, port.name);
-            return names;
-        }())));
+    Q_EMIT message(tr("Linked %1.")
+                       .arg(topology_text::link_name(
+                           *link,
+                           [this]
+                           {
+                               QHash<vss::endpoint_id, QString> names;
+                               for (const port_view& port : backend_.ports())
+                                   names.insert(port.id, port.name);
+                               return names;
+                           }())));
     return true;
 }
 
@@ -313,7 +318,8 @@ bool CanvasController::duplicate(const QVector<vss::endpoint_id>& ports)
     bool placed = false;
     if (view_ != nullptr && !ports.isEmpty())
     {
-        anchor = view_->node_rect(ports.first()).topLeft() + QPointF(24.0, 24.0);
+        anchor =
+            view_->node_rect(ports.first()).topLeft() + QPointF(24.0, 24.0);
         placed = true;
     }
     const auto made = batch(
@@ -334,7 +340,8 @@ bool CanvasController::duplicate(const QVector<vss::endpoint_id>& ports)
     }
     push_created(tr("Duplicate"), made->created);
     select_names(made->created);
-    Q_EMIT message(tr("Added %1.").arg(made->created.join(QStringLiteral(", "))));
+    Q_EMIT message(
+        tr("Added %1.").arg(made->created.join(QStringLiteral(", "))));
     return true;
 }
 
@@ -351,14 +358,16 @@ QString CanvasController::describe(const QVector<vss::endpoint_id>& ports,
     if (names.size() == 1)
         text = names.first();
     else if (names.size() > 1)
-        text = tr("%1 and %2").arg(names.mid(0, names.size() - 1)
-                                       .join(QStringLiteral(", ")),
-                                   names.last());
+        text =
+            tr("%1 and %2")
+                .arg(names.mid(0, names.size() - 1).join(QStringLiteral(", ")),
+                     names.last());
     if (!links.isEmpty())
     {
-        const QString link_text = tr("%n link(s)", nullptr,
-                                     static_cast<int>(links.size()));
-        text = text.isEmpty() ? link_text : tr("%1 and %2").arg(text, link_text);
+        const QString link_text =
+            tr("%n link(s)", nullptr, static_cast<int>(links.size()));
+        text =
+            text.isEmpty() ? link_text : tr("%1 and %2").arg(text, link_text);
     }
     return text;
 }
@@ -385,37 +394,37 @@ bool CanvasController::remove(const QVector<vss::endpoint_id>& ports,
     const auto removed = batch([&] { return apply_removal(backend_, what); });
     if (!removed)
     {
-        Q_EMIT message(tr("Could not delete: %1")
-                           .arg(error_text(removed.error())));
+        Q_EMIT message(
+            tr("Could not delete: %1").arg(error_text(removed.error())));
         return false;
     }
     const QString subject = names_in(what).isEmpty()
                                 ? tr("link")
                                 : names_in(what).join(QStringLiteral(", "));
-    undo_.push({tr("Delete %1").arg(subject),
-                [this, what]
-                {
-                    return batch(
-                        [&]
-                        {
-                            const auto restored = restore_removal(backend_, what);
-                            if (!restored)
-                                return false;
-                            for (const QStringList& moved : *restored)
-                            {
-                                Q_EMIT message(
-                                    tr("Recreated %1 as %2 (it was %3).")
-                                        .arg(moved.value(0), moved.value(2),
-                                             moved.value(1)));
-                            }
-                            return true;
-                        });
-                },
-                [this, what]
-                {
-                    return batch(
-                        [&] { return apply_removal(backend_, what).has_value(); });
-                }});
+    undo_.push(
+        {tr("Delete %1").arg(subject),
+         [this, what]
+         {
+             return batch(
+                 [&]
+                 {
+                     const auto restored = restore_removal(backend_, what);
+                     if (!restored)
+                         return false;
+                     for (const QStringList& moved : *restored)
+                     {
+                         Q_EMIT message(tr("Recreated %1 as %2 (it was %3).")
+                                            .arg(moved.value(0), moved.value(2),
+                                                 moved.value(1)));
+                     }
+                     return true;
+                 });
+         },
+         [this, what]
+         {
+             return batch(
+                 [&] { return apply_removal(backend_, what).has_value(); });
+         }});
     Q_EMIT message(tr("Deleted %1.").arg(subject));
     return true;
 }
@@ -451,21 +460,22 @@ bool CanvasController::link_selected(const QVector<vss::endpoint_id>& ports,
     if (!link)
         return true;
     const link_recipe recipe = recipe_of(backend_.ports(), *link);
-    undo_.push({tr("Link selected"),
-                [this, recipe]
-                {
-                    return batch(
-                        [&]
-                        {
-                            const auto found = find_link(backend_, recipe);
-                            return found &&
-                                   backend_.disconnect(found->id).has_value();
-                        });
-                },
-                [this, recipe] {
-                    return batch(
-                        [&] { return make_link(backend_, recipe).has_value(); });
-                }});
+    undo_.push(
+        {tr("Link selected"),
+         [this, recipe]
+         {
+             return batch(
+                 [&]
+                 {
+                     const auto found = find_link(backend_, recipe);
+                     return found && backend_.disconnect(found->id).has_value();
+                 });
+         },
+         [this, recipe]
+         {
+             return batch([&]
+                          { return make_link(backend_, recipe).has_value(); });
+         }});
     return true;
 }
 
@@ -481,8 +491,8 @@ bool CanvasController::change_link(vss::link_id id,
     const auto made = batch([&] { return remake_link(backend_, id, options); });
     if (!made)
     {
-        Q_EMIT message(tr("Could not change the link: %1")
-                           .arg(error_text(made.error())));
+        Q_EMIT message(
+            tr("Could not change the link: %1").arg(error_text(made.error())));
         return false;
     }
     const auto swap = [this](const link_recipe& from, const link_recipe& to)
@@ -495,13 +505,10 @@ bool CanvasController::change_link(vss::link_id id,
                        remake_link(backend_, found->id, to.options).has_value();
             });
     };
-    undo_.push({tr("Link settings"),
-                [swap, old_recipe, new_recipe] {
-                    return swap(new_recipe, old_recipe);
-                },
-                [swap, old_recipe, new_recipe] {
-                    return swap(old_recipe, new_recipe);
-                }});
+    undo_.push({tr("Link settings"), [swap, old_recipe, new_recipe]
+                { return swap(new_recipe, old_recipe); },
+                [swap, old_recipe, new_recipe]
+                { return swap(old_recipe, new_recipe); }});
     return true;
 }
 
@@ -544,8 +551,8 @@ void CanvasController::record_settings(
 {
     if (before.isEmpty())
         return;
-    const auto apply = [this](const QVector<QPair<QString, vss::serial_settings>>&
-                                  values)
+    const auto apply =
+        [this](const QVector<QPair<QString, vss::serial_settings>>& values)
     {
         bool ok = true;
         for (const auto& [name, settings] : values)
@@ -560,11 +567,10 @@ void CanvasController::record_settings(
     QVector<QPair<QString, vss::serial_settings>> next;
     for (const auto& [name, settings] : before)
         next.append({name, after});
-    const QString text =
-        before.size() == 1
-            ? tr("Settings for %1").arg(before.first().first)
-            : tr("Settings for %n ports", nullptr,
-                 static_cast<int>(before.size()));
+    const QString text = before.size() == 1
+                             ? tr("Settings for %1").arg(before.first().first)
+                             : tr("Settings for %n ports", nullptr,
+                                  static_cast<int>(before.size()));
     undo_.push({text, [apply, before] { return apply(before); },
                 [apply, next] { return apply(next); }});
 }
@@ -590,8 +596,7 @@ void CanvasController::open_link_settings(vss::link_id id)
     QHash<vss::endpoint_id, QString> names;
     for (const port_view& port : backend_.ports())
         names.insert(port.id, port.name);
-    LinkSettingsDialog dialog(*link,
-                              topology_text::link_name(*link, names),
+    LinkSettingsDialog dialog(*link, topology_text::link_name(*link, names),
                               parent_);
     if (dialog.exec() != QDialog::Accepted)
         return;

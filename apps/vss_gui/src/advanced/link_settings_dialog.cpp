@@ -42,7 +42,7 @@ LinkSettingsDialog::LinkSettingsDialog(const link_view& link,
         title,
         tr("Applying makes the link again with the same ports. Bytes in "
            "flight while it is made can be lost."),
-        this, true, {}));
+        this, false, {}));
 
     const auto make_ms = [this](const QString& label, int maximum)
     {
@@ -57,9 +57,8 @@ LinkSettingsDialog::LinkSettingsDialog(const link_view& link,
     delay_->setValue(static_cast<int>(link.options.delay_ms));
     jitter_ = make_ms(tr("Jitter"), static_cast<int>(vss::max_link_delay_ms));
     jitter_->setValue(static_cast<int>(link.options.jitter_ms));
-    layout->addWidget(new FormRow(tr("Delay"), delay_,
-                                  tr("Every byte arrives this much later."),
-                                  this));
+    layout->addWidget(new FormRow(
+        tr("Delay"), delay_, tr("Every byte arrives this much later."), this));
     layout->addWidget(new FormRow(
         tr("Jitter"), jitter_,
         tr("Each delay varies by up to this much. No more than the delay."),
@@ -107,8 +106,7 @@ LinkSettingsDialog::LinkSettingsDialog(const link_view& link,
     layout->addWidget(footer);
 
     connect(delay_, &QSpinBox::valueChanged, this, [this] { update_state(); });
-    connect(jitter_, &QSpinBox::valueChanged, this,
-            [this] { update_state(); });
+    connect(jitter_, &QSpinBox::valueChanged, this, [this] { update_state(); });
     update_state();
     delay_->setFocus(Qt::OtherFocusReason);
 }
@@ -119,7 +117,8 @@ vss::link_options LinkSettingsDialog::options() const
     out.delay_ms = static_cast<std::uint32_t>(delay_->value());
     out.jitter_ms = static_cast<std::uint32_t>(jitter_->value());
     if (policy_shown())
-        out.policy = static_cast<vss::merge_policy>(policy_->currentData().toInt());
+        out.policy =
+            static_cast<vss::merge_policy>(policy_->currentData().toInt());
     if (modem_lines_shown())
         out.emulate_modem_lines = modem_lines_->isChecked();
     return out;

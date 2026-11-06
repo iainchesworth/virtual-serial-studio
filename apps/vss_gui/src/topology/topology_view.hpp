@@ -16,10 +16,10 @@
 
 #include <QGraphicsView>
 #include <QHash>
-#include <QSet>
 #include <QLineF>
 #include <QPointF>
 #include <QRectF>
+#include <QSet>
 #include <QSizeF>
 #include <QString>
 #include <QStringList>

@@ -6,6 +6,7 @@
 
 #include "topology/node_item.hpp"
 
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "topology/topology_text.hpp"
 
@@ -23,6 +24,10 @@ namespace vss::gui::topology
 {
 namespace
 {
+
+/// The kind tile: 32 px, and the gap after it.
+constexpr qreal kTileSize = 32.0;
+constexpr qreal kTileSpace = kTileSize + 10.0;
 
 QStringList badge_texts(const node_data& data)
 {
@@ -71,7 +76,8 @@ node_measure measure(const node_data& data, bool compact,
                              badge_area(data, badge_font);
     const qreal detail_width = detail_metrics.horizontalAdvance(data.detail);
     const qreal needed_width =
-        std::max(name_width, detail_width) + padding_x * 2.0;
+        std::max(name_width, detail_width) + padding_x * 2.0 +
+        (compact || data.icon.isEmpty() ? 0.0 : kTileSpace);
 
     const qreal line_gap = 2.0;
     const qreal needed_height = name_metrics.height() + line_gap +
@@ -186,27 +192,39 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->setRenderHint(QPainter::Antialiasing, true);
 
     const QRectF body(0.0, 0.0, size_.width(), size_.height());
-    const qreal radius = theme.radius(QStringLiteral("inner"));
+    const bool tiled = !data_.icon.isEmpty() && size_.height() >= 52.0;
+    const qreal radius =
+        theme.radius(tiled ? QStringLiteral("card") : QStringLiteral("inner"));
+
+    // A raised card: a soft shadow under it on the sunken canvas.
+    if (!data_.device)
+    {
+        QColor shadow = theme.colour(colour_role::ink);
+        shadow.setAlphaF(0.08F);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(shadow);
+        painter->drawRoundedRect(body.translated(0.0, 1.5), radius, radius);
+    }
 
     if (selected_ || in_loop_)
     {
         const QColor halo = in_loop_ ? theme.colour(colour_role::badSoft)
                                      : theme.colour(colour_role::accentSoft);
-        painter->setPen(QPen(halo, 2.0));
+        painter->setPen(QPen(halo, 4.0));
         painter->setBrush(Qt::NoBrush);
-        painter->drawRoundedRect(body.adjusted(-2.0, -2.0, 2.0, 2.0),
-                                 radius + 2.0, radius + 2.0);
+        painter->drawRoundedRect(body.adjusted(-2.5, -2.5, 2.5, 2.5),
+                                 radius + 2.5, radius + 2.5);
     }
 
-    QColor edge = theme.colour(colour_role::control);
+    QColor edge = theme.colour(colour_role::line2);
     if (in_loop_ || drop_ == drop_state::refuse)
         edge = theme.colour(colour_role::bad);
     else if (selected_ || drop_ == drop_state::accept)
         edge = theme.colour(colour_role::accent);
     else if (hovered_)
-        edge = theme.colour(colour_role::accentLine);
+        edge = theme.colour(colour_role::control);
 
-    const bool strong = in_loop_ || drop_ != drop_state::none;
+    const bool strong = in_loop_ || drop_ != drop_state::none || selected_;
     QPen body_pen(edge, strong ? 2.0 : 1.0);
     if (data_.unlinked && !selected_ && !strong)
         body_pen.setStyle(Qt::DashLine);
@@ -227,10 +245,10 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         constexpr qreal handle_radius = 5.0;
         for (const QPointF& centre : {left_handle(), right_handle()})
         {
-            painter->setPen(QPen(theme.colour(wire_source_
-                                                  ? colour_role::accent
-                                                  : colour_role::control),
-                                 1.5));
+            painter->setPen(
+                QPen(theme.colour(wire_source_ ? colour_role::accent
+                                               : colour_role::control),
+                     1.5));
             painter->setBrush(theme.colour(wire_source_ ? colour_role::accent
                                                         : colour_role::panel));
             painter->drawEllipse(centre, handle_radius, handle_radius);
@@ -246,7 +264,32 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     }
 
     const qreal padding_x = theme.space(2);
+    qreal left_x = padding_x;
     const qreal padding_y = theme.space(1);
+    if (tiled)
+    {
+        const QRectF tile(theme.space(2), (body.height() - kTileSize) / 2.0,
+                          kTileSize, kTileSize);
+        colour_role soft = colour_role::accentSoft;
+        colour_role ink = colour_role::accentText;
+        if (data_.tile == node_data::tint::violet)
+        {
+            soft = colour_role::violetSoft;
+            ink = colour_role::violet;
+        }
+        else if (data_.tile == node_data::tint::ok)
+        {
+            soft = colour_role::okSoft;
+            ink = colour_role::ok;
+        }
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(theme.colour(soft));
+        const qreal tile_radius = theme.radius(QStringLiteral("tile"));
+        painter->drawRoundedRect(tile, tile_radius, tile_radius);
+        const QIcon icon = IconProvider::instance().icon(data_.icon, ink, 18);
+        icon.paint(painter, tile.adjusted(7.0, 7.0, -7.0, -7.0).toRect());
+        left_x += kTileSpace;
+    }
     const QFont name_font = theme.font(text_style::label);
     const QFont detail_font = data_.detail_mono
                                   ? theme.font(text_style::data)
@@ -265,17 +308,16 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 
     const qreal badges_width = badge_area(data_, badge_font);
     const qreal name_available =
-        std::max(0.0, body.width() - padding_x * 2.0 - badges_width);
+        std::max(0.0, body.width() - left_x - padding_x - badges_width);
 
     painter->setFont(name_font);
     painter->setPen(theme.colour(colour_role::ink));
     const QString elided_name =
         name_metrics.elidedText(data_.name, Qt::ElideRight, name_available);
-    painter->drawText(
-        QRectF(padding_x, content_top, name_available, name_height),
-        Qt::AlignLeft | Qt::AlignVCenter, elided_name);
+    painter->drawText(QRectF(left_x, content_top, name_available, name_height),
+                      Qt::AlignLeft | Qt::AlignVCenter, elided_name);
 
-    qreal x = padding_x + name_metrics.horizontalAdvance(elided_name) + 6.0;
+    qreal x = left_x + name_metrics.horizontalAdvance(elided_name) + 6.0;
     const QStringList badges = badge_texts(data_);
     const qreal chip_height = std::max(18.0, badge_metrics.height() + 4.0);
     for (const QString& badge : badges)
@@ -310,10 +352,10 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 
     painter->setFont(detail_font);
     painter->setPen(theme.colour(colour_role::ink3));
-    const qreal detail_width = body.width() - padding_x * 2.0;
+    const qreal detail_width = body.width() - left_x - padding_x;
     const QString elided_detail =
         detail_metrics.elidedText(data_.detail, Qt::ElideRight, detail_width);
-    painter->drawText(QRectF(padding_x, content_top + name_height + 2.0,
+    painter->drawText(QRectF(left_x, content_top + name_height + 2.0,
                              detail_width, detail_height),
                       Qt::AlignLeft | Qt::AlignVCenter, elided_detail);
 }

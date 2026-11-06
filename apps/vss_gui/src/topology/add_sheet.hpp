@@ -50,8 +50,7 @@ public:
     int count() const;
     void set_count(int count);
     /// Sets slot `index` to an existing port, or back to a new one.
-    void set_slot_kind(int index, slot_kind kind,
-                       const QString& existing = {});
+    void set_slot_kind(int index, slot_kind kind, const QString& existing = {});
     void set_slot_name(int index, const QString& name);
     int slot_rows() const;
     QString slot_row_label(int index) const;
@@ -71,6 +70,7 @@ private:
     void rebuild_rows(int slots);
     void update_state();
     void sync_name_visibility(int index);
+    void rename_default(int index);
 
     canvas_item item_;
     std::vector<port_view> ports_;

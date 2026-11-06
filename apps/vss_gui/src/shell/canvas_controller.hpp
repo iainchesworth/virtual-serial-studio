@@ -59,7 +59,10 @@ public:
     /// The Delete confirmation; the default shows `ConfirmDialog`.
     using confirm_function =
         std::function<bool(const QString& title, const QString& body)>;
-    void set_confirm(confirm_function confirm) { confirm_ = std::move(confirm); }
+    void set_confirm(confirm_function confirm)
+    {
+        confirm_ = std::move(confirm);
+    }
     /// Device, Network and Share open the window's own flows.
     void set_flow_opener(std::function<void(canvas_item)> opener)
     {
@@ -81,9 +84,9 @@ public:
     bool change_link(vss::link_id id, const vss::link_options& options);
     bool reverse(vss::link_id id);
     /// Records the undo step of a Settings change made by the dialog.
-    void record_settings(
-        const QVector<QPair<QString, vss::serial_settings>>& before,
-        const vss::serial_settings& after);
+    void
+    record_settings(const QVector<QPair<QString, vss::serial_settings>>& before,
+                    const vss::serial_settings& after);
 
     void open_settings(const QVector<vss::endpoint_id>& ports);
     void open_link_settings(vss::link_id id);

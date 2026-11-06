@@ -19,6 +19,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QSpinBox>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -122,8 +123,8 @@ AddSheet::AddSheet(canvas_item item, const std::vector<port_view>& ports,
     auto* title_label = make_label(title, text_style::subtitle, this);
     heading->addWidget(title_label, 1);
     layout->addLayout(heading);
-    auto* description = make_label(item_description(item), text_style::caption,
-                                   this);
+    auto* description =
+        make_label(item_description(item), text_style::caption, this);
     description->setWordWrap(true);
     description->setProperty("muted", true);
     layout->addWidget(description);
@@ -211,8 +212,8 @@ void AddSheet::rebuild_rows(int slots)
     {
         bundle_slot slot;
         const int kind = line.kind->currentData().toInt();
-        slot.kind = kind == kKindExisting  ? slot_kind::existing
-                    : kind == kKindFixture ? slot_kind::new_fixture
+        slot.kind = kind == kKindExisting   ? slot_kind::existing
+                    : kind == kKindFixture  ? slot_kind::new_fixture
                     : kind == kKindLoopback ? slot_kind::new_loopback
                                             : slot_kind::new_port;
         slot.name = slot.kind == slot_kind::existing ? line.kind->currentText()
@@ -247,18 +248,18 @@ void AddSheet::rebuild_rows(int slots)
         line.name->setAccessibleName(
             tr("%1 name").arg(slot_label(item_, index, slots)));
 
-        bundle_slot slot = index < kept.size()
-                               ? kept[index]
-                               : fresh.slots.value(index);
+        bundle_slot slot =
+            index < kept.size() ? kept[index] : fresh.slots.value(index);
         if (index >= kept.size())
         {
             // A new row gets a name nothing else has.
-            slot.name = next_free_name(
-                ports_,
-                slot.kind == slot_kind::new_fixture    ? QStringLiteral("fixture")
-                : slot.kind == slot_kind::new_loopback ? QStringLiteral("loopback")
-                                                       : QStringLiteral("port"),
-                taken);
+            slot.name = next_free_name(ports_,
+                                       slot.kind == slot_kind::new_fixture
+                                           ? QStringLiteral("fixture")
+                                       : slot.kind == slot_kind::new_loopback
+                                           ? QStringLiteral("loopback")
+                                           : QStringLiteral("port"),
+                                       taken);
             taken.append(slot.name);
         }
         switch (slot.kind)
@@ -290,6 +291,7 @@ void AddSheet::rebuild_rows(int slots)
         connect(line.kind, &QComboBox::currentIndexChanged, this,
                 [this, position]
                 {
+                    rename_default(position);
                     sync_name_visibility(position);
                     update_state();
                 });
@@ -302,6 +304,32 @@ void AddSheet::rebuild_rows(int slots)
     adjustSize();
     if (!rows_.isEmpty())
         rows_.first().name->setFocus(Qt::OtherFocusReason);
+}
+
+void AddSheet::rename_default(int index)
+{
+    if (index < 0 || index >= rows_.size())
+        return;
+    // A name the sheet made up follows the kind ("port-2" becomes
+    // "fixture-1"); a name the user typed stays.
+    static const QRegularExpression made_up(
+        QStringLiteral("^(port|fixture|loopback)-\\d+$"));
+    QLineEdit* name = rows_[index].name;
+    if (!made_up.match(name->text()).hasMatch())
+        return;
+    const int kind = rows_[index].kind->currentData().toInt();
+    const QString base = kind == kKindFixture    ? QStringLiteral("fixture")
+                         : kind == kKindLoopback ? QStringLiteral("loopback")
+                                                 : QStringLiteral("port");
+    if (name->text().startsWith(base + QLatin1Char('-')))
+        return;
+    QStringList taken;
+    for (int other = 0; other < rows_.size(); ++other)
+    {
+        if (other != index)
+            taken.append(rows_[other].name->text());
+    }
+    name->setText(next_free_name(ports_, base, taken));
 }
 
 void AddSheet::sync_name_visibility(int index)
@@ -325,9 +353,9 @@ void AddSheet::update_state()
         names.append(slot.name);
         if (slot.kind != slot_kind::existing)
         {
-            const bool taken = std::any_of(
-                ports_.begin(), ports_.end(),
-                [&slot](const port_view& port) { return port.name == slot.name; });
+            const bool taken = std::any_of(ports_.begin(), ports_.end(),
+                                           [&slot](const port_view& port)
+                                           { return port.name == slot.name; });
             if (taken)
                 ok = false;
         }
@@ -382,8 +410,7 @@ void AddSheet::set_count(int value)
         count_->setValue(value);
 }
 
-void AddSheet::set_slot_kind(int index, slot_kind kind,
-                             const QString& existing)
+void AddSheet::set_slot_kind(int index, slot_kind kind, const QString& existing)
 {
     if (index < 0 || index >= rows_.size())
         return;

@@ -70,8 +70,8 @@ TEST_CASE("canvas edit: a failed link takes the new ports away again")
 {
     FakeStudioBackend backend;
     REQUIRE(backend.create_auto_port(QStringLiteral("kept"), true));
-    bundle_request request = default_request(canvas_item::split,
-                                             backend.ports());
+    bundle_request request =
+        default_request(canvas_item::split, backend.ports());
     request.slots[1] = {slot_kind::existing, QStringLiteral("kept")};
     // The first new port is made, then the last slot names no port.
     bundle_request broken = request;

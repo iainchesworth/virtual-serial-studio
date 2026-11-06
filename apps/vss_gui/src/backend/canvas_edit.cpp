@@ -99,9 +99,9 @@ void roll_back(StudioBackend& backend, const QVector<vss::link_id>& links,
     backend.refresh();
 }
 
-vss::result<vss::endpoint_id> make_slot_port(StudioBackend& backend,
-                                             const bundle_slot& slot,
-                                             const vss::serial_settings& settings)
+vss::result<vss::endpoint_id>
+make_slot_port(StudioBackend& backend, const bundle_slot& slot,
+               const vss::serial_settings& settings)
 {
     vss::result<vss::endpoint_id> made = failure();
     switch (slot.kind)
@@ -140,8 +140,8 @@ QString copy_name(const std::vector<port_view>& ports, const QString& name,
     const QString copy = name + QStringLiteral("-copy");
     const bool used =
         taken.contains(copy) ||
-        std::any_of(ports.begin(), ports.end(),
-                    [&copy](const port_view& port) { return port.name == copy; });
+        std::any_of(ports.begin(), ports.end(), [&copy](const port_view& port)
+                    { return port.name == copy; });
     return used ? next_free_name(ports, copy, taken) : copy;
 }
 
@@ -277,8 +277,8 @@ slot_kind default_slot_kind(canvas_item item, int index)
     }
 }
 
-QString next_free_name(const std::vector<port_view>& ports,
-                       const QString& base, const QStringList& taken)
+QString next_free_name(const std::vector<port_view>& ports, const QString& base,
+                       const QStringList& taken)
 {
     QSet<QString> used(taken.begin(), taken.end());
     for (const port_view& port : ports)
@@ -296,8 +296,7 @@ bundle_request default_request(canvas_item item,
 {
     bundle_request request;
     request.item = item;
-    const int slots =
-        slot_count(item, count > 0 ? count : default_count(item));
+    const int slots = slot_count(item, count > 0 ? count : default_count(item));
     QStringList taken;
     for (int index = 0; index < slots; ++index)
     {
@@ -395,8 +394,7 @@ vss::result<bundle_made> build_bundle(StudioBackend& backend,
         linked = add(link);
         break;
     case canvas_item::bench:
-        for (qsizetype index = 0; linked && index + 1 < ids.size();
-             index += 2)
+        for (qsizetype index = 0; linked && index + 1 < ids.size(); index += 2)
         {
             link = backend.connect_ports(ids[index], ids[index + 1], {});
             linked = add(link);
@@ -502,8 +500,8 @@ vss::result<vss::link_id> make_link(StudioBackend& backend,
                              recipe.options);
         break;
     case link_shape::join:
-        made = backend.join(to_vector(*sources), targets->first(),
-                            recipe.options);
+        made =
+            backend.join(to_vector(*sources), targets->first(), recipe.options);
         break;
     case link_shape::bus:
         made = backend.bus(to_vector(*sources));
@@ -520,8 +518,8 @@ vss::result<vss::link_id> make_link(StudioBackend& backend,
     return made;
 }
 
-std::optional<vss::config::port_entry> port_entry_of(
-    const StudioBackend& backend, const QString& name)
+std::optional<vss::config::port_entry>
+port_entry_of(const StudioBackend& backend, const QString& name)
 {
     const std::string wanted = name.toStdString();
     for (const auto& entry : backend.snapshot().ports)
@@ -532,9 +530,9 @@ std::optional<vss::config::port_entry> port_entry_of(
     return std::nullopt;
 }
 
-vss::result<vss::endpoint_id>
-make_port(StudioBackend& backend, const vss::config::port_entry& entry,
-          const QString& name)
+vss::result<vss::endpoint_id> make_port(StudioBackend& backend,
+                                        const vss::config::port_entry& entry,
+                                        const QString& name)
 {
     vss::result<vss::endpoint_id> made = failure();
     if (entry.kind == "mock")
@@ -553,8 +551,8 @@ make_port(StudioBackend& backend, const vss::config::port_entry& entry,
 
     const std::string& kind = entry.virtual_kind;
     if (kind == "loopback")
-        made = backend.create_virtual_port(name, vss::virtual_port_kind::loopback,
-                                           entry.capture);
+        made = backend.create_virtual_port(
+            name, vss::virtual_port_kind::loopback, entry.capture);
     else if (kind == "pty")
         made = backend.create_virtual_port(name, vss::virtual_port_kind::pty,
                                            entry.capture);
@@ -563,8 +561,8 @@ make_port(StudioBackend& backend, const vss::config::port_entry& entry,
             name, vss::virtual_port_kind::named_pipe, entry.capture);
     else if (kind == "windows-driver" ||
              (entry.com_number != 0 && backend.caps().com_numbers))
-        made = backend.create_driver_port(name, entry.capture,
-                                          entry.com_number);
+        made =
+            backend.create_driver_port(name, entry.capture, entry.com_number);
     else
         made = backend.create_auto_port(name, entry.capture);
 
@@ -732,8 +730,7 @@ vss::result<QVector<QStringList>> restore_removal(StudioBackend& backend,
     return moved;
 }
 
-vss::result<vss::link_id> remake_link(StudioBackend& backend,
-                                      vss::link_id id,
+vss::result<vss::link_id> remake_link(StudioBackend& backend, vss::link_id id,
                                       const vss::link_options& options)
 {
     const auto link = backend.link(id);
