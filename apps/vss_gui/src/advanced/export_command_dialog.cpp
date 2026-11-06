@@ -45,7 +45,7 @@ void ExportCommandDialog::build()
         320);
 
     auto* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(20, 20, 20, 0);
+    layout->setContentsMargins(24, 24, 24, 0);
     layout->setSpacing(14);
     layout->addWidget(make_header(
         title, tr("Copy the command, or save the setup as a file first."), this,

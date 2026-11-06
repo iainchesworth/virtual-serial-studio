@@ -82,7 +82,7 @@ void TemplatesDialog::build()
     setMinimumWidth(760);
 
     auto* outer = new QVBoxLayout(this);
-    outer->setContentsMargins(20, 20, 20, 0);
+    outer->setContentsMargins(24, 24, 24, 0);
     outer->setSpacing(12);
 
     auto* header = new QHBoxLayout();
@@ -235,7 +235,8 @@ void TemplatesDialog::build_footer(QVBoxLayout* outer)
     QHBoxLayout* layout = nullptr;
     QFrame* footer = make_dialog_footer(this, layout);
 
-    auto* browse = make_dialog_action_button(tr("Browse for a file"), "quiet", footer);
+    auto* browse =
+        make_dialog_action_button(tr("Browse for a file"), "quiet", footer);
     connect(browse, &QPushButton::clicked, this,
             [this]
             {
@@ -249,7 +250,7 @@ void TemplatesDialog::build_footer(QVBoxLayout* outer)
     layout->insertWidget(0, browse);
 
     auto* save = make_dialog_action_button(tr("Save current setup as template"),
-                                    "quiet", footer);
+                                           "quiet", footer);
     connect(save, &QPushButton::clicked, this,
             [this]
             {
@@ -449,7 +450,8 @@ void TemplatesDialog::refresh_recent()
         recent_table_->setItem(
             row, 2, text_item(opened, text_style::caption, colour_role::ink3));
 
-        auto* open = make_dialog_action_button(tr("Open"), "quiet", recent_table_);
+        auto* open =
+            make_dialog_action_button(tr("Open"), "quiet", recent_table_);
         open->setProperty("size", QStringLiteral("small"));
         open->setAccessibleName(tr("Open %1").arg(name));
         polish(open);

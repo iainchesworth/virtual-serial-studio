@@ -27,7 +27,6 @@ namespace
 struct tone_colours
 {
     colour_role fill;
-    colour_role edge;
     colour_role glyph;
     StatusChip::kind chip;
 };
@@ -37,19 +36,18 @@ tone_colours colours_for(row_tone tone)
     switch (tone)
     {
     case row_tone::ok:
-        return {colour_role::okSoft, colour_role::okLine, colour_role::ok,
+        return {colour_role::okSoft, colour_role::ok,
                 StatusChip::kind::healthy};
     case row_tone::warn:
-        return {colour_role::amberSoft, colour_role::amberLine,
-                colour_role::amber, StatusChip::kind::waiting};
+        return {colour_role::amberSoft, colour_role::amber,
+                StatusChip::kind::waiting};
     case row_tone::info:
-        return {colour_role::accentSoft, colour_role::accentLine,
-                colour_role::accentStrong, StatusChip::kind::fixture};
+        return {colour_role::accentSoft, colour_role::accentText,
+                StatusChip::kind::fixture};
     case row_tone::neutral:
         break;
     }
-    return {colour_role::sunken, colour_role::line2, colour_role::ink3,
-            StatusChip::kind::closed};
+    return {colour_role::fill, colour_role::ink2, StatusChip::kind::closed};
 }
 
 } // namespace
@@ -59,15 +57,17 @@ CheckRowWidget::CheckRowWidget(const spec& row, QWidget* parent)
 {
     setFrameShape(QFrame::NoFrame);
     auto* layout = new QGridLayout(this);
-    const int margin = row_.framed ? 14 : 11;
-    layout->setContentsMargins(margin, margin, margin, margin);
-    layout->setHorizontalSpacing(14);
+    const Theme& theme = Theme::instance();
+    const int tile = theme.metric(QStringLiteral("tile"));
+    layout->setContentsMargins(theme.space(3), theme.space(2), theme.space(3),
+                               theme.space(2));
+    layout->setHorizontalSpacing(theme.space(2));
     layout->setVerticalSpacing(2);
-    layout->setColumnMinimumWidth(0, 36);
+    layout->setColumnMinimumWidth(0, tile);
     layout->setColumnStretch(1, 1);
 
     icon_holder_ = new QLabel(this);
-    icon_holder_->setFixedSize(36, 36);
+    icon_holder_->setFixedSize(tile, tile);
     icon_holder_->setAttribute(Qt::WA_TransparentForMouseEvents);
     auto* icon_layout = new QVBoxLayout(icon_holder_);
     icon_layout->setContentsMargins(0, 0, 0, 0);
@@ -85,7 +85,9 @@ CheckRowWidget::CheckRowWidget(const spec& row, QWidget* parent)
     QFont bold = title_->font();
     bold.setWeight(QFont::DemiBold);
     title_->setFont(bold);
-    heading->addWidget(title_, 0, Qt::AlignVCenter);
+    // Without a stretch a word-wrapped title takes its narrow size hint and
+    // breaks after a word or two, even with room to spare.
+    heading->addWidget(title_, 1, Qt::AlignVCenter);
     if (!row_.chip.isEmpty())
     {
         auto* chip =
@@ -93,7 +95,6 @@ CheckRowWidget::CheckRowWidget(const spec& row, QWidget* parent)
         chip->setAccessibleName(row_.chip);
         heading->addWidget(chip, 0, Qt::AlignVCenter);
     }
-    heading->addStretch(1);
     layout->addLayout(heading, 0, 1);
 
     auto* sentence = new QLabel(row_.sentence, this);
@@ -134,12 +135,13 @@ void CheckRowWidget::apply_style()
     setAttribute(Qt::WA_StyledBackground, true);
     polish(this);
 
+    // A kind tile: a tinted rounded square with no edge (rule 8).
     const tone_colours colours = colours_for(row_.tone);
     icon_holder_->setStyleSheet(
-        QStringLiteral("QLabel { background: %1; border: 1px solid %2; "
-                       "border-radius: 18px; }")
-            .arg(Theme::instance().colour(colours.fill).name(QColor::HexRgb),
-                 Theme::instance().colour(colours.edge).name(QColor::HexRgb)));
+        QStringLiteral("QLabel { background: %1; border: 0; "
+                       "border-radius: %2px; }")
+            .arg(Theme::instance().colour(colours.fill).name(QColor::HexRgb))
+            .arg(Theme::instance().radius(QStringLiteral("tile"))));
     glyph_->setPixmap(
         IconProvider::instance()
             .icon(row_.icon.isEmpty() ? QStringLiteral("info") : row_.icon,

@@ -9,6 +9,7 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
+#include "widgets/dialogs.hpp"
 
 #include <QClipboard>
 #include <QComboBox>
@@ -234,8 +235,11 @@ QFrame* make_dialog_footer(QWidget* parent, QHBoxLayout*& layout)
     footer->setAttribute(Qt::WA_StyledBackground);
     footer->setFrameShape(QFrame::NoFrame);
     layout = new QHBoxLayout(footer);
-    layout->setContentsMargins(20, 10, 20, 10);
-    layout->setSpacing(8);
+    set_dialog_footer_margins(layout);
+    // The dialogs that use this footer inset their whole layout by the dialog
+    // padding already, so the footer adds none at the sides.
+    const QMargins margins = layout->contentsMargins();
+    layout->setContentsMargins(0, margins.top(), 0, margins.bottom());
     layout->addStretch(1);
     return footer;
 }
