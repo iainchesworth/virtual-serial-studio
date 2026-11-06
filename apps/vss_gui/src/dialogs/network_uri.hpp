@@ -60,6 +60,15 @@ bool parse_port(const QString& text, int& port);
 std::optional<network_endpoint> parse_network_uri(const QString& text,
                                                   QString* error = nullptr);
 
+/// True for `127.0.0.0/8`, `::1` and `localhost`: an address only this
+/// computer can reach. `0.0.0.0`, `::` and an empty host are not.
+bool is_loopback_host(const QString& host);
+
+/// True when the URI is for an RFC 2217 server that other computers can reach
+/// and that has no `allow=` list: the case that needs a warning, because
+/// RFC 2217 has no password.
+bool rfc2217_server_is_open(const QString& uri);
+
 /// The port number at the end of a URI, or 0 when there is none.
 int network_port_from_uri(const QString& uri);
 

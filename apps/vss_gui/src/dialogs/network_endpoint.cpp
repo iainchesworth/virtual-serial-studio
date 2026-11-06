@@ -8,11 +8,15 @@
 
 #include "dialogs/common.hpp"
 #include "dialogs/network_uri.hpp"
+#include "support/elevated_step.hpp"
+#include "support/firewall_dialog.hpp"
+#include "support/permission_rows.hpp"
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
+#include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
 #include <QComboBox>
@@ -29,6 +33,8 @@
 #include <QStringList>
 #include <QTextDocumentFragment>
 #include <QVBoxLayout>
+
+#include <vss/ports/permissions.hpp>
 
 #include <algorithm>
 
@@ -258,6 +264,35 @@ void NetworkEndpointDialog::build()
         body);
     firewall_note_->hide();
     layout->addWidget(firewall_note_);
+
+    firewall_button_ = make_dialog_button(
+        tr("Check Windows Firewall for this port"), "quiet", body);
+    firewall_button_->setObjectName(QStringLiteral("networkFirewall"));
+    firewall_button_->setAccessibleName(
+        tr("Check Windows Firewall for this port"));
+    if (backend_.caps().firewall_rule)
+    {
+        firewall_button_->setToolTip(
+            tr("Shows what Windows Firewall does to this port. Nothing changes "
+               "until you agree."));
+    }
+    else
+    {
+        firewall_button_->setToolTip(tr("Not available in this build"));
+    }
+    firewall_button_->hide();
+    connect(firewall_button_, &QPushButton::clicked, this,
+            [this] { show_firewall_dialog(); });
+    layout->addWidget(firewall_button_, 0, Qt::AlignLeft);
+    open_note_ = new NoteBanner(
+        NoteBanner::kind::warn,
+        tr("RFC 2217 has no password. Anyone who can reach this port can use "
+           "the device. Choose This PC only (127.0.0.1), or in Advanced add "
+           "?allow=192.168.1.0/24 to the address to say who may connect."),
+        body);
+    open_note_->setObjectName(QStringLiteral("networkOpenWarning"));
+    open_note_->hide();
+    layout->addWidget(open_note_);
 
     auto* address_card = new QFrame(body);
     address_card->setProperty("card", true);
@@ -572,7 +607,30 @@ void NetworkEndpointDialog::update_role_ui()
 void NetworkEndpointDialog::update_warning()
 {
     const bool windows = windows_platform(backend_.facts());
-    firewall_note_->setVisible(windows && server_selected());
+    // Windows Firewall only matters for a bind that other computers can reach.
+    const bool reachable =
+        server_selected() &&
+        !vss::permissions::is_loopback_host(
+            listen_host(listen_combo_, listen_custom_).toStdString());
+    firewall_note_->setVisible(windows && reachable);
+    firewall_button_->setVisible(windows && reachable);
+    if (open_note_ != nullptr)
+        open_note_->setVisible(rfc2217_server_is_open(effective_uri()));
+}
+
+void NetworkEndpointDialog::show_firewall_dialog()
+{
+    // Ask now, for the listener as it is in the form.  A transport without a
+    // server role (RFC 2217) never gets here.
+    const auto facts = vss::permissions::probe(
+        support::permission_context_for(effective_uri()));
+    const auto fact = support::firewall_fact(facts);
+    if (!fact)
+        return;
+    support::FirewallDialog dialog(
+        *fact, backend_.caps().firewall_rule && support::firewall_step_available(),
+        this);
+    dialog.exec();
 }
 
 void NetworkEndpointDialog::update_result()
@@ -660,6 +718,8 @@ void NetworkEndpointDialog::update_address_blocks()
     command_block_->set_text(command(), tr("Command"));
     if (!override_)
         override_edit_->setText(effective_uri());
+    // The address decides whether other computers can reach the server.
+    update_warning();
 }
 
 QString NetworkEndpointDialog::result_text() const

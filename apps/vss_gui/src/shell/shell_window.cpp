@@ -2471,6 +2471,50 @@ bool ShellWindow::run_selftest()
             fail(QStringLiteral("the launcher did not return after removal"));
     }
 
+    if (backend_.caps().shared_bus)
+    {
+        // A shared bus through the same backend the Connect dialog uses: three
+        // members, one link, and the link goes when the members do.
+        std::vector<vss::endpoint_id> members;
+        for (const char* name : {"selftest-a", "selftest-b", "selftest-c"})
+        {
+            const auto member = backend_.create_virtual_port(
+                QString::fromLatin1(name), vss::virtual_port_kind::loopback,
+                true);
+            if (!member)
+            {
+                fail(QStringLiteral("create_virtual_port for the bus: %1")
+                         .arg(error_text(member.error())));
+                break;
+            }
+            members.push_back(*member);
+        }
+        if (members.size() == 3)
+        {
+            const auto bus = backend_.bus(members);
+            backend_.refresh();
+            QApplication::processEvents();
+            const auto links = backend_.links();
+            if (!bus)
+            {
+                fail(QStringLiteral("bus: %1").arg(error_text(bus.error())));
+            }
+            else if (links.size() != 1 ||
+                     links.front().shape != link_shape::bus ||
+                     links.front().sources.size() != 3)
+            {
+                fail(QStringLiteral("the shared bus did not show as one link "
+                                    "of three ports"));
+            }
+        }
+        for (const vss::endpoint_id id : members)
+            static_cast<void>(backend_.remove_port(id));
+        backend_.refresh();
+        QApplication::processEvents();
+        if (!backend_.links().empty())
+            fail(QStringLiteral("removing the members left the bus behind"));
+    }
+
     qputenv("VSS_HIGH_CONTRAST", QByteArrayLiteral("1"));
     Theme::instance().set_mode(theme_mode::dark);
     Theme::instance().set_mode(theme_mode::light);

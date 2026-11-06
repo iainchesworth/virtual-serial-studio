@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Cache hygiene
+
+# Keeps the repository's 10 GB Actions cache quota for entries something can still restore.
+# GitHub evicts the least recently used entry once the quota is full, with no regard for which
+# took long to build. On 2026-11-06 this repository held 10.8 GB: ten NuGet caches for the
+# Windows driver (6.6 GB, 570 to 800 MB each, one per pull request and queue ref), the Qt kit
+# (1.8 GB), the Tracy tools and the Python installs. An entry is readable only from its own ref,
+# the pull request's base and the default branch, so an entry whose ref is gone (a closed pull
+# request, a finished merge-queue branch) can never be restored; the shared prune action
+# (standard 11.6) removes those and the older generations of a cache saved under a new key.
+#
+# Not a gate: nothing waits for it, and a missed run only means the next one catches up.
+#
+# Trust: `workflow_run` runs with a write token in the context of the default branch. This
+# job runs only the pinned shared action, takes nothing from the triggering run and is limited
+# by `branches` to runs on develop, so pull request controlled text never reaches it.
+
+on:
+  # After a run on develop finished saving its caches: a new generation exists and the one before
+  # it is superseded.
+  # zizmor: ignore[dangerous-triggers] see the trust note above: a pinned action, nothing from the event
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [develop]
+  # A closed pull request's caches go as soon as it is closed, merged or not.
+  pull_request:
+    types: [closed]
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Only list what would be deleted.
+        type: boolean
+        default: true
+      purge:
+        description: Delete every entry whose key starts with this, on every ref. Empty for none.
+        type: string
+        default: ""
+
+permissions: {}
+
+# One at a time, and never cancelled half way through a delete loop.
+concurrency:
+  group: cache-hygiene
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    name: Prune Actions caches
+    # A fork's token cannot delete anything, and a fork's caches are not in this quota. A
+    # cancelled run saved nothing new.
+    if: >-
+      ${{
+        (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion != 'cancelled')
+      }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: write # delete cache entries
+      contents: read
+    steps:
+      - name: Prune
+        uses: iainchesworthlabs/icl-common-infra/actions/prune-actions-cache@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          # A manual run defaults to a dry run; every other trigger deletes.
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+          purge: ${{ github.event_name == 'workflow_dispatch' && inputs.purge || '' }}

@@ -9,7 +9,12 @@
 // can be scripted, measured and put in CI.
 //
 
+#include "permissions_command.hpp"
+
+#include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
+#include <vss/studio/capture.hpp>
+#include <vss/studio/replay.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
 
@@ -17,9 +22,12 @@
 #include <atomic>
 #include <chrono>
 #include <csignal>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <iterator>
 #include <map>
+#include <memory>
 #include <string>
 #include <thread>
 #include <vector>
@@ -34,6 +42,8 @@ struct arguments
 {
     std::vector<std::string> positional;
     std::map<std::string, std::string> options;
+    /// Every value an option was given, for the ones that may repeat.
+    std::map<std::string, std::vector<std::string>> repeated;
     std::vector<std::string> flags;
 
     bool has(const std::string& flag) const
@@ -45,6 +55,12 @@ struct arguments
     {
         const auto it = options.find(key);
         return it == options.end() ? fallback : it->second;
+    }
+
+    std::vector<std::string> all(const std::string& key) const
+    {
+        const auto it = repeated.find(key);
+        return it == repeated.end() ? std::vector<std::string>{} : it->second;
     }
 
     int number(const std::string& key, int fallback) const
@@ -77,10 +93,29 @@ void print_usage()
         "  vss_cli join <uri> <uri> [<uri>...] --target=<uri>\n"
         "      Merge several publishers into one serial port.\n"
         "\n"
+        "  vss_cli bus [<uri>...] [--virtual=N] [--tap=<uri>|virtual]\n"
+        "              [--kind=auto|loopback|pty|windows-driver] "
+        "[--seconds=N]\n"
+        "      Put ports on one shared multi-drop bus: each hears every other\n"
+        "      and none hears itself.  Each <uri> is a port to attach; "
+        "--virtual\n"
+        "      adds N virtual ports for other programs to open.  --tap adds a\n"
+        "      listen-only port that hears every member and sends to none.\n"
+        "      Runs until Ctrl-C or SIGTERM, or for N seconds.\n"
+        "\n"
         "  vss_cli bridge <uri> <uri>\n"
         "      Join two transports back to back (for example serial to tcp).\n"
-        "      tcp-listen://host:port and udp-listen://host:port wait for other\n"
+        "      tcp-listen://host:port and udp-listen://host:port wait for "
+        "other\n"
         "      computers to connect instead of connecting out.\n"
+        "      ?allow=a,b,c after the port (addresses or ranges such as\n"
+        "      192.168.1.0/24) lets only those computers in; the others are\n"
+        "      closed at once. For example:\n"
+        "        vss_cli bridge serial://COM3 "
+        "rfc2217-listen://192.168.1.10:7001?allow=192.168.1.0/24\n"
+        "      RFC 2217 carries the baud rate, framing and modem lines. It "
+        "has\n"
+        "      no password: listen on 127.0.0.1, or add allow=.\n"
         "\n"
         "  vss_cli loopback [--seconds=N]\n"
         "      A virtual port, a redirect and a monitor: no hardware needed.\n"
@@ -110,17 +145,43 @@ void print_usage()
         "a\n"
         "      \"com_number\" gets that COM number from the Windows driver.\n"
         "\n"
+        "  vss_cli capture [<topology.json>] [--uri=<uri>...] --out=<file>\n"
+        "                  [--format=cap|csv|jsonl] [--port=<name>[,<name>...]]\n"
+        "                  [--seconds=N]\n"
+        "      Record every byte that crosses the ports, each with its time in\n"
+        "      milliseconds from the start and the port it belongs to.  cap is\n"
+        "      the `[ms] R|W 0x..|0x..` text format, one line per chunk, and\n"
+        "      has no port names; csv and jsonl carry the port, the direction\n"
+        "      and the absolute start time.  R is bytes the port received and\n"
+        "      W is bytes written to it, so use --port to keep one row per\n"
+        "      message.\n"
+        "      The format comes from the file name when --format is left out.\n"
+        "      Runs until Ctrl-C or SIGTERM, or for N seconds.\n"
+        "\n"
+        "  vss_cli play <file> [<topology.json>] (--uri=<uri> | --port=<name>)\n"
+        "               [--speed=X] [--loop] [--direction=R|W] [--from=<name>]\n"
+        "               [--seconds=N]\n"
+        "      Write the records of a .cap or .jsonl capture into one port at\n"
+        "      the times they were recorded, so a recorded master or device can\n"
+        "      drive a bus without the original program.  --uri opens the port\n"
+        "      a program would open; --port names a port of the topology.  R\n"
+        "      (the default) sends the bytes the recorded port received, W the\n"
+        "      bytes written to it.  --from keeps the records of one recorded\n"
+        "      port.  A loop lasts as long as the capture did.\n"
+        "\n"
         "  vss_cli bench --from=<uri> --to=<uri> [--bytes=1MB] [--chunk=4KB]\n"
         "      Measure a real end-to-end transfer.\n"
         "\n"
         "  vss_cli selftest\n"
         "      Check the wiring without touching hardware.\n"
         "\n"
+        "%s"
         "  Common: --verbose, --quiet\n"
         "\n"
         "Virtual Serial Studio is free software under the GNU General Public\n"
         "License, version 3 or later.  This program comes with ABSOLUTELY NO\n"
-        "WARRANTY; see LICENSE for details.\n");
+        "WARRANTY; see LICENSE for details.\n",
+        vss_cli::permissions_usage());
 }
 
 void print_topology(studio& app)
@@ -143,6 +204,15 @@ void print_topology(studio& app)
     std::printf("links: %zu\n", links.size());
     for (const auto& link : links)
     {
+        if (link.mode == vss::link_mode::bus)
+        {
+            std::printf("  [%llu] %-8s %zu members  bytes=%llu dropped=%llu\n",
+                        static_cast<unsigned long long>(link.id),
+                        vss::to_string(link.mode), link.sources.size(),
+                        static_cast<unsigned long long>(link.stats.bytes),
+                        static_cast<unsigned long long>(link.stats.dropped));
+            continue;
+        }
         std::printf("  [%llu] %-8s %zu -> %zu  bytes=%llu dropped=%llu\n",
                     static_cast<unsigned long long>(link.id),
                     vss::to_string(link.mode), link.sources.size(),
@@ -310,6 +380,133 @@ int command_join(const arguments& args)
     return 0;
 }
 
+bool parse_virtual_kind(const std::string& kind, vss::virtual_port_kind& out)
+{
+    if (kind == "auto" || kind == "pty")
+        out = vss::virtual_port_kind::pty;
+    else if (kind == "loopback")
+        out = vss::virtual_port_kind::loopback;
+    else if (kind == "windows-driver")
+        out = vss::virtual_port_kind::windows_driver;
+    else
+        return false;
+    return true;
+}
+
+int command_bus(const arguments& args)
+{
+    catch_stop_signals();
+
+    vss::virtual_port_kind kind = vss::virtual_port_kind::pty;
+    if (!parse_virtual_kind(args.get("--kind", "auto"), kind))
+    {
+        std::fprintf(stderr, "unknown --kind=%s\n", args.get("--kind").c_str());
+        return 2;
+    }
+
+    const int virtual_count = args.number("--virtual", 0);
+    const std::size_t uri_count = args.positional.size() - 1;
+    if (virtual_count < 0 ||
+        uri_count + static_cast<std::size_t>(virtual_count) < 2)
+    {
+        std::fprintf(stderr, "bus needs at least two members: give URIs or "
+                             "--virtual=N\n");
+        return 2;
+    }
+
+    studio app;
+    std::vector<std::string> members;
+
+    for (std::size_t index = 1; index < args.positional.size(); ++index)
+    {
+        const std::string name = "member-" + std::to_string(members.size() + 1);
+        const auto attached = app.attach_serial(name, args.positional[index]);
+        if (!attached)
+        {
+            std::fprintf(stderr, "cannot open %s: %s\n",
+                         args.positional[index].c_str(),
+                         attached.error().message().c_str());
+            return 1;
+        }
+        members.push_back((*attached)->name());
+        std::printf("%s -> %s\n", (*attached)->name().c_str(),
+                    args.positional[index].c_str());
+    }
+
+    for (int index = 0; index < virtual_count; ++index)
+    {
+        const std::string name = "member-" + std::to_string(members.size() + 1);
+        const auto created = app.create_virtual_port(name, kind);
+        if (!created)
+        {
+            std::fprintf(stderr, "cannot create %s: %s\n", name.c_str(),
+                         created.error().message().c_str());
+            return 1;
+        }
+        members.push_back((*created)->name());
+        std::printf("%s -> %s\n", (*created)->name().c_str(),
+                    app.advertised_path((*created)->id()).c_str());
+    }
+
+    const auto bus = app.bus(members);
+    if (!bus)
+    {
+        std::fprintf(stderr, "bus failed: %s\n", bus.error().message().c_str());
+        return 1;
+    }
+
+    // The tap is outside the bus: a join from every member that the bus does
+    // not feed back, so the program on it hears everything and sends nothing.
+    const std::string tap = args.get("--tap");
+    if (!tap.empty())
+    {
+        const auto opened = tap == "virtual"
+                                ? app.create_virtual_port("tap", kind)
+                                : app.attach_serial("tap", tap);
+        if (!opened)
+        {
+            std::fprintf(stderr, "cannot open the tap: %s\n",
+                         opened.error().message().c_str());
+            return 1;
+        }
+        const auto tapped = app.join(members, (*opened)->name());
+        if (!tapped)
+        {
+            std::fprintf(stderr, "cannot tap the bus: %s\n",
+                         tapped.error().message().c_str());
+            return 1;
+        }
+        std::printf("tap -> %s\n",
+                    tap == "virtual"
+                        ? app.advertised_path((*opened)->id()).c_str()
+                        : tap.c_str());
+    }
+
+    std::printf("bus of %zu members (link %llu)\n", members.size(),
+                static_cast<unsigned long long>(*bus));
+    std::fflush(stdout);
+    run_until_stopped(app, args.number("--seconds", 0), args.has("--verbose"));
+    return 0;
+}
+
+/// RFC 2217 has no password, so a server that other computers can reach, and
+/// that has no allow list, is worth a line of warning.
+void warn_if_reachable(const std::string& uri)
+{
+    if (!uri.starts_with("rfc2217-listen://"))
+        return;
+    const auto address = vss::parse_listen_uri(uri);
+    if (!address || !address->allow.empty() ||
+        vss::listens_on_loopback(*address))
+        return;
+    std::fprintf(stderr,
+                 "warning: %s can be reached from other computers, and RFC "
+                 "2217 has no password. Anyone who can reach the port can use "
+                 "the serial port. Listen on 127.0.0.1, or add "
+                 "?allow=192.168.1.0/24 (the addresses that may connect).\n",
+                 uri.c_str());
+}
+
 int command_bridge(const arguments& args)
 {
     if (args.positional.size() < 3)
@@ -317,6 +514,9 @@ int command_bridge(const arguments& args)
         std::fprintf(stderr, "bridge needs two URIs\n");
         return 2;
     }
+
+    warn_if_reachable(args.positional[1]);
+    warn_if_reachable(args.positional[2]);
 
     studio app;
     const auto link = app.bridge(args.positional[1], args.positional[2]);
@@ -625,6 +825,253 @@ int command_run(const arguments& args)
     return 0;
 }
 
+/// Applies the topology a command names and opens every `--uri`, the way
+/// `capture`, `play` and `respond` all start.  The topology is the positional
+/// argument at `topology_index`, if there is one.  Returns an exit code, or -1
+/// when the ports are ready.
+int open_ports(studio& app, const arguments& args, std::size_t topology_index)
+{
+    if (args.positional.size() > topology_index)
+    {
+        const auto& path = args.positional[topology_index];
+        const auto document = vss::config::load_file(path);
+        if (!document)
+        {
+            std::fprintf(stderr, "cannot load %s: %s\n", path.c_str(),
+                         document.error().message().c_str());
+            return 1;
+        }
+        if (const auto applied = app.apply(*document); !applied)
+        {
+            std::fprintf(stderr, "cannot apply the topology: %s\n",
+                         applied.error().message().c_str());
+            return 1;
+        }
+    }
+
+    for (const auto& uri : args.all("--uri"))
+    {
+        const auto attached = app.attach_serial(uri, uri);
+        if (!attached)
+        {
+            std::fprintf(stderr, "cannot open %s: %s\n", uri.c_str(),
+                         attached.error().message().c_str());
+            return 1;
+        }
+    }
+    return -1;
+}
+
+int command_capture(const arguments& args)
+{
+    const std::string out = args.get("--out");
+    if (out.empty())
+    {
+        std::fprintf(stderr, "capture needs --out=<file>\n");
+        return 2;
+    }
+    if (args.positional.size() < 2 && args.all("--uri").empty())
+    {
+        std::fprintf(stderr,
+                     "capture needs a topology file or at least one --uri\n");
+        return 2;
+    }
+
+    vss::capture_options options;
+    if (args.options.count("--format") != 0)
+    {
+        const auto format = vss::parse_capture_format(args.get("--format"));
+        if (!format)
+        {
+            std::fprintf(stderr, "unknown --format=%s (use cap, csv or jsonl)\n",
+                         args.get("--format").c_str());
+            return 2;
+        }
+        options.format = *format;
+    }
+    else if (const auto guessed = vss::capture_format_for_path(out))
+    {
+        options.format = *guessed;
+    }
+    for (const auto& list : args.all("--port"))
+    {
+        for (const auto& name : split_list(list, ','))
+            options.ports.push_back(name);
+    }
+
+    catch_stop_signals();
+    studio app;
+    if (const int code = open_ports(app, args, 1); code >= 0)
+        return code;
+
+    for (const auto& name : options.ports)
+    {
+        if (app.find(name))
+            continue;
+        std::fprintf(stderr, "there is no port named %s; the ports are:\n",
+                     name.c_str());
+        for (const auto& info : app.endpoint_infos())
+            std::fprintf(stderr, "  %s\n", info.name.c_str());
+        return 2;
+    }
+
+    auto session = vss::capture_session::start(app.engine(), out, options);
+    if (!session)
+    {
+        std::fprintf(stderr, "cannot write %s: %s\n", out.c_str(),
+                     session.error().message().c_str());
+        return 1;
+    }
+
+    print_topology(app);
+    std::printf("capturing %s to %s (%s)\n",
+                options.ports.empty() ? "every port" : "the chosen ports",
+                out.c_str(), vss::to_string(options.format));
+    std::fflush(stdout);
+
+    run_until_stopped(app, args.number("--seconds", 0), false);
+
+    (*session)->stop();
+    const bool good = (*session)->good();
+    std::printf("wrote %llu record(s), %llu byte(s)\n",
+                static_cast<unsigned long long>((*session)->records()),
+                static_cast<unsigned long long>((*session)->bytes()));
+    if (!good)
+        std::fprintf(stderr, "writing %s failed\n", out.c_str());
+    return good ? 0 : 1;
+}
+
+/// The endpoint a `play` or `respond` command acts on: `--port` names a port
+/// of the topology, and a single `--uri` stands for itself.
+std::shared_ptr<vss::endpoint> chosen_port(studio& app, const arguments& args,
+                                           const char* command)
+{
+    const std::string name = args.get("--port");
+    const auto uris = args.all("--uri");
+    if (name.empty() && uris.size() != 1)
+    {
+        std::fprintf(stderr,
+                     "%s needs --uri=<uri> or --port=<name> to say which "
+                     "port to use\n",
+                     command);
+        return nullptr;
+    }
+    const std::string wanted = name.empty() ? uris.front() : name;
+    auto port = app.find(wanted);
+    if (!port)
+    {
+        std::fprintf(stderr, "there is no port named %s; the ports are:\n",
+                     wanted.c_str());
+        for (const auto& info : app.endpoint_infos())
+            std::fprintf(stderr, "  %s\n", info.name.c_str());
+    }
+    return port;
+}
+
+int command_play(const arguments& args)
+{
+    if (args.positional.size() < 2)
+    {
+        std::fprintf(stderr, "play needs a capture file\n");
+        return 2;
+    }
+    const std::string& file = args.positional[1];
+
+    vss::replay_options options;
+    if (args.options.count("--direction") != 0)
+    {
+        const std::string letter = args.get("--direction");
+        if (letter == "R" || letter == "r")
+            options.direction = vss::data_direction::rx;
+        else if (letter == "W" || letter == "w")
+            options.direction = vss::data_direction::tx;
+        else
+        {
+            std::fprintf(stderr, "--direction is R or W, not %s\n",
+                         letter.c_str());
+            return 2;
+        }
+    }
+    if (args.options.count("--speed") != 0)
+    {
+        try
+        {
+            options.speed = std::stod(args.get("--speed"));
+        }
+        catch (const std::exception&)
+        {
+            options.speed = 0.0;
+        }
+        if (!(options.speed > 0.0))
+        {
+            std::fprintf(stderr, "--speed must be a number above zero\n");
+            return 2;
+        }
+    }
+    options.loop = args.has("--loop");
+    options.from_port = args.get("--from");
+
+    const auto capture = vss::read_capture_file(file);
+    if (!capture)
+    {
+        std::fprintf(stderr, "cannot read %s: %s\n", file.c_str(),
+                     capture.error().message().c_str());
+        return 1;
+    }
+    if (capture->skipped_lines > 0)
+        std::fprintf(stderr, "%zu line(s) of %s could not be read and were skipped\n",
+                     capture->skipped_lines, file.c_str());
+
+    catch_stop_signals();
+    studio app;
+    if (const int code = open_ports(app, args, 2); code >= 0)
+        return code;
+    const auto port = chosen_port(app, args, "play");
+    if (!port)
+        return 2;
+
+    auto player = vss::replay_player::start(app.engine(), port,
+                                            capture->records, options);
+    if (!player)
+    {
+        std::fprintf(stderr, "nothing to play: %s has no %c records%s\n",
+                     file.c_str(), vss::direction_letter(options.direction),
+                     options.from_port.empty() ? "" : " from that port");
+        return 1;
+    }
+
+    std::printf("playing %zu record(s) of %s into %s%s\n",
+                (*player)->records_per_pass(), file.c_str(),
+                port->name().c_str(), options.loop ? " in a loop" : "");
+    std::fflush(stdout);
+
+    const int seconds = args.number("--seconds", 0);
+    const auto started = std::chrono::steady_clock::now();
+    while (!g_stop_requested.load() && !(*player)->finished())
+    {
+        if (seconds > 0 &&
+            std::chrono::steady_clock::now() - started >=
+                std::chrono::seconds(seconds))
+            break;
+        std::this_thread::sleep_for(20ms);
+    }
+    // The last write is queued on the port; give it a moment to leave.
+    if ((*player)->finished())
+        std::this_thread::sleep_for(200ms);
+
+    (*player)->stop();
+    std::printf("sent %llu record(s), %llu byte(s)\n",
+                static_cast<unsigned long long>((*player)->records_sent()),
+                static_cast<unsigned long long>((*player)->bytes_sent()));
+    if ((*player)->write_errors() > 0)
+    {
+        std::fprintf(stderr, "%llu write(s) failed\n",
+                     static_cast<unsigned long long>((*player)->write_errors()));
+        return 1;
+    }
+    return 0;
+}
+
 int command_bench(const arguments& args)
 {
     const std::string from = args.get("--from");
@@ -727,6 +1174,16 @@ int command_selftest()
     return 0;
 }
 
+/// Options that take a value, so `--out file` means the same as `--out=file`.
+bool takes_value(const std::string& name)
+{
+    static const char* const names[] = {"--out",       "--format", "--port",
+                                        "--uri",       "--seconds", "--speed",
+                                        "--direction", "--from"};
+    return std::find(std::begin(names), std::end(names), name) !=
+           std::end(names);
+}
+
 arguments parse(int argc, char** argv)
 {
     arguments parsed;
@@ -736,10 +1193,22 @@ arguments parse(int argc, char** argv)
         if (value.rfind("--", 0) == 0)
         {
             const auto equals = value.find('=');
-            if (equals == std::string::npos)
-                parsed.flags.push_back(value);
+            if (equals != std::string::npos)
+            {
+                const auto name = value.substr(0, equals);
+                parsed.options[name] = value.substr(equals + 1);
+                parsed.repeated[name].push_back(value.substr(equals + 1));
+            }
+            else if (takes_value(value) && index + 1 < argc)
+            {
+                parsed.options[value] = argv[index + 1];
+                parsed.repeated[value].push_back(argv[index + 1]);
+                ++index;
+            }
             else
-                parsed.options[value.substr(0, equals)] = value.substr(equals + 1);
+            {
+                parsed.flags.push_back(value);
+            }
         }
         else
         {
@@ -769,6 +1238,8 @@ int main(int argc, char** argv)
             return command_share(args);
         if (command == "join")
             return command_join(args);
+        if (command == "bus")
+            return command_bus(args);
         if (command == "bridge")
             return command_bridge(args);
         if (command == "loopback")
@@ -779,10 +1250,17 @@ int main(int argc, char** argv)
             return command_vport(args);
         if (command == "run")
             return command_run(args);
+        if (command == "capture")
+            return command_capture(args);
+        if (command == "play")
+            return command_play(args);
         if (command == "bench")
             return command_bench(args);
         if (command == "selftest")
             return command_selftest();
+        if (command == "permissions")
+            return vss_cli::command_permissions(
+                std::vector<std::string>(argv + 1, argv + argc));
     }
     catch (const std::exception& error)
     {

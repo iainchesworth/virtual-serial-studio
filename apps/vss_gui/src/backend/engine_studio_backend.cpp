@@ -12,6 +12,8 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/ports/permissions.hpp>
+#include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QMetaObject>
@@ -88,20 +90,26 @@ link_view make_link(const vss::link_info& info)
     view.owner = info.owner;
     view.stats = info.stats;
 
-    if (info.mode == vss::link_mode::duplex)
+    if (info.mode == vss::link_mode::bus)
+    {
+        view.shape = link_shape::bus;
+    }
+    else if (info.mode == vss::link_mode::duplex)
     {
         view.shape = info.sources.size() == 1 && info.targets.size() == 1
                          ? link_shape::two_way
                          : link_shape::split;
     }
-    else if (!info.options.emulate_modem_lines)
+    else if (info.sources.size() > 1)
     {
-        view.shape = link_shape::monitor;
+        // Many sources are a join with or without modem lines; a tap on a
+        // bus is a join without them.
+        view.shape = link_shape::join;
     }
     else
     {
-        view.shape =
-            info.sources.size() > 1 ? link_shape::join : link_shape::one_way;
+        view.shape = info.options.emulate_modem_lines ? link_shape::one_way
+                                                      : link_shape::monitor;
     }
     return view;
 }
@@ -204,6 +212,8 @@ capabilities EngineStudioBackend::caps() const
     caps.undo = true;
     // `vss::hub::set_link_wiring` holds the wires of every link.
     caps.line_matrix = true;
+    // `vss::hub::bus` is a shared multi-drop link, in the JSON as "bus".
+    caps.shared_bus = true;
     // The JSON editor places a schema error on its line with a path index of
     // the text, and asks `vss::config::from_json` which field it refused.
     caps.json_positions = true;
@@ -212,6 +222,10 @@ capabilities EngineStudioBackend::caps() const
     caps.rename_port = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
+    // The rule is made by the elevated command-line helper; the platform must
+    // have the step and be able to start a program through its own prompt.
+    caps.firewall_rule = vss::permissions::can_manage_firewall_rules() &&
+                         vss::permissions::can_run_elevated();
     return caps;
 }
 
@@ -351,7 +365,12 @@ std::vector<device_view> EngineStudioBackend::devices() const
         view.path = QString::fromStdString(device.path);
         view.description = QString::fromStdString(device.description);
         view.hardware_id = QString::fromStdString(device.hardware_id);
-        view.virtual_device = device.virtual_device;
+        // A port made by the Studio driver is a virtual port, not a device.
+        // Its hardware id starts with VSSCOM\ (VSSCOM\PORT, VSSCOM\VSSCOM0).
+        view.virtual_device =
+            device.virtual_device ||
+            view.hardware_id.startsWith(QStringLiteral("VSSCOM\\"),
+                                        Qt::CaseInsensitive);
         view.com0com = device.com0com;
         view.com0com_pair = device.com0com_pair;
         view.com0com_side = QString::fromStdString(device.com0com_side);
@@ -387,6 +406,9 @@ std::vector<traffic_view> EngineStudioBackend::traffic(int limit) const
 setup_facts EngineStudioBackend::facts() const
 {
     setup_facts facts;
+    facts.driver_found = vss::driver_available();
+    if (facts.driver_found)
+        facts.driver_version = QString::fromStdString(vss::driver_version());
     const auto installation = studio_.detect_com0com();
     facts.com0com_found = installation.found;
     facts.com0com_pairs = static_cast<int>(installation.pairs.size());
@@ -470,6 +492,16 @@ vss::result<vss::link_id> EngineStudioBackend::monitor(vss::endpoint_id from,
                                                        vss::endpoint_id to)
 {
     const auto linked = studio_.engine().monitor(from, to);
+    if (!linked)
+        return linked.error();
+    rebuild();
+    return *linked;
+}
+
+vss::result<vss::link_id>
+EngineStudioBackend::bus(const std::vector<vss::endpoint_id>& members)
+{
+    const auto linked = studio_.engine().bus(members);
     if (!linked)
         return linked.error();
     rebuild();

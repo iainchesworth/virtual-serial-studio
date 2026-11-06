@@ -98,3 +98,69 @@ IOKit do not show.
 
 Virtual ports on Windows need the `vsscom` driver. Until it is installed, `auto` falls back to com0com when present, and to an
 in-process loopback device otherwise. See [`windows-com-driver.md`](windows-com-driver.md).
+
+### Prompts Windows shows that the program did not ask for
+
+A UAC window that appears while the tests run is not a request from the tests for
+administrator rights. Windows Firewall shows the prompt when a program starts
+listening on every network address and has no rule yet; pressing **Allow access**
+then needs administrator approval, and that is the UAC window. The system tests
+and the performance suite used to do this with their TCP and UDP probes. They now
+listen on the loopback address only, which the firewall never asks about, and a
+test must keep to that: bind a test server to `127.0.0.1`, never to the wildcard
+address.
+
+Every program the project builds on Windows carries an application manifest with
+`requestedExecutionLevel asInvoker` (`cmake/windows/vss.manifest`, attached by
+`cmake/VssWindowsResources.cmake`). Without a manifest Windows decides from the file
+name and version strings whether to treat a program as an installer, so the
+manifest means Windows never guesses. The unit tests read the manifest of the test
+program itself.
+
+The old prompts leave firewall rules behind, one per build folder and protocol,
+named after the program. They are harmless, but a machine that ran the tests
+from many build folders has dozens. Remove them in the Windows Defender Firewall
+with Advanced Security console (**Inbound Rules**, sort by name, delete the
+`vss_system_tests` rules) or from an administrator PowerShell:
+
+```powershell
+Get-NetFirewallRule -DisplayName vss_system_tests | Remove-NetFirewallRule
+```
+
+Check the list first with `Get-NetFirewallRule -DisplayName vss_system_tests`;
+Studio never adds, changes or removes a firewall rule by itself.
+
+### Elevation and Windows Firewall
+
+The permissions layer (`libs/vss_ports`, `vss/ports/permissions.hpp`) is shared by the
+GUI and `vss_cli permissions`. `observe()` reads the host (the process token with
+`GetTokenInformation`, and Windows Firewall through `INetFwPolicy2`, read only);
+`evaluate()` turns that into facts with reason codes and is plain code, so the
+tests inject observations and check every outcome on every system. A platform that
+cannot be asked answers `unknown`, and the Setup check shows "Not checked yet".
+
+- **Administrator.** Elevated, an administrator account that has not elevated (a
+  filtered token) and a standard user are three different facts, because Windows
+  asks for consent in the second and for a password in the third.
+- **One privileged step, in its own process.** Studio is never run elevated to do
+  one thing. The firewall rule is made by `vss_cli permissions firewall-allow`,
+  started with the `runas` verb so Windows shows its own prompt. The helper
+  validates its arguments (one port, one protocol, local subnet unless the caller
+  said otherwise, never every network), refuses a program that is not `vss_gui.exe`
+  or `vss_cli.exe` in its own folder, and replaces only a rule with its own name.
+  The prompt shows the helper's name and publisher. Until the release is signed the
+  publisher reads "Unknown", which the user guide says.
+- **Reading the rules.** An inbound rule decides a listener when it is enabled,
+  names the program (or no program), covers the protocol and the port, and applies
+  to a network the computer is on now. A block rule wins. "Block all incoming
+  connections" overrides every rule and is reported as such. Rules for a service
+  are skipped.
+- **Capability.** `capabilities::firewall_rule` is true where the platform has the
+  step. Without it, or without `vss_cli` beside the program, the dialog explains
+  and shows the command, and the button reads "Not available in this build".
+
+Not run on a real machine for this change (a check never changes the firewall of
+the machine the tests run on, so the step itself is covered by unit tests of the
+rule text, the argument round trip and the helper's refusals): adding and removing
+the rule in a Windows guest, the UAC prompt for a standard user, and a machine
+joined to a domain with policy-managed rules.

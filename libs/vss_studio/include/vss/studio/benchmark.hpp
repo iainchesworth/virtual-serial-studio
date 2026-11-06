@@ -22,7 +22,7 @@ namespace vss {
 struct benchmark_options
 {
     /// Total payload, in bytes.  Must be greater than zero.
-    std::uint64_t bytes = 1024 * 1024;
+    std::uint64_t bytes = std::uint64_t{1024} * 1024;
     /// Size of each write, in bytes.  Must be greater than zero.
     std::size_t chunk = 4096;
     /// How long one write may take before the run fails.

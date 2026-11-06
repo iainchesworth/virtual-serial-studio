@@ -118,8 +118,9 @@ public:
     echo_server() : acceptor_(io_)
     {
         boost::system::error_code error;
+        // Loopback only, so Windows Firewall has nothing to ask about.
         const boost::asio::ip::tcp::endpoint endpoint(
-            boost::asio::ip::tcp::v4(), 0);
+            boost::asio::ip::address_v4::loopback(), 0);
         acceptor_.open(endpoint.protocol(), error);
         if (!error)
             acceptor_.bind(endpoint, error);

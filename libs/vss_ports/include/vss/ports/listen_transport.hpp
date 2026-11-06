@@ -15,6 +15,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace vss {
 
@@ -35,6 +36,11 @@ struct listen_address
     std::string host;
     /// 0 asks the system for a free port.
     std::uint16_t port = 0;
+    /// Who may connect: IP addresses and CIDR ranges such as `192.168.1.0/24`
+    /// or `fd00::/8`. Empty admits everyone. A TCP or RFC 2217 client outside
+    /// the list is closed at once, and a UDP datagram from outside it is
+    /// ignored.
+    std::vector<std::string> allow;
 
     friend bool operator==(const listen_address&, const listen_address&) = default;
 };
@@ -47,8 +53,20 @@ bool is_listen_uri(std::string_view uri) noexcept;
 /// Parses `tcp-listen://host:port`, `udp-listen://host:port` and
 /// `rfc2217-listen://host:port`. The host is
 /// an IP address, `[::1]` for IPv6, or empty for every IPv4 interface. The
-/// URI carries nothing else.
+/// only thing a URI may add is `?allow=a,b,c`, a comma separated list of
+/// addresses and CIDR ranges (see #listen_address::allow). Anything else after
+/// the port is an error.
 result<listen_address> parse_listen_uri(std::string_view uri);
+
+/// True when `list` admits `address` (an IP address in text form). An empty
+/// list admits everyone and a bad address is never admitted. An IPv4 address
+/// written as IPv6 (`::ffff:192.0.2.1`) counts as the IPv4 address.
+bool allow_list_admits(const std::vector<std::string>& list,
+                       std::string_view address);
+
+/// True when the address listens on this computer only: `127.0.0.0/8` or
+/// `::1`. An empty host (every interface) is not.
+bool listens_on_loopback(const listen_address& address);
 
 /// The URI for an address, the inverse of parse_listen_uri.
 std::string make_listen_uri(const listen_address& address);
@@ -104,6 +122,10 @@ public:
 
     /// TCP clients connected now, or UDP senders heard from.
     std::size_t peer_count() const noexcept;
+
+    /// TCP connections closed, and UDP datagrams ignored, because the allow
+    /// list did not admit the sender.
+    std::size_t refused_count() const noexcept;
 
 private:
     class state;

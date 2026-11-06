@@ -159,6 +159,11 @@ public:
                          std::string_view target);
     result<link_id> redirect(std::string_view from, std::string_view to);
     result<link_id> monitor(std::string_view from, std::string_view to);
+
+    /// Puts the named ports on one shared multi-drop bus: each hears every
+    /// other and none hears itself.  Modem lines are not carried.  See
+    /// #hub::bus for the rules, including how a bus meets other links.
+    result<link_id> bus(const std::vector<std::string>& members);
     result<void> disconnect(link_id id);
 
     // -- scenarios ---------------------------------------------------------

@@ -28,6 +28,7 @@
 #include <string_view>
 #include <thread>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -101,6 +102,27 @@ public:
 
     /// Passive one-way copy, for a monitor port.
     result<link_id> monitor(endpoint_id from, endpoint_id to);
+
+    /// A shared multi-drop bus: every byte a member publishes goes to every
+    /// other member and never back to its sender, as on an RS-485 pair.
+    ///
+    /// The members form one broadcast domain, so the cycle check treats the
+    /// whole bus as a single node: the routes between its members are not
+    /// loops, but a path that leaves the bus and comes back to it still is.
+    /// An endpoint is a member of at most one bus (`errc::already_exists`).
+    /// There must be 2 to #max_bus_members distinct members.  A route that
+    /// already joins two of them is refused with `errc::cycle_detected`.
+    ///
+    /// A listen-only tap is not a member: give it a #join from the members
+    /// (or a #monitor from one), which the bus does not feed back.
+    ///
+    /// A bus carries no modem lines, so `emulate_modem_lines` is stored as
+    /// `false`, and it supports `merge_policy::interleave` only
+    /// (`errc::unsupported` otherwise).  The link counts a delivery to each
+    /// receiving member, as a split does.  Removing a member takes it out of
+    /// the bus; the bus itself goes when fewer than two members remain.
+    result<link_id> bus(const std::vector<endpoint_id>& members,
+                        link_options options = {});
 
     result<void> disconnect(link_id id);
 
@@ -177,6 +199,12 @@ private:
                              const std::vector<endpoint_id>& targets,
                              link_options options);
     bool would_create_cycle(endpoint_id from, endpoint_id to) const;
+    bool bus_would_create_cycle(const std::vector<endpoint_id>& members) const;
+    /// The node of the cycle graph an endpoint stands for: itself, or the
+    /// bus it belongs to.
+    endpoint_id cycle_node(endpoint_id id) const;
+    bool reaches(endpoint_id start,
+                 const std::unordered_set<endpoint_id>& goals) const;
     void add_route(link_id link, endpoint_id from, endpoint_id to);
     void erase_routes(link_id link);
     link_info describe(const link_record& record) const;
@@ -201,6 +229,8 @@ private:
     std::unordered_map<std::string, endpoint_id> names_;
     std::unordered_map<link_id, std::shared_ptr<link_record>> links_;
     std::unordered_map<endpoint_id, std::vector<route_entry>> routes_;
+    /// The bus each member belongs to.
+    std::unordered_map<endpoint_id, link_id> bus_of_;
 
     mutable std::mutex subscriber_mutex_;
     subscriber_id next_subscriber_id_ = 1;

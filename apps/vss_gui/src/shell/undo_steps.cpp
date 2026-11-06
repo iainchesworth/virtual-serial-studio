@@ -40,7 +40,7 @@ bool same_ends(const link_view& left, const link_view& right)
 bool create_link(StudioBackend& backend, const link_view& spec)
 {
     if (find_link(backend, spec) || spec.sources.isEmpty() ||
-        spec.targets.isEmpty())
+        (spec.shape != link_shape::bus && spec.targets.isEmpty()))
         return false;
 
     vss::result<vss::link_id> made =
@@ -65,6 +65,9 @@ bool create_link(StudioBackend& backend, const link_view& spec)
     case link_shape::join:
         made = backend.join(to_vector(spec.sources), spec.targets.first(),
                             spec.options);
+        break;
+    case link_shape::bus:
+        made = backend.bus(to_vector(spec.sources));
         break;
     }
     if (!made)

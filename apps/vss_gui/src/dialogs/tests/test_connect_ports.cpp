@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QRadioButton>
 
 #include <vector>
 
@@ -134,6 +135,92 @@ TEST_CASE("connect: every mode makes the right link")
         REQUIRE_EQ(link.shape, vss::gui::link_shape::join);
         REQUIRE_EQ(link.targets.front(), ports.delta);
         REQUIRE_EQ(link.sources.size(), 2);
+    }
+}
+
+TEST_CASE("connect: a real device links in every mode")
+{
+    // "Real device" attaches a port of kind physical. The connect dialog does
+    // not filter by kind, so it takes part in each mode like any other port.
+    using mode = vss::gui::ConnectPortsDialog::mode;
+    const auto with_device =
+        [](vss::gui::FakeStudioBackend& backend, vss::endpoint_id& device,
+           vss::endpoint_id& first, vss::endpoint_id& second)
+    {
+        const auto attached =
+            backend.attach_serial(QStringLiteral("device"),
+                                  QStringLiteral("serial://COM3"), {}, true);
+        REQUIRE(attached.has_value());
+        device = *attached;
+        REQUIRE(backend.port(device)->kind == vss::endpoint_kind::physical);
+        first = *backend.create_virtual_port(QStringLiteral("first"),
+                                             vss::virtual_port_kind::pty, true);
+        second = *backend.create_virtual_port(
+            QStringLiteral("second"), vss::virtual_port_kind::loopback, true);
+        backend.refresh();
+    };
+
+    for (const mode chosen : {mode::two_way, mode::redirect, mode::monitor})
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(chosen));
+        dialog.select_from(device);
+        dialog.select_to(first);
+        REQUIRE(dialog.primary_enabled());
+        REQUIRE(dialog.submit());
+        const vss::gui::link_view link = only_link(backend);
+        REQUIRE_EQ(link.sources.front(), device);
+        REQUIRE_EQ(link.targets.front(), first);
+    }
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(mode::split));
+        dialog.select_split_source(device);
+        dialog.set_target_ids({first, second});
+        REQUIRE(dialog.submit());
+        REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::split);
+        REQUIRE_EQ(only_link(backend).sources.front(), device);
+    }
+    {
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        REQUIRE(dialog.set_mode(mode::join));
+        dialog.select_join_target(device);
+        dialog.set_source_ids({first, second});
+        REQUIRE(dialog.submit());
+        REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::join);
+        REQUIRE_EQ(only_link(backend).targets.front(), device);
+    }
+    {
+        // A real device and a loopback are not both Studio only, so the pair
+        // is allowed, unlike two loopbacks.
+        vss::gui::FakeStudioBackend backend;
+        vss::endpoint_id device = 0;
+        vss::endpoint_id first = 0;
+        vss::endpoint_id second = 0;
+        with_device(backend, device, first, second);
+        vss::gui::ConnectPortsDialog dialog(backend);
+        show(dialog);
+        dialog.select_from(device);
+        dialog.select_to(second);
+        REQUIRE(dialog.primary_enabled());
     }
 }
 
@@ -295,4 +382,107 @@ TEST_CASE("connect: without Advanced the join keeps interleaving")
     REQUIRE(dialog.submit());
     REQUIRE_EQ(only_link(backend).options.policy,
                vss::merge_policy::interleave);
+}
+
+namespace
+{
+
+/// A backend whose engine can make a shared bus, as the real one does.
+void allow_bus(vss::gui::FakeStudioBackend& backend)
+{
+    vss::gui::capabilities caps = backend.caps();
+    caps.shared_bus = true;
+    backend.set_capabilities(caps);
+}
+
+} // namespace
+
+TEST_CASE("connect: a shared bus puts the chosen ports on one link")
+{
+    vss::gui::FakeStudioBackend backend;
+    allow_bus(backend);
+    const fixture_ports ports = make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+
+    REQUIRE(dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    REQUIRE_EQ(dialog.current_mode(), vss::gui::ConnectPortsDialog::mode::bus);
+
+    dialog.set_member_ids({ports.alpha, ports.beta, ports.delta});
+    REQUIRE_EQ(dialog.count_text(),
+               QStringLiteral("3 ports chosen. That is enough for a bus."));
+    REQUIRE_EQ(dialog.accessible_result_text(),
+               QStringLiteral("Each of alpha, beta and delta hears what the "
+                              "others write, and none hears itself. Their "
+                              "bytes are mixed in the order they arrive."));
+    REQUIRE(dialog.primary_enabled());
+
+    dialog.set_member_ids({ports.alpha});
+    REQUIRE_EQ(dialog.count_text(), QStringLiteral("Choose at least 2 ports."));
+    REQUIRE(!dialog.primary_enabled());
+    REQUIRE_EQ(dialog.accessible_result_text(),
+               QStringLiteral("Choose the ports to put on the bus."));
+
+    dialog.set_member_ids({ports.alpha, ports.beta, ports.delta});
+    REQUIRE(dialog.submit());
+    const vss::gui::link_view link = only_link(backend);
+    REQUIRE_EQ(link.shape, vss::gui::link_shape::bus);
+    REQUIRE_EQ(link.mode, vss::link_mode::bus);
+    REQUIRE_EQ(link.sources.size(), 3);
+    REQUIRE(link.targets.isEmpty());
+    REQUIRE(!link.options.emulate_modem_lines);
+    REQUIRE_EQ(dialog.result_summary(),
+               QStringLiteral("Put alpha, beta and delta on a shared bus."));
+}
+
+TEST_CASE("connect: the bus is disabled where the build has none")
+{
+    vss::gui::FakeStudioBackend backend;
+    REQUIRE(!backend.caps().shared_bus);
+    make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+
+    // The other five modes still work; the star stays the way to share.
+    REQUIRE(!dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    REQUIRE_EQ(dialog.current_mode(),
+               vss::gui::ConnectPortsDialog::mode::two_way);
+
+    QRadioButton* radio = nullptr;
+    for (QRadioButton* candidate : dialog.findChildren<QRadioButton*>())
+    {
+        if (candidate->accessibleName() == QStringLiteral("Shared bus"))
+            radio = candidate;
+    }
+    REQUIRE(radio != nullptr);
+    REQUIRE(!radio->isEnabled());
+    REQUIRE_EQ(radio->parentWidget()->toolTip(),
+               QStringLiteral("Not available in this build"));
+}
+
+TEST_CASE("connect: a bus refused by the engine says why and stays open")
+{
+    vss::gui::FakeStudioBackend backend;
+    allow_bus(backend);
+    const fixture_ports ports = make_ports(backend);
+    vss::gui::ConnectPortsDialog dialog(backend);
+    show(dialog);
+    REQUIRE(dialog.set_mode(vss::gui::ConnectPortsDialog::mode::bus));
+    dialog.set_member_ids({ports.alpha, ports.beta});
+
+    backend.fail_next(vss::make_error_code(vss::errc::cycle_detected));
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_visible());
+    REQUIRE_EQ(dialog.error_title(),
+               QStringLiteral("That link would create a loop"));
+    REQUIRE(dialog.error_body().contains(QStringLiteral("out of the bus")));
+    REQUIRE(backend.links().empty());
+
+    backend.fail_next(vss::make_error_code(vss::errc::already_exists));
+    REQUIRE(!dialog.submit());
+    REQUIRE(dialog.error_body().contains(
+        QStringLiteral("A port can be on one bus only")));
+
+    REQUIRE(dialog.submit());
+    REQUIRE_EQ(only_link(backend).shape, vss::gui::link_shape::bus);
 }

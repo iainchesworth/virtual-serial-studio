@@ -65,6 +65,52 @@ time, use an `owner` policy:
 publisher owns the link the other publishers' bytes are counted as dropped, not
 silently interleaved.
 
+## Put several programs on one bus
+
+A polled protocol such as Modbus RTU runs on a single line with one master and
+several devices, and every station hears every byte. A shared bus gives each
+program its own port and joins them like that line: what one writes goes to all
+the others and never back to itself.
+
+```bash
+vss_cli bus --virtual=3 --tap=virtual --seconds=60
+```
+
+```
+member-1 -> /dev/pts/4          <- open this in the master
+member-2 -> /dev/pts/5          <- and these in the devices
+member-3 -> /dev/pts/6
+tap -> /dev/pts/7               <- a listener that cannot transmit
+bus of 3 members (link 1)
+```
+
+Add `<uri>` arguments to put real or network ports on the bus as well, for
+example `vss_cli bus serial://COM3 tcp://10.0.0.2:4001 --virtual=1`.
+
+In JSON the bus lists its members, and the listener is a join from them that
+carries no modem lines:
+
+```json
+{
+  "name": "bus",
+  "ports": [
+    { "name": "master",   "kind": "virtual" },
+    { "name": "device-1", "kind": "virtual" },
+    { "name": "device-2", "kind": "virtual" },
+    { "name": "listener", "kind": "virtual" }
+  ],
+  "links": [
+    { "mode": "bus", "members": ["master", "device-1", "device-2"] },
+    { "mode": "join", "sources": ["master", "device-1", "device-2"],
+      "targets": ["listener"], "emulate_modem_lines": false }
+  ]
+}
+```
+
+A bus has no modem lines, no owner policy, and a port can be on one bus only.
+A route out of the bus and back into it is refused as a loop. The listener is
+outside the bus on purpose: a port that is not a member cannot send onto it.
+
 ## Watch traffic without disturbing the device
 
 `monitor` links are one-way and do not emulate modem lines, so the observer
@@ -76,6 +122,74 @@ vss_cli loopback      # a console port and a monitor port, no hardware
 
 The GUI monitor reads from the hub's ring buffer and shows both directions with
 ASCII or hex previews. The send panel writes into any open endpoint.
+
+## One master, several programs and a silent listener
+
+One program polls and several others answer, as on a shared serial line, and
+you want a record of the whole conversation with the exact time of every
+message. Each program opens its own port. Studio joins the ports and records
+them; nothing needs to be added to any of the programs.
+
+```json
+{
+  "name": "poll-lab",
+  "ports": [
+    { "name": "master",   "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "device-1", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "device-2", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "listener", "kind": "virtual", "virtual_kind": "auto" }
+  ],
+  "links": [
+    { "mode": "split",   "sources": ["master"],
+      "targets": ["device-1", "device-2"] },
+    { "mode": "monitor", "sources": ["master"], "targets": ["listener"] }
+  ]
+}
+```
+
+The master's port is the line as the master sees it: it receives what the
+master sends and is written everything the devices answer. The `monitor` link
+gives a fourth program a read-only copy of what the master sends; that program
+cannot send anything back. Start the programs on the ports `vss_cli` prints,
+then record the master's port:
+
+```bash
+vss_cli capture poll-lab.json --out poll.cap --port master --seconds=120
+```
+
+`poll.cap` has a line for each message in either direction:
+
+```
+[      1204] R 0x02|0x31|0x03
+[      1251] W 0x02|0x31|0x41|0x03
+```
+
+`R` is a poll the master sent and `W` is an answer written to it, 47 ms
+later. For the whole picture with the names of the ports, record every port to
+JSON Lines and read it with any tool:
+
+```bash
+vss_cli capture poll-lab.json --out poll.jsonl
+```
+
+One message shows up once for each port it crossed: `R` on the sender and `W`
+on each receiver. Filter on `port` and `direction` to pick the rows you want.
+The `.cap` file has no port column, so keep one port per file with `--port`.
+
+### Play the master again without the master
+
+The `R` records of the master's port are what the master sent, with the gaps
+between them. Play them into the port the master program had opened, and the
+devices see the same polls at the same times:
+
+```bash
+vss_cli play poll.cap --uri=serial://COM6 --seconds=60
+vss_cli play poll.cap --uri=serial://COM6 --speed=4 --loop    # faster, until Ctrl-C
+```
+
+Record the replay with `capture` as before, and the two captures can be compared
+line by line: the same bytes in the same order, with the same gaps to within a
+few milliseconds.
 
 ## Test software that watches the control lines
 

@@ -42,6 +42,7 @@ const char* to_string(link_mode value) noexcept
     {
     case link_mode::duplex: return "duplex";
     case link_mode::one_way: return "one-way";
+    case link_mode::bus: return "bus";
     }
     return "unknown";
 }

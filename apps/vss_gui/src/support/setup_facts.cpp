@@ -6,6 +6,8 @@
 
 #include "support/setup_facts.hpp"
 
+#include "support/permission_rows.hpp"
+
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDir>
@@ -119,6 +121,12 @@ setup_row devices_row(const setup_facts& facts, const QStringList& paths,
     return row;
 }
 
+/// Either driver is enough for other programs to see Studio's ports.
+bool windows_ports_ready(const setup_facts& facts)
+{
+    return facts.driver_found || facts.com0com_found;
+}
+
 void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
                       const platform_facts& platform, bool checks_available,
                       const QStringList& paths)
@@ -134,6 +142,29 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             QCoreApplication::translate(
                 "SetupCheck", "Studio did not check for the virtual port "
                               "driver.")));
+    }
+    else if (facts.driver_found)
+    {
+        QString sentence = QCoreApplication::translate(
+            "SetupCheck", "The Virtual Serial Studio driver is installed, so "
+                          "other programs can see ports Studio makes as COM "
+                          "ports.");
+        if (!facts.driver_version.isEmpty())
+        {
+            sentence += QLatin1Char(' ');
+            sentence +=
+                QCoreApplication::translate("SetupCheck", "Driver version %1.")
+                    .arg(facts.driver_version);
+        }
+        if (facts.com0com_found)
+        {
+            sentence += QLatin1Char(' ');
+            sentence += QCoreApplication::translate(
+                "SetupCheck",
+                "com0com is also installed, and Studio tries its own driver "
+                "first.");
+        }
+        rows.push_back(ok_row(driver.title, sentence));
     }
     else if (facts.com0com_found)
     {
@@ -154,9 +185,10 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
     {
         driver.state = setup_state::attention;
         driver.sentence = QCoreApplication::translate(
-            "SetupCheck", "com0com was not found. Windows needs a driver "
-                          "before other programs can see virtual ports as "
-                          "COM ports.");
+            "SetupCheck", "Neither the Virtual Serial Studio driver nor "
+                          "com0com was found. Windows needs a driver before "
+                          "other programs can see virtual ports as COM "
+                          "ports.");
         driver.chip =
             QCoreApplication::translate("SetupCheck", "Needs attention");
         driver.action_text =
@@ -178,6 +210,14 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
                 "SetupCheck",
                 "Studio could not check for administrator rights.")));
     }
+    else if (facts.driver_found)
+    {
+        rows.push_back(ok_row(
+            administrator.title,
+            QCoreApplication::translate(
+                "SetupCheck", "The Virtual Serial Studio driver makes ports "
+                              "without administrator rights.")));
+    }
     else if (platform.elevated)
     {
         rows.push_back(ok_row(
@@ -194,6 +234,11 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             "SetupCheck",
             "Creating a new linked pair needs administrator rights, once "
             "per pair. Everything else runs without them.");
+        if (const QString who = elevation_sentence(platform.permissions);
+            !who.isEmpty())
+        {
+            administrator.sentence += QLatin1Char(' ') + who;
+        }
         administrator.chip =
             QCoreApplication::translate("SetupCheck", "Needed later");
         administrator.action_text = QCoreApplication::translate(
@@ -400,6 +445,7 @@ setup_report build_setup_report(const setup_facts& facts,
         add_unix_rows(report.rows, normalised, platform, checks_available,
                       device_paths);
     }
+    append_permission_rows(report.rows, platform.permissions);
 
     int attention = 0;
     int not_checked = 0;
@@ -428,7 +474,7 @@ setup_report build_setup_report(const setup_facts& facts,
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "All set");
 
-    if (windows && checks_available && !normalised.com0com_found)
+    if (windows && checks_available && !windows_ports_ready(normalised))
     {
         report.driver_note = QCoreApplication::translate(
             "SetupCheck",
@@ -446,7 +492,7 @@ setup_report build_setup_report(const setup_facts& facts,
     if (!checks_available)
         report.ports_ready = false;
     else if (windows)
-        report.ports_ready = normalised.com0com_found;
+        report.ports_ready = windows_ports_ready(normalised);
     else
         report.ports_ready = platform.pty_known && platform.pty_available;
 
@@ -460,7 +506,9 @@ setup_report build_setup_report(const setup_facts& facts,
 setup_report query_setup_report(const StudioBackend& backend)
 {
     const setup_facts facts = backend.facts();
-    const platform_facts platform = probe_platform_facts();
+    platform_facts platform = probe_platform_facts();
+    platform.permissions =
+        vss::permissions::probe(permission_context(backend));
     const bool checks_available = backend.caps().setup_check;
 
     QStringList paths;
@@ -519,21 +567,29 @@ bool relaunch_as_administrator(QString* error)
     }
     const std::wstring path =
         QDir::toNativeSeparators(executable).toStdWString();
-    const auto result = reinterpret_cast<INT_PTR>(ShellExecuteW(
-        nullptr, L"runas", path.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
-    if (result > 32)
+    // ShellExecuteEx reports a declined UAC prompt as ERROR_CANCELLED; the
+    // older ShellExecute folded it into SE_ERR_ACCESSDENIED, so the user could
+    // not tell "I said no" from "Windows refused".
+    SHELLEXECUTEINFOW info{};
+    info.cbSize = sizeof(info);
+    info.fMask = SEE_MASK_FLAG_NO_UI;
+    info.lpVerb = L"runas";
+    info.lpFile = path.c_str();
+    info.nShow = SW_SHOWNORMAL;
+    if (ShellExecuteExW(&info) != 0)
         return true;
     if (error != nullptr)
     {
-        *error = result == SE_ERR_ACCESSDENIED || result == ERROR_CANCELLED
-                     ? QCoreApplication::translate(
-                           "SetupCheck",
-                           "Windows did not allow the elevated restart. Try "
-                           "again from the Start menu.")
-                     : QCoreApplication::translate(
-                           "SetupCheck",
-                           "Windows could not restart Virtual Serial Studio as "
-                           "administrator.");
+        *error =
+            GetLastError() == ERROR_CANCELLED
+                ? QCoreApplication::translate(
+                      "SetupCheck",
+                      "You declined the Windows permission prompt, so Studio "
+                      "keeps running as before. Nothing was changed.")
+                : QCoreApplication::translate(
+                      "SetupCheck",
+                      "Windows could not restart Virtual Serial Studio as "
+                      "administrator.");
     }
     return false;
 #else

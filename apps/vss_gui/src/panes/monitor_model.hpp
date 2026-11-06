@@ -9,12 +9,15 @@
 
 #include "backend/view_types.hpp"
 
+#include <vss/studio/capture.hpp>
+
 #include <QAbstractTableModel>
 #include <QByteArray>
 #include <QDateTime>
 #include <QString>
 #include <QVector>
 
+#include <chrono>
 #include <cstdint>
 #include <vector>
 
@@ -36,7 +39,20 @@ struct traffic_row
     traffic_direction direction = traffic_direction::rx;
     std::uint64_t bytes = 0;
     QByteArray preview;
+    /// Every byte of the chunk, not only the preview.  The capture export
+    /// writes these.
+    QByteArray data;
+    /// The engine's event time (a steady clock), unlike #time, which is the
+    /// wall clock when the batch reached the GUI.
+    vss::time_point when{};
     bool dropped = false;
+};
+
+/// The rows a capture export writes, with the wall clock at their offset zero.
+struct capture_export
+{
+    std::vector<vss::capture_record> records;
+    std::chrono::system_clock::time_point started;
 };
 
 /// Bounded traffic model.  Events arrive in coalesced batches from the
@@ -57,6 +73,9 @@ public:
     /// The design's named cap: 10,000 rows.
     static constexpr int kMaxRows = 10'000;
     static constexpr int kPreviewBytes = 256;
+    /// Rows also keep their whole payload for the capture export, so the
+    /// payloads kept are bounded as well: the oldest rows go first.
+    static constexpr qint64 kMaxRetainedBytes = qint64{32} * 1024 * 1024;
 
     explicit MonitorModel(QObject* parent = nullptr);
 
@@ -83,6 +102,9 @@ public:
     const traffic_row* row_at(int row) const;
     int total_rows() const noexcept { return static_cast<int>(rows_.size()); }
     QString export_text() const;
+    /// The rows that pass the filters, with every byte and the engine's event
+    /// time, as capture records.  Offsets run from the first of those rows.
+    capture_export export_capture() const;
 
     static QString ascii_preview(const QByteArray& data);
     static QString hex_preview(const QByteArray& data);
@@ -95,6 +117,7 @@ private:
     void trim();
 
     std::vector<traffic_row> rows_;
+    qint64 retained_bytes_ = 0;
     QVector<int> visible_;
     vss::endpoint_id port_filter_ = 0;
     vss::endpoint_id selected_ = 0;
