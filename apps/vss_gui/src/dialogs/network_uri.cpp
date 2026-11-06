@@ -58,7 +58,7 @@ QString build_network_uri(network_transport transport, network_role role,
         address = QStringLiteral("[%1]").arg(address);
     }
     QString scheme = network_scheme(transport);
-    if (role == network_role::server && transport != network_transport::rfc2217)
+    if (role == network_role::server)
         scheme += QStringLiteral("-listen");
     return QStringLiteral("%1://%2:%3")
         .arg(scheme, address, QString::number(port));
@@ -110,6 +110,11 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     else if (scheme == QLatin1String("udp-listen"))
     {
         endpoint.transport = network_transport::udp;
+        endpoint.role = network_role::server;
+    }
+    else if (scheme == QLatin1String("rfc2217-listen"))
+    {
+        endpoint.transport = network_transport::rfc2217;
         endpoint.role = network_role::server;
     }
     else
@@ -176,6 +181,25 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
     endpoint.host = host;
     endpoint.port = port;
     return endpoint;
+}
+
+bool is_loopback_host(const QString& host)
+{
+    const QString text = host.trimmed().toLower();
+    return text == QLatin1String("localhost") || text == QLatin1String("::1") ||
+           text.startsWith(QLatin1String("127."));
+}
+
+bool rfc2217_server_is_open(const QString& uri)
+{
+    const auto parsed = parse_network_uri(uri);
+    if (!parsed || parsed->role != network_role::server ||
+        parsed->transport != network_transport::rfc2217)
+        return false;
+    // A list of who may connect is the person's answer to the warning.
+    if (uri.contains(QLatin1String("?allow=")))
+        return false;
+    return !is_loopback_host(parsed->host);
 }
 
 int network_port_from_uri(const QString& uri)

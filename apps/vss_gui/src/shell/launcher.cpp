@@ -316,8 +316,11 @@ void Launcher::refresh()
     {
         readiness_->set_kind(NoteBanner::kind::ok);
         readiness_->set_text(
-            tr("Ready. This PC can create ports that other programs "
-               "can open (com0com detected)."));
+            backend_.facts().driver_found
+                ? tr("Ready. This PC can create ports that other programs "
+                     "can open (Virtual Serial Studio driver detected).")
+                : tr("Ready. This PC can create ports that other programs "
+                     "can open (com0com detected)."));
         if (readiness_->action_button() != nullptr)
             readiness_->action_button()->setText(tr("View setup check"));
     }

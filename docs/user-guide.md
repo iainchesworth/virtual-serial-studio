@@ -146,8 +146,9 @@ On Linux the **Port ready** dialog looks like this:
 - **Name**: a unique suffix is added if the name is taken. With **How many**
   above one, names run `port-1`, `port-2` and so on. The number must be 1 to
   32.
-- **Kind**: *Best available (recommended)* uses com0com on Windows when it is
-  installed and a pseudo terminal on Linux and macOS; *Pseudo terminal*; or
+- **Kind**: *Best available (recommended)* uses the Virtual Serial Studio
+  driver on Windows when it is installed, then com0com, and a pseudo terminal
+  on Linux and macOS; *Pseudo terminal*; or
   *In-process loopback*, whose port only Studio can open. On Windows there are
   no pseudo terminals, so *Pseudo terminal* gives the same result as *Best
   available*.
@@ -158,19 +159,24 @@ name**, a note on how to use it, and **Connect COM7 to something**, **Create
 another** and **Done**. **Show details** gives the saved-setup entry and the
 equivalent `vss_cli` command. Without a driver on Windows the title reads
 "port-1 is ready inside Studio" and the dialog warns that other programs cannot
-open it, with a button for the setup check.
+open it, with a button for the setup check. With a driver installed and a
+port that only Studio can open (an in-process loopback), the note says so
+instead of asking you to install a driver.
 
 ### Linked pair
 
 **Connect two programs** creates two ports that talk to each other. Choose the
-pair name. The two port names are shown for you to read: on Windows they come
-from the free com0com pairs, and on Linux and macOS they are paths such as
+pair name. With the Virtual Serial Studio driver on Windows, Studio makes both
+ports when you press **Create pair** and Windows chooses their COM numbers, so
+the port fields read "Chosen when you create the pair" and no free pairs are
+needed. With only com0com on Windows the two names are shown for you to read;
+they come from the free com0com pairs, and the dialog uses a pair that already
+exists and never creates one. On Linux and macOS they are paths such as
 `/dev/pts/3`. DTR is wired to DSR and RTS to CTS, as on a standard null-modem
-cable. The dialog uses a pair that already exists and never creates one, so it
-does not ask for administrator permission. When there are not enough free
-driver pairs, the button is disabled and the dialog points to the setup check;
-the share wizard can create another pair. In Advanced, **More options** offers
-the port kind.
+cable. Neither route asks for administrator permission. With com0com, when
+there are not enough free driver pairs the button is disabled and the dialog
+points to the setup check; the share wizard can create another pair. In
+Advanced, **More options** offers the port kind.
 
 The picture shows a Windows PC with no free com0com pairs: **Create pair** is
 off and the dialog points to the setup check.
@@ -181,7 +187,8 @@ off and the dialog points to the setup check.
 
 **Attach a real device** lists the serial devices when the dialog opens; press
 **Refresh** after plugging one in. A com0com pair end is listed as *Virtual* and
-cannot be chosen, because it is a port and not a device. Studio cannot tell in
+cannot be chosen, because it is a port and not a device. A port made by the
+Virtual Serial Studio driver is listed the same way. Studio cannot tell in
 advance that another program holds a device: if it does, opening fails with a
 message that offers **Try again** and **Choose another**. In the Add port
 dialog, choosing *Real device* and pressing **Next** opens this dialog.
@@ -202,7 +209,7 @@ that Studio creates, not the device.
 
 A TCP, UDP or RFC 2217 address used as a port. Choose the transport, then
 whether Studio **connects to a server** or **waits for other computers to
-connect (server)**. Waiting works for TCP and UDP; RFC 2217 only connects. See
+connect (server)**. Waiting works for TCP, UDP and RFC 2217. See
 [network addresses](#network-addresses).
 
 ![The Put a device on the network dialog with TCP chosen, a server address and the equivalent vss_cli bridge command](images/network-endpoint-light.png)
@@ -263,7 +270,11 @@ Remove link**. Removing a port removes its links too, after a confirmation.
 1. **Choose the device** to share, and a name.
 2. **How many programs?** (1 to 32). The table lists the port each program will
    open and whether other programs can open it. In step 1 you can change the
-   device's settings or use **A network device instead**. On Windows each outside program
+   device's settings or use **A network device instead**. On Windows with the
+   Virtual Serial Studio driver, Studio makes a port for each program when you
+   share, so no free pairs are counted; the wizard warns only when you ask for
+   more ports than one user can hold (16), for example "Only 16 of the 17
+   programs can open their port". With only com0com, each outside program
    needs its own com0com pair. When there are not enough free pairs the wizard
    warns, for example "Only 2 of the 3 programs can open their port", and
    offers **Create another pair** (administrator permission) or **Keep the
@@ -422,13 +433,48 @@ accepts these forms, and you can type them in Advanced and in `vss_cli`:
 | `udp://host:port` | UDP datagrams sent to and received from one address. |
 | `tcp-listen://host:port` | A TCP server: Studio waits for other computers. Any number can connect; what you send goes to all of them. |
 | `udp-listen://host:port` | UDP datagrams from any sender; replies go to the senders heard from lately. |
-| `rfc2217://host:port` | RFC 2217 serial-over-network (connects only). |
+| `rfc2217://host:port` | RFC 2217 serial-over-network: Studio connects to an access server. |
+| `rfc2217-listen://host:port` | An RFC 2217 access server: Studio waits for serial-over-network clients such as pySerial's `rfc2217://`. |
 | `loopback:name` | An in-process loopback endpoint. |
+
+An RFC 2217 server speaks Telnet with the COM-PORT option, so a client opens
+it as a serial port. Data passes through as it would for TCP. The client's
+DTR and RTS are the endpoint's output lines, so a linked port sees them as
+DSR, CTS and DCD, and the CTS, DSR, DCD and RI that reach the endpoint are
+sent to the client as modem state.
 
 To let other computers connect, allow the port through the host firewall and
 listen on an interface they can reach (`0.0.0.0` for all interfaces). Try
 `127.0.0.1` first. Studio does not use the network unless you add an endpoint
 like these.
+
+### Who may connect
+
+A listening address can carry a list of the computers that may connect, after
+the port: `?allow=` and then addresses or ranges, separated by commas.
+
+```text
+rfc2217-listen://192.168.1.10:7001?allow=192.168.1.0/24,10.0.0.5
+tcp-listen://0.0.0.0:4001?allow=fd00::/8
+```
+
+A computer that is not on the list is disconnected as soon as it connects,
+before it can send or receive a byte, and a UDP datagram from one is ignored.
+An address alone means that computer; `a.b.c.d/n` is every address that shares
+the first `n` bits. IPv4 and IPv6 both work, and an IPv4 address that arrives
+written as IPv6 counts as the IPv4 one. The list is not a password and does not
+encrypt anything: an address can be forged, and the data crosses the network
+as it is. It keeps strangers on the same network away from a port. To use it in
+the network dialog, turn on Advanced and edit the address. Nothing in a saved
+setup changes: the list is part of the address.
+
+An RFC 2217 server has no password at all. The network dialog and `vss_cli
+bridge` warn when such a server can be reached from another computer and has no
+`allow=` list. Listen on `127.0.0.1` when the other program is on this computer.
+
+Every connection Studio accepts is set to send what it writes at once, so a
+short reply (a reply to a poll on a serial bus, for example) is not held back
+waiting for more data.
 
 ## Finding things: the command palette
 
@@ -456,8 +502,10 @@ registry on Windows, a configuration file on Linux and macOS).
 ## Help and diagnostics
 
 - **Tools → Setup check** says what this PC needs so other programs can use
-  your ports. On Windows it looks for the com0com driver, whether administrator
-  rights will be needed, and the real serial devices. On Linux and macOS it
+  your ports. On Windows it looks for the Virtual Serial Studio driver (and
+  names its version) or com0com, whether administrator rights will be needed,
+  and the real serial devices. Either driver counts as ready, and the com0com
+  install guidance appears only when neither is found. On Linux and macOS it
   looks at pseudo terminals and your serial port group. The status bar chip
   shows "Setup ready" or "Setup needs attention" and opens the same dialog.
 
@@ -530,16 +578,19 @@ available in this build". It never pretends. At the moment:
 - **"Waiting for a program" and "Program connected" on Windows and macOS**:
   Studio can see whether a program has opened a port only for a pseudo terminal
   on Linux. Everywhere else a port reads **Open** and no more.
-- An **RFC 2217 server**: Studio can connect to one but cannot act as one.
+- **Settings sent by an RFC 2217 client** (baud rate, data bits, parity, stop
+  bits, flow control): the server accepts and reports them but does not apply
+  them to a real device linked to it. DTR, RTS and break from the client are
+  passed on as control lines.
 
 The reasons and the plan for each are in
 [gui-design/docs/08-engine-gaps.md](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/08-engine-gaps.md).
 
 ## Troubleshooting
 
-**No COM ports appear on Windows.** A virtual COM port needs a pair driver.
-Open **Tools → Setup check**. Without com0com, *Best available* falls back to an
-in-process loopback, whose path is `loopback:<name>` and which other
+**No COM ports appear on Windows.** A virtual COM port needs a driver: the
+Virtual Serial Studio driver or com0com. Open **Tools → Setup check**. With
+neither, *Best available* falls back to an in-process loopback, whose path is `loopback:<name>` and which other
 applications cannot open. Pseudo terminals do not exist on Windows.
 
 **A pseudo terminal path is shown but another program cannot open it.** On

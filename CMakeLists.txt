@@ -103,6 +103,7 @@ include(VssVirtualSerial)
 include(VssCoverage)
 include(VssSanitizers)
 include(VssTracy)
+include(VssWindowsResources)
 include(VssFuzz)
 
 # ---------------------------------------------------------------------------

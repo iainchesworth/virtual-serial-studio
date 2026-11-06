@@ -12,6 +12,7 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QMetaObject>
@@ -187,9 +188,9 @@ capabilities EngineStudioBackend::caps() const
 {
     capabilities caps = capabilities{};
     // Boost.VirtualSerial's network backends only connect. Waiting for other
-    // computers is `vss_ports`' listen transport (`tcp-listen://` and
-    // `udp-listen://`), which `vss::studio::attach_serial` opens. RFC 2217 has
-    // no server role.
+    // computers is `vss_ports`' listen transport (`tcp-listen://`,
+    // `udp-listen://` and `rfc2217-listen://`), which
+    // `vss::studio::attach_serial` opens.
     caps.network_server = true;
     // `vss::run_benchmark` is the core `vss_cli bench` uses, shared with the
     // GUI.
@@ -351,7 +352,12 @@ std::vector<device_view> EngineStudioBackend::devices() const
         view.path = QString::fromStdString(device.path);
         view.description = QString::fromStdString(device.description);
         view.hardware_id = QString::fromStdString(device.hardware_id);
-        view.virtual_device = device.virtual_device;
+        // A port made by the Studio driver is a virtual port, not a device.
+        // Its hardware id starts with VSSCOM\ (VSSCOM\PORT, VSSCOM\VSSCOM0).
+        view.virtual_device =
+            device.virtual_device ||
+            view.hardware_id.startsWith(QStringLiteral("VSSCOM\\"),
+                                        Qt::CaseInsensitive);
         view.com0com = device.com0com;
         view.com0com_pair = device.com0com_pair;
         view.com0com_side = QString::fromStdString(device.com0com_side);
@@ -387,6 +393,9 @@ std::vector<traffic_view> EngineStudioBackend::traffic(int limit) const
 setup_facts EngineStudioBackend::facts() const
 {
     setup_facts facts;
+    facts.driver_found = vss::driver_available();
+    if (facts.driver_found)
+        facts.driver_version = QString::fromStdString(vss::driver_version());
     const auto installation = studio_.detect_com0com();
     facts.com0com_found = installation.found;
     facts.com0com_pairs = static_cast<int>(installation.pairs.size());

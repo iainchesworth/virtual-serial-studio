@@ -6,6 +6,8 @@
 
 #include <vss/ports/listen_transport.hpp>
 
+#include <vss/ports/rfc2217.hpp>
+
 #include "platform/listen_socket_platform.hpp"
 
 #include <boost/asio/buffer.hpp>
@@ -22,6 +24,7 @@
 #include <charconv>
 #include <cstring>
 #include <deque>
+#include <functional>
 #include <mutex>
 #include <optional>
 #include <vector>
@@ -34,17 +37,144 @@ namespace {
 
 constexpr std::string_view tcp_scheme = "tcp-listen://";
 constexpr std::string_view udp_scheme = "udp-listen://";
+constexpr std::string_view rfc2217_scheme = "rfc2217-listen://";
 
 /// Bytes held for the hub before the clients are told to wait.
 constexpr std::size_t receive_limit = 1U << 20;
 constexpr std::size_t chunk_size = 4096;
 constexpr std::size_t udp_peer_limit = 16;
+constexpr std::size_t allow_limit = 64;
+constexpr std::string_view allow_key = "allow=";
+
+/// One entry of an allow list: an address and how many leading bits of it a
+/// client must share.
+struct allow_rule
+{
+    asio::ip::address base;
+    unsigned prefix = 0;
+};
+
+std::optional<allow_rule> parse_allow_rule(std::string_view text)
+{
+    std::string_view address = text;
+    std::string_view length;
+    const auto slash = text.find('/');
+    if (slash != std::string_view::npos)
+    {
+        address = text.substr(0, slash);
+        length = text.substr(slash + 1);
+        if (length.empty())
+            return std::nullopt;
+    }
+
+    boost::system::error_code ec;
+    const auto base = asio::ip::make_address(std::string(address), ec);
+    if (ec)
+        return std::nullopt;
+
+    const unsigned most = base.is_v4() ? 32U : 128U;
+    unsigned prefix = most;
+    if (!length.empty())
+    {
+        const auto parsed = std::from_chars(
+            length.data(), length.data() + length.size(), prefix);
+        if (parsed.ec != std::errc{} ||
+            parsed.ptr != length.data() + length.size() || prefix > most)
+            return std::nullopt;
+    }
+    return allow_rule{base, prefix};
+}
+
+/// An IPv4 address that arrived as IPv6 (`::ffff:a.b.c.d`) is the IPv4 one.
+asio::ip::address plain_address(const asio::ip::address& address)
+{
+    if (address.is_v6() && address.to_v6().is_v4_mapped())
+        return asio::ip::make_address_v4(asio::ip::v4_mapped, address.to_v6());
+    return address;
+}
+
+template <class Bytes>
+bool same_prefix(const Bytes& left, const Bytes& right, unsigned bits)
+{
+    for (std::size_t index = 0; bits > 0; ++index)
+    {
+        const unsigned take = std::min(8U, bits);
+        const unsigned mask = (0xFFU << (8U - take)) & 0xFFU;
+        if (((left[index] ^ right[index]) & mask) != 0)
+            return false;
+        bits -= take;
+    }
+    return true;
+}
+
+bool rule_admits(const allow_rule& rule, const asio::ip::address& peer)
+{
+    const auto address = plain_address(peer);
+    if (rule.base.is_v4() != address.is_v4())
+        return false;
+    if (address.is_v4())
+        return same_prefix(rule.base.to_v4().to_bytes(),
+                           address.to_v4().to_bytes(), rule.prefix);
+    return same_prefix(rule.base.to_v6().to_bytes(), address.to_v6().to_bytes(),
+                       rule.prefix);
+}
+
+/// The rules of a list, or nothing if an entry is not an address or a range.
+std::optional<std::vector<allow_rule>>
+parse_allow_list(const std::vector<std::string>& list)
+{
+    if (list.size() > allow_limit)
+        return std::nullopt;
+    std::vector<allow_rule> rules;
+    for (const std::string& entry : list)
+    {
+        const auto rule = parse_allow_rule(entry);
+        if (!rule)
+            return std::nullopt;
+        rules.push_back(*rule);
+    }
+    return rules;
+}
+
+bool rules_admit(const std::vector<allow_rule>& rules,
+                 const asio::ip::address& peer)
+{
+    if (rules.empty())
+        return true;
+    for (const allow_rule& rule : rules)
+    {
+        if (rule_admits(rule, peer))
+            return true;
+    }
+    return false;
+}
 
 } // namespace
 
+bool allow_list_admits(const std::vector<std::string>& list,
+                       std::string_view address)
+{
+    if (list.empty())
+        return true;
+    boost::system::error_code ec;
+    const auto peer = asio::ip::make_address(std::string(address), ec);
+    const auto rules = parse_allow_list(list);
+    return !ec && rules && rules_admit(*rules, peer);
+}
+
+bool listens_on_loopback(const listen_address& address)
+{
+    if (address.host.empty())
+        return false;
+    boost::system::error_code ec;
+    const auto ip = asio::ip::make_address(address.host, ec);
+    return !ec && plain_address(ip).is_loopback();
+}
+
 bool is_listen_uri(std::string_view uri) noexcept
 {
-    return uri.starts_with(tcp_scheme) || uri.starts_with(udp_scheme);
+    return uri.starts_with(tcp_scheme) || uri.starts_with(udp_scheme) ||
+           uri.starts_with(rfc2217_scheme);
 }
 
 result<listen_address> parse_listen_uri(std::string_view uri)
@@ -60,9 +190,38 @@ result<listen_address> parse_listen_uri(std::string_view uri)
         address.protocol = listen_protocol::udp;
         uri.remove_prefix(udp_scheme.size());
     }
+    else if (uri.starts_with(rfc2217_scheme))
+    {
+        address.protocol = listen_protocol::rfc2217;
+        uri.remove_prefix(rfc2217_scheme.size());
+    }
     else
     {
         return make_error_code(errc::invalid_uri);
+    }
+
+    // After the port the URI may carry `?allow=list` and nothing else.
+    std::vector<std::string> allow;
+    if (const auto mark = uri.find('?'); mark != std::string_view::npos)
+    {
+        std::string_view query = uri.substr(mark + 1);
+        uri = uri.substr(0, mark);
+        if (!query.starts_with(allow_key))
+            return make_error_code(errc::invalid_uri);
+        query.remove_prefix(allow_key.size());
+        while (true)
+        {
+            const auto comma = query.find(',');
+            const auto entry = query.substr(0, comma);
+            if (!parse_allow_rule(entry))
+                return make_error_code(errc::invalid_uri);
+            allow.emplace_back(entry);
+            if (comma == std::string_view::npos)
+                break;
+            query.remove_prefix(comma + 1);
+        }
+        if (allow.size() > allow_limit)
+            return make_error_code(errc::invalid_uri);
     }
 
     std::string_view host;
@@ -108,18 +267,35 @@ result<listen_address> parse_listen_uri(std::string_view uri)
 
     address.host = std::string(host);
     address.port = static_cast<std::uint16_t>(value);
+    address.allow = std::move(allow);
     return address;
 }
 
 std::string make_listen_uri(const listen_address& address)
 {
-    std::string text(address.protocol == listen_protocol::tcp ? tcp_scheme
-                                                              : udp_scheme);
+    std::string text;
+    switch (address.protocol)
+    {
+    case listen_protocol::tcp:
+        text = tcp_scheme;
+        break;
+    case listen_protocol::udp:
+        text = udp_scheme;
+        break;
+    case listen_protocol::rfc2217:
+        text = rfc2217_scheme;
+        break;
+    }
     if (address.host.find(':') != std::string::npos)
         text += '[' + address.host + ']';
     else
         text += address.host;
     text += ':' + std::to_string(address.port);
+    for (std::size_t index = 0; index < address.allow.size(); ++index)
+    {
+        text += index == 0 ? "?allow=" : ",";
+        text += address.allow[index];
+    }
     return text;
 }
 
@@ -141,6 +317,10 @@ public:
     error_code open()
     {
         boost::system::error_code ec;
+        const auto rules = parse_allow_list(address_.allow);
+        if (!rules)
+            return make_error_code(errc::invalid_uri);
+        rules_ = *rules;
         asio::ip::address ip = asio::ip::address_v4::any();
         if (!address_.host.empty())
         {
@@ -149,7 +329,7 @@ public:
                 return make_error_code(errc::invalid_uri);
         }
 
-        if (address_.protocol == listen_protocol::tcp)
+        if (stream())
         {
             const asio::ip::tcp::endpoint where(ip, address_.port);
             acceptor_.open(where.protocol(), ec);
@@ -182,9 +362,20 @@ public:
         return {};
     }
 
+    /// TCP and RFC 2217 are byte streams; UDP is datagrams.
+    bool stream() const noexcept
+    {
+        return address_.protocol != listen_protocol::udp;
+    }
+
+    bool serial_role() const noexcept
+    {
+        return address_.protocol == listen_protocol::rfc2217;
+    }
+
     void start()
     {
-        if (address_.protocol == listen_protocol::tcp)
+        if (stream())
             accept_next();
         else
             receive_next();
@@ -202,17 +393,18 @@ public:
                                           asio::error::operation_aborted, 0);
                            return;
                        }
-                       bool busy = false;
+                       std::optional<io_handler> rejected;
                        {
                            std::lock_guard lock(self->read_mutex_);
-                           busy = self->pending_read_.has_value();
-                           if (!busy)
+                           if (self->pending_read_.has_value())
+                               rejected = std::move(handler);
+                           else
                                self->pending_read_ =
                                    pending{buffer, std::move(handler)};
                        }
-                       if (busy)
+                       if (rejected)
                        {
-                           self->complete(std::move(handler),
+                           self->complete(std::move(*rejected),
                                           asio::error::already_started, 0);
                            return;
                        }
@@ -229,7 +421,7 @@ public:
                    [self = shared_from_this(), payload,
                     handler = std::move(handler)]() mutable
                    {
-                       self->send(std::move(payload), std::move(handler));
+                       self->send(payload, std::move(handler));
                    });
     }
 
@@ -253,9 +445,44 @@ public:
                    [self = shared_from_this()] { self->abort_pending_read(); });
     }
 
+    /// Only the RFC 2217 role has control lines.
+    bool has_lines() const noexcept { return serial_role(); }
+
+    void set_line(control_line line, bool value)
+    {
+        if (!serial_role())
+            return;
+        control_lines inputs;
+        {
+            std::lock_guard lock(lines_mutex_);
+            switch (line)
+            {
+            case control_line::cts:
+            case control_line::dsr:
+            case control_line::dcd:
+            case control_line::ri:
+                inputs_.set(line, value);
+                break;
+            default:
+                outputs_.set(line, value);
+                break;
+            }
+            inputs = inputs_;
+        }
+        asio::post(strand_, [self = shared_from_this(), inputs]
+                   { self->notify_modem(inputs); });
+    }
+
+    control_lines lines() const
+    {
+        std::lock_guard lock(lines_mutex_);
+        return control_lines::from_bits(inputs_.bits | outputs_.bits);
+    }
+
     bool is_open() const noexcept { return open_.load(); }
     std::uint16_t port() const noexcept { return port_.load(); }
     std::size_t peers() const noexcept { return peers_.load(); }
+    std::size_t refused() const noexcept { return refused_.load(); }
     const listen_address& address() const noexcept { return address_; }
 
 private:
@@ -263,6 +490,12 @@ private:
     {
         asio::mutable_buffer buffer;
         io_handler handler;
+    };
+
+    struct outgoing
+    {
+        std::shared_ptr<std::string> bytes;
+        std::function<void(error_code)> done;
     };
 
     struct client
@@ -275,6 +508,12 @@ private:
         asio::ip::tcp::socket socket;
         std::array<char, chunk_size> buffer{};
         bool reading = false;
+        /// Present for the RFC 2217 role: the Telnet and COM-PORT state.
+        std::optional<rfc2217::session> session;
+        /// A socket takes one write at a time, and payload and protocol
+        /// replies share it.
+        std::deque<outgoing> queue;
+        bool writing = false;
     };
 
     /// The parked read, removed from the state; empty when none is waiting.
@@ -314,7 +553,27 @@ private:
                         self->accept_next();
                     return;
                 }
+                boost::system::error_code remote_ec;
+                const auto remote = socket.remote_endpoint(remote_ec);
+                if (remote_ec || !rules_admit(self->rules_, remote.address()))
+                {
+                    // Not on the allow list: closed before a byte is read.
+                    boost::system::error_code ignored;
+                    socket.close(ignored);
+                    self->refused_.fetch_add(1);
+                    self->accept_next();
+                    return;
+                }
+                // A reply must not wait for more data to share a packet with.
+                boost::system::error_code ignored;
+                socket.set_option(asio::ip::tcp::no_delay(true), ignored);
                 auto made = std::make_shared<client>(std::move(socket));
+                if (self->serial_role())
+                {
+                    made->session.emplace();
+                    self->enqueue(made, std::make_shared<std::string>(
+                                            made->session->greeting()));
+                }
                 self->clients_.push_back(made);
                 self->peers_.store(self->clients_.size());
                 self->read_client(made);
@@ -339,12 +598,106 @@ private:
                     self->drop(peer);
                     return;
                 }
-                self->received_.insert(self->received_.end(),
-                                       peer->buffer.begin(),
-                                       peer->buffer.begin() +
-                                           static_cast<std::ptrdiff_t>(count));
+                if (peer->session)
+                {
+                    self->consume_serial(peer, count);
+                }
+                else
+                {
+                    self->received_.insert(
+                        self->received_.end(), peer->buffer.begin(),
+                        peer->buffer.begin() +
+                            static_cast<std::ptrdiff_t>(count));
+                }
                 self->deliver();
                 self->read_client(peer);
+            });
+    }
+
+    /// What an RFC 2217 client sent: payload for the hub, replies for the
+    /// client, and the lines it drove.
+    void consume_serial(const std::shared_ptr<client>& peer, std::size_t count)
+    {
+        auto& slot = peer->session;
+        if (!slot)
+            return;
+        rfc2217::session& session = *slot;
+        const auto fed = session.feed(
+            std::string_view(peer->buffer.data(), count));
+        received_.insert(received_.end(), fed.data.begin(), fed.data.end());
+        if (!fed.reply.empty())
+            enqueue(peer, std::make_shared<std::string>(fed.reply));
+        if (fed.modem_state_requested)
+        {
+            const std::string text =
+                session.modem_state(current_inputs(), true);
+            if (!text.empty())
+                enqueue(peer, std::make_shared<std::string>(text));
+        }
+        if (fed.outputs_changed)
+        {
+            {
+                std::lock_guard lock(lines_mutex_);
+                const control_lines driven = session.outputs();
+                for (const control_line line :
+                     {control_line::dtr, control_line::rts,
+                      control_line::break_signal})
+                    outputs_.set(line, driven.test(line));
+            }
+            // The endpoint learns of the change through a read that returns
+            // no bytes; see deliver().
+            std::lock_guard lock(read_mutex_);
+            lines_dirty_ = true;
+        }
+    }
+
+    control_lines current_inputs() const
+    {
+        std::lock_guard lock(lines_mutex_);
+        return inputs_;
+    }
+
+    void enqueue(const std::shared_ptr<client>& peer,
+                 std::shared_ptr<std::string> bytes,
+                 std::function<void(error_code)> done = {})
+    {
+        peer->queue.push_back(outgoing{std::move(bytes), std::move(done)});
+        if (!peer->writing)
+            write_next(peer);
+    }
+
+    void write_next(const std::shared_ptr<client>& peer)
+    {
+        if (peer->queue.empty())
+        {
+            peer->writing = false;
+            return;
+        }
+        peer->writing = true;
+        const outgoing item = peer->queue.front();
+        asio::async_write(
+            peer->socket, asio::buffer(*item.bytes),
+            [self = shared_from_this(), peer, item](error_code ec, std::size_t)
+            {
+                if (!peer->queue.empty())
+                    peer->queue.pop_front();
+                if (item.done)
+                    item.done(ec);
+                if (ec)
+                {
+                    // Nothing more can be sent; tell whoever still waits.
+                    auto rest = std::move(peer->queue);
+                    peer->queue.clear();
+                    peer->writing = false;
+                    for (auto& waiting : rest)
+                    {
+                        if (waiting.done)
+                            waiting.done(ec);
+                    }
+                    self->drop(peer);
+                    return;
+                }
+                self->write_next(peer);
             });
     }
 
@@ -375,7 +728,11 @@ private:
                 self->receiving_ = false;
                 if (ec == asio::error::operation_aborted || self->closed_)
                     return;
-                if (!ec)
+                if (!ec && !rules_admit(self->rules_, self->sender_.address()))
+                {
+                    self->refused_.fetch_add(1);
+                }
+                else if (!ec)
                 {
                     self->remember(self->sender_);
                     self->received_.insert(
@@ -404,10 +761,13 @@ private:
         std::optional<pending> taken;
         {
             std::lock_guard lock(read_mutex_);
-            if (pending_read_ && !received_.empty())
+            // A read with no bytes tells the endpoint that only the control
+            // lines changed.
+            if (pending_read_ && (!received_.empty() || lines_dirty_))
             {
                 taken = std::move(pending_read_);
                 pending_read_.reset();
+                lines_dirty_ = false;
             }
         }
         if (taken)
@@ -423,7 +783,7 @@ private:
         }
         if (received_.size() < receive_limit)
         {
-            if (address_.protocol == listen_protocol::tcp)
+            if (stream())
             {
                 const auto waiting = clients_;
                 for (const auto& peer : waiting)
@@ -436,7 +796,8 @@ private:
         }
     }
 
-    void send(std::shared_ptr<std::vector<char>> payload, io_handler handler)
+    void send(const std::shared_ptr<std::vector<char>>& payload,
+              io_handler handler)
     {
         const std::size_t size = payload->size();
         if (closed_)
@@ -445,7 +806,7 @@ private:
             return;
         }
 
-        if (address_.protocol == listen_protocol::tcp)
+        if (stream())
         {
             if (clients_.empty())
             {
@@ -455,20 +816,21 @@ private:
             auto remaining = std::make_shared<std::size_t>(clients_.size());
             auto shared_handler =
                 std::make_shared<io_handler>(std::move(handler));
+            const std::string_view view(payload->data(), payload->size());
+            auto wire = std::make_shared<std::string>(
+                serial_role() ? rfc2217::session::encode(view)
+                              : std::string(view));
             const auto targets = clients_;
             for (const auto& peer : targets)
             {
-                asio::async_write(
-                    peer->socket, asio::buffer(*payload),
-                    [self = shared_from_this(), peer, payload, remaining,
-                     shared_handler, size](error_code ec, std::size_t)
-                    {
-                        if (ec)
-                            self->drop(peer);
-                        if (--*remaining == 0)
-                            self->complete(std::move(*shared_handler), {},
-                                           size);
-                    });
+                enqueue(peer, wire,
+                        [self = shared_from_this(), remaining, shared_handler,
+                         size](error_code)
+                        {
+                            if (--*remaining == 0)
+                                self->complete(std::move(*shared_handler), {},
+                                               size);
+                        });
             }
             return;
         }
@@ -492,6 +854,20 @@ private:
                     if (--*remaining == 0)
                         self->complete(std::move(*shared_handler), {}, size);
                 });
+        }
+    }
+
+    /// Tells every RFC 2217 client the modem lines that changed.
+    void notify_modem(control_lines inputs)
+    {
+        for (const auto& peer : clients_)
+        {
+            auto& slot = peer->session;
+            if (!slot || !slot->com_port_active())
+                continue;
+            const std::string text = slot->modem_state(inputs);
+            if (!text.empty())
+                enqueue(peer, std::make_shared<std::string>(text));
         }
     }
 
@@ -526,11 +902,22 @@ private:
     /// Guarded by read_mutex_: close() and cancel() take it from any thread.
     std::mutex read_mutex_;
     std::optional<pending> pending_read_;
+    /// A client changed DTR, RTS or break and the endpoint has not heard.
+    bool lines_dirty_ = false;
     bool closed_ = false;
+    /// The allow list, parsed when the transport is opened.
+    std::vector<allow_rule> rules_;
+
+    /// Control lines of the RFC 2217 role. Inputs come from the peers on the
+    /// hub's links, outputs from what the clients commanded.
+    mutable std::mutex lines_mutex_;
+    control_lines inputs_;
+    control_lines outputs_;
 
     std::atomic<bool> open_{false};
     std::atomic<std::uint16_t> port_{0};
     std::atomic<std::size_t> peers_{0};
+    std::atomic<std::size_t> refused_{0};
 };
 
 listen_transport::listen_transport(const executor_type& executor,
@@ -544,19 +931,30 @@ listen_transport::listen_transport(const executor_type& executor,
 
 listen_transport::~listen_transport()
 {
-    state_->close();
+    try
+    {
+        state_->close();
+    }
+    catch (...) // NOLINT(bugprone-empty-catch)
+    {
+        // close() posts to the strand and can throw; a destructor must not.
+    }
 }
 
 std::string listen_transport::describe() const
 {
     const auto& address = state_->address();
     const std::string host = address.host.empty() ? "0.0.0.0" : address.host;
-    return std::string(address.protocol == listen_protocol::tcp ? "TCP"
-                                                                : "UDP") +
-           " listening on " + host + ":" + std::to_string(state_->port()) +
-           " (" + std::to_string(state_->peers()) +
-           (address.protocol == listen_protocol::tcp ? " connected)"
-                                                     : " senders)");
+    std::string name = "TCP";
+    if (address.protocol == listen_protocol::udp)
+        name = "UDP";
+    else if (address.protocol == listen_protocol::rfc2217)
+        name = "RFC 2217";
+    return name + " listening on " + host + ":" +
+           std::to_string(state_->port()) + " (" +
+           std::to_string(state_->peers()) +
+           (address.protocol == listen_protocol::udp ? " senders)"
+                                                     : " connected)");
 }
 
 std::string listen_transport::public_path() const
@@ -593,6 +991,21 @@ void listen_transport::cancel()
     state_->cancel();
 }
 
+bool listen_transport::supports_control_lines() const noexcept
+{
+    return state_->has_lines();
+}
+
+void listen_transport::set_control_line(control_line line, bool value)
+{
+    state_->set_line(line, value);
+}
+
+control_lines listen_transport::lines() const
+{
+    return state_->lines();
+}
+
 std::uint16_t listen_transport::local_port() const noexcept
 {
     return state_->port();
@@ -601,6 +1014,11 @@ std::uint16_t listen_transport::local_port() const noexcept
 std::size_t listen_transport::peer_count() const noexcept
 {
     return state_->peers();
+}
+
+std::size_t listen_transport::refused_count() const noexcept
+{
+    return state_->refused();
 }
 
 } // namespace vss

@@ -259,6 +259,16 @@ void NetworkEndpointDialog::build()
     firewall_note_->hide();
     layout->addWidget(firewall_note_);
 
+    open_note_ = new NoteBanner(
+        NoteBanner::kind::warn,
+        tr("RFC 2217 has no password. Anyone who can reach this port can use "
+           "the device. Choose This PC only (127.0.0.1), or in Advanced add "
+           "?allow=192.168.1.0/24 to the address to say who may connect."),
+        body);
+    open_note_->setObjectName(QStringLiteral("networkOpenWarning"));
+    open_note_->hide();
+    layout->addWidget(open_note_);
+
     auto* address_card = new QFrame(body);
     address_card->setProperty("card", true);
     polish(address_card);
@@ -335,8 +345,6 @@ void NetworkEndpointDialog::build()
             [this](int id)
             {
                 transport_ = static_cast<network_transport>(id);
-                if (transport_ == network_transport::rfc2217)
-                    role_ = network_role::client;
                 clear_error();
                 update_role_ui();
             });
@@ -517,8 +525,6 @@ void NetworkEndpointDialog::set_transport(network_transport transport)
     transport_ = transport;
     const QSignalBlocker blocker(transport_control_);
     transport_control_->set_current(static_cast<int>(transport));
-    if (transport_ == network_transport::rfc2217)
-        role_ = network_role::client;
     update_role_ui();
 }
 
@@ -543,10 +549,7 @@ void NetworkEndpointDialog::update_role_ui()
 {
     if (role_row_ == nullptr)
         return;
-    const bool rfc = transport_ == network_transport::rfc2217;
-    role_row_->setVisible(!rfc);
-    if (rfc)
-        role_ = network_role::client;
+    role_row_->setVisible(true);
 
     server_radio_->setEnabled(server_available_);
     server_radio_->setToolTip(
@@ -580,6 +583,8 @@ void NetworkEndpointDialog::update_warning()
 {
     const bool windows = windows_platform(backend_.facts());
     firewall_note_->setVisible(windows && server_selected());
+    if (open_note_ != nullptr)
+        open_note_->setVisible(rfc2217_server_is_open(effective_uri()));
 }
 
 void NetworkEndpointDialog::update_result()
@@ -667,6 +672,8 @@ void NetworkEndpointDialog::update_address_blocks()
     command_block_->set_text(command(), tr("Command"));
     if (!override_)
         override_edit_->setText(effective_uri());
+    // The address decides whether other computers can reach the server.
+    update_warning();
 }
 
 QString NetworkEndpointDialog::result_text() const

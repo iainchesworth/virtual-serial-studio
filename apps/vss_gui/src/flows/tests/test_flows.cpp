@@ -434,6 +434,24 @@ TEST_CASE("flows: port ready copies, details and platform variants")
     REQUIRE_EQ(warning->action_button()->text(),
                QStringLiteral("Open setup check"));
     studio_only.close();
+
+    // With a driver present, "install a driver" would be wrong advice.
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    facts.driver_found = true;
+    backend.set_facts(facts);
+    vss::gui::PortReadyDialog with_driver(backend, *loopback,
+                                          QStringLiteral("loopback"), false,
+                                          vss::gui::platform_kind::windows);
+    with_driver.show();
+    settle();
+    auto* driver_warning = with_driver.findChild<vss::gui::NoteBanner*>(
+        QStringLiteral("portReadyDriverNote"));
+    REQUIRE(driver_warning != nullptr);
+    REQUIRE_EQ(driver_warning->text(),
+               QStringLiteral("Other programs cannot open this port. It "
+                              "exists only inside Studio."));
+    with_driver.close();
 }
 
 TEST_CASE("flows: port ready peer states respect the capability")
@@ -519,6 +537,56 @@ TEST_CASE("flows: pair creates two ports and a null-modem link")
     REQUIRE(backend.links().front().options.emulate_modem_lines);
     REQUIRE_EQ(dialog.outcome()->first_path,
                backend.port(dialog.outcome()->first)->path);
+}
+
+TEST_CASE("flows: pair needs no free pairs with the Studio driver")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    facts.driver_found = true;
+    facts.driver_version = QStringLiteral("2");
+    backend.set_facts(facts);
+
+    vss::gui::PairDialog dialog(backend, false,
+                                vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    REQUIRE(dialog.primary_button()->isEnabled());
+    REQUIRE(dialog.panel()->driver_note() != nullptr);
+    REQUIRE(dialog.panel()->driver_note()->isHidden());
+    REQUIRE(dialog.panel()->first_port_edit()->text().isEmpty());
+    REQUIRE_EQ(dialog.panel()->first_port_edit()->placeholderText(),
+               QStringLiteral("Chosen when you create the pair"));
+    REQUIRE_EQ(dialog.panel()->admin_note()->text(),
+               QStringLiteral("The Studio driver makes the ports for this "
+                              "pair, so Windows does not ask for "
+                              "administrator permission."));
+    REQUIRE(
+        dialog.panel()
+            ->findChild<QLabel*>(QStringLiteral("pairHint"))
+            ->text()
+            .startsWith(QStringLiteral("The Studio driver makes both ports")));
+    dialog.primary_button()->click();
+    REQUIRE_EQ(dialog.result(), QDialog::Accepted);
+    REQUIRE_EQ(backend.ports().size(), 2);
+    REQUIRE_EQ(backend.links().size(), 1);
+
+    // With com0com installed as well, its pair count still does not matter.
+    vss::gui::FakeStudioBackend both;
+    vss::gui::setup_facts both_facts;
+    both_facts.platform = QStringLiteral("windows");
+    both_facts.driver_found = true;
+    both_facts.com0com_found = true;
+    both_facts.com0com_pairs = 0;
+    both.set_facts(both_facts);
+    vss::gui::PairDialog both_dialog(both, false,
+                                     vss::gui::platform_kind::windows);
+    both_dialog.show();
+    settle();
+    REQUIRE(both_dialog.primary_button()->isEnabled());
+    REQUIRE(both_dialog.panel()->driver_note()->isHidden());
 }
 
 TEST_CASE("flows: pair degrades without a driver or free pairs")

@@ -90,11 +90,10 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
                                            network_role::client,
                                            QStringLiteral("lab"), 4001),
                QStringLiteral("tcp://lab:4001"));
-    // RFC 2217 has no server role.
     REQUIRE_EQ(vss::gui::build_network_uri(network_transport::rfc2217,
                                            network_role::server,
                                            QStringLiteral("lab"), 7001),
-               QStringLiteral("rfc2217://lab:7001"));
+               QStringLiteral("rfc2217-listen://lab:7001"));
 
     const auto listening = vss::gui::parse_network_uri(
         QStringLiteral("tcp-listen://127.0.0.1:4001"));
@@ -107,8 +106,11 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
                    ->role,
                network_role::server);
     REQUIRE_EQ(parsed->role, network_role::client);
-    REQUIRE(!vss::gui::parse_network_uri(QStringLiteral("rfc2217-listen://h:1"))
-                 .has_value());
+    const auto rfc_server =
+        vss::gui::parse_network_uri(QStringLiteral("rfc2217-listen://h:1"));
+    REQUIRE(rfc_server.has_value());
+    REQUIRE_EQ(rfc_server->transport, network_transport::rfc2217);
+    REQUIRE_EQ(rfc_server->role, network_role::server);
 
     REQUIRE(!vss::gui::valid_port(0));
     REQUIRE(!vss::gui::valid_port(65536));
@@ -186,6 +188,30 @@ TEST_CASE("network dialog: client role, URI preview and port validation")
     REQUIRE(dialog.submit());
     REQUIRE_EQ(dialog.result_port(), 4002);
     REQUIRE_EQ(backend.links().size(), std::size_t{1});
+}
+
+TEST_CASE("network dialog: RFC 2217 can wait for other computers")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend, true);
+    vss::gui::NetworkEndpointDialog dialog(backend, false, 0);
+    show(dialog);
+
+    dialog.set_transport(vss::gui::network_transport::rfc2217);
+    dialog.set_role(vss::gui::network_role::server);
+    dialog.set_listen_address(QStringLiteral("0.0.0.0"));
+    dialog.set_port(7001);
+    REQUIRE(dialog.server_selected());
+    REQUIRE_EQ(dialog.role(), vss::gui::network_role::server);
+    REQUIRE_EQ(dialog.uri(), QStringLiteral("rfc2217-listen://0.0.0.0:7001"));
+
+    // Without the capability the same choice falls back to connecting.
+    vss::gui::FakeStudioBackend plain;
+    configure(plain, false);
+    vss::gui::NetworkEndpointDialog client(plain, false, 0);
+    show(client);
+    client.set_transport(vss::gui::network_transport::rfc2217);
+    REQUIRE_EQ(client.role(), vss::gui::network_role::client);
 }
 
 TEST_CASE("network dialog: server role appears only with the capability")
@@ -293,4 +319,90 @@ TEST_CASE("network dialog: a build without bridging disables the action")
     REQUIRE(dialog.error_visible());
     REQUIRE_EQ(dialog.error_title(),
                QStringLiteral("Could not start the bridge"));
+}
+
+TEST_CASE("network URI: which RFC 2217 servers other computers can reach")
+{
+    using vss::gui::is_loopback_host;
+    using vss::gui::rfc2217_server_is_open;
+    REQUIRE(is_loopback_host(QStringLiteral("127.0.0.1")));
+    REQUIRE(is_loopback_host(QStringLiteral("127.8.0.2")));
+    REQUIRE(is_loopback_host(QStringLiteral("::1")));
+    REQUIRE(is_loopback_host(QStringLiteral("localhost")));
+    REQUIRE(!is_loopback_host(QStringLiteral("0.0.0.0")));
+    REQUIRE(!is_loopback_host(QStringLiteral("::")));
+    REQUIRE(!is_loopback_host(QStringLiteral("192.168.1.10")));
+
+    REQUIRE(rfc2217_server_is_open(
+        QStringLiteral("rfc2217-listen://0.0.0.0:7001")));
+    // Any address that is not this computer, not only every interface.
+    REQUIRE(rfc2217_server_is_open(
+        QStringLiteral("rfc2217-listen://192.168.1.10:7001")));
+    REQUIRE(!rfc2217_server_is_open(
+        QStringLiteral("rfc2217-listen://127.0.0.1:7001")));
+    REQUIRE(
+        !rfc2217_server_is_open(QStringLiteral("rfc2217-listen://[::1]:7001")));
+    // A list of who may connect is the answer to the warning.
+    REQUIRE(!rfc2217_server_is_open(QStringLiteral(
+        "rfc2217-listen://192.168.1.10:7001?allow=192.168.1.0/24")));
+    // Only the server of this protocol is warned about.
+    REQUIRE(
+        !rfc2217_server_is_open(QStringLiteral("rfc2217://192.168.1.10:7001")));
+    REQUIRE(
+        !rfc2217_server_is_open(QStringLiteral("tcp-listen://0.0.0.0:4001")));
+    REQUIRE(!rfc2217_server_is_open(QStringLiteral("nonsense")));
+}
+
+TEST_CASE("network dialog: an RFC 2217 server reachable from the network is "
+          "warned about")
+{
+    vss::gui::FakeStudioBackend backend;
+    configure(backend, true);
+    vss::gui::NetworkEndpointDialog dialog(backend, false, 0);
+    show(dialog);
+
+    const auto warned = [&]
+    {
+        for (vss::gui::NoteBanner* note :
+             dialog.findChildren<vss::gui::NoteBanner*>())
+        {
+            if (note->objectName() == QStringLiteral("networkOpenWarning"))
+                return note->isVisibleTo(&dialog);
+        }
+        return false;
+    };
+
+    // TCP is not warned about, even on every interface.
+    REQUIRE_EQ(dialog.listen_address(), QStringLiteral("0.0.0.0"));
+    REQUIRE(!warned());
+
+    dialog.set_transport(vss::gui::network_transport::rfc2217);
+    dialog.set_role(vss::gui::network_role::server);
+    dialog.set_port(7001);
+    dialog.set_listen_address(QStringLiteral("0.0.0.0"));
+    REQUIRE(warned());
+    dialog.set_listen_address(QStringLiteral("192.168.1.10"));
+    REQUIRE(warned());
+    dialog.set_listen_address(QStringLiteral("127.0.0.1"));
+    REQUIRE(!warned());
+
+    // The Advanced address wins, and the warning follows it.
+    dialog.set_advanced(true);
+    dialog.set_address_override(
+        QStringLiteral("rfc2217-listen://0.0.0.0:7002"));
+    QApplication::processEvents();
+    REQUIRE(warned());
+    dialog.set_address_override(
+        QStringLiteral("rfc2217-listen://0.0.0.0:7002?allow=10.0.0.0/8"));
+    QApplication::processEvents();
+    REQUIRE(!warned());
+    dialog.clear_address_override();
+    QApplication::processEvents();
+    REQUIRE(!warned());
+
+    // Back to the client role: nothing to warn about.
+    dialog.set_listen_address(QStringLiteral("0.0.0.0"));
+    REQUIRE(warned());
+    dialog.set_role(vss::gui::network_role::client);
+    REQUIRE(!warned());
 }

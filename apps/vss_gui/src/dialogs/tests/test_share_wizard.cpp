@@ -137,6 +137,88 @@ TEST_CASE("share plan: free pairs, warning copy and planned paths")
     REQUIRE_EQ(linux_plan.openable, 3);
 }
 
+TEST_CASE("share plan: the Studio driver needs no free pairs")
+{
+    const vss::gui::share_plan three = vss::gui::make_driver_share_plan(3, 0);
+    REQUIRE(three.studio_driver);
+    REQUIRE(!three.needs_warning());
+    REQUIRE_EQ(three.openable, 3);
+    REQUIRE_EQ(three.free_pairs, 0);
+    REQUIRE(vss::gui::share_warning_plain(three).isEmpty());
+
+    const QStringList planned = vss::gui::planned_share_paths(three, {});
+    REQUIRE_EQ(planned.size(), 3);
+    REQUIRE_EQ(planned.at(0), QStringLiteral("A free port"));
+    REQUIRE_EQ(planned.at(2), QStringLiteral("A free port"));
+
+    const vss::gui::share_plan limit = vss::gui::make_driver_share_plan(17, 0);
+    REQUIRE_EQ(limit.openable, 16);
+    REQUIRE_EQ(limit.studio_only, 1);
+    REQUIRE_EQ(
+        vss::gui::share_warning_plain(limit),
+        QStringLiteral("Only 16 of the 17 programs can open their port. The "
+                       "Studio driver gives one user at most 16 ports. The "
+                       "seventeenth port works only inside Studio."));
+
+    const vss::gui::share_plan held = vss::gui::make_driver_share_plan(4, 14);
+    REQUIRE_EQ(held.openable, 2);
+    REQUIRE_EQ(
+        vss::gui::share_warning_plain(held),
+        QStringLiteral("Only 2 of the 4 programs can open their port. The "
+                       "Studio driver gives one user at most 16 ports, and "
+                       "Studio already holds 14. The remaining 2 ports work "
+                       "only inside Studio."));
+
+    const vss::gui::share_plan full = vss::gui::make_driver_share_plan(1, 16);
+    REQUIRE_EQ(full.openable, 0);
+    REQUIRE(vss::gui::share_warning_plain(full).startsWith(
+        QStringLiteral("Studio cannot create a port another program can "
+                       "open.")));
+}
+
+TEST_CASE("share wizard: the Studio driver needs no free pairs")
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::setup_facts facts;
+    facts.platform = QStringLiteral("windows");
+    facts.driver_found = true;
+    facts.driver_version = QStringLiteral("2");
+    backend.set_facts(facts);
+
+    // A port the Studio driver made is not a device to share.
+    vss::gui::device_view driver_port;
+    driver_port.path = QStringLiteral("COM5");
+    driver_port.description = QStringLiteral("Virtual Serial Studio Port");
+    driver_port.hardware_id = QStringLiteral("VSSCOM\\PORT");
+    driver_port.virtual_device = true;
+    backend.set_devices({serial_device(QStringLiteral("COM3")), driver_port});
+
+    vss::gui::ShareWizard wizard(backend);
+    show(wizard);
+    REQUIRE_EQ(wizard.selected_device_path(), QStringLiteral("COM3"));
+    REQUIRE(wizard.next());
+    REQUIRE_EQ(wizard.programs(), 3);
+    REQUIRE(!wizard.warning_visible());
+    REQUIRE(wizard.free_pair_paths().isEmpty());
+    REQUIRE_EQ(wizard.planned_paths().size(), 3);
+    REQUIRE_EQ(wizard.planned_paths().at(0), QStringLiteral("A free port"));
+
+    wizard.set_programs(17);
+    REQUIRE(wizard.warning_visible());
+    REQUIRE(wizard.warning_text().startsWith(
+        QStringLiteral("Only 16 of the 17 programs")));
+    REQUIRE(wizard.warning_text().contains(QStringLiteral("at most 16 ports")));
+    REQUIRE(!wizard.warning_text().contains(QStringLiteral("free pairs")));
+
+    // More com0com pairs cannot lift the driver's limit, so the button goes.
+    for (QPushButton* button : wizard.findChildren<QPushButton*>())
+    {
+        if (button->text() == QStringLiteral("Create another pair"))
+            REQUIRE(button->isHidden());
+    }
+    wizard.close();
+}
+
 TEST_CASE("share wizard: step 1 defaults, the step 2 table and the warning")
 {
     vss::gui::FakeStudioBackend backend;
