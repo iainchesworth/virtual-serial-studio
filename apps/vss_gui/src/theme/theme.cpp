@@ -117,11 +117,12 @@ QFont resolve_base_font()
 QFont resolve_mono_font()
 {
     QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-#if defined(Q_OS_WIN)
+    // Only the typewriter default is replaced, so this is a no-op wherever the
+    // system already reports a screen face.
     const QString consolas = QStringLiteral("Consolas");
-    if (QFontDatabase::families().contains(consolas))
+    if (font.family() == QLatin1String("Courier New") &&
+        QFontDatabase::families().contains(consolas))
         font.setFamily(consolas);
-#endif
     font.setHintingPreference(QFont::PreferNoHinting);
     font.setStyleStrategy(QFont::PreferAntialias);
     return font;

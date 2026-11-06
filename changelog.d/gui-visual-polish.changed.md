@@ -1,4 +1,4 @@
-The desktop app has a visual and theming pass. Icons now come from an icon
+**The desktop app has a visual and theming pass.** Icons now come from an icon
 engine that draws at any size and display scale in the colour the theme has
 at that moment, and every action, button and field that the design gives an
 icon shows it: Remove port, Remove link, Copy, Pause and Resume, Send, Run,
