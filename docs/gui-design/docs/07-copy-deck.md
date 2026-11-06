@@ -15,7 +15,9 @@ Screen-specific strings are in `docs/screens/`. Take them exactly. This page hol
 |---|---|
 | Port | Anything a program can open or Studio can route: virtual, real, network, fixture. |
 | Program | An application that opens a port. |
-| Device | A real serial device on this PC. |
+| Device | A real serial device on this PC. Studio holds it open; programs never open it. |
+| Virtual port | The port a program opens in place of the device. Studio creates it and passes the data between it and the device. |
+| Setup | Everything built together: a linked pair, a shared device with its program ports, or an attached device with its virtual port. |
 | Linked pair | Two virtual ports wired like a null-modem cable. |
 | Link | A connection between ports: two-way, one-way, monitor, split, join, shared bus. |
 | Studio only | An in-process port that other programs cannot open. |
@@ -34,3 +36,17 @@ Title: "Could not <verb> <thing>" (for example "Could not open COM3"). Body: one
 - Keep each screen's strings in one place (a `strings` header or a single translation unit per screen) so a copy review is a single diff.
 - Dates and numbers use the user's locale. Byte sizes read "1.2 kB", "10.0 MB".
 - Placeholders like `<version>` and `<date>` in the specs are values filled at runtime, never literal text.
+
+## Explaining the device and its port
+First-time users do not know that an attached or shared device is taken over by Studio. Say it in these words, everywhere the idea appears:
+- Attach, subtitle: "Studio holds the real device open. Your programs connect to a new virtual port that Studio creates, and Studio passes the data between the two."
+- Attach, result: "Studio will hold **COM3** open at 115200 baud. Your programs should not open COM3. They open the new virtual port that Studio creates, and Studio passes data between that port and COM3."
+- Share, step 1 and 2: "Your programs will open the ports Studio creates, not **COM3** itself." and "You can add another program after sharing, and remove any program's port later with Remove port."
+- Never write "I open this port" or any first-person wording that leaves out who opens what.
+
+## Removing
+- Setup: title "Remove this setup?", body "This closes <n> ports and <m> links: <names>. A program that has one of these ports open loses it. Nothing is saved until you save the setup.", buttons "Remove setup" and "Cancel".
+- Port in a setup: title "Remove <port>?", body "<port> is part of a setup with <n> other ports: <names>. Remove only <port> and its links, or close the whole setup. Nothing is saved until you save the setup.", buttons "Cancel", "Remove only <port>", "Remove the whole setup".
+- Program port of a share: the body says "<port> is one of <n> programs sharing a device, in a setup with ..." and "the others keep sharing".
+- Port with no links: title "Remove <port>?", body "Remove <port> and its links? Nothing is saved until you save the setup.", buttons "Remove port" and "Cancel".
+- Status bar after a setup: "Removed the setup (2 ports and 1 link)."

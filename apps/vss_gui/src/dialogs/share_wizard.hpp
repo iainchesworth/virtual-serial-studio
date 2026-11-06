@@ -118,9 +118,11 @@ private:
     void refresh_step3_states();
     bool validate_source();
     QString program_default(int index) const;
+    QString shared_title(int programs) const;
     QStringList program_names() const;
     void undo_share();
     void set_step(int step);
+    void fit_to_screen(int width, int height);
     void clear_error();
 
     StudioBackend& backend_;

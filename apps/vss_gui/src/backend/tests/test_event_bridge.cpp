@@ -258,6 +258,7 @@ TEST_CASE("engine backend: ports, links and sends go through the adapter")
         // Only a pseudo terminal on a platform that can inspect other
         // processes has a definite answer; a loopback port never does.
         REQUIRE_EQ(backend.caps().peer_open, vss::peer_open_supported());
+        REQUIRE(backend.caps().line_format);
         REQUIRE_EQ(backend.port(*first)->peer, vss::gui::peer_state::unknown);
 
         const auto link =

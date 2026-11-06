@@ -10,11 +10,13 @@ add_library(vss_gui_backend STATIC
   engine_studio_backend.cpp
   fake_studio_backend.cpp
   event_bridge.cpp
+  share_edit.cpp
   com_numbers.cpp
   studio_backend.hpp
   engine_studio_backend.hpp
   fake_studio_backend.hpp
   event_bridge.hpp
+  share_edit.hpp
   com_numbers.hpp
   capabilities.hpp
   other_ports.hpp
@@ -36,6 +38,7 @@ if(VSS_BUILD_TESTS)
     tests/main.cpp
     tests/test_fake_backend.cpp
     tests/test_event_bridge.cpp
+    tests/test_share_edit.cpp
     tests/test_com_numbers.cpp)
 
   target_include_directories(vss_gui_backend_tests PRIVATE

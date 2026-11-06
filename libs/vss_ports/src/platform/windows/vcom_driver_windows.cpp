@@ -667,6 +667,38 @@ public:
         return peer_;
     }
 
+    /// The baud rate and framing the program set, while a program has the
+    /// port open.  Before it calls `SetCommState` the driver reports its own
+    /// defaults, which are not a choice the program made, so a port nobody has
+    /// open reports nothing.
+    std::optional<line_format> peer_format() const override
+    {
+        std::lock_guard lock(mutex_);
+        if (!peer_known_ || !peer_.open || peer_.baud_rate == 0)
+            return std::nullopt;
+
+        line_format out;
+        out.baud_rate = peer_.baud_rate;
+        out.data_bits = peer_.data_bits;
+        switch (peer_.parity)
+        {
+        case 0: out.parity = parity_mode::none; break;
+        case 1: out.parity = parity_mode::odd; break;
+        case 2: out.parity = parity_mode::even; break;
+        case 3: out.parity = parity_mode::mark; break;
+        case 4: out.parity = parity_mode::space; break;
+        default: return std::nullopt;
+        }
+        switch (peer_.stop_bits)
+        {
+        case 0: out.stop_bits = stop_bits_mode::one; break;
+        case 1: out.stop_bits = stop_bits_mode::one_point_five; break;
+        case 2: out.stop_bits = stop_bits_mode::two; break;
+        default: return std::nullopt;
+        }
+        return out;
+    }
+
     bool named(const std::string& com_name) const
     {
         std::lock_guard lock(mutex_);

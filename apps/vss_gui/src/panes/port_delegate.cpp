@@ -223,12 +223,22 @@ void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
     if (!compact_ && !table_)
     {
         painter->setFont(theme.font(text_style::caption));
-        painter->setPen(theme.colour(colour_role::ink3));
+        // What the engine knows of the other side shares the line under the
+        // name.  A warning takes the whole line, in the warning colour, since
+        // it is the part that needs acting on.
+        const QString status = index.data(PortModel::status_role).toString();
+        const bool warn = index.data(PortModel::format_warning_role).toBool();
+        const QString line =
+            status.isEmpty() ? role_text
+            : warn           ? status
+                             : role_text + QStringLiteral(". ") + status;
+        painter->setPen(theme.colour(warn ? colour_role::noteWarnText
+                                          : colour_role::ink3));
         painter->drawText(
             QRect(left, top + 20, right - left, 18),
             Qt::AlignLeft | Qt::AlignVCenter,
             QFontMetrics(theme.font(text_style::caption))
-                .elidedText(role_text, Qt::ElideRight, right - left));
+                .elidedText(line, Qt::ElideRight, right - left));
     }
 
     const int path_y = table_ ? option.rect.top() + 22

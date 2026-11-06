@@ -12,6 +12,7 @@
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/pick_row.hpp"
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -73,8 +74,9 @@ AttachDialog::AttachDialog(StudioBackend& backend, bool advanced,
                            platform_kind platform, QWidget* parent)
     : FlowDialog(
           tr("Attach a real device"),
-          tr("Studio opens the device once. Your programs then open the port "
-             "Studio creates for them."),
+          tr("Studio holds the real device open. Your programs connect to a "
+             "new virtual port that Studio creates, and Studio passes the "
+             "data between the two."),
           parent),
       backend_(backend), platform_(platform), advanced_(advanced)
 {
@@ -468,13 +470,15 @@ void AttachDialog::rebuild_rows()
             chip_kind = StatusChip::kind::healthy;
         }
 
-        auto* frame = new QFrame(device_card_);
+        auto* frame = new PickRow(device_card_);
         frame->setObjectName(QStringLiteral("attachDeviceRow"));
+        frame->setCursor(available ? Qt::PointingHandCursor : Qt::ArrowCursor);
         auto* row_layout = new QHBoxLayout(frame);
         row_layout->setContentsMargins(14, 10, 14, 10);
         row_layout->setSpacing(12);
 
         auto* radio = new QRadioButton(frame);
+        frame->set_radio(radio);
         radio->setObjectName(QStringLiteral("attachDeviceRadio"));
         radio->setAccessibleName(tr("%1, %2").arg(device.path, description));
         radio->setEnabled(available);
@@ -484,7 +488,6 @@ void AttachDialog::rebuild_rows()
 
         auto* path = new QLabel(device.path, frame);
         path->setFont(flow_semibold(Theme::instance().font(text_style::data)));
-        path->setTextInteractionFlags(Qt::TextSelectableByMouse);
         path->setAccessibleName(device.path);
         row_layout->addWidget(path, 0, Qt::AlignVCenter);
 
@@ -494,14 +497,23 @@ void AttachDialog::rebuild_rows()
         if (!available)
             text->setProperty("muted", true);
         if (!device.description.isEmpty())
-            text->setToolTip(device.description);
+            frame->setToolTip(device.description);
         row_layout->addWidget(text, 1);
 
         auto* chip = new StatusChip(chip_text, chip_kind, frame);
         row_layout->addWidget(chip, 0, Qt::AlignVCenter);
 
+        // A click anywhere on the row selects it, and a double-click moves on
+        // to the next field.
+        frame->pass_clicks_through();
         rows_layout_->addWidget(frame);
         rows_.push_back(device_row{frame, radio, device.path, available});
+        connect(frame, &PickRow::activated, this,
+                [this]
+                {
+                    name_->setFocus(Qt::OtherFocusReason);
+                    name_->selectAll();
+                });
 
         connect(radio, &QRadioButton::toggled, this,
                 [this, index](bool checked)
@@ -596,12 +608,14 @@ void AttachDialog::update_result()
     }
     const vss::serial_settings serial = current_settings();
     result_->set_result_text(
-        tr("Studio will open <b>%1</b> at %2 baud and keep it open. Your "
-           "programs should open the port Studio creates, not %1.")
+        tr("Studio will hold <b>%1</b> open at %2 baud. Your programs should "
+           "not open %1. They open the new virtual port that Studio creates, "
+           "and Studio passes data between that port and %1.")
             .arg(path.toHtmlEscaped())
             .arg(serial.baud_rate),
-        tr("Studio will open %1 at %2 baud and keep it open. Your programs "
-           "should open the port Studio creates, not %1.")
+        tr("Studio will hold %1 open at %2 baud. Your programs should not "
+           "open %1. They open the new virtual port that Studio creates, and "
+           "Studio passes data between that port and %1.")
             .arg(path)
             .arg(serial.baud_rate));
 }
