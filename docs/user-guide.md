@@ -578,6 +578,7 @@ again.
 | Record traffic to a file | `vss_cli capture topology.json --out bus.cap --port master` |
 | Record a port without a topology | `vss_cli capture --uri=serial://COM5 --out run.jsonl --seconds=60` |
 | Play a capture into a port | `vss_cli play bus.cap --uri=serial://COM6 --speed=2` |
+| Make a port answer like a device | `vss_cli respond device.json --uri=serial://COM7` |
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
 
@@ -634,6 +635,59 @@ other programs on a bus without the program that made the recording.
 - It stops when the last record has been sent, or at `Ctrl-C`, or after
   `--seconds`, and prints how many records and bytes it sent. Lines of the file
   that cannot be read are skipped and counted.
+
+### Scripted devices with `vss_cli respond`
+
+```bash
+vss_cli respond <script.json> [<topology.json>] (--uri=<uri> | --port=<name>)
+                [--seconds=N]
+```
+
+`respond` makes one port act as a device, or as a master that polls, with no
+program behind it. The behaviour is in a script, a JSON file of its own: the
+topology file and its schema do not change. The port is chosen as for `play`:
+the end a program would open.
+
+```json
+{
+  "version": 1,
+  "seed": 7,
+  "rules": [
+    { "name": "status", "match": "02 31", "mask": "ff f0",
+      "reply": "02 31 41 03", "delay_ms": 150, "jitter_ms": 10 }
+  ],
+  "poll": {
+    "start_ms": 100, "interval_ms": 1000, "cycles": 0,
+    "steps": [ { "send": "02 31 03" },
+               { "send": "02 32 03", "at_ms": 250, "jitter_ms": 5 } ]
+  }
+}
+```
+
+**Rules** make a device. `match` is the bytes to wait for, in hex. `mask`, when
+given, has as many bytes as `match`, and only the bits that are 1 in it are
+compared, so `"02 30"` with `"ff f0"` matches `02 30` to `02 3f`. `reply` is
+sent after `delay_ms` (default 0), plus or minus a random amount of up to
+`jitter_ms`. The delay is counted from the moment the request arrived, not from
+when the script got to it, so a reply meant for a 200 ms window is not late by
+the time the program took to look.
+
+- Bytes are matched as a stream. A request that arrives in two reads is found,
+  and the bytes up to the end of a match are used up. When several rules could
+  match, the one that starts first wins, and then the one listed first.
+- A reply is written to the port as one piece.
+
+**Poll** makes a master. A cycle starts `start_ms` after the script starts, and
+a new one every `interval_ms`; each step is sent `at_ms` after its cycle
+started, plus or minus `jitter_ms`. `cycles` is how many cycles to run, and 0
+means until you stop it. With no `interval_ms` the list is sent once. A script
+may have rules, a poll list, or both.
+
+`seed` makes the jitter repeat from run to run. A key the script does not know
+is an error that names it, so a misspelt `delay_ms` is found and not ignored.
+Delays are limited to one hour. `respond` runs until `Ctrl-C` or `--seconds`, or,
+for a poll-only script with a number of cycles, until the last step has gone,
+and prints how many requests it matched and what it sent.
 
 See [ux.md](ux.md) for the design reasoning, [scenarios.md](scenarios.md) for
 worked examples and [the screen specifications](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/00-product-brief.md) for the

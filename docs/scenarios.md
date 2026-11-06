@@ -145,6 +145,35 @@ Record the replay with `capture` as before, and the two captures can be compared
 line by line: the same bytes in the same order, with the same gaps to within a
 few milliseconds.
 
+### Answer the master without the device programs
+
+A device that must answer inside a window, say 200 ms, can be scripted. This
+`device-1.json` answers a poll for address `31` after 150 ms, which leaves 50 ms
+of margin, and one for `32` after 60 to 120 ms:
+
+```json
+{
+  "version": 1,
+  "seed": 1,
+  "rules": [
+    { "name": "poll 31", "match": "02 31", "reply": "02 31 41 03",
+      "delay_ms": 150 },
+    { "name": "poll 32", "match": "02 32", "reply": "02 32 42 03",
+      "delay_ms": 90, "jitter_ms": 30 }
+  ]
+}
+```
+
+```bash
+vss_cli respond device-1.json --uri=serial://COM7
+```
+
+Run one `respond` for each device port, play the recorded master into its port
+with `vss_cli play`, and `capture` the master's port. The `W` lines are the
+answers, and the gap from a poll to its answer is the time the device took. A
+script with a `poll` list can stand in for the master instead, so the whole bus
+can run with no program on it.
+
 ## Test software that watches the control lines
 
 1. Attach a device (or create a pair of virtual ports).
