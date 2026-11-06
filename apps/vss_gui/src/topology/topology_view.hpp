@@ -7,6 +7,7 @@
 #ifndef VSS_GUI_TOPOLOGY_TOPOLOGY_VIEW_HPP
 #define VSS_GUI_TOPOLOGY_TOPOLOGY_VIEW_HPP
 
+#include "backend/canvas_edit.hpp"
 #include "backend/capabilities.hpp"
 #include "backend/view_types.hpp"
 #include "topology/topology_layout.hpp"
@@ -18,15 +19,22 @@
 #include <QLineF>
 #include <QPointF>
 #include <QRectF>
+#include <QSet>
 #include <QSizeF>
 #include <QString>
 #include <QStringList>
 #include <QVector>
 
 #include <functional>
+#include <optional>
+#include <utility>
 #include <vector>
 
+class QGraphicsPathItem;
+class QGraphicsRectItem;
 class QLabel;
+class QMenu;
+class QRubberBand;
 
 namespace vss::gui::topology
 {
@@ -58,6 +66,46 @@ public:
 
     /// What this build can do; a missing capability hides its control.
     void set_capabilities(const capabilities& caps);
+
+    /// Advanced mode: the canvas is an editor.  Tiles can be dropped on it,
+    /// nodes show wiring handles, several items can be selected, and the
+    /// menus offer Settings, Duplicate and Delete.  See
+    /// `docs/gui-design/docs/screens/07-canvas-editor.md`.
+    void set_editing(bool on);
+    bool is_editing() const noexcept { return editing_; }
+
+    /// Every selected port and link, the focused one included.
+    QVector<vss::endpoint_id> selected_ports() const;
+    QVector<vss::link_id> selected_links() const;
+    void select_all();
+    /// Selects exactly these items (the rubber band and the tests).
+    void set_multi_selection(const QVector<vss::endpoint_id>& ports,
+                             const QVector<vss::link_id>& links);
+    /// Adds or removes one item, as Ctrl+click does.
+    void toggle_selected(vss::endpoint_id port, vss::link_id link);
+
+    /// The nodes of the next topology that are new go here, in scene units,
+    /// instead of into the automatic layout: a tile dropped at a point.
+    void place_next_at(const QPointF& scene_point);
+
+    /// Starts a wire from a port, as dragging from its handle or Ctrl+L does.
+    void begin_wire(vss::endpoint_id from);
+    void cancel_wire();
+    bool is_wiring() const noexcept { return wire_from_ != 0; }
+    vss::endpoint_id wire_source() const noexcept { return wire_from_; }
+    /// True when a link of this kind between the two would close a loop,
+    /// which the engine refuses: bytes could come back to where they
+    /// started.  Follows the engine's rule (`hub::would_create_cycle`).
+    bool would_loop(vss::endpoint_id from, vss::endpoint_id to,
+                    wire_kind kind = wire_kind::two_way) const;
+    /// Ends the wire on a port with the chosen kind of link.
+    void finish_wire(vss::endpoint_id to, wire_kind kind);
+    /// Ends the wire on empty canvas: a new port there, linked as chosen.
+    void finish_wire_new(slot_kind kind, wire_kind wire,
+                         const QPointF& scene_point);
+    /// The labels of the link chooser for a wire from one port to another.
+    QStringList wire_menu_labels(vss::endpoint_id from,
+                                 vss::endpoint_id to) const;
 
     /// Replaces the graph.  Until the user moves a node the whole layout is
     /// recomputed; after that every node keeps its position for the rest of
@@ -113,8 +161,11 @@ public:
     /// from the same list; the tests read it without opening a popup.
     QStringList node_menu_labels(vss::endpoint_id id) const;
     QStringList link_menu_labels(vss::link_id id) const;
-    /// The labels of the menu on empty canvas: Tidy layout and Fit.
+    /// The labels of the menu on empty canvas: Tidy layout and Fit, and in
+    /// Advanced mode the Add items and Select all before them.
     QStringList canvas_menu_labels() const;
+    /// The labels of the menu for a selection of several ports.
+    QStringList selection_menu_labels() const;
 
     /// Fits all items into view with a margin and returns to automatic fitting.
     void fit_content();
@@ -148,6 +199,29 @@ Q_SIGNALS:
     void port_action_requested(vss::endpoint_id id, port_menu_action action);
     void status_message(const QString& text);
 
+    // -- Advanced canvas -------------------------------------------------
+    /// A toolbox tile dropped on the canvas, or an Add item of the canvas
+    /// menu.  `at_point` is false when the tile should go to a free spot.
+    void add_requested(vss::gui::canvas_item item, const QPointF& scene_point,
+                       bool at_point);
+    void wire_requested(vss::endpoint_id from, vss::endpoint_id to,
+                        vss::gui::wire_kind kind);
+    void wire_new_requested(vss::endpoint_id from, vss::gui::slot_kind kind,
+                            vss::gui::wire_kind wire,
+                            const QPointF& scene_point);
+    void settings_requested(const QVector<vss::endpoint_id>& ports);
+    void link_settings_requested(vss::link_id id);
+    void reverse_requested(vss::link_id id);
+    void duplicate_requested(const QVector<vss::endpoint_id>& ports);
+    void delete_requested(const QVector<vss::endpoint_id>& ports,
+                          const QVector<vss::link_id>& links);
+    /// Link selected: a two-way link, or a split, join, bus or switch with
+    /// `hub` as the one end.
+    void link_selected_requested(const QVector<vss::endpoint_id>& ports,
+                                 vss::endpoint_id hub,
+                                 vss::gui::canvas_item shape);
+    void selection_changed(int count);
+
 protected:
     bool focusNextPrevChild(bool next) override;
     void keyPressEvent(QKeyEvent* event) override;
@@ -156,6 +230,13 @@ protected:
     void focusInEvent(QFocusEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
+    void dragLeaveEvent(QDragLeaveEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
     void drawBackground(QPainter* painter, const QRectF& rect) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 
@@ -184,6 +265,27 @@ private:
                   bool user_action);
     qsizetype focus_index_of_port(vss::endpoint_id id) const;
     qsizetype focus_index_of_link(vss::link_id id) const;
+
+    bool is_selected_port(vss::endpoint_id id) const;
+    bool is_selected_link(vss::link_id id) const;
+    void clear_multi();
+    void emit_selection_count();
+    void populate_node_menu(QMenu* menu, vss::endpoint_id id);
+    void populate_selection_menu(QMenu* menu, vss::endpoint_id id);
+    void populate_link_menu(QMenu* menu, vss::link_id id);
+    void populate_canvas_menu(QMenu* menu, const QPointF& scene_point,
+                              bool at_point);
+    void add_link_selected_menu(QMenu* menu, vss::endpoint_id hub);
+    void open_wire_menu(vss::endpoint_id to, const QPoint& viewport_position);
+    void open_wire_new_menu(const QPoint& viewport_position);
+    std::optional<std::pair<vss::endpoint_id, bool>>
+    handle_at(const QPointF& scene_point) const;
+    vss::endpoint_id node_at(const QPointF& scene_point) const;
+    /// True when bytes can travel from one port to the other over links.
+    bool reaches(vss::endpoint_id from, vss::endpoint_id to) const;
+    void update_wire(const QPointF& scene_point);
+    void update_wire_targets(vss::endpoint_id hovered);
+    void move_selection_by(const QPointF& delta, vss::endpoint_id except);
 
     QGraphicsScene* scene_ = nullptr;
     std::vector<port_view> ports_;
@@ -227,6 +329,23 @@ private:
 
     QVector<vss::link_id> loop_links_;
     QVector<vss::endpoint_id> loop_nodes_;
+
+    // -- Advanced canvas -------------------------------------------------
+    bool editing_ = false;
+    QSet<vss::endpoint_id> multi_ports_;
+    QSet<vss::link_id> multi_links_;
+    std::optional<QPointF> pending_drop_;
+    vss::endpoint_id wire_from_ = 0;
+    QPointF wire_start_;
+    QGraphicsPathItem* wire_item_ = nullptr;
+    QGraphicsRectItem* ghost_ = nullptr;
+    QRubberBand* band_ = nullptr;
+    QPoint band_origin_;
+    bool band_active_ = false;
+    bool band_adds_ = false;
+    bool panning_ = false;
+    bool space_down_ = false;
+    QPoint pan_last_;
 };
 
 } // namespace vss::gui::topology

@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QDockWidget>
 #include <QFontMetricsF>
+#include <QHash>
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -815,15 +816,33 @@ TEST_CASE("topology: light and dark themes repaint from Theme tokens")
     QApplication::processEvents();
     const QImage light = view.grab().toImage();
     REQUIRE(!light.isNull());
-    REQUIRE_EQ(light.pixelColor(light.width() - 4, 4),
-               theme.colour(vss::gui::colour_role::panel));
+    // The canvas is the sunken ground (with a dot grid between the nodes).
+    const auto ground_at = [](const QImage& image)
+    {
+        int best = 0;
+        QColor most;
+        QHash<QRgb, int> counts;
+        for (int y = 2; y < 22; ++y)
+        {
+            for (int x = image.width() - 22; x < image.width() - 2; ++x)
+            {
+                const int count = ++counts[image.pixel(x, y)];
+                if (count > best)
+                {
+                    best = count;
+                    most = image.pixelColor(x, y);
+                }
+            }
+        }
+        return most;
+    };
+    REQUIRE_EQ(ground_at(light), theme.colour(vss::gui::colour_role::sunken));
 
     theme.set_mode(vss::gui::theme_mode::dark);
     QApplication::processEvents();
     const QImage dark = view.grab().toImage();
     REQUIRE(!dark.isNull());
-    REQUIRE_EQ(dark.pixelColor(dark.width() - 4, 4),
-               theme.colour(vss::gui::colour_role::panel));
+    REQUIRE_EQ(ground_at(dark), theme.colour(vss::gui::colour_role::sunken));
     REQUIRE(light != dark);
 
     theme.set_mode(vss::gui::theme_mode::light);

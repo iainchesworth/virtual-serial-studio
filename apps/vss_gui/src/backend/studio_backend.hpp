@@ -95,7 +95,8 @@ public:
     }
 
     /// The program that has the driver port open, or none.
-    virtual std::optional<holder_view> port_holder(vss::endpoint_id /*id*/) const
+    virtual std::optional<holder_view>
+    port_holder(vss::endpoint_id /*id*/) const
     {
         return std::nullopt;
     }
@@ -113,6 +114,19 @@ public:
     /// changes only part of the records.
     virtual vss::result<void> rename_port(vss::endpoint_id /*id*/,
                                           const QString& /*name*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
+    /// Gives a port new serial settings and keeps its name, id and links
+    /// (capability: port_settings).  A fixture or a device is opened again
+    /// with them; a virtual port only saves them, because the program that
+    /// opens it sets its own speed.  It can block while a device opens, so a
+    /// dialog calls it from a worker thread and calls `refresh()` afterwards.
+    /// The default is `unsupported`.
+    virtual vss::result<void>
+    set_port_settings(vss::endpoint_id /*id*/,
+                      const vss::serial_settings& /*settings*/)
     {
         return vss::make_error_code(vss::errc::unsupported);
     }

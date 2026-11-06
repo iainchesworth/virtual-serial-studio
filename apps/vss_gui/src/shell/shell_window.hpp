@@ -39,6 +39,7 @@ struct setup_group;
 class MonitorPanel;
 class NoteBanner;
 class OwnerBar;
+class CanvasController;
 class PaneHeader;
 class PortsPanel;
 class SendPanel;
@@ -49,6 +50,7 @@ namespace topology
 {
 class LinksList;
 class TopologyView;
+class Toolbox;
 } // namespace topology
 
 /// The redesigned frame: menu, toolbar, launcher, docks and status bar.
@@ -146,6 +148,7 @@ private:
     void show_owner_controls();
     void update_owner_bar();
     void sync_advanced_docks();
+    void sync_canvas_editing();
     void log_local(const QString& text);
 
     void open_setup_check();
@@ -193,6 +196,8 @@ private:
     Launcher* launcher_ = nullptr;
     QWidget* workspace_ = nullptr;
     topology::TopologyView* topology_ = nullptr;
+    topology::Toolbox* toolbox_ = nullptr;
+    CanvasController* canvas_ = nullptr;
     topology::LinksList* links_ = nullptr;
     QDockWidget* ports_dock_ = nullptr;
     QDockWidget* inspector_dock_ = nullptr;

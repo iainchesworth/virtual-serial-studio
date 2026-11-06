@@ -26,8 +26,12 @@ add_library(vss_gui_advanced STATIC
   line_matrix_panel.hpp
   line_presets.cpp
   line_presets.hpp
+  link_settings_dialog.cpp
+  link_settings_dialog.hpp
   owner_bar.cpp
   owner_bar.hpp
+  port_settings_dialog.cpp
+  port_settings_dialog.hpp
   wiring_dialog.cpp
   wiring_dialog.hpp)
 
