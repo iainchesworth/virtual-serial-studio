@@ -16,6 +16,8 @@ add_library(vss_gui_shell STATIC
   launcher.hpp
   level_service.cpp
   level_service.hpp
+  port_warnings.cpp
+  port_warnings.hpp
   setup_group.cpp
   setup_group.hpp
   shell_window.cpp

@@ -325,8 +325,8 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="87" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="439" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="450" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="468" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="479" />
             <source>Create port</source>
             <translation>באַשאַפֿן פּאָרט</translation>
         </message>
@@ -430,7 +430,7 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="280" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="293" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="310" />
             <source>Kind</source>
             <translation>סאָרט</translation>
         </message>
@@ -440,7 +440,23 @@
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="295" />
+            <source>Automatic</source>
+            <translation>אויטאָמאַטיש</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="299" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="301" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>פּראָגראַמען וואָס עפענען אַ פעסטן נאָמען ווי COM3 געפינען דעם פּאָרט יעדעס מאָל. „אויטאָמאַטיש“ נעמט די נידעריקסטע פֿרייע נומער. אַ נומער דאַרף דעם Studio־דרייווער און זײַן העלפער־סערוויס, און גילט ווען מע שאַפֿט איין פּאָרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="311" />
             <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
             <translation>„בעסטער בנימצא“ ניצט דעם Studio דרייווער אָדער com0com אויף Windows, און אַ פּסעוודאָ־טערמינאַל אויף Linux און macOS. ביז 32 אויף אַ מאָל. עטלעכע פּאָרטן הייסן port-1, port-2 אאד״ג.</translation>
         </message>
@@ -449,104 +465,105 @@
             <translation type="vanished">דער בעסטער פֿאַראַנענער ניצט com0com אויף Windows, און אַ פּסעוודאָ־טערמינאַל אויף Linux און macOS. ביז 32 אויף אײן מאָל. עטלעכע פּאָרטן הייסן port-1, port-2 און אַזוי ווײַטער.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="348" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="377" />
             <source>Next chooses the device and its serial settings. Studio opens the device once and creates the port your programs open.</source>
             <translation>ווײַטער קלײַבט אויס דעם אַפּאַראַט און זײַנע סעריעלע פּאַראַמעטערס. Studio עפֿנט דעם אַפּאַראַט איין מאָל און באַשאַפֿט דעם פּאָרט וואָס אײַערע פּראָגראַמען עפֿענען.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="365" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="394" />
             <source>Network endpoints arrive in a later work package. Nothing has been created.</source>
             <translation>נעץ־ענדפּונקטן קומען אין אַ שפּעטערדיקן אַרבעט־פּעקל. גאָרנישט איז נישט באַשאַפֿן געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="367" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="396" />
             <source>Mock fixtures arrive in a later work package. Nothing has been created.</source>
             <translation>מאָק־פֿיקסטורן קומען אין אַ שפּעטערדיקן אַרבעט־פּעקל. גאָרנישט איז נישט באַשאַפֿן געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="417" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="446" />
             <source>Virtual port settings</source>
             <translation>פּאַראַמעטערס פֿון ווירטועלן פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="420" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="449" />
             <source>Pair settings</source>
             <translation>פּאַראַמעטערס פֿון פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="423" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="452" />
             <source>Real device settings</source>
             <translation>פּאַראַמעטערס פֿון פֿיזישן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="426" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="455" />
             <source>Network endpoint settings</source>
             <translation>פּאַראַמעטערס פֿון נעץ־ענדפּונקט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="429" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="458" />
             <source>Mock fixture settings</source>
             <translation>פּאַראַמעטערס פֿון מאָק־פֿיקסטור</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="442" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="471" />
             <source>Create pair</source>
             <translation>באַשאַפֿן פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="446" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="475" />
             <source>Next</source>
             <translation>ווײַטער</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="478" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="507" />
             <source>This creates one port named &lt;b&gt;%1&lt;/b&gt;. Studio then shows the name to open in your program, such as COM7.</source>
             <translation>דאָס באַשאַפֿט איין פּאָרט מיטן נאָמען &lt;b&gt;%1&lt;/b&gt;. דערנאָך ווײַזט Studio דעם נאָמען וואָס מען עפֿנט אין אײַער פּראָגראַם, למשל COM7.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="481" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="510" />
             <source>This creates one port named %1. Studio then shows the name to open in your program, such as COM7.</source>
             <translation>דאָס באַשאַפֿט איין פּאָרט מיטן נאָמען %1. דערנאָך ווײַזט Studio דעם נאָמען וואָס מען עפֿנט אין אײַער פּראָגראַם, למשל COM7.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="489" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="518" />
             <source>This creates %1 ports named &lt;b&gt;%2&lt;/b&gt;. Studio then shows the names to open in your programs, such as COM7 and COM8.</source>
             <translation>דאָס באַשאַפֿט %1 פּאָרטן מיט די נעמען &lt;b&gt;%2&lt;/b&gt;. דערנאָך ווײַזט Studio די נעמען וואָס מען עפֿנט אין אײַערע פּראָגראַמען, למשל COM7 און COM8.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="493" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="522" />
             <source>This creates %1 ports named %2. Studio then shows the names to open in your programs, such as COM7 and COM8.</source>
             <translation>דאָס באַשאַפֿט %1 פּאָרטן מיט די נעמען %2. דערנאָך ווײַזט Studio די נעמען וואָס מען עפֿנט אין אײַערע פּראָגראַמען, למשל COM7 און COM8.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="506" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="546" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="553" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="593" />
             <source>Choose a number from 1 to 32.</source>
             <translation>קלײַבט אויס אַ נומער פֿון 1 ביז 32.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="548" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="559" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="595" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="606" />
             <source>Enter a name for the port.</source>
             <translation>גיב אַן נאָמען פֿאַר דער פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="582" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="640" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="645" />
             <source>Could not create the port</source>
             <translation>נישט געקענט באַשאַפֿן דעם פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="583" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="646" />
             <source>Could not create the ports</source>
             <translation>נישט געקענט באַשאַפֿן די פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="586" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="649" />
             <source>Studio could not create the port. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן דעם פּאָרט. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="587" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="650" />
             <source> Try a different name or kind, then try again.</source>
             <translation> פּרובירט אַן אַנדער נאָמען אָדער סאָרט, און פּרובירט נאָך אַ מאָל.</translation>
         </message>
@@ -1309,6 +1326,60 @@
             <location filename="../src/support/diagnostic_bundle_dialog.cpp" line="407" />
             <source>Environment copied.</source>
             <translation>די סבֿיבֿה איז אָפּגעקאָפּירט.</translation>
+        </message>
+    </context>
+    <context>
+        <name>ComNumberDialog</name>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="22" />
+            <source>Change COM number</source>
+            <translation>ענדערן די COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="23" />
+            <source>Programs open the port by this number.</source>
+            <translation>פּראָגראַמען עפענען דעם פּאָרט לויט דער דאָזיקער נומער.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="39" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="41" />
+            <source>New COM number</source>
+            <translation>נײַע COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="42" />
+            <source>Windows restarts the port to change its number, so no program may have it open. A number that another device has is refused.</source>
+            <translation>Windows שטארט איבער דעם פּאָרט כּדי צו ענדערן זײַן נומער, דעריבער טאָר קיין פּראָגראַם אים נישט האַלטן אָפֿן. אַ נומער וואָס אַן אַנדער אַפּאַראַט האָט ווערט אָפּגעוויזן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="49" />
+            <source>Cancel</source>
+            <translation>אַנולירן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="52" />
+            <location filename="../src/flows/com_number_dialog.cpp" line="146" />
+            <source>Change number</source>
+            <translation>ענדערן נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="90" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="123" />
+            <source>Changing</source>
+            <translation>ענדערט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="153" />
+            <source>Could not change the COM number</source>
+            <translation>מע האט נישט געקענט ענדערן די COM־נומער</translation>
         </message>
     </context>
     <context>
@@ -2244,85 +2315,116 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="349" />
+            <location filename="../src/panes/inspector_panel.cpp" line="386" />
             <source>path</source>
             <translation>וועג</translation>
         </message>
         <message>
             <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <source>Change...</source>
+            <translation>ענדערן...</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <source>Change COM number</source>
+            <translation>ענדערן די COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="210" />
             <source>Traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="195" />
+            <location filename="../src/panes/inspector_panel.cpp" line="219" />
             <source>Serial</source>
             <translation>סעריעל</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
-            <location filename="../src/panes/inspector_panel.cpp" line="363" />
+            <location filename="../src/panes/inspector_panel.cpp" line="236" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;פֿאַרוואָס קומט גאָרנישט אָן?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <source>Release port...</source>
+            <translation>באַפֿרײַען פּאָרט...</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <source>Release port</source>
+            <translation>באַפֿרײַען פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>Control lines</source>
             <translation>קאָנטראָל־ליניעס</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="280" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="244" />
+            <location filename="../src/panes/inspector_panel.cpp" line="281" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="282" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="268" />
+            <location filename="../src/panes/inspector_panel.cpp" line="305" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;עפֿענען ליניע־מאַטריץ און דעפֿעקטן&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="346" />
+            <location filename="../src/panes/inspector_panel.cpp" line="383" />
             <source>The engine reported a failure.</source>
             <translation>דער מאָטאָר האָט געמאָלדן אַ דורכפֿאַל.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="350" />
+            <location filename="../src/panes/inspector_panel.cpp" line="387" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="360" />
+            <location filename="../src/panes/inspector_panel.cpp" line="397" />
             <source>No program has opened %1 yet.</source>
             <translation>קיין פּראָגראַם האָט נאָך נישט געעפֿנט %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="375" />
+            <location filename="../src/panes/inspector_panel.cpp" line="412" />
+            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="430" />
             <source>This port does not support control lines.</source>
             <translation>דער פּאָרט שטיצט נישט קאָנטראָל־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
-            <location filename="../src/panes/inspector_panel.cpp" line="417" />
+            <location filename="../src/panes/inspector_panel.cpp" line="458" />
+            <location filename="../src/panes/inspector_panel.cpp" line="472" />
             <source>%1 on</source>
             <translation>%1 אָן</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="459" />
+            <location filename="../src/panes/inspector_panel.cpp" line="473" />
             <source>%1 off</source>
             <translation>%1 אָפּ</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="437" />
+            <location filename="../src/panes/inspector_panel.cpp" line="492" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -4216,25 +4318,48 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>PortWarnings</name>
+        <message>
+            <location filename="../src/shell/port_warnings.cpp" line="31" />
+            <source>A program has %1 open. Removing the port takes it away from that program, which may stop or show an error.</source>
+            <translation>אַ פּראָגראַם האָט געעפֿנט %1. אַװעקנעמען דעם פּאָרט נעמט אים אָפּ פֿון דער פּראָגראַם, וואָס קען אָפּשטעלן זיך אָדער ווײַזן אַ טעות.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/port_warnings.cpp" line="45" />
+            <source>A program has %1 open. Closing Studio removes the port under it, and the program may stop or show an error.</source>
+            <translation>אַ פּראָגראַם האָט געעפֿנט %1. פֿאַרמאַכן Studio נעמט אַװעק דעם פּאָרט פֿון אונטער דער פּראָגראַם, וואָס קען אָפּשטעלן זיך אָדער ווײַזן אַ טעות.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/port_warnings.cpp" line="49" />
+            <source>Programs have these ports open: %1. Closing Studio removes the ports under them, and the programs may stop or show an error.</source>
+            <translation>פּראָגראַמען האָבן געעפֿנט די פּאָרטן: %1. פֿאַרמאַכן Studio נעמט אַװעק די פּאָרטן פֿון אונטער זיי, און די פּראָגראַמען קענען אָפּשטעלן זיך אָדער ווײַזן אַ טעות.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/port_warnings.cpp" line="61" />
+            <source>Programs have these ports open: %1. A new setup removes every port, and the programs may stop or show an error.</source>
+            <translation>פּראָגראַמען האָבן געעפֿנט די פּאָרטן: %1. אַ נײַע סעטאַפּ נעמט אַװעק יעדן פּאָרט, און די פּראָגראַמען קענען אָפּשטעלן זיך אָדער ווײַזן אַ טעות.</translation>
+        </message>
+    </context>
+    <context>
         <name>PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="48" />
-            <location filename="../src/panes/ports_panel.cpp" line="49" />
+            <location filename="../src/panes/ports_panel.cpp" line="61" />
+            <location filename="../src/panes/ports_panel.cpp" line="62" />
             <source>Filter ports</source>
             <translation>פֿילטערן פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="68" />
+            <location filename="../src/panes/ports_panel.cpp" line="81" />
             <source>Ports</source>
             <translation>פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="91" />
+            <location filename="../src/panes/ports_panel.cpp" line="104" />
             <source>Ports table</source>
             <translation>טאַבעלע פֿון פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="260" />
+            <location filename="../src/panes/ports_panel.cpp" line="301" />
             <source>Copied %1.</source>
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
@@ -4242,7 +4367,7 @@ Networks: %5</source>
     <context>
         <name>QObject</name>
         <message>
-            <location filename="../src/backend/studio_backend.cpp" line="23" />
+            <location filename="../src/backend/studio_backend.cpp" line="53" />
             <source>Error %1</source>
             <translation>טעות %1</translation>
         </message>
@@ -4551,29 +4676,195 @@ Networks: %5</source>
             <translation>אַוואַנסירט</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="66" />
+            <location filename="../src/flows/common.cpp" line="124" />
             <source>Could not %1 %2</source>
             <translation>נישט געקענט %1 %2</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="76" />
+            <location filename="../src/flows/common.cpp" line="134" />
             <source>The system did not allow this. Nothing was changed. Open Tools, Setup check: it says whether your account is missing the serial device group or AppArmor, SELinux or a sandbox is in the way, and shows the command to fix it.</source>
             <translation>די סיסטעם האָט עס נישט דערלויבט. גאָרנישט איז געענדערט געוואָרן. עפֿנט Tools, אײַנשטעלונג־קאָנטראָלע: עס זאָגט צי אײַער קאָנטאָ פֿעלט די גרופּע פֿאַר סעריעלע מכשירים אָדער צי AppArmor, SELinux אָדער אַ זאַמד־קאַסטן שטערט, און ווײַזט דעם באַפֿעל וואָס פֿאַרריכט עס.</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="82" />
+            <location filename="../src/flows/common.cpp" line="113" />
+            <location filename="../src/flows/common.cpp" line="140" />
             <source>Windows did not allow this change. Nothing was changed. Run Virtual Serial Studio as administrator and try again.</source>
             <translation>Windows האָט נישט דערלויבט די ענדערונג. גאָרנישט איז געענדערט געוואָרן. לויפֿט Virtual Serial Studio ווי אַדמיניסטראַטאָר און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/common.cpp" line="88" />
+            <location filename="../src/flows/common.cpp" line="69" />
+            <source>COM%1 already belongs to another device on this PC, such as a real port, com0com or an earlier port that Windows remembers. Nothing was changed. Choose a different number.</source>
+            <translation>COM%1 געהערט שוין צו אַן אַנדער אַפּאַראַט אין דעם קאָמפּיוטער, ווי אַ אמתער פּאָרט, com0com אָדער אַ פֿריִערדיקער פּאָרט וואָס Windows געדענקט. גאָרנישט איז געענדערט געוואָרן. קלײַבט אַן אַנדער נומער.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="76" />
+            <source>Choose a number from 1 to 255.</source>
+            <translation>קלײַבט אַ נומער פֿון 1 ביז 255.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="79" />
+            <source>Choosing a COM number needs the Virtual Serial Studio helper service, and it is not installed or is too old. Nothing was changed. Install the helper from the driver package, or leave the number on Automatic.</source>
+            <translation>אויסקלײַבן אַ COM־נומער דאַרף דעם Virtual Serial Studio העלפער־סערוויס, און ער איז נישט אינסטאַלירט אָדער צו אַלט. גאָרנישט איז געענדערט געוואָרן. אינסטאַלירט דעם העלפער פֿון דער דרייווער־פּעקל, אָדער לאָזט די נומער אויף „אויטאָמאַטיש“.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="89" />
+            <source>A program has this port open, and Windows restarts the port to change its number. Nothing was changed. Close the program, or use Release port in Advanced mode, then try again.</source>
+            <translation>אַ פּראָגראַם האָט געעפֿנט דעם פּאָרט, און Windows שטארט איבער דעם פּאָרט כּדי צו ענדערן זײַן נומער. גאָרנישט איז געענדערט געוואָרן. פֿאַרמאַכט די פּראָגראַם, אָדער ניצט „באַפֿרײַען פּאָרט“ אין אַדוואַנסט־מאָדוס, און פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="95" />
+            <source>Every port of the driver is in use. Nothing was changed. Remove a port you no longer need and try again.</source>
+            <translation>אַלע פּאָרטן פֿון דעם דרייווער זענען אין באַנוץ. גאָרנישט איז געענדערט געוואָרן. נעמט אַװעק אַ פּאָרט וואָס איר דאַרפֿט מער נישט און פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="101" />
+            <source>No more ports can be made: one user can hold 16 driver ports and the driver 32 in all. Nothing was changed. Remove a port you no longer need and try again.</source>
+            <translation>מע קען נישט שאַפֿן מער פּאָרטן: איין באַניצער קען האַלטן 16 דרייווער־פּאָרטן און דער דרייווער 32 אין גאַנצן. גאָרנישט איז געענדערט געוואָרן. נעמט אַװעק אַ פּאָרט וואָס איר דאַרפֿט מער נישט און פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="108" />
+            <source>The port did not appear in time. Nothing was changed. Try again.</source>
+            <translation>דער פּאָרט איז נישט דערשינען אין צײַט. גאָרנישט איז געענדערט געוואָרן. פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="117" />
+            <source>The COM number could not be set. Nothing was changed. Open Tools, Setup check to see whether the driver and its helper service are healthy.</source>
+            <translation>מע האט נישט געקענט שטעלן די COM־נומער. גאָרנישט איז געענדערט געוואָרן. עפֿנט מכשירים, סעטאַפּ־קאָנטראָל, כּדי צו זען צי דער דרייווער און זײַן העלפער־סערוויס זענען געזונט.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/common.cpp" line="146" />
             <source>Another program may be using the device. Nothing was changed. Close that program and try again.</source>
             <translation>אפֿשר ניצט אַן אַנדער פּראָגראַם דעם אַפּאַראַט. גאָרנישט איז געענדערט געוואָרן. פֿאַרמאַכט יענע פּראָגראַם און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="111" />
+            <location filename="../src/shell/shell_window.cpp" line="114" />
             <source>untitled</source>
             <translation>אָן נאָמען</translation>
+        </message>
+    </context>
+    <context>
+        <name>ReleasePortDialog</name>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="26" />
+            <location filename="../src/flows/release_port_dialog.cpp" line="98" />
+            <location filename="../src/flows/release_port_dialog.cpp" line="158" />
+            <source>Release port</source>
+            <translation>באַפֿרײַען פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="27" />
+            <source>Make the program that has this port let go of it.</source>
+            <translation>מאַכן די פּראָגראַם וואָס האַלט דעם פּאָרט זאָל אים לאָזן גיין.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="45" />
+            <source>No data has passed on %1 yet.</source>
+            <translation>ביז איצט זענען קיין דאַטן נישט דורכגעגאַנגען אויף %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="50" />
+            <source>No data has passed on %1 for %2.</source>
+            <translation>אויף %1 זענען שוין %2 קיין דאַטן נישט דורכגעגאַנגען.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="58" />
+            <source>Take the port back</source>
+            <translation>צוריקנעמען דעם פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="59" />
+            <source>The program keeps running, but its connection to the port stops working. Another program can open the port at once, with the same COM number. Try this first.</source>
+            <translation>די פּראָגראַם לויפֿט ווײַטער, אָבער איר פֿאַרבינדונג צום פּאָרט הערט אויף צו אַרבעטן. אַן אַנדערע פּראָגראַם קען עפֿענען דעם פּאָרט תיכּף, מיט דער זעלבער COM־נומער. פּרובירט דאָס צוערשט.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="65" />
+            <source>End the program</source>
+            <translation>ענדיקן די פּראָגראַם</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="66" />
+            <source>Windows closes the program straight away, as End task in Task Manager does. The program does not get to save anything.</source>
+            <translation>Windows פֿאַרמאַכט די פּראָגראַם תיכּף, ווי „End task“ אין Task Manager. די פּראָגראַם קען גאָרנישט אָפּשפּאָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="85" />
+            <source>Studio ends only your own programs. Run Studio as administrator to end this one.</source>
+            <translation>Studio ענדיקט נאָר אײַערע אייגענע פּראָגראַמען. לויפֿט Studio ווי אַדמיניסטראַטאָר כּדי צו ענדיקן דעם דאָזיקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="88" />
+            <source>This program belongs to another user. Run Studio as administrator to end it.</source>
+            <translation>די דאָזיקע פּראָגראַם געהערט צו אַן אַנדער באַניצער. לויפֿט Studio ווי אַדמיניסטראַטאָר כּדי זי צו ענדיקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="95" />
+            <source>Cancel</source>
+            <translation>אַנולירן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="116" />
+            <source>%1 second</source>
+            <translation>%1 סעקונדע</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="117" />
+            <source>%1 seconds</source>
+            <translation>%1 סעקונדעס</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="120" />
+            <source>%1 minutes</source>
+            <translation>%1 מינוט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="121" />
+            <source>%1 hour</source>
+            <translation>%1 שטונד</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="122" />
+            <source>%1 hours</source>
+            <translation>%1 שטונדן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="128" />
+            <source>No program is known to have %1 open.</source>
+            <translation>קיין פּראָגראַם איז נישט באַקאַנט וואָס האָט געעפֿנט %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="131" />
+            <source>A program (process %1) has %2 open.</source>
+            <translation>אַ פּראָגראַם (פּראָצעס %1) האָט געעפֿנט %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="135" />
+            <source>%1 (process %2) has %3 open.</source>
+            <translation>%1 (פּראָצעס %2) האָט געעפֿנט %3.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="157" />
+            <source>End program</source>
+            <translation>ענדיקן די פּראָגראַם</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="172" />
+            <source>Windows did not allow this. The program belongs to another user. Nothing was changed. Run Studio as administrator and try again.</source>
+            <translation>Windows האָט עס נישט דערלאָזט. די פּראָגראַם געהערט צו אַן אַנדער באַניצער. גאָרנישט איז געענדערט געוואָרן. לויפֿט Studio ווי אַדמיניסטראַטאָר און פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="178" />
+            <source>No program has the port open any more. Nothing was changed.</source>
+            <translation>קיין פּראָגראַם האַלט דעם פּאָרט מער נישט אָפֿן. גאָרנישט איז געענדערט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="183" />
+            <source>Studio could not release the port. Nothing was changed. Try again.</source>
+            <translation>Studio האָט נישט געקענט באַפֿרײַען דעם פּאָרט. גאָרנישט איז געענדערט געוואָרן. פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="187" />
+            <source>Could not release %1</source>
+            <translation>מע האט נישט געקענט באַפֿרײַען %1</translation>
         </message>
     </context>
     <context>
@@ -6103,594 +6394,704 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>נײַ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>new document setup</source>
             <translation>נײַ דאָקומענט אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>Open</source>
             <translation>אָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>open file setup</source>
             <translation>עפֿענען טעקע אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="215" />
             <source>Open recent</source>
             <translation>עפֿענען לעצטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="215" />
             <source>recent file</source>
             <translation>לעצטע טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>Setups and templates</source>
             <translation>אײַנשטעלונגען און שבלאָנען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="222" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>template setup</source>
             <translation>שבלאָן אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
-            <location filename="../src/shell/shell_window.cpp" line="2400" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="2474" />
             <source>Save</source>
             <translation>אָפּהיטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>save file setup</source>
             <translation>אָפּהיטן טעקע אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Save as</source>
             <translation>אָפּהיטן ווי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>save as file</source>
             <translation>אָפּהיטן ווי טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Export as command</source>
             <translation>עקספּאָרטירן ווי קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="231" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>cli command</source>
             <translation>קאָמאַנד־שורה קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>Diagnostic bundle</source>
             <translation>דיאַגנאָסטיק־פּעקל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>support zip</source>
             <translation>שטיצע zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="239" />
             <source>Quit</source>
             <translation>פֿאַרלאָזן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="239" />
             <source>exit</source>
             <translation>אַרויסגיין</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="1162" />
             <source>Undo</source>
             <translation>צוריקדרייען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="248" />
             <source>undo stack restore</source>
             <translation>צוריקדרייען סטעק צוריקשטעלן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
-            <location filename="../src/shell/shell_window.cpp" line="1156" />
+            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Redo</source>
             <translation>איבערמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="252" />
             <source>redo stack restore</source>
             <translation>איבערמאַכן סטעק צוריקשטעלן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="253" />
+            <location filename="../src/shell/shell_window.cpp" line="256" />
             <source>Remove selected</source>
             <translation>אַוועקנעמען דאָס אויסגעקליבענע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="254" />
-            <location filename="../src/shell/shell_window.cpp" line="293" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
             <source>delete remove</source>
             <translation>אויסמעקן אַוועקנעמען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Add port</source>
             <translation>צולייגן פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
-            <location filename="../src/shell/shell_window.cpp" line="264" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>new virtual create</source>
             <translation>נײַ ווירטועל באַשאַפֿן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Virtual port</source>
             <translation>ווירטועלער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="269" />
             <source>Linked pair</source>
             <translation>פֿאַרבונדענער פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>pair two null modem</source>
             <translation>פּאָר צוויי נאַל־מאָדעם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="272" />
             <source>Attach real device</source>
             <translation>אָנשליסן פֿיזישן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>serial device</source>
             <translation>סעריעלער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Network endpoint</source>
             <translation>נעץ־ענדפּונקט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>Mock fixture</source>
             <translation>מאָק־פֿיקסטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="281" />
             <source>fixture mock script</source>
             <translation>פֿיקסטור מאָק סקריפּט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="284" />
             <source>Copy port name</source>
             <translation>קאָפּירן פּאָרט־נאָמען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="282" />
+            <location filename="../src/shell/shell_window.cpp" line="285" />
             <source>clipboard path</source>
             <translation>קליפּבאָרד וועג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="286" />
-            <location filename="../src/shell/shell_window.cpp" line="1992" />
+            <location filename="../src/shell/shell_window.cpp" line="289" />
+            <location filename="../src/shell/shell_window.cpp" line="2024" />
             <source>Rename port</source>
             <translation>טוישן דעם נאָמען פֿון דער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="287" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>name change relabel</source>
             <translation>נאָמען טוישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="293" />
-            <location filename="../src/shell/shell_window.cpp" line="1833" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="1853" />
             <source>Remove port</source>
             <translation>אַוועקנעמען פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="297" />
-            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="1924" />
             <source>Remove setup</source>
             <translation>אַוועקנעמען אָנשטעל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="298" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>אויסמעקן אַוועקנעמען אָפּבויען פֿאַרמאַכן פּאָר טיילן אָנשליסן אַלץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="305" />
-            <location filename="../src/shell/shell_window.cpp" line="1338" />
+            <location filename="../src/shell/shell_window.cpp" line="308" />
+            <location filename="../src/shell/shell_window.cpp" line="1345" />
             <source>Connect ports</source>
             <translation>פֿאַרבינדן פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="309" />
             <source>link split join redirect monitor</source>
             <translation>פֿאַרבינדונג צעטיילונג פֿאַראייניקונג אומלייטונג מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="311" />
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="321" />
             <source>Share a device</source>
             <translation>צעטיילן אַן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="312" />
-            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="315" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>split listeners</source>
             <translation>צעטיילונג צוהערער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
             <source>Watch traffic</source>
             <translation>באַטראַכטן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="323" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>monitor copy</source>
             <translation>מאָניטאָר קאָפּיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="329" />
             <source>Add a program port</source>
             <translation>צולייגן אַ פּראָגראַם־פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="327" />
+            <location filename="../src/shell/shell_window.cpp" line="330" />
             <source>share attach more listener another</source>
             <translation>טיילן אָנשליסן מער נאָך צוהערער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="331" />
-            <location filename="../src/shell/shell_window.cpp" line="1735" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1753" />
+            <location filename="../src/shell/shell_window.cpp" line="334" />
+            <location filename="../src/shell/shell_window.cpp" line="1750" />
+            <location filename="../src/shell/shell_window.cpp" line="1754" />
+            <location filename="../src/shell/shell_window.cpp" line="1768" />
             <source>Remove link</source>
             <translation>אַוועקנעמען פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="332" />
+            <location filename="../src/shell/shell_window.cpp" line="335" />
             <source>delete disconnect</source>
             <translation>אויסמעקן אָפּטרענען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>Link wiring</source>
             <translation>פֿאַרבינדונג־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="339" />
             <source>line matrix faults</source>
             <translation>ליניע־מאַטריץ דעפֿעקטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>Owner</source>
             <translation>באַזיצער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>policy arbitration</source>
             <translation>פּאָליסי אַרביטראַציע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>Fit</source>
             <translation>אָנפּאַסן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>zoom</source>
             <translation>זום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="350" />
-            <location filename="../src/shell/shell_window.cpp" line="630" />
-            <location filename="../src/shell/shell_window.cpp" line="631" />
+            <location filename="../src/shell/shell_window.cpp" line="353" />
+            <location filename="../src/shell/shell_window.cpp" line="633" />
+            <location filename="../src/shell/shell_window.cpp" line="634" />
             <source>Search actions</source>
             <translation>זוכן אַקציעס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>command palette</source>
             <translation>קאָמאַנד־פּאַלעטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="357" />
             <source>Setup check</source>
             <translation>אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="358" />
             <source>driver com0com permissions</source>
             <translation>דרײַווער com0com דערלויבענישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="357" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>Benchmark</source>
             <translation>בענטשמאַרק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="358" />
+            <location filename="../src/shell/shell_window.cpp" line="361" />
             <source>throughput speed</source>
             <translation>דורכגאַנג גיכקייט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>Refresh now</source>
             <translation>דערפֿרישן איצט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>reload</source>
             <translation>איבערלאָדן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Refreshed.</source>
             <translation>דערפֿרישט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>Settings</source>
             <translation>פּרעפֿערענצן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="373" />
             <source>preferences theme density refresh baud</source>
             <translation>פּרעפֿערענצן טעמע געדיכטקייט דערפֿרישן באָד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="376" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>Advanced mode</source>
             <translation>אַוואַנסירטער מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>simple expert level</source>
             <translation>פּשוט עקספּערט שטופֿע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
-            <location filename="../src/shell/shell_window.cpp" line="758" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="761" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
             <source>traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="387" />
             <source>Show links as a list</source>
             <translation>ווײַזן פֿאַרבינדונגען ווי אַ ליסטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="385" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>links topology list accessible</source>
             <translation>פֿאַרבינדונגען טאָפּאָלאָגיע ליסטע צוטריטלעך</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
-            <location filename="../src/shell/shell_window.cpp" line="903" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="910" />
             <source>Log</source>
             <translation>לאָג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>events</source>
             <translation>געשעענישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="919" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="926" />
             <source>Topology JSON</source>
             <translation>טאָפּאָלאָגיע־JSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>editor schema</source>
             <translation>רעדאַקטאָר סכימע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Follow the system</source>
             <translation>נאָכפֿאָלגן דעם סיסטעם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>theme colour scheme</source>
             <translation>טעמע קאָליר־סכעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="407" />
             <source>Light</source>
             <translation>ליכטיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="407" />
+            <location filename="../src/shell/shell_window.cpp" line="417" />
             <source>theme</source>
             <translation>טעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="417" />
             <source>Dark</source>
             <translation>פֿינצטער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="427" />
             <source>Comfortable</source>
             <translation>באַקוועם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="425" />
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="428" />
+            <location filename="../src/shell/shell_window.cpp" line="438" />
             <source>density spacing</source>
             <translation>געדיכטקייט צווישנרוים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="437" />
             <source>Compact</source>
             <translation>קאָמפּאַקט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>Reset layout</source>
             <translation>צוריקשטעלן אויסלייג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="447" />
             <source>docks window</source>
             <translation>פּאַנעלן פֿענצטער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="449" />
             <source>Show launcher</source>
             <translation>ווײַזן לאָנטשער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="447" />
+            <location filename="../src/shell/shell_window.cpp" line="450" />
             <source>empty start</source>
             <translation>ליידיקער אָנהייב</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="451" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>Help contents</source>
             <translation>הילף־אינהאַלט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="452" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>manual help topics</source>
             <translation>האַנדבוך הילף טעמעס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>Why is nothing arriving?</source>
             <translation>פֿאַרוואָס קומט גאָרנישט אָן?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
+            <location filename="../src/shell/shell_window.cpp" line="458" />
             <source>troubleshoot no data</source>
             <translation>פּראָבלעמען־לייזן קיין דאַטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>Keyboard shortcuts</source>
             <translation>קלאַוויאַטור־שאָרטקאַטס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>keys</source>
             <translation>קלאַווישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="459" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>Copy environment</source>
             <translation>קאָפּירן סבֿיבֿה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
             <source>build bug report</source>
             <translation>ווערסיע באַג באַריכט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>About</source>
             <translation>וועגן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="466" />
             <source>version licence copyright</source>
             <translation>ווערסיע דערלויבעניש קאַפּירײַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="477" />
-            <location filename="../src/shell/shell_window.cpp" line="482" />
-            <location filename="../src/shell/shell_window.cpp" line="1166" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
+            <location filename="../src/shell/shell_window.cpp" line="485" />
+            <location filename="../src/shell/shell_window.cpp" line="1173" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="688" />
+            <location filename="../src/shell/shell_window.cpp" line="691" />
             <source>Change owner</source>
             <translation>טוישן דעם באַזיצער</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <source>1 port</source>
+            <translation>1 פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <source>%1 ports</source>
+            <translation>%1 פּאָרטן</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1785" />
+            <source>1 link</source>
+            <translation>1 פֿאַרבינדונג</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1786" />
+            <source>%1 links</source>
+            <translation>%1 פֿאַרבינדונגען</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
+            <source>Remove only %1</source>
+            <translation>נאָר אַוועקנעמען %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1820" />
+            <source>Remove the whole setup</source>
+            <translation>אַוועקנעמען דעם גאַנצן אָנשטעל</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1823" />
+            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 איז איינער פֿון %2 פּראָגראַמען וואָס טיילן אַן אַפּאַראַט, אין אַן אָנשטעל מיט %3: %4. נעמט אַוועק נאָר %1 און די אַנדערע טיילן װײַטער, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 איז אַ טייל פֿון אַן אָנשטעל מיט %2: %3. נעמט אַוועק נאָר %1 און זײַנע פֿאַרבינדונגען, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1903" />
+            <source>%1 and %2</source>
+            <translation>%1 און %2</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1919" />
+            <source>Remove this setup?</source>
+            <translation>אַוועקנעמען דעם אָנשטעל?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
+            <translation>דאָס פֿאַרמאַכט %1: %2. אַ פּראָגראַם וואָס האָט אָפֿן איינעם פֿון די פּאָרטן פֿאַרלירט אים. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1943" />
+            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
+            <translation>אַ טייל פֿון דעם אָנשטעל איז נאָך אָפֿן. מאַכט צו וואָס ניצט עס און קלײַבט נאָך אַ מאָל אויס אַוועקנעמען אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1953" />
+            <source>Removed the setup (%1).</source>
+            <translation>דער אָנשטעל איז אַוועקגענומען (%1).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1955" />
+            <source>Removed %1 of %2.</source>
+            <translation>אַוועקגענומען %1 פֿון %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
+            <source>the device</source>
+            <translation>דעם אַפּאַראַט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1996" />
+            <source>Could not add a program port to %1</source>
+            <translation>נישט געקענט צולייגן אַ פּראָגראַם־פּאָרט צו %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <source>The setup is as it was. Check the device, then try again.</source>
+            <translation>דער אָנשטעל איז אומגעביטן. קוקט איבער דעם אַפּאַראַט און פּרוּווט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2006" />
+            <source>Added %1 to %2.</source>
+            <translation>%1 צוגעלייגט צו %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2007" />
+            <source>a port</source>
+            <translation>אַ פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <source>Close Studio?</source>
+            <translation>פֿאַרמאַכן Studio?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <source>Close Studio</source>
+            <translation>פֿאַרמאַכן Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2655" />
+            <source>Keep Studio open</source>
+            <translation>לאָזן Studio אָפֿן</translation>
         </message>
         <message>
             <source>Undo needs an exact restore, which this build cannot prove.</source>
             <translation type="vanished">צוריקדרייען דאַרף אַ גענויע צוריקשטעלונג, וואָס די דאָזיקע ווערסיע קען נישט באַווײַזן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="513" />
+            <location filename="../src/shell/shell_window.cpp" line="516" />
             <source>&amp;File</source>
             <translation>&amp;טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="527" />
+            <location filename="../src/shell/shell_window.cpp" line="530" />
             <source>&amp;Edit</source>
             <translation>&amp;רעדאַקטירן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="534" />
+            <location filename="../src/shell/shell_window.cpp" line="537" />
             <source>&amp;Ports</source>
             <translation>&amp;פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="549" />
+            <location filename="../src/shell/shell_window.cpp" line="552" />
             <source>&amp;Topology</source>
             <translation>&amp;טאָפּאָלאָגיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="561" />
+            <location filename="../src/shell/shell_window.cpp" line="564" />
             <source>&amp;Tools</source>
             <translation>&amp;געצײַג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="569" />
+            <location filename="../src/shell/shell_window.cpp" line="572" />
             <source>&amp;View</source>
             <translation>&amp;אַנזיכט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="577" />
+            <location filename="../src/shell/shell_window.cpp" line="580" />
             <source>Theme</source>
             <translation>טעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="581" />
+            <location filename="../src/shell/shell_window.cpp" line="584" />
             <source>Density</source>
             <translation>געדיכטקייט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="591" />
             <source>&amp;Help</source>
             <translation>&amp;הילף</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="598" />
+            <location filename="../src/shell/shell_window.cpp" line="601" />
             <source>Main toolbar</source>
             <translation>הויפּט־געצײַג־פּאַנעל</translation>
         </message>
@@ -6699,100 +7100,100 @@ Networks: %5</source>
             <translation type="vanished">נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="753" />
+            <location filename="../src/shell/shell_window.cpp" line="756" />
             <source>Ports</source>
             <translation>פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="755" />
-            <location filename="../src/shell/shell_window.cpp" line="1208" />
+            <location filename="../src/shell/shell_window.cpp" line="758" />
+            <location filename="../src/shell/shell_window.cpp" line="1215" />
             <source>Inspector</source>
             <translation>אינספּעקטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="756" />
+            <location filename="../src/shell/shell_window.cpp" line="759" />
             <source>Send</source>
             <translation>שיקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="791" />
-            <location filename="../src/shell/shell_window.cpp" line="1261" />
+            <location filename="../src/shell/shell_window.cpp" line="794" />
+            <location filename="../src/shell/shell_window.cpp" line="1268" />
             <source>Copied %1.</source>
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="807" />
+            <location filename="../src/shell/shell_window.cpp" line="814" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 בײַטן געשטעלט אין ריי צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="863" />
+            <location filename="../src/shell/shell_window.cpp" line="870" />
             <source>Links</source>
             <translation>פֿאַרבינדונגען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="925" />
             <source>Applied the topology JSON.</source>
             <translation>דער טאָפּאָלאָגיע־JSON איז אָנגעווענדט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1133" />
+            <location filename="../src/shell/shell_window.cpp" line="1140" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="1162" />
             <source>Undo %1</source>
             <translation>אַנולירן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1156" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Redo %1</source>
             <translation>איבערהאָלן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1168" />
+            <location filename="../src/shell/shell_window.cpp" line="1175" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>אַנולירט דאָס מאַכן אָדער אַוועקנעמען פֿון אַ לינק, דעם טוישן פֿון באַזיצער און דעם טוישן דעם נאָמען פֿון אַ פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1177" />
             <source>This build cannot reverse changes.</source>
             <translation>די ווערסיע קען נישט אַנולירן ענדערונגען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1178" />
+            <location filename="../src/shell/shell_window.cpp" line="1185" />
             <source>Undid %1.</source>
             <translation>%1 איז אַנולירט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="1188" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>נישט געקענט אַנולירן %1. די קאָנפֿיגוראַציע האָט זיך געביטן זינט דעמאָלט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1189" />
+            <location filename="../src/shell/shell_window.cpp" line="1196" />
             <source>Redid %1.</source>
             <translation>%1 איז איבערגעהאָלט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1192" />
+            <location filename="../src/shell/shell_window.cpp" line="1199" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>נישט געקענט איבערהאָלן %1. די קאָנפֿיגוראַציע האָט זיך געביטן זינט דעמאָלט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1214" />
             <source>Ports %1</source>
             <translation>פּאָרטן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1212" />
+            <location filename="../src/shell/shell_window.cpp" line="1219" />
             <source>Inspector %1</source>
             <translation>אינספּעקטאָר %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1816" />
-            <location filename="../src/shell/shell_window.cpp" line="1829" />
+            <location filename="../src/shell/shell_window.cpp" line="1836" />
+            <location filename="../src/shell/shell_window.cpp" line="1849" />
             <source>Remove %1?</source>
             <translation>אַוועקנעמען %1?</translation>
         </message>
@@ -6801,288 +7202,214 @@ Networks: %5</source>
             <translation type="vanished">דער פּאָרט און זײַנע פֿאַרבינדונגען וועלן אַוועקגענומען ווערן. דאָס קען מען נישט צוריקדרייען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1798" />
-            <location filename="../src/shell/shell_window.cpp" line="1833" />
-            <location filename="../src/shell/shell_window.cpp" line="1892" />
-            <location filename="../src/shell/shell_window.cpp" line="2399" />
+            <location filename="../src/shell/shell_window.cpp" line="1754" />
+            <location filename="../src/shell/shell_window.cpp" line="1818" />
+            <location filename="../src/shell/shell_window.cpp" line="1853" />
+            <location filename="../src/shell/shell_window.cpp" line="1924" />
+            <location filename="../src/shell/shell_window.cpp" line="2344" />
+            <location filename="../src/shell/shell_window.cpp" line="2473" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1851" />
-            <location filename="../src/shell/shell_window.cpp" line="1910" />
+            <location filename="../src/shell/shell_window.cpp" line="1871" />
+            <location filename="../src/shell/shell_window.cpp" line="1942" />
             <source>Could not remove %1</source>
             <translation>נישט געקענט אַוועקנעמען %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1860" />
+            <location filename="../src/shell/shell_window.cpp" line="1880" />
             <source>Removed %1.</source>
             <translation>%1 איז אַוועקגענומען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1349" />
+            <location filename="../src/shell/shell_window.cpp" line="1356" />
             <source>Sharing is not available in this build.</source>
             <translation>צעטיילן איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1376" />
+            <location filename="../src/shell/shell_window.cpp" line="1383" />
             <source>Networking is not available in this build.</source>
             <translation>נעצווערק איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1398" />
+            <location filename="../src/shell/shell_window.cpp" line="1405" />
             <source>Bridge is running on port %1.</source>
             <translation>די בריק לויפֿט אויף פּאָרט %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1399" />
+            <location filename="../src/shell/shell_window.cpp" line="1406" />
             <source>Open monitor</source>
             <translation>עפֿענען מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1420" />
-            <location filename="../src/shell/shell_window.cpp" line="2311" />
-            <location filename="../src/shell/shell_window.cpp" line="2323" />
+            <location filename="../src/shell/shell_window.cpp" line="1427" />
+            <location filename="../src/shell/shell_window.cpp" line="2385" />
+            <location filename="../src/shell/shell_window.cpp" line="2397" />
             <source>Could not open %1</source>
             <translation>נישט געקענט עפֿענען %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1421" />
+            <location filename="../src/shell/shell_window.cpp" line="1428" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>די אײַנשטעלונג דאַרף אַן אַפּאַראַט אָדער נעץ־ענדפּונקט וואָס איז נישט פֿאַראַנען אויף דעם קאָמפּיוטער. גאָרנישט איז געענדערט געוואָרן. קאָנטראָלירט דעם אַפּאַראַט און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1444" />
-            <location filename="../src/shell/shell_window.cpp" line="2335" />
-            <location filename="../src/shell/shell_window.cpp" line="2363" />
+            <location filename="../src/shell/shell_window.cpp" line="1451" />
+            <location filename="../src/shell/shell_window.cpp" line="2409" />
+            <location filename="../src/shell/shell_window.cpp" line="2437" />
             <source>%1 ports, %2 links</source>
             <translation>%1 פּאָרטן, %2 פֿאַרבינדונגען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1536" />
-            <location filename="../src/shell/shell_window.cpp" line="1559" />
+            <location filename="../src/shell/shell_window.cpp" line="1543" />
+            <location filename="../src/shell/shell_window.cpp" line="1566" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>פֿאַרבונדענער פּאָר באַשאַפֿן. פּראָגראַם A עפֿנט %1; פּראָגראַם B עפֿנט %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1595" />
+            <location filename="../src/shell/shell_window.cpp" line="1610" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>באַטראַכט %1. דער באַטראַכטער איז %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1645" />
+            <location filename="../src/shell/shell_window.cpp" line="1660" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 איז אַ טייל פֿון אַ שפּעטערדיקן אַרבעט־פּעקל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1651" />
+            <location filename="../src/shell/shell_window.cpp" line="1666" />
             <source>%1 arrives with %2.</source>
             <translation>%1 קומט מיט %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1736" />
+            <location filename="../src/shell/shell_window.cpp" line="1751" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>אַוועקנעמען די פֿאַרבינדונג? %1. גאָרנישט ווערט אָפּגעהיטן ביז איר היט אָפּ די אײַנשטעלונג.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
             <source>Could not remove the link</source>
             <translation>נישט געקענט אַוועקנעמען די פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1756" />
+            <location filename="../src/shell/shell_window.cpp" line="1771" />
             <source>Removed the link.</source>
             <translation>די פֿאַרבינדונג איז אַוועקגענומען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1764" />
-            <source>1 port</source>
-            <translation>1 פּאָרט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1765" />
-            <source>%1 ports</source>
-            <translation>%1 פּאָרטן</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
-            <source>1 link</source>
-            <translation>1 פֿאַרבינדונג</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1771" />
-            <source>%1 links</source>
-            <translation>%1 פֿאַרבינדונגען</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1799" />
-            <source>Remove only %1</source>
-            <translation>נאָר אַוועקנעמען %1</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1800" />
-            <source>Remove the whole setup</source>
-            <translation>אַוועקנעמען דעם גאַנצן אָנשטעל</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1803" />
-            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
-            <translation>%1 איז איינער פֿון %2 פּראָגראַמען וואָס טיילן אַן אַפּאַראַט, אין אַן אָנשטעל מיט %3: %4. נעמט אַוועק נאָר %1 און די אַנדערע טיילן װײַטער, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1811" />
-            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
-            <translation>%1 איז אַ טייל פֿון אַן אָנשטעל מיט %2: %3. נעמט אַוועק נאָר %1 און זײַנע פֿאַרבינדונגען, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1830" />
+            <location filename="../src/shell/shell_window.cpp" line="1850" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>אַוועקנעמען %1 און זײַנע פֿאַרבינדונגען? גאָרנישט ווערט אָפּגעהיטן ביז איר היט אָפּ די אײַנשטעלונג.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1883" />
-            <source>%1 and %2</source>
-            <translation>%1 און %2</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
-            <source>Remove this setup?</source>
-            <translation>אַוועקנעמען דעם אָנשטעל?</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1889" />
-            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
-            <translation>דאָס פֿאַרמאַכט %1: %2. אַ פּראָגראַם וואָס האָט אָפֿן איינעם פֿון די פּאָרטן פֿאַרלירט אים. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
-            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
-            <translation>אַ טייל פֿון דעם אָנשטעל איז נאָך אָפֿן. מאַכט צו וואָס ניצט עס און קלײַבט נאָך אַ מאָל אויס אַוועקנעמען אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1921" />
-            <source>Removed the setup (%1).</source>
-            <translation>דער אָנשטעל איז אַוועקגענומען (%1).</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1923" />
-            <source>Removed %1 of %2.</source>
-            <translation>אַוועקגענומען %1 פֿון %2.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1957" />
-            <source>the device</source>
-            <translation>דעם אַפּאַראַט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1964" />
-            <source>Could not add a program port to %1</source>
-            <translation>נישט געקענט צולייגן אַ פּראָגראַם־פּאָרט צו %1</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1965" />
-            <source>The setup is as it was. Check the device, then try again.</source>
-            <translation>דער אָנשטעל איז אומגעביטן. קוקט איבער דעם אַפּאַראַט און פּרוּווט נאָך אַ מאָל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1974" />
-            <source>Added %1 to %2.</source>
-            <translation>%1 צוגעלייגט צו %2.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1975" />
-            <source>a port</source>
-            <translation>אַ פּאָרט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1995" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
             <source>Renamed %1 to %2.</source>
             <translation>דער נאָמען פֿון %1 איז געביטן צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2052" />
+            <location filename="../src/shell/shell_window.cpp" line="2047" />
+            <source>%1 is now %2.</source>
+            <translation>%1 איז איצט %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <source>Released %1.</source>
+            <translation>%1 איז באַפֿרײַט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2119" />
             <source>Add a port before opening the line matrix.</source>
             <translation>לייגט צו אַ פּאָרט איידער איר עפֿנט די ליניע־מאַטריץ.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2087" />
+            <location filename="../src/shell/shell_window.cpp" line="2154" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>קלײַבט אויס דעם ציל פֿון אַ פֿאַראייניקונג מיט דער באַזיצער־פּאָליסי כדי צו קאָנטראָלירן ווער שרײַבט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2168" />
+            <location filename="../src/shell/shell_window.cpp" line="2235" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>טעסט־מאָדע. נײַע פּאָרטן אַרבעטן נאָר אין Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2189" />
+            <location filename="../src/shell/shell_window.cpp" line="2256" />
             <source>Could not restart as administrator</source>
             <translation>נישט געקענט ווידער אָנהייבן ווי אַדמיניסטראַטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2267" />
+            <location filename="../src/shell/shell_window.cpp" line="2334" />
             <source>Environment copied.</source>
             <translation>די סבֿיבֿה איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2286" />
+            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <source>Start a new setup?</source>
+            <translation>אָנהייבן אַ נײַע סעטאַפּ?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <source>Start new</source>
+            <translation>אָנהייבן נײַ</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2360" />
             <source>Started a new setup.</source>
             <translation>אַ נײַע אײַנשטעלונג איז אָנגעהויבן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2296" />
+            <location filename="../src/shell/shell_window.cpp" line="2370" />
             <source>Open setup</source>
             <translation>עפֿענען אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2297" />
+            <location filename="../src/shell/shell_window.cpp" line="2371" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studio־אײַנשטעלונגען (*.json);;אַלע טעקעס (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2338" />
+            <location filename="../src/shell/shell_window.cpp" line="2412" />
             <source>Opened %1.</source>
             <translation>%1 איז געעפֿנט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2354" />
+            <location filename="../src/shell/shell_window.cpp" line="2428" />
             <source>Could not save this setup</source>
             <translation>נישט געקענט אָפּהיטן די אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2367" />
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2441" />
+            <location filename="../src/shell/shell_window.cpp" line="2442" />
             <source>Saved %1.</source>
             <translation>%1 איז אָפּגעהיט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2374" />
+            <location filename="../src/shell/shell_window.cpp" line="2448" />
             <source>Save setup</source>
             <translation>אָפּהיטן אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2376" />
+            <location filename="../src/shell/shell_window.cpp" line="2450" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studio־אײַנשטעלונגען (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2394" />
+            <location filename="../src/shell/shell_window.cpp" line="2468" />
             <source>Save changes to %1?</source>
             <translation>אָפּהיטן ענדערונגען צו %1?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2395" />
+            <location filename="../src/shell/shell_window.cpp" line="2469" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>אײַערע פּאָרטן און פֿאַרבינדונגען האָבן זיך געענדערט זינט דעם לעצטן אָפּהיטן. איר קענט אָפּשטעלן די פֿראַגע אין פּרעפֿערענצן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2398" />
+            <location filename="../src/shell/shell_window.cpp" line="2472" />
             <source>Don't save</source>
             <translation>נישט אָפּהיטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2463" />
+            <location filename="../src/shell/shell_window.cpp" line="2537" />
             <source>Layout reset.</source>
             <translation>דער אויסלייג איז צוריקגעשטעלט.</translation>
         </message>
@@ -8502,75 +8829,80 @@ Networks: %5</source>
     <context>
         <name>WatchDialog</name>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="33" />
+            <location filename="../src/flows/watch_dialog.cpp" line="34" />
             <source>Watch traffic</source>
             <translation>באַטראַכטן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="34" />
+            <location filename="../src/flows/watch_dialog.cpp" line="35" />
             <source>See what flows through a port without changing it.</source>
             <translation>זעט וואָס פֿליסט דורך אַ פּאָרט אָן עס צו ענדערן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="40" />
+            <location filename="../src/flows/watch_dialog.cpp" line="41" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="43" />
+            <location filename="../src/flows/watch_dialog.cpp" line="44" />
             <source>Start watching</source>
             <translation>אָנהייבן באַטראַכטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="75" />
-            <location filename="../src/flows/watch_dialog.cpp" line="84" />
+            <location filename="../src/flows/watch_dialog.cpp" line="76" />
+            <location filename="../src/flows/watch_dialog.cpp" line="90" />
             <source>Port to watch</source>
             <translation>פּאָרט צום באַטראַכטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="80" />
+            <location filename="../src/flows/watch_dialog.cpp" line="81" />
             <source>%1 (Studio only)</source>
             <translation>%1 (נאָר אין Studio)</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="81" />
+            <location filename="../src/flows/watch_dialog.cpp" line="82" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
         <message>
             <location filename="../src/flows/watch_dialog.cpp" line="88" />
-            <location filename="../src/flows/watch_dialog.cpp" line="90" />
+            <source>No ports available</source>
+            <translation>קיין פּאָרטן זענען נישט פֿאַראַן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="95" />
+            <location filename="../src/flows/watch_dialog.cpp" line="97" />
             <source>Name of the watcher</source>
             <translation>נאָמען פֿון דעם באַטראַכטער</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="91" />
+            <location filename="../src/flows/watch_dialog.cpp" line="98" />
             <source>A new Studio-only port that receives a read-only copy.</source>
             <translation>אַ נײַער פּאָרט נאָר אין Studio וואָס באַקומט אַ נאָר־לייענען־קאָפּיע.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="95" />
-            <location filename="../src/flows/watch_dialog.cpp" line="98" />
+            <location filename="../src/flows/watch_dialog.cpp" line="102" />
+            <location filename="../src/flows/watch_dialog.cpp" line="105" />
             <source>Open the monitor when it is ready</source>
             <translation>עפֿענען דעם מאָניטאָר ווען ער איז גרייט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="116" />
+            <location filename="../src/flows/watch_dialog.cpp" line="123" />
             <source>Studio only</source>
             <translation>נאָר אין Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="119" />
+            <location filename="../src/flows/watch_dialog.cpp" line="126" />
             <source>The watcher is shown in the ports list so you can remove it when you are finished.</source>
             <translation>דער באַטראַכטער ווערט געוויזן אין דער ליסטע פֿון פּאָרטן, כדי איר זאָלט אים קענען אַוועקנעמען ווען איר זענט פֿאַרטיק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="130" />
+            <location filename="../src/flows/watch_dialog.cpp" line="137" />
             <source>Watching is not available in this build.</source>
             <translation>באַטראַכטן איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="161" />
+            <location filename="../src/flows/watch_dialog.cpp" line="188" />
             <source>No ports to watch yet. Create a port first.</source>
             <translation>נאָך קיין פּאָרטן צום באַטראַכטן. באַשאַפֿט פֿריִער אַ פּאָרט.</translation>
         </message>
@@ -8580,54 +8912,64 @@ Networks: %5</source>
             <translation>באַטראַכטן דאַרף שטיצע פֿאַר פֿאַרבינדונגען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="189" />
+            <source>%1 Create a port in Studio instead, then watch that.</source>
+            <translation>%1 שאַפֿט אַנשטאָט דעם אַ פּאָרט אין Studio און קוקט אויף יענעם.</translation>
+        </message>
+        <message>
             <location filename="../src/flows/watch_dialog.cpp" line="192" />
+            <source>Create a port</source>
+            <translation>שאַפֿן אַ פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="218" />
             <source>%1-monitor</source>
             <translation>%1־מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="195" />
+            <location filename="../src/flows/watch_dialog.cpp" line="221" />
             <source>Watching never changes what &lt;b&gt;%1&lt;/b&gt; sees. The watcher is a read-only copy, and it never drives modem lines.</source>
             <translation>באַטראַכטן ענדערט קיינמאָל נישט וואָס &lt;b&gt;%1&lt;/b&gt; זעט. דער באַטראַכטער איז אַ נאָר־לייענען־קאָפּיע, און ער טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="199" />
+            <location filename="../src/flows/watch_dialog.cpp" line="225" />
             <source>Watching never changes what %1 sees. The watcher is a read-only copy, and it never drives modem lines.</source>
             <translation>באַטראַכטן ענדערט קיינמאָל נישט וואָס %1 זעט. דער באַטראַכטער איז אַ נאָר־לייענען־קאָפּיע, און ער טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="223" />
+            <location filename="../src/flows/watch_dialog.cpp" line="249" />
             <source>Could not watch this port</source>
             <translation>נישט געקענט באַטראַכטן דעם פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="224" />
+            <location filename="../src/flows/watch_dialog.cpp" line="250" />
             <source>The port is no longer available. Nothing was changed. Choose another port and try again.</source>
             <translation>דער פּאָרט איז שוין נישט פֿאַראַנען. גאָרנישט איז געענדערט געוואָרן. קלײַבט אויס אַן אַנדערן פּאָרט און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="233" />
+            <location filename="../src/flows/watch_dialog.cpp" line="259" />
             <source>Enter a name for the watcher.</source>
             <translation>גיט אַרײַן אַ נאָמען פֿאַרן באַטראַכטער.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="243" />
-            <location filename="../src/flows/watch_dialog.cpp" line="260" />
+            <location filename="../src/flows/watch_dialog.cpp" line="269" />
+            <location filename="../src/flows/watch_dialog.cpp" line="286" />
             <source>watch</source>
             <translation>באַטראַכט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="246" />
+            <location filename="../src/flows/watch_dialog.cpp" line="272" />
             <source>Studio could not create the watcher. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן דעם באַטראַכטער. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="247" />
-            <location filename="../src/flows/watch_dialog.cpp" line="265" />
+            <location filename="../src/flows/watch_dialog.cpp" line="273" />
+            <location filename="../src/flows/watch_dialog.cpp" line="291" />
             <source> Try again.</source>
             <translation> פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="263" />
+            <location filename="../src/flows/watch_dialog.cpp" line="289" />
             <source>Studio could not create the read-only monitor link. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן די נאָר־לייענען־מאָניטאָר־פֿאַרבינדונג. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
@@ -9278,8 +9620,8 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="87" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="439" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="450" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="468" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="479" />
             <source>Create port</source>
             <translation>באַשאַפֿן פּאָרט</translation>
         </message>
@@ -9383,7 +9725,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="280" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="293" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="310" />
             <source>Kind</source>
             <translation>סאָרט</translation>
         </message>
@@ -9393,7 +9735,23 @@ Networks: %5</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="295" />
+            <source>Automatic</source>
+            <translation>אויטאָמאַטיש</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="299" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="301" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>פּראָגראַמען וואָס עפענען אַ פעסטן נאָמען ווי COM3 געפינען דעם פּאָרט יעדעס מאָל. „אויטאָמאַטיש“ נעמט די נידעריקסטע פֿרייע נומער. אַ נומער דאַרף דעם Studio־דרייווער און זײַן העלפער־סערוויס, און גילט ווען מע שאַפֿט איין פּאָרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/add_port_dialog.cpp" line="311" />
             <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
             <translation>„בעסטער בנימצא“ ניצט דעם Studio דרייווער אָדער com0com אויף Windows, און אַ פּסעוודאָ־טערמינאַל אויף Linux און macOS. ביז 32 אויף אַ מאָל. עטלעכע פּאָרטן הייסן port-1, port-2 אאד״ג.</translation>
         </message>
@@ -9402,104 +9760,105 @@ Networks: %5</source>
             <translation type="vanished">דער בעסטער פֿאַראַנענער ניצט com0com אויף Windows, און אַ פּסעוודאָ־טערמינאַל אויף Linux און macOS. ביז 32 אויף אײן מאָל. עטלעכע פּאָרטן הייסן port-1, port-2 און אַזוי ווײַטער.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="348" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="377" />
             <source>Next chooses the device and its serial settings. Studio opens the device once and creates the port your programs open.</source>
             <translation>ווײַטער קלײַבט אויס דעם אַפּאַראַט און זײַנע סעריעלע פּאַראַמעטערס. Studio עפֿנט דעם אַפּאַראַט איין מאָל און באַשאַפֿט דעם פּאָרט וואָס אײַערע פּראָגראַמען עפֿענען.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="365" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="394" />
             <source>Network endpoints arrive in a later work package. Nothing has been created.</source>
             <translation>נעץ־ענדפּונקטן קומען אין אַ שפּעטערדיקן אַרבעט־פּעקל. גאָרנישט איז נישט באַשאַפֿן געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="367" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="396" />
             <source>Mock fixtures arrive in a later work package. Nothing has been created.</source>
             <translation>מאָק־פֿיקסטורן קומען אין אַ שפּעטערדיקן אַרבעט־פּעקל. גאָרנישט איז נישט באַשאַפֿן געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="417" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="446" />
             <source>Virtual port settings</source>
             <translation>פּאַראַמעטערס פֿון ווירטועלן פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="420" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="449" />
             <source>Pair settings</source>
             <translation>פּאַראַמעטערס פֿון פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="423" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="452" />
             <source>Real device settings</source>
             <translation>פּאַראַמעטערס פֿון פֿיזישן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="426" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="455" />
             <source>Network endpoint settings</source>
             <translation>פּאַראַמעטערס פֿון נעץ־ענדפּונקט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="429" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="458" />
             <source>Mock fixture settings</source>
             <translation>פּאַראַמעטערס פֿון מאָק־פֿיקסטור</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="442" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="471" />
             <source>Create pair</source>
             <translation>באַשאַפֿן פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="446" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="475" />
             <source>Next</source>
             <translation>ווײַטער</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="478" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="507" />
             <source>This creates one port named &lt;b&gt;%1&lt;/b&gt;. Studio then shows the name to open in your program, such as COM7.</source>
             <translation>דאָס באַשאַפֿט איין פּאָרט מיטן נאָמען &lt;b&gt;%1&lt;/b&gt;. דערנאָך ווײַזט Studio דעם נאָמען וואָס מען עפֿנט אין אײַער פּראָגראַם, למשל COM7.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="481" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="510" />
             <source>This creates one port named %1. Studio then shows the name to open in your program, such as COM7.</source>
             <translation>דאָס באַשאַפֿט איין פּאָרט מיטן נאָמען %1. דערנאָך ווײַזט Studio דעם נאָמען וואָס מען עפֿנט אין אײַער פּראָגראַם, למשל COM7.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="489" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="518" />
             <source>This creates %1 ports named &lt;b&gt;%2&lt;/b&gt;. Studio then shows the names to open in your programs, such as COM7 and COM8.</source>
             <translation>דאָס באַשאַפֿט %1 פּאָרטן מיט די נעמען &lt;b&gt;%2&lt;/b&gt;. דערנאָך ווײַזט Studio די נעמען וואָס מען עפֿנט אין אײַערע פּראָגראַמען, למשל COM7 און COM8.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="493" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="522" />
             <source>This creates %1 ports named %2. Studio then shows the names to open in your programs, such as COM7 and COM8.</source>
             <translation>דאָס באַשאַפֿט %1 פּאָרטן מיט די נעמען %2. דערנאָך ווײַזט Studio די נעמען וואָס מען עפֿנט אין אײַערע פּראָגראַמען, למשל COM7 און COM8.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="506" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="546" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="553" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="593" />
             <source>Choose a number from 1 to 32.</source>
             <translation>קלײַבט אויס אַ נומער פֿון 1 ביז 32.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="548" />
-            <location filename="../src/flows/add_port_dialog.cpp" line="559" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="595" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="606" />
             <source>Enter a name for the port.</source>
             <translation>גיב אַן נאָמען פֿאַר דער פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="582" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="640" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="645" />
             <source>Could not create the port</source>
             <translation>נישט געקענט באַשאַפֿן דעם פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="583" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="646" />
             <source>Could not create the ports</source>
             <translation>נישט געקענט באַשאַפֿן די פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="586" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="649" />
             <source>Studio could not create the port. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן דעם פּאָרט. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/add_port_dialog.cpp" line="587" />
+            <location filename="../src/flows/add_port_dialog.cpp" line="650" />
             <source> Try a different name or kind, then try again.</source>
             <translation> פּרובירט אַן אַנדער נאָמען אָדער סאָרט, און פּרובירט נאָך אַ מאָל.</translation>
         </message>
@@ -10034,6 +10393,60 @@ Networks: %5</source>
         <message>
             <source>The benchmark command is not available in this build.</source>
             <translation type="vanished">די בענטשמאַרק־קאָמאַנדע איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::ComNumberDialog</name>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="22" />
+            <source>Change COM number</source>
+            <translation>ענדערן די COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="23" />
+            <source>Programs open the port by this number.</source>
+            <translation>פּראָגראַמען עפענען דעם פּאָרט לויט דער דאָזיקער נומער.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="39" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="41" />
+            <source>New COM number</source>
+            <translation>נײַע COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="42" />
+            <source>Windows restarts the port to change its number, so no program may have it open. A number that another device has is refused.</source>
+            <translation>Windows שטארט איבער דעם פּאָרט כּדי צו ענדערן זײַן נומער, דעריבער טאָר קיין פּראָגראַם אים נישט האַלטן אָפֿן. אַ נומער וואָס אַן אַנדער אַפּאַראַט האָט ווערט אָפּגעוויזן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="49" />
+            <source>Cancel</source>
+            <translation>אַנולירן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="52" />
+            <location filename="../src/flows/com_number_dialog.cpp" line="146" />
+            <source>Change number</source>
+            <translation>ענדערן נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="90" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="123" />
+            <source>Changing</source>
+            <translation>ענדערט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/com_number_dialog.cpp" line="153" />
+            <source>Could not change the COM number</source>
+            <translation>מע האט נישט געקענט ענדערן די COM־נומער</translation>
         </message>
     </context>
     <context>
@@ -10744,85 +11157,116 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="349" />
+            <location filename="../src/panes/inspector_panel.cpp" line="386" />
             <source>path</source>
             <translation>וועג</translation>
         </message>
         <message>
             <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <source>COM number</source>
+            <translation>COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <source>Change...</source>
+            <translation>ענדערן...</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <source>Change COM number</source>
+            <translation>ענדערן די COM־נומער</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="210" />
             <source>Traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="195" />
+            <location filename="../src/panes/inspector_panel.cpp" line="219" />
             <source>Serial</source>
             <translation>סעריעל</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
-            <location filename="../src/panes/inspector_panel.cpp" line="363" />
+            <location filename="../src/panes/inspector_panel.cpp" line="236" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;פֿאַרוואָס קומט גאָרנישט אָן?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <source>Release port...</source>
+            <translation>באַפֿרײַען פּאָרט...</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <source>Release port</source>
+            <translation>באַפֿרײַען פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>Control lines</source>
             <translation>קאָנטראָל־ליניעס</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="280" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="244" />
+            <location filename="../src/panes/inspector_panel.cpp" line="281" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="282" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="268" />
+            <location filename="../src/panes/inspector_panel.cpp" line="305" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;עפֿענען ליניע־מאַטריץ און דעפֿעקטן&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="346" />
+            <location filename="../src/panes/inspector_panel.cpp" line="383" />
             <source>The engine reported a failure.</source>
             <translation>דער מאָטאָר האָט געמאָלדן אַ דורכפֿאַל.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="350" />
+            <location filename="../src/panes/inspector_panel.cpp" line="387" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="360" />
+            <location filename="../src/panes/inspector_panel.cpp" line="397" />
             <source>No program has opened %1 yet.</source>
             <translation>קיין פּראָגראַם האָט נאָך נישט געעפֿנט %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="375" />
+            <location filename="../src/panes/inspector_panel.cpp" line="412" />
+            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="430" />
             <source>This port does not support control lines.</source>
             <translation>דער פּאָרט שטיצט נישט קאָנטראָל־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
-            <location filename="../src/panes/inspector_panel.cpp" line="417" />
+            <location filename="../src/panes/inspector_panel.cpp" line="458" />
+            <location filename="../src/panes/inspector_panel.cpp" line="472" />
             <source>%1 on</source>
             <translation>%1 אָן</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="459" />
+            <location filename="../src/panes/inspector_panel.cpp" line="473" />
             <source>%1 off</source>
             <translation>%1 אָפּ</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="437" />
+            <location filename="../src/panes/inspector_panel.cpp" line="492" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -12275,25 +12719,150 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="48" />
-            <location filename="../src/panes/ports_panel.cpp" line="49" />
+            <location filename="../src/panes/ports_panel.cpp" line="61" />
+            <location filename="../src/panes/ports_panel.cpp" line="62" />
             <source>Filter ports</source>
             <translation>פֿילטערן פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="68" />
+            <location filename="../src/panes/ports_panel.cpp" line="81" />
             <source>Ports</source>
             <translation>פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="91" />
+            <location filename="../src/panes/ports_panel.cpp" line="104" />
             <source>Ports table</source>
             <translation>טאַבעלע פֿון פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="260" />
+            <location filename="../src/panes/ports_panel.cpp" line="301" />
             <source>Copied %1.</source>
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::ReleasePortDialog</name>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="26" />
+            <location filename="../src/flows/release_port_dialog.cpp" line="98" />
+            <location filename="../src/flows/release_port_dialog.cpp" line="158" />
+            <source>Release port</source>
+            <translation>באַפֿרײַען פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="27" />
+            <source>Make the program that has this port let go of it.</source>
+            <translation>מאַכן די פּראָגראַם וואָס האַלט דעם פּאָרט זאָל אים לאָזן גיין.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="45" />
+            <source>No data has passed on %1 yet.</source>
+            <translation>ביז איצט זענען קיין דאַטן נישט דורכגעגאַנגען אויף %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="50" />
+            <source>No data has passed on %1 for %2.</source>
+            <translation>אויף %1 זענען שוין %2 קיין דאַטן נישט דורכגעגאַנגען.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="58" />
+            <source>Take the port back</source>
+            <translation>צוריקנעמען דעם פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="59" />
+            <source>The program keeps running, but its connection to the port stops working. Another program can open the port at once, with the same COM number. Try this first.</source>
+            <translation>די פּראָגראַם לויפֿט ווײַטער, אָבער איר פֿאַרבינדונג צום פּאָרט הערט אויף צו אַרבעטן. אַן אַנדערע פּראָגראַם קען עפֿענען דעם פּאָרט תיכּף, מיט דער זעלבער COM־נומער. פּרובירט דאָס צוערשט.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="65" />
+            <source>End the program</source>
+            <translation>ענדיקן די פּראָגראַם</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="66" />
+            <source>Windows closes the program straight away, as End task in Task Manager does. The program does not get to save anything.</source>
+            <translation>Windows פֿאַרמאַכט די פּראָגראַם תיכּף, ווי „End task“ אין Task Manager. די פּראָגראַם קען גאָרנישט אָפּשפּאָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="85" />
+            <source>Studio ends only your own programs. Run Studio as administrator to end this one.</source>
+            <translation>Studio ענדיקט נאָר אײַערע אייגענע פּראָגראַמען. לויפֿט Studio ווי אַדמיניסטראַטאָר כּדי צו ענדיקן דעם דאָזיקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="88" />
+            <source>This program belongs to another user. Run Studio as administrator to end it.</source>
+            <translation>די דאָזיקע פּראָגראַם געהערט צו אַן אַנדער באַניצער. לויפֿט Studio ווי אַדמיניסטראַטאָר כּדי זי צו ענדיקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="95" />
+            <source>Cancel</source>
+            <translation>אַנולירן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="116" />
+            <source>%1 second</source>
+            <translation>%1 סעקונדע</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="117" />
+            <source>%1 seconds</source>
+            <translation>%1 סעקונדעס</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="120" />
+            <source>%1 minutes</source>
+            <translation>%1 מינוט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="121" />
+            <source>%1 hour</source>
+            <translation>%1 שטונד</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="122" />
+            <source>%1 hours</source>
+            <translation>%1 שטונדן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="128" />
+            <source>No program is known to have %1 open.</source>
+            <translation>קיין פּראָגראַם איז נישט באַקאַנט וואָס האָט געעפֿנט %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="131" />
+            <source>A program (process %1) has %2 open.</source>
+            <translation>אַ פּראָגראַם (פּראָצעס %1) האָט געעפֿנט %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="135" />
+            <source>%1 (process %2) has %3 open.</source>
+            <translation>%1 (פּראָצעס %2) האָט געעפֿנט %3.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="157" />
+            <source>End program</source>
+            <translation>ענדיקן די פּראָגראַם</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="172" />
+            <source>Windows did not allow this. The program belongs to another user. Nothing was changed. Run Studio as administrator and try again.</source>
+            <translation>Windows האָט עס נישט דערלאָזט. די פּראָגראַם געהערט צו אַן אַנדער באַניצער. גאָרנישט איז געענדערט געוואָרן. לויפֿט Studio ווי אַדמיניסטראַטאָר און פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="178" />
+            <source>No program has the port open any more. Nothing was changed.</source>
+            <translation>קיין פּראָגראַם האַלט דעם פּאָרט מער נישט אָפֿן. גאָרנישט איז געענדערט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="183" />
+            <source>Studio could not release the port. Nothing was changed. Try again.</source>
+            <translation>Studio האָט נישט געקענט באַפֿרײַען דעם פּאָרט. גאָרנישט איז געענדערט געוואָרן. פּרובירט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/release_port_dialog.cpp" line="187" />
+            <source>Could not release %1</source>
+            <translation>מע האט נישט געקענט באַפֿרײַען %1</translation>
         </message>
     </context>
     <context>
@@ -12986,594 +13555,704 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>נײַ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>new document setup</source>
             <translation>נײַ דאָקומענט אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>Open</source>
             <translation>אָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="212" />
             <source>open file setup</source>
             <translation>עפֿענען טעקע אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="215" />
             <source>Open recent</source>
             <translation>עפֿענען לעצטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="215" />
             <source>recent file</source>
             <translation>לעצטע טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="221" />
+            <location filename="../src/shell/shell_window.cpp" line="224" />
             <source>Setups and templates</source>
             <translation>אײַנשטעלונגען און שבלאָנען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="222" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>template setup</source>
             <translation>שבלאָן אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
-            <location filename="../src/shell/shell_window.cpp" line="2400" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="2474" />
             <source>Save</source>
             <translation>אָפּהיטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="227" />
             <source>save file setup</source>
             <translation>אָפּהיטן טעקע אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>Save as</source>
             <translation>אָפּהיטן ווי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="230" />
             <source>save as file</source>
             <translation>אָפּהיטן ווי טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="233" />
             <source>Export as command</source>
             <translation>עקספּאָרטירן ווי קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="231" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>cli command</source>
             <translation>קאָמאַנד־שורה קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="236" />
             <source>Diagnostic bundle</source>
             <translation>דיאַגנאָסטיק־פּעקל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>support zip</source>
             <translation>שטיצע zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="239" />
             <source>Quit</source>
             <translation>פֿאַרלאָזן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="239" />
             <source>exit</source>
             <translation>אַרויסגיין</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="1162" />
             <source>Undo</source>
             <translation>צוריקדרייען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="245" />
+            <location filename="../src/shell/shell_window.cpp" line="248" />
             <source>undo stack restore</source>
             <translation>צוריקדרייען סטעק צוריקשטעלן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
-            <location filename="../src/shell/shell_window.cpp" line="1156" />
+            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Redo</source>
             <translation>איבערמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="249" />
+            <location filename="../src/shell/shell_window.cpp" line="252" />
             <source>redo stack restore</source>
             <translation>איבערמאַכן סטעק צוריקשטעלן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="253" />
+            <location filename="../src/shell/shell_window.cpp" line="256" />
             <source>Remove selected</source>
             <translation>אַוועקנעמען דאָס אויסגעקליבענע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="254" />
-            <location filename="../src/shell/shell_window.cpp" line="293" />
+            <location filename="../src/shell/shell_window.cpp" line="257" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
             <source>delete remove</source>
             <translation>אויסמעקן אַוועקנעמען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
             <source>Add port</source>
             <translation>צולייגן פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="260" />
-            <location filename="../src/shell/shell_window.cpp" line="264" />
+            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
             <source>new virtual create</source>
             <translation>נײַ ווירטועל באַשאַפֿן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Virtual port</source>
             <translation>ווירטועלער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="269" />
             <source>Linked pair</source>
             <translation>פֿאַרבונדענער פּאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="270" />
             <source>pair two null modem</source>
             <translation>פּאָר צוויי נאַל־מאָדעם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="272" />
             <source>Attach real device</source>
             <translation>אָנשליסן פֿיזישן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>serial device</source>
             <translation>סעריעלער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Network endpoint</source>
             <translation>נעץ־ענדפּונקט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="274" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>Mock fixture</source>
             <translation>מאָק־פֿיקסטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="278" />
+            <location filename="../src/shell/shell_window.cpp" line="281" />
             <source>fixture mock script</source>
             <translation>פֿיקסטור מאָק סקריפּט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="284" />
             <source>Copy port name</source>
             <translation>קאָפּירן פּאָרט־נאָמען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="282" />
+            <location filename="../src/shell/shell_window.cpp" line="285" />
             <source>clipboard path</source>
             <translation>קליפּבאָרד וועג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="286" />
-            <location filename="../src/shell/shell_window.cpp" line="1992" />
+            <location filename="../src/shell/shell_window.cpp" line="289" />
+            <location filename="../src/shell/shell_window.cpp" line="2024" />
             <source>Rename port</source>
             <translation>טוישן דעם נאָמען פֿון דער פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="287" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>name change relabel</source>
             <translation>נאָמען טוישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="293" />
-            <location filename="../src/shell/shell_window.cpp" line="1833" />
+            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="1853" />
             <source>Remove port</source>
             <translation>אַוועקנעמען פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="297" />
-            <location filename="../src/shell/shell_window.cpp" line="1892" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="1924" />
             <source>Remove setup</source>
             <translation>אַוועקנעמען אָנשטעל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="298" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>אויסמעקן אַוועקנעמען אָפּבויען פֿאַרמאַכן פּאָר טיילן אָנשליסן אַלץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="305" />
-            <location filename="../src/shell/shell_window.cpp" line="1338" />
+            <location filename="../src/shell/shell_window.cpp" line="308" />
+            <location filename="../src/shell/shell_window.cpp" line="1345" />
             <source>Connect ports</source>
             <translation>פֿאַרבינדן פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="309" />
             <source>link split join redirect monitor</source>
             <translation>פֿאַרבינדונג צעטיילונג פֿאַראייניקונג אומלייטונג מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="311" />
-            <location filename="../src/shell/shell_window.cpp" line="318" />
+            <location filename="../src/shell/shell_window.cpp" line="314" />
+            <location filename="../src/shell/shell_window.cpp" line="321" />
             <source>Share a device</source>
             <translation>צעטיילן אַן אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="312" />
-            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="315" />
+            <location filename="../src/shell/shell_window.cpp" line="322" />
             <source>split listeners</source>
             <translation>צעטיילונג צוהערער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
             <source>Watch traffic</source>
             <translation>באַטראַכטן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="323" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
             <source>monitor copy</source>
             <translation>מאָניטאָר קאָפּיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="329" />
             <source>Add a program port</source>
             <translation>צולייגן אַ פּראָגראַם־פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="327" />
+            <location filename="../src/shell/shell_window.cpp" line="330" />
             <source>share attach more listener another</source>
             <translation>טיילן אָנשליסן מער נאָך צוהערער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="331" />
-            <location filename="../src/shell/shell_window.cpp" line="1735" />
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1753" />
+            <location filename="../src/shell/shell_window.cpp" line="334" />
+            <location filename="../src/shell/shell_window.cpp" line="1750" />
+            <location filename="../src/shell/shell_window.cpp" line="1754" />
+            <location filename="../src/shell/shell_window.cpp" line="1768" />
             <source>Remove link</source>
             <translation>אַוועקנעמען פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="332" />
+            <location filename="../src/shell/shell_window.cpp" line="335" />
             <source>delete disconnect</source>
             <translation>אויסמעקן אָפּטרענען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="338" />
             <source>Link wiring</source>
             <translation>פֿאַרבינדונג־פֿאַרדראָטונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="336" />
+            <location filename="../src/shell/shell_window.cpp" line="339" />
             <source>line matrix faults</source>
             <translation>ליניע־מאַטריץ דעפֿעקטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>Owner</source>
             <translation>באַזיצער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>policy arbitration</source>
             <translation>פּאָליסי אַרביטראַציע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>Fit</source>
             <translation>אָנפּאַסן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="340" />
+            <location filename="../src/shell/shell_window.cpp" line="343" />
             <source>zoom</source>
             <translation>זום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="350" />
-            <location filename="../src/shell/shell_window.cpp" line="630" />
-            <location filename="../src/shell/shell_window.cpp" line="631" />
+            <location filename="../src/shell/shell_window.cpp" line="353" />
+            <location filename="../src/shell/shell_window.cpp" line="633" />
+            <location filename="../src/shell/shell_window.cpp" line="634" />
             <source>Search actions</source>
             <translation>זוכן אַקציעס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>command palette</source>
             <translation>קאָמאַנד־פּאַלעטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="354" />
+            <location filename="../src/shell/shell_window.cpp" line="357" />
             <source>Setup check</source>
             <translation>אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="355" />
+            <location filename="../src/shell/shell_window.cpp" line="358" />
             <source>driver com0com permissions</source>
             <translation>דרײַווער com0com דערלויבענישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="357" />
+            <location filename="../src/shell/shell_window.cpp" line="360" />
             <source>Benchmark</source>
             <translation>בענטשמאַרק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="358" />
+            <location filename="../src/shell/shell_window.cpp" line="361" />
             <source>throughput speed</source>
             <translation>דורכגאַנג גיכקייט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>Refresh now</source>
             <translation>דערפֿרישן איצט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>reload</source>
             <translation>איבערלאָדן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="370" />
             <source>Refreshed.</source>
             <translation>דערפֿרישט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="369" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>Settings</source>
             <translation>פּרעפֿערענצן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="373" />
             <source>preferences theme density refresh baud</source>
             <translation>פּרעפֿערענצן טעמע געדיכטקייט דערפֿרישן באָד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="376" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>Advanced mode</source>
             <translation>אַוואַנסירטער מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="380" />
             <source>simple expert level</source>
             <translation>פּשוט עקספּערט שטופֿע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
-            <location filename="../src/shell/shell_window.cpp" line="758" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="761" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="381" />
+            <location filename="../src/shell/shell_window.cpp" line="384" />
             <source>traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="384" />
+            <location filename="../src/shell/shell_window.cpp" line="387" />
             <source>Show links as a list</source>
             <translation>ווײַזן פֿאַרבינדונגען ווי אַ ליסטע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="385" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>links topology list accessible</source>
             <translation>פֿאַרבינדונגען טאָפּאָלאָגיע ליסטע צוטריטלעך</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
-            <location filename="../src/shell/shell_window.cpp" line="903" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="910" />
             <source>Log</source>
             <translation>לאָג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="388" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>events</source>
             <translation>געשעענישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="919" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="926" />
             <source>Topology JSON</source>
             <translation>טאָפּאָלאָגיע־JSON</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="394" />
             <source>editor schema</source>
             <translation>רעדאַקטאָר סכימע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Follow the system</source>
             <translation>נאָכפֿאָלגן דעם סיסטעם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>theme colour scheme</source>
             <translation>טעמע קאָליר־סכעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="407" />
             <source>Light</source>
             <translation>ליכטיק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="407" />
+            <location filename="../src/shell/shell_window.cpp" line="417" />
             <source>theme</source>
             <translation>טעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="417" />
             <source>Dark</source>
             <translation>פֿינצטער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="427" />
             <source>Comfortable</source>
             <translation>באַקוועם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="425" />
-            <location filename="../src/shell/shell_window.cpp" line="435" />
+            <location filename="../src/shell/shell_window.cpp" line="428" />
+            <location filename="../src/shell/shell_window.cpp" line="438" />
             <source>density spacing</source>
             <translation>געדיכטקייט צווישנרוים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="437" />
             <source>Compact</source>
             <translation>קאָמפּאַקט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="443" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
             <source>Reset layout</source>
             <translation>צוריקשטעלן אויסלייג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="447" />
             <source>docks window</source>
             <translation>פּאַנעלן פֿענצטער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="449" />
             <source>Show launcher</source>
             <translation>ווײַזן לאָנטשער</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="447" />
+            <location filename="../src/shell/shell_window.cpp" line="450" />
             <source>empty start</source>
             <translation>ליידיקער אָנהייב</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="451" />
+            <location filename="../src/shell/shell_window.cpp" line="454" />
             <source>Help contents</source>
             <translation>הילף־אינהאַלט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="452" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>manual help topics</source>
             <translation>האַנדבוך הילף טעמעס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="457" />
             <source>Why is nothing arriving?</source>
             <translation>פֿאַרוואָס קומט גאָרנישט אָן?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="455" />
+            <location filename="../src/shell/shell_window.cpp" line="458" />
             <source>troubleshoot no data</source>
             <translation>פּראָבלעמען־לייזן קיין דאַטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>Keyboard shortcuts</source>
             <translation>קלאַוויאַטור־שאָרטקאַטס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="460" />
             <source>keys</source>
             <translation>קלאַווישן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="459" />
+            <location filename="../src/shell/shell_window.cpp" line="462" />
             <source>Copy environment</source>
             <translation>קאָפּירן סבֿיבֿה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="460" />
+            <location filename="../src/shell/shell_window.cpp" line="463" />
             <source>build bug report</source>
             <translation>ווערסיע באַג באַריכט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>About</source>
             <translation>וועגן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="463" />
+            <location filename="../src/shell/shell_window.cpp" line="466" />
             <source>version licence copyright</source>
             <translation>ווערסיע דערלויבעניש קאַפּירײַט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="477" />
-            <location filename="../src/shell/shell_window.cpp" line="482" />
-            <location filename="../src/shell/shell_window.cpp" line="1166" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
+            <location filename="../src/shell/shell_window.cpp" line="485" />
+            <location filename="../src/shell/shell_window.cpp" line="1173" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="688" />
+            <location filename="../src/shell/shell_window.cpp" line="691" />
             <source>Change owner</source>
             <translation>טוישן דעם באַזיצער</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <source>1 port</source>
+            <translation>1 פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1780" />
+            <source>%1 ports</source>
+            <translation>%1 פּאָרטן</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1785" />
+            <source>1 link</source>
+            <translation>1 פֿאַרבינדונג</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1786" />
+            <source>%1 links</source>
+            <translation>%1 פֿאַרבינדונגען</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
+            <source>Remove only %1</source>
+            <translation>נאָר אַוועקנעמען %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1820" />
+            <source>Remove the whole setup</source>
+            <translation>אַוועקנעמען דעם גאַנצן אָנשטעל</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1823" />
+            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 איז איינער פֿון %2 פּראָגראַמען וואָס טיילן אַן אַפּאַראַט, אין אַן אָנשטעל מיט %3: %4. נעמט אַוועק נאָר %1 און די אַנדערע טיילן װײַטער, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
+            <translation>%1 איז אַ טייל פֿון אַן אָנשטעל מיט %2: %3. נעמט אַוועק נאָר %1 און זײַנע פֿאַרבינדונגען, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1903" />
+            <source>%1 and %2</source>
+            <translation>%1 און %2</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1919" />
+            <source>Remove this setup?</source>
+            <translation>אַוועקנעמען דעם אָנשטעל?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1921" />
+            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
+            <translation>דאָס פֿאַרמאַכט %1: %2. אַ פּראָגראַם וואָס האָט אָפֿן איינעם פֿון די פּאָרטן פֿאַרלירט אים. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1943" />
+            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
+            <translation>אַ טייל פֿון דעם אָנשטעל איז נאָך אָפֿן. מאַכט צו וואָס ניצט עס און קלײַבט נאָך אַ מאָל אויס אַוועקנעמען אָנשטעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1953" />
+            <source>Removed the setup (%1).</source>
+            <translation>דער אָנשטעל איז אַוועקגענומען (%1).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1955" />
+            <source>Removed %1 of %2.</source>
+            <translation>אַוועקגענומען %1 פֿון %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
+            <source>the device</source>
+            <translation>דעם אַפּאַראַט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1996" />
+            <source>Could not add a program port to %1</source>
+            <translation>נישט געקענט צולייגן אַ פּראָגראַם־פּאָרט צו %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <source>The setup is as it was. Check the device, then try again.</source>
+            <translation>דער אָנשטעל איז אומגעביטן. קוקט איבער דעם אַפּאַראַט און פּרוּווט נאָך אַ מאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2006" />
+            <source>Added %1 to %2.</source>
+            <translation>%1 צוגעלייגט צו %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2007" />
+            <source>a port</source>
+            <translation>אַ פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <source>Close Studio?</source>
+            <translation>פֿאַרמאַכן Studio?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2654" />
+            <source>Close Studio</source>
+            <translation>פֿאַרמאַכן Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2655" />
+            <source>Keep Studio open</source>
+            <translation>לאָזן Studio אָפֿן</translation>
         </message>
         <message>
             <source>Undo needs an exact restore, which this build cannot prove.</source>
             <translation type="vanished">צוריקדרייען דאַרף אַ גענויע צוריקשטעלונג, וואָס די דאָזיקע ווערסיע קען נישט באַווײַזן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="513" />
+            <location filename="../src/shell/shell_window.cpp" line="516" />
             <source>&amp;File</source>
             <translation>&amp;טעקע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="527" />
+            <location filename="../src/shell/shell_window.cpp" line="530" />
             <source>&amp;Edit</source>
             <translation>&amp;רעדאַקטירן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="534" />
+            <location filename="../src/shell/shell_window.cpp" line="537" />
             <source>&amp;Ports</source>
             <translation>&amp;פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="549" />
+            <location filename="../src/shell/shell_window.cpp" line="552" />
             <source>&amp;Topology</source>
             <translation>&amp;טאָפּאָלאָגיע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="561" />
+            <location filename="../src/shell/shell_window.cpp" line="564" />
             <source>&amp;Tools</source>
             <translation>&amp;געצײַג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="569" />
+            <location filename="../src/shell/shell_window.cpp" line="572" />
             <source>&amp;View</source>
             <translation>&amp;אַנזיכט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="577" />
+            <location filename="../src/shell/shell_window.cpp" line="580" />
             <source>Theme</source>
             <translation>טעמע</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="581" />
+            <location filename="../src/shell/shell_window.cpp" line="584" />
             <source>Density</source>
             <translation>געדיכטקייט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="591" />
             <source>&amp;Help</source>
             <translation>&amp;הילף</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="598" />
+            <location filename="../src/shell/shell_window.cpp" line="601" />
             <source>Main toolbar</source>
             <translation>הויפּט־געצײַג־פּאַנעל</translation>
         </message>
@@ -13582,100 +14261,100 @@ Networks: %5</source>
             <translation type="vanished">נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="753" />
+            <location filename="../src/shell/shell_window.cpp" line="756" />
             <source>Ports</source>
             <translation>פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="755" />
-            <location filename="../src/shell/shell_window.cpp" line="1208" />
+            <location filename="../src/shell/shell_window.cpp" line="758" />
+            <location filename="../src/shell/shell_window.cpp" line="1215" />
             <source>Inspector</source>
             <translation>אינספּעקטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="756" />
+            <location filename="../src/shell/shell_window.cpp" line="759" />
             <source>Send</source>
             <translation>שיקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="791" />
-            <location filename="../src/shell/shell_window.cpp" line="1261" />
+            <location filename="../src/shell/shell_window.cpp" line="794" />
+            <location filename="../src/shell/shell_window.cpp" line="1268" />
             <source>Copied %1.</source>
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="807" />
+            <location filename="../src/shell/shell_window.cpp" line="814" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 בײַטן געשטעלט אין ריי צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="863" />
+            <location filename="../src/shell/shell_window.cpp" line="870" />
             <source>Links</source>
             <translation>פֿאַרבינדונגען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="925" />
             <source>Applied the topology JSON.</source>
             <translation>דער טאָפּאָלאָגיע־JSON איז אָנגעווענדט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1133" />
+            <location filename="../src/shell/shell_window.cpp" line="1140" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1155" />
+            <location filename="../src/shell/shell_window.cpp" line="1162" />
             <source>Undo %1</source>
             <translation>אַנולירן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1156" />
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
             <source>Redo %1</source>
             <translation>איבערהאָלן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1168" />
+            <location filename="../src/shell/shell_window.cpp" line="1175" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>אַנולירט דאָס מאַכן אָדער אַוועקנעמען פֿון אַ לינק, דעם טוישן פֿון באַזיצער און דעם טוישן דעם נאָמען פֿון אַ פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1177" />
             <source>This build cannot reverse changes.</source>
             <translation>די ווערסיע קען נישט אַנולירן ענדערונגען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1178" />
+            <location filename="../src/shell/shell_window.cpp" line="1185" />
             <source>Undid %1.</source>
             <translation>%1 איז אַנולירט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="1188" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>נישט געקענט אַנולירן %1. די קאָנפֿיגוראַציע האָט זיך געביטן זינט דעמאָלט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1189" />
+            <location filename="../src/shell/shell_window.cpp" line="1196" />
             <source>Redid %1.</source>
             <translation>%1 איז איבערגעהאָלט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1192" />
+            <location filename="../src/shell/shell_window.cpp" line="1199" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>נישט געקענט איבערהאָלן %1. די קאָנפֿיגוראַציע האָט זיך געביטן זינט דעמאָלט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1214" />
             <source>Ports %1</source>
             <translation>פּאָרטן %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1212" />
+            <location filename="../src/shell/shell_window.cpp" line="1219" />
             <source>Inspector %1</source>
             <translation>אינספּעקטאָר %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1816" />
-            <location filename="../src/shell/shell_window.cpp" line="1829" />
+            <location filename="../src/shell/shell_window.cpp" line="1836" />
+            <location filename="../src/shell/shell_window.cpp" line="1849" />
             <source>Remove %1?</source>
             <translation>אַוועקנעמען %1?</translation>
         </message>
@@ -13684,288 +14363,214 @@ Networks: %5</source>
             <translation type="vanished">דער פּאָרט און זײַנע פֿאַרבינדונגען וועלן אַוועקגענומען ווערן. דאָס קען מען נישט צוריקדרייען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1739" />
-            <location filename="../src/shell/shell_window.cpp" line="1798" />
-            <location filename="../src/shell/shell_window.cpp" line="1833" />
-            <location filename="../src/shell/shell_window.cpp" line="1892" />
-            <location filename="../src/shell/shell_window.cpp" line="2399" />
+            <location filename="../src/shell/shell_window.cpp" line="1754" />
+            <location filename="../src/shell/shell_window.cpp" line="1818" />
+            <location filename="../src/shell/shell_window.cpp" line="1853" />
+            <location filename="../src/shell/shell_window.cpp" line="1924" />
+            <location filename="../src/shell/shell_window.cpp" line="2344" />
+            <location filename="../src/shell/shell_window.cpp" line="2473" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1851" />
-            <location filename="../src/shell/shell_window.cpp" line="1910" />
+            <location filename="../src/shell/shell_window.cpp" line="1871" />
+            <location filename="../src/shell/shell_window.cpp" line="1942" />
             <source>Could not remove %1</source>
             <translation>נישט געקענט אַוועקנעמען %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1860" />
+            <location filename="../src/shell/shell_window.cpp" line="1880" />
             <source>Removed %1.</source>
             <translation>%1 איז אַוועקגענומען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1349" />
+            <location filename="../src/shell/shell_window.cpp" line="1356" />
             <source>Sharing is not available in this build.</source>
             <translation>צעטיילן איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1376" />
+            <location filename="../src/shell/shell_window.cpp" line="1383" />
             <source>Networking is not available in this build.</source>
             <translation>נעצווערק איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1398" />
+            <location filename="../src/shell/shell_window.cpp" line="1405" />
             <source>Bridge is running on port %1.</source>
             <translation>די בריק לויפֿט אויף פּאָרט %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1399" />
+            <location filename="../src/shell/shell_window.cpp" line="1406" />
             <source>Open monitor</source>
             <translation>עפֿענען מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1420" />
-            <location filename="../src/shell/shell_window.cpp" line="2311" />
-            <location filename="../src/shell/shell_window.cpp" line="2323" />
+            <location filename="../src/shell/shell_window.cpp" line="1427" />
+            <location filename="../src/shell/shell_window.cpp" line="2385" />
+            <location filename="../src/shell/shell_window.cpp" line="2397" />
             <source>Could not open %1</source>
             <translation>נישט געקענט עפֿענען %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1421" />
+            <location filename="../src/shell/shell_window.cpp" line="1428" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>די אײַנשטעלונג דאַרף אַן אַפּאַראַט אָדער נעץ־ענדפּונקט וואָס איז נישט פֿאַראַנען אויף דעם קאָמפּיוטער. גאָרנישט איז געענדערט געוואָרן. קאָנטראָלירט דעם אַפּאַראַט און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1444" />
-            <location filename="../src/shell/shell_window.cpp" line="2335" />
-            <location filename="../src/shell/shell_window.cpp" line="2363" />
+            <location filename="../src/shell/shell_window.cpp" line="1451" />
+            <location filename="../src/shell/shell_window.cpp" line="2409" />
+            <location filename="../src/shell/shell_window.cpp" line="2437" />
             <source>%1 ports, %2 links</source>
             <translation>%1 פּאָרטן, %2 פֿאַרבינדונגען</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1536" />
-            <location filename="../src/shell/shell_window.cpp" line="1559" />
+            <location filename="../src/shell/shell_window.cpp" line="1543" />
+            <location filename="../src/shell/shell_window.cpp" line="1566" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>פֿאַרבונדענער פּאָר באַשאַפֿן. פּראָגראַם A עפֿנט %1; פּראָגראַם B עפֿנט %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1595" />
+            <location filename="../src/shell/shell_window.cpp" line="1610" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>באַטראַכט %1. דער באַטראַכטער איז %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1645" />
+            <location filename="../src/shell/shell_window.cpp" line="1660" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 איז אַ טייל פֿון אַ שפּעטערדיקן אַרבעט־פּעקל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1651" />
+            <location filename="../src/shell/shell_window.cpp" line="1666" />
             <source>%1 arrives with %2.</source>
             <translation>%1 קומט מיט %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1736" />
+            <location filename="../src/shell/shell_window.cpp" line="1751" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>אַוועקנעמען די פֿאַרבינדונג? %1. גאָרנישט ווערט אָפּגעהיטן ביז איר היט אָפּ די אײַנשטעלונג.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1747" />
+            <location filename="../src/shell/shell_window.cpp" line="1762" />
             <source>Could not remove the link</source>
             <translation>נישט געקענט אַוועקנעמען די פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1756" />
+            <location filename="../src/shell/shell_window.cpp" line="1771" />
             <source>Removed the link.</source>
             <translation>די פֿאַרבינדונג איז אַוועקגענומען.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1764" />
-            <source>1 port</source>
-            <translation>1 פּאָרט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1765" />
-            <source>%1 ports</source>
-            <translation>%1 פּאָרטן</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
-            <source>1 link</source>
-            <translation>1 פֿאַרבינדונג</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1771" />
-            <source>%1 links</source>
-            <translation>%1 פֿאַרבינדונגען</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1799" />
-            <source>Remove only %1</source>
-            <translation>נאָר אַוועקנעמען %1</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1800" />
-            <source>Remove the whole setup</source>
-            <translation>אַוועקנעמען דעם גאַנצן אָנשטעל</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1803" />
-            <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
-            <translation>%1 איז איינער פֿון %2 פּראָגראַמען וואָס טיילן אַן אַפּאַראַט, אין אַן אָנשטעל מיט %3: %4. נעמט אַוועק נאָר %1 און די אַנדערע טיילן װײַטער, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1811" />
-            <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
-            <translation>%1 איז אַ טייל פֿון אַן אָנשטעל מיט %2: %3. נעמט אַוועק נאָר %1 און זײַנע פֿאַרבינדונגען, אָדער פֿאַרמאַכט דעם גאַנצן אָנשטעל. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1830" />
+            <location filename="../src/shell/shell_window.cpp" line="1850" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>אַוועקנעמען %1 און זײַנע פֿאַרבינדונגען? גאָרנישט ווערט אָפּגעהיטן ביז איר היט אָפּ די אײַנשטעלונג.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1883" />
-            <source>%1 and %2</source>
-            <translation>%1 און %2</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
-            <source>Remove this setup?</source>
-            <translation>אַוועקנעמען דעם אָנשטעל?</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1889" />
-            <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
-            <translation>דאָס פֿאַרמאַכט %1: %2. אַ פּראָגראַם וואָס האָט אָפֿן איינעם פֿון די פּאָרטן פֿאַרלירט אים. גאָרנישט ווערט נישט געשפּאָרט ביז איר שפּאָרט דעם אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
-            <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
-            <translation>אַ טייל פֿון דעם אָנשטעל איז נאָך אָפֿן. מאַכט צו וואָס ניצט עס און קלײַבט נאָך אַ מאָל אויס אַוועקנעמען אָנשטעל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1921" />
-            <source>Removed the setup (%1).</source>
-            <translation>דער אָנשטעל איז אַוועקגענומען (%1).</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1923" />
-            <source>Removed %1 of %2.</source>
-            <translation>אַוועקגענומען %1 פֿון %2.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1957" />
-            <source>the device</source>
-            <translation>דעם אַפּאַראַט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1964" />
-            <source>Could not add a program port to %1</source>
-            <translation>נישט געקענט צולייגן אַ פּראָגראַם־פּאָרט צו %1</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1965" />
-            <source>The setup is as it was. Check the device, then try again.</source>
-            <translation>דער אָנשטעל איז אומגעביטן. קוקט איבער דעם אַפּאַראַט און פּרוּווט נאָך אַ מאָל.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1974" />
-            <source>Added %1 to %2.</source>
-            <translation>%1 צוגעלייגט צו %2.</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1975" />
-            <source>a port</source>
-            <translation>אַ פּאָרט</translation>
-        </message>
-        <message>
-            <location filename="../src/shell/shell_window.cpp" line="1995" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
             <source>Renamed %1 to %2.</source>
             <translation>דער נאָמען פֿון %1 איז געביטן צו %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2052" />
+            <location filename="../src/shell/shell_window.cpp" line="2047" />
+            <source>%1 is now %2.</source>
+            <translation>%1 איז איצט %2.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <source>Released %1.</source>
+            <translation>%1 איז באַפֿרײַט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2119" />
             <source>Add a port before opening the line matrix.</source>
             <translation>לייגט צו אַ פּאָרט איידער איר עפֿנט די ליניע־מאַטריץ.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2087" />
+            <location filename="../src/shell/shell_window.cpp" line="2154" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>קלײַבט אויס דעם ציל פֿון אַ פֿאַראייניקונג מיט דער באַזיצער־פּאָליסי כדי צו קאָנטראָלירן ווער שרײַבט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2168" />
+            <location filename="../src/shell/shell_window.cpp" line="2235" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>טעסט־מאָדע. נײַע פּאָרטן אַרבעטן נאָר אין Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2189" />
+            <location filename="../src/shell/shell_window.cpp" line="2256" />
             <source>Could not restart as administrator</source>
             <translation>נישט געקענט ווידער אָנהייבן ווי אַדמיניסטראַטאָר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2267" />
+            <location filename="../src/shell/shell_window.cpp" line="2334" />
             <source>Environment copied.</source>
             <translation>די סבֿיבֿה איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2286" />
+            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <source>Start a new setup?</source>
+            <translation>אָנהייבן אַ נײַע סעטאַפּ?</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2343" />
+            <source>Start new</source>
+            <translation>אָנהייבן נײַ</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2360" />
             <source>Started a new setup.</source>
             <translation>אַ נײַע אײַנשטעלונג איז אָנגעהויבן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2296" />
+            <location filename="../src/shell/shell_window.cpp" line="2370" />
             <source>Open setup</source>
             <translation>עפֿענען אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2297" />
+            <location filename="../src/shell/shell_window.cpp" line="2371" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>Virtual Serial Studio־אײַנשטעלונגען (*.json);;אַלע טעקעס (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2338" />
+            <location filename="../src/shell/shell_window.cpp" line="2412" />
             <source>Opened %1.</source>
             <translation>%1 איז געעפֿנט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2354" />
+            <location filename="../src/shell/shell_window.cpp" line="2428" />
             <source>Could not save this setup</source>
             <translation>נישט געקענט אָפּהיטן די אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2367" />
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2441" />
+            <location filename="../src/shell/shell_window.cpp" line="2442" />
             <source>Saved %1.</source>
             <translation>%1 איז אָפּגעהיט.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2374" />
+            <location filename="../src/shell/shell_window.cpp" line="2448" />
             <source>Save setup</source>
             <translation>אָפּהיטן אײַנשטעלונג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2376" />
+            <location filename="../src/shell/shell_window.cpp" line="2450" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>Virtual Serial Studio־אײַנשטעלונגען (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2394" />
+            <location filename="../src/shell/shell_window.cpp" line="2468" />
             <source>Save changes to %1?</source>
             <translation>אָפּהיטן ענדערונגען צו %1?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2395" />
+            <location filename="../src/shell/shell_window.cpp" line="2469" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>אײַערע פּאָרטן און פֿאַרבינדונגען האָבן זיך געענדערט זינט דעם לעצטן אָפּהיטן. איר קענט אָפּשטעלן די פֿראַגע אין פּרעפֿערענצן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2398" />
+            <location filename="../src/shell/shell_window.cpp" line="2472" />
             <source>Don't save</source>
             <translation>נישט אָפּהיטן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2463" />
+            <location filename="../src/shell/shell_window.cpp" line="2537" />
             <source>Layout reset.</source>
             <translation>דער אויסלייג איז צוריקגעשטעלט.</translation>
         </message>
@@ -14409,75 +15014,80 @@ Networks: %5</source>
     <context>
         <name>vss::gui::WatchDialog</name>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="33" />
+            <location filename="../src/flows/watch_dialog.cpp" line="34" />
             <source>Watch traffic</source>
             <translation>באַטראַכטן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="34" />
+            <location filename="../src/flows/watch_dialog.cpp" line="35" />
             <source>See what flows through a port without changing it.</source>
             <translation>זעט וואָס פֿליסט דורך אַ פּאָרט אָן עס צו ענדערן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="40" />
+            <location filename="../src/flows/watch_dialog.cpp" line="41" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="43" />
+            <location filename="../src/flows/watch_dialog.cpp" line="44" />
             <source>Start watching</source>
             <translation>אָנהייבן באַטראַכטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="75" />
-            <location filename="../src/flows/watch_dialog.cpp" line="84" />
+            <location filename="../src/flows/watch_dialog.cpp" line="76" />
+            <location filename="../src/flows/watch_dialog.cpp" line="90" />
             <source>Port to watch</source>
             <translation>פּאָרט צום באַטראַכטן</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="80" />
+            <location filename="../src/flows/watch_dialog.cpp" line="81" />
             <source>%1 (Studio only)</source>
             <translation>%1 (נאָר אין Studio)</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="81" />
+            <location filename="../src/flows/watch_dialog.cpp" line="82" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
         <message>
             <location filename="../src/flows/watch_dialog.cpp" line="88" />
-            <location filename="../src/flows/watch_dialog.cpp" line="90" />
+            <source>No ports available</source>
+            <translation>קיין פּאָרטן זענען נישט פֿאַראַן</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="95" />
+            <location filename="../src/flows/watch_dialog.cpp" line="97" />
             <source>Name of the watcher</source>
             <translation>נאָמען פֿון דעם באַטראַכטער</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="91" />
+            <location filename="../src/flows/watch_dialog.cpp" line="98" />
             <source>A new Studio-only port that receives a read-only copy.</source>
             <translation>אַ נײַער פּאָרט נאָר אין Studio וואָס באַקומט אַ נאָר־לייענען־קאָפּיע.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="95" />
-            <location filename="../src/flows/watch_dialog.cpp" line="98" />
+            <location filename="../src/flows/watch_dialog.cpp" line="102" />
+            <location filename="../src/flows/watch_dialog.cpp" line="105" />
             <source>Open the monitor when it is ready</source>
             <translation>עפֿענען דעם מאָניטאָר ווען ער איז גרייט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="116" />
+            <location filename="../src/flows/watch_dialog.cpp" line="123" />
             <source>Studio only</source>
             <translation>נאָר אין Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="119" />
+            <location filename="../src/flows/watch_dialog.cpp" line="126" />
             <source>The watcher is shown in the ports list so you can remove it when you are finished.</source>
             <translation>דער באַטראַכטער ווערט געוויזן אין דער ליסטע פֿון פּאָרטן, כדי איר זאָלט אים קענען אַוועקנעמען ווען איר זענט פֿאַרטיק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="130" />
+            <location filename="../src/flows/watch_dialog.cpp" line="137" />
             <source>Watching is not available in this build.</source>
             <translation>באַטראַכטן איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="161" />
+            <location filename="../src/flows/watch_dialog.cpp" line="188" />
             <source>No ports to watch yet. Create a port first.</source>
             <translation>נאָך קיין פּאָרטן צום באַטראַכטן. באַשאַפֿט פֿריִער אַ פּאָרט.</translation>
         </message>
@@ -14487,54 +15097,64 @@ Networks: %5</source>
             <translation>באַטראַכטן דאַרף שטיצע פֿאַר פֿאַרבינדונגען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="189" />
+            <source>%1 Create a port in Studio instead, then watch that.</source>
+            <translation>%1 שאַפֿט אַנשטאָט דעם אַ פּאָרט אין Studio און קוקט אויף יענעם.</translation>
+        </message>
+        <message>
             <location filename="../src/flows/watch_dialog.cpp" line="192" />
+            <source>Create a port</source>
+            <translation>שאַפֿן אַ פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/watch_dialog.cpp" line="218" />
             <source>%1-monitor</source>
             <translation>%1־מאָניטאָר</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="195" />
+            <location filename="../src/flows/watch_dialog.cpp" line="221" />
             <source>Watching never changes what &lt;b&gt;%1&lt;/b&gt; sees. The watcher is a read-only copy, and it never drives modem lines.</source>
             <translation>באַטראַכטן ענדערט קיינמאָל נישט וואָס &lt;b&gt;%1&lt;/b&gt; זעט. דער באַטראַכטער איז אַ נאָר־לייענען־קאָפּיע, און ער טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="199" />
+            <location filename="../src/flows/watch_dialog.cpp" line="225" />
             <source>Watching never changes what %1 sees. The watcher is a read-only copy, and it never drives modem lines.</source>
             <translation>באַטראַכטן ענדערט קיינמאָל נישט וואָס %1 זעט. דער באַטראַכטער איז אַ נאָר־לייענען־קאָפּיע, און ער טרײַבט קיינמאָל נישט קיין מאָדעם־ליניעס.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="223" />
+            <location filename="../src/flows/watch_dialog.cpp" line="249" />
             <source>Could not watch this port</source>
             <translation>נישט געקענט באַטראַכטן דעם פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="224" />
+            <location filename="../src/flows/watch_dialog.cpp" line="250" />
             <source>The port is no longer available. Nothing was changed. Choose another port and try again.</source>
             <translation>דער פּאָרט איז שוין נישט פֿאַראַנען. גאָרנישט איז געענדערט געוואָרן. קלײַבט אויס אַן אַנדערן פּאָרט און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="233" />
+            <location filename="../src/flows/watch_dialog.cpp" line="259" />
             <source>Enter a name for the watcher.</source>
             <translation>גיט אַרײַן אַ נאָמען פֿאַרן באַטראַכטער.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="243" />
-            <location filename="../src/flows/watch_dialog.cpp" line="260" />
+            <location filename="../src/flows/watch_dialog.cpp" line="269" />
+            <location filename="../src/flows/watch_dialog.cpp" line="286" />
             <source>watch</source>
             <translation>באַטראַכט</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="246" />
+            <location filename="../src/flows/watch_dialog.cpp" line="272" />
             <source>Studio could not create the watcher. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן דעם באַטראַכטער. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="247" />
-            <location filename="../src/flows/watch_dialog.cpp" line="265" />
+            <location filename="../src/flows/watch_dialog.cpp" line="273" />
+            <location filename="../src/flows/watch_dialog.cpp" line="291" />
             <source> Try again.</source>
             <translation> פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/watch_dialog.cpp" line="263" />
+            <location filename="../src/flows/watch_dialog.cpp" line="289" />
             <source>Studio could not create the read-only monitor link. Nothing was changed.</source>
             <translation>Studio האָט נישט געקענט באַשאַפֿן די נאָר־לייענען־מאָניטאָר־פֿאַרבינדונג. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
@@ -14598,6 +15218,24 @@ Networks: %5</source>
         <message>
             <source>Not valid</source>
             <translation type="vanished">נישט גילטיק</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::other_ports</name>
+        <message>
+            <location filename="../src/backend/other_ports.hpp" line="32" />
+            <source>%1 and %2 more</source>
+            <translation>%1 און %2 נאָך</translation>
+        </message>
+        <message>
+            <location filename="../src/backend/other_ports.hpp" line="39" />
+            <source>%1 and %2</source>
+            <translation>%1 און %2</translation>
+        </message>
+        <message>
+            <location filename="../src/backend/other_ports.hpp" line="50" />
+            <source>Another program made %1. Studio cannot show or watch ports it did not make itself.</source>
+            <translation>אַן אַנדער פּראָגראַם האָט געשאַפֿן %1. Studio קען נישט ווײַזן אָדער אָבסערווירן פּאָרטן וואָס עס האָט נישט אַליין געשאַפֿן.</translation>
         </message>
     </context>
     <context>

@@ -17,6 +17,7 @@ add_library(vss_gui_backend STATIC
   event_bridge.hpp
   share_edit.hpp
   capabilities.hpp
+  other_ports.hpp
   view_types.hpp)
 
 target_include_directories(vss_gui_backend PUBLIC

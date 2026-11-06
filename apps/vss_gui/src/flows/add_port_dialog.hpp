@@ -61,6 +61,11 @@ public:
     QLineEdit* name_edit() const noexcept { return name_; }
     QSpinBox* count_spin() const noexcept { return count_; }
     QComboBox* kind_combo() const noexcept { return kind_; }
+    /// The COM number to ask for, 0 for Automatic.  Shown only where the Studio
+    /// driver is installed.
+    QSpinBox* com_number_spin() const noexcept { return com_; }
+    bool com_number_visible() const;
+    FormRow* com_number_row() const noexcept { return com_row_; }
     ResultSentence* result_sentence() const noexcept { return result_; }
     PairPanel* pair_panel() const noexcept { return pair_panel_; }
     PickCard* mode_card(mode value) const;
@@ -88,6 +93,7 @@ private:
     void refresh_mode();
     void refresh_result();
     void validate_count();
+    void refresh_com_row();
     void create_virtual_ports();
     void create_pair();
     void show_error(const flow_error& error);
@@ -115,6 +121,8 @@ private:
     QComboBox* kind_ = nullptr;
     FormRow* name_row_ = nullptr;
     FormRow* count_row_ = nullptr;
+    QSpinBox* com_ = nullptr;
+    FormRow* com_row_ = nullptr;
     ResultSentence* result_ = nullptr;
     PairPanel* pair_panel_ = nullptr;
     QPushButton* cancel_ = nullptr;

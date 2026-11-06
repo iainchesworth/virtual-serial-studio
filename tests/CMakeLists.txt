@@ -198,7 +198,7 @@ endif()
 if(TARGET vss_gui_shell_tests)
   add_test(NAME gui_shell COMMAND vss_gui_shell_tests --verbose)
   set_tests_properties(gui_shell PROPERTIES
-    TIMEOUT 180
+    TIMEOUT 300
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 

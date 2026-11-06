@@ -7,6 +7,8 @@
 add_library(vss_gui_flows STATIC
   common.cpp
   common.hpp
+  com_number_dialog.cpp
+  com_number_dialog.hpp
   flow_dialog.cpp
   flow_dialog.hpp
   add_port_dialog.cpp
@@ -22,7 +24,9 @@ add_library(vss_gui_flows STATIC
   watch_dialog.cpp
   watch_dialog.hpp
   rename_dialog.cpp
-  rename_dialog.hpp)
+  rename_dialog.hpp
+  release_port_dialog.cpp
+  release_port_dialog.hpp)
 
 target_include_directories(vss_gui_flows PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/..)
