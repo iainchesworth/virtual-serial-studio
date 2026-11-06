@@ -234,13 +234,13 @@ private:
     executor_type executor_;
     // Mutable: asking for the native handle is not a const call in Asio.
     mutable boost::asio::posix::stream_descriptor descriptor_;
-    std::optional<line_format> initial_format_;
-    bool framing_kept_ = false;
     int slave_fd_ = -1;
     std::string path_;
     std::string name_;
     control_lines lines_;
     std::atomic<bool> open_{true};
+    std::optional<line_format> initial_format_;
+    bool framing_kept_ = false;
 };
 
 } // namespace
