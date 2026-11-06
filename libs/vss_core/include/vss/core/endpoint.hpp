@@ -18,6 +18,7 @@
 #include <boost/asio/strand.hpp>
 
 #include <atomic>
+#include <cstdint>
 #include <deque>
 #include <functional>
 #include <memory>
@@ -95,6 +96,19 @@ public:
     /// Closes the transport without destroying the endpoint.
     void close();
 
+    /// Gives the endpoint a new transport in place of the one it has, and starts
+    /// reading again.  It is how an endpoint comes back after its transport
+    /// failed or the other side hung up, with its name, its id and every link
+    /// it is on kept: the hub never sees it go.  The old transport is cancelled
+    /// and closed, bytes still queued for it are dropped, and a read or write
+    /// it still owes is ignored when it completes.  Works from any state, open
+    /// included (a deliberate restart).  The caller builds `fresh`, usually
+    /// from the record it kept of how the endpoint was made; it must be open.
+    /// `errc::invalid_argument` for a null transport and `errc::not_open` for
+    /// one that is not open or when the hub is not running.  Safe from any
+    /// thread, but not concurrently with another reopen of the same endpoint.
+    result<void> reopen(std::shared_ptr<transport> fresh);
+
     /// Ordered shutdown: closes on the endpoint's strand and then invokes
     /// `done`.  Used by #hub::stop so teardown cannot race a completion.
     void shutdown(std::function<void()> done);
@@ -134,6 +148,7 @@ private:
     /// Called by the hub, which holds its lock, when it renames the endpoint.
     void set_name(std::string name);
 
+    std::shared_ptr<transport> active_transport() const;
     void do_read();
     void on_read(boost::system::error_code ec, std::size_t count);
     void request_write();
@@ -154,7 +169,13 @@ private:
     mutable std::mutex name_mutex_;
     std::string name_;
     const endpoint_kind kind_;
-    const std::shared_ptr<transport> transport_;
+    /// The transport now in use.  #reopen replaces it, so every read goes
+    /// through #active_transport.
+    std::shared_ptr<transport> transport_;
+    mutable std::mutex transport_mutex_;
+    /// Counts the transports this endpoint has had, to tell a completion of
+    /// the current one from one of a transport since replaced.
+    std::atomic<std::uint64_t> generation_{0};
     endpoint_options options_;
     const boost::asio::strand<boost::asio::any_io_executor> strand_;
 

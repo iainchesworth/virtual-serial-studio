@@ -6346,6 +6346,27 @@ Réseaux : %5</translation>
         <name>ShellWindow</name>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>Des ports COM ont été perdus. Le service d’assistance ou le pilote a redémarré et a supprimé les ports que vos programmes avaient ouverts.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>Recréer les ports</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>Ports recréés.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>Impossible de recréer tous les ports : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>Nouveau</translation>
         </message>
@@ -13331,6 +13352,27 @@ Réseaux : %5</translation>
         <name>vss::gui::ShellWindow</name>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>Des ports COM ont été perdus. Le service d’assistance ou le pilote a redémarré et a supprimé les ports que vos programmes avaient ouverts.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>Recréer les ports</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>Ports recréés.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>Impossible de recréer tous les ports : %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>Nouveau</translation>
         </message>

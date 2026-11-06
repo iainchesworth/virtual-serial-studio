@@ -47,6 +47,12 @@ struct capabilities
     /// Observe whether another program opened the advertised path.  False:
     /// `endpoint_info::open` is the studio's own transport state.
     bool peer_open = false;
+    /// Make the ports of the Windows driver again after the helper service or
+    /// the driver restarted and took them away (`vss::studio::reopen`).  The
+    /// window shows a banner with a "Recreate ports" action while any are lost.
+    /// A backend without it shows no banner and does not claim the ports are
+    /// fine.
+    bool recreate_ports = false;
     /// Rename a port.  The engine backend provides it through
     /// `vss::studio::rename_port`, which keeps the hub, the studio's records
     /// and a saved setup in step.

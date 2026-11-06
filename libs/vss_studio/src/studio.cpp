@@ -10,6 +10,8 @@
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/serial_transport.hpp>
 
+#include "reconnector.hpp"
+
 #include <boost/asio/post.hpp>
 
 #include <algorithm>
@@ -125,12 +127,63 @@ studio::studio(const studio_options& options)
 {
     if (options_.start_hub)
         hub_->start();
+
+    // Tries at reconnecting run on a thread of their own; what they publish
+    // and what they open goes through the studio, which joins that thread
+    // before anything else is torn down.
+    reconnector_ = std::make_shared<reconnector>(
+        [this](endpoint_id id) { return reconnect_attempt(id); },
+        [this](endpoint_id id, std::string text)
+        {
+            const auto found = hub_->find_endpoint(id);
+            if (!found)
+                return;
+            endpoint_event event;
+            event.kind = event_kind::log_message;
+            event.endpoint = id;
+            event.name = found->name();
+            event.message = std::move(text);
+            event.when = clock_type::now();
+            hub_->publish(std::move(event));
+        });
+
+    // A connection that is lost shows as the endpoint stopping.  The sink holds
+    // the reconnector and the hub weakly, not the studio, so a delivery that is
+    // already running when the studio goes is harmless.
+    reconnect_subscription_ = hub_->subscribe(
+        event_filter{std::nullopt, event_kind::stopped},
+        [core = std::weak_ptr<reconnector>(reconnector_),
+         weak_hub = std::weak_ptr<vss::hub>(hub_)](const endpoint_event& event)
+        {
+            const auto retry = core.lock();
+            const auto engine = weak_hub.lock();
+            if (!retry || !engine)
+                return;
+            const auto found = engine->find_endpoint(event.endpoint);
+            if (!found)
+                return;
+            // Events for the states on the way (opening) are not a loss.
+            const auto state = found->state();
+            if (state == endpoint_state::failed ||
+                state == endpoint_state::closed)
+                retry->lost(event.endpoint);
+        });
 }
 
 studio::~studio()
 {
+    if (hub_ && reconnect_subscription_ != 0)
+        hub_->unsubscribe(reconnect_subscription_);
+    // Ends the tries first: one may be in the middle of opening a transport.
+    if (reconnector_)
+    {
+        reconnector_->set_policy({});
+        reconnector_.reset();
+    }
+
     if (hub_)
     {
+
         hub_->stop();
         hub_->join();
     }
@@ -243,7 +296,10 @@ studio::register_port(port_record record, std::shared_ptr<transport> transport,
         std::lock_guard lock(record_mutex_);
         records_.emplace(record.id, record);
     }
+    if (reconnects(record) && reconnector_)
+        reconnector_->allow(record.id);
     return *created;
+
 }
 
 result<std::shared_ptr<endpoint>>
@@ -408,6 +464,7 @@ studio::attach_serial(const std::string& name, const std::string& uri,
     record.uri = uri;
     record.capture = options.capture_traffic;
     record.serial = settings;
+    record.settings_given = true;
     if (const auto kind = classify_uri(uri))
         record.kind = to_string(*kind);
     else
@@ -513,6 +570,8 @@ result<void> studio::remove_port(endpoint_id id)
     const auto removed = hub_->remove_endpoint(id);
     if (!removed)
         return removed.error();
+    if (reconnector_)
+        reconnector_->disallow(id);
 
     std::lock_guard lock(record_mutex_);
     if (const auto it = records_.find(id); it != records_.end())
@@ -698,6 +757,147 @@ std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
             out.emplace(ids[index], states[index]);
     }
     return out;
+}
+
+bool studio::reconnects(const port_record& record)
+{
+    // A client that connects out.  A listener waits for others, a serial
+    // device does not come back by trying again, and an in-process port has
+    // no connection to lose.
+    return (record.kind == "tcp" || record.kind == "rfc2217") &&
+           !record.uri.empty() && !is_listen_uri(record.uri);
+}
+
+result<void> studio::reopen(endpoint_id id)
+{
+    port_record record;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        record = it->second;
+    }
+    const auto found = hub_->find_endpoint(id);
+    if (!found)
+        return make_error_code(errc::not_found);
+
+    if (record.kind == "virtual" &&
+        record.virtual_kind == to_string(virtual_port_kind::windows_driver))
+    {
+        if (!supports(virtual_port_kind::windows_driver))
+            return make_error_code(errc::unsupported);
+
+        // The dead port goes first, so its slot and its COM name are free for
+        // the new one.
+        if (const auto old = record.driver.lock())
+            old->close();
+        auto created = vss::create_virtual_port(
+            hub_->executor(), virtual_port_kind::windows_driver, record.name,
+            record.com_number);
+        if (!created)
+            return created.error();
+        const std::string path = created->path;
+        const std::weak_ptr<transport> driver = created->port;
+        if (const auto reopened = found->reopen(std::move(created->port));
+            !reopened)
+            return reopened.error();
+
+        std::lock_guard lock(record_mutex_);
+        if (const auto it = records_.find(id); it != records_.end())
+        {
+            claimed_paths_.erase(it->second.target);
+            claimed_paths_.erase(it->second.advertised);
+            it->second.target = path;
+            it->second.advertised = path;
+            it->second.driver = driver;
+            claimed_paths_.insert(path);
+        }
+        return {};
+    }
+
+    if (record.kind == "mock" || record.uri.empty())
+        return make_error_code(errc::unsupported);
+
+    // A listener holds its address until it is closed, and the new one wants
+    // the same address, so the old one goes first.
+    if (is_listen_uri(record.uri))
+        found->close();
+
+    boost::system::error_code ec;
+    auto fresh = open_transport(hub_->executor(), record.uri,
+                                record.settings_given ? &record.serial : nullptr,
+                                ec);
+    if (ec)
+        return ec;
+    return found->reopen(std::move(fresh));
+}
+
+result<void> studio::reconnect_attempt(endpoint_id id)
+{
+    if (!hub_->running())
+        return make_error_code(errc::unsupported);
+    const auto found = hub_->find_endpoint(id);
+    if (!found)
+        return make_error_code(errc::not_found);
+
+    // Somebody opened it already, or it has not stopped after all.
+    const auto state = found->state();
+    if (state != endpoint_state::failed && state != endpoint_state::closed)
+        return {};
+    return reopen(id);
+}
+
+void studio::set_reconnect_policy(const reconnect_policy& policy)
+{
+    reconnector_->set_policy(policy);
+}
+
+reconnect_policy studio::current_reconnect_policy() const
+{
+    return reconnector_->policy();
+}
+
+std::vector<endpoint_id> studio::lost_ports() const
+{
+    std::vector<endpoint_id> candidates;
+    {
+        std::lock_guard lock(record_mutex_);
+        for (const auto& [id, record] : records_)
+        {
+            if (record.kind == "virtual" &&
+                record.virtual_kind ==
+                    to_string(virtual_port_kind::windows_driver))
+                candidates.push_back(id);
+        }
+    }
+
+    std::vector<endpoint_id> out;
+    for (const endpoint_id id : candidates)
+    {
+        const auto found = hub_->find_endpoint(id);
+        if (!found)
+            continue;
+        const auto state = found->state();
+        if (state == endpoint_state::failed || state == endpoint_state::closed)
+            out.push_back(id);
+    }
+    std::sort(out.begin(), out.end());
+    return out;
+}
+
+studio::recreate_report studio::recreate_lost_ports()
+{
+    recreate_report report;
+    for (const endpoint_id id : lost_ports())
+    {
+        const auto reopened = reopen(id);
+        if (reopened)
+            report.recreated.push_back(id);
+        else
+            report.failed.emplace_back(id, reopened.error());
+    }
+    return report;
 }
 
 std::string studio::advertised_path(endpoint_id id) const

@@ -9,6 +9,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_control_lines.cpp
   unit/test_document.cpp
   unit/test_endpoint.cpp
+  unit/test_endpoint_reopen.cpp
   unit/test_error_and_log.cpp
   unit/test_hub_bus.cpp
   unit/test_hub_events.cpp
@@ -29,6 +30,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_replay.cpp
   unit/test_responder.cpp
   unit/test_studio.cpp
+  unit/test_studio_reopen.cpp
   unit/test_studio_links.cpp
   unit/test_virtual_ports.cpp
   unit/test_vsscom_core.cpp)

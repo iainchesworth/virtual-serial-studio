@@ -62,6 +62,8 @@ public:
                                    release_method method) override;
     vss::result<void> rename_port(vss::endpoint_id id,
                                   const QString& name) override;
+    std::vector<vss::endpoint_id> lost_ports() const override;
+    vss::result<std::size_t> recreate_lost_ports() override;
 
     std::vector<port_view> ports() const override { return ports_; }
     std::vector<link_view> links() const override { return links_; }

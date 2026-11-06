@@ -258,6 +258,7 @@ capabilities EngineStudioBackend::caps() const
     // and its revoke request takes a port back from a program.
     caps.com_numbers = driver_installed();
     caps.release_port = driver_installed();
+    caps.recreate_ports = true;
     // The window's Undo history reverses changes with exact inverse
     // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
     caps.undo = true;
@@ -470,6 +471,21 @@ vss::result<void> EngineStudioBackend::rename_port(vss::endpoint_id id,
         return renamed.error();
     rebuild();
     return {};
+}
+
+std::vector<vss::endpoint_id> EngineStudioBackend::lost_ports() const
+{
+    return studio_.lost_ports();
+}
+
+vss::result<std::size_t> EngineStudioBackend::recreate_lost_ports()
+{
+    // Runs on a worker thread: the studio is safe to call from any thread, and
+    // the refresh that shows the result is the caller's, on the GUI thread.
+    const auto report = studio_.recreate_lost_ports();
+    if (!report.failed.empty())
+        return report.failed.front().second;
+    return report.recreated.size();
 }
 
 std::vector<device_view> EngineStudioBackend::devices() const

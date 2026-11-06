@@ -6344,6 +6344,27 @@ Networks: %5</source>
         <name>ShellWindow</name>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>部分 COM 端口已丢失。辅助服务或驱动程序重新启动，移除了您的程序已打开的端口。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>重新创建端口</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>端口已重新创建。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>未能重新创建所有端口：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>新建</translation>
         </message>
@@ -13327,6 +13348,27 @@ Networks: %5</source>
         <name>vss::gui::ShellWindow</name>
         <message>
             <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>部分 COM 端口已丢失。辅助服务或驱动程序重新启动，移除了您的程序已打开的端口。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>重新创建端口</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>端口已重新创建。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>未能重新创建所有端口：%1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <source>New</source>
             <translation>新建</translation>
         </message>

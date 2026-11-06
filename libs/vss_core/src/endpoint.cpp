@@ -38,8 +38,14 @@ endpoint::endpoint(hub& owner, endpoint_id id, std::string name,
 
 endpoint::~endpoint()
 {
-    if (transport_)
-        transport_->close();
+    if (const auto current = active_transport())
+        current->close();
+}
+
+std::shared_ptr<transport> endpoint::active_transport() const
+{
+    std::lock_guard lock(transport_mutex_);
+    return transport_;
 }
 
 endpoint_state endpoint::state() const noexcept
@@ -49,18 +55,21 @@ endpoint_state endpoint::state() const noexcept
 
 bool endpoint::is_open() const noexcept
 {
-    return state_.load() == endpoint_state::open && transport_
-        && transport_->is_open();
+    const auto current = active_transport();
+    return state_.load() == endpoint_state::open && current
+        && current->is_open();
 }
 
 std::string endpoint::public_path() const
 {
-    return transport_ ? transport_->public_path() : std::string();
+    const auto current = active_transport();
+    return current ? current->public_path() : std::string();
 }
 
 std::string endpoint::description() const
 {
-    return transport_ ? transport_->describe() : std::string();
+    const auto current = active_transport();
+    return current ? current->describe() : std::string();
 }
 
 boost::asio::any_io_executor endpoint::get_executor() const
@@ -75,7 +84,8 @@ void endpoint::start()
 
     transition(endpoint_state::opening);
 
-    if (!transport_ || !transport_->is_open())
+    const auto current = active_transport();
+    if (!current || !current->is_open())
     {
         running_ = false;
         transition(endpoint_state::failed);
@@ -85,13 +95,13 @@ void endpoint::start()
 
     {
         std::lock_guard lock(lines_mutex_);
-        lines_ = transport_->lines();
+        lines_ = current->lines();
     }
     transition(endpoint_state::open);
 
     // A transport may log what it notices about its device. The sink holds the
     // endpoint weakly: the transport can outlive a call into it.
-    transport_->set_notice_sink(
+    current->set_notice_sink(
         [weak = weak_from_this()](std::string text)
         {
             if (const auto self = weak.lock())
@@ -101,6 +111,45 @@ void endpoint::start()
     // Arm the first read on the strand, like every later one.
     auto self = shared_from_this();
     boost::asio::post(strand_, [self] { self->do_read(); });
+}
+
+result<void> endpoint::reopen(std::shared_ptr<transport> fresh)
+{
+    if (!fresh)
+        return make_error_code(errc::invalid_argument);
+    if (!fresh->is_open())
+        return make_error_code(errc::not_open);
+    if (!owner_.running())
+        return make_error_code(errc::not_open);
+
+    // Everything the old transport still owes (a read, a write) is stale from
+    // here on: the completions check the generation and are dropped.
+    generation_.fetch_add(1);
+    running_ = false;
+
+    std::shared_ptr<transport> old;
+    {
+        std::lock_guard lock(transport_mutex_);
+        old = std::move(transport_);
+        transport_ = std::move(fresh);
+    }
+    if (old)
+    {
+        old->cancel();
+        old->close();
+    }
+    {
+        // Bytes queued for the old connection are not sent down the new one.
+        std::lock_guard lock(write_mutex_);
+        writing_ = false;
+        write_queue_.clear();
+        write_queue_bytes_ = 0;
+    }
+
+    start();
+    return state() == endpoint_state::open ? result<void>()
+                                           : result<void>(make_error_code(
+                                                 errc::not_open));
 }
 
 void endpoint::stop()
@@ -119,10 +168,10 @@ void endpoint::shutdown(std::function<void()> done)
 
     auto self = shared_from_this();
     boost::asio::post(strand_, [self, done = std::move(done)] {
-        if (self->transport_)
+        if (const auto current = self->active_transport())
         {
-            self->transport_->cancel();
-            self->transport_->close();
+            current->cancel();
+            current->close();
         }
         {
             std::lock_guard lock(self->write_mutex_);
@@ -139,10 +188,10 @@ void endpoint::shutdown(std::function<void()> done)
 void endpoint::close()
 {
     running_ = false;
-    if (transport_)
+    if (const auto current = active_transport())
     {
-        transport_->cancel();
-        transport_->close();
+        current->cancel();
+        current->close();
     }
     transition(endpoint_state::closed);
 }
@@ -157,11 +206,17 @@ void endpoint::do_read()
     // enters the strand here instead, and everything that touches the
     // transport stays serialised, as the serial library's contract asks.
     auto self = shared_from_this();
-    transport_->async_read_some(
+    const std::uint64_t generation = generation_.load();
+    const auto current = active_transport();
+    current->async_read_some(
         boost::asio::buffer(read_buffer_),
-        [self](boost::system::error_code ec, std::size_t count) {
-            boost::asio::post(self->strand_,
-                              [self, ec, count] { self->on_read(ec, count); });
+        [self, generation](boost::system::error_code ec, std::size_t count) {
+            boost::asio::post(self->strand_, [self, generation, ec, count] {
+                // A read that belongs to a transport since replaced by
+                // reopen() is no news: drop it.
+                if (generation == self->generation_.load())
+                    self->on_read(ec, count);
+            });
         });
 }
 
@@ -182,7 +237,8 @@ void endpoint::on_read(boost::system::error_code ec, std::size_t count)
     {
         // A transport that has control lines completes a read with no bytes
         // when only its lines changed (an RFC 2217 client set DTR).
-        if (transport_ && transport_->supports_control_lines())
+        if (const auto current = active_transport();
+            current && current->supports_control_lines())
             refresh_lines();
         do_read();
         return;
@@ -227,8 +283,8 @@ void endpoint::handle_read_failure(const boost::system::error_code& ec,
         || ec == boost::asio::error::connection_reset
         || ec == boost::asio::error::broken_pipe;
 
-    if (transport_)
-        transport_->close();
+    if (const auto current = active_transport())
+        current->close();
 
     if (graceful)
     {
@@ -257,8 +313,14 @@ void endpoint::request_write()
     if (!start)
         return;
 
+    // A start posted for a transport since replaced would run beside the one
+    // reopen() has made room for, and send the same bytes twice.
     auto self = shared_from_this();
-    boost::asio::post(strand_, [self] { self->start_next_write(); });
+    const std::uint64_t generation = generation_.load();
+    boost::asio::post(strand_, [self, generation] {
+        if (generation == self->generation_.load())
+            self->start_next_write();
+    });
 }
 
 void endpoint::start_next_write()
@@ -274,7 +336,8 @@ void endpoint::start_next_write()
         next = write_queue_.front();
     }
 
-    if (!transport_ || !transport_->is_open())
+    const auto current = active_transport();
+    if (!current || !current->is_open())
     {
         std::lock_guard lock(write_mutex_);
         writing_ = false;
@@ -286,11 +349,14 @@ void endpoint::start_next_write()
     auto self = shared_from_this();
     // As in do_read: the std::function loses an executor binding, so the
     // completion enters the strand explicitly.
-    transport_->async_write_some(
+    const std::uint64_t generation = generation_.load();
+    current->async_write_some(
         boost::asio::buffer(*next->data) + next->offset,
-        [self, next](boost::system::error_code ec, std::size_t count) {
-            boost::asio::post(self->strand_, [self, next, ec, count] {
-                self->on_write(next, ec, count);
+        [self, next, generation](boost::system::error_code ec,
+                                 std::size_t count) {
+            boost::asio::post(self->strand_, [self, next, generation, ec, count] {
+                if (generation == self->generation_.load())
+                    self->on_write(next, ec, count);
             });
         });
 }
@@ -437,15 +503,16 @@ control_lines endpoint::lines() const
 
 void endpoint::refresh_lines()
 {
-    if (!transport_)
+    const auto current = active_transport();
+    if (!current)
         return;
 
-    transport_->refresh_lines();
+    current->refresh_lines();
     control_lines updated;
     {
         std::lock_guard lock(lines_mutex_);
         const control_lines before = lines_;
-        lines_ = transport_->lines();
+        lines_ = current->lines();
         updated = lines_;
         if (updated == before)
             return;
@@ -456,12 +523,13 @@ void endpoint::refresh_lines()
 
 error_code endpoint::set_line(control_line line, bool state)
 {
-    if (!transport_)
+    const auto current = active_transport();
+    if (!current)
         return make_error_code(errc::not_open);
-    if (!transport_->supports_control_lines())
+    if (!current->supports_control_lines())
         return make_error_code(errc::unsupported);
 
-    transport_->set_control_line(line, state);
+    current->set_control_line(line, state);
 
     control_lines snapshot;
     {
@@ -485,11 +553,12 @@ void endpoint::set_peer_inputs(control_lines inputs)
         lines_ = updated;
     }
 
-    if (transport_ && transport_->supports_control_lines())
+    if (const auto current = active_transport();
+        current && current->supports_control_lines())
     {
-        transport_->set_control_line(control_line::cts, updated.cts());
-        transport_->set_control_line(control_line::dsr, updated.dsr());
-        transport_->set_control_line(control_line::dcd, updated.dcd());
+        current->set_control_line(control_line::cts, updated.cts());
+        current->set_control_line(control_line::dsr, updated.dsr());
+        current->set_control_line(control_line::dcd, updated.dcd());
     }
 
     emit_lines();
@@ -533,8 +602,8 @@ endpoint_info endpoint::info() const
     out.serial = options_.serial;
     out.lines = lines();
     out.stats = stats();
-    out.supports_control_lines =
-        transport_ && transport_->supports_control_lines();
+    const auto current = active_transport();
+    out.supports_control_lines = current && current->supports_control_lines();
     out.open = is_open();
     return out;
 }

@@ -17,6 +17,7 @@
 #include <vss/ports/stable_link.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/virtual_port.hpp>
+#include <vss/studio/reconnect.hpp>
 
 #include <memory>
 #include <mutex>
@@ -28,6 +29,8 @@
 #include <vector>
 
 namespace vss {
+
+class reconnector;
 
 /// A fault a mock fixture can raise.  Each one is reported as an error on the
 /// fixture's next read, which stops the endpoint and emits an error event.
@@ -158,6 +161,48 @@ public:
     /// together and not more than about once a second.
     std::unordered_map<endpoint_id, peer_open_state> peer_states() const;
 
+    /// Opens the port again from what the studio kept of how it was made,
+    /// and puts the new transport under the same endpoint, so the name, the id
+    /// and every link stay.  For a port made from an address (a serial device,
+    /// `tcp://`, `rfc2217://`, a listener) it opens that address again with the
+    /// settings it had; for a port of the Windows driver it makes a new driver
+    /// port with the COM number it was asked to have, after closing the dead
+    /// one so its number is free, and the COM name can differ when no number was
+    /// asked for.  Works on a port that is open too (a restart).
+    /// `errc::not_found` for an unknown port and `errc::unsupported` for one
+    /// that cannot be made again (a mock fixture, a pseudo terminal, an
+    /// in-process loopback).  A port that cannot be opened reports why and is
+    /// left as it was.  It can block while the transport connects, so do not
+    /// call it from the GUI thread.
+    result<void> reopen(endpoint_id id);
+
+    /// Turns the retry of lost connections on or off.  With the policy on, a
+    /// `tcp://` or `rfc2217://` client whose connection drops (not a listener,
+    /// not a serial device) is opened again after a delay that doubles with
+    /// each failure; every step is logged as a `log_message` event on the
+    /// endpoint.  Off by default.
+    void set_reconnect_policy(const reconnect_policy& policy);
+    reconnect_policy current_reconnect_policy() const;
+
+    /// The ports of the Windows driver whose endpoint has stopped: the helper
+    /// service or the driver was restarted, or the port was removed from
+    /// outside, and the programs that had the COM port lost it.  The ports
+    /// are still in the topology with their links; #recreate_lost_ports makes
+    /// them again.  Empty on every other platform.
+    std::vector<endpoint_id> lost_ports() const;
+
+    /// What #recreate_lost_ports did.
+    struct recreate_report
+    {
+        std::vector<endpoint_id> recreated;
+        std::vector<std::pair<endpoint_id, error_code>> failed;
+    };
+
+    /// Calls #reopen for every lost port.  A port that fails is reported and
+    /// the rest go on.  Blocks for as long as the driver takes to make the
+    /// ports, a second or two each.
+    recreate_report recreate_lost_ports();
+
     /// What other applications should open for this endpoint.
     std::string advertised_path(endpoint_id id) const;
 
@@ -240,6 +285,9 @@ private:
         /// number is changed through.
         unsigned com_number = 0;
         std::weak_ptr<transport> driver;
+        /// The port was opened with settings given apart from its address, so
+        /// a reopen gives them again; otherwise the address alone describes it.
+        bool settings_given = false;
     };
 
     result<std::shared_ptr<endpoint>> register_port(
@@ -263,8 +311,15 @@ private:
     bool path_in_use(const std::string& path) const;
     void claim_paths(const std::string& target, const std::string& advertised);
 
+    /// One try of the retry policy for a lost connection.
+    result<void> reconnect_attempt(endpoint_id id);
+    /// True for an endpoint the retry policy applies to.
+    static bool reconnects(const port_record& record);
+
     studio_options options_;
     std::shared_ptr<vss::hub> hub_;
+    std::shared_ptr<reconnector> reconnector_;
+    subscriber_id reconnect_subscription_ = 0;
     mutable std::mutex record_mutex_;
     std::unordered_map<endpoint_id, port_record> records_;
     std::unordered_set<std::string> claimed_paths_;

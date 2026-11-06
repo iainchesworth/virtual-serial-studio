@@ -214,6 +214,24 @@ public:
         return vss::make_error_code(vss::errc::unsupported);
     }
 
+    // -- lost ports (capability: recreate_ports) ----------------------------
+
+    /// The ports of the Windows driver that were taken away under the programs
+    /// that had them, because the helper service or the driver restarted.  They
+    /// are still in the topology, stopped.  Empty everywhere else.
+    virtual std::vector<vss::endpoint_id> lost_ports() const { return {}; }
+
+    /// Makes the lost ports again, each with the COM number it asked for, and
+    /// keeps their links.  Blocks for a second or two a port, so it belongs on
+    /// a worker thread.  Returns how many were made; an error when any could
+    /// not be, and then the others have still been made.  The default is
+    /// `unsupported`: a build without `Capabilities::recreate_ports` never
+    /// pretends.
+    virtual vss::result<std::size_t> recreate_lost_ports()
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     // -- documents ---------------------------------------------------------
 
     virtual vss::config::document snapshot() const = 0;

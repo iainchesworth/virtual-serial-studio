@@ -5,6 +5,7 @@
 //
 
 #include "test_framework.hpp"
+#include "qt_wait.hpp"
 
 #include "backend/fake_studio_backend.hpp"
 #include "dialogs/connect_ports.hpp"
@@ -24,6 +25,7 @@
 
 #include "theme/theme.hpp"
 #include "widgets/dialogs.hpp"
+#include "widgets/notes.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -995,4 +997,101 @@ TEST_CASE("shell: a new setup warns while a program holds a port")
     REQUIRE(backend.ports().empty());
     window.close();
     clear_settings();
+}
+
+namespace
+{
+
+/// The banner that offers to make lost ports again, or null.
+vss::gui::NoteBanner* find_lost_banner(QWidget& window)
+{
+    const auto banners = window.findChildren<vss::gui::NoteBanner*>();
+    for (auto* banner : banners)
+    {
+        if (banner->text().startsWith(QStringLiteral("Some COM ports were lost")))
+            return banner;
+    }
+    return nullptr;
+}
+
+} // namespace
+
+TEST_CASE("shell: a banner offers to recreate ports the driver lost")
+{
+    clear_settings();
+    vss::gui::capabilities caps;
+    caps.recreate_ports = true;
+    vss::gui::FakeStudioBackend backend;
+    backend.set_capabilities(caps);
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+
+    const auto port = backend.create_virtual_port(
+        QStringLiteral("com"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(port.has_value());
+    QApplication::processEvents();
+
+    auto* banner = find_lost_banner(window);
+    REQUIRE(banner != nullptr);
+    REQUIRE(!banner->isVisible());
+
+    // The helper restarted: the port is lost and the banner says so.
+    backend.set_lost_ports({*port});
+    QApplication::processEvents();
+    REQUIRE(banner->isVisible());
+    REQUIRE(banner->action_button() != nullptr);
+    REQUIRE_EQ(banner->action_button()->text(), QStringLiteral("Recreate ports"));
+
+    banner->action_button()->click();
+    REQUIRE(vss_test::wait_until(
+        [&] { return !banner->isVisible(); }, 5000));
+    REQUIRE(backend.lost_ports().empty());
+    REQUIRE(banner->action_button()->isEnabled());
+}
+
+TEST_CASE("shell: the banner stays after a failed recreate and says why")
+{
+    clear_settings();
+    vss::gui::capabilities caps;
+    caps.recreate_ports = true;
+    vss::gui::FakeStudioBackend backend;
+    backend.set_capabilities(caps);
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+
+    const auto port = backend.create_virtual_port(
+        QStringLiteral("com"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(port.has_value());
+    backend.set_lost_ports({*port});
+    QApplication::processEvents();
+    auto* banner = find_lost_banner(window);
+    REQUIRE(banner != nullptr);
+    REQUIRE(banner->isVisible());
+
+    backend.fail_next(vss::make_error_code(vss::errc::device_busy));
+    banner->action_button()->click();
+    REQUIRE(vss_test::wait_until(
+        [&] { return banner->action_button()->isEnabled(); }, 5000));
+    // Nothing was made, so the banner is still there for another try.
+    REQUIRE(banner->isVisible());
+    REQUIRE_EQ(backend.lost_ports().size(), std::size_t{1});
+}
+
+TEST_CASE("shell: without the capability a lost port shows no banner")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    const auto port = backend.create_virtual_port(
+        QStringLiteral("com"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(port.has_value());
+    backend.set_lost_ports({*port});
+    QApplication::processEvents();
+    auto* banner = find_lost_banner(window);
+    REQUIRE(banner != nullptr);
+    REQUIRE(!banner->isVisible());
 }

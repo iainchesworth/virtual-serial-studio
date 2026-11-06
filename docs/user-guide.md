@@ -1035,6 +1035,33 @@ language. See [i18n.md](i18n.md).
 | `F1` | Help contents |
 | `Space`, `Ctrl+F` | In the monitor: pause, search |
 
+## When the ports are taken away
+
+A port of the Windows driver lives as long as the helper service or the driver
+that made it. If the helper service stops (Windows starts it again after five
+seconds) or the driver is restarted, every port it made is removed under the
+programs that had them open. Studio sees the ports stop, keeps them in the
+setup with their links and COM numbers, and shows a banner above the diagram:
+
+> Some COM ports were lost. The helper service or the driver was restarted and
+> removed the ports your programs had open.
+
+**Recreate ports** makes each one again with the COM number it asked for, and
+puts it back under the same name and links, so nothing has to be connected
+again. A port without a requested number can come back under a different COM
+name, because Windows gives the lowest free number: ask for a number if a
+program opens a fixed name (see *Choosing a COM number*). A program that had the
+old port open has to open it again; Studio cannot do that for it. If a port
+cannot be made, the banner stays and the status bar says why.
+
+Connections that Studio makes itself can be retried. `vss_cli run
+topology.json --reconnect` opens a `tcp://` or `rfc2217://` client again when
+its connection drops, after one second and then twice as long each time, up to
+thirty seconds, and logs each try as an event. Listeners and serial devices
+are not retried. In the engine, `studio::set_reconnect_policy` sets the delays
+and the most tries, and `studio::reopen` opens any port that has an address
+again by hand.
+
 ## What this build cannot do
 
 A control that the engine cannot back is shown disabled, with the tooltip "Not
@@ -1044,8 +1071,12 @@ available in this build". It never pretends. At the moment:
   link, changing an owner and renaming a port. They do not cover adding or removing a port, a
   wizard or applying JSON, because a port that is made again is a different
   port. Any of those starts a new history.
-- **Reconnect a failed port**: a port that stops shows *Failed* and keeps its
-  links, but the engine has no call to reopen it.
+- **Reconnect a failed network port from the window**: a port that stops shows
+  *Failed* or *Closed* and keeps its links. The engine can open it again
+  (`studio::reopen`), and `vss_cli run --reconnect` does so for `tcp://` and
+  `rfc2217://` clients, but the window has no button for it yet. The one thing
+  the window does is the **Recreate ports** banner for Windows driver ports
+  that a restart took away (see *When the ports are taken away*).
 - **Editing a link that exists**: modem-line emulation and the merge policy are
   fixed when the link is created.
 - **"In use" for a device**: shown only if the engine can prove it, and it

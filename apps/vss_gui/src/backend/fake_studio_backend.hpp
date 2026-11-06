@@ -49,6 +49,10 @@ public:
     {
         return releases_;
     }
+    /// Marks ports as lost, as a restart of the Windows driver would.
+    void set_lost_ports(std::vector<vss::endpoint_id> ids);
+    std::vector<vss::endpoint_id> lost_ports() const override;
+    vss::result<std::size_t> recreate_lost_ports() override;
     void set_devices(std::vector<device_view> devices);
     void set_facts(const setup_facts& facts) { facts_ = facts; }
     /// Windows-style free driver pairs for `share_serial`; -1 keeps the
@@ -189,6 +193,7 @@ private:
     std::chrono::milliseconds benchmark_duration_{0};
     std::optional<vss::benchmark_options> benchmark_seen_;
     std::vector<port_view> ports_;
+    std::vector<vss::endpoint_id> lost_;
     std::vector<link_view> links_;
     std::vector<device_view> devices_;
     std::vector<traffic_view> traffic_;
