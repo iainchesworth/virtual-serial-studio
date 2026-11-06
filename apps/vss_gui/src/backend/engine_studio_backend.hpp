@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 
+class QTimer;
+
 namespace vss
 {
 class studio;
@@ -118,6 +120,9 @@ private:
 
     vss::studio& studio_;
     std::unique_ptr<EventBridge> bridge_;
+    /// Looks for a program that opened a pseudo terminal; null where the
+    /// platform cannot tell.
+    QTimer* peer_timer_ = nullptr;
     std::vector<port_view> ports_;
     std::vector<link_view> links_;
 };

@@ -10,6 +10,7 @@
 #include <boost/json.hpp>
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <set>
 #include <sstream>
@@ -510,6 +511,15 @@ result<document> from_json(std::string_view text)
 
 result<document> load_file(const std::string& path)
 {
+    // A topology is a small regular file. A directory, a device or a pipe would
+    // open on some systems and then read as nothing, or never stop.
+    std::error_code status_error;
+    const auto status = std::filesystem::status(path, status_error);
+    if (status_error || status.type() == std::filesystem::file_type::not_found)
+        return make_error_code(errc::not_found);
+    if (!std::filesystem::is_regular_file(status))
+        return make_error_code(errc::invalid_argument);
+
     std::ifstream stream(path, std::ios::binary);
     if (!stream)
         return make_error_code(errc::not_found);

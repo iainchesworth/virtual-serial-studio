@@ -12,6 +12,7 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/serial_enumeration.hpp>
+#include <vss/ports/peer_open.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/ports/stable_link.hpp>
 #include <vss/ports/virtual_port.hpp>
@@ -118,6 +119,13 @@ public:
     /// name, `errc::already_exists` when another port has the name and
     /// `errc::not_found` for an unknown port.
     result<void> rename_port(endpoint_id id, const std::string& name);
+
+    /// For each pseudo terminal port, whether a program other than the studio
+    /// has its device open.  A port the platform cannot observe is left out,
+    /// so a missing entry means "unknown", never "not open".  The process
+    /// table is read once for every port, so call it for all of them
+    /// together and not more than about once a second.
+    std::unordered_map<endpoint_id, peer_open_state> peer_states() const;
 
     /// What other applications should open for this endpoint.
     std::string advertised_path(endpoint_id id) const;

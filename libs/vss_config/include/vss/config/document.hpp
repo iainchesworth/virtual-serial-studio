@@ -74,6 +74,8 @@ result<document> from_json(std::string_view text);
 /// Checks names, kinds, URIs and link arity.
 error_code validate(const document& value);
 
+/// Reads a topology file. A missing path gives `not_found`; a path that is not
+/// a regular file (a directory, a device, a pipe) gives `invalid_argument`.
 result<document> load_file(const std::string& path);
 result<void> save_file(const std::string& path, const document& value,
                        bool pretty = true);

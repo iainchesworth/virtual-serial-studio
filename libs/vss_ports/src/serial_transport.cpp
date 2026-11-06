@@ -90,8 +90,16 @@ result<endpoint_kind> classify_uri(std::string_view uri)
         const auto address = parse_listen_uri(uri);
         if (!address)
             return address.error();
-        return address->protocol == listen_protocol::tcp ? endpoint_kind::tcp
-                                                         : endpoint_kind::udp;
+        switch (address->protocol)
+        {
+        case listen_protocol::tcp:
+            return endpoint_kind::tcp;
+        case listen_protocol::rfc2217:
+            return endpoint_kind::rfc2217;
+        case listen_protocol::udp:
+            break;
+        }
+        return endpoint_kind::udp;
     }
 
     boost::system::error_code ec;

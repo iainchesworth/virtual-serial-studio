@@ -63,10 +63,11 @@ struct capabilities
     bool share = true;
     /// TCP, UDP and RFC 2217 endpoints built from a URI.
     bool bridge = true;
-    /// Wait for other computers to connect (a listening TCP/UDP endpoint).
-    /// False: the backend cannot open `tcp-listen://` or `udp-listen://`
-    /// endpoints. The engine can (`vss_ports`' listen transport), so only a
-    /// backend without one leaves this off. RFC 2217 has no server role.
+    /// Wait for other computers to connect (a listening TCP, UDP or RFC 2217
+    /// endpoint). False: the backend cannot open `tcp-listen://`,
+    /// `udp-listen://` or `rfc2217-listen://` endpoints. The engine can
+    /// (`vss_ports`' listen transport), so only a backend without one leaves
+    /// this off.
     bool network_server = false;
     /// A shared multi-drop bus link: every member hears every other and none
     /// hears itself (`vss::hub::bus`).  The engine backend provides it.  A

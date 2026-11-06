@@ -96,8 +96,7 @@ options parse(int argc, char** argv)
     return parsed;
 }
 
-void write_junit(const std::string& path,
-                 const std::vector<outcome>& outcomes,
+bool write_junit(const std::string& path, const std::vector<outcome>& outcomes,
                  std::chrono::milliseconds elapsed)
 {
     std::size_t failures = 0;
@@ -112,7 +111,7 @@ void write_junit(const std::string& path,
 
     std::ofstream stream(path, std::ios::binary | std::ios::trunc);
     if (!stream)
-        return;
+        return false;
 
     stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     stream << "<testsuites tests=\"" << outcomes.size() << "\" failures=\""
@@ -150,6 +149,8 @@ void write_junit(const std::string& path,
     }
 
     stream << "  </testsuite>\n</testsuites>\n";
+    stream.flush();
+    return static_cast<bool>(stream);
 }
 
 } // namespace
@@ -251,8 +252,15 @@ int main(int argc, char** argv)
     const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - started);
 
-    if (!configuration.junit_path.empty())
-        write_junit(configuration.junit_path, outcomes, elapsed);
+    // A report that was asked for and cannot be written must not pass quietly.
+    bool report_written = true;
+    if (!configuration.junit_path.empty() &&
+        !write_junit(configuration.junit_path, outcomes, elapsed))
+    {
+        std::cerr << "cannot write the JUnit report "
+                  << configuration.junit_path << '\n';
+        report_written = false;
+    }
 
     std::cout << "\n"
               << selected.size() << " tests, "
@@ -260,5 +268,5 @@ int main(int argc, char** argv)
               << " failed, " << skips << " skipped in " << elapsed.count()
               << " ms\n";
 
-    return failures == 0 ? 0 : 1;
+    return failures == 0 && report_written ? 0 : 1;
 }
