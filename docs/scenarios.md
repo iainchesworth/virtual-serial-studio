@@ -130,6 +130,21 @@ One message shows up once for each port it crossed: `R` on the sender and `W`
 on each receiver. Filter on `port` and `direction` to pick the rows you want.
 The `.cap` file has no port column, so keep one port per file with `--port`.
 
+### Play the master again without the master
+
+The `R` records of the master's port are what the master sent, with the gaps
+between them. Play them into the port the master program had opened, and the
+devices see the same polls at the same times:
+
+```bash
+vss_cli play poll.cap --uri=serial://COM6 --seconds=60
+vss_cli play poll.cap --uri=serial://COM6 --speed=4 --loop    # faster, until Ctrl-C
+```
+
+Record the replay with `capture` as before, and the two captures can be compared
+line by line: the same bytes in the same order, with the same gaps to within a
+few milliseconds.
+
 ## Test software that watches the control lines
 
 1. Attach a device (or create a pair of virtual ports).
