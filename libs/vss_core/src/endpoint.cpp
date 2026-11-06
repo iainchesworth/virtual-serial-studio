@@ -180,6 +180,10 @@ void endpoint::on_read(boost::system::error_code ec, std::size_t count)
 
     if (count == 0)
     {
+        // A transport that has control lines completes a read with no bytes
+        // when only its lines changed (an RFC 2217 client set DTR).
+        if (transport_ && transport_->supports_control_lines())
+            refresh_lines();
         do_read();
         return;
     }

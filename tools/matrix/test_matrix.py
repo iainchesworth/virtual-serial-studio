@@ -12,6 +12,7 @@ from __future__ import annotations
 import io
 import json
 import sys
+import tarfile
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -88,6 +89,19 @@ class PackageAndLinkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as scratch:
             (Path(scratch) / "bin").mkdir()
             self.assertEqual(self.statuses(["--package", scratch])["T9"], "fail")
+
+    @unittest.skipUnless(hasattr(tarfile, "data_filter"), "this Python has no extraction filter")
+    def test_an_archive_that_leaves_its_folder_is_refused(self) -> None:
+        with tempfile.TemporaryDirectory() as scratch:
+            package = Path(scratch, "package.tar.gz")
+            payload = b"x"
+            with tarfile.open(package, "w:gz") as archive:
+                member = tarfile.TarInfo("../escaped.txt")
+                member.size = len(payload)
+                archive.addfile(member, io.BytesIO(payload))
+            with self.assertRaises(ValueError):
+                run_cell.unpack_package(package, Path(scratch, "target"))
+            self.assertFalse(Path(scratch, "escaped.txt").exists())
 
     @unittest.skipUnless(run_cell.POSIX, "the stand-in programs are shell scripts")
     def test_a_package_whose_programs_run_passes_and_a_broken_one_fails(self) -> None:

@@ -3,8 +3,9 @@ name: CodeQL
 
 # Code scanning, nightly on develop. There is no pull request trigger, so a finding never blocks a
 # merge and a required check cannot be left waiting. The shared reusable workflow does not fetch
-# Boost, so the C++ build is written out here. A failed analysis opens or updates one
-# `nightly-analysis` issue.
+# Boost, so the C++ build is written out here. The C++ build includes the Qt GUI, which is most of
+# the first-party code and would otherwise never be analysed. A failed analysis opens or updates
+# one `nightly-analysis` issue.
 
 on:
   schedule:
@@ -48,10 +49,15 @@ jobs:
         uses: ./.github/actions/setup-toolchain
         with:
           compiler: gcc
+          qt: "true"
 
       - name: Prepare dependencies
         if: matrix.build_mode == 'manual'
         uses: ./.github/actions/prepare-deps
+
+      - name: Install GUI system libraries
+        if: matrix.build_mode == 'manual'
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
 
       - name: Initialise CodeQL
         uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
@@ -64,8 +70,8 @@ jobs:
         if: matrix.build_mode == 'manual'
         run: |
           set -euo pipefail
-          cmake --preset linux-release
-          cmake --build --preset linux-release
+          cmake --preset linux-release-gui
+          cmake --build --preset linux-release-gui
 
       - name: Analyze
         uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
