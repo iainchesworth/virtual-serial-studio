@@ -1117,3 +1117,21 @@ lines applied. The numbers are the rows of the design review.
   catalogues in `apps/vss_gui/translations/`.
 - **Ordinals.** The share wizard's ordinal words ("third") are catalogue
   entries in the `ordinal` context, so each language inflects them.
+
+### COM numbers and a port nobody has opened
+
+- **COM numbers of driver ports.** The window no longer leaves the number to
+  Windows (the lowest free one, so COM1 and COM2 on a computer with no real
+  ones). It asks the Studio driver for the number above every COM port the
+  computer already has, never below COM3, because COM1 and COM2 are the legacy
+  on-board names that Windows, firmware and many programs treat as taken. A
+  number that Windows' COM name database holds, which no list of ports shows, is
+  refused by the driver with no port made, and the next number is tried. Without
+  the helper service the number is left to Windows as before. The number is kept
+  in a saved setup, so a program that opens a fixed name finds the port again.
+  The pair form still reads "Chosen when you create the pair"; the COM number
+  editor remains a follow-up.
+- **Waiting for program.** The Inspector, the Port ready dialog and the
+  troubleshoot row say that the program has to open exactly this port, because a
+  program that was set up with another COM name opens nothing of ours. The
+  Inspector adds a "Copy name" button to the waiting note.

@@ -10,10 +10,12 @@ add_library(vss_gui_backend STATIC
   engine_studio_backend.cpp
   fake_studio_backend.cpp
   event_bridge.cpp
+  com_numbers.cpp
   studio_backend.hpp
   engine_studio_backend.hpp
   fake_studio_backend.hpp
   event_bridge.hpp
+  com_numbers.hpp
   capabilities.hpp
   view_types.hpp)
 
@@ -32,7 +34,8 @@ if(VSS_BUILD_TESTS)
   add_executable(vss_gui_backend_tests
     tests/main.cpp
     tests/test_fake_backend.cpp
-    tests/test_event_bridge.cpp)
+    tests/test_event_bridge.cpp
+    tests/test_com_numbers.cpp)
 
   target_include_directories(vss_gui_backend_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/tests/framework)

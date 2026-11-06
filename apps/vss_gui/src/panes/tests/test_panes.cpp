@@ -17,8 +17,10 @@
 
 #include <QApplication>
 #include <QCheckBox>
+#include <QClipboard>
 #include <QComboBox>
 #include <QElapsedTimer>
+#include <QGuiApplication>
 #include <QLabel>
 #include <QListView>
 #include <QPushButton>
@@ -405,6 +407,23 @@ TEST_CASE("inspector: waiting sentence and control line chips")
             waiting = true;
     }
     REQUIRE(waiting);
+
+    // The waiting note names the exact port and offers to copy it.
+    bool names_port = false;
+    for (QLabel* label : panel.findChildren<QLabel*>())
+    {
+        if (label->text().contains(QStringLiteral("has to open exactly")))
+            names_port = true;
+    }
+    REQUIRE(names_port);
+    auto* copy_name = panel.findChild<QPushButton*>(
+        QStringLiteral("inspectorCopyName"));
+    REQUIRE(copy_name != nullptr);
+    REQUIRE(!copy_name->isHidden());
+    REQUIRE(copy_name->accessibleName().startsWith(QStringLiteral("Copy name")));
+    copy_name->click();
+    REQUIRE_EQ(QGuiApplication::clipboard()->text(),
+               backend.port(*id)->path);
 
     bool has_dtr = false;
     for (QLabel* label : panel.findChildren<QLabel*>())

@@ -605,7 +605,9 @@ TEST_CASE("support: troubleshooting checklist reports each state honestly")
     REQUIRE(report.rows.at(3).highlight);
     REQUIRE_EQ(report.rows.at(3).sentence,
                QStringLiteral("No program has opened COM7 yet, so nothing can "
-                              "arrive."));
+                              "arrive. The program has to open exactly COM7; "
+                              "a different COM port will not receive "
+                              "anything."));
 
     vss::gui::port_view open = terminal;
     open.peer = vss::gui::peer_state::open;
