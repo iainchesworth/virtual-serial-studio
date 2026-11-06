@@ -673,6 +673,25 @@ public:
         return same_name(port_, com_name);
     }
 
+    /// Takes the port back from its program: see `revoke_driver_port`.
+    result<std::uint32_t> revoke()
+    {
+        if (!open_.load())
+            return make_error_code(errc::not_open);
+        // The request ends at once, so the lock is held across it, as it is
+        // for the state read.  The hub end is not swapped while it is held.
+        std::lock_guard lock(mutex_);
+        if (raw_ == INVALID_HANDLE_VALUE)
+            return make_error_code(errc::not_open);
+        ULONG process = 0;
+        DWORD returned = 0;
+        if (!control(raw_, static_cast<DWORD>(IOCTL_VSSCOM_HUB_REVOKE), nullptr, 0,
+                     &process, sizeof(process), &returned) ||
+            returned != sizeof(process))
+            return make_error_code(errc::io_error);
+        return static_cast<std::uint32_t>(process);
+    }
+
     /// Changes the COM number: see `set_driver_com_number`.
     result<std::string> renumber(unsigned number)
     {
@@ -1393,6 +1412,16 @@ result<std::string> platform_set_driver_com_number(transport& port,
     {
         if (static_cast<transport*>(candidate.get()) == &port)
             return candidate->renumber(com_number);
+    }
+    return make_error_code(errc::invalid_argument);
+}
+
+result<std::uint32_t> platform_revoke_driver_port(transport& port)
+{
+    for (const auto& candidate : registry_snapshot())
+    {
+        if (static_cast<transport*>(candidate.get()) == &port)
+            return candidate->revoke();
     }
     return make_error_code(errc::invalid_argument);
 }

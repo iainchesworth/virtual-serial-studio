@@ -31,6 +31,7 @@ if(UNIX)
   target_sources(vss_ports PRIVATE
     src/platform/posix/com0com_posix.cpp
     src/platform/posix/native_lines_posix.cpp
+    src/platform/posix/process_control_posix.cpp
     src/platform/posix/serial_enumeration_posix.cpp
     src/platform/posix/vcom_driver_posix.cpp
     src/platform/posix/virtual_port_posix.cpp)

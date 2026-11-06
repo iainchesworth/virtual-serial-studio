@@ -92,6 +92,22 @@ result<virtual_port_result> create_driver_port(
 /// `errc::not_open` when the transport is closed.
 result<std::string> set_driver_com_number(transport& port, unsigned com_number);
 
+/// Takes a driver port back from the program that has it open, as a driver
+/// revoke request does: the program's waiting reads, writes and event waits
+/// end, every later request on its handle fails, and another program can open
+/// the port at once.  The program keeps running and keeps its handle, which no
+/// longer does anything.  `port` is the transport that `create_driver_port`
+/// returned.  The answer is the process that had the port open, or 0 when none
+/// did (the call then changes nothing).
+///
+/// Only the user who made the port holds its hub end, so only that user can
+/// revoke it; another user's request cannot get that far.  `errc::unsupported`
+/// where there is no driver, `errc::invalid_argument` for a transport that is
+/// not a driver port, `errc::not_open` when the transport is closed and
+/// `errc::io_error` when the driver refused (a driver older than version 3
+/// does not know the request).
+result<std::uint32_t> revoke_driver_port(transport& port);
+
 /// What the driver says about the program that has the application end of a
 /// port open, and the line settings that program has chosen.  The numbers are
 /// those of `SERIAL_LINE_CONTROL`.

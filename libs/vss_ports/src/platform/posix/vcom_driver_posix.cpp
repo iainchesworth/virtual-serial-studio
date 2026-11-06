@@ -33,6 +33,11 @@ result<std::string> platform_set_driver_com_number(transport&, unsigned)
     return make_error_code(errc::unsupported);
 }
 
+result<std::uint32_t> platform_revoke_driver_port(transport&)
+{
+    return make_error_code(errc::unsupported);
+}
+
 std::optional<driver_peer_info> platform_driver_peer(const std::string&)
 {
     return std::nullopt;
