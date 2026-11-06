@@ -300,9 +300,9 @@ void AddPortDialog::build_virtual_page()
     com_row_ = new FormRow(
         tr("COM number"), com_,
         tr("Programs that open a fixed name such as COM3 find the port again "
-           "every run. Automatic takes the lowest free number. A number needs "
-           "the Studio driver and its helper service, and is used when one "
-           "port is made."),
+           "every run. Automatic takes a free number above the ports this PC "
+           "already has, never COM1 or COM2. A number needs the Studio driver "
+           "and its helper service, and is used when one port is made."),
         virtual_page_);
     layout->addWidget(com_row_);
 

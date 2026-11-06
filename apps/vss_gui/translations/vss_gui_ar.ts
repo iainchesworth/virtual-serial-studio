@@ -451,8 +451,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes a free number above the ports this PC already has, never COM1 or COM2. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ نفسه في كل مرة. يختار الوضع التلقائي رقمًا حرًا أعلى من المنافذ الموجودة بالفعل في هذا الكمبيوتر، ولا يستخدم COM1 أو COM2 أبدًا. يتطلب الرقم برنامج تشغيل Studio وخدمته المساعدة، ويُستخدم عند إنشاء منفذ واحد.</translation>
+        </message>
+        <message>
             <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
-            <translation>البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ في كل مرة. يأخذ «تلقائي» أقل رقم متاح. يتطلب الرقم برنامج تشغيل Studio وخدمة المساعد الخاصة به، ويُستخدم عند إنشاء منفذ واحد.</translation>
+            <translation type="vanished">البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ في كل مرة. يأخذ «تلقائي» أقل رقم متاح. يتطلب الرقم برنامج تشغيل Studio وخدمة المساعد الخاصة به، ويُستخدم عند إنشاء منفذ واحد.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="311" />
@@ -2281,137 +2285,157 @@ Networks: %5</source>
     <context>
         <name>InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="115" />
+            <location filename="../src/panes/inspector_panel.cpp" line="117" />
             <source>Inspector</source>
             <translation>المفتش</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="136" />
+            <location filename="../src/panes/inspector_panel.cpp" line="138" />
             <source>Select a port to inspect it.</source>
             <translation>اختر منفذاً لفحصه.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="167" />
+            <location filename="../src/panes/inspector_panel.cpp" line="169" />
             <source>State</source>
             <translation>الحالة</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="171" />
+            <location filename="../src/panes/inspector_panel.cpp" line="173" />
             <source>Path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="386" />
+            <location filename="../src/panes/inspector_panel.cpp" line="183" />
+            <location filename="../src/panes/inspector_panel.cpp" line="403" />
             <source>path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="188" />
             <source>COM number</source>
             <translation>رقم COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <location filename="../src/panes/inspector_panel.cpp" line="196" />
             <source>Change...</source>
             <translation>تغيير...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change COM number</source>
             <translation>تغيير رقم COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="210" />
+            <location filename="../src/panes/inspector_panel.cpp" line="212" />
             <source>Traffic</source>
             <translation>حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="219" />
+            <location filename="../src/panes/inspector_panel.cpp" line="221" />
             <source>Serial</source>
             <translation>تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="236" />
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="238" />
+            <location filename="../src/panes/inspector_panel.cpp" line="422" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;لماذا لا يصل شيء؟&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <source>Copy name</source>
+            <translation>نسخ الاسم</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <source>%1 copied.</source>
+            <translation>تم نسخ %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="262" />
             <source>Release port...</source>
             <translation>تحرير المنفذ...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port</source>
             <translation>تحرير المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="258" />
+            <location filename="../src/panes/inspector_panel.cpp" line="275" />
             <source>Control lines</source>
             <translation>خطوط التحكم</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="280" />
+            <location filename="../src/panes/inspector_panel.cpp" line="297" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="281" />
+            <location filename="../src/panes/inspector_panel.cpp" line="298" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="282" />
+            <location filename="../src/panes/inspector_panel.cpp" line="299" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="305" />
+            <location filename="../src/panes/inspector_panel.cpp" line="322" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;فتح مصفوفة الخطوط والأعطال&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="383" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>The engine reported a failure.</source>
             <translation>أبلغ المحرك عن فشل.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="387" />
+            <location filename="../src/panes/inspector_panel.cpp" line="404" />
             <source>RX %1, TX %2</source>
             <translation>RX %1، TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="397" />
-            <source>No program has opened %1 yet.</source>
-            <translation>لم يفتح أي برنامج %1 بعد.</translation>
+            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
+            <translation>لم يفتح أي برنامج %1 بعد. يجب أن يفتح البرنامج %1 تحديدًا؛ لن يستقبل منفذ آخر أي شيء.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="412" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <source>Copy name, %1</source>
+            <translation>نسخ الاسم، %1</translation>
+        </message>
+        <message>
+            <source>No program has opened %1 yet.</source>
+            <translation type="vanished">لم يفتح أي برنامج %1 بعد.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="434" />
+            <location filename="../src/panes/inspector_panel.cpp" line="440" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="430" />
+            <location filename="../src/panes/inspector_panel.cpp" line="452" />
             <source>This port does not support control lines.</source>
             <translation>لا يدعم هذا المنفذ خطوط التحكم.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="458" />
-            <location filename="../src/panes/inspector_panel.cpp" line="472" />
+            <location filename="../src/panes/inspector_panel.cpp" line="480" />
+            <location filename="../src/panes/inspector_panel.cpp" line="494" />
             <source>%1 on</source>
             <translation>%1 مفعّل</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="459" />
-            <location filename="../src/panes/inspector_panel.cpp" line="473" />
+            <location filename="../src/panes/inspector_panel.cpp" line="481" />
+            <location filename="../src/panes/inspector_panel.cpp" line="495" />
             <source>%1 off</source>
             <translation>%1 معطّل</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="492" />
+            <location filename="../src/panes/inspector_panel.cpp" line="514" />
             <source>%1, %2</source>
             <translation>%1، %2</translation>
         </message>
@@ -4253,8 +4277,12 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
+            <translation>لم يفتح أي برنامج %1 بعد. في برنامجك، اختر %1 تحديدًا. يتم تحديث هذه اللوحة عندما يفتحه برنامج.</translation>
+        </message>
+        <message>
             <source>No program has opened %1 yet. This panel updates when one does.</source>
-            <translation>لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
+            <translation type="vanished">لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
@@ -4408,53 +4436,53 @@ Networks: %5</source>
             <translation>الخطوة %1 من %2، %3</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="55" />
+            <location filename="../src/panes/inspector_panel.cpp" line="57" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="57" />
+            <location filename="../src/panes/inspector_panel.cpp" line="59" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="59" />
+            <location filename="../src/panes/inspector_panel.cpp" line="61" />
             <source>CTS</source>
             <translation>CTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="61" />
+            <location filename="../src/panes/inspector_panel.cpp" line="63" />
             <source>DSR</source>
             <translation>DSR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="63" />
+            <location filename="../src/panes/inspector_panel.cpp" line="65" />
             <source>DCD</source>
             <translation>DCD</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="65" />
+            <location filename="../src/panes/inspector_panel.cpp" line="67" />
             <source>RI</source>
             <translation>RI</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="67" />
+            <location filename="../src/panes/inspector_panel.cpp" line="69" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="100" />
+            <location filename="../src/panes/inspector_panel.cpp" line="102" />
             <location filename="../src/dialogs/common.cpp" line="100" />
             <source>no flow control</source>
             <translation>بلا تحكم في التدفق</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="102" />
+            <location filename="../src/panes/inspector_panel.cpp" line="104" />
             <source>software flow control</source>
             <translation>تحكم برمجي في التدفق</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="104" />
+            <location filename="../src/panes/inspector_panel.cpp" line="106" />
             <source>hardware flow control</source>
             <translation>تحكم عتادي في التدفق</translation>
         </message>
@@ -7951,237 +7979,237 @@ Networks: %5</source>
             <translation>%1 من الارتباطات، عُثر على حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="402" />
+            <location filename="../src/advanced/json_validation.cpp" line="431" />
             <source>Valid, version 1</source>
             <translation>صالح، الإصدار 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="405" />
+            <location filename="../src/advanced/json_validation.cpp" line="434" />
             <source>Not valid</source>
             <translation>غير صالح</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="420" />
-            <location filename="../src/advanced/json_validation.cpp" line="445" />
-            <location filename="../src/advanced/json_validation.cpp" line="473" />
-            <location filename="../src/advanced/json_validation.cpp" line="506" />
-            <location filename="../src/advanced/json_validation.cpp" line="533" />
-            <location filename="../src/advanced/json_validation.cpp" line="560" />
-            <location filename="../src/advanced/json_validation.cpp" line="588" />
-            <location filename="../src/advanced/json_validation.cpp" line="629" />
-            <location filename="../src/advanced/json_validation.cpp" line="670" />
-            <location filename="../src/advanced/json_validation.cpp" line="705" />
-            <location filename="../src/advanced/json_validation.cpp" line="741" />
-            <location filename="../src/advanced/json_validation.cpp" line="774" />
-            <location filename="../src/advanced/json_validation.cpp" line="809" />
-            <location filename="../src/advanced/json_validation.cpp" line="858" />
-            <location filename="../src/advanced/json_validation.cpp" line="991" />
-            <location filename="../src/advanced/json_validation.cpp" line="1031" />
-            <location filename="../src/advanced/json_validation.cpp" line="1065" />
-            <location filename="../src/advanced/json_validation.cpp" line="1121" />
-            <location filename="../src/advanced/json_validation.cpp" line="1158" />
+            <location filename="../src/advanced/json_validation.cpp" line="449" />
+            <location filename="../src/advanced/json_validation.cpp" line="474" />
+            <location filename="../src/advanced/json_validation.cpp" line="502" />
+            <location filename="../src/advanced/json_validation.cpp" line="535" />
+            <location filename="../src/advanced/json_validation.cpp" line="562" />
+            <location filename="../src/advanced/json_validation.cpp" line="589" />
+            <location filename="../src/advanced/json_validation.cpp" line="617" />
+            <location filename="../src/advanced/json_validation.cpp" line="658" />
+            <location filename="../src/advanced/json_validation.cpp" line="699" />
+            <location filename="../src/advanced/json_validation.cpp" line="734" />
+            <location filename="../src/advanced/json_validation.cpp" line="770" />
+            <location filename="../src/advanced/json_validation.cpp" line="803" />
+            <location filename="../src/advanced/json_validation.cpp" line="838" />
+            <location filename="../src/advanced/json_validation.cpp" line="887" />
+            <location filename="../src/advanced/json_validation.cpp" line="1020" />
+            <location filename="../src/advanced/json_validation.cpp" line="1060" />
+            <location filename="../src/advanced/json_validation.cpp" line="1094" />
+            <location filename="../src/advanced/json_validation.cpp" line="1150" />
+            <location filename="../src/advanced/json_validation.cpp" line="1187" />
             <source>Valid JSON, version 1</source>
             <translation>JSON صالح، الإصدار 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="423" />
-            <location filename="../src/advanced/json_validation.cpp" line="448" />
-            <location filename="../src/advanced/json_validation.cpp" line="476" />
-            <location filename="../src/advanced/json_validation.cpp" line="509" />
-            <location filename="../src/advanced/json_validation.cpp" line="536" />
-            <location filename="../src/advanced/json_validation.cpp" line="563" />
-            <location filename="../src/advanced/json_validation.cpp" line="591" />
-            <location filename="../src/advanced/json_validation.cpp" line="632" />
-            <location filename="../src/advanced/json_validation.cpp" line="673" />
-            <location filename="../src/advanced/json_validation.cpp" line="708" />
-            <location filename="../src/advanced/json_validation.cpp" line="744" />
-            <location filename="../src/advanced/json_validation.cpp" line="777" />
-            <location filename="../src/advanced/json_validation.cpp" line="812" />
-            <location filename="../src/advanced/json_validation.cpp" line="861" />
-            <location filename="../src/advanced/json_validation.cpp" line="994" />
-            <location filename="../src/advanced/json_validation.cpp" line="1034" />
-            <location filename="../src/advanced/json_validation.cpp" line="1068" />
-            <location filename="../src/advanced/json_validation.cpp" line="1124" />
+            <location filename="../src/advanced/json_validation.cpp" line="452" />
+            <location filename="../src/advanced/json_validation.cpp" line="477" />
+            <location filename="../src/advanced/json_validation.cpp" line="505" />
+            <location filename="../src/advanced/json_validation.cpp" line="538" />
+            <location filename="../src/advanced/json_validation.cpp" line="565" />
+            <location filename="../src/advanced/json_validation.cpp" line="592" />
+            <location filename="../src/advanced/json_validation.cpp" line="620" />
+            <location filename="../src/advanced/json_validation.cpp" line="661" />
+            <location filename="../src/advanced/json_validation.cpp" line="702" />
+            <location filename="../src/advanced/json_validation.cpp" line="737" />
+            <location filename="../src/advanced/json_validation.cpp" line="773" />
+            <location filename="../src/advanced/json_validation.cpp" line="806" />
+            <location filename="../src/advanced/json_validation.cpp" line="841" />
+            <location filename="../src/advanced/json_validation.cpp" line="890" />
+            <location filename="../src/advanced/json_validation.cpp" line="1023" />
+            <location filename="../src/advanced/json_validation.cpp" line="1063" />
+            <location filename="../src/advanced/json_validation.cpp" line="1097" />
+            <location filename="../src/advanced/json_validation.cpp" line="1153" />
             <source>Ports, all names unique</source>
             <translation>المنافذ، كل الأسماء فريدة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="426" />
-            <location filename="../src/advanced/json_validation.cpp" line="451" />
-            <location filename="../src/advanced/json_validation.cpp" line="479" />
-            <location filename="../src/advanced/json_validation.cpp" line="512" />
-            <location filename="../src/advanced/json_validation.cpp" line="539" />
-            <location filename="../src/advanced/json_validation.cpp" line="566" />
-            <location filename="../src/advanced/json_validation.cpp" line="594" />
-            <location filename="../src/advanced/json_validation.cpp" line="635" />
-            <location filename="../src/advanced/json_validation.cpp" line="676" />
-            <location filename="../src/advanced/json_validation.cpp" line="711" />
-            <location filename="../src/advanced/json_validation.cpp" line="747" />
-            <location filename="../src/advanced/json_validation.cpp" line="780" />
-            <location filename="../src/advanced/json_validation.cpp" line="815" />
-            <location filename="../src/advanced/json_validation.cpp" line="864" />
-            <location filename="../src/advanced/json_validation.cpp" line="997" />
-            <location filename="../src/advanced/json_validation.cpp" line="1037" />
-            <location filename="../src/advanced/json_validation.cpp" line="1071" />
-            <location filename="../src/advanced/json_validation.cpp" line="1127" />
+            <location filename="../src/advanced/json_validation.cpp" line="455" />
+            <location filename="../src/advanced/json_validation.cpp" line="480" />
+            <location filename="../src/advanced/json_validation.cpp" line="508" />
+            <location filename="../src/advanced/json_validation.cpp" line="541" />
+            <location filename="../src/advanced/json_validation.cpp" line="568" />
+            <location filename="../src/advanced/json_validation.cpp" line="595" />
+            <location filename="../src/advanced/json_validation.cpp" line="623" />
+            <location filename="../src/advanced/json_validation.cpp" line="664" />
+            <location filename="../src/advanced/json_validation.cpp" line="705" />
+            <location filename="../src/advanced/json_validation.cpp" line="740" />
+            <location filename="../src/advanced/json_validation.cpp" line="776" />
+            <location filename="../src/advanced/json_validation.cpp" line="809" />
+            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <location filename="../src/advanced/json_validation.cpp" line="893" />
+            <location filename="../src/advanced/json_validation.cpp" line="1026" />
+            <location filename="../src/advanced/json_validation.cpp" line="1066" />
+            <location filename="../src/advanced/json_validation.cpp" line="1100" />
+            <location filename="../src/advanced/json_validation.cpp" line="1156" />
             <source>Links, no loops</source>
             <translation>الارتباطات، بلا حلقات</translation>
         </message>
         <message>
             <location filename="../src/advanced/json_validation.cpp" line="292" />
-            <location filename="../src/advanced/json_validation.cpp" line="429" />
+            <location filename="../src/advanced/json_validation.cpp" line="458" />
             <source>Line %1: %2</source>
             <translation>السطر %1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="432" />
+            <location filename="../src/advanced/json_validation.cpp" line="461" />
             <source>The line is highlighted and nothing was applied.</source>
             <translation>السطر مميّز ولم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="454" />
+            <location filename="../src/advanced/json_validation.cpp" line="483" />
             <source>Line 1: the document must be a JSON object</source>
             <translation>السطر 1: يجب أن يكون المستند كائن JSON</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="456" />
+            <location filename="../src/advanced/json_validation.cpp" line="485" />
             <source>A setup file starts with a { and ends with a }.</source>
             <translation>يبدأ ملف الإعداد بالرمز { وينتهي بالرمز }.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="484" />
+            <location filename="../src/advanced/json_validation.cpp" line="513" />
             <source>Line %1: version must be 1</source>
             <translation>السطر %1: يجب أن تكون قيمة version هي 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="487" />
+            <location filename="../src/advanced/json_validation.cpp" line="516" />
             <source>The document needs "version": 1</source>
             <translation>يحتاج المستند إلى "version": 1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="490" />
             <location filename="../src/advanced/json_validation.cpp" line="519" />
-            <location filename="../src/advanced/json_validation.cpp" line="547" />
-            <location filename="../src/advanced/json_validation.cpp" line="754" />
-            <location filename="../src/advanced/json_validation.cpp" line="792" />
-            <location filename="../src/advanced/json_validation.cpp" line="924" />
-            <location filename="../src/advanced/json_validation.cpp" line="933" />
-            <location filename="../src/advanced/json_validation.cpp" line="1095" />
+            <location filename="../src/advanced/json_validation.cpp" line="548" />
+            <location filename="../src/advanced/json_validation.cpp" line="576" />
+            <location filename="../src/advanced/json_validation.cpp" line="783" />
+            <location filename="../src/advanced/json_validation.cpp" line="821" />
+            <location filename="../src/advanced/json_validation.cpp" line="953" />
+            <location filename="../src/advanced/json_validation.cpp" line="962" />
+            <location filename="../src/advanced/json_validation.cpp" line="1124" />
             <source>Nothing was applied.</source>
             <translation>لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="517" />
+            <location filename="../src/advanced/json_validation.cpp" line="546" />
             <source>"ports" must be a list</source>
             <translation>يجب أن تكون "ports" قائمة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="545" />
+            <location filename="../src/advanced/json_validation.cpp" line="574" />
             <source>Each port must be an object</source>
             <translation>يجب أن يكون كل منفذ كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="572" />
+            <location filename="../src/advanced/json_validation.cpp" line="601" />
             <source>Line %1: a port has no name</source>
             <translation>السطر %1: منفذ بلا اسم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="575" />
+            <location filename="../src/advanced/json_validation.cpp" line="604" />
             <source>A port has no name</source>
             <translation>منفذ بلا اسم</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="577" />
+            <location filename="../src/advanced/json_validation.cpp" line="606" />
             <source>Every port needs a name so links can refer to it.</source>
             <translation>يحتاج كل منفذ إلى اسم ليمكن للارتباطات الإشارة إليه.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="599" />
+            <location filename="../src/advanced/json_validation.cpp" line="628" />
             <source>Line %1: the name "%2" is used twice</source>
             <translation>السطر %1: الاسم "%2" مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="604" />
+            <location filename="../src/advanced/json_validation.cpp" line="633" />
             <source>The name "%1" is used twice</source>
             <translation>الاسم "%1" مستخدم مرتين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="607" />
+            <location filename="../src/advanced/json_validation.cpp" line="636" />
             <source>Port names identify ports in links, so each name must be unique. Nothing was applied.</source>
             <translation>تحدد أسماء المنافذ المنافذ في الارتباطات، لذا يجب أن يكون كل اسم فريداً. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="641" />
+            <location filename="../src/advanced/json_validation.cpp" line="670" />
             <source>Line %1: unknown port kind "%2"</source>
             <translation>السطر %1: نوع منفذ غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="645" />
+            <location filename="../src/advanced/json_validation.cpp" line="674" />
             <source>Unknown port kind "%1"</source>
             <translation>نوع منفذ غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="648" />
+            <location filename="../src/advanced/json_validation.cpp" line="677" />
             <source>Use virtual, physical, tcp, udp, rfc2217 or mock. Nothing was applied.</source>
             <translation>استخدم virtual أو physical أو tcp أو udp أو rfc2217 أو mock. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="683" />
+            <location filename="../src/advanced/json_validation.cpp" line="712" />
             <source>Line %1: unknown virtual kind "%2"</source>
             <translation>السطر %1: نوع افتراضي غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="688" />
+            <location filename="../src/advanced/json_validation.cpp" line="717" />
             <source>Unknown virtual kind "%1"</source>
             <translation>نوع افتراضي غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="691" />
+            <location filename="../src/advanced/json_validation.cpp" line="720" />
             <source>Use auto, pty, named-pipe, loopback or windows-driver. Nothing was applied.</source>
             <translation>استخدم auto أو pty أو named-pipe أو loopback أو windows-driver. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="718" />
+            <location filename="../src/advanced/json_validation.cpp" line="747" />
             <source>Line %1: port "%2" has no address</source>
             <translation>السطر %1: المنفذ "%2" بلا عنوان</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="723" />
+            <location filename="../src/advanced/json_validation.cpp" line="752" />
             <source>Port "%1" has no address</source>
             <translation>المنفذ "%1" بلا عنوان</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="726" />
+            <location filename="../src/advanced/json_validation.cpp" line="755" />
             <source>A physical or network port needs a uri. Nothing was applied.</source>
             <translation>يحتاج المنفذ الفعلي أو الشبكي إلى uri. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="752" />
+            <location filename="../src/advanced/json_validation.cpp" line="781" />
             <source>"links" must be a list</source>
             <translation>يجب أن تكون "links" قائمة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="786" />
+            <location filename="../src/advanced/json_validation.cpp" line="815" />
             <source>Line %1: each link must be an object</source>
             <translation>السطر %1: يجب أن يكون كل ارتباط كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="790" />
+            <location filename="../src/advanced/json_validation.cpp" line="819" />
             <source>Each link must be an object</source>
             <translation>يجب أن يكون كل ارتباط كائناً</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="823" />
+            <location filename="../src/advanced/json_validation.cpp" line="852" />
             <source>Line %1: unknown link mode "%2"</source>
             <translation>السطر %1: وضع ارتباط غير معروف "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="827" />
+            <location filename="../src/advanced/json_validation.cpp" line="856" />
             <source>Unknown link mode "%1"</source>
             <translation>وضع ارتباط غير معروف "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="834" />
+            <location filename="../src/advanced/json_validation.cpp" line="863" />
             <source>Did you mean "%1"? The line is highlighted and nothing was applied.</source>
             <translation>هل تقصد "%1"؟ السطر مميّز ولم يُطبَّق شيء.</translation>
         </message>
@@ -8190,97 +8218,97 @@ Networks: %5</source>
             <translation type="vanished">استخدم duplex أو split أو join أو redirect أو monitor. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1003" />
+            <location filename="../src/advanced/json_validation.cpp" line="1032" />
             <source>Line %1: a link needs ports on both sides</source>
             <translation>السطر %1: يحتاج الارتباط إلى منافذ على الجانبين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1007" />
+            <location filename="../src/advanced/json_validation.cpp" line="1036" />
             <source>A link needs ports on both sides</source>
             <translation>يحتاج الارتباط إلى منافذ على الجانبين</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1009" />
+            <location filename="../src/advanced/json_validation.cpp" line="1038" />
             <source>sources and targets must be non-empty lists of port names. Nothing was applied.</source>
             <translation>يجب أن تكون sources وtargets قوائم غير فارغة من أسماء المنافذ. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1043" />
+            <location filename="../src/advanced/json_validation.cpp" line="1072" />
             <source>Line %1: "%2" has the wrong number of ports</source>
             <translation>السطر %1: "%2" فيه عدد خاطئ من المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1048" />
+            <location filename="../src/advanced/json_validation.cpp" line="1077" />
             <source>"%1" has the wrong number of ports</source>
             <translation>"%1" فيه عدد خاطئ من المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1052" />
+            <location filename="../src/advanced/json_validation.cpp" line="1081" />
             <source>A duplex, redirect or monitor link joins one port to one port; a split has one source; a join has one target. Nothing was applied.</source>
             <translation>يربط ارتباط duplex أو redirect أو monitor منفذاً بمنفذ واحد؛ وللارتباط split مصدر واحد؛ وللارتباط join هدف واحد. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1087" />
+            <location filename="../src/advanced/json_validation.cpp" line="1116" />
             <source>Line %1: no port is called "%2"</source>
             <translation>السطر %1: لا يوجد منفذ باسم "%2"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="921" />
-            <location filename="../src/advanced/json_validation.cpp" line="1092" />
+            <location filename="../src/advanced/json_validation.cpp" line="950" />
+            <location filename="../src/advanced/json_validation.cpp" line="1121" />
             <source>No port is called "%1"</source>
             <translation>لا يوجد منفذ باسم "%1"</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1133" />
+            <location filename="../src/advanced/json_validation.cpp" line="1162" />
             <source>Line %1: these links create a loop</source>
             <translation>السطر %1: هذه الارتباطات تنشئ حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="949" />
-            <location filename="../src/advanced/json_validation.cpp" line="1136" />
+            <location filename="../src/advanced/json_validation.cpp" line="978" />
+            <location filename="../src/advanced/json_validation.cpp" line="1165" />
             <source>These links create a loop</source>
             <translation>هذه الارتباطات تنشئ حلقة</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="844" />
+            <location filename="../src/advanced/json_validation.cpp" line="873" />
             <source>Use duplex, split, join, redirect, monitor or bus. Nothing was applied.</source>
             <translation>استخدم duplex أو split أو join أو redirect أو monitor أو bus. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="874" />
+            <location filename="../src/advanced/json_validation.cpp" line="903" />
             <source>Bus links are not available in this build</source>
             <translation>ارتباطات الناقل غير متاحة في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="877" />
+            <location filename="../src/advanced/json_validation.cpp" line="906" />
             <source>This build cannot put ports on a shared bus. Nothing was applied.</source>
             <translation>لا يستطيع هذا الإصدار وضع المنافذ على ناقل مشترك. لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="903" />
+            <location filename="../src/advanced/json_validation.cpp" line="932" />
             <source>A bus needs between 2 and %1 ports</source>
             <translation>يحتاج الناقل إلى ما بين 2 و%1 من المنافذ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="906" />
+            <location filename="../src/advanced/json_validation.cpp" line="935" />
             <source>List the ports of the bus in "members". Nothing was applied.</source>
             <translation>اذكر منافذ الناقل في "members". لم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="931" />
+            <location filename="../src/advanced/json_validation.cpp" line="960" />
             <source>A port can be on one bus only</source>
             <translation>لا يمكن أن يكون المنفذ إلا على ناقل واحد</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="951" />
-            <location filename="../src/advanced/json_validation.cpp" line="1138" />
+            <location filename="../src/advanced/json_validation.cpp" line="980" />
+            <location filename="../src/advanced/json_validation.cpp" line="1167" />
             <source>Bytes would go round forever, so the hub refuses a loop and nothing was applied.</source>
             <translation>ستدور البايتات إلى الأبد، لذا يرفض المحور الحلقة ولم يُطبَّق شيء.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/json_validation.cpp" line="1167" />
-            <location filename="../src/advanced/json_validation.cpp" line="1173" />
-            <location filename="../src/advanced/json_validation.cpp" line="1193" />
+            <location filename="../src/advanced/json_validation.cpp" line="1196" />
+            <location filename="../src/advanced/json_validation.cpp" line="1202" />
+            <location filename="../src/advanced/json_validation.cpp" line="1222" />
             <source>The setup format rejected this document</source>
             <translation>رفض تنسيق الإعداد هذا المستند</translation>
         </message>
@@ -8575,22 +8603,26 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/troubleshoot.cpp" line="346" />
-            <source>No program has opened %1 yet, so nothing can arrive.</source>
-            <translation>لم يفتح أي برنامج %1 بعد، لذا لا يمكن أن يصل شيء.</translation>
+            <source>No program has opened %1 yet, so nothing can arrive. The program has to open exactly %1; a different COM port will not receive anything.</source>
+            <translation>لم يفتح أي برنامج %1 بعد، لذلك لا يمكن أن يصل أي شيء. يجب أن يفتح البرنامج %1 تحديدًا؛ لن يستقبل منفذ COM آخر أي شيء.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="359" />
-            <location filename="../src/support/troubleshoot.cpp" line="368" />
+            <source>No program has opened %1 yet, so nothing can arrive.</source>
+            <translation type="vanished">لم يفتح أي برنامج %1 بعد، لذا لا يمكن أن يصل شيء.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/troubleshoot.cpp" line="361" />
+            <location filename="../src/support/troubleshoot.cpp" line="370" />
             <source>Data reaches the program</source>
             <translation>تصل البيانات إلى البرنامج</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="361" />
+            <location filename="../src/support/troubleshoot.cpp" line="363" />
             <source>Studio cannot see whether the program read the data.</source>
             <translation>لا يستطيع Studio معرفة ما إذا كان البرنامج قد قرأ البيانات.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot.cpp" line="370" />
+            <location filename="../src/support/troubleshoot.cpp" line="372" />
             <source>Checked once a program connects.</source>
             <translation>يُفحص عندما يتصل برنامج.</translation>
         </message>
@@ -9577,8 +9609,12 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="302" />
+            <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes a free number above the ports this PC already has, never COM1 or COM2. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
+            <translation>البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ نفسه في كل مرة. يختار الوضع التلقائي رقمًا حرًا أعلى من المنافذ الموجودة بالفعل في هذا الكمبيوتر، ولا يستخدم COM1 أو COM2 أبدًا. يتطلب الرقم برنامج تشغيل Studio وخدمته المساعدة، ويُستخدم عند إنشاء منفذ واحد.</translation>
+        </message>
+        <message>
             <source>Programs that open a fixed name such as COM3 find the port again every run. Automatic takes the lowest free number. A number needs the Studio driver and its helper service, and is used when one port is made.</source>
-            <translation>البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ في كل مرة. يأخذ «تلقائي» أقل رقم متاح. يتطلب الرقم برنامج تشغيل Studio وخدمة المساعد الخاصة به، ويُستخدم عند إنشاء منفذ واحد.</translation>
+            <translation type="vanished">البرامج التي تفتح اسمًا ثابتًا مثل COM3 تجد المنفذ في كل مرة. يأخذ «تلقائي» أقل رقم متاح. يتطلب الرقم برنامج تشغيل Studio وخدمة المساعد الخاصة به، ويُستخدم عند إنشاء منفذ واحد.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="311" />
@@ -10954,137 +10990,157 @@ Networks: %5</source>
     <context>
         <name>vss::gui::InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="115" />
+            <location filename="../src/panes/inspector_panel.cpp" line="117" />
             <source>Inspector</source>
             <translation>المفتش</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="136" />
+            <location filename="../src/panes/inspector_panel.cpp" line="138" />
             <source>Select a port to inspect it.</source>
             <translation>اختر منفذاً لفحصه.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="167" />
+            <location filename="../src/panes/inspector_panel.cpp" line="169" />
             <source>State</source>
             <translation>الحالة</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="171" />
+            <location filename="../src/panes/inspector_panel.cpp" line="173" />
             <source>Path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="181" />
-            <location filename="../src/panes/inspector_panel.cpp" line="386" />
+            <location filename="../src/panes/inspector_panel.cpp" line="183" />
+            <location filename="../src/panes/inspector_panel.cpp" line="403" />
             <source>path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="188" />
             <source>COM number</source>
             <translation>رقم COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="194" />
+            <location filename="../src/panes/inspector_panel.cpp" line="196" />
             <source>Change...</source>
             <translation>تغيير...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="197" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change COM number</source>
             <translation>تغيير رقم COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="210" />
+            <location filename="../src/panes/inspector_panel.cpp" line="212" />
             <source>Traffic</source>
             <translation>حركة البيانات</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="219" />
+            <location filename="../src/panes/inspector_panel.cpp" line="221" />
             <source>Serial</source>
             <translation>تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="236" />
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="238" />
+            <location filename="../src/panes/inspector_panel.cpp" line="422" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;لماذا لا يصل شيء؟&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="245" />
+            <location filename="../src/panes/inspector_panel.cpp" line="243" />
+            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <source>Copy name</source>
+            <translation>نسخ الاسم</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <source>%1 copied.</source>
+            <translation>تم نسخ %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="262" />
             <source>Release port...</source>
             <translation>تحرير المنفذ...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="248" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port</source>
             <translation>تحرير المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="258" />
+            <location filename="../src/panes/inspector_panel.cpp" line="275" />
             <source>Control lines</source>
             <translation>خطوط التحكم</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="280" />
+            <location filename="../src/panes/inspector_panel.cpp" line="297" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="281" />
+            <location filename="../src/panes/inspector_panel.cpp" line="298" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="282" />
+            <location filename="../src/panes/inspector_panel.cpp" line="299" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="305" />
+            <location filename="../src/panes/inspector_panel.cpp" line="322" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;فتح مصفوفة الخطوط والأعطال&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="383" />
+            <location filename="../src/panes/inspector_panel.cpp" line="400" />
             <source>The engine reported a failure.</source>
             <translation>أبلغ المحرك عن فشل.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="387" />
+            <location filename="../src/panes/inspector_panel.cpp" line="404" />
             <source>RX %1, TX %2</source>
             <translation>RX %1، TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="397" />
-            <source>No program has opened %1 yet.</source>
-            <translation>لم يفتح أي برنامج %1 بعد.</translation>
+            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
+            <translation>لم يفتح أي برنامج %1 بعد. يجب أن يفتح البرنامج %1 تحديدًا؛ لن يستقبل منفذ آخر أي شيء.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="412" />
-            <location filename="../src/panes/inspector_panel.cpp" line="418" />
+            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <source>Copy name, %1</source>
+            <translation>نسخ الاسم، %1</translation>
+        </message>
+        <message>
+            <source>No program has opened %1 yet.</source>
+            <translation type="vanished">لم يفتح أي برنامج %1 بعد.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/inspector_panel.cpp" line="434" />
+            <location filename="../src/panes/inspector_panel.cpp" line="440" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="430" />
+            <location filename="../src/panes/inspector_panel.cpp" line="452" />
             <source>This port does not support control lines.</source>
             <translation>لا يدعم هذا المنفذ خطوط التحكم.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="458" />
-            <location filename="../src/panes/inspector_panel.cpp" line="472" />
+            <location filename="../src/panes/inspector_panel.cpp" line="480" />
+            <location filename="../src/panes/inspector_panel.cpp" line="494" />
             <source>%1 on</source>
             <translation>%1 مفعّل</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="459" />
-            <location filename="../src/panes/inspector_panel.cpp" line="473" />
+            <location filename="../src/panes/inspector_panel.cpp" line="481" />
+            <location filename="../src/panes/inspector_panel.cpp" line="495" />
             <source>%1 off</source>
             <translation>%1 معطّل</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="492" />
+            <location filename="../src/panes/inspector_panel.cpp" line="514" />
             <source>%1, %2</source>
             <translation>%1، %2</translation>
         </message>
@@ -12483,8 +12539,12 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
+            <translation>لم يفتح أي برنامج %1 بعد. في برنامجك، اختر %1 تحديدًا. يتم تحديث هذه اللوحة عندما يفتحه برنامج.</translation>
+        </message>
+        <message>
             <source>No program has opened %1 yet. This panel updates when one does.</source>
-            <translation>لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
+            <translation type="vanished">لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
         </message>
         <message>
             <location filename="../src/flows/port_ready_dialog.cpp" line="362" />

@@ -147,8 +147,9 @@ On Linux the **Port ready** dialog looks like this:
   above one, names run `port-1`, `port-2` and so on. The number must be 1 to
   32.
 - **COM number** (Windows, with the Studio driver and its helper service,
-  and only for *Best available*): *Automatic* takes the lowest free number, or
-  type the number a program expects, 1 to 255. It names one port, so it is off
+  and only for *Best available*): *Automatic* takes a free number above the
+  ports this PC already has (never COM1 or COM2), or type the number a program
+  expects, 1 to 255. It names one port, so it is off
   when **How many** is above one. A number that is refused is explained under
   the field and nothing is made; see [Choosing a COM number
   (Windows)](#choosing-a-com-number-windows).

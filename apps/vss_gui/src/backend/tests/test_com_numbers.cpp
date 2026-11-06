@@ -1,0 +1,71 @@
+//
+// Copyright (c) 2026 Virtual Serial Studio contributors
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#include "backend/com_numbers.hpp"
+
+#include "test_framework.hpp"
+
+#include <algorithm>
+#include <string>
+#include <vector>
+
+using vss::gui::com_numbers_in_use;
+using vss::gui::first_com_candidate;
+using vss::gui::first_gui_com_number;
+using vss::gui::last_gui_com_number;
+using vss::gui::next_com_candidate;
+
+TEST_CASE("com numbers: reads COM paths and ignores everything else")
+{
+    const auto numbers =
+        com_numbers_in_use({"COM1", "com12", "COM255", "/dev/ttyUSB0", "COM",
+                            "COM0", "COMx", "COM1234567", "CNCA0", "COM7 "});
+    REQUIRE_EQ(numbers.size(), std::size_t{3});
+    REQUIRE_EQ(numbers[0], 1U);
+    REQUIRE_EQ(numbers[1], 12U);
+    REQUIRE_EQ(numbers[2], 255U);
+}
+
+TEST_CASE("com numbers: a new port starts above every port in use")
+{
+    REQUIRE_EQ(first_com_candidate({3, 5, 7, 9, 13, 15, 16}), 17U);
+    REQUIRE_EQ(first_com_candidate({1, 2}), first_gui_com_number);
+    REQUIRE_EQ(first_com_candidate({}), first_gui_com_number);
+    REQUIRE_EQ(first_com_candidate({4}), 5U);
+}
+
+TEST_CASE("com numbers: never COM1 or COM2")
+{
+    // Nothing in use, or only low legacy ports in use: COM3, not COM1.
+    REQUIRE(first_com_candidate({}) >= 3U);
+    REQUIRE(first_com_candidate({1}) >= 3U);
+    REQUIRE(first_com_candidate({2}) >= 3U);
+}
+
+TEST_CASE("com numbers: falls back below the highest when nothing is above")
+{
+    std::vector<unsigned> in_use{last_gui_com_number, 3, 4};
+    REQUIRE_EQ(first_com_candidate(in_use), 5U);
+
+    in_use.clear();
+    for (unsigned number = first_gui_com_number; number <= last_gui_com_number;
+         ++number)
+        in_use.push_back(number);
+    REQUIRE_EQ(first_com_candidate(in_use), 0U);
+}
+
+TEST_CASE("com numbers: the next candidate skips what is in use and stops")
+{
+    const std::vector<unsigned> in_use{3, 5, 7};
+    // Refused 6: 7 is in use, so move to 8.
+    REQUIRE_EQ(next_com_candidate(6, 4, in_use), 8U);
+    // Refused 7: 8 is next.
+    REQUIRE_EQ(next_com_candidate(7, 4, in_use), 8U);
+    // Past the top it wraps to the first GUI number, skipping what is taken.
+    REQUIRE_EQ(next_com_candidate(last_gui_com_number, 100, in_use), 4U);
+    // It stops once it has gone all the way round to where it started.
+    REQUIRE_EQ(next_com_candidate(9, 10, in_use), 0U);
+}
