@@ -3625,7 +3625,7 @@ Redes: %5</translation>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="110" />
-            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
             <source>Command</source>
             <translation>Comando</translation>
         </message>
@@ -3666,66 +3666,127 @@ Redes: %5</translation>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio se ejecuta en el App Sandbox de macOS.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>Una app en el entorno aislado solo llega a un dispositivo serie y a la red con permisos (entitlements). Las líneas de abajo son las que una versión aislada de Studio necesita en su archivo de entitlements.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
             <source>SELinux is enforcing.</source>
             <translation>SELinux está en modo enforcing.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
             <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
             <translation>Esto es normal y no pasa nada mientras no se rechace un dispositivo. Si se rechaza, los comandos de abajo encuentran la denegación y crean un módulo de política para ella. Lea lo que propone audit2allow antes de instalarlo.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
             <source>Commands</source>
             <translation>Comandos</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="164" />
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
             <source>Firewall</source>
             <translation>Firewall</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="168" />
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
             <source>A firewall is on and may stop other computers reaching this port.</source>
             <translation>Hay un firewall activo y puede impedir que otros equipos lleguen a este puerto.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="172" />
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
             <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
             <translation>Studio no puede leer las reglas del firewall sin derechos de administrador. Si otros equipos no pueden conectarse, abra el puerto con el comando de abajo.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="180" />
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
             <source>Studio cannot read the firewall rules.</source>
             <translation>Studio no puede leer las reglas del firewall.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
             <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
             <translation>Leerlas requiere derechos de administrador, y ni ufw ni firewalld está activo. Si otros equipos no pueden conectarse, compruebe las reglas con una cuenta de administrador, por ejemplo con sudo nft list ruleset.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="194" />
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>Firewall de macOS</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>La primera conexión de otro equipo hace que macOS pregunte.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>Con el firewall activado, macOS pregunta una vez por cada programa si puede aceptar conexiones entrantes. Elija Permitir. Si eligió No permitir, abra Ajustes del Sistema, Red, Firewall, Opciones y ponga el programa en Permitir conexiones entrantes, o ejecute los comandos de abajo en un terminal. Studio nunca cambia el firewall.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>El firewall bloquea todas las conexiones entrantes.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>Ese ajuste anula a todos los programas. Abra Ajustes del Sistema, Red, Firewall, Opciones y desactive Bloquear todas las conexiones entrantes si quiere que otros equipos puedan conectarse.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio no pudo leer el firewall.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>Mire Ajustes del Sistema, Red, Firewall. Si está activado y otros equipos no pueden conectarse, revise las Opciones.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>Acceso a la red local</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS pregunta una vez si Studio puede usar su red local.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>Desde macOS 15, una app necesita su permiso para encontrar dispositivos de la red local y conectarse a ellos. Studio no puede comprobar la respuesta. Si eligió No permitir y otros equipos no pueden conectarse, abra Ajustes del Sistema, Privacidad y seguridad, Red local, y active Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
             <source>Permissions</source>
             <translation>Permisos</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="245" />
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
             <source>Add me to the %1 group</source>
             <translation>Añadirme al grupo %1</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="253" />
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
             <source>Your desktop will ask for your password before anything changes.</source>
             <translation>Su escritorio le pedirá la contraseña antes de cambiar nada.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="262" />
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
             <source>Not available in this build</source>
             <translation>No disponible en esta compilación</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="268" />
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
             <source>Close</source>
             <translation>Cerrar</translation>
         </message>
@@ -4733,6 +4794,7 @@ Redes: %5</translation>
             <location filename="../src/support/permission_rows.cpp" line="63" />
             <location filename="../src/support/permission_rows.cpp" line="74" />
             <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
@@ -4776,6 +4838,7 @@ Redes: %5</translation>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="111" />
             <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>Cómo cambiarlo</translation>
         </message>
@@ -4847,7 +4910,9 @@ Redes: %5</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="221" />
-            <location filename="../src/support/permission_rows.cpp" line="267" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
             <source>For information</source>
             <translation>A título informativo</translation>
         </message>
@@ -4868,48 +4933,100 @@ Redes: %5</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio se ejecuta en el App Sandbox de macOS. Solo llega a un dispositivo serie o a la red con los permisos (entitlements) adecuados.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
             <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
             <translation>SELinux está en modo enforcing. Es normal; solo importa si se rechaza un dispositivo.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="261" />
+            <location filename="../src/support/permission_rows.cpp" line="268" />
             <source>Firewall</source>
             <translation>Firewall</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <location filename="../src/support/permission_rows.cpp" line="275" />
             <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
             <translation>Hay un firewall activo. Si otros equipos no pueden llegar a %1, abra el puerto.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="281" />
             <source>Show the command</source>
             <translation>Mostrar el comando</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="280" />
+            <location filename="../src/support/permission_rows.cpp" line="287" />
             <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
             <translation>Studio no puede leer las reglas del firewall sin derechos de administrador, así que no puede decir si otros equipos pueden conectarse.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="285" />
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
             <source>How to check</source>
             <translation>Cómo comprobarlo</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="360" />
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>Firewall de macOS</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>El firewall de macOS está desactivado, así que no detiene a otros equipos. Studio no cambia ese ajuste.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>El firewall de macOS está activado. La primera vez que otro equipo se conecte, macOS preguntará si Studio puede aceptar conexiones entrantes. Elija Permitir.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>Si eligió No permitir</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>El firewall de macOS está configurado para bloquear todas las conexiones entrantes, algo que ningún programa puede eludir. Desactívelo en Ajustes del Sistema si quiere que otros equipos puedan conectarse.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio no pudo leer el ajuste del firewall de macOS, así que no puede decir si otros equipos pueden conectarse.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>Acceso a la red local</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>Desde macOS 15, macOS pregunta una vez si las apps pueden conectarse a dispositivos de su red local. No se puede comprobar desde aquí; si eligió No permitir, vuelva a activarlo.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>Dónde encontrarlo</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>Su cuenta es de administrador, así que Windows le pedirá que confirme.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="365" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>Su cuenta no es de administrador, así que Windows le pedirá la contraseña de un administrador.</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
             <location filename="../src/support/permission_rows.cpp" line="145" />
-            <location filename="../src/support/permission_rows.cpp" line="279" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="423" />
             <location filename="../src/support/setup_facts.cpp" line="434" />
@@ -4959,6 +5076,7 @@ Redes: %5</translation>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="84" />
             <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="163" />
             <location filename="../src/support/setup_facts.cpp" line="262" />
             <location filename="../src/support/setup_facts.cpp" line="302" />

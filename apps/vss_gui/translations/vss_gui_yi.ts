@@ -3625,7 +3625,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="110" />
-            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
@@ -3666,66 +3666,127 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio לויפֿט אין macOS׳ס App Sandbox.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>אַן אַפּ אין דער זאַמד־קאַסטן דערגרייכט אַ סעריעלן מכשיר און דעם נעץ בלויז מיט דערלויבענישן (entitlements). די שורות אונטן זענען די וואָס אַ זאַמד־קאַסטן־ווערסיע פֿון Studio דאַרף אין איר entitlements־טעקע.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
             <source>SELinux is enforcing.</source>
             <translation>SELinux איז אין enforcing־מאָדע.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
             <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
             <translation>דאָס איז נאָרמאַל און גאָרנישט איז פֿאַלש כּל־זמן קיין מכשיר ווערט נישט אָפּגעוואָרפֿן. אויב יאָ, געפֿינען די באַפֿעלן אונטן די אָפּוואַרפֿונג און בויען פֿאַר איר אַ פּאָליטיק־מאָדול. לייענט וואָס audit2allow שלאָגט פֿאָר איידער איר אינסטאַלירט עס.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
             <source>Commands</source>
             <translation>באַפֿעלן</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="164" />
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
             <source>Firewall</source>
             <translation>פֿײַערוואָל</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="168" />
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
             <source>A firewall is on and may stop other computers reaching this port.</source>
             <translation>אַ פֿײַערוואָל איז אָנגעשטעלט און קען פֿאַרהיטן אַנדערע קאָמפּיוטערס צו דערגרייכן דעם פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="172" />
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
             <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
             <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל אָן אַדמיניסטראַטאָר־רעכט. אויב אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, עפֿנט דעם פּאָרט מיט דעם באַפֿעל אונטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="180" />
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
             <source>Studio cannot read the firewall rules.</source>
             <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
             <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
             <translation>זיי צו לייענען דאַרף אַדמיניסטראַטאָר־רעכט, און ניט ufw און ניט firewalld איז אָנגעשטעלט. אויב אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, קאָנטראָלירט די כּללים מיט אַן אַדמיניסטראַטאָר־קאָנטאָ, למשל מיט sudo nft list ruleset.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="194" />
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS־פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>די ערשטע פֿאַרבינדונג פֿון אַן אַנדער קאָמפּיוטער מאַכט macOS פֿרעגן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>ווען דער פֿײַערוואָל איז אָנגעשטעלט, פֿרעגט macOS איין מאָל פֿאַר יעדן פּראָגראַם צי עס מעג אָננעמען אײַנקומענדיקע פֿאַרבינדונגען. קלײַבט אויס Allow. אויב איר האָט אויסגעקליבן Don't Allow, עפֿנט System Settings, Network, Firewall, Options, און שטעלט דאָס פּראָגראַם אויף Allow incoming connections, אָדער לויפֿט די באַפֿעלן אונטן אין אַ טערמינאַל. Studio ענדערט קיינמאָל נישט דעם פֿײַערוואָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>דער פֿײַערוואָל בלאָקירט אַלע אײַנקומענדיקע פֿאַרבינדונגען.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>די באַשטימונג שטעלט אַוועק יעדעס פּראָגראַם. עפֿנט System Settings, Network, Firewall, Options, און שטעלט אָפּ Block all incoming connections אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio האָט נישט געקענט לייענען דעם פֿײַערוואָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>קוקט אין System Settings, Network, Firewall. אויב ער איז אָנגעשטעלט און אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, קאָנטראָלירט די Options.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>צוטריט צו דעם לאָקאַלן נעץ</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS פֿרעגט איין מאָל צי Studio מעג נוצן אײַער לאָקאַלן נעץ.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>פֿון macOS 15 אָן דאַרף אַן אַפּ אײַער דערלויבעניש צו געפֿינען מכשירים אין דעם לאָקאַלן נעץ און זיך פֿאַרבינדן צו זיי. Studio קען נישט קאָנטראָלירן די תּשובֿה. אויב איר האָט אויסגעקליבן Don't Allow און אַנדערע קאָמפּיוטערס קענען זיך נישט פֿאַרבינדן, עפֿנט System Settings, Privacy &amp; Security, Local Network, און שטעלט אָן Virtual Serial Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
             <source>Permissions</source>
             <translation>דערלויבענישן</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="245" />
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
             <source>Add me to the %1 group</source>
             <translation>לייגט מיך צו צו דער %1־גרופּע</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="253" />
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
             <source>Your desktop will ask for your password before anything changes.</source>
             <translation>אײַער דעסקטאַפּ וועט פֿרעגן וועגן אײַער פּאַראָל איידער עפּעס ענדערט זיך.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="262" />
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="268" />
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
@@ -4733,6 +4794,7 @@ Networks: %5</source>
             <location filename="../src/support/permission_rows.cpp" line="63" />
             <location filename="../src/support/permission_rows.cpp" line="74" />
             <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
@@ -4776,6 +4838,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="111" />
             <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>ווי אַזוי צו ענדערן</translation>
         </message>
@@ -4847,7 +4910,9 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="221" />
-            <location filename="../src/support/permission_rows.cpp" line="267" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
             <source>For information</source>
             <translation>צו װיסן</translation>
         </message>
@@ -4868,48 +4933,100 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio לויפֿט אין macOS׳ס App Sandbox. עס דערגרייכט אַ סעריעלן מכשיר אָדער דעם נעץ בלויז מיט די ריכטיקע דערלויבענישן (entitlements).</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
             <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
             <translation>SELinux איז אין enforcing־מאָדע. דאָס איז נאָרמאַל; עס איז וויכטיק בלויז אויב אַ מכשיר ווערט אָפּגעוואָרפֿן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="261" />
+            <location filename="../src/support/permission_rows.cpp" line="268" />
             <source>Firewall</source>
             <translation>פֿײַערוואָל</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <location filename="../src/support/permission_rows.cpp" line="275" />
             <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
             <translation>אַ פֿײַערוואָל איז אָנגעשטעלט. אויב אַנדערע קאָמפּיוטערס קענען נישט דערגרייכן %1, עפֿנט דעם פּאָרט.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="281" />
             <source>Show the command</source>
             <translation>ווײַזן דעם באַפֿעל</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="280" />
+            <location filename="../src/support/permission_rows.cpp" line="287" />
             <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
             <translation>Studio קען נישט לייענען די כּללים פֿון דעם פֿײַערוואָל אָן אַדמיניסטראַטאָר־רעכט, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="285" />
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
             <source>How to check</source>
             <translation>ווי אַזוי צו קאָנטראָלירן</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="360" />
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS־פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>דער macOS־פֿײַערוואָל איז אָפּגעשטעלט, דעריבער האַלט ער נישט אָפּ אַנדערע קאָמפּיוטערס. Studio ענדערט נישט די באַשטימונג.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>דער macOS־פֿײַערוואָל איז אָנגעשטעלט. דאָס ערשטע מאָל וואָס אַן אַנדער קאָמפּיוטער פֿאַרבינדט זיך, פֿרעגט macOS צי Studio מעג אָננעמען אײַנקומענדיקע פֿאַרבינדונגען. קלײַבט אויס Allow.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>אויב איר האָט אויסגעקליבן Don't Allow</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>דער macOS־פֿײַערוואָל איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס קיין שום פּראָגראַם קען נישט אַרומגיין. שטעלט עס אָפּ אין System Settings אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio האָט נישט געקענט לייענען די באַשטימונג פֿון דעם macOS־פֿײַערוואָל, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>צוטריט צו דעם לאָקאַלן נעץ</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>פֿון macOS 15 אָן פֿרעגט macOS איין מאָל צי אַפּס מעגן זיך פֿאַרבינדן צו מכשירים אין אײַער לאָקאַלן נעץ. מען קען דאָס נישט קאָנטראָלירן פֿון דאָ; אויב איר האָט אויסגעקליבן Don't Allow, שטעלט עס װידער אָן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>וווּ צו געפֿינען</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>אײַער קאָנטאָ איז אַ אַדמיניסטראַטאָר, דעריבער וועט Windows בעטן אַז איר זאָלט באַשטעטיקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="365" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>אײַער קאָנטאָ איז נישט אַ אַדמיניסטראַטאָר, דעריבער וועט Windows פֿרעגן וועגן אַ אַדמיניסטראַטאָרס פּאַראָל.</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
             <location filename="../src/support/permission_rows.cpp" line="145" />
-            <location filename="../src/support/permission_rows.cpp" line="279" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="423" />
             <location filename="../src/support/setup_facts.cpp" line="434" />
@@ -4959,6 +5076,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="84" />
             <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="163" />
             <location filename="../src/support/setup_facts.cpp" line="262" />
             <location filename="../src/support/setup_facts.cpp" line="302" />

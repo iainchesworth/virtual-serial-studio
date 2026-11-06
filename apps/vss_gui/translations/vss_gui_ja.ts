@@ -3625,7 +3625,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="110" />
-            <location filename="../src/support/permission_dialog.cpp" line="190" />
+            <location filename="../src/support/permission_dialog.cpp" line="200" />
             <source>Command</source>
             <translation>コマンド</translation>
         </message>
@@ -3666,66 +3666,127 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_dialog.cpp" line="151" />
+            <source>Studio runs in the macOS App Sandbox.</source>
+            <translation>Studio は macOS の App Sandbox 内で動作しています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <source>A sandboxed app reaches a serial device and the network only with entitlements. The lines below are the ones a sandboxed build of Studio needs in its entitlements file.</source>
+            <translation>サンドボックス内のアプリは、権限 (entitlements) がある場合にのみシリアルデバイスやネットワークに届きます。次の行は、サンドボックス版の Studio がエンタイトルメントファイルに必要とするものです。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="161" />
             <source>SELinux is enforcing.</source>
             <translation>SELinux は enforcing モードです。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="153" />
+            <location filename="../src/support/permission_dialog.cpp" line="163" />
             <source>This is normal and nothing is wrong unless a device is refused. If one is, the commands below find the denial and build a policy module for it. Read what audit2allow proposes before you install it.</source>
             <translation>これは通常の状態で、デバイスが拒否されない限り問題ではありません。拒否される場合は、下のコマンドで拒否を見つけ、そのためのポリシーモジュールを作成できます。インストールする前に、audit2allow が提案する内容を確認してください。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="161" />
+            <location filename="../src/support/permission_dialog.cpp" line="171" />
+            <location filename="../src/support/permission_dialog.cpp" line="220" />
             <source>Commands</source>
             <translation>コマンド</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="164" />
+            <location filename="../src/support/permission_dialog.cpp" line="174" />
             <source>Firewall</source>
             <translation>ファイアウォール</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="168" />
+            <location filename="../src/support/permission_dialog.cpp" line="178" />
             <source>A firewall is on and may stop other computers reaching this port.</source>
             <translation>ファイアウォールが有効で、他のコンピューターがこのポートに届かない可能性があります。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="172" />
+            <location filename="../src/support/permission_dialog.cpp" line="182" />
             <source>Studio cannot read the firewall rules without administrator rights. If other computers cannot connect, open the port with the command below.</source>
             <translation>Studio は管理者権限なしではファイアウォールのルールを読み取れません。他のコンピューターから接続できない場合は、下のコマンドでポートを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="180" />
+            <location filename="../src/support/permission_dialog.cpp" line="190" />
             <source>Studio cannot read the firewall rules.</source>
             <translation>Studio はファイアウォールのルールを読み取れません。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="182" />
+            <location filename="../src/support/permission_dialog.cpp" line="192" />
             <source>Reading them needs administrator rights, and neither ufw nor firewalld is on. If other computers cannot connect, check the rules with an administrator account, for example with sudo nft list ruleset.</source>
             <translation>読み取りには管理者権限が必要で、ufw も firewalld も有効ではありません。他のコンピューターから接続できない場合は、管理者アカウントでルールを確認してください (例: sudo nft list ruleset)。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="194" />
+            <location filename="../src/support/permission_dialog.cpp" line="204" />
+            <source>macOS firewall</source>
+            <translation>macOS のファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="207" />
+            <source>The first connection from another computer makes macOS ask.</source>
+            <translation>他のコンピューターからの最初の接続で、macOS が確認を求めます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="210" />
+            <source>With the firewall on, macOS asks whether the program may accept incoming connections, once for each program. Choose Allow. If you chose Don't Allow, open System Settings, Network, Firewall, Options, and set the program to Allow incoming connections, or run the commands below in a terminal. Studio never changes the firewall.</source>
+            <translation>ファイアウォールがオンの場合、macOS はプログラムごとに 1 回、受信接続を受け付けてよいかを尋ねます。「許可」を選んでください。「許可しない」を選んだ場合は、システム設定の「ネットワーク」→「ファイアウォール」→「オプション」を開き、そのプログラムを「外部からの接続を許可」に設定するか、下のコマンドをターミナルで実行してください。Studio がファイアウォールを変更することはありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="224" />
+            <source>The firewall blocks all incoming connections.</source>
+            <translation>ファイアウォールがすべての受信接続をブロックしています。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="227" />
+            <source>That setting overrides every program. Open System Settings, Network, Firewall, Options, and turn off Block all incoming connections if you want other computers to connect.</source>
+            <translation>この設定はすべてのプログラムより優先されます。他のコンピューターから接続できるようにするには、システム設定の「ネットワーク」→「ファイアウォール」→「オプション」を開き、「外部からのすべての接続をブロック」をオフにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="235" />
+            <source>Studio could not read the firewall.</source>
+            <translation>Studio はファイアウォールを読み取れませんでした。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="237" />
+            <source>Look at System Settings, Network, Firewall. If it is on and other computers cannot connect, check the Options.</source>
+            <translation>システム設定の「ネットワーク」→「ファイアウォール」を確認してください。オンで他のコンピューターから接続できない場合は、オプションを確認してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="244" />
+            <source>Local Network access</source>
+            <translation>ローカルネットワークへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="246" />
+            <source>macOS asks once whether Studio may use your local network.</source>
+            <translation>macOS は、Studio がローカルネットワークを使ってよいかを 1 回だけ尋ねます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="249" />
+            <source>From macOS 15, an app needs your permission to find and connect to devices on the local network. Studio cannot check the answer. If you chose Don't Allow and other computers cannot connect, open System Settings, Privacy &amp; Security, Local Network, and turn Virtual Serial Studio on.</source>
+            <translation>macOS 15 以降では、ローカルネットワーク上のデバイスを探して接続するために、アプリにユーザーの許可が必要です。Studio は回答を確認できません。「許可しない」を選び、他のコンピューターから接続できない場合は、システム設定の「プライバシーとセキュリティ」→「ローカルネットワーク」を開き、Virtual Serial Studio をオンにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_dialog.cpp" line="260" />
             <source>Permissions</source>
             <translation>アクセス許可</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="245" />
+            <location filename="../src/support/permission_dialog.cpp" line="311" />
             <source>Add me to the %1 group</source>
             <translation>%1 グループに自分を追加</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="253" />
+            <location filename="../src/support/permission_dialog.cpp" line="319" />
             <source>Your desktop will ask for your password before anything changes.</source>
             <translation>変更の前に、デスクトップがパスワードを求めます。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="262" />
+            <location filename="../src/support/permission_dialog.cpp" line="328" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_dialog.cpp" line="268" />
+            <location filename="../src/support/permission_dialog.cpp" line="334" />
             <source>Close</source>
             <translation>閉じる</translation>
         </message>
@@ -4731,6 +4792,7 @@ Networks: %5</source>
             <location filename="../src/support/permission_rows.cpp" line="63" />
             <location filename="../src/support/permission_rows.cpp" line="74" />
             <location filename="../src/support/permission_rows.cpp" line="154" />
+            <location filename="../src/support/permission_rows.cpp" line="310" />
             <location filename="../src/support/setup_facts.cpp" line="84" />
             <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
@@ -4774,6 +4836,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="111" />
             <location filename="../src/support/permission_rows.cpp" line="121" />
+            <location filename="../src/support/permission_rows.cpp" line="340" />
             <source>How to change it</source>
             <translation>変更する方法</translation>
         </message>
@@ -4845,7 +4908,9 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="221" />
-            <location filename="../src/support/permission_rows.cpp" line="267" />
+            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="320" />
+            <location filename="../src/support/permission_rows.cpp" line="363" />
             <source>For information</source>
             <translation>参考情報</translation>
         </message>
@@ -4866,48 +4931,100 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="246" />
+            <source>Studio runs in the macOS App Sandbox. It reaches a serial device or the network only with the right entitlements.</source>
+            <translation>Studio は macOS の App Sandbox 内で動作しています。適切な権限 (entitlements) がある場合にのみシリアルデバイスやネットワークに届きます。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="253" />
             <source>SELinux is enforcing. That is normal; this only matters if a device is refused.</source>
             <translation>SELinux は enforcing モードです。これは通常の状態で、デバイスが拒否された場合にだけ関係します。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="261" />
+            <location filename="../src/support/permission_rows.cpp" line="268" />
             <source>Firewall</source>
             <translation>ファイアウォール</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="268" />
+            <location filename="../src/support/permission_rows.cpp" line="275" />
             <source>A firewall is on. If other computers cannot reach %1, open the port.</source>
             <translation>ファイアウォールが有効です。他のコンピューターが %1 に届かない場合は、ポートを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="274" />
+            <location filename="../src/support/permission_rows.cpp" line="281" />
             <source>Show the command</source>
             <translation>コマンドを表示</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="280" />
+            <location filename="../src/support/permission_rows.cpp" line="287" />
             <source>Studio cannot read the firewall rules without administrator rights, so it cannot say whether other computers can connect.</source>
             <translation>Studio は管理者権限なしではファイアウォールのルールを読み取れないため、他のコンピューターから接続できるかどうかは判断できません。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="285" />
+            <location filename="../src/support/permission_rows.cpp" line="292" />
+            <location filename="../src/support/permission_rows.cpp" line="351" />
             <source>How to check</source>
             <translation>確認する方法</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="360" />
+            <location filename="../src/support/permission_rows.cpp" line="305" />
+            <source>macOS firewall</source>
+            <translation>macOS のファイアウォール</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="311" />
+            <source>The macOS firewall is off, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>macOS のファイアウォールはオフなので、他のコンピューターは止められません。Studio はこの設定を変更しません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="321" />
+            <source>The macOS firewall is on. The first time another computer connects, macOS asks whether Studio may accept incoming connections. Choose Allow.</source>
+            <translation>macOS のファイアウォールはオンです。他のコンピューターが初めて接続したときに、macOS が Studio に受信接続を受け付けてよいかを尋ねます。「許可」を選んでください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="325" />
+            <source>If you chose Don't Allow</source>
+            <translation>「許可しない」を選んだ場合</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="334" />
+            <source>The macOS firewall is set to block all incoming connections, which no program can get around. Turn that off in System Settings if you want other computers to connect.</source>
+            <translation>macOS のファイアウォールはすべての受信接続をブロックする設定になっており、どのプログラムもこれを回避できません。他のコンピューターから接続できるようにするには、システム設定でこれをオフにしてください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="346" />
+            <source>Studio could not read the macOS firewall setting, so it cannot say whether other computers can connect.</source>
+            <translation>Studio は macOS のファイアウォール設定を読み取れなかったため、他のコンピューターから接続できるかどうかは判断できません。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="362" />
+            <source>Local Network access</source>
+            <translation>ローカルネットワークへのアクセス</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="364" />
+            <source>macOS 15 and later asks once whether apps may connect to devices on your local network. It cannot be checked from here; if you chose Don't Allow, turn it on again.</source>
+            <translation>macOS 15 以降では、アプリがローカルネットワーク上のデバイスに接続してよいかを macOS が 1 回だけ尋ねます。ここからは確認できません。「許可しない」を選んだ場合は、オンに戻してください。</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="370" />
+            <source>Show where</source>
+            <translation>場所を表示</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="450" />
             <source>Your account is an administrator, so Windows will ask you to confirm.</source>
             <translation>お使いのアカウントは管理者なので、Windows が確認を求めます。</translation>
         </message>
         <message>
-            <location filename="../src/support/permission_rows.cpp" line="365" />
+            <location filename="../src/support/permission_rows.cpp" line="455" />
             <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
             <translation>お使いのアカウントは管理者ではないので、Windows が管理者のパスワードを求めます。</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
             <location filename="../src/support/permission_rows.cpp" line="145" />
-            <location filename="../src/support/permission_rows.cpp" line="279" />
+            <location filename="../src/support/permission_rows.cpp" line="286" />
+            <location filename="../src/support/permission_rows.cpp" line="345" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
             <location filename="../src/support/setup_facts.cpp" line="423" />
             <location filename="../src/support/setup_facts.cpp" line="434" />
@@ -4957,6 +5074,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="84" />
             <location filename="../src/support/permission_rows.cpp" line="161" />
+            <location filename="../src/support/permission_rows.cpp" line="331" />
             <location filename="../src/support/setup_facts.cpp" line="163" />
             <location filename="../src/support/setup_facts.cpp" line="262" />
             <location filename="../src/support/setup_facts.cpp" line="302" />

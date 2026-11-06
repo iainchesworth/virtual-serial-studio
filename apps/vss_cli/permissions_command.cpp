@@ -47,6 +47,10 @@ std::string_view topic_name(perm::topic what) noexcept
         return "confinement";
     case perm::topic::linux_firewall:
         return "linux_firewall";
+    case perm::topic::macos_firewall:
+        return "macos_firewall";
+    case perm::topic::macos_local_network:
+        return "macos_local_network";
     }
     return "unknown";
 }

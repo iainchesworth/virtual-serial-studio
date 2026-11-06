@@ -241,6 +241,13 @@ std::optional<setup_row> confinement_row(const perm::fact& fact)
                                          "devices.")
                            .arg(subject_text(fact));
     }
+    else if (fact.why == perm::reason::macos_sandbox)
+    {
+        row.sentence = QCoreApplication::translate(
+            "SetupCheck", "Studio runs in the macOS App Sandbox. It reaches a "
+                          "serial device or the network only with the right "
+                          "entitlements.");
+    }
     else
     {
         row.sentence = QCoreApplication::translate(
@@ -284,6 +291,83 @@ std::optional<setup_row> linux_firewall_row(const perm::fact& fact)
         row.action_text =
             QCoreApplication::translate("SetupCheck", "How to check");
     }
+    return row;
+}
+
+std::optional<setup_row> macos_firewall_row(const perm::fact& fact)
+{
+    // Nothing to say while Studio listens on this computer only.
+    if (fact.why == perm::reason::loopback_only)
+        return std::nullopt;
+
+    setup_row row;
+    row.icon = QStringLiteral("info");
+    row.title = QCoreApplication::translate("SetupCheck", "macOS firewall");
+    row.action = setup_action::firewall_help;
+    if (fact.why == perm::reason::firewall_off)
+    {
+        row.state = setup_state::ok;
+        row.chip = QCoreApplication::translate("SetupCheck", "OK");
+        row.sentence = QCoreApplication::translate(
+            "SetupCheck",
+            "The macOS firewall is off, so it does not stop other "
+            "computers. Studio does not change that setting.");
+        row.action = setup_action::none;
+    }
+    else if (fact.why == perm::reason::alf_prompt)
+    {
+        row.state = setup_state::info;
+        row.chip = QCoreApplication::translate("SetupCheck", "For information");
+        row.sentence = QCoreApplication::translate(
+            "SetupCheck", "The macOS firewall is on. The first time another "
+                          "computer connects, macOS asks whether Studio may "
+                          "accept incoming connections. Choose Allow.");
+        row.action_text = QCoreApplication::translate(
+            "SetupCheck", "If you chose Don't Allow");
+    }
+    else if (fact.why == perm::reason::block_all_inbound)
+    {
+        row.state = setup_state::attention;
+        row.chip = QCoreApplication::translate("SetupCheck", "Needs attention");
+        row.icon = QStringLiteral("warning");
+        row.highlight = true;
+        row.sentence = QCoreApplication::translate(
+            "SetupCheck", "The macOS firewall is set to block all incoming "
+                          "connections, which no program can get around. Turn "
+                          "that off in System Settings if you want other "
+                          "computers to connect.");
+        row.action_text =
+            QCoreApplication::translate("SetupCheck", "How to change it");
+    }
+    else
+    {
+        row.state = setup_state::not_checked;
+        row.chip = QCoreApplication::translate("SetupCheck", "Not checked yet");
+        row.sentence = QCoreApplication::translate(
+            "SetupCheck",
+            "Studio could not read the macOS firewall setting, so "
+            "it cannot say whether other computers can connect.");
+        row.action_text =
+            QCoreApplication::translate("SetupCheck", "How to check");
+    }
+    return row;
+}
+
+std::optional<setup_row> local_network_row(const perm::fact&)
+{
+    setup_row row;
+    row.state = setup_state::info;
+    row.icon = QStringLiteral("info");
+    row.title =
+        QCoreApplication::translate("SetupCheck", "Local Network access");
+    row.chip = QCoreApplication::translate("SetupCheck", "For information");
+    row.sentence = QCoreApplication::translate(
+        "SetupCheck",
+        "macOS 15 and later asks once whether apps may connect to "
+        "devices on your local network. It cannot be checked from "
+        "here; if you chose Don't Allow, turn it on again.");
+    row.action = setup_action::network_privacy_help;
+    row.action_text = QCoreApplication::translate("SetupCheck", "Show where");
     return row;
 }
 
@@ -337,6 +421,12 @@ void append_permission_rows(QVector<setup_row>& rows,
             break;
         case perm::topic::linux_firewall:
             row = linux_firewall_row(fact);
+            break;
+        case perm::topic::macos_firewall:
+            row = macos_firewall_row(fact);
+            break;
+        case perm::topic::macos_local_network:
+            row = local_network_row(fact);
             break;
         case perm::topic::windows_elevation:
             break;

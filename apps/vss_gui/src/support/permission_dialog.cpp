@@ -146,6 +146,16 @@ wording wording_for(const perm::fact& fact)
                 "below to the local override of the profile and reload it. "
                 "Studio never edits a profile.");
         }
+        else if (fact.why == perm::reason::macos_sandbox)
+        {
+            out.subtitle = QCoreApplication::translate(
+                "PermissionDialog", "Studio runs in the macOS App Sandbox.");
+            out.body = QCoreApplication::translate(
+                "PermissionDialog",
+                "A sandboxed app reaches a serial device and the network only "
+                "with entitlements. The lines below are the ones a sandboxed "
+                "build of Studio needs in its entitlements file.");
+        }
         else
         {
             out.subtitle = QCoreApplication::translate("PermissionDialog",
@@ -188,6 +198,62 @@ wording wording_for(const perm::fact& fact)
         }
         out.command_label =
             QCoreApplication::translate("PermissionDialog", "Command");
+        break;
+    case perm::topic::macos_firewall:
+        out.title =
+            QCoreApplication::translate("PermissionDialog", "macOS firewall");
+        if (fact.why == perm::reason::alf_prompt)
+        {
+            out.subtitle = QCoreApplication::translate(
+                "PermissionDialog",
+                "The first connection from another computer makes macOS ask.");
+            out.body = QCoreApplication::translate(
+                "PermissionDialog",
+                "With the firewall on, macOS asks whether the program may "
+                "accept incoming connections, once for each program. Choose "
+                "Allow. If you chose Don't Allow, open System Settings, "
+                "Network, "
+                "Firewall, Options, and set the program to Allow incoming "
+                "connections, or run the commands below in a terminal. Studio "
+                "never changes the firewall.");
+            out.command_label =
+                QCoreApplication::translate("PermissionDialog", "Commands");
+        }
+        else if (fact.why == perm::reason::block_all_inbound)
+        {
+            out.subtitle = QCoreApplication::translate(
+                "PermissionDialog",
+                "The firewall blocks all incoming connections.");
+            out.body = QCoreApplication::translate(
+                "PermissionDialog",
+                "That setting overrides every program. Open System Settings, "
+                "Network, Firewall, Options, and turn off Block all incoming "
+                "connections if you want other computers to connect.");
+        }
+        else
+        {
+            out.subtitle = QCoreApplication::translate(
+                "PermissionDialog", "Studio could not read the firewall.");
+            out.body = QCoreApplication::translate(
+                "PermissionDialog",
+                "Look at System Settings, Network, Firewall. If it is on and "
+                "other computers cannot connect, check the Options.");
+        }
+        break;
+    case perm::topic::macos_local_network:
+        out.title = QCoreApplication::translate("PermissionDialog",
+                                                "Local Network access");
+        out.subtitle = QCoreApplication::translate(
+            "PermissionDialog",
+            "macOS asks once whether Studio may use your local network.");
+        out.body = QCoreApplication::translate(
+            "PermissionDialog",
+            "From macOS 15, an app needs your permission to find and connect "
+            "to "
+            "devices on the local network. Studio cannot check the answer. If "
+            "you chose Don't Allow and other computers cannot connect, open "
+            "System Settings, Privacy & Security, Local Network, and turn "
+            "Virtual Serial Studio on.");
         break;
     default:
         out.title =

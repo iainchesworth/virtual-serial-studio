@@ -212,3 +212,92 @@ TEST_CASE("permission dialog: the group step is explained and never runs "
         confinement(perm::reason::apparmor_profile, perm::state::info), true);
     REQUIRE(plain.step_button() == nullptr);
 }
+
+namespace
+{
+
+perm::fact mac_fact(perm::topic what, std::string_view why, perm::state status)
+{
+    perm::fact fact;
+    fact.what = what;
+    fact.status = status;
+    fact.why = std::string(why);
+    fact.port = 4001;
+    fact.subject = "/Applications/vss_gui.app/Contents/MacOS/vss_gui";
+    fact.remedy =
+        "sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add x";
+    return fact;
+}
+
+support::setup_report mac_report_with(std::vector<perm::fact> facts)
+{
+    vss::gui::setup_facts engine;
+    engine.platform = QStringLiteral("macos");
+    support::platform_facts platform;
+    platform.pty_known = true;
+    platform.pty_available = true;
+    platform.permissions = std::move(facts);
+    return support::build_setup_report(engine, platform, {});
+}
+
+} // namespace
+
+TEST_CASE("macos rows: the firewall row says what macOS will do and never "
+          "offers to change it")
+{
+    const QString title = QStringLiteral("macOS firewall");
+
+    auto report = mac_report_with(
+        {mac_fact(perm::topic::macos_firewall, perm::reason::loopback_only,
+                  perm::state::ok)});
+    REQUIRE(find_row(report, title) == nullptr);
+
+    report = mac_report_with(
+        {mac_fact(perm::topic::macos_firewall, perm::reason::firewall_off,
+                  perm::state::ok)});
+    REQUIRE(find_row(report, title)->state == support::setup_state::ok);
+
+    report = mac_report_with(
+        {mac_fact(perm::topic::macos_firewall, perm::reason::alf_prompt,
+                  perm::state::info)});
+    const auto* row = find_row(report, title);
+    REQUIRE(row->state == support::setup_state::info);
+    REQUIRE(row->sentence.contains(QStringLiteral("Choose Allow")));
+    REQUIRE(row->action == support::setup_action::firewall_help);
+
+    report = mac_report_with(
+        {mac_fact(perm::topic::macos_firewall, perm::reason::block_all_inbound,
+                  perm::state::attention)});
+    REQUIRE(find_row(report, title)->state == support::setup_state::attention);
+
+    report = mac_report_with(
+        {mac_fact(perm::topic::macos_firewall, perm::reason::not_asked,
+                  perm::state::unknown)});
+    REQUIRE(find_row(report, title)->state ==
+            support::setup_state::not_checked);
+}
+
+TEST_CASE("macos rows: Local Network access is information that cannot be "
+          "checked, and the sandbox row names the entitlements")
+{
+    auto report = mac_report_with(
+        {mac_fact(perm::topic::macos_local_network,
+                  perm::reason::local_network_prompt, perm::state::info)});
+    const auto* row = find_row(report, QStringLiteral("Local Network access"));
+    REQUIRE(row->state == support::setup_state::info);
+    REQUIRE(row->sentence.contains(QStringLiteral("cannot be checked")));
+    REQUIRE(row->action == support::setup_action::network_privacy_help);
+
+    report = mac_report_with(
+        {mac_fact(perm::topic::confinement, perm::reason::macos_sandbox,
+                  perm::state::info)});
+    row = find_row(report, QStringLiteral("Confinement"));
+    REQUIRE(row->sentence.contains(QStringLiteral("App Sandbox")));
+
+    // The explanation dialog has no step to run on macOS.
+    support::PermissionDialog dialog(mac_fact(perm::topic::macos_firewall,
+                                              perm::reason::alf_prompt,
+                                              perm::state::info),
+                                     true);
+    REQUIRE(dialog.step_button() == nullptr);
+}

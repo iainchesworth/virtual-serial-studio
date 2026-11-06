@@ -71,7 +71,11 @@ enum class topic
     /// SELinux) so that it may be refused devices or directories.
     confinement,
     /// Linux: would ufw or firewalld stand between a listener and the network.
-    linux_firewall
+    linux_firewall,
+    /// macOS: what the Application Firewall does to a listener.
+    macos_firewall,
+    /// macOS: the Local Network privacy permission (macOS 15 and later).
+    macos_local_network
 };
 
 enum class transport_protocol
@@ -140,6 +144,10 @@ inline constexpr std::string_view selinux_enforcing = "selinux_enforcing";
 inline constexpr std::string_view ufw_active = "ufw_active";
 inline constexpr std::string_view firewalld_active = "firewalld_active";
 inline constexpr std::string_view rules_need_root = "rules_need_root";
+// macos_firewall, macos_local_network, confinement on macOS
+inline constexpr std::string_view alf_prompt = "alf_prompt";
+inline constexpr std::string_view local_network_prompt = "local_network_prompt";
+inline constexpr std::string_view macos_sandbox = "macos_sandbox";
 // every topic
 inline constexpr std::string_view not_asked = "not_asked";
 inline constexpr std::string_view other_platform = "other_platform";
@@ -316,10 +324,26 @@ struct linux_observation
     tri can_ask_polkit = tri::unknown;
 };
 
+struct macos_observation
+{
+    std::string user;
+    std::vector<device_access> devices;
+    /// The Application Firewall is on.
+    tri firewall_on = tri::unknown;
+    /// "Block all incoming connections" is on.
+    tri block_all = tri::unknown;
+    /// The major number of the Darwin kernel: 24 is macOS 15, where apps need
+    /// the Local Network permission. Zero when not known.
+    int darwin_major = 0;
+    /// This program runs in the App Sandbox.
+    tri sandboxed = tri::unknown;
+};
+
 struct observation
 {
     windows_observation windows;
     linux_observation linux_host;
+    macos_observation macos_host;
 };
 
 /// Reads the host. Nothing is changed. Takes a moment on Windows, where the
@@ -479,6 +503,30 @@ std::string selinux_commands();
 /// The commands that open a port in ufw or firewalld.
 std::string ufw_command(const listener& what);
 std::string firewalld_command(const listener& what);
+
+// ---------------------------------------------------------------------------
+// macOS
+// ---------------------------------------------------------------------------
+
+/// Reads the output of `socketfilterfw --getglobalstate`: "Firewall is enabled.
+/// (State = 1)", "... (State = 2)" (block all incoming connections) or
+/// "Firewall is disabled. (State = 0)". Anything else leaves both unknown.
+void parse_alf_global_state(std::string_view text, tri& on, tri& block_all);
+
+/// Reads `socketfilterfw --getblockall`: "Block all DISABLED!" or "ENABLED!".
+tri parse_alf_block_all(std::string_view text);
+
+/// The major number in a Darwin kernel release such as "24.1.0"; zero if it is
+/// not a number.
+int darwin_major_from_release(std::string_view release);
+
+/// The two commands that let a program accept incoming connections through the
+/// Application Firewall. For the user to read and copy; Studio never runs them.
+std::string socketfilterfw_commands(std::string_view program);
+
+/// The entitlements an App Sandbox build needs for serial devices and for
+/// network clients and servers, as the lines of an entitlements file.
+std::string sandbox_entitlements();
 
 /// Full path of this program.
 std::string this_program();

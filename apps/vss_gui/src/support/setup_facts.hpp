@@ -67,7 +67,9 @@ enum class setup_action
     /// Explain a refused serial device and, where this build can, offer the group.
     serial_access_help,
     /// Explain AppArmor, SELinux, Flatpak or Snap and show the exact fix.
-    confinement_help
+    confinement_help,
+    /// Show where the Local Network permission is (macOS).
+    network_privacy_help
 };
 
 struct setup_row

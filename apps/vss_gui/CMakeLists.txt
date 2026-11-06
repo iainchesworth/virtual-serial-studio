@@ -142,7 +142,12 @@ if(VSS_INSTALL)
     MACOSX_BUNDLE_GUI_IDENTIFIER "com.iainchesworthlabs.virtualserialstudio"
     MACOSX_BUNDLE_BUNDLE_NAME "Virtual Serial Studio"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
-    MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+    MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+    MACOSX_BUNDLE_COPYRIGHT "Copyright (c) 2026 Virtual Serial Studio contributors. GPL-3.0-or-later."
+    # The default template plus NSLocalNetworkUsageDescription, which macOS 15
+    # needs before it asks the user whether the app may use the local network.
+    MACOSX_BUNDLE_INFO_PLIST
+      "${CMAKE_CURRENT_SOURCE_DIR}/macos/Info.plist.in")
 
   # The deploy script puts the Qt libraries in lib/, beside bin/. On macOS
   # macdeployqt copies the frameworks into the bundle, and it finds them through

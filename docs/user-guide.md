@@ -534,6 +534,41 @@ still filter.
 `vss_cli permissions check --device=/dev/ttyUSB0 --listen=tcp-listen://0.0.0.0:4001`
 prints the same facts.
 
+### macOS
+
+**Application Firewall.** Nothing is asked while Studio listens on this Mac only
+(`127.0.0.1`). When a network endpoint waits for other computers and the firewall
+is on, macOS shows its own question the first time one of them connects: *Do you
+want the application to accept incoming network connections?* Choose **Allow**.
+macOS remembers the answer for each program. The Setup check row *macOS firewall*
+says which case you are in and, if you chose *Don't Allow* by mistake, shows the two
+`socketfilterfw` commands that fix it (or you can set the program to *Allow
+incoming connections* in **System Settings → Network → Firewall → Options**).
+*Block all incoming connections* overrides every program, so there the row asks
+you to turn that off. Studio only reads the firewall state; it never changes the
+firewall.
+
+**Local Network.** From macOS 15 an app needs your permission to find and connect
+to devices on your local network, and macOS asks once. Studio cannot read the
+answer, so the row *Local Network access* is information, and says where the switch
+is (**System Settings → Privacy & Security → Local Network**) for the case where
+you chose *Don't Allow* and other computers cannot connect.
+
+**Serial devices.** `/dev/cu.*` devices are ordinary files that an ordinary user
+may open, so the *Serial device access* row mostly says "you may open them". If a
+USB serial adapter does not appear at all on a Mac with Apple silicon, macOS may be
+asking you to allow the accessory (**System Settings → Privacy & Security → Allow
+accessories to connect**); that prompt cannot be read from here either.
+
+**The App Sandbox.** The release runs without the sandbox. A sandboxed build needs
+the entitlements `com.apple.security.device.serial`, `network.client` and
+`network.server`; the *Confinement* row names them if Studio finds itself sandboxed.
+
+**Downloaded builds.** Until a release is signed and notarised (see
+[Releasing](releasing.md)), Gatekeeper asks you to allow the app: right-click it, choose
+**Open**, then **Open** again, or run `xattr -dr com.apple.quarantine
+vss_gui.app`.
+
 ## Finding things: the command palette
 
 `Ctrl+K`, or the **Search actions** box in the toolbar, opens a list of every

@@ -194,3 +194,33 @@ read-only probe in a Debian WSL distribution, which found `/dev/ttyS0` owned by
 the polkit prompt and the group change (they change the account), AppArmor and
 SELinux denials on real profiles, a Flatpak or Snap build, and Clang. Those need the
 Ubuntu guest of `docs/vm-testing.md` and a Fedora guest.
+
+### The Application Firewall, Local Network and the sandbox on macOS
+
+The permissions layer reads: `stat` and `access(2)` of each serial device, the
+`APP_SANDBOX_CONTAINER_ID` that the App Sandbox sets, the Darwin release from
+`uname` (24 is macOS 15, where the Local Network permission starts), and, only when a
+listener is open to other computers, `socketfilterfw --getglobalstate` and
+`--getblockall` run with a small fixed environment and a three second limit
+(`capture_command` in `src/platform/posix/permissions_posix.hpp`). The output is
+parsed by `parse_alf_global_state` and `parse_alf_block_all`, which leave a state
+unknown when the text is not what macOS prints.
+
+- **No step.** The firewall answer is given in the prompt macOS shows. The fix for
+  "Don't Allow" is two `sudo socketfilterfw` commands that the user runs; Studio
+  does not run them, so there is no capability flag to gate.
+- **Local Network** has no query and is reported as information from macOS 15 only
+  when a listener is open to other computers. The bundle's `Info.plist`
+  (`apps/vss_gui/macos/Info.plist.in`) carries `NSLocalNetworkUsageDescription`;
+  without it macOS refuses the request without asking.
+- **Release.** `apps/vss_gui/macos/vss_gui.entitlements` is the hardened-runtime
+  entitlements file for the notarised release: empty on purpose, because Studio needs
+  no exception (no JIT, no unsigned memory, no foreign libraries). A sandboxed build
+  starts from `vss_gui.sandbox.entitlements`. `tools/macos/sign-and-notarize.sh` signs
+  from the inside out, notarises and staples; see [Releasing](releasing.md).
+
+Not run: anything on a Mac. The macOS file was compiled with GCC 14 against a stand-in
+for `mach-o/dyld.h`, its parsing was tested with the text macOS prints, the shared
+command runner was tested on Linux, and the `Info.plist` template was expanded with
+CMake and read back as a property list. The Application Firewall query, the prompts,
+signing and notarisation need a Mac with an Apple Developer ID.

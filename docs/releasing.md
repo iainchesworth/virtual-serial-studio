@@ -25,7 +25,7 @@ are not in the packages.
 | System | State |
 |---|---|
 | Windows | The `SIGN_WINDOWS` repository variable chooses: `false` (the default) leaves the files unsigned and names the package `-unsigned`, `test` signs with a leaf certificate from the owner's own certificate authority (`-testsigned`), and `production` is reserved for the signing service that has not been chosen yet |
-| macOS | Not signed or notarised yet. Gatekeeper asks the user to allow the app |
+| macOS | Not signed or notarised yet. Gatekeeper asks the user to allow the app. The owner signs and notarises with `tools/macos/sign-and-notarize.sh` (below) |
 | Linux | Not signed beyond the GPG signature on the file |
 
 A test-signed Windows package is trusted only on a machine that has the owner's
@@ -84,3 +84,30 @@ These are not in the repository and an agent does not create them.
 - On Windows the GUI keeps a console window, because `vss_gui --selftest` has
   to print to its caller. A double click shows the console beside the window.
 - The GUI package has no installer. Unpack it where you like.
+
+## macOS signing and notarisation
+
+Gatekeeper opens a download without a warning only when the app is signed with a
+Developer ID Application certificate, built with the hardened runtime, notarised by
+Apple and stapled. The pieces are in the repository; the identity is not.
+
+- `apps/vss_gui/macos/vss_gui.entitlements`: the entitlements of the notarised,
+  non-sandboxed release. It is empty on purpose (Studio needs no hardened-runtime
+  exception). Add a key only with a reason beside it.
+- `apps/vss_gui/macos/vss_gui.sandbox.entitlements`: the starting point for a
+  sandboxed build (serial devices, USB, network client and server, files the user
+  picks). The release does not use it.
+- `apps/vss_gui/macos/Info.plist.in`: the bundle's property list, with
+  `NSLocalNetworkUsageDescription` so macOS 15 can ask for the Local Network
+  permission.
+- `tools/macos/sign-and-notarize.sh --app vss_gui.app --cli bin/vss_cli`: signs every
+  nested library, plug-in and framework, then the app, with `--options runtime` and a
+  timestamp; checks the signature; sends a zip to `xcrun notarytool`; staples the
+  ticket; asks `spctl` to assess the app. `--dry-run` prints the commands and runs
+  none.
+
+The script reads `VSS_SIGN_IDENTITY` (the certificate name in the keychain) and
+`VSS_NOTARY_PROFILE` (a profile saved once with `xcrun notarytool
+store-credentials`). Neither is in the repository, a workflow does not hold them
+yet, and an agent does not create them. Making the Release workflow call the script
+needs the owner to add the certificate and the profile as organisation secrets.

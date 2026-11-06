@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!--
+  Entitlements for the notarised release (hardened runtime, no App Sandbox).
+
+  Virtual Serial Studio asks for no exception to the hardened runtime: it does
+  not generate code at run time (no JIT, no unsigned executable memory), it loads
+  only libraries and plug-ins that are signed with the same identity in the
+  bundle, and it has no use for the camera, microphone, contacts or location.
+  Serial devices (/dev/cu.*) are plain files that need no entitlement outside the
+  sandbox, and incoming connections are the Application Firewall's business, not
+  an entitlement. The dictionary is empty on purpose; do not add a key without a
+  reason written next to it. A sandboxed build uses vss_gui.sandbox.entitlements.
+-->
+<plist version="1.0">
+<dict/>
+</plist>

@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cctype>
 #include <charconv>
+#include <functional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -331,7 +332,10 @@ void describe_policy_denial(const linux_observation& seen, fact& out)
     }
 }
 
-fact linux_serial_fact(const linux_observation& seen, const context& ask)
+fact serial_fact(const std::vector<device_access>& devices,
+                 const std::string& user, tri can_ask_polkit, bool unix_groups,
+                 const context& ask,
+                 const std::function<void(fact&)>& describe_policy)
 {
     fact out;
     out.what = topic::serial_access;
@@ -340,7 +344,7 @@ fact linux_serial_fact(const linux_observation& seen, const context& ask)
     bool any_unknown = false;
     const device_access* refused = nullptr;
     const device_access* policy = nullptr;
-    for (const device_access& each : seen.devices)
+    for (const device_access& each : devices)
     {
         if (!each.exists)
             continue;
@@ -366,7 +370,7 @@ fact linux_serial_fact(const linux_observation& seen, const context& ask)
         out.status = state::attention;
         out.subject = refused->path;
         const std::string& group = refused->group;
-        if (refused->in_group == tri::no && !group.empty())
+        if (unix_groups && refused->in_group == tri::no && !group.empty())
         {
             if (refused->listed_in_group == tri::yes)
             {
@@ -379,12 +383,12 @@ fact linux_serial_fact(const linux_observation& seen, const context& ask)
             {
                 out.why = std::string(reason::not_in_group);
                 group_membership_spec spec;
-                spec.user = seen.user;
+                spec.user = user;
                 spec.group = group;
                 if (validate(spec).empty())
                 {
                     out.remedy = usermod_command(spec);
-                    if (seen.can_ask_polkit == tri::yes)
+                    if (can_ask_polkit == tri::yes)
                         out.group_step = spec;
                 }
                 else
@@ -407,7 +411,7 @@ fact linux_serial_fact(const linux_observation& seen, const context& ask)
         out.status = state::attention;
         out.why = std::string(reason::denied_by_policy);
         out.subject = policy->path;
-        describe_policy_denial(seen, out);
+        describe_policy(out);
         return out;
     }
 
@@ -507,9 +511,97 @@ fact linux_firewall_fact(const linux_observation& seen, const context& ask)
 std::vector<fact> linux_facts(const linux_observation& seen, const context& ask)
 {
     std::vector<fact> facts;
-    facts.push_back(linux_serial_fact(seen, ask));
+    facts.push_back(serial_fact(seen.devices, seen.user, seen.can_ask_polkit,
+                                true, ask, [&seen](fact& out)
+                                { describe_policy_denial(seen, out); }));
     facts.push_back(confinement_fact(seen));
     facts.push_back(linux_firewall_fact(seen, ask));
+    return facts;
+}
+
+fact macos_firewall_fact(const macos_observation& seen, const context& ask)
+{
+    fact out;
+    out.what = topic::macos_firewall;
+    out.subject = program_of(ask);
+    const std::vector<listener> exposed = exposed_listeners(ask);
+    if (exposed.empty())
+    {
+        out.status = state::ok;
+        out.why = std::string(reason::loopback_only);
+        return out;
+    }
+    out.port = exposed.front().port;
+    out.protocol = exposed.front().protocol;
+
+    if (seen.firewall_on == tri::unknown)
+    {
+        out.status = state::unknown;
+        out.why = std::string(reason::not_asked);
+    }
+    else if (seen.firewall_on == tri::no)
+    {
+        out.status = state::ok;
+        out.why = std::string(reason::firewall_off);
+    }
+    else if (seen.block_all == tri::yes)
+    {
+        // Blocks signed programs too: no allow list helps.
+        out.status = state::attention;
+        out.why = std::string(reason::block_all_inbound);
+    }
+    else
+    {
+        // The firewall is on. macOS asks once whether the program may accept
+        // incoming connections; the answer is kept per program.
+        out.status = state::info;
+        out.why = std::string(reason::alf_prompt);
+        out.remedy = socketfilterfw_commands(out.subject);
+    }
+    return out;
+}
+
+std::vector<fact> macos_facts(const macos_observation& seen, const context& ask)
+{
+    std::vector<fact> facts;
+    facts.push_back(serial_fact(
+        seen.devices, seen.user, tri::no, false, ask,
+        [&seen](fact& out)
+        {
+            if (seen.sandboxed == tri::yes)
+                out.remedy = sandbox_entitlements();
+            else
+                out.remedy = "log show --last 10m --predicate 'eventMessage "
+                             "CONTAINS \"deny\"'";
+        }));
+
+    fact sandbox;
+    sandbox.what = topic::confinement;
+    if (seen.sandboxed == tri::yes)
+    {
+        sandbox.status = state::info;
+        sandbox.why = std::string(reason::macos_sandbox);
+        sandbox.remedy = sandbox_entitlements();
+    }
+    else
+    {
+        sandbox.status = state::ok;
+        sandbox.why = std::string(reason::unconfined);
+    }
+    facts.push_back(std::move(sandbox));
+
+    facts.push_back(macos_firewall_fact(seen, ask));
+
+    // Local Network privacy has no query: macOS asks the first time and keeps
+    // the answer. It only matters to a listener other computers reach.
+    if (seen.darwin_major >= 24 && !exposed_listeners(ask).empty())
+    {
+        fact network;
+        network.what = topic::macos_local_network;
+        network.status = state::info;
+        network.why = std::string(reason::local_network_prompt);
+        facts.push_back(std::move(network));
+    }
     return facts;
 }
 
@@ -972,6 +1064,72 @@ std::string firewalld_command(const listener& what)
            " && sudo firewall-cmd --reload";
 }
 
+void parse_alf_global_state(std::string_view text, tri& on, tri& block_all)
+{
+    on = tri::unknown;
+    block_all = tri::unknown;
+    const auto state_at = text.find("State =");
+    if (state_at == std::string_view::npos)
+        return;
+    unsigned long value = 0;
+    std::string_view number = text.substr(state_at + 7);
+    number = trim(number.substr(0, number.find(')')));
+    if (!parse_number(number, value))
+        return;
+    if (value == 0)
+    {
+        on = tri::no;
+        block_all = tri::no;
+    }
+    else if (value == 1)
+    {
+        on = tri::yes;
+        block_all = tri::no;
+    }
+    else if (value == 2)
+    {
+        on = tri::yes;
+        block_all = tri::yes;
+    }
+}
+
+tri parse_alf_block_all(std::string_view text)
+{
+    if (text.find("ENABLED") != std::string_view::npos)
+        return tri::yes;
+    if (text.find("DISABLED") != std::string_view::npos)
+        return tri::no;
+    return tri::unknown;
+}
+
+int darwin_major_from_release(std::string_view release)
+{
+    unsigned long value = 0;
+    if (!parse_number(release.substr(0, release.find('.')), value) ||
+        value > 1000)
+        return 0;
+    return static_cast<int>(value);
+}
+
+std::string socketfilterfw_commands(std::string_view program)
+{
+    const std::string tool = "/usr/libexec/ApplicationFirewall/socketfilterfw";
+    const std::string path =
+        program.empty() ? std::string("<program>") : std::string(program);
+    return "sudo " + tool + " --add \"" + path + "\"\nsudo " + tool +
+           " --unblockapp \"" + path + "\"";
+}
+
+std::string sandbox_entitlements()
+{
+    return "com.apple.security.device.serial\n"
+           "com.apple.security.network.client\n"
+           "com.apple.security.network.server\n"
+           "# Each is a boolean key set to true in the .entitlements file of "
+           "the "
+           "app, which the codesign step applies.";
+}
+
 std::string_view host_name() noexcept
 {
     return detail::platform_host_name();
@@ -989,6 +1147,8 @@ std::vector<fact> evaluate(const observation& seen, const context& ask,
         return windows_facts(seen.windows, ask);
     if (host == "linux")
         return linux_facts(seen.linux_host, ask);
+    if (host == "macos")
+        return macos_facts(seen.macos_host, ask);
     return {};
 }
 

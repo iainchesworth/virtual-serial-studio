@@ -362,14 +362,19 @@ void SetupCheckDialog::show_firewall_help()
             recheck();
         return;
     }
-    show_permission_help(vss::permissions::topic::linux_firewall);
+    if (find_fact(facts, vss::permissions::topic::linux_firewall))
+    {
+        show_permission_help(vss::permissions::topic::linux_firewall);
+        return;
+    }
+    show_permission_help(vss::permissions::topic::macos_firewall);
 }
 
 void SetupCheckDialog::show_permission_help(vss::permissions::topic what)
 {
     // Ask again, for the same reason.
-    const auto fact = find_fact(
-        vss::permissions::probe(permission_context(backend_)), what);
+    const auto fact =
+        find_fact(vss::permissions::probe(permission_context(backend_)), what);
     if (!fact)
         return;
     PermissionDialog dialog(*fact, group_step_available(), this);
@@ -408,6 +413,9 @@ void SetupCheckDialog::handle_action(setup_action action)
         break;
     case setup_action::confinement_help:
         show_permission_help(vss::permissions::topic::confinement);
+        break;
+    case setup_action::network_privacy_help:
+        show_permission_help(vss::permissions::topic::macos_local_network);
         break;
     }
 }

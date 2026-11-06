@@ -275,11 +275,6 @@ TEST_CASE("permissions: firewall off, block-all and unreadable rules")
     REQUIRE_EQ(firewall->why, std::string(reason::not_asked));
 }
 
-TEST_CASE("permissions: macOS reports nothing it was not asked yet")
-{
-    REQUIRE(evaluate({}, listening_on("0.0.0.0", 4001), "macos").empty());
-}
-
 TEST_CASE("permissions: the firewall rule is one program, one port, one scope")
 {
     firewall_rule_spec spec;
