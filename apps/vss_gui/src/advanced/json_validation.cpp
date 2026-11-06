@@ -312,7 +312,8 @@ bool engine_rejects_port(const QJsonObject& port)
 /// `vss::config::from_json` returns only an error code.  To place it, each
 /// port is checked on its own, then each serial setting of the failing port,
 /// so the line comes from the engine's own rules and none of them is copied
-/// here.  Returns 0 when the cause is not in a port.
+/// here.  A link's delay and jitter are placed from the engine's limits.
+/// Returns 0 when the cause is in neither.
 int engine_problem_line(const QJsonObject& root, const path_index& index)
 {
     const QJsonValue name = root.value(QStringLiteral("name"));
@@ -352,6 +353,34 @@ int engine_problem_line(const QJsonObject& root, const path_index& index)
         if (port.contains(QStringLiteral("uri")))
             return index.line(base + QStringLiteral("/uri"));
         return index.line(base);
+    }
+
+    // A link's delay and jitter: the limits are the engine's own constants.
+    const QJsonArray links = root.value(QStringLiteral("links")).toArray();
+    for (int position = 0; position < links.size(); ++position)
+    {
+        const QJsonObject link = links.at(position).toObject();
+        const QString base = QStringLiteral("links/%1/").arg(position);
+        const auto milliseconds = [&link](const QString& key, qint64& out)
+        {
+            if (!link.contains(key))
+                return true;
+            const QJsonValue value = link.value(key);
+            const double number = value.toDouble(-1);
+            if (!value.isDouble() || number < 0 ||
+                number > static_cast<double>(vss::max_link_delay_ms) ||
+                number != static_cast<double>(static_cast<qint64>(number)))
+                return false;
+            out = static_cast<qint64>(number);
+            return true;
+        };
+        qint64 delay = 0;
+        qint64 jitter = 0;
+        if (!milliseconds(QStringLiteral("delay_ms"), delay))
+            return index.line(base + QStringLiteral("delay_ms"));
+        if (!milliseconds(QStringLiteral("jitter_ms"), jitter) ||
+            jitter > delay)
+            return index.line(base + QStringLiteral("jitter_ms"));
     }
     return 0;
 }

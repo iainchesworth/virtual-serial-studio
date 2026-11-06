@@ -766,13 +766,14 @@ result<link_id> studio::monitor(std::string_view from, std::string_view to)
     return hub_->monitor(first->id(), second->id());
 }
 
-result<link_id> studio::bus(const std::vector<std::string>& members)
+result<link_id> studio::bus(const std::vector<std::string>& members,
+                           link_options options)
 {
     error_code ec;
     const auto ids = resolve_all(members, ec);
     if (ec)
         return ec;
-    return hub_->bus(ids);
+    return hub_->bus(ids, options);
 }
 
 result<void> studio::disconnect(link_id id)
@@ -949,10 +950,12 @@ result<void> studio::apply(const config::document& value,
         link_options options;
         options.emulate_modem_lines = link.emulate_modem_lines;
         options.policy = link.policy;
+        options.delay_ms = link.delay_ms;
+        options.jitter_ms = link.jitter_ms;
 
         result<link_id> added = make_error_code(errc::config_error);
         if (link.mode == "bus")
-            added = hub_->bus(members);
+            added = hub_->bus(members, options);
         else if (link.mode == "duplex")
             added = hub_->connect(sources[0], targets[0], options);
         else if (link.mode == "split")
@@ -962,7 +965,12 @@ result<void> studio::apply(const config::document& value,
         else if (link.mode == "redirect")
             added = hub_->redirect(sources[0], targets[0], options);
         else if (link.mode == "monitor")
-            added = hub_->monitor(sources[0], targets[0]);
+        {
+            // A monitor is a one-way link without modem lines; going through
+            // redirect lets it carry a delay.
+            options.emulate_modem_lines = false;
+            added = hub_->redirect(sources[0], targets[0], options);
+        }
 
         if (!added)
         {
@@ -1040,6 +1048,8 @@ config::document studio::snapshot() const
 
         entry.emulate_modem_lines = link.options.emulate_modem_lines;
         entry.policy = link.options.policy;
+        entry.delay_ms = link.options.delay_ms;
+        entry.jitter_ms = link.options.jitter_ms;
         document.links.push_back(std::move(entry));
     }
 

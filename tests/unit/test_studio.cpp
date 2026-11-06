@@ -254,6 +254,72 @@ TEST_CASE("studio: documents apply and snapshot")
     REQUIRE_EQ(snapshot.ports[0].virtual_kind, std::string("loopback"));
 }
 
+
+TEST_CASE("studio: a link's delay and jitter apply and snapshot, on a bus and a monitor")
+{
+    config::document document;
+    document.name = "unit";
+    for (const char* name : {"a", "b", "c", "tap"})
+    {
+        config::port_entry port;
+        port.name = name;
+        port.kind = "virtual";
+        port.virtual_kind = "loopback";
+        document.ports.push_back(port);
+    }
+
+    config::link_entry bus;
+    bus.mode = "bus";
+    bus.members = {"a", "b", "c"};
+    bus.emulate_modem_lines = false;
+    bus.delay_ms = 190;
+    bus.jitter_ms = 10;
+    document.links.push_back(bus);
+
+    config::link_entry monitor;
+    monitor.mode = "monitor";
+    monitor.sources = {"a"};
+    monitor.targets = {"tap"};
+    monitor.emulate_modem_lines = false;
+    monitor.delay_ms = 25;
+    document.links.push_back(monitor);
+
+    studio app;
+    REQUIRE(app.apply(document));
+
+    const auto infos = app.link_infos();
+    REQUIRE_EQ(infos.size(), std::size_t{2});
+    REQUIRE_EQ(infos[0].options.delay_ms, std::uint32_t{190});
+    REQUIRE_EQ(infos[0].options.jitter_ms, std::uint32_t{10});
+    REQUIRE_EQ(infos[1].options.delay_ms, std::uint32_t{25});
+
+    const auto snapshot = app.snapshot();
+    REQUIRE_EQ(snapshot.links.size(), std::size_t{2});
+    REQUIRE_EQ(snapshot.links[0].delay_ms, std::uint32_t{190});
+    REQUIRE_EQ(snapshot.links[0].jitter_ms, std::uint32_t{10});
+    REQUIRE_EQ(snapshot.links[1].mode, std::string("monitor"));
+    REQUIRE_EQ(snapshot.links[1].delay_ms, std::uint32_t{25});
+
+    // Saved and loaded again, the delays survive.
+    const auto text = config::to_json(snapshot);
+    REQUIRE(text);
+    const auto reloaded = config::from_json(*text);
+    REQUIRE(reloaded);
+    REQUIRE(reloaded->links == snapshot.links);
+
+    // A bus made in code takes the same options.
+    studio direct;
+    config::document pair;
+    pair.name = "x";
+    pair.ports = {document.ports[0], document.ports[1]};
+    REQUIRE(direct.apply(pair));
+    link_options options;
+    options.delay_ms = 40;
+    const auto made = direct.bus({"a", "b"}, options);
+    REQUIRE(made);
+    REQUIRE_EQ(direct.link_infos()[0].options.delay_ms, std::uint32_t{40});
+}
+
 TEST_CASE("studio: a failed apply rolls back")
 {
     config::document document;
