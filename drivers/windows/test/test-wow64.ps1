@@ -30,8 +30,8 @@
 # design did not predict, but nothing the test was built to prove has failed; the detail says
 # what happened. They are results to read, not to hide. Exit code 1 when a test failed.
 #
-# T5 needs a revoke request in the driver: IOCTL_VSSCOM_HUB_REVOKE in public.h, with no input
-# and no output, sent to the hub end. The script finds its control code in public.h (next to
+# T5 needs a revoke request in the driver: IOCTL_VSSCOM_HUB_REVOKE in public.h (an enumerator
+# or a #define), sent to the hub end with no input and no output. The script finds its control code in public.h (next to
 # this script, or in ..\vsscom), or takes it from -RevokeCode.
 
 [CmdletBinding()]
@@ -68,7 +68,7 @@ function Get-RevokeControlCode {
     foreach ($candidate in (Join-Path $PSScriptRoot 'public.h'), (Join-Path $PSScriptRoot '..\vsscom\public.h')) {
         if (-not (Test-Path $candidate)) { continue }
         $text = (Get-Content -Raw $candidate) -replace '\\\r?\n', ' '
-        if ($text -match 'define\s+IOCTL_VSSCOM_HUB_REVOKE\s+CTL_CODE\(\s*FILE_DEVICE_VSSCOM\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*,\s*METHOD_(\w+)\s*,\s*FILE_(\w+)\s*\)') {
+        if ($text -match 'IOCTL_VSSCOM_HUB_REVOKE\s*=?\s*CTL_CODE\(\s*FILE_DEVICE_VSSCOM\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*,\s*METHOD_(\w+)\s*,\s*FILE_(\w+)\s*\)') {
             $function = [uint32]$Matches[1]
             $method = @{ BUFFERED = 0; IN_DIRECT = 1; OUT_DIRECT = 2; NEITHER = 3 }[$Matches[2]]
             $access = @{ ANY_ACCESS = 0; READ_ACCESS = 1; WRITE_ACCESS = 2 }[$Matches[3]]
@@ -417,7 +417,7 @@ Add-Test 'T4' 'closing the handle in a suspended program from outside frees the 
 
 Add-Test 'T5' "the driver's revoke request frees a port held by a suspended program, with a write blocked" {
     if ($null -eq $RevokeControl) {
-        throw 'SKIP: the driver has no revoke request yet. Define IOCTL_VSSCOM_HUB_REVOKE in drivers/windows/vsscom/public.h (hub end, no input, no output) and ship public.h next to this script, or pass -RevokeCode.'
+        throw 'SKIP: the driver has no revoke request yet. Define IOCTL_VSSCOM_HUB_REVOKE in drivers/windows/vsscom/public.h (hub end; PR 88 adds it) and ship public.h next to this script, or pass -RevokeCode.'
     }
     $p = New-TestPort
     $hub = Open-Hub $p.Path
@@ -437,6 +437,10 @@ Add-Test 'T5' "the driver's revoke request frees a port held by a suspended prog
         $again = Open-Again $p.Port
         Assert ($again.ok) "the port did not reopen after the revoke: $($again.error_name)"
         $detail += 'the port reopens while the old handle is still in the suspended program'
+        # Let the old program run again: its requests on the revoked handle should now end with an error.
+        [WowProc]::Resume($hold.Pid) | Out-Null
+        Start-Sleep -Seconds 2
+        $detail += "after the old program was resumed, its log: $(Get-HoldLog $hold)"
         $detail
     } finally {
         Stop-Hold $hold

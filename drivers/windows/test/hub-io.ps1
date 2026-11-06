@@ -51,12 +51,15 @@ public sealed class WowHub : IDisposable
     const uint IOCTL_GET_STATE = 0x80002004;
     const uint IOCTL_WAIT_STATE = 0x80002008;
     const uint IOCTL_SET_LINES = 0x8000200C;
-    const int StateWords = 11;
+    // 11 words up to VSSCOM_VERSION 2; version 3 adds AppProcessId as the 12th. The buffer is
+    // sized for 12 and either answer is accepted; AppProcessId reads 0 from an older driver.
+    const int StateWords = 12;
+    const int OldStateWords = 11;
     public const int TimedOut = 258;
 
     // Indexes into the state words.
     public const int Generation = 0, AppOpen = 1, BaudRate = 2, DataBits = 3, Parity = 4, StopBits = 5,
-                     Dtr = 6, Rts = 7, Break = 8, Lines = 9, TxQueued = 10;
+                     Dtr = 6, Rts = 7, Break = 8, Lines = 9, TxQueued = 10, AppProcessId = 11;
 
     IntPtr handle;
     WowHub(IntPtr h) { handle = h; }
@@ -175,15 +178,15 @@ public sealed class WowHub : IDisposable
             bool started = DeviceIoControl(handle, code, hasInput ? input : IntPtr.Zero, hasInput ? 4u : 0u,
                                            output, StateWords * 4, IntPtr.Zero, ov);
             int n = Finish(ov, signal, started, ms, out error);
-            if (n != StateWords * 4) return null;
+            if (n != StateWords * 4 && n != OldStateWords * 4) return null;
             var words = new uint[StateWords];
-            for (int i = 0; i < StateWords; i++) words[i] = (uint)Marshal.ReadInt32(output, i * 4);
+            for (int i = 0; i < n / 4; i++) words[i] = (uint)Marshal.ReadInt32(output, i * 4);
             return words;
         }
         finally { CloseHandle(signal); Marshal.FreeHGlobal(ov); Marshal.FreeHGlobal(input); Marshal.FreeHGlobal(output); }
     }
 
-    /// Generation, AppOpen, BaudRate, DataBits, Parity, StopBits, Dtr, Rts, Break, Lines, TxQueued.
+    /// Generation, AppOpen, BaudRate, DataBits, Parity, StopBits, Dtr, Rts, Break, Lines, TxQueued, AppProcessId.
     public uint[] GetState() { return StateCall(IOCTL_GET_STATE, 0, false, 5000); }
 
     /// Waits until the generation is not `known`; null when `ms` passes first.
