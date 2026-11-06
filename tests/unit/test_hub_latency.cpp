@@ -29,6 +29,32 @@ link_options latency(std::uint32_t delay_ms, std::uint32_t jitter_ms = 0)
     return options;
 }
 
+/// Checks that `targets` have received nothing, for as long as that is still
+/// a fact about the delay.  A chunk read from a source at `sent` is not due
+/// before `sent + delay`, so a look that finished before then must find
+/// nothing; a look that finished after proves nothing, because the machine
+/// may have stopped this thread for longer than the delay (a loaded runner
+/// does), and is not held against the engine.  Every look is judged by when it
+/// ended, not when it began, and the loop stops looking once the delay is up.
+/// The lower bound it protects stays exact: no early delivery passes.
+void require_nothing_before_due(std::vector<const mock_endpoint*> targets,
+                                std::chrono::steady_clock::time_point sent,
+                                std::chrono::milliseconds delay)
+{
+    for (;;)
+    {
+        std::vector<std::string> seen;
+        for (const auto* target : targets)
+            seen.push_back(target->written());
+        const auto ended = std::chrono::steady_clock::now();
+        if (ended - sent >= delay)
+            return;
+        for (const auto& text : seen)
+            REQUIRE_EQ(text, std::string());
+        std::this_thread::sleep_for(5ms);
+    }
+}
+
 struct latency_fixture
 {
     std::shared_ptr<vss::hub> hub = start_hub();
@@ -59,9 +85,8 @@ TEST_CASE("latency: bytes arrive no sooner than the delay")
     const auto sent = std::chrono::steady_clock::now();
     fixture.a.inject_read("hello");
 
-    // Well inside the delay nothing has arrived.
-    std::this_thread::sleep_for(60ms);
-    REQUIRE_EQ(fixture.b.written(), std::string());
+    // Inside the delay nothing has arrived, however often it is looked at.
+    require_nothing_before_due({&fixture.b}, sent, 200ms);
 
     REQUIRE(wait_until([&] { return fixture.b.written() == "hello"; }, 5000ms));
     const auto arrived = std::chrono::steady_clock::now() - sent;
@@ -137,10 +162,12 @@ TEST_CASE("latency: a delayed link does not slow another link")
     REQUIRE(fixture.hub->connect(fixture.b.endpoint->id(),
                                  fixture.c.endpoint->id()));
 
+    const auto sent = std::chrono::steady_clock::now();
     fixture.b.inject_read("fast");
     REQUIRE(wait_until([&] { return fixture.c.written() == "fast"; }, 5000ms));
-    // The same bytes went to a on the delayed link and are still on the way.
-    REQUIRE_EQ(fixture.a.written(), std::string());
+    // The same bytes went to a on the delayed link and are still on the way,
+    // for as long as its delay has not passed.
+    require_nothing_before_due({&fixture.a}, sent, 400ms);
     REQUIRE(wait_until([&] { return fixture.a.written() == "fast"; }, 5000ms));
 }
 
@@ -177,9 +204,7 @@ TEST_CASE("latency: a bus delays what each member hears")
 
     const auto sent = std::chrono::steady_clock::now();
     fixture.a.inject_read("poll");
-    std::this_thread::sleep_for(50ms);
-    REQUIRE_EQ(fixture.b.written(), std::string());
-    REQUIRE_EQ(fixture.c.written(), std::string());
+    require_nothing_before_due({&fixture.b, &fixture.c}, sent, 150ms);
 
     REQUIRE(wait_until(
         [&] {
@@ -201,16 +226,31 @@ TEST_CASE("latency: a bus delays what each member hears")
 
 TEST_CASE("latency: removing the link drops what is still on the way")
 {
-    latency_fixture fixture;
-    const auto link = fixture.hub->connect(
-        fixture.a.endpoint->id(), fixture.b.endpoint->id(), latency(200));
-    REQUIRE(link);
+    // The chunk is dropped only if the link goes before the chunk is due.  A
+    // stall between the two lines that send and remove can lose that race
+    // legitimately, so such a run is tried again; what is never allowed is
+    // delivery of a chunk whose link was removed in time.
+    bool proved = false;
+    for (int attempt = 0; attempt < 10 && !proved; ++attempt)
+    {
+        latency_fixture fixture;
+        const auto link = fixture.hub->connect(
+            fixture.a.endpoint->id(), fixture.b.endpoint->id(), latency(200));
+        REQUIRE(link);
 
-    fixture.a.inject_read("lost");
-    REQUIRE(fixture.hub->disconnect(*link));
+        const auto sent = std::chrono::steady_clock::now();
+        fixture.a.inject_read("lost");
+        REQUIRE(fixture.hub->disconnect(*link));
+        const auto removed = std::chrono::steady_clock::now();
+        if (removed - sent >= 200ms)
+            continue;
 
-    std::this_thread::sleep_for(350ms);
-    REQUIRE_EQ(fixture.b.written(), std::string());
+        // Removed in time. Wait out the delay and then some.
+        std::this_thread::sleep_for(350ms);
+        REQUIRE_EQ(fixture.b.written(), std::string());
+        proved = true;
+    }
+    REQUIRE(proved);
 }
 
 TEST_CASE("latency: removing the target leaves the rest of the topology alone")

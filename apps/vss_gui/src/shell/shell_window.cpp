@@ -341,6 +341,13 @@ void ShellWindow::build_actions()
             if (topology_ != nullptr)
                 topology_->fit_content();
         });
+    add(QStringLiteral("topology.tidy"), tr("Tidy layout"),
+        tr("arrange align overlap"), {}, {}, action_level::advanced,
+        [this]
+        {
+            if (topology_ != nullptr)
+                topology_->tidy_layout();
+        });
 
     // Tools
     add(QStringLiteral("tools.search"), tr("Search actions"),
@@ -549,6 +556,7 @@ void ShellWindow::build_menus()
     add(topology, QStringLiteral("topology.wiring"));
     add(topology, QStringLiteral("topology.owner"));
     topology->addSeparator();
+    add(topology, QStringLiteral("topology.tidy"));
     add(topology, QStringLiteral("topology.fit"));
 
     QMenu* tools = add_menu(tr("&Tools"));
@@ -1653,7 +1661,15 @@ void ShellWindow::show_watch()
 {
     WatchDialog dialog(backend_, selection_.port(), vss::gui::host_platform(),
                        this);
-    if (dialog.exec() != QDialog::Accepted || dialog.link_id() == 0)
+    const int result = dialog.exec();
+    // The empty list offers "Create a port": open that flow now the Watch
+    // window has closed.
+    if (dialog.create_port_chosen())
+    {
+        show_add_port();
+        return;
+    }
+    if (result != QDialog::Accepted || dialog.link_id() == 0)
         return;
     const auto source = backend_.port(dialog.source_id());
     const auto watcher = backend_.port(dialog.watcher_id());

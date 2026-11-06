@@ -6,6 +6,7 @@
 
 #include "backend/engine_studio_backend.hpp"
 
+#include "backend/com_numbers.hpp"
 #include "backend/event_bridge.hpp"
 #include "backend/platform/com0com_platform.hpp"
 
@@ -345,12 +346,55 @@ vss::result<vss::endpoint_id> EngineStudioBackend::create_virtual_port(
 {
     vss::endpoint_options options = studio_.default_options();
     options.capture_traffic = capture;
-    const auto created =
-        studio_.create_virtual_port(name.toStdString(), kind, options);
+    const auto created = create_port_with_com_number(name, kind, options);
     if (!created)
         return created.error();
     rebuild();
     return (*created)->id();
+}
+
+vss::result<std::shared_ptr<vss::endpoint>>
+EngineStudioBackend::create_port_with_com_number(
+    const QString& name, vss::virtual_port_kind kind,
+    const vss::endpoint_options& options)
+{
+    const std::string port_name = name.toStdString();
+    const bool driver_port = kind == vss::virtual_port_kind::pty ||
+                             kind == vss::virtual_port_kind::windows_driver;
+    if (!driver_port || !driver_installed())
+        return studio_.create_virtual_port(port_name, kind, options);
+
+    // Ask the driver for a number that is not COM1 or COM2 and is above every
+    // port the computer already has, so a program that was set up for an
+    // on-board port does not find ours, and a port here does not take the
+    // number of one that is only unplugged.  Windows keeps names in its COM
+    // name database that no list of ports shows; the driver refuses those with
+    // `already_exists` and makes no port, so the next number is tried.
+    std::vector<std::string> paths;
+    for (const auto& device : studio_.serial_devices())
+        paths.push_back(device.path);
+    for (const auto& info : studio_.endpoint_infos())
+        paths.push_back(info.path);
+    const std::vector<unsigned> in_use = com_numbers_in_use(paths);
+
+    const unsigned start = first_com_candidate(in_use);
+    unsigned candidate = start;
+    while (candidate != 0)
+    {
+        auto created =
+            studio_.create_virtual_port(port_name, kind, options, candidate);
+        if (created)
+            return created;
+        if (created.error() != vss::errc::already_exists)
+        {
+            // No helper service to give a number: take the one Windows picks.
+            if (created.error() == vss::errc::unsupported)
+                break;
+            return created;
+        }
+        candidate = next_com_candidate(candidate, start, in_use);
+    }
+    return studio_.create_virtual_port(port_name, kind, options);
 }
 
 vss::result<vss::endpoint_id>

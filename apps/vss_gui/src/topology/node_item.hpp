@@ -11,6 +11,7 @@
 
 #include <QFont>
 #include <QGraphicsItem>
+#include <QPointF>
 #include <QRectF>
 #include <QSizeF>
 #include <QString>
@@ -54,6 +55,11 @@ struct node_item_callbacks
     std::function<void(vss::endpoint_id)> double_clicked;
     std::function<void(vss::endpoint_id)> hover_entered;
     std::function<void(vss::endpoint_id)> hover_left;
+    /// The user is dragging the node; `position` is where its top-left corner
+    /// would go.  The view moves the node and the links that follow it.
+    std::function<void(vss::endpoint_id, const QPointF& position)> dragged;
+    /// The mouse button was released after a drag.
+    std::function<void(vss::endpoint_id)> drag_finished;
 };
 
 /// One port drawn as a card on the topology scene.
@@ -80,6 +86,8 @@ public:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
@@ -92,6 +100,14 @@ private:
     bool focused_ = false;
     bool hovered_ = false;
     bool in_loop_ = false;
+
+    /// Set while the left button is down on the node; the drag starts only
+    /// after the pointer has moved past the platform drag distance, so a click
+    /// with a slightly unsteady hand still selects.
+    bool pressed_ = false;
+    bool dragging_ = false;
+    QPointF press_scene_;
+    QPointF press_position_;
 };
 
 } // namespace vss::gui::topology

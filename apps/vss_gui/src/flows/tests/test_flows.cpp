@@ -82,6 +82,17 @@ vss::gui::device_view make_device(const QString& path, bool com0com,
     return device;
 }
 
+vss::gui::device_view make_driver_port(const QString& path)
+{
+    vss::gui::device_view device;
+    device.path = path;
+    device.description = QStringLiteral("Virtual Serial Studio port (%1)")
+                             .arg(path);
+    device.hardware_id = QStringLiteral("VSSCOM\\PORT");
+    device.virtual_device = true;
+    return device;
+}
+
 void use_two_free_pairs(vss::gui::FakeStudioBackend& backend)
 {
     backend.set_devices({make_device(QStringLiteral("COM7"), true, true, false,
@@ -807,6 +818,90 @@ TEST_CASE("flows: watch creates a loopback watcher and monitor link")
     REQUIRE_EQ(backend.links().front().shape, vss::gui::link_shape::monitor);
     REQUIRE(!backend.links().front().options.emulate_modem_lines);
     REQUIRE(backend.port(dialog.watcher_id())->studio_only);
+}
+
+TEST_CASE("flows: watch with no ports says why and offers a next step")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+
+    // Nothing exists yet.
+    {
+        vss::gui::WatchDialog dialog(backend, 0,
+                                     vss::gui::platform_kind::windows);
+        dialog.show();
+        settle();
+        REQUIRE_EQ(dialog.port_combo()->count(), 0);
+        REQUIRE(!dialog.port_combo()->isEnabled());
+        REQUIRE_EQ(dialog.port_combo()->placeholderText(),
+                   QStringLiteral("No ports available"));
+        REQUIRE(!dialog.primary_button()->isEnabled());
+        REQUIRE(dialog.empty_note() != nullptr);
+        REQUIRE_EQ(dialog.empty_note()->text(),
+                   QStringLiteral("No ports to watch yet. Create a port "
+                                  "first."));
+        REQUIRE(dialog.empty_note()->action_button() != nullptr);
+        REQUIRE_EQ(dialog.empty_note()->action_button()->text(),
+                   QStringLiteral("Create a port"));
+    }
+
+    // Another program made a driver port: the note names it and the reason.
+    // A com0com end and a real device are not that program's ports.
+    backend.set_devices({make_driver_port(QStringLiteral("COM41")),
+                         make_driver_port(QStringLiteral("COM42")),
+                         make_device(QStringLiteral("COM7"), true, true, false,
+                                     1, QStringLiteral("A")),
+                         make_device(QStringLiteral("COM3"), false, false,
+                                     false, -1, {})});
+    vss::gui::WatchDialog dialog(backend, 0, vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    REQUIRE(dialog.empty_note() != nullptr);
+    const QString text = dialog.empty_note()->text();
+    REQUIRE(text.contains(QStringLiteral("Another program made COM41 and "
+                                         "COM42.")));
+    REQUIRE(text.contains(QStringLiteral("cannot show or watch")));
+    REQUIRE(!text.contains(QStringLiteral("COM7")));
+    REQUIRE(!text.contains(QStringLiteral("COM3")));
+
+    bool requested = false;
+    QObject::connect(&dialog, &vss::gui::WatchDialog::create_port_requested,
+                     [&requested] { requested = true; });
+    dialog.empty_note()->action_button()->click();
+    REQUIRE(requested);
+    REQUIRE(dialog.create_port_chosen());
+    REQUIRE_EQ(dialog.result(), QDialog::Rejected);
+}
+
+TEST_CASE("flows: watch lists this studio's ports and names the other ones")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    const auto port = backend.create_auto_port(QStringLiteral("device"), true);
+    REQUIRE(port.has_value());
+    backend.set_devices({make_driver_port(QStringLiteral("COM41"))});
+
+    vss::gui::WatchDialog dialog(backend, *port,
+                                 vss::gui::platform_kind::windows);
+    dialog.show();
+    settle();
+    REQUIRE_EQ(dialog.port_combo()->count(), 1);
+    REQUIRE(dialog.empty_note() == nullptr);
+    REQUIRE(dialog.primary_button()->isEnabled());
+    // The list is not complete, and the form says so beside it.
+    const auto labels = dialog.findChildren<QLabel*>();
+    const bool hint = std::any_of(
+        labels.begin(), labels.end(),
+        [](const QLabel* label)
+        { return label->text().contains(QStringLiteral("Another program made "
+                                                       "COM41.")); });
+    REQUIRE(hint);
+
+    // A build that can list them has them in the ports list: no note.
+    vss::gui::capabilities caps;
+    caps.external_ports = true;
+    backend.set_capabilities(caps);
+    REQUIRE(backend.other_program_ports().empty());
 }
 
 TEST_CASE("flows: watch failure rolls back and hide when links are unavailable")

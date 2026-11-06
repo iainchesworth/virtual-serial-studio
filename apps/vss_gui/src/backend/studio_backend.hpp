@@ -126,6 +126,14 @@ public:
     /// returns everything retained.  Used by the diagnostic bundle only when
     /// the user opts in to traffic contents.
     virtual std::vector<traffic_view> traffic(int limit) const = 0;
+    /// Virtual ports on this machine that another program made and this
+    /// studio does not hold (a Windows driver port of a `vss_cli` process, for
+    /// example).  The engine cannot attach to them or read their traffic, so
+    /// they never appear in `ports()`; the window lists them only to say so.
+    /// Empty when `Capabilities::external_ports` is on, because then `ports()`
+    /// already has them.  Reads the device list, so call it when a screen
+    /// opens or on a slow timer, not for every event.
+    virtual std::vector<device_view> other_program_ports() const;
     virtual setup_facts facts() const = 0;
     virtual std::optional<port_view> port(vss::endpoint_id id) const = 0;
     virtual std::optional<link_view> link(vss::link_id id) const = 0;

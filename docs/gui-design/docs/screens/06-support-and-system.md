@@ -17,7 +17,7 @@ Checklist, each row with icon, title, one sentence, chip:
 1. "The port exists and is open", "terminal is open on COM7." (Passed or Needs attention if closed or failed.)
 2. "The port is linked to the device", "terminal is in a split link from device." (Needs attention: "This port has no link. Connect it to a device.")
 3. "The device is sending", "device received data in the last minute." (Needs attention: "device has not sent anything in the last minute. Check the cable and the device's power.")
-4. "A program has opened COM7", "No program has opened COM7 yet, so nothing can arrive." (Needs attention row highlighted in amber.)
+4. "A program has opened COM7", "No program has opened COM7 yet, so nothing can arrive. The program has to open exactly COM7; a different COM port will not receive anything." (Needs attention row highlighted in amber.)
 5. "Data reaches the program", "Checked once a program connects." (Not checked yet, hollow.)
 Card "Try this": numbered steps "In your program, choose **COM7** as the serial port." "If the program shows an error, another program may be using COM7. Close it, then try again." "Some programs only list ports when they start. Restart the program after creating the port." Buttons "Copy COM7" and "Check again". Muted: "Still stuck? A diagnostic bundle gathers the setup, the log and the environment for whoever helps you. Traffic contents are left out unless you choose to include them." Footer: link "Create diagnostic bundle", primary Close.
 Chips use text plus shape. The checks come from endpoint state, counters and events. If the engine cannot know whether a program has opened a port, mark checks 4 and 5 "Not checked yet" and explain, see 08-engine-gaps.md.

@@ -350,8 +350,8 @@ void PortReadyDialog::refresh_peer()
         peer_chip_->set_kind(StatusChip::kind::waiting);
         peer_chip_->set_text(tr("Waiting"));
         peer_text_->setText(
-            tr("No program has opened %1 yet. This panel updates when one "
-               "does.")
+            tr("No program has opened %1 yet. In your program, choose exactly "
+               "%1. This panel updates when one opens it.")
                 .arg(port_.path));
         peer_text_->setVisible(true);
         return;

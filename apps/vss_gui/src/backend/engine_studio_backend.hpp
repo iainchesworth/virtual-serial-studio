@@ -126,6 +126,13 @@ public:
     void set_refresh_interval(int milliseconds) override;
 
 private:
+    /// Makes a virtual port, asking the Windows driver for a COM number that
+    /// is not a legacy port (see `com_numbers.hpp`) where it has one to give.
+    vss::result<std::shared_ptr<vss::endpoint>>
+    create_port_with_com_number(const QString& name,
+                                vss::virtual_port_kind kind,
+                                const vss::endpoint_options& options);
+
     void rebuild();
 
     vss::studio& studio_;
