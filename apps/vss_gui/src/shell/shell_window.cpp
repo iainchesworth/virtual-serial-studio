@@ -2956,7 +2956,8 @@ void ShellWindow::closeEvent(QCloseEvent* event)
                "and quit."),
             QVector<confirm_choice>{
                 {tr("Cancel"), QString(), true},
-                {tr("Stop the ports and quit"), QStringLiteral("danger"), false},
+                {tr("Stop the ports and quit"), QStringLiteral("danger"),
+                 false},
                 {tr("Minimise instead"), QStringLiteral("primary"), false}},
             2, this);
         dialog.exec();
@@ -3132,9 +3133,8 @@ void ShellWindow::start_running_setup(bool automatic)
     loading_ = false;
     if (!applied)
     {
-        const QString text =
-            tr("Could not start the ports from last time: %1")
-                .arg(error_text(applied.error()));
+        const QString text = tr("Could not start the ports from last time: %1")
+                                 .arg(error_text(applied.error()));
         status_->showMessage(text, 10000);
         log_local(text);
         if (tray_ != nullptr && !isVisible())

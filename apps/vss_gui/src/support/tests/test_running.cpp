@@ -35,7 +35,8 @@ TEST_CASE("running setup: what was running is read back with its facts")
     QSettings().clear();
     QTemporaryDir directory;
     REQUIRE(directory.isValid());
-    const QString path = directory.filePath(QStringLiteral("running-setup.json"));
+    const QString path =
+        directory.filePath(QStringLiteral("running-setup.json"));
     const vss::gui::support::running_state state{
         QStringLiteral("C:/setups/lab.json"), true, false};
     REQUIRE(vss::gui::support::save_running_setup(path, one_port(), state));
@@ -57,7 +58,8 @@ TEST_CASE("running setup: none without a file or without ports")
 {
     QSettings().clear();
     QTemporaryDir directory;
-    const QString path = directory.filePath(QStringLiteral("running-setup.json"));
+    const QString path =
+        directory.filePath(QStringLiteral("running-setup.json"));
     bool damaged = true;
     REQUIRE(!vss::gui::support::load_running_setup(path, &damaged));
     REQUIRE(!damaged);
@@ -72,7 +74,8 @@ TEST_CASE("running setup: a damaged file is moved aside, never applied")
 {
     QSettings().clear();
     QTemporaryDir directory;
-    const QString path = directory.filePath(QStringLiteral("running-setup.json"));
+    const QString path =
+        directory.filePath(QStringLiteral("running-setup.json"));
     {
         QFile file(path);
         REQUIRE(file.open(QIODevice::WriteOnly));
@@ -89,7 +92,8 @@ TEST_CASE("running setup: a damaged file is moved aside, never applied")
 TEST_CASE("running setup: a Quit is remembered with the ports")
 {
     QTemporaryDir directory;
-    const QString path = directory.filePath(QStringLiteral("running-setup.json"));
+    const QString path =
+        directory.filePath(QStringLiteral("running-setup.json"));
     REQUIRE(!vss::gui::support::save_running_state(path, {}));
     REQUIRE(vss::gui::support::save_running_setup(path, one_port(), {}));
     REQUIRE(vss::gui::support::save_running_state(
@@ -107,7 +111,8 @@ TEST_CASE("running setup: a Quit is remembered with the ports")
 TEST_CASE("running setup: a file of another version is not applied")
 {
     QTemporaryDir directory;
-    const QString path = directory.filePath(QStringLiteral("running-setup.json"));
+    const QString path =
+        directory.filePath(QStringLiteral("running-setup.json"));
     {
         QFile file(path);
         REQUIRE(file.open(QIODevice::WriteOnly));
@@ -120,7 +125,8 @@ TEST_CASE("running setup: a file of another version is not applied")
 
 TEST_CASE("sign-in start: the entry runs Studio hidden")
 {
-    REQUIRE(vss::gui::support::sign_in_command(QStringLiteral("C:/A B/vss_gui.exe")) ==
+    REQUIRE(vss::gui::support::sign_in_command(
+                QStringLiteral("C:/A B/vss_gui.exe")) ==
             QStringLiteral("\"C:/A B/vss_gui.exe\" --background"));
 }
 
@@ -134,8 +140,8 @@ TEST_CASE("sign-in start: the entry is added and removed")
     vss::gui::support::sign_in_location location;
     QTemporaryDir directory;
 #if defined(Q_OS_WIN)
-    location.where = QStringLiteral(
-        "HKEY_CURRENT_USER\\Software\\VSS GUI Tests\\Run");
+    location.where =
+        QStringLiteral("HKEY_CURRENT_USER\\Software\\VSS GUI Tests\\Run");
 #else
     location.where = directory.filePath(QStringLiteral("autostart"));
 #endif

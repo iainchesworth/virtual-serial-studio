@@ -56,7 +56,8 @@ std::optional<QJsonObject> read_object(const QString& path, bool* exists)
 running_state state_of(const QJsonObject& object)
 {
     running_state state;
-    state.document_path = object.value(QLatin1String("documentPath")).toString();
+    state.document_path =
+        object.value(QLatin1String("documentPath")).toString();
     state.dirty = object.value(QLatin1String("dirty")).toBool(false);
     state.stopped = object.value(QLatin1String("stopped")).toBool(false);
     return state;

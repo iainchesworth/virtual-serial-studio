@@ -37,8 +37,8 @@ bool sign_in_start_available();
 /// The command the entry runs: the program, quoted, then `--background`.
 QString sign_in_command(const QString& program);
 
-bool sign_in_start_enabled(const sign_in_location& location =
-                               default_sign_in_location());
+bool sign_in_start_enabled(
+    const sign_in_location& location = default_sign_in_location());
 
 /// Adds or removes the entry.  False, with nothing changed, when it cannot.
 bool set_sign_in_start(bool enabled, const sign_in_location& location =

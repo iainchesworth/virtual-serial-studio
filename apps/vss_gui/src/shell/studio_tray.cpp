@@ -114,11 +114,11 @@ void StudioTray::apply_icon()
 {
     // The notification area wants a small, clear mark; the theme's icons are
     // drawn in its colours, so the warn state needs no literal colour.
-    icon_->setIcon(warn_ ? IconProvider::instance().icon(
-                               QStringLiteral("warning"), colour_role::amber, 32)
-                         : IconProvider::instance().icon(
-                               QStringLiteral("connect"), colour_role::accent,
-                               32));
+    icon_->setIcon(
+        warn_ ? IconProvider::instance().icon(QStringLiteral("warning"),
+                                              colour_role::amber, 32)
+              : IconProvider::instance().icon(QStringLiteral("connect"),
+                                              colour_role::accent, 32));
 }
 
 } // namespace vss::gui

@@ -106,8 +106,7 @@ int main(int argc, char* argv[])
 
     // One Studio per user.  A second one shows the first and leaves, so the
     // Start menu brings back a Studio that runs in the notification area.
-    vss::gui::SingleInstance instance(
-        vss::gui::SingleInstance::default_name());
+    vss::gui::SingleInstance instance(vss::gui::SingleInstance::default_name());
     if (!headless)
     {
         const bool replace = parser.isSet(replace_option);
