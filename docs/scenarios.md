@@ -77,6 +77,59 @@ vss_cli loopback      # a console port and a monitor port, no hardware
 The GUI monitor reads from the hub's ring buffer and shows both directions with
 ASCII or hex previews. The send panel writes into any open endpoint.
 
+## One master, several programs and a silent listener
+
+One program polls and several others answer, as on a shared serial line, and
+you want a record of the whole conversation with the exact time of every
+message. Each program opens its own port. Studio joins the ports and records
+them; nothing needs to be added to any of the programs.
+
+```json
+{
+  "name": "poll-lab",
+  "ports": [
+    { "name": "master",   "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "device-1", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "device-2", "kind": "virtual", "virtual_kind": "auto" },
+    { "name": "listener", "kind": "virtual", "virtual_kind": "auto" }
+  ],
+  "links": [
+    { "mode": "split",   "sources": ["master"],
+      "targets": ["device-1", "device-2"] },
+    { "mode": "monitor", "sources": ["master"], "targets": ["listener"] }
+  ]
+}
+```
+
+The master's port is the line as the master sees it: it receives what the
+master sends and is written everything the devices answer. The `monitor` link
+gives a fourth program a read-only copy of what the master sends; that program
+cannot send anything back. Start the programs on the ports `vss_cli` prints,
+then record the master's port:
+
+```bash
+vss_cli capture poll-lab.json --out poll.cap --port master --seconds=120
+```
+
+`poll.cap` has a line for each message in either direction:
+
+```
+[      1204] R 0x02|0x31|0x03
+[      1251] W 0x02|0x31|0x41|0x03
+```
+
+`R` is a poll the master sent and `W` is an answer written to it, 47 ms
+later. For the whole picture with the names of the ports, record every port to
+JSON Lines and read it with any tool:
+
+```bash
+vss_cli capture poll-lab.json --out poll.jsonl
+```
+
+One message shows up once for each port it crossed: `R` on the sender and `W`
+on each receiver. Filter on `port` and `direction` to pick the rows you want.
+The `.cap` file has no port column, so keep one port per file with `--port`.
+
 ## Test software that watches the control lines
 
 1. Attach a device (or create a pair of virtual ports).

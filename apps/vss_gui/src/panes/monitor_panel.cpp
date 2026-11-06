@@ -221,6 +221,14 @@ void MonitorPanel::build()
     export_ = new QPushButton(tr("Export"), advanced_bar_);
     export_->setProperty("size", QStringLiteral("small"));
     polish(export_);
+    export_capture_ = new QPushButton(tr("Export capture"), advanced_bar_);
+    export_capture_->setProperty("size", QStringLiteral("small"));
+    export_capture_->setAccessibleName(tr("Export capture"));
+    export_capture_->setAccessibleDescription(
+        tr("Save the traffic shown with every byte and its exact time to a "
+           "capture file."));
+    export_capture_->setToolTip(export_capture_->accessibleDescription());
+    polish(export_capture_);
     advanced_layout->addWidget(port_filter_);
     advanced_layout->addWidget(rx_);
     advanced_layout->addWidget(tx_);
@@ -232,6 +240,7 @@ void MonitorPanel::build()
     advanced_layout->addWidget(advanced_clear);
     advanced_layout->addWidget(advanced_follow);
     advanced_layout->addWidget(export_);
+    advanced_layout->addWidget(export_capture_);
     advanced_bar_->setVisible(false);
     page_layout->addWidget(advanced_bar_);
 
@@ -329,6 +338,8 @@ void MonitorPanel::build()
                 update_empty();
             });
     connect(export_, &QPushButton::clicked, this, [this] { export_visible(); });
+    connect(export_capture_, &QPushButton::clicked, this,
+            [this] { export_capture(); });
     connect(hex_, &QCheckBox::toggled, this,
             [this](bool on)
             {
@@ -488,6 +499,8 @@ void MonitorPanel::update_actions()
         simple_pause_->setText(pause_text);
     if (export_ != nullptr)
         export_->setEnabled(model_->rowCount() > 0);
+    if (export_capture_ != nullptr)
+        export_capture_->setEnabled(model_->rowCount() > 0);
     if (hex_ != nullptr && hex_->isChecked() != model_->hex())
     {
         const QSignalBlocker blocker(hex_);
@@ -586,6 +599,45 @@ void MonitorPanel::export_visible()
         return;
     }
     file.write(model_->export_text().toUtf8());
+    Q_EMIT status_message(tr("Exported %1.").arg(path));
+}
+
+void MonitorPanel::export_capture()
+{
+    const QString cap_filter = tr("Capture text (*.cap)");
+    const QString csv_filter = tr("Comma separated values (*.csv)");
+    const QString jsonl_filter = tr("JSON Lines (*.jsonl)");
+    QString selected = cap_filter;
+    QString path = QFileDialog::getSaveFileName(
+        this, tr("Export capture"), QStringLiteral("capture.cap"),
+        cap_filter + QStringLiteral(";;") + csv_filter +
+            QStringLiteral(";;") + jsonl_filter,
+        &selected);
+    if (path.isEmpty())
+        return;
+
+    // The extension decides when there is one; otherwise the filter does, and
+    // the file gets the extension that goes with it.
+    vss::capture_format format = vss::capture_format::cap;
+    if (selected == csv_filter)
+        format = vss::capture_format::csv;
+    else if (selected == jsonl_filter)
+        format = vss::capture_format::jsonl;
+    if (const auto named = vss::capture_format_for_path(path.toStdString()))
+        format = *named;
+    else
+        path += QLatin1Char('.') + QString::fromLatin1(vss::to_string(format));
+
+    const capture_export rows = model_->export_capture();
+    vss::capture_header header;
+    header.started = rows.started;
+    const auto written = vss::write_capture_file(path.toStdString(), format,
+                                                 header, rows.records);
+    if (!written)
+    {
+        Q_EMIT error_message(tr("Could not save %1.").arg(path));
+        return;
+    }
     Q_EMIT status_message(tr("Exported %1.").arg(path));
 }
 
