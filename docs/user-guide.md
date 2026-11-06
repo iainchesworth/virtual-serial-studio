@@ -539,9 +539,10 @@ Some programs look for their equipment by opening `COM1`, `COM2` and so on up to
 
 ### What stops when Studio does
 
-Studio's driver ports belong to Studio and are removed when it closes, or if it
+Studio's driver ports belong to Studio and are removed when it quits, or if it
 stops without warning. A running program loses its port at that moment and may
-stop or show an error. Close the programs first, or accept that they will notice.
+stop or show an error. Closing the window is not quitting: see
+[When the window is closed](#when-the-window-is-closed).
 
 ## Watching traffic
 
@@ -748,6 +749,36 @@ The same file can be replayed without the window:
 ```bash
 vss_cli run topology.json --seconds=60
 ```
+
+## When the window is closed
+
+Your ports run on this computer until you quit Studio or open another setup.
+The window is only for setting them up and watching them.
+
+- **Closing the window** with ports running keeps them running. Studio stays in
+  the notification area (the menu bar on macOS); click its icon, or start
+  Studio again from the Start menu, to bring the window back with everything
+  live. There is only one Studio at a time. With no ports, closing quits.
+- **Quitting** (**File → Quit**, `Ctrl+Q`, or **Stop the ports and quit** in
+  the icon's menu) stops every port and link. Studio asks first.
+- **The running setup** is kept by itself, a second after each change. After a
+  restart, a sign-out or a crash, the same ports start again the next time
+  Studio starts. After a Quit they do not start by themselves: a banner offers
+  **Start again**.
+- **Start when I sign in** (in the icon's menu, or **Settings → Running**)
+  starts Studio hidden when you sign in, so the ports are back after a restart
+  without opening anything. It is off until you turn it on, and it is not
+  available on macOS yet.
+- **Saved setups** are unchanged: **File → Open** replaces what runs with the
+  saved setup, which then runs until you quit or open another, and you can
+  change it and save it again.
+- **Settings → Running → When I close the window** can make closing quit, as
+  before.
+- On a desktop with no notification area, closing with ports running asks
+  whether to minimise instead.
+
+`vss_cli run setup.json` runs a setup without any window, in its own process.
+Studio cannot see those ports.
 
 ## Network addresses
 

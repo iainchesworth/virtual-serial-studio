@@ -21,8 +21,10 @@
 #include "shell/port_warnings.hpp"
 #include "shell/setup_group.hpp"
 #include "shell/shell_window.hpp"
+#include "shell/studio_tray.hpp"
 #include "shell/undo_service.hpp"
 #include "shell/undo_steps.hpp"
+#include "support/running_setup.hpp"
 #include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
@@ -38,6 +40,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QSettings>
+#include <QTemporaryDir>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -1407,4 +1410,178 @@ TEST_CASE("shell: without the capability a lost port shows no banner")
     auto* banner = find_lost_banner(window);
     REQUIRE(banner != nullptr);
     REQUIRE(!banner->isVisible());
+}
+
+// -- running in the background ----------------------------------------------
+
+namespace
+{
+
+QString running_file(const QTemporaryDir& directory)
+{
+    return directory.filePath(QStringLiteral("running-setup.json"));
+}
+
+void write_running(const QString& path, bool stopped)
+{
+    vss::gui::FakeStudioBackend before;
+    REQUIRE(before
+                .create_virtual_port(QStringLiteral("console"),
+                                     vss::virtual_port_kind::loopback, true)
+                .has_value());
+    REQUIRE(before
+                .create_virtual_port(QStringLiteral("logger"),
+                                     vss::virtual_port_kind::loopback, true)
+                .has_value());
+    REQUIRE(vss::gui::support::save_running_setup(
+        path, before.snapshot(),
+        {QStringLiteral("C:/setups/lab.json"), true, stopped}));
+}
+
+} // namespace
+
+TEST_CASE("background: the ports that ran before a restart start again")
+{
+    clear_settings();
+    QTemporaryDir directory;
+    write_running(running_file(directory), false);
+
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.enable_background(running_file(directory), false);
+    QApplication::processEvents();
+    REQUIRE(window.background_enabled());
+    REQUIRE(backend.ports().size() == 2);
+    // The saved setup it came from and its unsaved mark come back too.
+    REQUIRE(window.windowTitle().startsWith(QStringLiteral("lab.json*")));
+    REQUIRE(!window.resume_banner()->isVisible());
+    clear_settings();
+}
+
+TEST_CASE("background: after a Quit Studio offers to start the ports again")
+{
+    clear_settings();
+    QTemporaryDir directory;
+    write_running(running_file(directory), true);
+
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    window.enable_background(running_file(directory), false);
+    QApplication::processEvents();
+    REQUIRE(backend.ports().empty());
+    auto* banner = window.resume_banner();
+    REQUIRE(banner->isVisible());
+    REQUIRE(banner->findChildren<QLabel*>().size() > 0);
+    bool said = false;
+    for (auto* label : banner->findChildren<QLabel*>())
+        said = said || label->text().contains(QStringLiteral("2 ports"));
+    REQUIRE(said);
+
+    REQUIRE(banner->action_button() != nullptr);
+    banner->action_button()->click();
+    QApplication::processEvents();
+    REQUIRE(backend.ports().size() == 2);
+    REQUIRE(!banner->isVisible());
+    clear_settings();
+}
+
+TEST_CASE("background: a setup that cannot start is offered again")
+{
+    clear_settings();
+    QTemporaryDir directory;
+    write_running(running_file(directory), false);
+
+    vss::gui::FakeStudioBackend backend;
+    backend.fail_next(vss::make_error_code(vss::errc::already_exists));
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    window.enable_background(running_file(directory), false);
+    QApplication::processEvents();
+    REQUIRE(backend.ports().empty());
+    REQUIRE(window.resume_banner()->isVisible());
+    clear_settings();
+}
+
+TEST_CASE("background: what runs is kept, and a Quit is recorded")
+{
+    clear_settings();
+    QTemporaryDir directory;
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.enable_background(running_file(directory), false);
+    REQUIRE(backend
+                .create_virtual_port(QStringLiteral("console"),
+                                     vss::virtual_port_kind::loopback, true)
+                .has_value());
+    backend.refresh();
+    QApplication::processEvents();
+    window.save_running_now();
+    auto setup = vss::gui::support::load_running_setup(running_file(directory));
+    REQUIRE(setup.has_value());
+    REQUIRE(setup->ports == 1);
+    REQUIRE(!setup->state.stopped);
+
+    window.save_running_now(true);
+    setup = vss::gui::support::load_running_setup(running_file(directory));
+    REQUIRE(setup.has_value());
+    REQUIRE(setup->state.stopped);
+    clear_settings();
+}
+
+TEST_CASE("background: Quit asks before it stops the ports")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    QTemporaryDir directory;
+    vss::gui::FakeStudioBackend backend;
+    REQUIRE(backend
+                .create_virtual_port(QStringLiteral("console"),
+                                     vss::virtual_port_kind::loopback, true)
+                .has_value());
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    window.enable_background(running_file(directory), false);
+    QApplication::processEvents();
+
+    remove_probe probe;
+    answer_next_remove_confirm(&probe, QStringLiteral("Keep running"));
+    window.quit_studio();
+    REQUIRE(probe.seen);
+    REQUIRE((probe.title + probe.body)
+                .contains(QStringLiteral("Stop the ports and quit")));
+    REQUIRE(probe.body.contains(QStringLiteral("1 ports")));
+    REQUIRE(backend.ports().size() == 1);
+    REQUIRE(window.isVisible());
+    clear_settings();
+}
+
+TEST_CASE("background: without background running, closing still quits")
+{
+    clear_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    REQUIRE(!window.background_enabled());
+    REQUIRE(window.tray() == nullptr);
+    REQUIRE(!window.resume_banner()->isVisible());
+}
+
+TEST_CASE("background: the tray icon says what runs")
+{
+    vss::gui::StudioTray tray;
+    tray.set_state(3, 2, false);
+    REQUIRE(tray.status_text() == QStringLiteral("3 ports, 2 links running"));
+    REQUIRE(!tray.warn());
+    tray.set_state(3, 2, true);
+    REQUIRE(tray.warn());
+    tray.set_sign_in(false, true);
+    QAction* sign_in = nullptr;
+    for (QAction* action : tray.menu()->actions())
+        if (action->objectName() == QStringLiteral("traySignIn"))
+            sign_in = action;
+    REQUIRE(sign_in != nullptr);
+    REQUIRE(!sign_in->isEnabled());
+    REQUIRE(!sign_in->isChecked());
+    REQUIRE(sign_in->toolTip() ==
+            QStringLiteral("Not available in this build"));
 }

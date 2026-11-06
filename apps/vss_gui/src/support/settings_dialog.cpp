@@ -7,6 +7,7 @@
 #include "support/settings_dialog.hpp"
 
 #include "support/setup_facts.hpp"
+#include "support/sign_in_start.hpp"
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
@@ -153,8 +154,10 @@ void SettingsDialog::build()
     nav_layout->setSpacing(2);
     auto* group = new QButtonGroup(this);
     group->setExclusive(true);
+    nav_ = group;
     const QStringList sections = {
         QCoreApplication::translate("Settings", "General"),
+        QCoreApplication::translate("Settings", "Running"),
         QCoreApplication::translate("Settings", "Appearance"),
         QCoreApplication::translate("Settings", "Performance")};
     for (int index = 0; index < sections.size(); ++index)
@@ -223,6 +226,66 @@ void SettingsDialog::build()
     general_layout->addWidget(ask_on_discard_);
     general_layout->addStretch(1);
     pages_->addWidget(scroll_page(general, pages_));
+
+    // -- Running -----------------------------------------------------------
+    auto* running = new QWidget(pages_);
+    auto* running_layout = new QVBoxLayout(running);
+    running_layout->setContentsMargins(22, 22, 28, 22);
+    running_layout->setSpacing(14);
+    running_layout->addWidget(section_title(
+        QCoreApplication::translate("Settings", "Running"), running));
+    running_layout->addWidget(hint_label(
+        QCoreApplication::translate(
+            "Settings",
+            "Your ports run on this computer until you quit Studio or open "
+            "another setup. The window is only for setting them up and "
+            "watching them."),
+        running));
+
+    auto* close_label = new QLabel(
+        QCoreApplication::translate("Settings", "When I close the window"),
+        running);
+    QFont close_bold = Theme::instance().font(text_style::caption);
+    close_bold.setWeight(QFont::DemiBold);
+    close_label->setFont(close_bold);
+    running_layout->addWidget(close_label);
+    auto* close_group = new QButtonGroup(this);
+    close_group->setExclusive(true);
+    close_background_ = new QRadioButton(
+        QCoreApplication::translate("Settings",
+                                    "Keep the ports running in the background"),
+        running);
+    close_background_->setObjectName(QStringLiteral("closeBackground"));
+    close_quit_ = new QRadioButton(
+        QCoreApplication::translate("Settings", "Stop the ports and quit"),
+        running);
+    close_quit_->setObjectName(QStringLiteral("closeQuit"));
+    close_group->addButton(close_background_);
+    close_group->addButton(close_quit_);
+    close_background_->setChecked(settings_.keep_running_on_close);
+    close_quit_->setChecked(!settings_.keep_running_on_close);
+    running_layout->addWidget(close_background_);
+    running_layout->addWidget(close_quit_);
+
+    sign_in_ = new Switch(
+        QCoreApplication::translate("Settings", "Start when I sign in"),
+        running);
+    sign_in_->setObjectName(QStringLiteral("signInSwitch"));
+    const bool sign_in_available = sign_in_start_available();
+    sign_in_->setChecked(sign_in_available && sign_in_start_enabled());
+    sign_in_->setEnabled(sign_in_available);
+    if (!sign_in_available)
+        sign_in_->setToolTip(QCoreApplication::translate(
+            "Settings", "Not available in this build"));
+    running_layout->addWidget(sign_in_);
+    running_layout->addWidget(hint_label(
+        QCoreApplication::translate(
+            "Settings",
+            "Studio starts in the notification area and starts the ports that "
+            "were running before the computer restarted."),
+        running));
+    running_layout->addStretch(1);
+    pages_->addWidget(scroll_page(running, pages_));
 
     // -- Appearance --------------------------------------------------------
     auto* appearance = new QWidget(pages_);
@@ -402,6 +465,29 @@ void SettingsDialog::build()
                 settings_.ask_on_discard = on;
                 persist();
             });
+    connect(close_background_, &QRadioButton::toggled, this,
+            [this](bool on)
+            {
+                settings_.keep_running_on_close = on;
+                persist();
+            });
+    connect(sign_in_, &Switch::toggled, this,
+            [this](bool on)
+            {
+                if (set_sign_in_start(on))
+                    return;
+                const QSignalBlocker blocker(sign_in_);
+                sign_in_->setChecked(sign_in_start_enabled());
+                ErrorDialog dialog(
+                    QCoreApplication::translate(
+                        "Settings", "Could not change start at sign-in"),
+                    QCoreApplication::translate(
+                        "Settings",
+                        "Studio could not write the sign-in entry. Nothing "
+                        "was changed."),
+                    {}, this);
+                dialog.exec();
+            });
     connect(refresh_, &QSlider::valueChanged, this,
             [this](int value)
             {
@@ -438,6 +524,13 @@ void SettingsDialog::build()
     close->setFocus(Qt::OtherFocusReason);
     QTimer::singleShot(0, close,
                        [close] { close->setFocus(Qt::OtherFocusReason); });
+}
+
+void SettingsDialog::show_page(int index)
+{
+    select_page(index);
+    if (nav_ != nullptr && nav_->button(index) != nullptr)
+        nav_->button(index)->setChecked(true);
 }
 
 void SettingsDialog::select_page(int index)
@@ -486,6 +579,10 @@ void SettingsDialog::reset_to_defaults()
         advanced_->setChecked(settings_.advanced);
         baud_->setCurrentText(QString::number(settings_.default_baud));
         ask_on_discard_->setChecked(settings_.ask_on_discard);
+        const QSignalBlocker block_close(close_background_);
+        const QSignalBlocker block_quit(close_quit_);
+        close_background_->setChecked(settings_.keep_running_on_close);
+        close_quit_->setChecked(!settings_.keep_running_on_close);
         refresh_->setValue(settings_.refresh_ms);
         const QSignalBlocker block_density(density_);
         density_->set_current(0);

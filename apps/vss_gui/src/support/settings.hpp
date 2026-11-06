@@ -28,6 +28,10 @@ struct ui_settings
     int refresh_ms = 250;
     int default_baud = 115200;
     bool ask_on_discard = true;
+    /// Closing the window with ports running keeps them running in the
+    /// background (`ui/closeAction` is `background`), or stops them and
+    /// quits (`quit`).
+    bool keep_running_on_close = true;
 };
 
 inline constexpr int kRefreshMinMs = 50;

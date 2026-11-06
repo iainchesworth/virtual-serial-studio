@@ -41,16 +41,19 @@
 #include "shell/port_warnings.hpp"
 #include "shell/setup_group.hpp"
 #include "shell/status_bar.hpp"
+#include "shell/studio_tray.hpp"
 #include "shell/undo_steps.hpp"
 #include "support/about_dialog.hpp"
 #include "support/build_info.hpp"
 #include "support/diagnostic_bundle_dialog.hpp"
 #include "support/help_contents_dialog.hpp"
+#include "support/running_setup.hpp"
 #include "support/settings.hpp"
 #include "support/settings_dialog.hpp"
 #include "support/setup_check_dialog.hpp"
 #include "support/setup_facts.hpp"
 #include "support/shortcuts_dialog.hpp"
+#include "support/sign_in_start.hpp"
 #include "support/troubleshoot_dialog.hpp"
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
@@ -248,7 +251,14 @@ void ShellWindow::build_actions()
         tr("support zip"), QStringLiteral("export"), {}, action_level::simple,
         [this] { open_bundle(); });
     add(QStringLiteral("file.quit"), tr("Quit"), tr("exit"), {},
-        QKeySequence::Quit, action_level::simple, [this] { close(); });
+        QKeySequence::Quit, action_level::simple,
+        [this]
+        {
+            if (background_)
+                quit_studio();
+            else
+                close();
+        });
 
     // Edit
     // The engine cannot restore a snapshot exactly: a restored port gets a new
@@ -729,8 +739,22 @@ void ShellWindow::build_toolbar()
 
 void ShellWindow::build_central()
 {
-    central_ = new QStackedWidget(this);
-    setCentralWidget(central_);
+    // The banner that offers to start again what was running when the user
+    // last quit sits above the stack, so it reads the same over the launcher
+    // and the workspace.  Hidden until background running finds such a setup.
+    auto* frame = new QWidget(this);
+    auto* frame_layout = new QVBoxLayout(frame);
+    frame_layout->setContentsMargins(0, 0, 0, 0);
+    frame_layout->setSpacing(0);
+    resume_banner_ = new NoteBanner(NoteBanner::kind::info, QString(), frame);
+    resume_banner_->setObjectName(QStringLiteral("resumeBanner"));
+    resume_banner_->set_action(tr("Start again"),
+                               [this] { start_running_setup(false); });
+    resume_banner_->setVisible(false);
+    frame_layout->addWidget(resume_banner_);
+    central_ = new QStackedWidget(frame);
+    frame_layout->addWidget(central_, 1);
+    setCentralWidget(frame);
 
     launcher_ = new Launcher(backend_, central_);
     connect(launcher_, &Launcher::job_requested, this,
@@ -1268,6 +1292,9 @@ void ShellWindow::on_backend_changed()
     validate_selection();
     update_dock_titles();
     update_actions();
+    update_resume_banner();
+    update_tray();
+    schedule_running_save();
 }
 
 void ShellWindow::on_level_changed(bool advanced)
@@ -1365,6 +1392,7 @@ void ShellWindow::update_lost_banner()
     const bool lost =
         backend_.caps().recreate_ports && !backend_.lost_ports().empty();
     lost_banner_->setVisible(lost);
+    update_tray();
 }
 
 void ShellWindow::recreate_lost_ports()
@@ -1407,6 +1435,9 @@ void ShellWindow::update_title()
     setWindowTitle(tr("%1 - Virtual Serial Studio").arg(name));
     if (json_editor_ != nullptr)
         json_editor_->set_document_path(document_path_);
+    // The saved setup's name and the unsaved mark are part of what the
+    // running setup keeps.
+    schedule_running_save();
 }
 
 void ShellWindow::update_actions()
@@ -2975,7 +3006,23 @@ void ShellWindow::showEvent(QShowEvent* event)
 
 bool ShellWindow::confirm_exit()
 {
-    const QString warning = exit_warning(ports_in_use(backend_.ports()));
+    const auto ports = backend_.ports();
+    const QString warning = exit_warning(ports_in_use(ports));
+    if (background_ && !ports.empty())
+    {
+        // With background running on, quitting is the one way to stop the
+        // ports, so it is always confirmed while any run.
+        const QString body =
+            !warning.isEmpty()
+                ? warning
+                : tr("This stops %1 ports and %2 links. Studio offers to "
+                     "start them again the next time it opens.")
+                      .arg(static_cast<qulonglong>(ports.size()))
+                      .arg(static_cast<qulonglong>(backend_.links().size()));
+        return ConfirmDialog::ask(tr("Stop the ports and quit?"), body,
+                                  tr("Stop the ports and quit"),
+                                  tr("Keep running"), true, this);
+    }
     if (warning.isEmpty())
         return true;
     return ConfirmDialog::ask(tr("Close Studio?"), warning, tr("Close Studio"),
@@ -2984,13 +3031,307 @@ bool ShellWindow::confirm_exit()
 
 void ShellWindow::closeEvent(QCloseEvent* event)
 {
-    if (!restarting_ && (!confirm_discard() || !confirm_exit()))
+    if (restarting_)
     {
+        // The Studio that replaces this one (as administrator) starts the
+        // same ports again, so this is not a Quit.
+        save_layout();
+        if (background_)
+        {
+            save_running_now(false);
+            QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+        }
+        event->accept();
+        return;
+    }
+
+    if (background_ && !quitting_ && !backend_.ports().empty() &&
+        load_ui_settings().keep_running_on_close)
+    {
+        if (tray_ != nullptr && tray_->visible())
+        {
+            save_layout();
+            save_running_now(false);
+            hide();
+            event->ignore();
+            show_background_notice();
+            return;
+        }
+        // Nowhere to keep a hidden Studio: never hide what cannot be found.
+        ConfirmDialog dialog(
+            tr("Keep the ports running?"),
+            tr("This desktop has no notification area to keep Studio in. "
+               "Minimise the window to keep the ports running, or stop them "
+               "and quit."),
+            QVector<confirm_choice>{
+                {tr("Cancel"), QString(), true},
+                {tr("Stop the ports and quit"), QStringLiteral("danger"),
+                 false},
+                {tr("Minimise instead"), QStringLiteral("primary"), false}},
+            2, this);
+        dialog.exec();
+        if (dialog.chosen() == 2)
+            showMinimized();
+        if (dialog.chosen() != 1)
+        {
+            event->ignore();
+            return;
+        }
+        quitting_ = true;
+    }
+
+    if (!confirm_discard() || !confirm_exit())
+    {
+        quitting_ = false;
         event->ignore();
         return;
     }
-    save_layout();
     event->accept();
+    finish_quit();
+}
+
+void ShellWindow::quit_studio()
+{
+    quitting_ = true;
+    if (!confirm_discard() || !confirm_exit())
+    {
+        quitting_ = false;
+        return;
+    }
+    finish_quit();
+}
+
+void ShellWindow::finish_quit()
+{
+    quitting_ = true;
+    if (isVisible())
+        save_layout();
+    if (!background_)
+        return;
+    save_running_now(true);
+    if (running_save_ != nullptr)
+        running_save_->stop();
+    if (tray_ != nullptr)
+        tray_->hide();
+    // The window may be hidden, and the last window closing does not end the
+    // program while background running is on, so end it here.
+    QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+}
+
+void ShellWindow::enable_background(const QString& running_path, bool use_tray)
+{
+    if (background_)
+        return;
+    background_ = true;
+    running_path_ = running_path;
+    QApplication::setQuitOnLastWindowClosed(false);
+
+    running_save_ = new QTimer(this);
+    running_save_->setSingleShot(true);
+    running_save_->setInterval(1000);
+    connect(running_save_, &QTimer::timeout, this,
+            [this] { save_running_now(false); });
+    // Signing out or shutting down ends Studio without a Quit: keep what
+    // runs so it comes back.
+    connect(qApp, &QGuiApplication::commitDataRequest, this,
+            [this](QSessionManager&) { save_running_now(false); });
+
+    if (use_tray)
+    {
+        tray_ = new StudioTray(this);
+        connect(tray_, &StudioTray::open_requested, this,
+                &ShellWindow::bring_to_front);
+        connect(tray_, &StudioTray::quit_requested, this,
+                &ShellWindow::quit_studio);
+        connect(tray_, &StudioTray::sign_in_toggled, this,
+                [this](bool on)
+                {
+                    if (!set_sign_in_start(on))
+                        tray_->notify(tr("Could not change start at sign-in"),
+                                      tr("Studio could not write the sign-in "
+                                         "entry. Nothing was changed."),
+                                      true);
+                    tray_->set_sign_in(sign_in_start_available(),
+                                       sign_in_start_enabled());
+                });
+        // Refresh the sign-in item each time the menu opens: the entry can
+        // change in Preferences or outside Studio.
+        connect(tray_->menu(), &QMenu::aboutToShow, this,
+                [this]
+                {
+                    tray_->set_sign_in(sign_in_start_available(),
+                                       sign_in_start_enabled());
+                });
+        tray_->set_sign_in(sign_in_start_available(), sign_in_start_enabled());
+        tray_->show();
+    }
+
+    bool damaged = false;
+    const auto setup = load_running_setup(running_path_, &damaged);
+    if (damaged)
+    {
+        const QString text = tr("The ports from last time could not be read, "
+                                "so Studio started without them.");
+        status_->showMessage(text, 10000);
+        log_local(text);
+    }
+    if (setup && !setup->state.stopped && backend_.ports().empty())
+        start_running_setup(true);
+    update_resume_banner();
+    update_tray();
+}
+
+void ShellWindow::bring_to_front()
+{
+    if (isMinimized())
+        showNormal();
+    else
+        show();
+    raise();
+    activateWindow();
+}
+
+void ShellWindow::schedule_running_save()
+{
+    // A fixed delay from the first change, not from the last: counters make
+    // the ports change all the time while traffic flows.
+    if (running_save_ != nullptr && !loading_ && !quitting_ &&
+        !running_save_->isActive())
+        running_save_->start();
+}
+
+void ShellWindow::save_running_now(bool stopped)
+{
+    if (!background_ || running_path_.isEmpty())
+        return;
+    if (backend_.ports().empty() && !stopped)
+    {
+        // Nothing runs: keep a stopped setup that can still be started
+        // again, and otherwise forget the last one.
+        const auto kept = support::load_running_state(running_path_);
+        if (kept.stopped)
+            return;
+    }
+    const support::running_state state{document_path_, dirty_, stopped};
+    const auto document = backend_.snapshot();
+    const auto text = vss::config::to_json(document);
+    const QByteArray key =
+        (text ? QByteArray::fromStdString(*text) : QByteArray()) +
+        state.document_path.toUtf8() + (state.dirty ? "1" : "0") +
+        (state.stopped ? "1" : "0");
+    if (key == running_written_)
+        return;
+    if (support::save_running_setup(running_path_, document, state))
+        running_written_ = key;
+}
+
+void ShellWindow::start_running_setup(bool automatic)
+{
+    bool damaged = false;
+    const auto setup = load_running_setup(running_path_, &damaged);
+    if (!setup)
+    {
+        update_resume_banner();
+        return;
+    }
+    if (!automatic && !backend_.ports().empty())
+        return;
+
+    loading_ = true;
+    const auto applied = backend_.apply(setup->document, true);
+    loading_ = false;
+    if (!applied)
+    {
+        const QString text = tr("Could not start the ports from last time: %1")
+                                 .arg(error_text(applied.error()));
+        status_->showMessage(text, 10000);
+        log_local(text);
+        if (tray_ != nullptr && !isVisible())
+            tray_->notify(tr("Could not start the ports from last time"),
+                          tr("Open Studio to see why and start them again."),
+                          true);
+        // Offer it again from the banner, as after a Quit.
+        support::running_state state = setup->state;
+        state.stopped = true;
+        support::save_running_state(running_path_, state);
+        update_resume_banner();
+        return;
+    }
+    document_path_ = setup->state.document_path;
+    title_override_.clear();
+    last_signature_ = document_signature();
+    dirty_ = setup->state.dirty;
+    update_title();
+    const QString text =
+        automatic ? tr("Started the ports that were running before: %1 "
+                       "ports, %2 links.")
+                        .arg(setup->ports)
+                        .arg(setup->links)
+                  : tr("Started the ports again: %1 ports, %2 links.")
+                        .arg(setup->ports)
+                        .arg(setup->links);
+    status_->showMessage(text, 6000);
+    log_local(text);
+    show_workspace();
+    status_->refresh();
+    save_running_now(false);
+    update_resume_banner();
+    update_tray();
+}
+
+void ShellWindow::update_resume_banner()
+{
+    if (resume_banner_ == nullptr)
+        return;
+    if (!background_ || !backend_.ports().empty())
+    {
+        resume_banner_->setVisible(false);
+        return;
+    }
+    const auto setup = load_running_setup(running_path_);
+    if (!setup || !setup->state.stopped)
+    {
+        resume_banner_->setVisible(false);
+        return;
+    }
+    resume_banner_->set_text(
+        tr("When you last quit, %1 ports and %2 links were running.")
+            .arg(setup->ports)
+            .arg(setup->links));
+    resume_banner_->setVisible(true);
+}
+
+void ShellWindow::update_tray()
+{
+    if (tray_ == nullptr)
+        return;
+    const bool lost =
+        backend_.caps().recreate_ports && !backend_.lost_ports().empty();
+    tray_->set_state(static_cast<int>(backend_.ports().size()),
+                     static_cast<int>(backend_.links().size()), lost);
+    if (lost && !was_lost_ && !isVisible())
+        tray_->notify(tr("Some COM ports were lost"),
+                      tr("Open Studio to recreate them."), true);
+    was_lost_ = lost;
+}
+
+void ShellWindow::show_background_notice()
+{
+    if (tray_ == nullptr)
+        return;
+    QSettings settings;
+    const QString key = QStringLiteral("ui/backgroundNoticeShown");
+    if (settings.value(key, false).toBool())
+        return;
+    settings.setValue(key, true);
+    tray_->notify(
+        tr("Studio is still running your ports"),
+        sign_in_start_available()
+            ? tr("Open it again from this icon, or quit it there to stop the "
+                 "ports. To have them back after a restart, choose Start when "
+                 "I sign in in the same menu.")
+            : tr("Open it again from this icon, or quit it there to stop the "
+                 "ports."));
 }
 
 bool ShellWindow::run_selftest()
