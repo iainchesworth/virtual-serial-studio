@@ -69,6 +69,16 @@ constexpr DWORD first_request_ms = 5000;
 constexpr DWORD idle_ms = 30000;
 constexpr DWORD create_wait_ms = 30000;
 
+void dbg(const wchar_t* step, unsigned long value = 0)
+{
+    FILE* f = nullptr;
+    if (_wfopen_s(&f, L"C:\\Windows\\Temp\\vsscom_helper_dbg.txt", L"a") == 0 && f)
+    {
+        std::fwprintf(f, L"%ls %lu\n", step, value);
+        std::fclose(f);
+    }
+}
+
 void trace(const wchar_t* text)
 {
     ::OutputDebugStringW(L"vsscom_helper: ");
@@ -418,7 +428,10 @@ DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
     if (::CM_Open_DevNode_Key(node, KEY_QUERY_VALUE | KEY_SET_VALUE, 0,
                               RegDisposition_OpenExisting, &raw,
                               CM_REGISTRY_HARDWARE) != CR_SUCCESS)
+    {
+        dbg(L"open devnode key failed");
         return ERROR_GEN_FAILURE;
+    }
     struct key_closer
     {
         HKEY key;
@@ -427,14 +440,22 @@ DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
 
     std::wstring old_name;
     if (!read_port_name(raw, old_name))
+    {
+        dbg(L"read_port_name failed");
         return ERROR_GEN_FAILURE;
+    }
+
     if (_wcsicmp(old_name.c_str(), wanted.c_str()) == 0)
         return ERROR_SUCCESS; // it is that number already
     const auto old_number = vss::helper::parse_com_name(old_name);
 
     const auto database = com_database::open();
     if (!database)
+    {
+        dbg(L"comdb open failed", ::GetLastError());
         return ERROR_GEN_FAILURE;
+    }
+    dbg(L"comdb open; old name len", static_cast<unsigned long>(old_name.size()));
     if (dos_name_exists(wanted))
         return ERROR_ALREADY_ASSIGNED;
     if (!database->claim(number))
@@ -451,6 +472,7 @@ DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
 
     if (!write_port_name(raw, wanted))
     {
+        dbg(L"write_port_name failed");
         database->release(number);
         return ERROR_GEN_FAILURE;
     }
@@ -460,13 +482,20 @@ DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
     // Nothing is restarted if a program has the port: the port would not restart
     // again. A failed restart (the hub end was open after all) leaves the port
     // that way, and no second try is made.
-    if (!port_is_free(old_name) || !restart_device(instance))
+    const bool free_port = port_is_free(old_name);
+    dbg(L"port_is_free", free_port ? 1 : 0);
+    const bool restarted = free_port && restart_device(instance);
+    dbg(L"restarted", restarted ? 1 : 0);
+    if (!free_port || !restarted)
     {
         put_back();
         return ERROR_BUSY;
     }
     const DWORD started = wait_started(instance, stop);
-    if (started != ERROR_SUCCESS || !wait_name(wanted, stop))
+    dbg(L"started", started);
+    const bool named = started == ERROR_SUCCESS && wait_name(wanted, stop);
+    dbg(L"named", named ? 1 : 0);
+    if (started != ERROR_SUCCESS || !named)
     {
         put_back();
         (void)restart_device(instance);
