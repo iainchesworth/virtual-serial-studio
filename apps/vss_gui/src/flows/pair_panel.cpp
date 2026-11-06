@@ -369,15 +369,39 @@ void PairPanel::refresh()
 {
     const setup_facts facts = backend_.facts();
     const bool windows = windows_platform(platform_);
-    driver_available_ = !windows || facts.com0com_found;
+    studio_driver_ = windows && facts.driver_found;
+    driver_available_ = !windows || facts.driver_found || facts.com0com_found;
     const QVector<free_pair> pairs = free_pairs();
     free_pair_count_ = static_cast<int>(pairs.size());
 
     can_create_ = backend_.caps().links && driver_available_;
-    if (windows)
+    // The Studio driver makes its ports when they are asked for, so only
+    // com0com needs two free pairs to exist beforehand.
+    if (windows && !studio_driver_)
         can_create_ = can_create_ && free_pair_count_ >= 2;
 
-    if (windows)
+    if (admin_note_ != nullptr)
+    {
+        admin_note_->set_text(
+            studio_driver_
+                ? tr("The Studio driver makes the ports for this pair, so "
+                     "Windows does not ask for administrator permission.")
+                : tr("Windows uses free com0com pairs for this pair, so it "
+                     "does not ask for administrator permission."));
+    }
+    if (hint_ != nullptr)
+    {
+        hint_->setText(
+            studio_driver_
+                ? tr("The Studio driver makes both ports when you create the "
+                     "pair. Windows chooses their COM numbers.")
+                : tr("Names are suggested from free COM numbers. This build "
+                     "chooses the free ports shown above. On Linux and macOS "
+                     "the ports are paths such as /dev/pts/3 and are chosen "
+                     "for you."));
+    }
+
+    if (windows && !studio_driver_)
     {
         if (pairs.size() >= 1)
             first_port_->setText(pairs.at(0).first);
@@ -429,7 +453,7 @@ void PairPanel::refresh_warning()
                                   "check."));
         driver_note_->setVisible(true);
     }
-    else if (free_pair_count_ < 2)
+    else if (!studio_driver_ && free_pair_count_ < 2)
     {
         driver_note_->set_text(
             tr("There are not enough free driver pairs. Open the setup "
