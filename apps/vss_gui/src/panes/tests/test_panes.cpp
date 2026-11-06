@@ -196,6 +196,102 @@ TEST_CASE("monitor: ascii, hex, filtering, pause and drop rows")
                 .contains(QStringLiteral("not the owner")));
 }
 
+namespace
+{
+
+vss::gui::gui_event timed_event(vss::endpoint_id id, const QString& name,
+                                vss::data_direction direction,
+                                const QByteArray& data, vss::time_point when)
+{
+    auto event = data_event(id, name, direction, data);
+    event.when = when;
+    return event;
+}
+
+} // namespace
+
+TEST_CASE("monitor: the capture export keeps every byte and the event time")
+{
+    vss::gui::MonitorModel model;
+    const auto base = vss::clock_type::now();
+    using namespace std::chrono_literals;
+
+    // Longer than the 256 bytes the table shows.
+    const QByteArray big(1000, 'q');
+    vss::gui::event_batch events;
+    events.push_back(timed_event(1, QStringLiteral("master"),
+                                 vss::data_direction::rx, big, base + 100ms));
+    events.push_back(timed_event(2, QStringLiteral("tap"),
+                                 vss::data_direction::tx, QByteArrayLiteral("ab"),
+                                 base + 350ms));
+    model.append_events(events);
+    model.append_drop(QStringLiteral("master"), 5);
+
+    // The preview is cut for display; the capture is not.
+    REQUIRE_EQ(model.row_at(0)->preview.size(), 256);
+    const auto everything = model.export_capture();
+    REQUIRE_EQ(everything.records.size(), std::size_t{2});
+    REQUIRE_EQ(everything.records[0].data.size(), std::size_t{1000});
+    REQUIRE_EQ(everything.records[0].port, std::string("master"));
+    REQUIRE(everything.records[0].direction == vss::data_direction::rx);
+    // Offsets are the engine's own times, 250 ms apart, from the first row.
+    REQUIRE_EQ(everything.records[0].offset_ms, 0);
+    REQUIRE_EQ(everything.records[1].offset_ms, 250);
+    REQUIRE(everything.records[1].direction == vss::data_direction::tx);
+
+    // The filters apply: only the tap.
+    model.set_filters(2, true, true, true, {});
+    const auto tap_only = model.export_capture();
+    REQUIRE_EQ(tap_only.records.size(), std::size_t{1});
+    REQUIRE_EQ(tap_only.records[0].port, std::string("tap"));
+}
+
+TEST_CASE("monitor: payloads kept for the capture export are bounded")
+{
+    vss::gui::MonitorModel model;
+    const QByteArray chunk(1024 * 1024, 'z');
+    const auto when = vss::clock_type::now();
+    vss::gui::event_batch events;
+    for (int index = 0; index < 40; ++index)
+    {
+        events.push_back(timed_event(1, QStringLiteral("p"),
+                                     vss::data_direction::rx, chunk, when));
+    }
+    model.append_events(events);
+
+    // 40 MiB came in; 32 MiB is the most that is kept, newest first.
+    REQUIRE_EQ(model.total_rows(), 32);
+    REQUIRE_EQ(model.export_capture().records.size(), std::size_t{32});
+}
+
+TEST_CASE("monitor panel: Export capture is named and follows the rows")
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::MonitorPanel panel(backend);
+    panel.resize(900, 240);
+    panel.set_advanced(true);
+    panel.show();
+    QApplication::processEvents();
+
+    QPushButton* button = nullptr;
+    for (QPushButton* candidate : panel.findChildren<QPushButton*>())
+    {
+        if (candidate->text() == QStringLiteral("Export capture"))
+            button = candidate;
+    }
+    REQUIRE(button != nullptr);
+    REQUIRE_EQ(button->accessibleName(), QStringLiteral("Export capture"));
+    REQUIRE(!button->accessibleDescription().isEmpty());
+    // Nothing to export yet, the same as the text export beside it.
+    REQUIRE(!button->isEnabled());
+
+    panel.handle_events({data_event(1, QStringLiteral("terminal"),
+                                    vss::data_direction::rx,
+                                    QByteArrayLiteral("x"))});
+    QApplication::processEvents();
+    REQUIRE(button->isEnabled());
+}
+
 TEST_CASE("send: hex validation, CRLF and the fake backend")
 {
     vss::gui::FakeStudioBackend backend;

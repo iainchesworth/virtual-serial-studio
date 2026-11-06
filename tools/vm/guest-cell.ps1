@@ -18,15 +18,30 @@
     Only one cell may use a guest at a time: starting or stopping a guest another run is using
     cuts that run off. The script refuses a guest that is already running unless -Force is given.
 
+    With -DriverBundle, a Windows guest also runs the driver tests after the cell (or instead of
+    it, when -Bundle is left out): tools/vm/guest/win-driver.ps1 signs, installs and uninstalls
+    each driver in the guest and runs test-wow64.ps1, the 32-bit client and the hung-program
+    tests, against it. The evidence comes back to <Out>\<guest id>\driver-out. The driver is x64
+    and ARM64 only, so these guests are 64-bit and the 32-bit program runs under WOW64.
+
 .PARAMETER Guest
     windows10, windows11 or ubuntu2604, as in tools/vm/matrix.json.
 
 .PARAMETER Bundle
-    The folder the make-bundle script wrote.
+    The folder the make-bundle script wrote. Optional when -DriverBundle is given.
 
 .PARAMETER Package
     Optional. A release archive for T9: virtual-serial-studio-*-windows-x86_64.zip for a Windows
     guest, or ...-linux-x86_64.tar.gz for Ubuntu (from the Release workflow's dry run).
+
+.PARAMETER DriverBundle
+    Optional, Windows guests only. The zip that tools/vm/make-driver-bundle.ps1 wrote.
+
+.PARAMETER DriverFlavour
+    Which drivers to run, kmdf and umdf by default. A flavour the bundle lacks is skipped.
+
+.PARAMETER DriverSuite
+    Also run test-driver.ps1, the driver's own suite, before the 32-bit tests.
 
 .PARAMETER Out
     Where the evidence goes: <Out>\<guest id>\cell-out.
@@ -34,13 +49,20 @@
 .EXAMPLE
     ./tools/vm/make-bundle.ps1 -Repository . -Out D:\bundle-win
     ./tools/vm/guest-cell.ps1 -Guest windows11 -Bundle D:\bundle-win -Commit (git rev-parse --short HEAD)
+
+.EXAMPLE
+    ./tools/vm/make-driver-bundle.ps1 -Repository . -Out D:\bundle-driver\driver-bundle.zip
+    ./tools/vm/guest-cell.ps1 -Guest windows10 -DriverBundle D:\bundle-driver\driver-bundle.zip
 #>
 
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)] [ValidateSet('windows10', 'windows11', 'ubuntu2604')] [string] $Guest,
-    [Parameter(Mandatory)] [string] $Bundle,
+    [string] $Bundle,
     [string] $Package,
+    [string] $DriverBundle,
+    [ValidateSet('kmdf', 'umdf')] [string[]] $DriverFlavour = @('kmdf', 'umdf'),
+    [switch] $DriverSuite,
     [string] $Out = 'out/guest-cell',
     [string] $Commit = '',
     [switch] $Force,
@@ -58,11 +80,17 @@ $cell = $entry.name -replace ' - ', '-' -replace ' ', '-'
 $snapshot = $matrix.snapshot
 $windows = $entry.kind -eq 'windows'
 
+if (-not $Bundle -and -not $DriverBundle) { throw 'pass -Bundle, -DriverBundle or both' }
+if ($DriverBundle -and -not $windows) { throw '-DriverBundle is for the Windows guests: the driver is a Windows driver' }
+
 if (-not $DryRun) {
-    if (-not (Test-Path -LiteralPath $Bundle)) { throw "no such bundle folder: $Bundle" }
-    $needed = if ($windows) { 'bundle.zip', 'bundle.json', 'py.zip', 'rt.zip' } else { 'bundle.tgz', 'bundle.env' }
-    $absent = $needed | Where-Object { -not (Test-Path -LiteralPath (Join-Path $Bundle $_)) }
-    if ($absent) { throw "the bundle lacks $($absent -join ', ')" }
+    if ($Bundle) {
+        if (-not (Test-Path -LiteralPath $Bundle)) { throw "no such bundle folder: $Bundle" }
+        $needed = if ($windows) { 'bundle.zip', 'bundle.json', 'py.zip', 'rt.zip' } else { 'bundle.tgz', 'bundle.env' }
+        $absent = $needed | Where-Object { -not (Test-Path -LiteralPath (Join-Path $Bundle $_)) }
+        if ($absent) { throw "the bundle lacks $($absent -join ', ')" }
+    }
+    if ($DriverBundle -and -not (Test-Path -LiteralPath $DriverBundle)) { throw "no such driver bundle: $DriverBundle" }
     if (-not $env:VSS_VM_USER -or -not $env:VSS_VM_PASSWORD) { . (Join-Path $here 'credentials.ps1') | Out-Null }
     if (-not $Force -and ((& $vmrun status -Vm $vm) -eq 'running')) {
         throw "$($entry.name) is running, so another run may be using it; stop it first, or pass -Force"
@@ -77,6 +105,7 @@ function Step([string] $Action, [hashtable] $Parameters = @{}) {
 $destination = Join-Path $Out $Guest
 New-Item -ItemType Directory -Force $destination | Out-Null
 $evidence = Join-Path $destination 'cell-out'
+$driverEvidence = Join-Path $destination 'driver-out'
 
 try {
     Step 'revert' @{ Name = $snapshot }
@@ -88,6 +117,8 @@ try {
     if ($windows) {
         $folder = 'C:\vss'
         Step 'run' @{ CommandLine = "New-Item -ItemType Directory -Force $folder | Out-Null" }
+    }
+    if ($windows -and $Bundle) {
         foreach ($name in 'bundle.zip', 'bundle.json', 'py.zip', 'pwsh.zip', 'rt.zip') {
             if ($DryRun -or (Test-Path -LiteralPath (Join-Path $Bundle $name))) {
                 Step 'copy-to' @{ Local = (Join-Path $Bundle $name); Guest = "$folder\$name" }
@@ -113,7 +144,7 @@ try {
             Remove-Item -Recurse -Force $evidence -ErrorAction SilentlyContinue
             Expand-Archive -Path (Join-Path $destination 'cell-out.zip') -DestinationPath $destination -Force
         }
-    } else {
+    } elseif (-not $windows) {
         $folder = '/tmp/vss'
         Step 'run' @{ CommandLine = "mkdir -p $folder" }
         foreach ($name in 'bundle.tgz', 'bundle.env') {
@@ -131,6 +162,22 @@ try {
             tar -xzf (Join-Path $destination 'cell-out.tgz') -C $destination
         }
     }
+
+    # The driver tests run after the cell, in the same guest, so the cell sees a guest with no
+    # driver in it. win-driver.ps1 signs, installs and removes each driver itself.
+    if ($windows -and $DriverBundle) {
+        Step 'copy-to' @{ Local = $DriverBundle; Guest = "$folder\driver-bundle.zip" }
+        Step 'copy-to' @{ Local = (Join-Path $here 'guest\win-driver.ps1'); Guest = "$folder\win-driver.ps1" }
+        $flavours = ($DriverFlavour | ForEach-Object { "'$_'" }) -join ','
+        $suite = if ($DriverSuite) { ' -Suite' } else { '' }
+        Step 'run' @{ CommandLine = "& $folder\win-driver.ps1 -Flavour $flavours$suite *> $folder\d.out" }
+        Step 'copy-from' @{ Guest = "$folder\d.out"; Local = (Join-Path $destination 'd.out') }
+        Step 'copy-from' @{ Guest = "$folder\driver-out.zip"; Local = (Join-Path $destination 'driver-out.zip') }
+        if (-not $DryRun) {
+            Remove-Item -Recurse -Force $driverEvidence -ErrorAction SilentlyContinue
+            Expand-Archive -Path (Join-Path $destination 'driver-out.zip') -DestinationPath $destination -Force
+        }
+    }
 }
 finally {
     # Leave the guest off whatever happened: a running guest blocks the next cell.
@@ -139,14 +186,46 @@ finally {
 }
 
 if ($DryRun) { exit 0 }
-$result = Get-ChildItem $evidence -Filter 'result-*.json' -ErrorAction SilentlyContinue | Select-Object -First 1
-if (-not $result) {
-    Write-Host "no result file came back; see $(Join-Path $destination 'g.out')"
-    exit 1
+$exitCode = 0
+
+if ($Bundle) {
+    $result = Get-ChildItem $evidence -Filter 'result-*.json' -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $result) {
+        Write-Host "no result file came back; see $(Join-Path $destination 'g.out')"
+        $exitCode = 1
+    } else {
+        $data = Get-Content -LiteralPath $result.FullName -Raw | ConvertFrom-Json
+        foreach ($item in $data.results) { '{0,-4} {1,-8} {2}' -f $item.id, $item.status, $item.detail }
+        $bad = @($data.results | Where-Object { $_.status -in 'fail', 'not_run' })
+        Write-Host "$($data.results.Count - $bad.Count) of $($data.results.Count) tests passed or do not apply; evidence in $evidence"
+        if ($bad.Count -gt 0) { $exitCode = 1 }
+    }
 }
-$data = Get-Content -LiteralPath $result.FullName -Raw | ConvertFrom-Json
-foreach ($item in $data.results) { '{0,-4} {1,-8} {2}' -f $item.id, $item.status, $item.detail }
-$bad = @($data.results | Where-Object { $_.status -in 'fail', 'not_run' })
-Write-Host "$($data.results.Count - $bad.Count) of $($data.results.Count) tests passed or do not apply; evidence in $evidence"
-if ($bad.Count -gt 0) { exit 1 }
-exit 0
+
+if ($DriverBundle) {
+    # One result file per driver and step. A test that failed, or a step that did not leave a
+    # result, fails the run; skip and unexpected are printed and do not (read the detail).
+    $summaryFile = Join-Path $driverEvidence 'driver-summary.json'
+    if (-not (Test-Path -LiteralPath $summaryFile)) {
+        Write-Host "no driver summary came back; see $(Join-Path $destination 'd.out')"
+        $exitCode = 1
+    } else {
+        $failed = 0
+        foreach ($step in (Get-Content -LiteralPath $summaryFile -Raw | ConvertFrom-Json)) {
+            $file = Join-Path $driverEvidence $step.result
+            if ($step.step -in 'wow64', 'suite', 'install', 'uninstall' -and (Test-Path -LiteralPath $file)) {
+                $data = Get-Content -LiteralPath $file -Raw | ConvertFrom-Json
+                foreach ($item in $data.tests) {
+                    '{0,-6} {1,-10} {2,-14} {3,-4} {4}' -f $step.flavour, $item.status, $step.step, $item.id, $item.detail
+                    if ($item.status -eq 'fail') { $failed++ }
+                }
+            } elseif ($null -ne $step.exit -and $step.exit -ne 0) {
+                '{0,-6} {1,-10} {2,-14} exit {3}' -f $step.flavour, 'fail', $step.step, $step.exit
+                $failed++
+            }
+        }
+        Write-Host "driver tests: $failed failed; evidence in $driverEvidence"
+        if ($failed -gt 0) { $exitCode = 1 }
+    }
+}
+exit $exitCode

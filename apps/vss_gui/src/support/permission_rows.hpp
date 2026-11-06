@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP
-#define VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP
+#pragma once
 
 #include "support/setup_facts.hpp"
 
@@ -26,8 +25,7 @@ namespace vss::gui::support
 vss::permissions::context permission_context(const StudioBackend& backend);
 
 /// The same, for one listener the user is about to open.
-vss::permissions::context
-permission_context_for(const QString& uri);
+vss::permissions::context permission_context_for(const QString& uri);
 
 /// Adds the rows the permission facts call for to the Setup check.  Facts for
 /// another system are not in the list, so they add nothing.  The row of a fact
@@ -46,5 +44,3 @@ std::optional<vss::permissions::fact>
 firewall_fact(const std::vector<vss::permissions::fact>& facts);
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP

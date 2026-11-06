@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_CLI_PERMISSIONS_COMMAND_HPP
-#define VSS_CLI_PERMISSIONS_COMMAND_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -21,5 +20,3 @@ int command_permissions(const std::vector<std::string>& arguments);
 const char* permissions_usage() noexcept;
 
 } // namespace vss_cli
-
-#endif // VSS_CLI_PERMISSIONS_COMMAND_HPP

@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_ELEVATED_STEP_HPP
-#define VSS_GUI_SUPPORT_ELEVATED_STEP_HPP
+#pragma once
 
 #include <vss/ports/permissions.hpp>
 
@@ -40,11 +39,11 @@ bool firewall_step_available();
 /// Starts the helper through the operating system's own elevation prompt to add
 /// the one rule of `spec`, and waits.  Call it only after the user has seen the
 /// rule and agreed; nothing here asks again.
-step_report allow_through_firewall(const vss::permissions::firewall_rule_spec& spec);
+step_report
+allow_through_firewall(const vss::permissions::firewall_rule_spec& spec);
 
 /// The same, to remove the rule again.
-step_report remove_firewall_rule(const vss::permissions::firewall_rule_spec& spec);
+step_report
+remove_firewall_rule(const vss::permissions::firewall_rule_spec& spec);
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_ELEVATED_STEP_HPP

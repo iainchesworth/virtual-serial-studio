@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_PORTS_PERMISSIONS_PLATFORM_HPP
-#define VSS_PORTS_PERMISSIONS_PLATFORM_HPP
+#pragma once
 
 #include <vss/ports/permissions.hpp>
 
@@ -23,17 +22,17 @@ std::string_view platform_host_name() noexcept;
 
 /// Reads what the host says. Never changes anything. A question the platform
 /// cannot answer stays `unknown`.
-permissions::observation
-platform_observe(const permissions::context& ask);
+permissions::observation platform_observe(const permissions::context& ask);
 
 /// Full path of the running program, or empty when it cannot be found.
 std::string platform_this_program();
 
-/// True when the platform has a firewall rule step (`platform_apply_firewall_rule`).
+/// True when the platform has a firewall rule step
+/// (`platform_apply_firewall_rule`).
 bool platform_can_manage_firewall_rules() noexcept;
 
-/// Adds or removes the one rule of `spec`. The caller has validated the spec and
-/// the process is expected to be elevated; the function checks and says so.
+/// Adds or removes the one rule of `spec`. The caller has validated the spec
+/// and the process is expected to be elevated; the function checks and says so.
 permissions::step_result
 platform_apply_firewall_rule(const permissions::firewall_rule_spec& spec,
                              bool remove);
@@ -48,5 +47,3 @@ platform_run_elevated(const std::string& executable,
                       const std::vector<std::string>& arguments);
 
 } // namespace vss::detail
-
-#endif // VSS_PORTS_PERMISSIONS_PLATFORM_HPP

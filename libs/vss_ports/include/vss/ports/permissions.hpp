@@ -19,7 +19,8 @@
 //  * Explained. A fact carries a reason code and, where there is one, the exact
 //    command or text the user can run. The GUI turns the code into a sentence
 //    (translated); the library never writes user-facing prose.
-//  * Never silent. Nothing in this header changes a protection. A step that does
+//  * Never silent. Nothing in this header changes a protection. A step that
+//  does
 //    (a firewall rule) runs only when the caller asks for it by name, after the
 //    user has agreed, in a separate elevated process that does that one thing.
 //
@@ -28,8 +29,7 @@
 // outcome is tested on every platform with injected observations.
 //
 
-#ifndef VSS_PORTS_PERMISSIONS_HPP
-#define VSS_PORTS_PERMISSIONS_HPP
+#pragma once
 
 #include <cstdint>
 #include <optional>
@@ -154,8 +154,8 @@ struct fact
     /// True when Studio can do the step itself, in an elevated helper, after
     /// the user agrees. The step is named by `firewall_rule_spec`.
     bool can_act = false;
-    /// The step itself, when `can_act`: what the confirmation shows and what the
-    /// elevated helper does.
+    /// The step itself, when `can_act`: what the confirmation shows and what
+    /// the elevated helper does.
     std::optional<firewall_rule_spec> step;
     /// For a listener fact, the listener it is about (zero: none).
     std::uint16_t port = 0;
@@ -201,7 +201,6 @@ struct firewall_rule_record
     /// Bit 1 domain, 2 private, 4 public; 0x7fffffff is every profile.
     long profiles = 0x7fffffff;
 };
-
 
 struct windows_observation
 {
@@ -255,9 +254,10 @@ bool port_list_covers(std::string_view list, std::uint16_t port) noexcept;
 
 /// Whether `rules` let a listener in. `program` is compared without regard to
 /// case. Block rules win.
-firewall_verdict firewall_verdict_for(
-    const std::vector<firewall_rule_record>& rules, std::string_view program,
-    const listener& what, long active_profiles);
+firewall_verdict
+firewall_verdict_for(const std::vector<firewall_rule_record>& rules,
+                     std::string_view program, const listener& what,
+                     long active_profiles);
 
 /// Empty when the spec may be applied, otherwise why not.
 std::string validate(const firewall_rule_spec& spec);
@@ -318,9 +318,9 @@ struct step_result
 /// the elevated helper (`vss_cli permissions firewall-allow`).
 step_result apply_firewall_rule(const firewall_rule_spec& spec, bool remove);
 
-/// Starts `executable` with `arguments` elevated, through the operating system's
-/// own prompt, waits and returns its exit code as a status. The user sees the
-/// prompt and may decline.
+/// Starts `executable` with `arguments` elevated, through the operating
+/// system's own prompt, waits and returns its exit code as a status. The user
+/// sees the prompt and may decline.
 step_result run_elevated(const std::string& executable,
                          const std::vector<std::string>& arguments);
 
@@ -340,5 +340,3 @@ bool can_run_elevated() noexcept;
 std::string this_program();
 
 } // namespace vss::permissions
-
-#endif // VSS_PORTS_PERMISSIONS_HPP
