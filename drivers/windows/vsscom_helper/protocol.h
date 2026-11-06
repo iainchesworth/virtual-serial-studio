@@ -72,15 +72,30 @@ enum
     // Make a port. The reply carries its slot.
     VSSCOM_HELPER_OP_CREATE = 1,
     // Remove a port that this pipe made.
-    VSSCOM_HELPER_OP_DESTROY = 2
+    VSSCOM_HELPER_OP_DESTROY = 2,
+    // Change the COM number of a port of the user-mode driver that this pipe made:
+    // Slot is its slot and Argument the number. See "COM numbers" below.
+    VSSCOM_HELPER_OP_SET_COM_NUMBER = 3,
+    // The same for a port of the kernel-mode driver, made through its control device
+    // by the caller (the helper asks the control device who made it). The port
+    // lives as long as the caller's control handle, not this pipe.
+    VSSCOM_HELPER_OP_SET_COM_NUMBER_KM = 4
+};
+
+enum
+{
+    // The numbers a port may be given. The COM name database holds 256 ports by
+    // default, and a name above 9 needs the \.COMn form to open.
+    VSSCOM_HELPER_MIN_COM_NUMBER = 1,
+    VSSCOM_HELPER_MAX_COM_NUMBER = 255
 };
 
 typedef struct _VSSCOM_HELPER_REQUEST
 {
     ULONG Version;  // VSSCOM_HELPER_VERSION
     ULONG Op;       // VSSCOM_HELPER_OP_*
-    ULONG Slot;     // for DESTROY; zero for CREATE
-    ULONG Reserved; // must be zero
+    ULONG Slot;     // for DESTROY and SET_COM_NUMBER; zero for CREATE
+    ULONG Argument; // the COM number for SET_COM_NUMBER; zero for the others
 } VSSCOM_HELPER_REQUEST, *PVSSCOM_HELPER_REQUEST;
 
 // Status is a Win32 error code:
@@ -93,7 +108,19 @@ typedef struct _VSSCOM_HELPER_REQUEST
 //   ERROR_TIMEOUT             the driver did not start in 30 seconds;
 //   ERROR_NOT_SUPPORTED       the request has a version or a code that the helper
 //                             does not know;
-//   ERROR_ACCESS_DENIED       the helper could not tell who the caller is.
+//   ERROR_ACCESS_DENIED       the helper could not tell who the caller is, or (for
+//                             SET_COM_NUMBER_KM) the port was made by someone else;
+//   ERROR_INVALID_PARAMETER   SET_COM_NUMBER: the number is outside the range above;
+//   ERROR_ALREADY_ASSIGNED    SET_COM_NUMBER: another device has that COM number: a real
+//                             port, com0com, or a port that is gone but keeps the
+//                             name; nothing was changed;
+//   ERROR_BUSY                SET_COM_NUMBER: a program has the port open, or its hub
+//                             end is open, so Windows could not restart it; nothing
+//                             was changed;
+//   ERROR_NOT_FOUND           (also) SET_COM_NUMBER: no such port, or this pipe does not
+//                             hold it;
+//   ERROR_GEN_FAILURE         SET_COM_NUMBER: Windows would not take the change; the
+//                             old number was put back.
 typedef struct _VSSCOM_HELPER_REPLY
 {
     ULONG Version; // VSSCOM_HELPER_VERSION
@@ -101,3 +128,23 @@ typedef struct _VSSCOM_HELPER_REPLY
     ULONG Slot;
     ULONG Reserved;
 } VSSCOM_HELPER_REPLY, *PVSSCOM_HELPER_REPLY;
+
+// COM numbers
+//
+// A port gets its COM name from the Ports class installer when Windows builds it:
+// the lowest number the COM name database (ComDB) has free. A program that wants
+// another number, as Device Manager's Advanced > COM Port Number does, asks the
+// helper, which runs as SYSTEM and so may do what Device Manager does:
+//
+//   1. claim the new number in ComDB (refused if another device holds it, or if
+//      \.\COMn already exists);
+//   2. write it as PortName in the device's hardware key and update its friendly
+//      name;
+//   3. restart the device, so that the driver reads the new PortName;
+//   4. release the old number in ComDB.
+//
+// Writing PortName into the device's registry key before the port is built does
+// not work: Windows then fails to install the port. The change is therefore made
+// on a port that exists, and the port is restarted: no program may have it open and
+// the hub end must be closed, or Windows refuses to restart it (ERROR_BUSY). The
+// reply comes when the port is running again under the new name.

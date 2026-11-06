@@ -43,17 +43,20 @@ TEST_CASE("driver client: the control codes are the ones the guest scripts use")
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_GET_STATE), 0x80002004ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_WAIT_STATE), 0x80002008ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_SET_LINES), 0x8000200Cul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_HUB_REVOKE), 0x80002010ul);
+    REQUIRE_EQ(static_cast<int>(VSSCOM_VERSION), 3);
 }
 
 TEST_CASE("driver client: the hub state has the layout the driver fills")
 {
-    // Eleven 32-bit words, in the order the guest script reads them.
-    REQUIRE_EQ(sizeof(VSSCOM_HUB_STATE), std::size_t{44});
+    // Twelve 32-bit words, in the order the guest script reads them.
+    REQUIRE_EQ(sizeof(VSSCOM_HUB_STATE), std::size_t{48});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Generation), std::size_t{0});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, AppOpen), std::size_t{4});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Dtr), std::size_t{24});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, Lines), std::size_t{36});
     REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, TxQueued), std::size_t{40});
+    REQUIRE_EQ(offsetof(VSSCOM_HUB_STATE, AppProcessId), std::size_t{44});
     REQUIRE_EQ(sizeof(VSSCOM_VERSION_INFO), std::size_t{8});
 
     // The line bits are the modem status bits Windows uses.
@@ -71,6 +74,9 @@ TEST_CASE("driver client: the control device has the codes and layout the guest 
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_CREATE_PORT), 0x80002044ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_DESTROY_PORT), 0x80002048ul);
     REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_LIST_PORTS), 0x8000204Cul);
+    REQUIRE_EQ(static_cast<unsigned long>(IOCTL_VSSCOM_CTL_GET_OWNER), 0x80002050ul);
+    REQUIRE_EQ(sizeof(VSSCOM_CTL_OWNER), std::size_t{8 + VSSCOM_CTL_MAX_SID_BYTES});
+    REQUIRE_EQ(offsetof(VSSCOM_CTL_OWNER, Sid), std::size_t{8});
 
     REQUIRE_EQ(sizeof(VSSCOM_CTL_VERSION_INFO), std::size_t{8});
     REQUIRE_EQ(sizeof(VSSCOM_CTL_CREATE), std::size_t{8});

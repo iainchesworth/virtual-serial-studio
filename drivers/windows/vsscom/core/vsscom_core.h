@@ -160,4 +160,84 @@ vsscom_u32 vsscom_modem_deltas(vsscom_u32 before, vsscom_u32 after);
 /// The events (CTS, DSR, RLSD) that a change between two readings raises.
 vsscom_u32 vsscom_modem_events(vsscom_u32 before, vsscom_u32 after);
 
+// -- Flow control (IOCTL_SERIAL_SET_HANDFLOW) ------------------------------
+//
+// The bits are the ones of SERIAL_HANDFLOW in ntddser.h, so that the driver
+// passes its structure through. Only the lines the driver itself drives are
+// here: DTR and RTS. Output flow control (stop sending while CTS or DSR is
+// low, XON/XOFF) is not applied.
+
+// Enumerators and not macros, because the preprocessor policy counts directives.
+enum
+{
+    VSSCOM_DTR_CONTROL = 0x01,   // SERIAL_DTR_CONTROL: DTR high
+    VSSCOM_DTR_HANDSHAKE = 0x02, // SERIAL_DTR_HANDSHAKE: follows the receive buffer
+    VSSCOM_DTR_MASK = 0x03,
+    VSSCOM_RTS_CONTROL = 0x40,   // SERIAL_RTS_CONTROL: RTS high
+    VSSCOM_RTS_HANDSHAKE = 0x80, // SERIAL_RTS_HANDSHAKE: follows the receive buffer
+    VSSCOM_RTS_TOGGLE = 0xC0,    // SERIAL_TRANSMIT_TOGGLE: high while sending
+    VSSCOM_RTS_MASK = 0xC0
+};
+
+/// The four fields of SERIAL_HANDFLOW that decide what DTR and RTS do.
+/// `control_handshake` and `flow_replace` carry every bit of the structure,
+/// including those that this file does not interpret, so that they validate.
+typedef struct vsscom_flow
+{
+    vsscom_u32 control_handshake;
+    vsscom_u32 flow_replace;
+    /// A handshake line goes high again when this many bytes or fewer are
+    /// in the receive buffer.
+    vsscom_u32 xon_limit;
+    /// A handshake line goes low when this many bytes or fewer are free.
+    vsscom_u32 xoff_limit;
+} vsscom_flow;
+
+typedef struct vsscom_flow_lines
+{
+    vsscom_bool dtr;
+    vsscom_bool rts;
+} vsscom_flow_lines;
+
+/// False for a combination Windows refuses with STATUS_INVALID_PARAMETER: a bit
+/// that means nothing, DTR_CONTROL and DTR_HANDSHAKE together, or a limit larger
+/// than the receive buffer while a handshake is in use.
+vsscom_bool vsscom_flow_valid(const vsscom_flow* flow, vsscom_u32 rx_size);
+
+/// True when the application may set or clear DTR (or RTS) itself. A line that
+/// follows the receive buffer is the driver's to move, so setting it is refused.
+vsscom_bool vsscom_flow_dtr_manual(const vsscom_flow* flow);
+vsscom_bool vsscom_flow_rts_manual(const vsscom_flow* flow);
+
+/// The levels of DTR and RTS after a change.
+///
+/// `set` is true when the application has just given the settings: enable
+/// drives the line high and disable drives it low. When it is false, only the
+/// lines the settings drive on their own change: a handshake line follows the
+/// receive buffer (low when `xoff_limit` bytes or fewer are free, high again
+/// at `xon_limit` bytes or fewer in use, unchanged in between), and a toggle
+/// RTS is high exactly while `sending` is true.
+vsscom_flow_lines vsscom_flow_update(const vsscom_flow* flow,
+                                     vsscom_flow_lines now, vsscom_u32 rx_count,
+                                     vsscom_u32 rx_size, vsscom_bool sending,
+                                     vsscom_bool set);
+
+/// How long `bytes` bytes take to leave a UART, in units of 100 ns. The frame
+/// is one start bit, `data_bits` data bits, a parity bit unless `parity` is 0,
+/// and the stop bits (`stop_bits` is 0 for one, 1 for one and a half, 2 for
+/// two, as in SERIAL_LINE_CONTROL). A baud rate of 0 gives 0.
+vsscom_u64 vsscom_tx_time(vsscom_u32 baud, vsscom_u32 data_bits,
+                          vsscom_u32 parity, vsscom_u32 stop_bits,
+                          vsscom_u32 bytes);
+
+/// When the last byte of a write that starts at `now` will have left, given
+/// that earlier bytes leave until `busy_until` (0 for none). Times are in 100
+/// ns units on one clock.
+vsscom_u64 vsscom_tx_busy_until(vsscom_u64 now, vsscom_u64 busy_until,
+                                vsscom_u64 duration);
+
+/// True while bytes are queued or the last one is still leaving.
+vsscom_bool vsscom_tx_sending(vsscom_u32 queued, vsscom_u64 now,
+                              vsscom_u64 busy_until);
+
 #endif // VSSCOM_CORE_H

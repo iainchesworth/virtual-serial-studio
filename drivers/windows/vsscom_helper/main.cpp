@@ -28,9 +28,15 @@
 #include <cfgmgr32.h>
 #include <devpropdef.h>
 #include <sddl.h>
+#include <setupapi.h>
 #include <swdevice.h>
+#include <winioctl.h>
+// Defines the interface GUIDs of public.h in this file only.
+#include <initguid.h>
 // clang-format on
 
+#include "../vsscom/public.h"
+#include "com_number.hpp"
 #include "lease_table.hpp"
 #include "protocol.h"
 
@@ -93,6 +99,9 @@ struct shared_state
     unique_handle stop;
 
     std::mutex mutex;
+    // One change of a COM number at a time: it claims, writes and restarts, and two
+    // of them would race for the same number.
+    std::mutex com_mutex;
     std::condition_variable idle;
     std::size_t connections = 0;
     std::map<std::string, std::size_t> connections_of;
@@ -211,6 +220,295 @@ DWORD make_device(std::size_t slot, const std::string& owner, HANDLE stop,
         device = nullptr;
     }
     return started;
+}
+
+// ---------------------------------------------------------------------------
+// COM numbers (see "COM numbers" in protocol.h)
+// ---------------------------------------------------------------------------
+
+/// The COM name database of msports.dll. Loaded when needed, so that the helper
+/// runs on a machine whose Ports class is somehow missing, and answers
+/// ERROR_GEN_FAILURE to the one request that wants it.
+class com_database
+{
+public:
+    static std::unique_ptr<com_database> open()
+    {
+        std::unique_ptr<com_database> db(new com_database);
+        db->module_ = ::LoadLibraryExW(L"msports.dll", nullptr,
+                                       LOAD_LIBRARY_SEARCH_SYSTEM32);
+        if (db->module_ == nullptr)
+            return nullptr;
+        db->open_ = reinterpret_cast<open_fn>(
+            ::GetProcAddress(db->module_, "ComDBOpen"));
+        db->close_ = reinterpret_cast<close_fn>(
+            ::GetProcAddress(db->module_, "ComDBClose"));
+        db->claim_ = reinterpret_cast<claim_fn>(
+            ::GetProcAddress(db->module_, "ComDBClaimPort"));
+        db->release_ = reinterpret_cast<release_fn>(
+            ::GetProcAddress(db->module_, "ComDBReleasePort"));
+        if (db->open_ == nullptr || db->close_ == nullptr ||
+            db->claim_ == nullptr || db->release_ == nullptr ||
+            db->open_(&db->handle_) != ERROR_SUCCESS)
+            return nullptr;
+        return db;
+    }
+
+    ~com_database()
+    {
+        if (handle_ != nullptr && close_ != nullptr)
+            (void)close_(handle_);
+        if (module_ != nullptr)
+            ::FreeLibrary(module_);
+    }
+
+    com_database(const com_database&) = delete;
+    com_database& operator=(const com_database&) = delete;
+
+    /// Takes the number if nobody else holds it, and never takes it from
+    /// another device. False when it is held.
+    bool claim(DWORD number)
+    {
+        BOOL forced = FALSE;
+        return claim_(handle_, number, FALSE, &forced) == ERROR_SUCCESS &&
+               !forced;
+    }
+
+    void release(DWORD number) { (void)release_(handle_, number); }
+
+private:
+    com_database() = default;
+
+    using open_fn = LONG(WINAPI*)(HANDLE*);
+    using close_fn = LONG(WINAPI*)(HANDLE);
+    using claim_fn = LONG(WINAPI*)(HANDLE, DWORD, BOOL, BOOL*);
+    using release_fn = LONG(WINAPI*)(HANDLE, DWORD);
+
+    HMODULE module_ = nullptr;
+    HANDLE handle_ = nullptr;
+    open_fn open_ = nullptr;
+    close_fn close_ = nullptr;
+    claim_fn claim_ = nullptr;
+    release_fn release_ = nullptr;
+};
+
+/// True when \\.\COMn already resolves to something: a real port, com0com, or a
+/// port of this driver. A name that is not in the database but is in use is as
+/// taken as one that is.
+bool dos_name_exists(const std::wstring& name)
+{
+    wchar_t target[512];
+    return ::QueryDosDeviceW(name.c_str(), target, 512) != 0;
+}
+
+bool read_port_name(HKEY key, std::wstring& name)
+{
+    wchar_t buffer[64]{};
+    DWORD size = sizeof(buffer) - sizeof(wchar_t);
+    DWORD type = 0;
+    if (::RegQueryValueExW(key, L"PortName", nullptr, &type,
+                           reinterpret_cast<LPBYTE>(buffer), &size) !=
+            ERROR_SUCCESS ||
+        type != REG_SZ)
+        return false;
+    name = buffer;
+    return true;
+}
+
+bool write_port_name(HKEY key, const std::wstring& name)
+{
+    return ::RegSetValueExW(key, L"PortName", 0, REG_SZ,
+                            reinterpret_cast<const BYTE*>(name.c_str()),
+                            static_cast<DWORD>((name.size() + 1) *
+                                               sizeof(wchar_t))) ==
+           ERROR_SUCCESS;
+}
+
+std::wstring read_friendly_name(DEVINST node)
+{
+    wchar_t buffer[256]{};
+    ULONG size = sizeof(buffer) - sizeof(wchar_t);
+    if (::CM_Get_DevNode_Registry_PropertyW(node, CM_DRP_FRIENDLYNAME, nullptr,
+                                            buffer, &size, 0) != CR_SUCCESS)
+        return {};
+    return buffer;
+}
+
+void write_friendly_name(DEVINST node, const std::wstring& name)
+{
+    (void)::CM_Set_DevNode_Registry_PropertyW(
+        node, CM_DRP_FRIENDLYNAME, const_cast<wchar_t*>(name.c_str()),
+        static_cast<ULONG>((name.size() + 1) * sizeof(wchar_t)), 0);
+}
+
+/// Restarts the device, as Device Manager does after a COM number changed. Windows
+/// refuses while a program has a handle on it.
+bool restart_device(const std::wstring& instance)
+{
+    const HDEVINFO set = ::SetupDiCreateDeviceInfoList(nullptr, nullptr);
+    if (set == INVALID_HANDLE_VALUE)
+        return false;
+    SP_DEVINFO_DATA data{};
+    data.cbSize = sizeof(data);
+    bool ok = ::SetupDiOpenDeviceInfoW(set, instance.c_str(), nullptr, 0,
+                                       &data) != FALSE;
+    if (ok)
+        ok = ::SetupDiRestartDevices(set, &data) != FALSE;
+    ::SetupDiDestroyDeviceInfoList(set);
+    return ok;
+}
+
+/// Waits until the COM name of a restarted port resolves again.
+bool wait_name(const std::wstring& name, HANDLE stop)
+{
+    using clock = std::chrono::steady_clock;
+    const auto until = clock::now() + std::chrono::seconds(15);
+    for (;;)
+    {
+        if (dos_name_exists(name))
+            return true;
+        if (clock::now() >= until ||
+            ::WaitForSingleObject(stop, 100) == WAIT_OBJECT_0)
+            return false;
+    }
+}
+
+/// Gives the port of the device `instance` the COM number `number`.
+///
+/// Nothing is changed unless the whole change goes through: a failure puts the
+/// old name and the old claim back. See "COM numbers" in protocol.h for the steps.
+DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
+{
+    if (!vss::helper::com_number_valid(number))
+        return ERROR_INVALID_PARAMETER;
+    const std::wstring wanted = vss::helper::com_name(number);
+
+    DEVINST node = 0;
+    if (::CM_Locate_DevNodeW(&node, const_cast<wchar_t*>(instance.c_str()),
+                             CM_LOCATE_DEVNODE_NORMAL) != CR_SUCCESS)
+        return ERROR_NOT_FOUND;
+
+    HKEY raw = nullptr;
+    if (::CM_Open_DevNode_Key(node, KEY_QUERY_VALUE | KEY_SET_VALUE, 0,
+                              RegDisposition_OpenExisting, &raw,
+                              CM_REGISTRY_HARDWARE) != CR_SUCCESS)
+        return ERROR_GEN_FAILURE;
+    struct key_closer
+    {
+        HKEY key;
+        ~key_closer() { ::RegCloseKey(key); }
+    } closer{raw};
+
+    std::wstring old_name;
+    if (!read_port_name(raw, old_name))
+        return ERROR_GEN_FAILURE;
+    if (_wcsicmp(old_name.c_str(), wanted.c_str()) == 0)
+        return ERROR_SUCCESS; // it is that number already
+    const auto old_number = vss::helper::parse_com_name(old_name);
+
+    const auto database = com_database::open();
+    if (!database)
+        return ERROR_GEN_FAILURE;
+    if (dos_name_exists(wanted))
+        return ERROR_ALREADY_ASSIGNED;
+    if (!database->claim(number))
+        return ERROR_ALREADY_ASSIGNED;
+
+    const std::wstring old_friendly = read_friendly_name(node);
+    auto put_back = [&]
+    {
+        (void)write_port_name(raw, old_name);
+        if (!old_friendly.empty())
+            write_friendly_name(node, old_friendly);
+        database->release(number);
+    };
+
+    if (!write_port_name(raw, wanted))
+    {
+        database->release(number);
+        return ERROR_GEN_FAILURE;
+    }
+    write_friendly_name(node,
+                        vss::helper::friendly_name_for(old_friendly, number));
+
+    if (!restart_device(instance))
+    {
+        put_back();
+        // The restart may have stopped the stack before it failed.
+        (void)restart_device(instance);
+        return ERROR_BUSY;
+    }
+    const DWORD started = wait_started(instance, stop);
+    if (started != ERROR_SUCCESS || !wait_name(wanted, stop))
+    {
+        put_back();
+        (void)restart_device(instance);
+        return started == ERROR_SUCCESS ? ERROR_GEN_FAILURE : started;
+    }
+
+    if (old_number)
+        database->release(*old_number);
+    return ERROR_SUCCESS;
+}
+
+/// The path of the control device of the kernel-mode driver, or empty.
+std::wstring control_device_path()
+{
+    GUID guid = GUID_DEVINTERFACE_VSSCOMCTL;
+    ULONG length = 0;
+    if (::CM_Get_Device_Interface_List_SizeW(
+            &length, &guid, nullptr, CM_GET_DEVICE_INTERFACE_LIST_PRESENT) !=
+            CR_SUCCESS ||
+        length <= 1)
+        return {};
+    std::vector<wchar_t> list(length);
+    if (::CM_Get_Device_Interface_ListW(&guid, nullptr, list.data(), length,
+                                        CM_GET_DEVICE_INTERFACE_LIST_PRESENT) !=
+        CR_SUCCESS)
+        return {};
+    return list.data();
+}
+
+/// Asks the control device whether the port in `slot` was made by `sid`.
+/// ERROR_SUCCESS: it was. ERROR_ACCESS_DENIED: it was someone else. ERROR_NOT_FOUND:
+/// no control device, or no port in that slot. ERROR_NOT_SUPPORTED: the driver is
+/// too old to say.
+DWORD control_port_owner_is(DWORD slot, const std::string& sid)
+{
+    const std::wstring path = control_device_path();
+    if (path.empty())
+        return ERROR_NOT_FOUND;
+    unique_handle control(::CreateFileW(path.c_str(),
+                                        GENERIC_READ | GENERIC_WRITE,
+                                        FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                        nullptr, OPEN_EXISTING, 0, nullptr));
+    if (control.get() == INVALID_HANDLE_VALUE)
+        return ERROR_NOT_FOUND;
+
+    VSSCOM_CTL_PORT in{};
+    in.Slot = slot;
+    VSSCOM_CTL_OWNER out{};
+    DWORD returned = 0;
+    if (!::DeviceIoControl(control.get(),
+                           static_cast<DWORD>(IOCTL_VSSCOM_CTL_GET_OWNER), &in,
+                           sizeof(in), &out, sizeof(out), &returned, nullptr))
+    {
+        switch (::GetLastError())
+        {
+        case ERROR_NOT_FOUND:
+            return ERROR_NOT_FOUND;
+        case ERROR_INVALID_FUNCTION:
+            return ERROR_NOT_SUPPORTED;
+        default:
+            return ERROR_ACCESS_DENIED;
+        }
+    }
+    if (returned != sizeof(out) || out.Valid == 0 ||
+        out.SidLength != sid.size() || out.SidLength > sizeof(out.Sid) ||
+        !::IsValidSid(const_cast<char*>(sid.data())) ||
+        !::EqualSid(out.Sid, const_cast<char*>(sid.data())))
+        return ERROR_ACCESS_DENIED;
+    return ERROR_SUCCESS;
 }
 
 /// The user of the caller at the other end of the pipe, as a binary SID.
@@ -406,18 +704,59 @@ private:
 
     VSSCOM_HELPER_REPLY handle(const VSSCOM_HELPER_REQUEST& request)
     {
-        if (request.Version != VSSCOM_HELPER_VERSION || request.Reserved != 0)
+        if (request.Version != VSSCOM_HELPER_VERSION)
             return reply_of(ERROR_NOT_SUPPORTED);
 
         switch (request.Op)
         {
         case VSSCOM_HELPER_OP_CREATE:
-            return create(request);
+            return request.Argument != 0 ? reply_of(ERROR_NOT_SUPPORTED)
+                                         : create(request);
         case VSSCOM_HELPER_OP_DESTROY:
-            return destroy(request);
+            return request.Argument != 0 ? reply_of(ERROR_NOT_SUPPORTED)
+                                         : destroy(request);
+        case VSSCOM_HELPER_OP_SET_COM_NUMBER:
+            return set_number(request, false);
+        case VSSCOM_HELPER_OP_SET_COM_NUMBER_KM:
+            return set_number(request, true);
         default:
             return reply_of(ERROR_NOT_SUPPORTED);
         }
+    }
+
+    /// Changes the COM number of a port. For the user-mode driver the port is one
+    /// of this pipe's; for the kernel-mode driver it is one the caller made through
+    /// the control device, which the control device vouches for.
+    VSSCOM_HELPER_REPLY set_number(const VSSCOM_HELPER_REQUEST& request,
+                                   bool kernel_mode)
+    {
+        if (!vss::helper::com_number_valid(request.Argument))
+            return reply_of(ERROR_INVALID_PARAMETER, request.Slot);
+
+        std::wstring instance;
+        wchar_t suffix[16]{};
+        swprintf_s(suffix, VssComUmPortInstanceFormat,
+                   static_cast<unsigned long>(request.Slot));
+        if (kernel_mode)
+        {
+            if (request.Slot >= VSSCOM_CTL_MAX_PORTS)
+                return reply_of(ERROR_NOT_FOUND, request.Slot);
+            const DWORD owned = control_port_owner_is(request.Slot, owner_);
+            if (owned != ERROR_SUCCESS)
+                return reply_of(owned, request.Slot);
+            instance = std::wstring(VSSCOM_PORT_HARDWARE_ID) + L"\\" + suffix;
+        }
+        else
+        {
+            if (devices_.find(request.Slot) == devices_.end())
+                return reply_of(ERROR_NOT_FOUND, request.Slot);
+            instance = std::wstring(VssComUmPortInstancePrefix) + suffix;
+        }
+
+        const std::lock_guard lock(state_->com_mutex);
+        return reply_of(set_com_number(instance, request.Argument,
+                                       state_->stop.get()),
+                        request.Slot);
     }
 
     VSSCOM_HELPER_REPLY create(const VSSCOM_HELPER_REQUEST& request)

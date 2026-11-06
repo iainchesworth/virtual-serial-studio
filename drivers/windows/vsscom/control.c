@@ -397,6 +397,57 @@ static VOID VssComCtlListPorts(_In_ PVSSCOM_CONTROL_CONTEXT Context,
     VssComCompleteWithData(Request, &list, sizeof(list));
 }
 
+// Who made a port. The helper service asks, to check that the user who wants the COM
+// number of a port changed is the user who made it. Administrators and SYSTEM only:
+// the control device is open to every signed-in user, and the owner of a port is
+// not for them to read.
+static VOID VssComCtlGetOwner(_In_ PVSSCOM_CONTROL_CONTEXT Context,
+                              _In_ WDFFILEOBJECT File, _In_ WDFREQUEST Request)
+{
+    VSSCOM_CTL_PORT input;
+    VSSCOM_CTL_OWNER output;
+    VSSCOM_OPENER maker;
+    const VSSCOM_OPENER* caller = &VssComCtlFileContext(File)->Opener;
+    BOOLEAN found;
+
+    if (!VssComFetchInput(Request, &input, sizeof(input)))
+    {
+        WdfRequestComplete(Request, STATUS_BUFFER_TOO_SMALL);
+        return;
+    }
+    if (input.Slot >= VSSCOM_CTL_MAX_PORTS)
+    {
+        WdfRequestComplete(Request, STATUS_INVALID_PARAMETER);
+        return;
+    }
+    if (!caller->Admin && !caller->Kernel)
+    {
+        WdfRequestComplete(Request, STATUS_ACCESS_DENIED);
+        return;
+    }
+
+    RtlZeroMemory(&maker, sizeof(maker));
+    WdfSpinLockAcquire(Context->Lock);
+    found = Context->InUse[input.Slot] && !Context->Dying[input.Slot];
+    if (found)
+        maker = Context->Maker[input.Slot];
+    WdfSpinLockRelease(Context->Lock);
+    if (!found)
+    {
+        WdfRequestComplete(Request, STATUS_NOT_FOUND);
+        return;
+    }
+
+    RtlZeroMemory(&output, sizeof(output));
+    if (maker.Valid)
+    {
+        output.Valid = 1;
+        output.SidLength = RtlLengthSid((PSID)maker.Sid);
+        RtlCopyMemory(output.Sid, maker.Sid, output.SidLength);
+    }
+    VssComCompleteWithData(Request, &output, sizeof(output));
+}
+
 static VOID VssComCtlIoControl(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
                                _In_ size_t OutputBufferLength,
                                _In_ size_t InputBufferLength,
@@ -426,6 +477,9 @@ static VOID VssComCtlIoControl(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request,
         return;
     case IOCTL_VSSCOM_CTL_LIST_PORTS:
         VssComCtlListPorts(context, file, Request);
+        return;
+    case IOCTL_VSSCOM_CTL_GET_OWNER:
+        VssComCtlGetOwner(context, file, Request);
         return;
     default:
         WdfRequestComplete(Request, STATUS_INVALID_DEVICE_REQUEST);

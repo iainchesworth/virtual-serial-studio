@@ -44,8 +44,19 @@ DEFINE_GUID(GUID_DEVINTERFACE_VSSCOM, 0x7c9a1f62, 0x3d54, 0x4a6b, 0x9d, 0x3e,
 #define IOCTL_VSSCOM_HUB_SET_LINES                                          \
     CTL_CODE(FILE_DEVICE_VSSCOM, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// 2 added the hub end.
-#define VSSCOM_VERSION 2
+// Takes the port back from the program that has it open: the program's requests
+// fail from then on, its waiting requests end, and a new program can open the
+// port. An enumerator and not a macro, because the preprocessor policy counts the
+// directives of this header.
+enum
+{
+    IOCTL_VSSCOM_HUB_REVOKE =
+        CTL_CODE(FILE_DEVICE_VSSCOM, 0x804, METHOD_BUFFERED, FILE_ANY_ACCESS)
+};
+
+// 2 added the hub end. 3 added AppProcessId to the hub state, the revoke request
+// and the effect of the DTR and RTS settings of SET_HANDFLOW.
+#define VSSCOM_VERSION 3
 
 typedef struct _VSSCOM_VERSION_INFO
 {
@@ -78,6 +89,7 @@ typedef struct _VSSCOM_HUB_STATE
     ULONG Break;    // 1 while the application holds a break
     ULONG Lines;    // the input lines the hub last set
     ULONG TxQueued; // bytes the application wrote that the hub has not read
+    ULONG AppProcessId; // the process that has the port open; 0 when none (version 3)
 } VSSCOM_HUB_STATE, *PVSSCOM_HUB_STATE;
 
 // ---------------------------------------------------------------------------
@@ -132,8 +144,11 @@ typedef struct _VSSCOM_CTL_VERSION_INFO
     ULONG MaxPorts; // VSSCOM_CTL_MAX_PORTS
 } VSSCOM_CTL_VERSION_INFO, *PVSSCOM_CTL_VERSION_INFO;
 
-// Input of CREATE_PORT. Both fields must be zero; they are for a wanted COM
-// number and for options that a later version may add.
+// Input of CREATE_PORT. Both fields must be zero; they are for options that a later
+// version may add. A wanted COM number is not one of them: the number belongs to the
+// Ports class installer and the COM name database, which only a user-mode program
+// with administrator rights can change, so the helper service does it
+// (vsscom_helper/protocol.h, VSSCOM_HELPER_OP_SET_COM_NUMBER).
 typedef struct _VSSCOM_CTL_CREATE
 {
     ULONG Flags;
@@ -161,5 +176,28 @@ typedef struct _VSSCOM_CTL_LIST
     ULONG Count;
     VSSCOM_CTL_LIST_ENTRY Ports[VSSCOM_CTL_MAX_PORTS];
 } VSSCOM_CTL_LIST, *PVSSCOM_CTL_LIST;
+
+// Who made a port, for the helper service. Only SYSTEM and administrators may ask: the
+// helper compares the user with the one who wants to change the COM number of the port.
+// Input: VSSCOM_CTL_PORT. Output: VSSCOM_CTL_OWNER. Fails with STATUS_NOT_FOUND for a
+// slot with no port, and STATUS_ACCESS_DENIED for any other caller. Added in version 3
+// of the ports; the control version stays 1, and an older driver answers
+// STATUS_INVALID_DEVICE_REQUEST.
+enum
+{
+    IOCTL_VSSCOM_CTL_GET_OWNER =
+        CTL_CODE(FILE_DEVICE_VSSCOM, 0x814, METHOD_BUFFERED, FILE_ANY_ACCESS)
+};
+enum
+{
+    VSSCOM_CTL_MAX_SID_BYTES = 68 // SECURITY_MAX_SID_SIZE
+};
+
+typedef struct _VSSCOM_CTL_OWNER
+{
+    ULONG Valid;     // 1 when Sid holds the user
+    ULONG SidLength; // bytes of Sid in use
+    UCHAR Sid[VSSCOM_CTL_MAX_SID_BYTES];
+} VSSCOM_CTL_OWNER, *PVSSCOM_CTL_OWNER;
 
 #endif // VSSCOM_PUBLIC_H
