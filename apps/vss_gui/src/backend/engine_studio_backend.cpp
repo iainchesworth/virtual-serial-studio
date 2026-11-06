@@ -232,8 +232,7 @@ EngineStudioBackend::EngineStudioBackend(vss::studio& studio, QObject* parent)
     {
         peer_timer_ = new QTimer(this);
         peer_timer_->setInterval(1000);
-        connect(peer_timer_, &QTimer::timeout, this,
-                [this] { rebuild(); });
+        connect(peer_timer_, &QTimer::timeout, this, [this] { rebuild(); });
         peer_timer_->start();
     }
     rebuild();
@@ -309,7 +308,8 @@ vss::result<vss::benchmark_result> EngineStudioBackend::run_benchmark(
     return vss::run_benchmark(*sender, *receiver, options, progress, cancel);
 }
 
-std::optional<line_wiring> EngineStudioBackend::link_wiring(vss::link_id id) const
+std::optional<line_wiring>
+EngineStudioBackend::link_wiring(vss::link_id id) const
 {
     const auto info = studio_.engine().find_link(id);
     if (!info)
@@ -327,8 +327,8 @@ std::optional<line_wiring> EngineStudioBackend::link_wiring(vss::link_id id) con
     return out;
 }
 
-vss::result<void> EngineStudioBackend::set_link_wiring(vss::link_id id,
-                                                       const line_wiring& wiring)
+vss::result<void>
+EngineStudioBackend::set_link_wiring(vss::link_id id, const line_wiring& wiring)
 {
     vss::modem_wiring wires;
     wires.dtr_to_dsr = wiring.dtr_to_dsr;
@@ -464,8 +464,9 @@ vss::result<void> EngineStudioBackend::remove_port(vss::endpoint_id id)
     return {};
 }
 
-vss::result<vss::endpoint_id> EngineStudioBackend::create_driver_port(
-    const QString& name, bool capture, unsigned com_number)
+vss::result<vss::endpoint_id>
+EngineStudioBackend::create_driver_port(const QString& name, bool capture,
+                                        unsigned com_number)
 {
     vss::endpoint_options options = studio_.default_options();
     options.capture_traffic = capture;
@@ -489,8 +490,8 @@ vss::result<QString> EngineStudioBackend::set_com_number(vss::endpoint_id id,
     return QString::fromStdString(*renumbered);
 }
 
-std::optional<holder_view> EngineStudioBackend::port_holder(
-    vss::endpoint_id id) const
+std::optional<holder_view>
+EngineStudioBackend::port_holder(vss::endpoint_id id) const
 {
     const auto peer = studio_.driver_holder(id);
     if (!peer || !peer->open || peer->process_id == 0)
@@ -881,20 +882,20 @@ void EngineStudioBackend::rebuild()
     {
         for (const auto& member : mismatch.members)
         {
-            const auto port = std::find_if(
-                next_ports.begin(), next_ports.end(),
-                [&member](const port_view& view)
-                { return view.id == member.endpoint; });
+            const auto port =
+                std::find_if(next_ports.begin(), next_ports.end(),
+                             [&member](const port_view& view)
+                             { return view.id == member.endpoint; });
             if (port == next_ports.end())
                 continue;
             for (const auto& other : mismatch.members)
             {
                 if (vss::same_format(other.format, member.format))
                     continue;
-                const auto peer = std::find_if(
-                    next_ports.begin(), next_ports.end(),
-                    [&other](const port_view& view)
-                    { return view.id == other.endpoint; });
+                const auto peer =
+                    std::find_if(next_ports.begin(), next_ports.end(),
+                                 [&other](const port_view& view)
+                                 { return view.id == other.endpoint; });
                 if (peer != next_ports.end() &&
                     !port->format_conflicts.contains(peer->name))
                     port->format_conflicts << peer->name;

@@ -95,7 +95,8 @@ public:
     }
 
     /// The program that has the driver port open, or none.
-    virtual std::optional<holder_view> port_holder(vss::endpoint_id /*id*/) const
+    virtual std::optional<holder_view>
+    port_holder(vss::endpoint_id /*id*/) const
     {
         return std::nullopt;
     }

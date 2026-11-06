@@ -129,4 +129,3 @@ private:
 };
 
 } // namespace vss::gui
-

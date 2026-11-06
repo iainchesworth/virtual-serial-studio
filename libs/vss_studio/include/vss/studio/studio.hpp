@@ -11,13 +11,13 @@
 #include <vss/core/endpoint.hpp>
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
-#include <vss/ports/serial_enumeration.hpp>
 #include <vss/ports/peer_open.hpp>
-#include <vss/studio/format_check.hpp>
+#include <vss/ports/serial_enumeration.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/ports/stable_link.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/virtual_port.hpp>
+#include <vss/studio/format_check.hpp>
 #include <vss/studio/reconnect.hpp>
 
 #include <memory>
@@ -29,7 +29,8 @@
 #include <unordered_set>
 #include <vector>
 
-namespace vss {
+namespace vss
+{
 
 class reconnector;
 
@@ -86,16 +87,17 @@ public:
     /// Creates an OS virtual port.  `auto` picks the best available: a
     /// pseudo terminal on POSIX, a com0com pair on Windows when one exists,
     /// and an in-process loopback otherwise.
-    /// `com_number` is the COM number a port of the Windows driver should have, 1 to
-    /// 255; 0 takes whichever Windows picks.  It means something only to that
-    /// driver (`virtual_port_kind::windows_driver`, or `auto` where the driver is
-    /// installed); every other port ignores it.  A number that another device has
-    /// fails with `errc::already_exists` and no port is made, and a number with no
-    /// helper service to give it fails with `errc::unsupported`.
-    result<std::shared_ptr<endpoint>> create_virtual_port(
-        const std::string& name,
-        virtual_port_kind kind = virtual_port_kind::pty,
-        endpoint_options options = {}, unsigned com_number = 0);
+    /// `com_number` is the COM number a port of the Windows driver should have,
+    /// 1 to 255; 0 takes whichever Windows picks.  It means something only to
+    /// that driver (`virtual_port_kind::windows_driver`, or `auto` where the
+    /// driver is installed); every other port ignores it.  A number that
+    /// another device has fails with `errc::already_exists` and no port is
+    /// made, and a number with no helper service to give it fails with
+    /// `errc::unsupported`.
+    result<std::shared_ptr<endpoint>>
+    create_virtual_port(const std::string& name,
+                        virtual_port_kind kind = virtual_port_kind::pty,
+                        endpoint_options options = {}, unsigned com_number = 0);
 
     /// Gives a port of the Windows driver a different COM number, as Device
     /// Manager's Advanced > COM Port Number does, and returns the new COM name.
@@ -106,19 +108,20 @@ public:
     result<std::string> set_com_number(endpoint_id id, unsigned com_number);
 
     /// Attaches a real serial port or a network backend from a URI.
-    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
-                                                    const std::string& uri,
-                                                    endpoint_options options = {});
+    result<std::shared_ptr<endpoint>>
+    attach_serial(const std::string& name, const std::string& uri,
+                  endpoint_options options = {});
 
-    result<std::shared_ptr<endpoint>> attach_serial(const std::string& name,
-                                                    const std::string& uri,
-                                                    const serial_settings& settings,
-                                                    endpoint_options options = {});
+    result<std::shared_ptr<endpoint>>
+    attach_serial(const std::string& name, const std::string& uri,
+                  const serial_settings& settings,
+                  endpoint_options options = {});
 
     /// Creates a scriptable in-memory device.
-    result<std::shared_ptr<endpoint>> create_mock_port(
-        const std::string& name, const serial_settings& settings = {},
-        const std::string& target = "scripted");
+    result<std::shared_ptr<endpoint>>
+    create_mock_port(const std::string& name,
+                     const serial_settings& settings = {},
+                     const std::string& target = "scripted");
 
     /// Makes a mock fixture report `fault` on its next read.  The call is
     /// queued on the endpoint's strand, so it is safe from any thread and
@@ -182,16 +185,17 @@ public:
     /// each has now.  Empty everywhere but Windows.
     std::unordered_map<endpoint_id, std::string> driver_ports() const;
 
-    /// What the driver says about the program that has the driver port `id` open:
-    /// its process and line settings.  Empty for a port that is not a driver
-    /// port, and for one the driver has not yet reported on.
+    /// What the driver says about the program that has the driver port `id`
+    /// open: its process and line settings.  Empty for a port that is not a
+    /// driver port, and for one the driver has not yet reported on.
     std::optional<driver_peer_info> driver_holder(endpoint_id id) const;
 
     /// Takes the driver port `id` back from the program that has it open: the
-    /// program keeps running, but its handle stops working and another program can
-    /// open the port.  The answer is the process that had it, or 0 when none did.
-    /// `errc::not_found` for an unknown port and `errc::unsupported` for a port
-    /// that is not a driver port; see `revoke_driver_port` for the rest.
+    /// program keeps running, but its handle stops working and another program
+    /// can open the port.  The answer is the process that had it, or 0 when
+    /// none did. `errc::not_found` for an unknown port and `errc::unsupported`
+    /// for a port that is not a driver port; see `revoke_driver_port` for the
+    /// rest.
     result<std::uint32_t> revoke_port(endpoint_id id);
 
     /// For each pseudo terminal port, whether a program other than the studio
@@ -207,8 +211,8 @@ public:
     /// `tcp://`, `rfc2217://`, a listener) it opens that address again with the
     /// settings it had; for a port of the Windows driver it makes a new driver
     /// port with the COM number it was asked to have, after closing the dead
-    /// one so its number is free, and the COM name can differ when no number was
-    /// asked for.  Works on a port that is open too (a restart).
+    /// one so its number is free, and the COM name can differ when no number
+    /// was asked for.  Works on a port that is open too (a restart).
     /// `errc::not_found` for an unknown port and `errc::unsupported` for one
     /// that cannot be made again (a mock fixture, a pseudo terminal, an
     /// in-process loopback).  A port that cannot be opened reports why and is
@@ -284,7 +288,8 @@ public:
         std::vector<endpoint_id> listeners;
         link_id link = 0;
 
-        friend bool operator==(const share_result&, const share_result&) = default;
+        friend bool operator==(const share_result&,
+                               const share_result&) = default;
     };
 
     /// Opens `uri` once and gives every listener its own virtual port.
@@ -342,13 +347,13 @@ private:
     /// and `errc::unsupported` for a port that is not a fixture.
     result<std::shared_ptr<serial_transport>> fixture_for(endpoint_id id) const;
 
-    result<std::shared_ptr<endpoint>> register_port(
-        port_record record, std::shared_ptr<transport> transport,
-        endpoint_options options);
+    result<std::shared_ptr<endpoint>>
+    register_port(port_record record, std::shared_ptr<transport> transport,
+                  endpoint_options options);
 
-    result<std::shared_ptr<endpoint>> create_auto_virtual_port(
-        const std::string& name, endpoint_options options,
-        unsigned com_number = 0);
+    result<std::shared_ptr<endpoint>>
+    create_auto_virtual_port(const std::string& name, endpoint_options options,
+                             unsigned com_number = 0);
 
     /// Makes the stable link for a new pseudo terminal when the options ask
     /// for one, and points the record's advertised path at it.

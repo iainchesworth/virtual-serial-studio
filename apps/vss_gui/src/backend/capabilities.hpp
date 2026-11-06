@@ -123,8 +123,8 @@ struct capabilities
     /// shows the command, with "Not available in this build".
     bool firewall_rule = false;
     /// Put the user in the group that owns the serial devices, through polkit,
-    /// after they agree (Linux with pkexec installed).  False elsewhere; the dialog
-    /// then only explains and shows the command.
+    /// after they agree (Linux with pkexec installed).  False elsewhere; the
+    /// dialog then only explains and shows the command.
     bool serial_group_step = false;
 };
 
