@@ -259,6 +259,16 @@ void NetworkEndpointDialog::build()
     firewall_note_->hide();
     layout->addWidget(firewall_note_);
 
+    open_note_ = new NoteBanner(
+        NoteBanner::kind::warn,
+        tr("RFC 2217 has no password. Anyone who can reach this port can use "
+           "the device. Choose This PC only (127.0.0.1), or in Advanced add "
+           "?allow=192.168.1.0/24 to the address to say who may connect."),
+        body);
+    open_note_->setObjectName(QStringLiteral("networkOpenWarning"));
+    open_note_->hide();
+    layout->addWidget(open_note_);
+
     auto* address_card = new QFrame(body);
     address_card->setProperty("card", true);
     polish(address_card);
@@ -573,6 +583,8 @@ void NetworkEndpointDialog::update_warning()
 {
     const bool windows = windows_platform(backend_.facts());
     firewall_note_->setVisible(windows && server_selected());
+    if (open_note_ != nullptr)
+        open_note_->setVisible(rfc2217_server_is_open(effective_uri()));
 }
 
 void NetworkEndpointDialog::update_result()
@@ -660,6 +672,8 @@ void NetworkEndpointDialog::update_address_blocks()
     command_block_->set_text(command(), tr("Command"));
     if (!override_)
         override_edit_->setText(effective_uri());
+    // The address decides whether other computers can reach the server.
+    update_warning();
 }
 
 QString NetworkEndpointDialog::result_text() const

@@ -23,6 +23,7 @@
 #include <memory>
 #include <string>
 #include <thread>
+#include <vector>
 
 using namespace vss;
 namespace asio = boost::asio;
@@ -342,4 +343,169 @@ TEST_CASE("listen: describe and public_path name the bound address")
     REQUIRE_EQ(transport->public_path(), expected);
     REQUIRE(transport->describe().find("TCP listening on 127.0.0.1") !=
             std::string::npos);
+}
+
+namespace
+{
+
+/// True once `done` holds, waited for up to three seconds.
+template <class Done> bool wait_for(Done done)
+{
+    for (int attempt = 0; attempt < 300; ++attempt)
+    {
+        if (done())
+            return true;
+        std::this_thread::sleep_for(10ms);
+    }
+    return false;
+}
+
+} // namespace
+
+TEST_CASE("listen: the allow list parses, prints and admits")
+{
+    const auto parsed = parse_listen_uri(
+        "rfc2217-listen://0.0.0.0:7001?allow=192.168.1.0/24,10.0.0.5,fd00::/8");
+    REQUIRE(parsed.has_value());
+    REQUIRE(parsed->protocol == listen_protocol::rfc2217);
+    REQUIRE_EQ(parsed->allow.size(), std::size_t{3});
+    REQUIRE_EQ(parsed->allow[0], std::string("192.168.1.0/24"));
+    REQUIRE_EQ(make_listen_uri(*parsed),
+               std::string("rfc2217-listen://0.0.0.0:7001"
+                           "?allow=192.168.1.0/24,10.0.0.5,fd00::/8"));
+    const auto round_trip = parse_listen_uri(make_listen_uri(*parsed));
+    REQUIRE(round_trip.has_value());
+    REQUIRE(*round_trip == *parsed);
+
+    // IPv6 hosts and every scheme take the list.
+    REQUIRE(parse_listen_uri("tcp-listen://[::1]:4001?allow=::1").has_value());
+    REQUIRE(
+        parse_listen_uri("udp-listen://:5000?allow=10.0.0.0/8").has_value());
+    // No list, no query.
+    REQUIRE(parse_listen_uri("tcp-listen://127.0.0.1:4001")->allow.empty());
+
+    for (const char* bad :
+         {"tcp-listen://127.0.0.1:4001?", "tcp-listen://127.0.0.1:4001?allow=",
+          "tcp-listen://127.0.0.1:4001?allow=,",
+          "tcp-listen://127.0.0.1:4001?x=1",
+          "tcp-listen://127.0.0.1:4001?allow=10.0.0.0/33",
+          "tcp-listen://127.0.0.1:4001?allow=10.0.0.0/",
+          "tcp-listen://127.0.0.1:4001?allow=10.0.0.0/x",
+          "tcp-listen://127.0.0.1:4001?allow=fd00::/129",
+          "tcp-listen://127.0.0.1:4001?allow=host.example",
+          "tcp-listen://127.0.0.1:4001?allow=10.0.0.1&allow=10.0.0.2",
+          "tcp-listen://127.0.0.1:4001?allow=10.0.0.1,"})
+    {
+        REQUIRE(!parse_listen_uri(bad).has_value());
+    }
+
+    const std::vector<std::string> list = {"192.168.1.0/24", "10.0.0.5",
+                                           "fd00::/8"};
+    REQUIRE(allow_list_admits({}, "203.0.113.9"));
+    REQUIRE(allow_list_admits(list, "192.168.1.200"));
+    REQUIRE(!allow_list_admits(list, "192.168.2.1"));
+    REQUIRE(allow_list_admits(list, "10.0.0.5"));
+    REQUIRE(!allow_list_admits(list, "10.0.0.6"));
+    REQUIRE(allow_list_admits(list, "fd12::1"));
+    REQUIRE(!allow_list_admits(list, "fe80::1"));
+    // An IPv4 address that arrives as IPv6 is the IPv4 address.
+    REQUIRE(allow_list_admits(list, "::ffff:192.168.1.7"));
+    REQUIRE(!allow_list_admits(list, "::ffff:192.168.3.7"));
+    REQUIRE(!allow_list_admits(list, "not an address"));
+    REQUIRE(allow_list_admits({"0.0.0.0/0"}, "198.51.100.1"));
+    REQUIRE(allow_list_admits({"10.1.2.3/32"}, "10.1.2.3"));
+    REQUIRE(!allow_list_admits({"10.1.2.3/32"}, "10.1.2.4"));
+    // A prefix that is not a whole number of bytes.
+    REQUIRE(allow_list_admits({"172.16.0.0/12"}, "172.31.255.255"));
+    REQUIRE(!allow_list_admits({"172.16.0.0/12"}, "172.32.0.1"));
+
+    listen_address address;
+    REQUIRE(!listens_on_loopback(address)); // every interface
+    address.host = "127.0.0.1";
+    REQUIRE(listens_on_loopback(address));
+    address.host = "127.8.9.10";
+    REQUIRE(listens_on_loopback(address));
+    address.host = "::1";
+    REQUIRE(listens_on_loopback(address));
+    address.host = "192.168.1.10";
+    REQUIRE(!listens_on_loopback(address));
+    address.host = "0.0.0.0";
+    REQUIRE(!listens_on_loopback(address));
+}
+
+TEST_CASE("listen: a TCP client outside the allow list is closed at once")
+{
+    loop running;
+    listen_address address;
+    address.host = "127.0.0.1";
+    address.allow = {"10.0.0.0/8"};
+    error_code ec;
+    listen_transport refusing(running.io.get_executor(), address, ec);
+    REQUIRE(!ec);
+
+    asio::io_context client_io;
+    auto outsider = connect_to(client_io, refusing.local_port());
+    boost::system::error_code closed;
+    std::array<char, 8> buffer{};
+    outsider.read_some(asio::buffer(buffer), closed);
+    REQUIRE(closed == asio::error::eof ||
+            closed == asio::error::connection_reset);
+    REQUIRE(wait_for([&] { return refusing.refused_count() == 1; }));
+    REQUIRE_EQ(refusing.peer_count(), std::size_t{0});
+
+    // The listener goes on: a client on the list is served.
+    address.allow = {"127.0.0.0/8"};
+    listen_transport admitting(running.io.get_executor(), address, ec);
+    REQUIRE(!ec);
+    auto member = connect_to(client_io, admitting.local_port());
+    REQUIRE(wait_for_peers(admitting, 1));
+    asio::write(member, asio::buffer(std::string("in")));
+    REQUIRE_EQ(read_from(admitting).text, std::string("in"));
+    REQUIRE_EQ(admitting.refused_count(), std::size_t{0});
+
+    // A list that is not valid cannot be opened.
+    address.allow = {"nonsense"};
+    listen_transport broken(running.io.get_executor(), address, ec);
+    REQUIRE(ec == errc::invalid_uri);
+}
+
+TEST_CASE("listen: an RFC 2217 server applies the allow list as well")
+{
+    loop running;
+    listen_address address;
+    address.protocol = listen_protocol::rfc2217;
+    address.host = "127.0.0.1";
+    address.allow = {"::1"};
+    error_code ec;
+    listen_transport server(running.io.get_executor(), address, ec);
+    REQUIRE(!ec);
+    asio::io_context client_io;
+    auto outsider = connect_to(client_io, server.local_port());
+    boost::system::error_code closed;
+    std::array<char, 8> buffer{};
+    outsider.read_some(asio::buffer(buffer), closed);
+    // Closed before the greeting: nothing was sent.
+    REQUIRE(closed);
+    REQUIRE(wait_for([&] { return server.refused_count() == 1; }));
+}
+
+TEST_CASE("listen: datagrams from outside the allow list are ignored")
+{
+    loop running;
+    listen_address address;
+    address.protocol = listen_protocol::udp;
+    address.host = "127.0.0.1";
+    address.allow = {"10.0.0.0/8"};
+    error_code ec;
+    listen_transport transport(running.io.get_executor(), address, ec);
+    REQUIRE(!ec);
+
+    asio::io_context client_io;
+    asio::ip::udp::socket client(client_io, asio::ip::udp::v4());
+    client.send_to(
+        asio::buffer(std::string("no")),
+        {asio::ip::make_address("127.0.0.1"), transport.local_port()});
+    REQUIRE(wait_for([&] { return transport.refused_count() == 1; }));
+    REQUIRE_EQ(transport.peer_count(), std::size_t{0});
+    REQUIRE_EQ(read_from(transport, 200ms).error, asio::error::timed_out);
 }
