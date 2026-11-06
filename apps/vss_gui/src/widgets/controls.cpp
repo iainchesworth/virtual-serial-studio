@@ -78,7 +78,7 @@ void SegmentedControl::apply_style()
             "background: %2; color: %3; padding: 0 %8px; min-height: %9px; "
             "spacing: 0; }"
             "QRadioButton::indicator { width: 0px; height: 0px; "
-            "image: none; }"
+            "border: 0; margin: 0; background: transparent; image: none; }"
             "QRadioButton:checked { background: %4; color: %5; "
             "border-color: %6; }"
             "QRadioButton:hover:!checked { background: %7; }")
@@ -89,7 +89,10 @@ void SegmentedControl::apply_style()
                  colour_name(colour_role::accentStrong),
                  colour_name(colour_role::sunken))
             .arg(padding)
-            .arg(height));
+            // The 1 px border is drawn inside the fixed height, so the
+            // content box is two pixels smaller; at the full height the bottom
+            // edge was cut off.
+            .arg(height - 2));
 }
 
 void SegmentedControl::set_compact(bool compact)
@@ -630,18 +633,11 @@ void Disclosure::apply_state(bool expanded, bool animate)
         content_->setVisible(false);
     }
 
-    QPixmap pixmap =
-        IconProvider::instance()
-            .icon(QStringLiteral("chevron-down"),
-                  expanded ? colour_role::accentStrong : colour_role::ink2, 16)
-            .pixmap(16, 16);
-    if (expanded)
-    {
-        QTransform transform;
-        transform.rotate(180);
-        pixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
-    }
-    header_->setIcon(QIcon(pixmap));
+    // The icon set has the pair: a right chevron (expand) while collapsed and
+    // a down chevron once open.
+    header_->setIcon(IconProvider::instance().icon(
+        expanded ? QStringLiteral("chevron-down") : QStringLiteral("expand"),
+        expanded ? colour_role::accentStrong : colour_role::ink2, 16));
     header_->setAccessibleName(expanded
                                    ? tr("%1, expanded").arg(header_->text())
                                    : tr("%1, collapsed").arg(header_->text()));

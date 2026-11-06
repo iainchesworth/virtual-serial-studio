@@ -8,6 +8,7 @@
 
 #include "support/check_row.hpp"
 #include "support/troubleshoot.hpp"
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
@@ -180,6 +181,8 @@ void TroubleshootDialog::build()
         QCoreApplication::translate("Troubleshoot", "Copy port path"), nullptr,
         try_card);
     copy_->setProperty("size", QStringLiteral("small"));
+    copy_->setIcon(IconProvider::instance().icon(QStringLiteral("copy"),
+                                                 colour_role::ink, 16));
     polish(copy_);
     copy_->setAutoDefault(false);
     connect(copy_, &QPushButton::clicked, this, &TroubleshootDialog::copy_path);
@@ -188,6 +191,8 @@ void TroubleshootDialog::build()
         QCoreApplication::translate("Troubleshoot", "Check again"), nullptr,
         try_card);
     again->setProperty("size", QStringLiteral("small"));
+    again->setIcon(IconProvider::instance().icon(QStringLiteral("refresh"),
+                                                 colour_role::ink, 16));
     polish(again);
     again->setAutoDefault(false);
     connect(again, &QPushButton::clicked, this,

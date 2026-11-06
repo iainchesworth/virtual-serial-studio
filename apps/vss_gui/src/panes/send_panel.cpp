@@ -6,6 +6,7 @@
 
 #include "panes/send_panel.hpp"
 
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 
@@ -81,6 +82,8 @@ void SendPanel::build()
     ports_->setMinimumContentsLength(8);
     top->addWidget(ports_, 1);
     send_ = new QPushButton(tr("Send"), this);
+    send_->setIcon(IconProvider::instance().icon(QStringLiteral("send"),
+                                                 colour_role::onAccent, 16));
     send_->setProperty("role", QStringLiteral("primary"));
     polish(send_);
     top->addWidget(send_);

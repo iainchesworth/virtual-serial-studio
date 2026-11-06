@@ -15,6 +15,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QGuiApplication>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QSettings>
@@ -44,6 +45,14 @@ int main(int argc, char* argv[])
     // CTest entry, which sets QT_SCALE_FACTOR before this process starts.
     if (selftest || screenshot)
         qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
+
+    // Fractional display scales (125, 150 percent) must reach the renderer
+    // unrounded.  Rounding 150 percent up to 200 or down to 100 resamples
+    // every glyph and icon, which is the main cause of soft text.  Qt 6
+    // defaults to this; say so explicitly so a Qt default change or an
+    // environment override cannot bring the rounding back.
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
     QApplication application(argc, argv);
     QApplication::setApplicationName(QStringLiteral("Virtual Serial Studio"));

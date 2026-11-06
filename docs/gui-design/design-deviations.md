@@ -1107,6 +1107,7 @@ lines applied. The numbers are the rows of the design review.
 
 ### Tokens and strings
 
+- **Windows fixed font.** The design says never set a font family. Qt reports Courier New as the fixed font on Windows, a thin typewriter face. `Theme` picks Consolas, which ships with the OS, when the font database has it, and otherwise keeps the system fixed font. No font is bundled. Segoe UI Variable was tried for text and rejected: Qt 6.12 draws it semi-bold.
 - **Menu colours (75).** The product stylesheet sets `color: %ink%` on menus.
   Without it menu text was dark on dark after a theme switch on Windows.
 - **Launcher cards (87).** The border colour `line2` is 1.76 to 1 against the

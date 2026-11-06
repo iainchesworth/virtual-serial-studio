@@ -228,7 +228,7 @@ void ShellWindow::build_actions()
         tr("cli command"), {}, {}, action_level::advanced,
         [this] { open_export_command(); });
     add(QStringLiteral("file.bundle"), tr("Diagnostic bundle"),
-        tr("support zip"), {}, {}, action_level::simple,
+        tr("support zip"), QStringLiteral("export"), {}, action_level::simple,
         [this] { open_bundle(); });
     add(QStringLiteral("file.quit"), tr("Quit"), tr("exit"), {},
         QKeySequence::Quit, action_level::simple, [this] { close(); });
@@ -276,19 +276,20 @@ void ShellWindow::build_actions()
         action_level::advanced, [this] { open_add_fixture(); });
     add(
         QStringLiteral("ports.copyName"), tr("Copy port name"),
-        tr("clipboard path"), {}, QKeySequence(QStringLiteral("Ctrl+Shift+C")),
-        action_level::simple, [this] { copy_selected_port(); }, false,
+        tr("clipboard path"), QStringLiteral("copy"),
+        QKeySequence(QStringLiteral("Ctrl+Shift+C")), action_level::simple,
+        [this] { copy_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
     add(
         QStringLiteral("ports.rename"), tr("Rename port"),
         tr("name change relabel"), {}, QKeySequence(Qt::Key_F2),
-        action_level::simple, [this] { show_rename(selection_.port()); },
-        false,
+        action_level::simple, [this] { show_rename(selection_.port()); }, false,
         [this]
         { return backend_.caps().rename_port && selection_.port() != 0; });
     add(
         QStringLiteral("ports.remove"), tr("Remove port"), tr("delete remove"),
-        {}, {}, action_level::simple, [this] { remove_selected_port(); }, false,
+        QStringLiteral("remove"), {}, action_level::simple,
+        [this] { remove_selected_port(); }, false,
         [this] { return selection_.port() != 0; });
 
     // Topology
@@ -315,8 +316,8 @@ void ShellWindow::build_actions()
         [this] { show_watch(); });
     add(
         QStringLiteral("topology.removeLink"), tr("Remove link"),
-        tr("delete disconnect"), {}, {}, action_level::simple,
-        [this] { remove_selected_link(); }, false,
+        tr("delete disconnect"), QStringLiteral("remove"), {},
+        action_level::simple, [this] { remove_selected_link(); }, false,
         [this] { return selection_.link() != 0; });
     add(QStringLiteral("topology.wiring"), tr("Link wiring"),
         tr("line matrix faults"), {}, {}, action_level::advanced,
@@ -443,14 +444,13 @@ void ShellWindow::build_actions()
     add(QStringLiteral("help.shortcuts"), tr("Keyboard shortcuts"), tr("keys"),
         {}, {}, action_level::simple, [this] { open_shortcuts(); });
     add(QStringLiteral("help.environment"), tr("Copy environment"),
-        tr("build bug report"), {}, {}, action_level::simple,
-        [this] { copy_environment(); });
+        tr("build bug report"), QStringLiteral("copy"), {},
+        action_level::simple, [this] { copy_environment(); });
     add(QStringLiteral("help.about"), tr("About"),
         tr("version licence copyright"), {}, {}, action_level::simple,
         [this] { open_about(); });
 
-    connect(&undo_, &UndoService::changed, this,
-            [this] { update_actions(); });
+    connect(&undo_, &UndoService::changed, this, [this] { update_actions(); });
 
     advanced_action_ = registry_.action(QStringLiteral("view.advanced"));
     monitor_action_ = registry_.action(QStringLiteral("view.monitor"));
@@ -612,8 +612,14 @@ void ShellWindow::build_toolbar()
     search_->setPlaceholderText(tr("Search actions"));
     search_->setAccessibleName(tr("Search actions"));
     search_->setClearButtonEnabled(true);
-    search_->setFixedWidth(240);
+    search_->setFixedWidth(220);
     search_->setFont(Theme::instance().font(text_style::body));
+    // The search field leads with the magnifier from the icon set.
+    search_
+        ->addAction(IconProvider::instance().icon(QStringLiteral("search"),
+                                                  colour_role::ink3, 16),
+                    QLineEdit::LeadingPosition)
+        ->setText(tr("Search actions"));
     toolbar_->addWidget(search_);
     connect(search_, &QLineEdit::returnPressed, this,
             [this] { open_palette(); });
@@ -661,14 +667,14 @@ void ShellWindow::build_central()
                 status_->showMessage(text, 6000);
                 log_local(text);
             });
-    connect(owner_bar_, &OwnerBar::owner_changed, this,
-            [this](vss::link_id id, vss::endpoint_id before,
-                   vss::endpoint_id after)
-            {
-                if (const auto link = backend_.link(id))
-                    undo_.push(owner_step(backend_, *link, before, after,
-                                          tr("Change owner")));
-            });
+    connect(
+        owner_bar_, &OwnerBar::owner_changed, this,
+        [this](vss::link_id id, vss::endpoint_id before, vss::endpoint_id after)
+        {
+            if (const auto link = backend_.link(id))
+                undo_.push(owner_step(backend_, *link, before, after,
+                                      tr("Change owner")));
+        });
     layout->addWidget(owner_bar_);
     central_->addWidget(workspace_);
 
@@ -1133,23 +1139,21 @@ void ShellWindow::update_undo_actions()
         QString plain;
         QString with_step;
         QString step;
-    } labels[] = {
-        {"edit.undo", tr("Undo"), tr("Undo %1"), undo_.undo_text()},
-        {"edit.redo", tr("Redo"), tr("Redo %1"), undo_.redo_text()}};
+    } labels[] = {{"edit.undo", tr("Undo"), tr("Undo %1"), undo_.undo_text()},
+                  {"edit.redo", tr("Redo"), tr("Redo %1"), undo_.redo_text()}};
     for (const auto& label : labels)
     {
-        QAction* action =
-            registry_.action(QString::fromLatin1(label.id));
+        QAction* action = registry_.action(QString::fromLatin1(label.id));
         if (action == nullptr)
             continue;
         action->setText(label.step.isEmpty() ? label.plain
                                              : label.with_step.arg(label.step));
         action->setToolTip(supported ? action->text()
                                      : tr("Not available in this build"));
-        action->setStatusTip(
-            supported ? tr("Reverses connecting or removing a link, "
-                           "changing an owner and renaming a port.")
-                      : tr("This build cannot reverse changes."));
+        action->setStatusTip(supported
+                                 ? tr("Reverses connecting or removing a link, "
+                                      "changing an owner and renaming a port.")
+                                 : tr("This build cannot reverse changes."));
     }
 }
 

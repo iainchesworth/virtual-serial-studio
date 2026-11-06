@@ -8,6 +8,7 @@ Authoritative values: `tokens/tokens.json`. This page explains how to use them i
 | ground | Window background | #F2F4F7 | #11161D |
 | panel | Docks, dialogs, inputs | #FFFFFF | #1A212B |
 | sunken | Headers, wells, code, alternate rows | #F7F8FA | #151B23 |
+| hover / pressed | Fill of a button, toolbar button, menu row or tab under the pointer, and while pressed | #ECF0F4 / #DFE5EC | #232C39 / #2D3949 |
 | line | Decorative dividers | #D8DDE4 | #2B3543 |
 | line2 | Soft borders on cards, scrollbar thumbs | #BCC4CF | #445064 |
 | control | Boundaries of controls (3:1 rule) | #748090 | #7E8A9C |
@@ -25,11 +26,14 @@ Run `python3 tools/check_contrast.py` after any colour change. It must report `F
 
 ## Typography
 - Never bundle fonts and never set a font family. Use `QFontDatabase::systemFont(QFontDatabase::GeneralFont)` and `QFontDatabase::systemFont(QFontDatabase::FixedFont)` for data, paths, addresses and payloads.
-- Implement the scale as ratios of the system font's point size so OS text size is honoured: caption and label 0.923, body 1.0, body large 1.077, subtitle 1.231, title 1.538, display 2.0, port name 3.385 (fixed font, weight 500), data 0.923 (fixed font). Weights: labels, titles and display 600, button 500.
+- Windows: keep Segoe UI for text. Qt 6 draws Segoe UI Variable at the wrong weight through DirectWrite (every regular label comes out semi-bold), so do not select it. Use Consolas for the fixed font when present (the Qt default is Courier New). Both ship with the OS, nothing is bundled. See design-deviations.
+- Request the unhinted outline (`QFont::PreferNoHinting`) and `QFont::PreferAntialias`, and set `Qt::HighDpiScaleFactorRoundingPolicy::PassThrough` before the `QApplication` is built, so 125 and 150 percent displays are not rounded and resampled.
+- Every style lands on a whole number of logical pixels (body 13, caption and label 12, large 14, subtitle 16, title 20, display 26, port name 44). A fractional size such as 11.08 px is the cause of soft, uneven text. Convert to points with the screen's logical DPI so Qt gets the same whole pixel size back.
+- Implement the scale as ratios of the system font's size (never below the 13px design body) so OS text size is honoured: caption and label 0.923, body 1.0, body large 1.077, subtitle 1.231, title 1.538, display 2.0, port name 3.385 (fixed font, weight 500), data 0.923 (fixed font). Weights: labels, titles and display 600, button 500.
 - Minimum text is 12px equivalent, except key caps and uppercase badges at 11px.
 
 ## Size, spacing, shape
-Use the `size`, `space`, `radius` and `layout` blocks in tokens.json. Spacing unit is 4px (4, 8, 12, 16, 24, 32, 48). Buttons are 34px high (28 small), inputs 34, toolbar buttons 34, dock headers 32, tab bars 32, status bar 30, menu bar 28, toolbar 48 (40 at the minimum window). Any pointer target is at least 24 by 24. Depth comes from 1px borders. Only dialogs, menus and toasts cast shadows, and those come from the platform.
+Use the `size`, `space`, `radius` and `layout` blocks in tokens.json. Radii: control 6, inner 8 (cards, menus), dialog 12, chip 11. The style sheet template reads them as `%radius.control%` and `%space.2%`, so change the token, not a widget. Spacing unit is 4px (4, 8, 12, 16, 24, 32, 48). Buttons are 34px high (28 small), inputs 34, toolbar buttons 34, dock headers 32, tab bars 32, status bar 30, menu bar 28, toolbar 48 (40 at the minimum window). Any pointer target is at least 24 by 24. Depth comes from 1px borders. Only dialogs, menus and toasts cast shadows, and those come from the platform.
 
 ## Required Qt architecture
 ```
@@ -55,4 +59,4 @@ FocusRingStyle : QProxyStyle    // paints the 2px ring with 2px offset for keybo
 9. Reduced motion: if the OS requests it use 0 ms durations. Otherwise 100 ms hover, 150 ms disclosure, 200 ms dialogs, ease-out. Live counters never animate.
 
 ## Icons
-`icons/*.svg` are 16px, 1.5 stroke, round caps, `currentColor`. Always paired with a text label, or a tooltip and accessible name when alone. Use Qt SVG (`Qt6::Svg`, approved) or hand-parse. To colour: read the file, replace `currentColor` with the token colour, render with `QSvgRenderer` into a pixmap at `size * devicePixelRatio`.
+`icons/*.svg` are 16px, 1.5 stroke, round caps, `currentColor`. Always paired with a text label, or a tooltip and accessible name when alone. Use Qt SVG (`Qt6::Svg`, approved) or hand-parse. `IconProvider` returns a `QIcon` backed by an icon engine that renders on demand at any size and device pixel ratio, so the icon stays sharp on every screen and at 200 percent text. An icon asked for by colour role follows the theme without being rebuilt, and its disabled mode is drawn in `disabledText`. Every action, button and field the specs give an icon shows one (mock-ups under `reference/mockups`).

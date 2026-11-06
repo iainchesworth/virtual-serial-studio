@@ -6,6 +6,7 @@
 
 #include "flows/port_ready_dialog.hpp"
 
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
@@ -157,6 +158,8 @@ void PortReadyDialog::build(bool advanced)
     {
         copy_ = new QPushButton(tr("Copy name"), path_block_);
         copy_->setObjectName(QStringLiteral("copyNameButton"));
+        copy_->setIcon(IconProvider::instance().icon(QStringLiteral("copy"),
+                                                     colour_role::ink, 16));
         copy_->setAccessibleName(tr("Copy name, %1").arg(port_.path));
         copy_->setToolTip(tr("Copy name"));
         copy_->setCursor(Qt::PointingHandCursor);
