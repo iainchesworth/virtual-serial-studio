@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_PORTS_PERMISSIONS_PLATFORM_HPP
-#define VSS_PORTS_PERMISSIONS_PLATFORM_HPP
+#pragma once
 
 #include <vss/ports/permissions.hpp>
 
@@ -57,5 +56,3 @@ permissions::step_result
 platform_add_user_to_group(const permissions::group_membership_spec& spec);
 
 } // namespace vss::detail
-
-#endif // VSS_PORTS_PERMISSIONS_PLATFORM_HPP

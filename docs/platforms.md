@@ -99,6 +99,37 @@ IOKit do not show.
 Virtual ports on Windows need the `vsscom` driver. Until it is installed, `auto` falls back to com0com when present, and to an
 in-process loopback device otherwise. See [`windows-com-driver.md`](windows-com-driver.md).
 
+### Prompts Windows shows that the program did not ask for
+
+A UAC window that appears while the tests run is not a request from the tests for
+administrator rights. Windows Firewall shows the prompt when a program starts
+listening on every network address and has no rule yet; pressing **Allow access**
+then needs administrator approval, and that is the UAC window. The system tests
+and the performance suite used to do this with their TCP and UDP probes. They now
+listen on the loopback address only, which the firewall never asks about, and a
+test must keep to that: bind a test server to `127.0.0.1`, never to the wildcard
+address.
+
+Every program the project builds on Windows carries an application manifest with
+`requestedExecutionLevel asInvoker` (`cmake/windows/vss.manifest`, attached by
+`cmake/VssWindowsResources.cmake`). Without a manifest Windows decides from the file
+name and version strings whether to treat a program as an installer, so the
+manifest means Windows never guesses. The unit tests read the manifest of the test
+program itself.
+
+The old prompts leave firewall rules behind, one per build folder and protocol,
+named after the program. They are harmless, but a machine that ran the tests
+from many build folders has dozens. Remove them in the Windows Defender Firewall
+with Advanced Security console (**Inbound Rules**, sort by name, delete the
+`vss_system_tests` rules) or from an administrator PowerShell:
+
+```powershell
+Get-NetFirewallRule -DisplayName vss_system_tests | Remove-NetFirewallRule
+```
+
+Check the list first with `Get-NetFirewallRule -DisplayName vss_system_tests`;
+Studio never adds, changes or removes a firewall rule by itself.
+
 ### Elevation and Windows Firewall
 
 The permissions layer (`libs/vss_ports`, `vss/ports/permissions.hpp`) is shared by the

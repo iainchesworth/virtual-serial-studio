@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP
-#define VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP
+#pragma once
 
 #include "support/setup_facts.hpp"
 
@@ -50,5 +49,3 @@ std::optional<vss::permissions::fact>
 firewall_fact(const std::vector<vss::permissions::fact>& facts);
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_PERMISSION_ROWS_HPP

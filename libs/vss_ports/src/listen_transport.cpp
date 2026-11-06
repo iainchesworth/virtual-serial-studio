@@ -234,17 +234,18 @@ public:
                                           asio::error::operation_aborted, 0);
                            return;
                        }
-                       bool busy = false;
+                       std::optional<io_handler> rejected;
                        {
                            std::lock_guard lock(self->read_mutex_);
-                           busy = self->pending_read_.has_value();
-                           if (!busy)
+                           if (self->pending_read_.has_value())
+                               rejected = std::move(handler);
+                           else
                                self->pending_read_ =
                                    pending{buffer, std::move(handler)};
                        }
-                       if (busy)
+                       if (rejected)
                        {
-                           self->complete(std::move(handler),
+                           self->complete(std::move(*rejected),
                                           asio::error::already_started, 0);
                            return;
                        }
@@ -261,7 +262,7 @@ public:
                    [self = shared_from_this(), payload,
                     handler = std::move(handler)]() mutable
                    {
-                       self->send(std::move(payload), std::move(handler));
+                       self->send(payload, std::move(handler));
                    });
     }
 
@@ -443,7 +444,11 @@ private:
     /// client, and the lines it drove.
     void consume_serial(const std::shared_ptr<client>& peer, std::size_t count)
     {
-        const auto fed = peer->session->feed(
+        auto& slot = peer->session;
+        if (!slot)
+            return;
+        rfc2217::session& session = *slot;
+        const auto fed = session.feed(
             std::string_view(peer->buffer.data(), count));
         received_.insert(received_.end(), fed.data.begin(), fed.data.end());
         if (!fed.reply.empty())
@@ -451,7 +456,7 @@ private:
         if (fed.modem_state_requested)
         {
             const std::string text =
-                peer->session->modem_state(current_inputs(), true);
+                session.modem_state(current_inputs(), true);
             if (!text.empty())
                 enqueue(peer, std::make_shared<std::string>(text));
         }
@@ -459,7 +464,7 @@ private:
         {
             {
                 std::lock_guard lock(lines_mutex_);
-                const control_lines driven = peer->session->outputs();
+                const control_lines driven = session.outputs();
                 for (const control_line line :
                      {control_line::dtr, control_line::rts,
                       control_line::break_signal})
@@ -613,7 +618,8 @@ private:
         }
     }
 
-    void send(std::shared_ptr<std::vector<char>> payload, io_handler handler)
+    void send(const std::shared_ptr<std::vector<char>>& payload,
+              io_handler handler)
     {
         const std::size_t size = payload->size();
         if (closed_)
@@ -678,9 +684,10 @@ private:
     {
         for (const auto& peer : clients_)
         {
-            if (!peer->session || !peer->session->com_port_active())
+            auto& slot = peer->session;
+            if (!slot || !slot->com_port_active())
                 continue;
-            const std::string text = peer->session->modem_state(inputs);
+            const std::string text = slot->modem_state(inputs);
             if (!text.empty())
                 enqueue(peer, std::make_shared<std::string>(text));
         }
@@ -743,7 +750,14 @@ listen_transport::listen_transport(const executor_type& executor,
 
 listen_transport::~listen_transport()
 {
-    state_->close();
+    try
+    {
+        state_->close();
+    }
+    catch (...) // NOLINT(bugprone-empty-catch)
+    {
+        // close() posts to the strand and can throw; a destructor must not.
+    }
 }
 
 std::string listen_transport::describe() const

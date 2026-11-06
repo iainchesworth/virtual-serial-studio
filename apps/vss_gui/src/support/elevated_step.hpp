@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_ELEVATED_STEP_HPP
-#define VSS_GUI_SUPPORT_ELEVATED_STEP_HPP
+#pragma once
 
 #include <vss/ports/permissions.hpp>
 
@@ -58,5 +57,3 @@ step_report
 add_to_serial_group(const vss::permissions::group_membership_spec& spec);
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_ELEVATED_STEP_HPP

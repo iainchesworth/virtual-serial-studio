@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_FIREWALL_DIALOG_HPP
-#define VSS_GUI_SUPPORT_FIREWALL_DIALOG_HPP
+#pragma once
 
 #include <vss/ports/permissions.hpp>
 
@@ -63,5 +62,3 @@ private:
 };
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_FIREWALL_DIALOG_HPP

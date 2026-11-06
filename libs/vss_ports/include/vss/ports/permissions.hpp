@@ -29,8 +29,7 @@
 // outcome is tested on every platform with injected observations.
 //
 
-#ifndef VSS_PORTS_PERMISSIONS_HPP
-#define VSS_PORTS_PERMISSIONS_HPP
+#pragma once
 
 #include <cstdint>
 #include <optional>
@@ -485,5 +484,3 @@ std::string firewalld_command(const listener& what);
 std::string this_program();
 
 } // namespace vss::permissions
-
-#endif // VSS_PORTS_PERMISSIONS_HPP

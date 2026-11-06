@@ -2707,72 +2707,72 @@ Networks: %5</source>
     <context>
         <name>MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>破棄</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>所有者ではないため、転送されません。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>受信</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>送信</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>破棄</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1、%2、%3、%4バイト、%5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>時刻</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>ポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>方向</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>バイト数</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>プレビュー</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>所有者ではないため、転送されません</translation>
         </message>
@@ -2781,7 +2781,7 @@ Networks: %5</source>
         <name>MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>モニター</translation>
         </message>
@@ -2793,7 +2793,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>一時停止</translation>
         </message>
@@ -2817,8 +2817,8 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>すべてのポート</translation>
         </message>
@@ -2864,66 +2864,95 @@ Networks: %5</source>
             <translation>エクスポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>トラフィック</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>まだトラフィックはありません。バイトを送信するか、プログラムでポートを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>ログ</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>トポロジーJSONエディターはWP7で提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>トポロジーJSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>再開</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>これらの条件に一致するトラフィックはありません。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>リンク</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>表示中のトラフィックをエクスポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>%1を保存できませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1をエクスポートしました。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <source>Export capture</source>
+            <translation>キャプチャをエクスポート</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>表示中の通信を、すべてのバイトと正確な時刻とともにキャプチャファイルに保存します。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>キャプチャテキスト (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>カンマ区切り値 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
         </message>
     </context>
     <context>
@@ -10601,72 +10630,72 @@ Networks: %5</source>
     <context>
         <name>vss::gui::MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>破棄</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>所有者ではないため、転送されません。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>受信</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>送信</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>破棄</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1、%2、%3、%4バイト、%5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>時刻</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>ポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>方向</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>バイト数</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>プレビュー</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>所有者ではないため、転送されません</translation>
         </message>
@@ -10675,7 +10704,7 @@ Networks: %5</source>
         <name>vss::gui::MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>モニター</translation>
         </message>
@@ -10687,7 +10716,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>一時停止</translation>
         </message>
@@ -10711,8 +10740,8 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>すべてのポート</translation>
         </message>
@@ -10758,66 +10787,95 @@ Networks: %5</source>
             <translation>エクスポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>トラフィック</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>まだトラフィックはありません。バイトを送信するか、プログラムでポートを開いてください。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>ログ</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>トポロジーJSONエディターはWP7で提供されます。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>トポロジーJSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>再開</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>これらの条件に一致するトラフィックはありません。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>リンク</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>表示中のトラフィックをエクスポート</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>%1を保存できませんでした。</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1をエクスポートしました。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <source>Export capture</source>
+            <translation>キャプチャをエクスポート</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
+            <translation>表示中の通信を、すべてのバイトと正確な時刻とともにキャプチャファイルに保存します。</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <source>Capture text (*.cap)</source>
+            <translation>キャプチャテキスト (*.cap)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <source>Comma separated values (*.csv)</source>
+            <translation>カンマ区切り値 (*.csv)</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <source>JSON Lines (*.jsonl)</source>
+            <translation>JSON Lines (*.jsonl)</translation>
         </message>
     </context>
     <context>
