@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <future>
 #include <utility>
 
 namespace vss
@@ -822,7 +823,14 @@ result<void> studio::reopen(endpoint_id id)
     // A listener holds its address until it is closed, and the new one wants
     // the same address, so the old one goes first.
     if (is_listen_uri(record.uri))
-        found->close();
+    {
+        // Closed on the endpoint's strand, and waited for, so the address is
+        // free when the new one binds.
+        auto closed = std::make_shared<std::promise<void>>();
+        auto done = closed->get_future();
+        found->shutdown([closed] { closed->set_value(); });
+        done.wait();
+    }
 
     boost::system::error_code ec;
     auto fresh = open_transport(hub_->executor(), record.uri,

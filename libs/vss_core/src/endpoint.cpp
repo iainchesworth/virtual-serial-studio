@@ -133,10 +133,16 @@ result<void> endpoint::reopen(std::shared_ptr<transport> fresh)
         old = std::move(transport_);
         transport_ = std::move(fresh);
     }
+    // A transport is a single-threaded object: the read that is parked on it
+    // runs on this endpoint's strand, so it is cancelled and closed there too,
+    // not from the caller's thread.
     if (old)
     {
-        old->cancel();
-        old->close();
+        auto self = shared_from_this();
+        boost::asio::post(strand_, [self, old] {
+            old->cancel();
+            old->close();
+        });
     }
     {
         // Bytes queued for the old connection are not sent down the new one.

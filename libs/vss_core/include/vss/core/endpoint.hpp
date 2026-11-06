@@ -100,8 +100,9 @@ public:
     /// reading again.  It is how an endpoint comes back after its transport
     /// failed or the other side hung up, with its name, its id and every link
     /// it is on kept: the hub never sees it go.  The old transport is cancelled
-    /// and closed, bytes still queued for it are dropped, and a read or write
-    /// it still owes is ignored when it completes.  Works from any state, open
+    /// and closed on the endpoint's strand (so a moment after the call
+    /// returns), bytes still queued for it are dropped, and a read or write it
+    /// still owes is ignored when it completes.  Works from any state, open
     /// included (a deliberate restart).  The caller builds `fresh`, usually
     /// from the record it kept of how the endpoint was made; it must be open.
     /// `errc::invalid_argument` for a null transport and `errc::not_open` for
