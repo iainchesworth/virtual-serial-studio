@@ -40,6 +40,10 @@ struct share_plan
     int programs = 1;
     int free_pairs = 0;
     bool windows = false;
+    /// The Studio driver makes ports on demand, so `free_pairs` does not
+    /// apply.  It holds at most `studio_driver_user_limit` ports for one user.
+    bool studio_driver = false;
+    int driver_ports_held = 0;
     /// Programs that get a port another program can open.
     int openable = 1;
     /// Programs whose port only works inside Studio.
@@ -48,7 +52,15 @@ struct share_plan
     bool needs_warning() const { return studio_only > 0; }
 };
 
+/// The most ports the Studio driver lets one user hold (32 exist in all).
+inline constexpr int studio_driver_user_limit = 16;
+
 share_plan make_share_plan(int programs, int free_pairs, bool windows);
+
+/// The plan when the Studio driver is installed: every program gets a port
+/// until the user holds `studio_driver_user_limit` of them.  `ports_held` is
+/// how many driver ports Studio already holds.
+share_plan make_driver_share_plan(int programs, int ports_held);
 
 /// The warn note's rich text: headline bold, cause and effect in one
 /// sentence.  Empty when no warning is needed.

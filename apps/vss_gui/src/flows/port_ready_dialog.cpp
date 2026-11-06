@@ -190,10 +190,16 @@ void PortReadyDialog::build(bool advanced)
 
     if (studio_only_)
     {
+        const setup_facts facts = backend_.facts();
+        const bool driver_present = windows_platform(platform_) &&
+                                    (facts.driver_found || facts.com0com_found);
         driver_note_ = new NoteBanner(
             NoteBanner::kind::warn,
-            tr("Other programs cannot open this port. Install a driver to "
-               "create ports they can open."),
+            driver_present
+                ? tr("Other programs cannot open this port. It exists only "
+                     "inside Studio.")
+                : tr("Other programs cannot open this port. Install a driver "
+                     "to create ports they can open."),
             this);
         driver_note_->setObjectName(QStringLiteral("portReadyDriverNote"));
         driver_note_->set_action(tr("Open setup check"),
@@ -388,7 +394,11 @@ QString PortReadyDialog::kind_description() const
         return tr("Windows driver");
     if (token == QLatin1String("auto") &&
         port_.path.startsWith(QStringLiteral("COM")))
-        return tr("Auto, resolved to com0com");
+    {
+        return backend_.facts().driver_found
+                   ? tr("Auto, resolved to the Studio driver")
+                   : tr("Auto, resolved to com0com");
+    }
     if (port_.kind == vss::endpoint_kind::physical)
         return tr("Real device");
     return tr("Auto");

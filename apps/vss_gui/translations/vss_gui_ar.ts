@@ -441,8 +441,12 @@
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>«الأفضل المتاح» يستخدم برنامج تشغيل Studio أو com0com في Windows، ومحطة طرفية زائفة في Linux وmacOS. حتى 32 في وقت واحد. تُسمّى عدة منافذ port-1 وport-2 وهكذا.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>يستخدم «الأفضل المتاح» com0com على Windows وطرفية زائفة على Linux وmacOS. حتى 32 منفذاً دفعة واحدة. تُسمّى المنافذ المتعددة port-1 وport-2 وهكذا.</translation>
+            <translation type="vanished">يستخدم «الأفضل المتاح» com0com على Windows وطرفية زائفة على Linux وmacOS. حتى 32 منفذاً دفعة واحدة. تُسمّى المنافذ المتعددة port-1 وport-2 وهكذا.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -2271,7 +2275,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>عرض فحص الإعداد</translation>
         </message>
@@ -2378,7 +2382,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>فتح فحص الإعداد</translation>
         </message>
@@ -2393,17 +2397,22 @@ Networks: %5</source>
             <translation>الإعداد يحتاج إلى انتباه. قد لا تكون المنافذ الجديدة قابلة للاستخدام من برامج أخرى.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>جاهز. يمكن لهذا الكمبيوتر إنشاء منافذ يمكن لبرامج أخرى فتحها (تم اكتشاف برنامج تشغيل Virtual Serial Studio).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>جاهز. يستطيع هذا الحاسوب إنشاء منافذ يمكن لبرامج أخرى فتحها (تم اكتشاف com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>الإعداد يحتاج إلى انتباه. لن ترى البرامج الأخرى المنافذ الجديدة حتى يُثبَّت برنامج تشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>إعداد محفوظ</translation>
         </message>
@@ -2958,12 +2967,12 @@ Networks: %5</source>
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="194" />
+            <location filename="../src/dialogs/network_uri.cpp" line="213" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>أدخل عنواناً مثل tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="200" />
+            <location filename="../src/dialogs/network_uri.cpp" line="219" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>اختر منفذاً من 1 إلى 65535.</translation>
         </message>
@@ -3072,116 +3081,121 @@ Networks: %5</source>
             <translation>يعرض ما يفعله جدار حماية Windows بهذا المنفذ. لا يتغير شيء حتى توافق.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>لا توجد كلمة مرور في RFC 2217. يستطيع كل من يصل إلى هذا المنفذ استخدام الجهاز. اختر هذا الحاسوب فقط (127.0.0.1)، أو أضف في الوضع المتقدم ?allow=192.168.1.0/24 إلى العنوان لتحديد من يحق له الاتصال.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
             <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="706" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>العنوان</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="300" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>تحرير العنوان</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="323" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>يُعتمد العنوان بدلاً من الحقول أعلاه أثناء تحريره.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="333" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>الأمر نفسه من سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="335" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="707" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>الأمر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="348" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>اختبر من هذا الحاسوب أولاً</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="350" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>إلغاء</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="353" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>بدء الجسر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="506" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>لا يتوفر جهاز تسلسلي. وصّل جهازاً ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="516" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1، %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="517" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>جهاز فعلي</translation>
         </message>
         <message>
             <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="572" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="586" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="630" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>الجهاز</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="640" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>يمكن للحواسيب الأخرى الاتصال بهذا الحاسوب على المنفذ %1 والتخاطب مع %2. تتدفق البيانات في الاتجاهين، وتعرض المراقبة الاتجاهين كليهما.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="648" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>يتصل Studio بـ %1 على المنفذ %2 ويتخاطب مع %3. تتدفق البيانات في الاتجاهين، وتعرض المراقبة الاتجاهين كليهما.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="650" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>الخادم</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="741" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>اختر جهازاً لمشاركته.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="785" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>الشبكات غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="786" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="812" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="821" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>تعذر بدء الجسر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="813" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>المنفذ %1 مستخدم بالفعل. اختر منفذاً آخر أو أوقف البرنامج الذي يستخدمه.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="822" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>قد يكون العنوان مستخدماً، أو رفض الحاسوب الآخر الاتصال. تحقق من العنوان وأعد المحاولة.</translation>
         </message>
@@ -3378,11 +3392,13 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>تُقترح الأسماء من أرقام COM الحرة. يختار هذا الإصدار المنافذ الحرة المعروضة أعلاه. على Linux وmacOS تكون المنافذ مسارات مثل /dev/pts/3 ويجري اختيارها لك.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>يستخدم Windows أزواج com0com الحرة لهذا الزوج، لذلك لا يطلب إذن المسؤول.</translation>
         </message>
@@ -3457,121 +3473,131 @@ Networks: %5</source>
             <translation>نوع المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>ينشئ برنامج تشغيل Studio منافذ هذا الزوج، لذا لا يطلب Windows إذن المسؤول.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>ينشئ برنامج تشغيل Studio المنفذين عند إنشاء الزوج. يختار Windows رقمي COM لهما.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>لا يوجد منفذ COM حر للبرنامج الأول</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>لا يوجد منفذ COM حر للبرنامج الثاني</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>يُختار عند إنشاء الزوج</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>الأزواج المرتبطة غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>تحتاج الأزواج المرتبطة إلى برنامج تشغيل. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>لا يوجد عدد كافٍ من أزواج برنامج التشغيل الحرة. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله &lt;b&gt;%1&lt;/b&gt; يصل إلى &lt;b&gt;%2&lt;/b&gt;، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله %1 يصل إلى %2، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>ما يرسله &lt;b&gt;%1&lt;/b&gt; يصل إلى &lt;b&gt;%2&lt;/b&gt;، والعكس بالعكس. خطوط المودم غير متقاطعة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>ما يرسله %1 يصل إلى %2، والعكس بالعكس. خطوط المودم غير متقاطعة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله المنفذ الأول يصل إلى الثاني، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>أدخل اسماً للزوج.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>منفذ COM حر آخر</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 مستخدم بالفعل. جرّب %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>تعذر إنشاء الزوج</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>يحتاج Windows إلى برنامج تشغيل تسلسلي قبل أن يتمكن Studio من إنشاء زوج يمكن لبرنامج آخر فتحه. لم يتغير شيء. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>لا يستطيع هذا الإصدار إنشاء زوج مرتبط. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>تعذر على Studio إنشاء المنفذ الأول. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> تحقق من الإعداد وأعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>تعذر على Studio إنشاء المنفذ الثاني. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>لم يعد بإمكان هذا الحاسوب منح الزوج منفذين يمكن لبرامج أخرى فتحهما. لم يتغير شيء. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>تعذر على Studio ربط المنفذين. لم يتغير شيء.</translation>
         </message>
@@ -3755,145 +3781,155 @@ Networks: %5</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>لا تستطيع البرامج الأخرى فتح هذا المنفذ. فهو موجود داخل Studio فقط.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>لا يمكن لبرامج أخرى فتح هذا المنفذ. ثبّت برنامج تشغيل لإنشاء منافذ يمكنها فتحها.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>فتح فحص الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>في برنامجك، اختر &lt;b&gt;%1&lt;/b&gt; كمنفذ تسلسلي. تُحدَّد إعدادات مثل معدل الباود من ذلك البرنامج. يبقى المنفذ متاحاً ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>في برنامجك، اختر %1 كمنفذ تسلسلي. تُحدَّد إعدادات مثل معدل الباود من ذلك البرنامج. يبقى المنفذ متاحاً ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>يوجد هذا المسار ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>مفتوح</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>إظهار التفاصيل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>الاسم</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>النوع</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>إدخال في إعداد محفوظ (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>الأمر نفسه من سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>الأمر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>ربط %1 بشيء ما</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>إنشاء منفذ آخر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>تم</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>في الانتظار</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>البرنامج متصل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>هناك برنامج يستخدم %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>إخفاء التفاصيل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>حلقة عودة داخل العملية</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>طرفية زائفة</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>برنامج تشغيل Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>تلقائي، تم تحديده كبرنامج تشغيل Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>تلقائي، وتم اختيار com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>جهاز فعلي</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>تلقائي</translation>
         </message>
@@ -4132,37 +4168,47 @@ Networks: %5</source>
             <translation>%1 و%2</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="141" />
+            <location filename="../src/dialogs/share_plan.cpp" line="156" />
             <source>Studio cannot create a port another program can open.</source>
             <translation>لا يستطيع Studio إنشاء منفذ يمكن لبرنامج آخر فتحه.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="147" />
+            <location filename="../src/dialogs/share_plan.cpp" line="162" />
             <source>Only %1 of the %2 programs can open their port.</source>
             <translation>يمكن لـ %1 فقط من %2 برامج فتح منافذها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="155" />
+            <location filename="../src/dialogs/share_plan.cpp" line="171" />
+            <source>The Studio driver gives one user at most 16 ports, and Studio already holds %1.</source>
+            <translation>يمنح برنامج تشغيل Studio المستخدم الواحد 16 منفذًا كحد أقصى، وStudio يحتفظ بالفعل بـ %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="174" />
+            <source>The Studio driver gives one user at most 16 ports.</source>
+            <translation>يمنح برنامج تشغيل Studio المستخدم الواحد 16 منفذًا كحد أقصى.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_plan.cpp" line="179" />
             <source>Each outside program needs its own driver pair, and Studio found 1 free pair.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، وقد وجد Studio زوجاً حراً واحداً.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="160" />
+            <location filename="../src/dialogs/share_plan.cpp" line="184" />
             <source>Each outside program needs its own driver pair, and Studio found no free pairs.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، ولم يجد Studio أي زوج حر.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="165" />
+            <location filename="../src/dialogs/share_plan.cpp" line="189" />
             <source>Each outside program needs its own driver pair, and Studio found %1 free pairs.</source>
             <translation>يحتاج كل برنامج خارجي إلى زوج برنامج تشغيل خاص به، وقد وجد Studio %1 من الأزواج الحرة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="180" />
+            <location filename="../src/dialogs/share_plan.cpp" line="204" />
             <source>The %1 port works only inside Studio.</source>
             <translation>المنفذ %1 يعمل داخل Studio فقط.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="186" />
+            <location filename="../src/dialogs/share_plan.cpp" line="210" />
             <source>The remaining %1 ports work only inside Studio.</source>
             <translation>المنافذ الـ %1 المتبقية تعمل داخل Studio فقط.</translation>
         </message>
@@ -4645,8 +4691,8 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="42" />
             <location filename="../src/support/setup_facts.cpp" line="96" />
-            <location filename="../src/support/setup_facts.cpp" line="423" />
-            <location filename="../src/support/setup_facts.cpp" line="434" />
+            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="472" />
             <source>Not checked yet</source>
             <translation>لم يُفحص بعد</translation>
         </message>
@@ -4666,170 +4712,194 @@ Networks: %5</source>
             <translation>لم يفحص Studio الأجهزة التسلسلية.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="130" />
+            <location filename="../src/support/setup_facts.cpp" line="136" />
             <source>Virtual port driver</source>
             <translation>برنامج تشغيل المنافذ الافتراضية</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="136" />
+            <location filename="../src/support/setup_facts.cpp" line="142" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>لم يفحص Studio وجود برنامج تشغيل المنافذ الافتراضية.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="144" />
+            <location filename="../src/support/setup_facts.cpp" line="148" />
+            <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
+            <translation>برنامج تشغيل Virtual Serial Studio مثبّت، لذا يمكن للبرامج الأخرى رؤية المنافذ التي ينشئها Studio كمنافذ COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="156" />
+            <source>Driver version %1.</source>
+            <translation>إصدار برنامج التشغيل: %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="162" />
+            <source>com0com is also installed, and Studio tries its own driver first.</source>
+            <translation>com0com مثبّت أيضًا، وStudio يجرّب برنامج تشغيله أولًا.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="173" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0com مثبّت مع %n زوج، لذا يمكن للبرامج الأخرى رؤية المنافذ الافتراضية كمنافذ COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="149" />
+            <location filename="../src/support/setup_facts.cpp" line="178" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0com مثبّت، لذا يمكن للبرامج الأخرى رؤية المنافذ الافتراضية كمنافذ COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="158" />
             <source>com0com was not found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
-            <translation>لم يُعثر على com0com. يحتاج Windows إلى برنامج تشغيل قبل أن تتمكن البرامج الأخرى من رؤية المنافذ الافتراضية كمنافذ COM.</translation>
+            <translation type="vanished">لم يُعثر على com0com. يحتاج Windows إلى برنامج تشغيل قبل أن تتمكن البرامج الأخرى من رؤية المنافذ الافتراضية كمنافذ COM.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="187" />
+            <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
+            <translation>لم يتم العثور على برنامج تشغيل Virtual Serial Studio ولا على com0com. يحتاج Windows إلى برنامج تشغيل حتى تراها البرامج الأخرى كمنافذ COM.</translation>
         </message>
         <message>
             <location filename="../src/support/permission_rows.cpp" line="78" />
-            <location filename="../src/support/setup_facts.cpp" line="163" />
-            <location filename="../src/support/setup_facts.cpp" line="262" />
-            <location filename="../src/support/setup_facts.cpp" line="302" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="340" />
             <source>Needs attention</source>
             <translation>يحتاج إلى انتباه</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="165" />
+            <location filename="../src/support/setup_facts.cpp" line="195" />
             <source>Install com0com</source>
             <translation>تثبيت com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="173" />
+            <location filename="../src/support/setup_facts.cpp" line="203" />
             <source>Administrator rights</source>
             <translation>صلاحيات المسؤول</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="179" />
+            <location filename="../src/support/setup_facts.cpp" line="209" />
             <source>Studio could not check for administrator rights.</source>
             <translation>تعذر على Studio التحقق من صلاحيات المسؤول.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="187" />
+            <location filename="../src/support/setup_facts.cpp" line="217" />
+            <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
+            <translation>ينشئ برنامج تشغيل Virtual Serial Studio منافذ دون صلاحيات المسؤول.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="225" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>يعمل Studio كمسؤول، لذا يمكنه إنشاء أزواج مرتبطة.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="195" />
+            <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>يتطلب إنشاء زوج مرتبط جديد صلاحيات المسؤول، مرة واحدة لكل زوج. وكل ما عدا ذلك يعمل بدونها.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="205" />
+            <location filename="../src/support/setup_facts.cpp" line="243" />
             <source>Needed later</source>
             <translation>مطلوب لاحقاً</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="206" />
+            <location filename="../src/support/setup_facts.cpp" line="244" />
             <source>Restart as administrator</source>
             <translation>إعادة التشغيل كمسؤول</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="218" />
+            <location filename="../src/support/setup_facts.cpp" line="256" />
             <source>Carry on without a driver</source>
             <translation>المتابعة بدون برنامج تشغيل</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="219" />
+            <location filename="../src/support/setup_facts.cpp" line="257" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>ما زال بإمكانك استخدام المنافذ داخل العملية والمراقبة ولوحة الإرسال لتجربة الأمور.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="223" />
+            <location filename="../src/support/setup_facts.cpp" line="261" />
             <source>Continue in test mode</source>
             <translation>المتابعة في وضع الاختبار</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="236" />
+            <location filename="../src/support/setup_facts.cpp" line="274" />
             <source>Pseudo terminals</source>
             <translation>الطرفيات الزائفة</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="242" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>لم يفحص Studio ما إذا كانت الطرفيات الزائفة متاحة.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="249" />
+            <location filename="../src/support/setup_facts.cpp" line="287" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>الطرفيات الزائفة متاحة، لذا يمكن للبرامج الأخرى فتح منافذ افتراضية جديدة.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="257" />
+            <location filename="../src/support/setup_facts.cpp" line="295" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>الطرفيات الزائفة غير متاحة. لن تتمكن البرامج الأخرى من فتح منافذ افتراضية جديدة.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="269" />
+            <location filename="../src/support/setup_facts.cpp" line="307" />
             <source>Serial port access</source>
             <translation>الوصول إلى المنفذ التسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="270" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Serial port group membership</source>
             <translation>العضوية في مجموعة المنافذ التسلسلية</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="277" />
+            <location filename="../src/support/setup_facts.cpp" line="315" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>ليس لدى Studio فحص للمجموعات على macOS. إذا تعذر فتح جهاز، فتحقق من أذوناته في /dev.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="281" />
+            <location filename="../src/support/setup_facts.cpp" line="319" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>لم يفحص Studio عضويتك في مجموعة dialout.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="290" />
+            <location filename="../src/support/setup_facts.cpp" line="328" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>أنت في مجموعة dialout، لذا يمكن للبرامج فتح الأجهزة التسلسلية.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="298" />
+            <location filename="../src/support/setup_facts.cpp" line="336" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>حسابك ليس في مجموعة dialout، لذا قد لا تتمكن البرامج من فتح الأجهزة التسلسلية.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="304" />
+            <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>كيف أضيف نفسي</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="428" />
+            <location filename="../src/support/setup_facts.cpp" line="466" />
             <source>1 thing to fix</source>
             <translation>أمر واحد يحتاج إلى إصلاح</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="429" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>%n things to fix</source>
             <translation>%n أمور تحتاج إلى إصلاح</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="441" />
+            <location filename="../src/support/setup_facts.cpp" line="479" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>إلى أن يُثبَّت برنامج تشغيل، تعمل المنافذ الجديدة داخل Virtual Serial Studio فقط. ولن تراها البرامج الأخرى.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="499" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>على Linux وmacOS يفحص هذا الفحص الطرفيات الزائفة وعضويتك في مجموعة المنافذ التسلسلية بدلاً من ذلك.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="526" />
+            <location filename="../src/support/setup_facts.cpp" line="564" />
             <source>The application path is not known.</source>
             <translation>مسار التطبيق غير معروف.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="547" />
+            <location filename="../src/support/setup_facts.cpp" line="585" />
             <source>You declined the Windows permission prompt, so Studio keeps running as before. Nothing was changed.</source>
             <translation>رفضت مطالبة الإذن من Windows، لذلك يواصل Studio العمل كما كان. لم يتغير شيء.</translation>
         </message>
@@ -4838,12 +4908,12 @@ Networks: %5</source>
             <translation type="vanished">لم يسمح Windows بإعادة التشغيل بصلاحيات مرتفعة. حاول مرة أخرى من قائمة ابدأ.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="551" />
+            <location filename="../src/support/setup_facts.cpp" line="589" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>تعذر على Windows إعادة تشغيل Virtual Serial Studio كمسؤول.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="559" />
+            <location filename="../src/support/setup_facts.cpp" line="597" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>إعادة التشغيل كمسؤول متاحة على Windows فقط.</translation>
         </message>
@@ -4933,7 +5003,7 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/support/setup_check_dialog.cpp" line="224" />
-            <location filename="../src/support/setup_facts.cpp" line="437" />
+            <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>كل شيء جاهز</translation>
         </message>
@@ -4994,12 +5064,13 @@ Networks: %5</source>
     <context>
         <name>ShareWizard</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="213" />
+            <location filename="../src/dialogs/share_plan.cpp" line="237" />
             <source>PTY</source>
             <translation>PTY</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="222" />
+            <location filename="../src/dialogs/share_plan.cpp" line="243" />
+            <location filename="../src/dialogs/share_plan.cpp" line="251" />
             <source>A free port</source>
             <translation>منفذ حر</translation>
         </message>
@@ -5027,13 +5098,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>مشاركة جهاز مع عدة برامج</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>يفتح Studio الجهاز مرة واحدة، ثم يمنح كل برنامج منفذه الخاص.</translation>
         </message>
@@ -5156,7 +5227,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>جهاز شبكي بدلاً من ذلك</translation>
         </message>
@@ -5299,213 +5370,219 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>افتراضي</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>هذا منفذ افتراضي وليس جهازاً.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>جهاز تسلسلي. يستخدمه Studio بالفعل.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>قيد الاستخدام</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>جهاز تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>متاح</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>استخدام جهاز بدلاً من ذلك</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>مشاركة %1 مع عدة برامج</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>يحصل كل برنامج على منفذه الخاص. ينسخ Studio بيانات الجهاز إلى جميعها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>افتح أحد هذه المنافذ في كل برنامج.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>الجهاز</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>اسم البرنامج %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>نعم</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>لا، لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>تحذير: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>سيطلب Windows إذن المسؤول.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>إبقاء %1 لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>إبقاء المنافذ الـ %1 المتبقية لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>كل ما يستقبله %1 يُنسخ إلى منفذ واحد. وما يكتبه البرنامج يعود إلى %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>كل ما يستقبله %1 يُنسخ إلى المنافذ الـ %2 كلها. وما يكتبه أي برنامج يعود إلى %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>تعذر إنشاء زوج آخر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>لم ينشئ Windows زوج برنامج التشغيل. اسمح بإذن المسؤول ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>المشاركة غير متاحة في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>تعذرت مشاركة %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>أُزيلت المشاركة السابقة. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>لم يتغير Studio. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 مشارك مع برنامج واحد</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 مشارك مع %2 من البرامج</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>ليس لبرامج أخرى</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>نسخ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>نسخ %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>كل ما يستقبله %1 يُنسخ الآن إلى منفذ واحد.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>كل ما يستقبله %1 يُنسخ الآن إلى المنافذ الـ %2 كلها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>تتحول تسمية «في الانتظار» إلى «البرنامج متصل» عندما يفتح كل برنامج منفذه.</translation>
         </message>
@@ -7951,162 +8028,162 @@ Networks: %5</source>
     <context>
         <name>ordinal</name>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="96" />
+            <location filename="../src/dialogs/share_plan.cpp" line="111" />
             <source>first</source>
             <translation>الأول</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="97" />
+            <location filename="../src/dialogs/share_plan.cpp" line="112" />
             <source>second</source>
             <translation>الثاني</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="98" />
+            <location filename="../src/dialogs/share_plan.cpp" line="113" />
             <source>third</source>
             <translation>الثالث</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="99" />
+            <location filename="../src/dialogs/share_plan.cpp" line="114" />
             <source>fourth</source>
             <translation>الرابع</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="100" />
+            <location filename="../src/dialogs/share_plan.cpp" line="115" />
             <source>fifth</source>
             <translation>الخامس</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="101" />
+            <location filename="../src/dialogs/share_plan.cpp" line="116" />
             <source>sixth</source>
             <translation>السادس</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="102" />
+            <location filename="../src/dialogs/share_plan.cpp" line="117" />
             <source>seventh</source>
             <translation>السابع</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="103" />
+            <location filename="../src/dialogs/share_plan.cpp" line="118" />
             <source>eighth</source>
             <translation>الثامن</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="104" />
+            <location filename="../src/dialogs/share_plan.cpp" line="119" />
             <source>ninth</source>
             <translation>التاسع</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="105" />
+            <location filename="../src/dialogs/share_plan.cpp" line="120" />
             <source>tenth</source>
             <translation>العاشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="106" />
+            <location filename="../src/dialogs/share_plan.cpp" line="121" />
             <source>eleventh</source>
             <translation>الحادي عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="107" />
+            <location filename="../src/dialogs/share_plan.cpp" line="122" />
             <source>twelfth</source>
             <translation>الثاني عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="108" />
+            <location filename="../src/dialogs/share_plan.cpp" line="123" />
             <source>thirteenth</source>
             <translation>الثالث عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="109" />
+            <location filename="../src/dialogs/share_plan.cpp" line="124" />
             <source>fourteenth</source>
             <translation>الرابع عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="110" />
+            <location filename="../src/dialogs/share_plan.cpp" line="125" />
             <source>fifteenth</source>
             <translation>الخامس عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="111" />
+            <location filename="../src/dialogs/share_plan.cpp" line="126" />
             <source>sixteenth</source>
             <translation>السادس عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="112" />
+            <location filename="../src/dialogs/share_plan.cpp" line="127" />
             <source>seventeenth</source>
             <translation>السابع عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="113" />
+            <location filename="../src/dialogs/share_plan.cpp" line="128" />
             <source>eighteenth</source>
             <translation>الثامن عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="114" />
+            <location filename="../src/dialogs/share_plan.cpp" line="129" />
             <source>nineteenth</source>
             <translation>التاسع عشر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="115" />
+            <location filename="../src/dialogs/share_plan.cpp" line="130" />
             <source>twentieth</source>
             <translation>العشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="116" />
+            <location filename="../src/dialogs/share_plan.cpp" line="131" />
             <source>twenty-first</source>
             <translation>الحادي والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="117" />
+            <location filename="../src/dialogs/share_plan.cpp" line="132" />
             <source>twenty-second</source>
             <translation>الثاني والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="118" />
+            <location filename="../src/dialogs/share_plan.cpp" line="133" />
             <source>twenty-third</source>
             <translation>الثالث والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="119" />
+            <location filename="../src/dialogs/share_plan.cpp" line="134" />
             <source>twenty-fourth</source>
             <translation>الرابع والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="120" />
+            <location filename="../src/dialogs/share_plan.cpp" line="135" />
             <source>twenty-fifth</source>
             <translation>الخامس والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="121" />
+            <location filename="../src/dialogs/share_plan.cpp" line="136" />
             <source>twenty-sixth</source>
             <translation>السادس والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="122" />
+            <location filename="../src/dialogs/share_plan.cpp" line="137" />
             <source>twenty-seventh</source>
             <translation>السابع والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="123" />
+            <location filename="../src/dialogs/share_plan.cpp" line="138" />
             <source>twenty-eighth</source>
             <translation>الثامن والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="124" />
+            <location filename="../src/dialogs/share_plan.cpp" line="139" />
             <source>twenty-ninth</source>
             <translation>التاسع والعشرون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="125" />
+            <location filename="../src/dialogs/share_plan.cpp" line="140" />
             <source>thirtieth</source>
             <translation>الثلاثون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="126" />
+            <location filename="../src/dialogs/share_plan.cpp" line="141" />
             <source>thirty-first</source>
             <translation>الحادي والثلاثون</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_plan.cpp" line="127" />
+            <location filename="../src/dialogs/share_plan.cpp" line="142" />
             <source>thirty-second</source>
             <translation>الثاني والثلاثون</translation>
         </message>
@@ -8633,8 +8710,12 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="294" />
+            <source>Best available uses the Studio driver or com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
+            <translation>«الأفضل المتاح» يستخدم برنامج تشغيل Studio أو com0com في Windows، ومحطة طرفية زائفة في Linux وmacOS. حتى 32 في وقت واحد. تُسمّى عدة منافذ port-1 وport-2 وهكذا.</translation>
+        </message>
+        <message>
             <source>Best available uses com0com on Windows, and a pseudo terminal on Linux and macOS. Up to 32 at once. Several ports are named port-1, port-2 and so on.</source>
-            <translation>يستخدم «الأفضل المتاح» com0com على Windows وطرفية زائفة على Linux وmacOS. حتى 32 منفذاً دفعة واحدة. تُسمّى المنافذ المتعددة port-1 وport-2 وهكذا.</translation>
+            <translation type="vanished">يستخدم «الأفضل المتاح» com0com على Windows وطرفية زائفة على Linux وmacOS. حتى 32 منفذاً دفعة واحدة. تُسمّى المنافذ المتعددة port-1 وport-2 وهكذا.</translation>
         </message>
         <message>
             <location filename="../src/flows/add_port_dialog.cpp" line="348" />
@@ -10010,7 +10091,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="179" />
             <location filename="../src/shell/launcher.cpp" line="303" />
-            <location filename="../src/shell/launcher.cpp" line="322" />
+            <location filename="../src/shell/launcher.cpp" line="325" />
             <source>View setup check</source>
             <translation>عرض فحص الإعداد</translation>
         </message>
@@ -10117,7 +10198,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/shell/launcher.cpp" line="292" />
             <location filename="../src/shell/launcher.cpp" line="312" />
-            <location filename="../src/shell/launcher.cpp" line="331" />
+            <location filename="../src/shell/launcher.cpp" line="334" />
             <source>Open setup check</source>
             <translation>فتح فحص الإعداد</translation>
         </message>
@@ -10132,17 +10213,22 @@ Networks: %5</source>
             <translation>الإعداد يحتاج إلى انتباه. قد لا تكون المنافذ الجديدة قابلة للاستخدام من برامج أخرى.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="319" />
+            <location filename="../src/shell/launcher.cpp" line="320" />
+            <source>Ready. This PC can create ports that other programs can open (Virtual Serial Studio driver detected).</source>
+            <translation>جاهز. يمكن لهذا الكمبيوتر إنشاء منافذ يمكن لبرامج أخرى فتحها (تم اكتشاف برنامج تشغيل Virtual Serial Studio).</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/launcher.cpp" line="322" />
             <source>Ready. This PC can create ports that other programs can open (com0com detected).</source>
             <translation>جاهز. يستطيع هذا الحاسوب إنشاء منافذ يمكن لبرامج أخرى فتحها (تم اكتشاف com0com).</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="328" />
+            <location filename="../src/shell/launcher.cpp" line="331" />
             <source>Setup needs attention. Other programs cannot see new ports until a driver is installed.</source>
             <translation>الإعداد يحتاج إلى انتباه. لن ترى البرامج الأخرى المنافذ الجديدة حتى يُثبَّت برنامج تشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/shell/launcher.cpp" line="358" />
+            <location filename="../src/shell/launcher.cpp" line="361" />
             <source>Saved setup</source>
             <translation>إعداد محفوظ</translation>
         </message>
@@ -10695,116 +10781,121 @@ Networks: %5</source>
             <translation>يعرض ما يفعله جدار حماية Windows بهذا المنفذ. لا يتغير شيء حتى توافق.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>لا توجد كلمة مرور في RFC 2217. يستطيع كل من يصل إلى هذا المنفذ استخدام الجهاز. اختر هذا الحاسوب فقط (127.0.0.1)، أو أضف في الوضع المتقدم ?allow=192.168.1.0/24 إلى العنوان لتحديد من يحق له الاتصال.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
             <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="706" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>العنوان</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="300" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>تحرير العنوان</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="323" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>يُعتمد العنوان بدلاً من الحقول أعلاه أثناء تحريره.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="333" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>الأمر نفسه من سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="335" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="707" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>الأمر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="348" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>اختبر من هذا الحاسوب أولاً</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="350" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>إلغاء</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="353" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>بدء الجسر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="506" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>لا يتوفر جهاز تسلسلي. وصّل جهازاً ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="516" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1، %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="517" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>جهاز فعلي</translation>
         </message>
         <message>
             <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="572" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="586" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="630" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>الجهاز</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="640" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>يمكن للحواسيب الأخرى الاتصال بهذا الحاسوب على المنفذ %1 والتخاطب مع %2. تتدفق البيانات في الاتجاهين، وتعرض المراقبة الاتجاهين كليهما.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="648" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>يتصل Studio بـ %1 على المنفذ %2 ويتخاطب مع %3. تتدفق البيانات في الاتجاهين، وتعرض المراقبة الاتجاهين كليهما.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="650" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>الخادم</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="741" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>اختر جهازاً لمشاركته.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="785" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>الشبكات غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="786" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="812" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="821" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>تعذر بدء الجسر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="813" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>المنفذ %1 مستخدم بالفعل. اختر منفذاً آخر أو أوقف البرنامج الذي يستخدمه.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="822" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>قد يكون العنوان مستخدماً، أو رفض الحاسوب الآخر الاتصال. تحقق من العنوان وأعد المحاولة.</translation>
         </message>
@@ -10889,11 +10980,13 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="147" />
+            <location filename="../src/flows/pair_panel.cpp" line="398" />
             <source>Names are suggested from free COM numbers. This build chooses the free ports shown above. On Linux and macOS the ports are paths such as /dev/pts/3 and are chosen for you.</source>
             <translation>تُقترح الأسماء من أرقام COM الحرة. يختار هذا الإصدار المنافذ الحرة المعروضة أعلاه. على Linux وmacOS تكون المنافذ مسارات مثل /dev/pts/3 ويجري اختيارها لك.</translation>
         </message>
         <message>
             <location filename="../src/flows/pair_panel.cpp" line="169" />
+            <location filename="../src/flows/pair_panel.cpp" line="389" />
             <source>Windows uses free com0com pairs for this pair, so it does not ask for administrator permission.</source>
             <translation>يستخدم Windows أزواج com0com الحرة لهذا الزوج، لذلك لا يطلب إذن المسؤول.</translation>
         </message>
@@ -10968,121 +11061,131 @@ Networks: %5</source>
             <translation>نوع المنفذ</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="388" />
+            <location filename="../src/flows/pair_panel.cpp" line="387" />
+            <source>The Studio driver makes the ports for this pair, so Windows does not ask for administrator permission.</source>
+            <translation>ينشئ برنامج تشغيل Studio منافذ هذا الزوج، لذا لا يطلب Windows إذن المسؤول.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <source>The Studio driver makes both ports when you create the pair. Windows chooses their COM numbers.</source>
+            <translation>ينشئ برنامج تشغيل Studio المنفذين عند إنشاء الزوج. يختار Windows رقمي COM لهما.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/pair_panel.cpp" line="412" />
             <source>No free COM port for the first program</source>
             <translation>لا يوجد منفذ COM حر للبرنامج الأول</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="396" />
+            <location filename="../src/flows/pair_panel.cpp" line="420" />
             <source>No free COM port for the second program</source>
             <translation>لا يوجد منفذ COM حر للبرنامج الثاني</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="402" />
-            <location filename="../src/flows/pair_panel.cpp" line="404" />
+            <location filename="../src/flows/pair_panel.cpp" line="426" />
+            <location filename="../src/flows/pair_panel.cpp" line="428" />
             <source>Chosen when you create the pair</source>
             <translation>يُختار عند إنشاء الزوج</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="418" />
+            <location filename="../src/flows/pair_panel.cpp" line="442" />
             <source>Linked pairs are not available in this build.</source>
             <translation>الأزواج المرتبطة غير متاحة في هذا الإصدار.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="428" />
+            <location filename="../src/flows/pair_panel.cpp" line="452" />
             <source>Linked pairs need a driver. Open the setup check.</source>
             <translation>تحتاج الأزواج المرتبطة إلى برنامج تشغيل. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="435" />
+            <location filename="../src/flows/pair_panel.cpp" line="459" />
             <source>There are not enough free driver pairs. Open the setup check.</source>
             <translation>لا يوجد عدد كافٍ من أزواج برنامج التشغيل الحرة. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="455" />
+            <location filename="../src/flows/pair_panel.cpp" line="479" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله &lt;b&gt;%1&lt;/b&gt; يصل إلى &lt;b&gt;%2&lt;/b&gt;، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="459" />
+            <location filename="../src/flows/pair_panel.cpp" line="483" />
             <source>Anything %1 sends arrives at %2, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله %1 يصل إلى %2، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="467" />
+            <location filename="../src/flows/pair_panel.cpp" line="491" />
             <source>Anything &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Modem lines are not crossed.</source>
             <translation>ما يرسله &lt;b&gt;%1&lt;/b&gt; يصل إلى &lt;b&gt;%2&lt;/b&gt;، والعكس بالعكس. خطوط المودم غير متقاطعة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="470" />
+            <location filename="../src/flows/pair_panel.cpp" line="494" />
             <source>Anything %1 sends arrives at %2, and the other way round. Modem lines are not crossed.</source>
             <translation>ما يرسله %1 يصل إلى %2، والعكس بالعكس. خطوط المودم غير متقاطعة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="478" />
+            <location filename="../src/flows/pair_panel.cpp" line="502" />
             <source>Anything the first port sends arrives at the second, and the other way round. DTR is wired to DSR and RTS to CTS, as on a standard null-modem cable.</source>
             <translation>ما يرسله المنفذ الأول يصل إلى الثاني، والعكس بالعكس. يوصَّل DTR بـ DSR وRTS بـ CTS، كما في كبل null-modem القياسي.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="490" />
+            <location filename="../src/flows/pair_panel.cpp" line="514" />
             <source>Enter a name for the pair.</source>
             <translation>أدخل اسماً للزوج.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="511" />
+            <location filename="../src/flows/pair_panel.cpp" line="535" />
             <source>another free COM port</source>
             <translation>منفذ COM حر آخر</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="518" />
-            <location filename="../src/flows/pair_panel.cpp" line="530" />
-            <location filename="../src/flows/pair_panel.cpp" line="538" />
+            <location filename="../src/flows/pair_panel.cpp" line="542" />
+            <location filename="../src/flows/pair_panel.cpp" line="554" />
+            <location filename="../src/flows/pair_panel.cpp" line="562" />
             <source>%1 is already used. Try %2.</source>
             <translation>%1 مستخدم بالفعل. جرّب %2.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="556" />
-            <location filename="../src/flows/pair_panel.cpp" line="576" />
-            <location filename="../src/flows/pair_panel.cpp" line="593" />
-            <location filename="../src/flows/pair_panel.cpp" line="612" />
-            <location filename="../src/flows/pair_panel.cpp" line="630" />
+            <location filename="../src/flows/pair_panel.cpp" line="580" />
+            <location filename="../src/flows/pair_panel.cpp" line="600" />
+            <location filename="../src/flows/pair_panel.cpp" line="617" />
+            <location filename="../src/flows/pair_panel.cpp" line="636" />
+            <location filename="../src/flows/pair_panel.cpp" line="654" />
             <source>Could not create the pair</source>
             <translation>تعذر إنشاء الزوج</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="559" />
+            <location filename="../src/flows/pair_panel.cpp" line="583" />
             <source>Windows needs a serial driver before Studio can create a pair another program can open. Nothing was changed. Open the setup check.</source>
             <translation>يحتاج Windows إلى برنامج تشغيل تسلسلي قبل أن يتمكن Studio من إنشاء زوج يمكن لبرنامج آخر فتحه. لم يتغير شيء. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="563" />
+            <location filename="../src/flows/pair_panel.cpp" line="587" />
             <source>This build cannot create a linked pair. Nothing was changed.</source>
             <translation>لا يستطيع هذا الإصدار إنشاء زوج مرتبط. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="578" />
+            <location filename="../src/flows/pair_panel.cpp" line="602" />
             <source>Studio could not create the first port. Nothing was changed.</source>
             <translation>تعذر على Studio إنشاء المنفذ الأول. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="580" />
-            <location filename="../src/flows/pair_panel.cpp" line="597" />
-            <location filename="../src/flows/pair_panel.cpp" line="634" />
+            <location filename="../src/flows/pair_panel.cpp" line="604" />
+            <location filename="../src/flows/pair_panel.cpp" line="621" />
+            <location filename="../src/flows/pair_panel.cpp" line="658" />
             <source> Check the setup and try again.</source>
             <translation> تحقق من الإعداد وأعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="595" />
+            <location filename="../src/flows/pair_panel.cpp" line="619" />
             <source>Studio could not create the second port. Nothing was changed.</source>
             <translation>تعذر على Studio إنشاء المنفذ الثاني. لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="613" />
+            <location filename="../src/flows/pair_panel.cpp" line="637" />
             <source>This PC can no longer give the pair two ports other programs can open. Nothing was changed. Open the setup check.</source>
             <translation>لم يعد بإمكان هذا الحاسوب منح الزوج منفذين يمكن لبرامج أخرى فتحهما. لم يتغير شيء. افتح فحص الإعداد.</translation>
         </message>
         <message>
-            <location filename="../src/flows/pair_panel.cpp" line="632" />
+            <location filename="../src/flows/pair_panel.cpp" line="656" />
             <source>Studio could not link the two ports. Nothing was changed.</source>
             <translation>تعذر على Studio ربط المنفذين. لم يتغير شيء.</translation>
         </message>
@@ -11266,145 +11369,155 @@ Networks: %5</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="195" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <source>Other programs cannot open this port. It exists only inside Studio.</source>
+            <translation>لا تستطيع البرامج الأخرى فتح هذا المنفذ. فهو موجود داخل Studio فقط.</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>لا يمكن لبرامج أخرى فتح هذا المنفذ. ثبّت برنامج تشغيل لإنشاء منافذ يمكنها فتحها.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>فتح فحص الإعداد</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="211" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>في برنامجك، اختر &lt;b&gt;%1&lt;/b&gt; كمنفذ تسلسلي. تُحدَّد إعدادات مثل معدل الباود من ذلك البرنامج. يبقى المنفذ متاحاً ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>في برنامجك، اختر %1 كمنفذ تسلسلي. تُحدَّد إعدادات مثل معدل الباود من ذلك البرنامج. يبقى المنفذ متاحاً ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="227" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>يوجد هذا المسار ما دام Virtual Serial Studio قيد التشغيل.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="241" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>مفتوح</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="374" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>إظهار التفاصيل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="260" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>الاسم</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="262" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>النوع</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="265" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>المسار</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>إدخال في إعداد محفوظ (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="276" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>الأمر نفسه من سطر الأوامر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>الأمر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="308" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>ربط %1 بشيء ما</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="316" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>إنشاء منفذ آخر</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>تم</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="345" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>في الانتظار</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="347" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>لم يفتح أي برنامج %1 بعد. تتحدث هذه اللوحة عند فتحه.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>البرنامج متصل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="357" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>هناك برنامج يستخدم %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>إخفاء التفاصيل</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="386" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>حلقة عودة داخل العملية</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="384" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>طرفية زائفة</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>برنامج تشغيل Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <source>Auto, resolved to the Studio driver</source>
+            <translation>تلقائي، تم تحديده كبرنامج تشغيل Studio</translation>
+        </message>
+        <message>
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>تلقائي، وتم اختيار com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>جهاز فعلي</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>تلقائي</translation>
         </message>
@@ -11600,13 +11713,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="187" />
             <location filename="../src/dialogs/share_wizard.cpp" line="198" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="912" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="920" />
             <source>Share a device with several programs</source>
             <translation>مشاركة جهاز مع عدة برامج</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="200" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="914" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="922" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>يفتح Studio الجهاز مرة واحدة، ثم يمنح كل برنامج منفذه الخاص.</translation>
         </message>
@@ -11729,7 +11842,7 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="404" />
             <location filename="../src/dialogs/share_wizard.cpp" line="406" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="844" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="852" />
             <source>A network device instead</source>
             <translation>جهاز شبكي بدلاً من ذلك</translation>
         </message>
@@ -11872,213 +11985,219 @@ Networks: %5</source>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="742" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
             <source>Virtual</source>
             <translation>افتراضي</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="748" />
+            <source>This is a virtual port, not a device.</source>
+            <translation>هذا منفذ افتراضي وليس جهازاً.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
             <source>Serial device. Studio is already using it.</source>
             <translation>جهاز تسلسلي. يستخدمه Studio بالفعل.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="749" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
             <source>In use</source>
             <translation>قيد الاستخدام</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="755" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="762" />
             <source>Serial device</source>
             <translation>جهاز تسلسلي</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="756" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="763" />
             <source>Available</source>
             <translation>متاح</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="843" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="851" />
             <source>Use a device instead</source>
             <translation>استخدام جهاز بدلاً من ذلك</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="921" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="929" />
             <source>Share %1 with several programs</source>
             <translation>مشاركة %1 مع عدة برامج</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="923" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="931" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>يحصل كل برنامج على منفذه الخاص. ينسخ Studio بيانات الجهاز إلى جميعها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="930" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="938" />
             <source>Open one of these ports in each program.</source>
             <translation>افتح أحد هذه المنافذ في كل برنامج.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1057" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1065" />
             <source>the device</source>
             <translation>الجهاز</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1072" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1080" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1074" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1082" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1076" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1084" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1078" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1086" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1114" />
             <location filename="../src/dialogs/share_wizard.cpp" line="1122" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>Name of program %1</source>
             <translation>اسم البرنامج %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>Yes</source>
             <translation>نعم</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1136" />
             <source>No, Studio only</source>
             <translation>لا، لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1160" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1186" />
             <source>Warning: %1</source>
             <translation>تحذير: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
             <source>Windows will ask for administrator permission.</source>
             <translation>سيطلب Windows إذن المسؤول.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1169" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1197" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1202" />
             <source>Keep the %1 as Studio only</source>
             <translation>إبقاء %1 لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1204" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>إبقاء المنافذ الـ %1 المتبقية لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1184" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1188" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1212" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1216" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>كل ما يستقبله %1 يُنسخ إلى منفذ واحد. وما يكتبه البرنامج يعود إلى %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1196" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1201" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1224" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1229" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>كل ما يستقبله %1 يُنسخ إلى المنافذ الـ %2 كلها. وما يكتبه أي برنامج يعود إلى %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1247" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Could not create another pair</source>
             <translation>تعذر إنشاء زوج آخر</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1276" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>لم ينشئ Windows زوج برنامج التشغيل. اسمح بإذن المسؤول ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1297" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1325" />
             <source>Sharing is not available in this build</source>
             <translation>المشاركة غير متاحة في هذا الإصدار</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1298" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1326" />
             <source>Nothing was changed.</source>
             <translation>لم يتغير شيء.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1315" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1343" />
             <source>Could not share %1</source>
             <translation>تعذرت مشاركة %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1316" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1344" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>أُزيلت المشاركة السابقة. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1318" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1346" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>لم يتغير Studio. تحقق من الجهاز ثم أعد المحاولة.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1330" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1358" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 مشارك مع برنامج واحد</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1331" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1359" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 مشارك مع %2 من البرامج</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1533" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1561" />
             <source>Studio only</source>
             <translation>لـ Studio فقط</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1436" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1464" />
             <source>Not for other programs</source>
             <translation>ليس لبرامج أخرى</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1445" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1473" />
             <source>Copy</source>
             <translation>نسخ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1448" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1476" />
             <source>Copy %1</source>
             <translation>نسخ %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1455" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1483" />
             <source>%1 copied.</source>
             <translation>تم نسخ %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1471" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1499" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1531" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>كل ما يستقبله %1 يُنسخ الآن إلى منفذ واحد.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1475" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1508" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1536" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>كل ما يستقبله %1 يُنسخ الآن إلى المنافذ الـ %2 كلها.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1495" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1515" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1543" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>تتحول تسمية «في الانتظار» إلى «البرنامج متصل» عندما يفتح كل برنامج منفذه.</translation>
         </message>

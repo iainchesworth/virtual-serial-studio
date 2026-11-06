@@ -13,6 +13,7 @@
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
 #include <vss/ports/permissions.hpp>
+#include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QMetaObject>
@@ -356,7 +357,12 @@ std::vector<device_view> EngineStudioBackend::devices() const
         view.path = QString::fromStdString(device.path);
         view.description = QString::fromStdString(device.description);
         view.hardware_id = QString::fromStdString(device.hardware_id);
-        view.virtual_device = device.virtual_device;
+        // A port made by the Studio driver is a virtual port, not a device.
+        // Its hardware id starts with VSSCOM\ (VSSCOM\PORT, VSSCOM\VSSCOM0).
+        view.virtual_device =
+            device.virtual_device ||
+            view.hardware_id.startsWith(QStringLiteral("VSSCOM\\"),
+                                        Qt::CaseInsensitive);
         view.com0com = device.com0com;
         view.com0com_pair = device.com0com_pair;
         view.com0com_side = QString::fromStdString(device.com0com_side);
@@ -392,6 +398,9 @@ std::vector<traffic_view> EngineStudioBackend::traffic(int limit) const
 setup_facts EngineStudioBackend::facts() const
 {
     setup_facts facts;
+    facts.driver_found = vss::driver_available();
+    if (facts.driver_found)
+        facts.driver_version = QString::fromStdString(vss::driver_version());
     const auto installation = studio_.detect_com0com();
     facts.com0com_found = installation.found;
     facts.com0com_pairs = static_cast<int>(installation.pairs.size());

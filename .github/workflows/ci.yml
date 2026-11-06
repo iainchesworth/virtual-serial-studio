@@ -1,10 +1,21 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 name: CI
 
-# The pull request gate. Pull requests (drafts included) run the static checks. Ready pull
-# requests and merge-queue entries also build. Required status checks are the two jobs
-# defined here by name, "CI Status" and "Scan dependency diff": a check from a called
-# workflow carries the caller's job name as a prefix, so it cannot be required by its plain name.
+# The gate, in tiers (standard 11.2 and 11.5; docs/migration.md has the reasons). tools/ci/plan_legs.py
+# decides which jobs a run needs, and the same answer goes to the "CI Status" aggregator.
+#
+#   draft pull request  the static jobs only
+#   ready pull request  Linux GCC build and tests, ASan/UBSan, fuzz replay; TSan when threading code changed
+#   merge-queue entry   the same on the merged tree, plus Windows MSVC, TSan, the Qt GUI build, the
+#                       performance floors (library code changed), macOS (a change that can affect it)
+#                       and the Windows driver (the driver changed)
+#   push to develop     Linux Clang, macOS, coverage, Tracy profiling, the Windows driver; one run at a
+#                       time with at most one waiting
+#   workflow_dispatch   every job (gh workflow run ci.yml --ref <branch>)
+#
+# Required status checks are the two jobs defined here by name, "CI Status" and "Scan dependency
+# diff": a check from a called workflow carries the caller's job name as a prefix, so it cannot be
+# required by its plain name.
 
 on:
   pull_request:
@@ -17,8 +28,12 @@ on:
 
 permissions: {}
 
+# A new push to a pull request cancels the run it supersedes. Every push to develop shares one
+# group and never cancels the run in progress: GitHub keeps one run going and one waiting, and a
+# newer push replaces the waiting one, so a burst of merges is verified as one batch. Merge-queue
+# entries each have their own ref and so build in parallel.
 concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
+  group: ci-${{ github.event_name == 'push' && 'post-merge' || github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -36,9 +51,18 @@ jobs:
     permissions:
       contents: read
     outputs:
-      build: ${{ steps.plan.outputs.build }}
-      docs_only: ${{ steps.plan.outputs.docs_only }}
-      driver: ${{ steps.driver.outputs.driver }}
+      tier: ${{ steps.legs.outputs.tier }}
+      build_matrix: ${{ steps.legs.outputs.build_matrix }}
+      run_build: ${{ steps.legs.outputs.run_build }}
+      run_macos: ${{ steps.legs.outputs.run_macos }}
+      run_gui: ${{ steps.legs.outputs.run_gui }}
+      run_coverage: ${{ steps.legs.outputs.run_coverage }}
+      run_performance: ${{ steps.legs.outputs.run_performance }}
+      run_profiling: ${{ steps.legs.outputs.run_profiling }}
+      run_asan_ubsan: ${{ steps.legs.outputs.run_asan_ubsan }}
+      run_fuzz_regress: ${{ steps.legs.outputs.run_fuzz_regress }}
+      run_tsan: ${{ steps.legs.outputs.run_tsan }}
+      run_driver: ${{ steps.legs.outputs.run_driver }}
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -50,33 +74,30 @@ jobs:
       - name: Check the vendored CMake modules
         run: python3 tools/sync_cmake.py --infra .icl-infra --check
       - name: Decide scope
-        id: plan
         env:
           EVENT: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
         run: |
           set -euo pipefail
           if [ "$EVENT" = "pull_request" ] || [ "$EVENT" = "merge_group" ]; then
-            git diff --name-only "$BASE_SHA"...HEAD | python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json >> "$GITHUB_OUTPUT"
+            git diff --name-only "$BASE_SHA"...HEAD > "$RUNNER_TEMP/changed.txt"
+            python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json < "$RUNNER_TEMP/changed.txt" > "$RUNNER_TEMP/plan.txt"
           else
-            python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json --force-all >> "$GITHUB_OUTPUT"
+            : > "$RUNNER_TEMP/changed.txt"
+            python3 .icl-infra/scripts/plan_gate.py --config .github/ci/plan.json --force-all > "$RUNNER_TEMP/plan.txt"
           fi
-      # The driver build runs on a Windows runner for each architecture, so it
-      # runs only when the driver or the gate itself changed.
-      - name: Decide driver scope
-        id: driver
+      # Which jobs this event needs: the tiers in the header. The driver build runs on a Windows
+      # runner for each architecture, so it runs only when the driver or the gate itself changed.
+      - name: Choose the legs
+        id: legs
         env:
           EVENT: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+          DRAFT: ${{ github.event.pull_request.draft }}
         run: |
           set -euo pipefail
-          driver=true
-          if [ "$EVENT" = "pull_request" ] || [ "$EVENT" = "merge_group" ]; then
-            if ! git diff --name-only "$BASE_SHA"...HEAD | grep -qE '^(drivers/windows/|\.github/workflows/ci\.yml|\.github/ci/|\.github/toolchain-versions\.json)'; then
-              driver=false
-            fi
-          fi
-          echo "driver=$driver" >> "$GITHUB_OUTPUT"
+          python3 tools/ci/plan_legs.py --event "$EVENT" --draft "${DRAFT:-false}" \
+            --plan "$RUNNER_TEMP/plan.txt" --changed "$RUNNER_TEMP/changed.txt" \
+            --config .github/ci/plan.json --summary "$GITHUB_STEP_SUMMARY" >> "$GITHUB_OUTPUT"
 
   changelog:
     runs-on: ubuntu-latest
@@ -92,6 +113,7 @@ jobs:
         run: |
           python3 tools/changelog.py --check
           python3 -m unittest discover -s tools -p "test_*.py" -v
+          python3 -m unittest discover -s tools/ci -p "test_*.py" -v
 
   design:
     name: Design tokens
@@ -114,24 +136,11 @@ jobs:
   build:
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-26.04
-            name: linux-gcc
-            compiler: gcc
-            preset: linux-release
-          - os: ubuntu-26.04
-            name: linux-clang
-            compiler: clang
-            preset: linux-release
-          - os: windows-2025
-            name: windows-msvc
-            compiler: msvc
-            preset: windows-msvc-release
+      matrix: ${{ fromJSON(needs.plan.outputs.build_matrix) }}
     runs-on: ${{ matrix.os }}
     name: Build and test (${{ matrix.name }})
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_build == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -153,7 +162,7 @@ jobs:
     runs-on: macos-26
     name: Build and test (macos-appleclang)
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_macos == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -173,7 +182,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: Qt GUI (offscreen self-test)
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_gui == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -207,7 +216,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: Coverage (90% statements, 80% branches)
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_coverage == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -271,7 +280,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: Performance floors
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_performance == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -312,7 +321,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: End-to-end profiling (Tracy)
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_profiling == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -423,7 +432,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: AddressSanitizer and UBSan
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_asan_ubsan == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -452,7 +461,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: Fuzz regression replay
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_fuzz_regress == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -481,12 +490,13 @@ jobs:
       - name: Test the runner
         run: python3 -m unittest discover -s tools -p "test_fuzz.py" -v
 
-  # Threading findings come from timing, so this leg runs for merge-queue entries and pushes, not for every pull request.
+  # Threading findings come from timing: this leg runs on a pull request that changed threading code
+  # and on every merge-queue entry.
   tsan:
     runs-on: ubuntu-26.04
     name: ThreadSanitizer
     needs: plan
-    if: needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) && github.event_name != 'pull_request'
+    if: needs.plan.outputs.run_tsan == 'true'
     timeout-minutes: 60
     permissions:
       contents: read
@@ -511,7 +521,7 @@ jobs:
   driver:
     name: Windows driver (${{ matrix.platform }})
     needs: plan
-    if: needs.plan.outputs.driver == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
+    if: needs.plan.outputs.run_driver == 'true'
     runs-on: windows-2025
     timeout-minutes: 40
     permissions:
@@ -679,15 +689,15 @@ jobs:
           needs: ${{ toJSON(needs) }}
           expected: >-
             {
-              "build": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "macos": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "gui": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "coverage": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "performance": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "profiling": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "asan-ubsan": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "fuzz-regress": ${{ needs.plan.outputs.build == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
-              "tsan": ${{ needs.plan.outputs.build == 'true' && github.event_name != 'pull_request' }},
-              "driver": ${{ needs.plan.outputs.driver == 'true' && (github.event_name != 'pull_request' || !github.event.pull_request.draft) }},
+              "build": ${{ needs.plan.outputs.run_build == 'true' }},
+              "macos": ${{ needs.plan.outputs.run_macos == 'true' }},
+              "gui": ${{ needs.plan.outputs.run_gui == 'true' }},
+              "coverage": ${{ needs.plan.outputs.run_coverage == 'true' }},
+              "performance": ${{ needs.plan.outputs.run_performance == 'true' }},
+              "profiling": ${{ needs.plan.outputs.run_profiling == 'true' }},
+              "asan-ubsan": ${{ needs.plan.outputs.run_asan_ubsan == 'true' }},
+              "fuzz-regress": ${{ needs.plan.outputs.run_fuzz_regress == 'true' }},
+              "tsan": ${{ needs.plan.outputs.run_tsan == 'true' }},
+              "driver": ${{ needs.plan.outputs.run_driver == 'true' }},
               "dependency-scan": ${{ github.event_name != 'push' }}
             }

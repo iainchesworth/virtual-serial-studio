@@ -88,6 +88,21 @@ share_plan make_share_plan(int programs, int free_pairs, bool windows)
     return plan;
 }
 
+share_plan make_driver_share_plan(int programs, int ports_held)
+{
+    share_plan plan;
+    plan.programs = std::max(1, std::min(32, programs));
+    plan.windows = true;
+    plan.studio_driver = true;
+    plan.driver_ports_held = std::max(0, ports_held);
+    plan.free_pairs = 0;
+    const int available =
+        std::max(0, studio_driver_user_limit - plan.driver_ports_held);
+    plan.openable = std::min(plan.programs, available);
+    plan.studio_only = plan.programs - plan.openable;
+    return plan;
+}
+
 QString ordinal_word(int value)
 {
     // Each word is its own catalogue entry, so a language can inflect it to fit
@@ -150,7 +165,16 @@ QString share_warning_rich(const share_plan& plan)
     }
 
     QString body;
-    if (plan.free_pairs == 1)
+    if (plan.studio_driver)
+    {
+        body = plan.driver_ports_held > 0
+                   ? QObject::tr("The Studio driver gives one user at most 16 "
+                                 "ports, and Studio already holds %1.")
+                         .arg(plan.driver_ports_held)
+                   : QObject::tr("The Studio driver gives one user at most 16 "
+                                 "ports.");
+    }
+    else if (plan.free_pairs == 1)
     {
         body = QObject::tr("Each outside program needs its own driver pair, "
                            "and Studio found 1 free pair.");
@@ -213,7 +237,12 @@ QStringList planned_share_paths(const share_plan& plan,
             paths << QCoreApplication::translate("ShareWizard", "PTY");
             continue;
         }
-        if (index < plan.openable && index < free_pair_paths.size())
+        if (plan.studio_driver && index < plan.openable)
+        {
+            // The driver picks the COM number when it makes the port.
+            paths << QCoreApplication::translate("ShareWizard", "A free port");
+        }
+        else if (index < plan.openable && index < free_pair_paths.size())
         {
             paths << free_pair_paths.at(index);
         }

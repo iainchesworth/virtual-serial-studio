@@ -43,8 +43,133 @@ constexpr std::string_view rfc2217_scheme = "rfc2217-listen://";
 constexpr std::size_t receive_limit = 1U << 20;
 constexpr std::size_t chunk_size = 4096;
 constexpr std::size_t udp_peer_limit = 16;
+constexpr std::size_t allow_limit = 64;
+constexpr std::string_view allow_key = "allow=";
+
+/// One entry of an allow list: an address and how many leading bits of it a
+/// client must share.
+struct allow_rule
+{
+    asio::ip::address base;
+    unsigned prefix = 0;
+};
+
+std::optional<allow_rule> parse_allow_rule(std::string_view text)
+{
+    std::string_view address = text;
+    std::string_view length;
+    const auto slash = text.find('/');
+    if (slash != std::string_view::npos)
+    {
+        address = text.substr(0, slash);
+        length = text.substr(slash + 1);
+        if (length.empty())
+            return std::nullopt;
+    }
+
+    boost::system::error_code ec;
+    const auto base = asio::ip::make_address(std::string(address), ec);
+    if (ec)
+        return std::nullopt;
+
+    const unsigned most = base.is_v4() ? 32U : 128U;
+    unsigned prefix = most;
+    if (!length.empty())
+    {
+        const auto parsed = std::from_chars(
+            length.data(), length.data() + length.size(), prefix);
+        if (parsed.ec != std::errc{} ||
+            parsed.ptr != length.data() + length.size() || prefix > most)
+            return std::nullopt;
+    }
+    return allow_rule{base, prefix};
+}
+
+/// An IPv4 address that arrived as IPv6 (`::ffff:a.b.c.d`) is the IPv4 one.
+asio::ip::address plain_address(const asio::ip::address& address)
+{
+    if (address.is_v6() && address.to_v6().is_v4_mapped())
+        return asio::ip::make_address_v4(asio::ip::v4_mapped, address.to_v6());
+    return address;
+}
+
+template <class Bytes>
+bool same_prefix(const Bytes& left, const Bytes& right, unsigned bits)
+{
+    for (std::size_t index = 0; bits > 0; ++index)
+    {
+        const unsigned take = std::min(8U, bits);
+        const unsigned mask = (0xFFU << (8U - take)) & 0xFFU;
+        if (((left[index] ^ right[index]) & mask) != 0)
+            return false;
+        bits -= take;
+    }
+    return true;
+}
+
+bool rule_admits(const allow_rule& rule, const asio::ip::address& peer)
+{
+    const auto address = plain_address(peer);
+    if (rule.base.is_v4() != address.is_v4())
+        return false;
+    if (address.is_v4())
+        return same_prefix(rule.base.to_v4().to_bytes(),
+                           address.to_v4().to_bytes(), rule.prefix);
+    return same_prefix(rule.base.to_v6().to_bytes(), address.to_v6().to_bytes(),
+                       rule.prefix);
+}
+
+/// The rules of a list, or nothing if an entry is not an address or a range.
+std::optional<std::vector<allow_rule>>
+parse_allow_list(const std::vector<std::string>& list)
+{
+    if (list.size() > allow_limit)
+        return std::nullopt;
+    std::vector<allow_rule> rules;
+    for (const std::string& entry : list)
+    {
+        const auto rule = parse_allow_rule(entry);
+        if (!rule)
+            return std::nullopt;
+        rules.push_back(*rule);
+    }
+    return rules;
+}
+
+bool rules_admit(const std::vector<allow_rule>& rules,
+                 const asio::ip::address& peer)
+{
+    if (rules.empty())
+        return true;
+    for (const allow_rule& rule : rules)
+    {
+        if (rule_admits(rule, peer))
+            return true;
+    }
+    return false;
+}
 
 } // namespace
+
+bool allow_list_admits(const std::vector<std::string>& list,
+                       std::string_view address)
+{
+    if (list.empty())
+        return true;
+    boost::system::error_code ec;
+    const auto peer = asio::ip::make_address(std::string(address), ec);
+    const auto rules = parse_allow_list(list);
+    return !ec && rules && rules_admit(*rules, peer);
+}
+
+bool listens_on_loopback(const listen_address& address)
+{
+    if (address.host.empty())
+        return false;
+    boost::system::error_code ec;
+    const auto ip = asio::ip::make_address(address.host, ec);
+    return !ec && plain_address(ip).is_loopback();
+}
 
 bool is_listen_uri(std::string_view uri) noexcept
 {
@@ -73,6 +198,30 @@ result<listen_address> parse_listen_uri(std::string_view uri)
     else
     {
         return make_error_code(errc::invalid_uri);
+    }
+
+    // After the port the URI may carry `?allow=list` and nothing else.
+    std::vector<std::string> allow;
+    if (const auto mark = uri.find('?'); mark != std::string_view::npos)
+    {
+        std::string_view query = uri.substr(mark + 1);
+        uri = uri.substr(0, mark);
+        if (!query.starts_with(allow_key))
+            return make_error_code(errc::invalid_uri);
+        query.remove_prefix(allow_key.size());
+        while (true)
+        {
+            const auto comma = query.find(',');
+            const auto entry = query.substr(0, comma);
+            if (!parse_allow_rule(entry))
+                return make_error_code(errc::invalid_uri);
+            allow.emplace_back(entry);
+            if (comma == std::string_view::npos)
+                break;
+            query.remove_prefix(comma + 1);
+        }
+        if (allow.size() > allow_limit)
+            return make_error_code(errc::invalid_uri);
     }
 
     std::string_view host;
@@ -118,6 +267,7 @@ result<listen_address> parse_listen_uri(std::string_view uri)
 
     address.host = std::string(host);
     address.port = static_cast<std::uint16_t>(value);
+    address.allow = std::move(allow);
     return address;
 }
 
@@ -141,6 +291,11 @@ std::string make_listen_uri(const listen_address& address)
     else
         text += address.host;
     text += ':' + std::to_string(address.port);
+    for (std::size_t index = 0; index < address.allow.size(); ++index)
+    {
+        text += index == 0 ? "?allow=" : ",";
+        text += address.allow[index];
+    }
     return text;
 }
 
@@ -162,6 +317,10 @@ public:
     error_code open()
     {
         boost::system::error_code ec;
+        const auto rules = parse_allow_list(address_.allow);
+        if (!rules)
+            return make_error_code(errc::invalid_uri);
+        rules_ = *rules;
         asio::ip::address ip = asio::ip::address_v4::any();
         if (!address_.host.empty())
         {
@@ -323,6 +482,7 @@ public:
     bool is_open() const noexcept { return open_.load(); }
     std::uint16_t port() const noexcept { return port_.load(); }
     std::size_t peers() const noexcept { return peers_.load(); }
+    std::size_t refused() const noexcept { return refused_.load(); }
     const listen_address& address() const noexcept { return address_; }
 
 private:
@@ -393,6 +553,20 @@ private:
                         self->accept_next();
                     return;
                 }
+                boost::system::error_code remote_ec;
+                const auto remote = socket.remote_endpoint(remote_ec);
+                if (remote_ec || !rules_admit(self->rules_, remote.address()))
+                {
+                    // Not on the allow list: closed before a byte is read.
+                    boost::system::error_code ignored;
+                    socket.close(ignored);
+                    self->refused_.fetch_add(1);
+                    self->accept_next();
+                    return;
+                }
+                // A reply must not wait for more data to share a packet with.
+                boost::system::error_code ignored;
+                socket.set_option(asio::ip::tcp::no_delay(true), ignored);
                 auto made = std::make_shared<client>(std::move(socket));
                 if (self->serial_role())
                 {
@@ -554,7 +728,11 @@ private:
                 self->receiving_ = false;
                 if (ec == asio::error::operation_aborted || self->closed_)
                     return;
-                if (!ec)
+                if (!ec && !rules_admit(self->rules_, self->sender_.address()))
+                {
+                    self->refused_.fetch_add(1);
+                }
+                else if (!ec)
                 {
                     self->remember(self->sender_);
                     self->received_.insert(
@@ -727,6 +905,8 @@ private:
     /// A client changed DTR, RTS or break and the endpoint has not heard.
     bool lines_dirty_ = false;
     bool closed_ = false;
+    /// The allow list, parsed when the transport is opened.
+    std::vector<allow_rule> rules_;
 
     /// Control lines of the RFC 2217 role. Inputs come from the peers on the
     /// hub's links, outputs from what the clients commanded.
@@ -737,6 +917,7 @@ private:
     std::atomic<bool> open_{false};
     std::atomic<std::uint16_t> port_{0};
     std::atomic<std::size_t> peers_{0};
+    std::atomic<std::size_t> refused_{0};
 };
 
 listen_transport::listen_transport(const executor_type& executor,
@@ -833,6 +1014,11 @@ std::uint16_t listen_transport::local_port() const noexcept
 std::size_t listen_transport::peer_count() const noexcept
 {
     return state_->peers();
+}
+
+std::size_t listen_transport::refused_count() const noexcept
+{
+    return state_->refused();
 }
 
 } // namespace vss

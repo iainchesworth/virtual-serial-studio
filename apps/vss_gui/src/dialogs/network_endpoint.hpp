@@ -134,6 +134,7 @@ private:
     NoteBanner* capability_note_ = nullptr;
     NoteBanner* firewall_note_ = nullptr;
     QPushButton* firewall_button_ = nullptr;
+    NoteBanner* open_note_ = nullptr;
     ResultSentence* result_ = nullptr;
     InlineError* error_ = nullptr;
     CodeBlock* address_block_ = nullptr;
