@@ -15,10 +15,16 @@ add_library(vss_gui_support STATIC
   check_row.hpp
   diagnostic_bundle_dialog.cpp
   diagnostic_bundle_dialog.hpp
+  elevated_step.cpp
+  elevated_step.hpp
   event_log.cpp
   event_log.hpp
+  firewall_dialog.cpp
+  firewall_dialog.hpp
   help_contents_dialog.cpp
   help_contents_dialog.hpp
+  permission_rows.cpp
+  permission_rows.hpp
   redact.cpp
   redact.hpp
   settings.cpp

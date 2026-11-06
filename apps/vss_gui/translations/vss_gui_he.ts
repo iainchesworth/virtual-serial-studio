@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
+<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="he">
     <context>
         <name>About</name>
@@ -1935,6 +1936,118 @@
         </message>
     </context>
     <context>
+        <name>FirewallDialog</name>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <source>domain</source>
+            <translation>דומיין</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <source>private</source>
+            <translation>פרטית</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <source>public</source>
+            <translation>ציבורית</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="69" />
+            <location filename="../src/support/firewall_dialog.cpp" line="70" />
+            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <source>Windows Firewall</source>
+            <translation>חומת האש של Windows</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <source>Other computers cannot reach this port until a rule allows it.</source>
+            <translation>מחשבים אחרים לא יכולים להגיע ליציאה הזו עד שכלל יתיר זאת.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <source>Windows Firewall stops other computers reaching this port.</source>
+            <translation>חומת האש של Windows מונעת ממחשבים אחרים להגיע ליציאה הזו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
+            <translation>Studio ממתין לחיבור של מחשבים אחרים. חומת האש של Windows חוסמת חיבורים שאף כלל לא מתיר. Studio לעולם לא משנה את חומת האש מעצמו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
+            <translation>כלל בחומת האש של Windows חוסם את התוכנית הזו ביציאה הזו. כלל חסימה גובר על כלל היתר, ו-Studio לא מסיר אותו. פתחו את חומת האש של Windows Defender עם אבטחה מתקדמת, מצאו את כלל החסימה תחת כללי נכנס, והשביתו או מחקו אותו אם ברצונכם שמחשבים אחרים יוכלו להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
+            <translation>חומת האש של Windows מוגדרת לחסום את כל החיבורים הנכנסים, וזה גובר על כל הכללים. פתחו את אבטחת Windows, בחרו הגנה על חומת אש ורשת, בחרו את הרשת שבה אתם נמצאים וכבו את האפשרות חסימת כל החיבורים הנכנסים.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <source>The rule Studio would add lets only this in:</source>
+            <translation>הכלל ש-Studio יוסיף מתיר רק את הדברים האלה:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <source>Program: %1
+Protocol and port: %2 %3
+Who: %4
+Networks: %5</source>
+            <translation>תוכנית: %1
+פרוטוקול ויציאה: %2 %3
+מי: %4
+רשתות: %5</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <source>computers on your local network</source>
+            <translation>מחשבים ברשת המקומית שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <source>any computer</source>
+            <translation>כל מחשב</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
+            <translation>אותו כלל כפקודה, אם אתם מעדיפים להריץ אותו בעצמכם בחלון טרמינל שנפתח כמנהל:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
+            <translation>כדי להוסיף את הכלל בעצמכם, הריצו את זה בחלון טרמינל שנפתח כמנהל:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <source>Command</source>
+            <translation>פקודה</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="158" />
+            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <source>Allow in Windows Firewall</source>
+            <translation>התרה בחומת האש של Windows</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <source>Windows will ask for administrator permission before the rule is added.</source>
+            <translation>Windows תבקש הרשאת מנהל לפני הוספת הכלל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <source>Close</source>
+            <translation>סגירה</translation>
+        </message>
+    </context>
+    <context>
         <name>FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -2603,72 +2716,72 @@
     <context>
         <name>MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>DROP</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>אינה הבעלים, לא הועבר.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>התקבל</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1, %2, %3, %4 בתים, %5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>שעה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>כיוון</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>בתים</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>תצוגה מקדימה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>אינה הבעלים, לא הועבר</translation>
         </message>
@@ -2677,7 +2790,7 @@
         <name>MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
@@ -2689,7 +2802,7 @@
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>השהיה</translation>
         </message>
@@ -2713,8 +2826,8 @@
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>כל היציאות</translation>
         </message>
@@ -2760,69 +2873,73 @@
             <translation>ייצוא</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>עדיין אין תעבורה. שלחו כמה בתים, או פתחו את היציאה בתוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>עורך JSON של הטופולוגיה יגיע עם WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>המשך</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>אין תעבורה התואמת למסננים אלה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>קישור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>ייצוא התעבורה הנראית</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>קובצי טקסט (*.txt);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>לא ניתן לשמור את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1 יוצא.</translation>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
             <source>Export capture</source>
             <translation>ייצוא לכידה</translation>
         </message>
@@ -2850,12 +2967,12 @@
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="189" />
+            <location filename="../src/dialogs/network_uri.cpp" line="213" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>הזינו כתובת כגון tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="195" />
+            <location filename="../src/dialogs/network_uri.cpp" line="219" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>בחרו יציאה בין 1 ל-65535.</translation>
         </message>
@@ -2863,205 +2980,222 @@
     <context>
         <name>NetworkEndpointDialog</name>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="119" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="130" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="125" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="136" />
             <source>Put a device on the network</source>
             <translation>הצבת התקן ברשת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="132" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="138" />
             <source>Share a serial device with other computers over TCP, UDP or RFC 2217.</source>
             <translation>שיתוף התקן טורי עם מחשבים אחרים דרך TCP, UDP או RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="141" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="147" />
             <source>Network settings</source>
             <translation>הגדרות רשת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="150" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="156" />
             <source>Device to share</source>
             <translation>התקן לשיתוף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="151" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
             <source>A real serial device plugged into this PC.</source>
             <translation>התקן טורי אמיתי המחובר למחשב זה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="160" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="163" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="166" />
             <source>Share it using</source>
             <translation>שיתוף באמצעות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="172" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="176" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="178" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="182" />
             <source>Wait for other computers to connect (server)</source>
             <translation>המתנה לחיבור מחשבים אחרים (שרת)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="174" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="177" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="180" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="183" />
             <source>Connect to a server (client)</source>
             <translation>התחברות לשרת (לקוח)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="194" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="200" />
             <source>All network interfaces (0.0.0.0)</source>
             <translation>כל ממשקי הרשת (0.0.0.0)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="196" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
             <source>This PC only (127.0.0.1)</source>
             <translation>מחשב זה בלבד (127.0.0.1)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="198" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="204" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="208" />
             <source>A specific address</source>
             <translation>כתובת מסוימת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="211" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="217" />
             <source>Listen on</source>
             <translation>האזנה ב</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="222" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="228" />
             <source>Server address</source>
             <translation>כתובת השרת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="230" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="242" />
             <source>Choose This PC only (127.0.0.1) to test from this machine first.</source>
             <translation>בחרו מחשב זה בלבד (127.0.0.1) כדי לבדוק קודם מהמחשב הזה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="249" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="255" />
             <source>This build can connect to a server, but cannot wait for other computers to connect. Start the server on the other computer.</source>
             <translation>גרסה זו יכולה להתחבר לשרת, אך אינה יכולה להמתין לחיבור של מחשבים אחרים. הפעילו את השרת במחשב האחר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="256" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="262" />
             <source>Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect.</source>
             <translation>אפשרו ל-Virtual Serial Studio לעבור דרך חומת האש של Windows, אחרת מחשבים אחרים לא יוכלו להתחבר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="271" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="283" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="292" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="666" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="269" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="272" />
+            <source>Check Windows Firewall for this port</source>
+            <translation>בדיקת חומת האש של Windows ליציאה הזו</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="276" />
+            <source>Shows what Windows Firewall does to this port. Nothing changes until you agree.</source>
+            <translation>מציג מה חומת האש של Windows עושה ליציאה הזו. דבר לא משתנה עד שתסכימו.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>ל-RFC 2217 אין סיסמה. כל מי שמגיע ליציאה הזו יכול להשתמש בהתקן. בחרו מחשב זה בלבד (127.0.0.1), או במצב מתקדם הוסיפו ?allow=192.168.1.0/24 לכתובת כדי לקבוע מי רשאי להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>כתובת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="274" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>עריכת כתובת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>הכתובת גוברת על השדות שמעליה בזמן עריכתה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="307" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="667" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="322" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>בדיקה קודם מהמחשב הזה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="324" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>הפעלת גשר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="482" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>אין התקן טורי זמין. חברו אחד ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="492" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1, %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="493" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="553" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="567" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="590" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="600" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>מחשבים אחרים יכולים להתחבר למחשב זה דרך יציאה %1 ולשוחח עם %2. הנתונים זורמים בשני הכיוונים, והמוניטור מציג את שניהם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="608" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studio מתחבר אל %1 דרך יציאה %2 ומשוחח עם %3. הנתונים זורמים בשני הכיוונים, והמוניטור מציג את שניהם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="610" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>השרת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="701" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>בחרו התקן לשיתוף.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="745" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>הרשת אינה זמינה בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="746" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="758" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="772" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="781" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>לא ניתן להפעיל את הגשר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="773" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>יציאה %1 כבר בשימוש. בחרו יציאה אחרת, או עצרו את התוכנית שמשתמשת בה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="782" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>ייתכן שהכתובת בשימוש, או שהמחשב האחר סירב לחיבור. בדקו את הכתובת ונסו שוב.</translation>
         </message>
@@ -3643,155 +3777,155 @@
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -4442,90 +4576,165 @@
     <context>
         <name>SetupCheck</name>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="46" />
+            <location filename="../src/support/setup_facts.cpp" line="48" />
             <source>No serial devices are visible to Virtual Serial Studio. You can still use virtual ports.</source>
             <translation>אין התקנים טוריים הגלויים ל-Virtual Serial Studio. עדיין אפשר להשתמש ביציאות וירטואליות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="51" />
+            <location filename="../src/support/setup_facts.cpp" line="53" />
             <source>%n serial device(s) are visible to Virtual Serial Studio.</source>
             <translation>מספר ההתקנים הטוריים הגלויים ל-Virtual Serial Studio: %n.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="60" />
+            <location filename="../src/support/setup_facts.cpp" line="62" />
             <source>%1 and %2 more are visible to Virtual Serial Studio.</source>
             <translation>%1 ועוד %2 גלויים ל-Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="67" />
+            <location filename="../src/support/setup_facts.cpp" line="69" />
             <source>%1 is visible to Virtual Serial Studio.</source>
             <translation>%1 גלוי ל-Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="71" />
+            <location filename="../src/support/setup_facts.cpp" line="73" />
             <source>%1 and %2 are visible to Virtual Serial Studio.</source>
             <translation>%1 ו-%2 גלויים ל-Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="82" />
-            <location filename="../src/support/setup_facts.cpp" line="117" />
+            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <source>the port you choose</source>
+            <translation>היציאה שתבחרו</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="37" />
+            <source>Windows Firewall</source>
+            <translation>חומת האש של Windows</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="43" />
+            <source>Studio could not read the Windows Firewall rules, so it cannot say whether other computers can connect.</source>
+            <translation>Studio לא הצליח לקרוא את הכללים של חומת האש של Windows, ולכן אינו יכול לומר אם מחשבים אחרים יכולים להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="52" />
+            <location filename="../src/support/permission_rows.cpp" line="61" />
+            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/setup_facts.cpp" line="84" />
+            <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>תקין</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="94" />
-            <location filename="../src/support/setup_facts.cpp" line="453" />
-            <location filename="../src/support/setup_facts.cpp" line="464" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
+            <translation>חומת האש של Windows אינה מעורבת. Studio לא ממתין לחיבור של מחשבים אחרים.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>חומת האש של Windows כבויה ברשת שבה אתם נמצאים, ולכן היא לא עוצרת מחשבים אחרים. Studio לא משנה את ההגדרה הזו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <source>Windows Firewall has a rule that lets other computers reach %1.</source>
+            <translation>בחומת האש של Windows יש כלל שמאפשר למחשבים אחרים להגיע אל %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
+            <translation>חומת האש של Windows עלולה למנוע ממחשבים אחרים להתחבר אל %1. Studio יכול להוסיף כלל אחד לתוכנית הזו וליציאה הזו, אחרי שתסכימו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <source>Allow through the firewall</source>
+            <translation>התרה בחומת האש</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <source>How to allow it</source>
+            <translation>איך להתיר</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
+            <translation>כלל בחומת האש של Windows חוסם את התוכנית הזו ב-%1. Studio לעולם לא מסיר כלל חסימה; שנו אותו בחומת האש של Windows Defender.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="99" />
+            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <source>How to change it</source>
+            <translation>איך לשנות</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
+            <translation>חומת האש של Windows מוגדרת לחסום את כל החיבורים הנכנסים, וזה גובר על כל הכללים. שנו את ההגדרה הזו באבטחת Windows אם ברצונכם שמחשבים אחרים יוכלו להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <source>Your account is an administrator, so Windows will ask you to confirm.</source>
+            <translation>החשבון שלכם הוא מנהל, ולכן Windows תבקש מכם לאשר.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
+            <translation>החשבון שלכם אינו מנהל, ולכן Windows תבקש סיסמה של מנהל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/setup_facts.cpp" line="96" />
+            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="472" />
             <source>Not checked yet</source>
             <translation>טרם נבדק</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="105" />
+            <location filename="../src/support/setup_facts.cpp" line="107" />
             <source>Real serial devices</source>
             <translation>התקנים טוריים אמיתיים</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="107" />
+            <location filename="../src/support/setup_facts.cpp" line="109" />
             <source>Refresh</source>
             <translation>רענון</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="113" />
+            <location filename="../src/support/setup_facts.cpp" line="115" />
             <source>Studio did not check the serial devices.</source>
             <translation>Studio לא בדק את ההתקנים הטוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="134" />
+            <location filename="../src/support/setup_facts.cpp" line="136" />
             <source>Virtual port driver</source>
             <translation>מנהל התקן ליציאות וירטואליות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="140" />
+            <location filename="../src/support/setup_facts.cpp" line="142" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>Studio לא בדק אם קיים מנהל התקן ליציאות וירטואליות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="146" />
+            <location filename="../src/support/setup_facts.cpp" line="148" />
             <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
             <translation>מנהל ההתקן של Virtual Serial Studio מותקן, ולכן תוכנות אחרות יכולות לראות את היציאות ש-Studio יוצר כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="153" />
+            <location filename="../src/support/setup_facts.cpp" line="156" />
             <source>Driver version %1.</source>
             <translation>גרסת מנהל ההתקן: %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="160" />
+            <location filename="../src/support/setup_facts.cpp" line="162" />
             <source>com0com is also installed, and Studio tries its own driver first.</source>
             <translation>גם com0com מותקן, ו-Studio מנסה קודם את מנהל ההתקן שלו.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="171" />
+            <location filename="../src/support/setup_facts.cpp" line="173" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0com מותקן, מספר הזוגות: %n, כך שתוכניות אחרות יכולות לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="176" />
+            <location filename="../src/support/setup_facts.cpp" line="178" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0com מותקן, כך שתוכניות אחרות יכולות לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
@@ -4534,196 +4743,201 @@
             <translation type="vanished">com0com לא נמצא. Windows צריך מנהל התקן כדי שתוכניות אחרות יוכלו לראות יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <location filename="../src/support/setup_facts.cpp" line="187" />
             <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
             <translation>לא נמצא לא מנהל ההתקן של Virtual Serial Studio ולא com0com. Windows צריך מנהל התקן כדי שתוכנות אחרות יראו יציאות וירטואליות כיציאות COM.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="191" />
-            <location filename="../src/support/setup_facts.cpp" line="293" />
-            <location filename="../src/support/setup_facts.cpp" line="333" />
+            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="340" />
             <source>Needs attention</source>
             <translation>דורש תשומת לב</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="195" />
             <source>Install com0com</source>
             <translation>התקנת com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="201" />
+            <location filename="../src/support/setup_facts.cpp" line="203" />
             <source>Administrator rights</source>
             <translation>הרשאות מנהל</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="207" />
+            <location filename="../src/support/setup_facts.cpp" line="209" />
             <source>Studio could not check for administrator rights.</source>
             <translation>Studio לא הצליח לבדוק הרשאות מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="215" />
+            <location filename="../src/support/setup_facts.cpp" line="217" />
             <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
             <translation>מנהל ההתקן של Virtual Serial Studio יוצר יציאות בלי הרשאות מנהל מערכת.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="223" />
+            <location filename="../src/support/setup_facts.cpp" line="225" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>Studio פועל כמנהל, ולכן הוא יכול ליצור זוגות מקושרים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="231" />
+            <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>יצירת זוג מקושר חדש דורשת הרשאות מנהל, פעם אחת לכל זוג. כל השאר פועל בלעדיהן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="236" />
+            <location filename="../src/support/setup_facts.cpp" line="243" />
             <source>Needed later</source>
             <translation>נדרש בהמשך</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="237" />
+            <location filename="../src/support/setup_facts.cpp" line="244" />
             <source>Restart as administrator</source>
             <translation>הפעלה מחדש כמנהל</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="249" />
+            <location filename="../src/support/setup_facts.cpp" line="256" />
             <source>Carry on without a driver</source>
             <translation>המשך ללא מנהל התקן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="250" />
+            <location filename="../src/support/setup_facts.cpp" line="257" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>עדיין אפשר להשתמש ביציאות בתוך התהליך, במוניטור ובחלונית השליחה כדי לנסות דברים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="254" />
+            <location filename="../src/support/setup_facts.cpp" line="261" />
             <source>Continue in test mode</source>
             <translation>המשך במצב בדיקה</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="267" />
+            <location filename="../src/support/setup_facts.cpp" line="274" />
             <source>Pseudo terminals</source>
             <translation>טרמינלים מדומים</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="273" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>Studio לא בדק אם טרמינלים מדומים זמינים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="280" />
+            <location filename="../src/support/setup_facts.cpp" line="287" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>טרמינלים מדומים זמינים, כך שתוכניות אחרות יכולות לפתוח יציאות וירטואליות חדשות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="288" />
+            <location filename="../src/support/setup_facts.cpp" line="295" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>טרמינלים מדומים אינם זמינים. תוכניות אחרות לא יוכלו לפתוח יציאות וירטואליות חדשות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="307" />
             <source>Serial port access</source>
             <translation>גישה ליציאות טוריות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="301" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Serial port group membership</source>
             <translation>חברות בקבוצת היציאות הטוריות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="308" />
+            <location filename="../src/support/setup_facts.cpp" line="315" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>ל-Studio אין בדיקת קבוצות עבור macOS. אם לא ניתן לפתוח התקן, בדקו את ההרשאות שלו ב-/dev.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="312" />
+            <location filename="../src/support/setup_facts.cpp" line="319" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>Studio לא בדק אם אתם חברים בקבוצה dialout.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="321" />
+            <location filename="../src/support/setup_facts.cpp" line="328" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>אתם חברים בקבוצה dialout, ולכן תוכניות יכולות לפתוח התקנים טוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="329" />
+            <location filename="../src/support/setup_facts.cpp" line="336" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>החשבון שלכם אינו בקבוצה dialout, ולכן ייתכן שתוכניות לא יוכלו לפתוח התקנים טוריים.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="335" />
+            <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>איך מוסיפים אותי</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="458" />
+            <location filename="../src/support/setup_facts.cpp" line="466" />
             <source>1 thing to fix</source>
             <translation>דבר אחד לתיקון</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="459" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>%n things to fix</source>
             <translation>מספר הדברים לתיקון: %n</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="471" />
+            <location filename="../src/support/setup_facts.cpp" line="479" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>עד שיותקן מנהל התקן, יציאות חדשות פועלות רק בתוך Virtual Serial Studio. תוכניות אחרות לא יראו אותן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="491" />
+            <location filename="../src/support/setup_facts.cpp" line="499" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>ב-Linux וב-macOS בדיקה זו בוחנת במקום זאת טרמינלים מדומים ואת החברות שלכם בקבוצת היציאות הטוריות.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="554" />
+            <location filename="../src/support/setup_facts.cpp" line="564" />
             <source>The application path is not known.</source>
             <translation>נתיב היישום אינו ידוע.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="567" />
-            <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
-            <translation>Windows לא אישר את ההפעלה מחדש בהרשאות מוגבהות. נסו שוב מתפריט התחל.</translation>
+            <location filename="../src/support/setup_facts.cpp" line="585" />
+            <source>You declined the Windows permission prompt, so Studio keeps running as before. Nothing was changed.</source>
+            <translation>דחיתם את בקשת ההרשאה של Windows, ולכן Studio ממשיך לפעול כמקודם. דבר לא שונה.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="571" />
+            <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
+            <translation type="vanished">Windows לא אישר את ההפעלה מחדש בהרשאות מוגבהות. נסו שוב מתפריט התחל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="589" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>Windows לא הצליח להפעיל מחדש את Virtual Serial Studio כמנהל.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="579" />
+            <location filename="../src/support/setup_facts.cpp" line="597" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>הפעלה מחדש כמנהל זמינה רק ב-Windows.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="49" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
             <source>Could not open the project page</source>
             <translation>לא ניתן לפתוח את דף הפרויקט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="51" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>הדפדפן שלכם לא נפתח. העתיקו את הקישור ופתחו אותו בעצמכם.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="63" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="65" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="77" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
             <source>Install the com0com driver</source>
             <translation>התקנת מנהל ההתקן com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="78" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studio אינו מתקין עבורכם מנהלי התקן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="84" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>תוכניות אחרות לא יכולות לראות יציאה וירטואלית עד שמנהל התקן יוצר יציאת COM. ב-Windows מנהל ההתקן הוא com0com.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="94" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -4734,72 +4948,107 @@
 4. חזרו אל בדיקת הגדרות ובחרו בדיקה חוזרת.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="109" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
             <source>com0com project page</source>
             <translation>דף הפרויקט של com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="116" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
             <source>Open project page</source>
             <translation>פתיחת דף הפרויקט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="127" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="170" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="271" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="140" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="142" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="154" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
             <source>Add me to the dialout group</source>
             <translation>הוסיפו אותי לקבוצה dialout</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="156" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>הריצו פקודה זו בטרמינל, ואז התנתקו והתחברו מחדש.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="163" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="192" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="193" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="214" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="196" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
             <source>Setup check</source>
             <translation>בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="215" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>מה מחשב זה צריך כדי שתוכניות אחרות יוכלו להשתמש ביציאות הווירטואליות שלכם.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="221" />
-            <location filename="../src/support/setup_facts.cpp" line="467" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>הכול מוכן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="258" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
             <source>Why is a driver needed?</source>
             <translation>למה נדרש מנהל התקן?</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="266" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
             <source>Re-check</source>
             <translation>בדיקה חוזרת</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="28" />
+            <source>The firewall rule was removed.</source>
+            <translation>כלל חומת האש הוסר.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="30" />
+            <source>The firewall rule was added.</source>
+            <translation>כלל חומת האש נוסף.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="33" />
+            <source>You declined the Windows permission prompt, so nothing was changed.</source>
+            <translation>דחיתם את בקשת ההרשאה של Windows, ולכן דבר לא שונה.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="38" />
+            <source>Not available in this build.</source>
+            <translation>לא זמין בגרסה זו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="41" />
+            <source>Windows did not give the helper administrator rights, so nothing was changed.</source>
+            <translation>Windows לא העניקה לעוזר הרשאות מנהל, ולכן דבר לא שונה.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="46" />
+            <source>The helper refused the rule, so nothing was changed. Use the command shown instead.</source>
+            <translation>העוזר דחה את הכלל, ולכן דבר לא שונה. השתמשו במקום זאת בפקודה המוצגת.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="53" />
+            <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
+            <translation>לא ניתן היה לשנות את כלל חומת האש. השתמשו במקום זאת בפקודה המוצגת, בחלון טרמינל שנפתח כמנהל.</translation>
         </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -10172,72 +10421,72 @@
     <context>
         <name>vss::gui::MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>DROP</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>אינה הבעלים, לא הועבר.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>התקבל</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1, %2, %3, %4 בתים, %5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>שעה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>כיוון</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>בתים</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>תצוגה מקדימה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>אינה הבעלים, לא הועבר</translation>
         </message>
@@ -10246,7 +10495,7 @@
         <name>vss::gui::MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
@@ -10258,7 +10507,7 @@
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>השהיה</translation>
         </message>
@@ -10282,8 +10531,8 @@
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>כל היציאות</translation>
         </message>
@@ -10329,69 +10578,73 @@
             <translation>ייצוא</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>עדיין אין תעבורה. שלחו כמה בתים, או פתחו את היציאה בתוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>עורך JSON של הטופולוגיה יגיע עם WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>המשך</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>אין תעבורה התואמת למסננים אלה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>קישור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>ייצוא התעבורה הנראית</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>קובצי טקסט (*.txt);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>לא ניתן לשמור את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1 יוצא.</translation>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
             <source>Export capture</source>
             <translation>ייצוא לכידה</translation>
         </message>
@@ -10419,205 +10672,222 @@
     <context>
         <name>vss::gui::NetworkEndpointDialog</name>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="119" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="130" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="125" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="136" />
             <source>Put a device on the network</source>
             <translation>הצבת התקן ברשת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="132" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="138" />
             <source>Share a serial device with other computers over TCP, UDP or RFC 2217.</source>
             <translation>שיתוף התקן טורי עם מחשבים אחרים דרך TCP, UDP או RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="141" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="147" />
             <source>Network settings</source>
             <translation>הגדרות רשת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="150" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="156" />
             <source>Device to share</source>
             <translation>התקן לשיתוף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="151" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
             <source>A real serial device plugged into this PC.</source>
             <translation>התקן טורי אמיתי המחובר למחשב זה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="160" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="163" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="166" />
             <source>Share it using</source>
             <translation>שיתוף באמצעות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="172" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="176" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="178" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="182" />
             <source>Wait for other computers to connect (server)</source>
             <translation>המתנה לחיבור מחשבים אחרים (שרת)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="174" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="177" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="180" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="183" />
             <source>Connect to a server (client)</source>
             <translation>התחברות לשרת (לקוח)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="194" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="200" />
             <source>All network interfaces (0.0.0.0)</source>
             <translation>כל ממשקי הרשת (0.0.0.0)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="196" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
             <source>This PC only (127.0.0.1)</source>
             <translation>מחשב זה בלבד (127.0.0.1)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="198" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="204" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="208" />
             <source>A specific address</source>
             <translation>כתובת מסוימת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="211" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="217" />
             <source>Listen on</source>
             <translation>האזנה ב</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="222" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="228" />
             <source>Server address</source>
             <translation>כתובת השרת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="230" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="242" />
             <source>Choose This PC only (127.0.0.1) to test from this machine first.</source>
             <translation>בחרו מחשב זה בלבד (127.0.0.1) כדי לבדוק קודם מהמחשב הזה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="249" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="255" />
             <source>This build can connect to a server, but cannot wait for other computers to connect. Start the server on the other computer.</source>
             <translation>גרסה זו יכולה להתחבר לשרת, אך אינה יכולה להמתין לחיבור של מחשבים אחרים. הפעילו את השרת במחשב האחר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="256" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="262" />
             <source>Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect.</source>
             <translation>אפשרו ל-Virtual Serial Studio לעבור דרך חומת האש של Windows, אחרת מחשבים אחרים לא יוכלו להתחבר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="271" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="283" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="292" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="666" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="269" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="272" />
+            <source>Check Windows Firewall for this port</source>
+            <translation>בדיקת חומת האש של Windows ליציאה הזו</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="276" />
+            <source>Shows what Windows Firewall does to this port. Nothing changes until you agree.</source>
+            <translation>מציג מה חומת האש של Windows עושה ליציאה הזו. דבר לא משתנה עד שתסכימו.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>ל-RFC 2217 אין סיסמה. כל מי שמגיע ליציאה הזו יכול להשתמש בהתקן. בחרו מחשב זה בלבד (127.0.0.1), או במצב מתקדם הוסיפו ?allow=192.168.1.0/24 לכתובת כדי לקבוע מי רשאי להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>כתובת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="274" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>עריכת כתובת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>הכתובת גוברת על השדות שמעליה בזמן עריכתה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="307" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="667" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="322" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>בדיקה קודם מהמחשב הזה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="324" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>הפעלת גשר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="482" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>אין התקן טורי זמין. חברו אחד ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="492" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1, %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="493" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="553" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="567" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="590" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="600" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>מחשבים אחרים יכולים להתחבר למחשב זה דרך יציאה %1 ולשוחח עם %2. הנתונים זורמים בשני הכיוונים, והמוניטור מציג את שניהם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="608" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studio מתחבר אל %1 דרך יציאה %2 ומשוחח עם %3. הנתונים זורמים בשני הכיוונים, והמוניטור מציג את שניהם.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="610" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>השרת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="701" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>בחרו התקן לשיתוף.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="745" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>הרשת אינה זמינה בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="746" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="758" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="772" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="781" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>לא ניתן להפעיל את הגשר</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="773" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>יציאה %1 כבר בשימוש. בחרו יציאה אחרת, או עצרו את התוכנית שמשתמשת בה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="782" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>ייתכן שהכתובת בשימוש, או שהמחשב האחר סירב לחיבור. בדקו את הכתובת ונסו שוב.</translation>
         </message>
@@ -11087,155 +11357,155 @@
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -13430,7 +13700,7 @@
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>

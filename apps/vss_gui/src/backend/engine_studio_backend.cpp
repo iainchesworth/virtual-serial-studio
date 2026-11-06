@@ -12,6 +12,7 @@
 #include <vss/core/hub.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/ports/permissions.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
 
@@ -213,6 +214,10 @@ capabilities EngineStudioBackend::caps() const
     caps.rename_port = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
+    // The rule is made by the elevated command-line helper; the platform must
+    // have the step and be able to start a program through its own prompt.
+    caps.firewall_rule = vss::permissions::can_manage_firewall_rules() &&
+                         vss::permissions::can_run_elevated();
     return caps;
 }
 

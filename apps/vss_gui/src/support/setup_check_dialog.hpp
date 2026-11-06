@@ -52,6 +52,7 @@ private:
     void build();
     void rebuild();
     void handle_action(setup_action action);
+    void show_firewall_help();
 
     StudioBackend& backend_;
     setup_report report_;

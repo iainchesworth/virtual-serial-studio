@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
+<!-- Translation origin: Machine translation, not reviewed by a speaker -->
 <TS version="2.1" language="yi">
     <context>
         <name>About</name>
@@ -1935,6 +1936,118 @@
         </message>
     </context>
     <context>
+        <name>FirewallDialog</name>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="40" />
+            <source>domain</source>
+            <translation>דאָמען</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="42" />
+            <source>private</source>
+            <translation>פּריוואַט</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="44" />
+            <source>public</source>
+            <translation>עפֿנטלעך</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="69" />
+            <location filename="../src/support/firewall_dialog.cpp" line="70" />
+            <location filename="../src/support/firewall_dialog.cpp" line="82" />
+            <source>Windows Firewall</source>
+            <translation>Windows Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="83" />
+            <source>Other computers cannot reach this port until a rule allows it.</source>
+            <translation>אַנדערע קאָמפּיוטערס קענען נישט דערגרייכן דעם פּאָרט ביז אַ כּלל דערלויבט עס.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="85" />
+            <source>Windows Firewall stops other computers reaching this port.</source>
+            <translation>דער Windows Firewall פֿאַרהיט אַנדערע קאָמפּיוטערס צו דערגרייכן דעם פּאָרט.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="92" />
+            <source>Studio is waiting for other computers to connect. Windows Firewall blocks connections that no rule allows. Studio never changes the firewall by itself.</source>
+            <translation>Studio וואַרט אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן. דער Windows Firewall בלאָקירט פֿאַרבינדונגען וואָס קיין שום כּלל דערלויבט נישט. Studio ענדערט קיינמאָל נישט דעם פֿײַערוואָל פֿון זיך אַליין.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="100" />
+            <source>A rule in Windows Firewall blocks this program on this port. A block rule wins over an allow rule, and Studio does not remove it. Open Windows Defender Firewall with Advanced Security, find the block rule under Inbound Rules, and disable or delete it if you want other computers to connect.</source>
+            <translation>אַ כּלל אין Windows Firewall בלאָקירט דאָס פּראָגראַם אויף דעם פּאָרט. אַ בלאָקיר־כּלל האָט פֿאָרראַנג איבער אַ דערלויבן־כּלל, און Studio באַזייטיקט עס נישט. עפֿנט Windows Defender Firewall מיט פֿאַרבעסערטער זיכערקייט, געפֿינט דאָס בלאָקיר־כּלל אונטער אײַנקומענדיקע כּללים, און דיאַקטיוויזירט אָדער מעקט עס אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="110" />
+            <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Open Windows Security, choose Firewall and network protection, pick the network you are on, and turn off Block all incoming connections.</source>
+            <translation>דער Windows Firewall איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס שטעלט אַוועק יעדעס כּלל. עפֿנט Windows Security, קלײַבט אויס Firewall &amp; network protection, קלײַבט אויס דעם נעץ אויף וועלכן איר זײַט, און שטעלט אָפּ בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="121" />
+            <source>The rule Studio would add lets only this in:</source>
+            <translation>דאָס כּלל וואָס Studio וואָלט צוגעגעבן דערלויבט בלויז דאָס:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="123" />
+            <source>Program: %1
+Protocol and port: %2 %3
+Who: %4
+Networks: %5</source>
+            <translation>פּראָגראַם: %1
+פּראָטאָקאָל און פּאָרט: %2 %3
+ווער: %4
+נעצן: %5</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="128" />
+            <source>computers on your local network</source>
+            <translation>קאָמפּיוטערס אין אײַער לאָקאַלן נעץ</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="129" />
+            <source>any computer</source>
+            <translation>יעדער קאָמפּיוטער</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="139" />
+            <source>The same rule as a command, if you prefer to run it yourself in a terminal opened as administrator:</source>
+            <translation>דאָס זעלבע כּלל ווי אַ באַפֿעל, אויב איר ווילט עס אַליין לויפֿן אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="141" />
+            <source>To add the rule yourself, run this in a terminal opened as administrator:</source>
+            <translation>כּדי צוצולייגן דאָס כּלל אַליין, לויפֿט דאָס אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר:</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="145" />
+            <source>Command</source>
+            <translation>קאָמאַנדע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="158" />
+            <location filename="../src/support/firewall_dialog.cpp" line="161" />
+            <source>Allow in Windows Firewall</source>
+            <translation>דערלויבן אין Windows Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="165" />
+            <source>Windows will ask for administrator permission before the rule is added.</source>
+            <translation>Windows וועט פֿרעגן וועגן אַדמיניסטראַטאָר־דערלויבעניש איידער דאָס כּלל ווערט צוגעגעבן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="173" />
+            <source>Not available in this build</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
+        </message>
+        <message>
+            <location filename="../src/support/firewall_dialog.cpp" line="177" />
+            <source>Close</source>
+            <translation>פֿאַרמאַכן</translation>
+        </message>
+    </context>
+    <context>
         <name>FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -2603,72 +2716,72 @@
     <context>
         <name>MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>DROP</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>נישט דער באַזיצער, נישט ווײַטערגעשיקט.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>באַקומען</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>געשיקט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>אַוועקגעוואָרפֿן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1, %2, %3, %4 בײַטן, %5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>צײַט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>ריכטונג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>בײַטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>פֿאָרויסבליק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>נישט דער באַזיצער, נישט ווײַטערגעשיקט</translation>
         </message>
@@ -2677,7 +2790,7 @@
         <name>MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
@@ -2689,7 +2802,7 @@
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>פּויזירן</translation>
         </message>
@@ -2713,8 +2826,8 @@
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>אַלע פּאָרטן</translation>
         </message>
@@ -2760,69 +2873,73 @@
             <translation>עקספּאָרטירן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>נאָך קיין טראַפֿיק. שיקט עטלעכע בײַטן, אָדער עפֿנט דעם פּאָרט אין אַ פּראָגראַם.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>לאָג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>דער טאָפּאָלאָגיע־JSON־רעדאַקטאָר קומט מיט WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>טאָפּאָלאָגיע־JSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>פֿאָרזעצן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>קיין טראַפֿיק שטימט נישט מיט די פֿילטערס.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>עקספּאָרטירן דעם זעבאַרן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>טעקסט־טעקעס (*.txt);;אַלע טעקעס (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>נישט געקענט אָפּהיטן %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1 איז עקספּאָרטירט.</translation>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
             <source>Export capture</source>
             <translation>עקספּאָרטירן קאַפּטשער</translation>
         </message>
@@ -2850,12 +2967,12 @@
     <context>
         <name>NetworkEndpoint</name>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="189" />
+            <location filename="../src/dialogs/network_uri.cpp" line="213" />
             <source>Enter an address such as tcp://192.168.1.50:4001.</source>
             <translation>גיט אַרײַן אַן אַדרעס, למשל tcp://192.168.1.50:4001.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_uri.cpp" line="195" />
+            <location filename="../src/dialogs/network_uri.cpp" line="219" />
             <source>Choose a port from 1 to 65535.</source>
             <translation>קלײַבט אויס אַ פּאָרט פֿון 1 ביז 65535.</translation>
         </message>
@@ -2863,205 +2980,222 @@
     <context>
         <name>NetworkEndpointDialog</name>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="119" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="130" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="125" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="136" />
             <source>Put a device on the network</source>
             <translation>אַרויפֿשטעלן אַן אַפּאַראַט אין נעץ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="132" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="138" />
             <source>Share a serial device with other computers over TCP, UDP or RFC 2217.</source>
             <translation>צעטיילט אַ סעריעלן אַפּאַראַט מיט אַנדערע קאָמפּיוטערס דורך TCP, UDP אָדער RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="141" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="147" />
             <source>Network settings</source>
             <translation>נעץ־פּאַראַמעטערס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="150" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="156" />
             <source>Device to share</source>
             <translation>אַפּאַראַט צום צעטיילן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="151" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
             <source>A real serial device plugged into this PC.</source>
             <translation>אַ פֿיזישער סעריעלער אַפּאַראַט וואָס איז אײַנגעשטעקט אין דעם קאָמפּיוטער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="160" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="163" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="166" />
             <source>Share it using</source>
             <translation>צעטיילט אים מיט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="172" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="176" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="178" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="182" />
             <source>Wait for other computers to connect (server)</source>
             <translation>וואַרטן אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן (סערווער)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="174" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="177" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="180" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="183" />
             <source>Connect to a server (client)</source>
             <translation>פֿאַרבינדן זיך מיט אַ סערווער (קליענט)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="194" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="200" />
             <source>All network interfaces (0.0.0.0)</source>
             <translation>אַלע נעץ־אינטערפֿייסן (0.0.0.0)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="196" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
             <source>This PC only (127.0.0.1)</source>
             <translation>נאָר דער קאָמפּיוטער (127.0.0.1)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="198" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="204" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="208" />
             <source>A specific address</source>
             <translation>אַ באַשטימטער אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="211" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="217" />
             <source>Listen on</source>
             <translation>צוהערן אויף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="222" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="228" />
             <source>Server address</source>
             <translation>סערווער־אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="230" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
             <source>Port</source>
             <translation>פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="242" />
             <source>Choose This PC only (127.0.0.1) to test from this machine first.</source>
             <translation>קלײַבט אויס "נאָר דער קאָמפּיוטער (127.0.0.1)" כדי צו טעסטירן פֿון דעם מאַשין פֿריִער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="249" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="255" />
             <source>This build can connect to a server, but cannot wait for other computers to connect. Start the server on the other computer.</source>
             <translation>די דאָזיקע ווערסיע קען זיך פֿאַרבינדן מיט אַ סערווער, אָבער קען נישט וואַרטן אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן. הייבט אָן דעם סערווער אויפֿן אַנדערן קאָמפּיוטער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="256" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="262" />
             <source>Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect.</source>
             <translation>דערלויבט Virtual Serial Studio דורך דער Windows Firewall, אַנדערש קענען אַנדערע קאָמפּיוטערס זיך נישט פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="271" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="283" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="292" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="666" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="269" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="272" />
+            <source>Check Windows Firewall for this port</source>
+            <translation>קאָנטראָלירן Windows Firewall פֿאַר דעם פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="276" />
+            <source>Shows what Windows Firewall does to this port. Nothing changes until you agree.</source>
+            <translation>ווײַזט וואָס Windows Firewall טוט מיט דעם פּאָרט. גאָרנישט ענדערט זיך ביז איר שטימט צו.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>RFC 2217 האט נישט קיין פּאַראָל. יעדער וואָס קען דערגרייכן דעם פּאָרט קען נוצן דעם מכשיר. קלײַבט אויס דער PC בלויז (127.0.0.1), אָדער לייגט אין Advanced צו ?allow=192.168.1.0/24 צו דער אַדרעס כּדי צו באַשטימען ווער מעג זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="274" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>רעדאַקטירן אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>דער אַדרעס האָט פֿאָרראַנג איבער די פֿעלדער אויבן בעת ער ווערט רעדאַקטירט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="307" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="667" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="322" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>טעסטירט פֿריִער פֿון דעם קאָמפּיוטער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="324" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>אָנהייבן בריק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="482" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>קיין סעריעלער אַפּאַראַט איז נישט פֿאַראַנען. שטעקט אײַן איינעם, און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="492" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1, %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="493" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>פֿיזישער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="553" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="567" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="590" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>דעם אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="600" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן מיט דעם קאָמפּיוטער אויף פּאָרט %1 און רעדן מיט %2. דאַטן פֿליסן אין ביידע ריכטונגען, און דער מאָניטאָר ווײַזט ביידע ריכטונגען.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="608" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studio פֿאַרבינדט זיך מיט %1 אויף פּאָרט %2 און רעדט מיט %3. דאַטן פֿליסן אין ביידע ריכטונגען, און דער מאָניטאָר ווײַזט ביידע ריכטונגען.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="610" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>דעם סערווער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="701" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>קלײַבט אויס אַן אַפּאַראַט צום צעטיילן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="745" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>נעצווערק איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="746" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="758" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="772" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="781" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>נישט געקענט אָנהייבן די בריק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="773" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>פּאָרט %1 איז שוין אין באַנוץ. קלײַבט אויס אַן אַנדערן פּאָרט, אָדער האַלט אָפּ די פּראָגראַם וואָס ניצט אים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="782" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>דער אַדרעס איז אפֿשר אין באַנוץ, אָדער דער אַנדערער קאָמפּיוטער האָט אָפּגעזאָגט די פֿאַרבינדונג. קאָנטראָלירט דעם אַדרעס און פּרובירט נאָך אַ מאָל.</translation>
         </message>
@@ -3643,155 +3777,155 @@
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט עפֿענען דעם פּאָרט. ער עקזיסטירט נאָר אין Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט עפֿענען דעם פּאָרט. אינסטאַלירט אַ דרײַווער כדי צו באַשאַפֿן פּאָרטן וואָס זיי קענען עפֿענען.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>עפֿענען אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>קלײַבט אין אײַער פּראָגראַם אויס &lt;b&gt;%1&lt;/b&gt; ווי דעם סעריעלן פּאָרט. פּאַראַמעטערס ווי באָד־גיכקייט ווערן אויסגעקליבן דורך יענער פּראָגראַם. דער פּאָרט בלײַבט פֿאַראַנען בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>קלײַבט אין אײַער פּראָגראַם אויס %1 ווי דעם סעריעלן פּאָרט. פּאַראַמעטערס ווי באָד־גיכקייט ווערן אויסגעקליבן דורך יענער פּראָגראַם. דער פּאָרט בלײַבט פֿאַראַנען בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>דער וועג עקזיסטירט בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>אָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>ווײַזן פּרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>נאָמען</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>סאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>וועג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>אײַנטראָג אין אַן אָפּגעהיטער אײַנשטעלונג (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>פֿאַרבינדן %1 מיט עפּעס</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>באַשאַפֿן נאָך אײנעם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>פֿאַרטיק</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>וואַרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>קיין פּראָגראַם האָט נאָך נישט געעפֿנט %1. די פּאַנעל אַקטואַליזירט זיך ווען אַ פּראָגראַם עפֿנט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>פּראָגראַם פֿאַרבונדן</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>אַ פּראָגראַם ניצט %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>באַהאַלטן פּרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>לופּבעק אין פּראָצעס</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>פּסעוודאָ־טערמינאַל</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>Windows־דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אויטאָמאַטיש, אויפֿגעלייזט צום Studio דרייווער</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>אויטאָמאַטיש, באַשלאָסן אויף com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>פֿיזישער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>אויטאָמאַטיש</translation>
         </message>
@@ -4442,90 +4576,165 @@
     <context>
         <name>SetupCheck</name>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="46" />
+            <location filename="../src/support/setup_facts.cpp" line="48" />
             <source>No serial devices are visible to Virtual Serial Studio. You can still use virtual ports.</source>
             <translation>Virtual Serial Studio זעט קיין סעריעלע אַפּאַראַטן נישט. איר קענט אָבער ווײַטער ניצן ווירטועלע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="51" />
+            <location filename="../src/support/setup_facts.cpp" line="53" />
             <source>%n serial device(s) are visible to Virtual Serial Studio.</source>
             <translation>Virtual Serial Studio זעט %n סעריעלע אַפּאַראַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="60" />
+            <location filename="../src/support/setup_facts.cpp" line="62" />
             <source>%1 and %2 more are visible to Virtual Serial Studio.</source>
             <translation>Virtual Serial Studio זעט %1 און נאָך %2.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="67" />
+            <location filename="../src/support/setup_facts.cpp" line="69" />
             <source>%1 is visible to Virtual Serial Studio.</source>
             <translation>Virtual Serial Studio זעט %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="71" />
+            <location filename="../src/support/setup_facts.cpp" line="73" />
             <source>%1 and %2 are visible to Virtual Serial Studio.</source>
             <translation>Virtual Serial Studio זעט %1 און %2.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="82" />
-            <location filename="../src/support/setup_facts.cpp" line="117" />
+            <location filename="../src/support/permission_rows.cpp" line="29" />
+            <source>the port you choose</source>
+            <translation>דער פּאָרט וואָס איר קלײַבט אויס</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="37" />
+            <source>Windows Firewall</source>
+            <translation>Windows Firewall</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="43" />
+            <source>Studio could not read the Windows Firewall rules, so it cannot say whether other computers can connect.</source>
+            <translation>Studio האָט נישט געקענט לייענען די כּללים פֿון Windows Firewall, דעריבער קען עס נישט זאָגן צי אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="52" />
+            <location filename="../src/support/permission_rows.cpp" line="61" />
+            <location filename="../src/support/permission_rows.cpp" line="70" />
+            <location filename="../src/support/setup_facts.cpp" line="84" />
+            <location filename="../src/support/setup_facts.cpp" line="119" />
             <source>OK</source>
             <translation>OK</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="94" />
-            <location filename="../src/support/setup_facts.cpp" line="453" />
-            <location filename="../src/support/setup_facts.cpp" line="464" />
+            <location filename="../src/support/permission_rows.cpp" line="53" />
+            <source>Windows Firewall is not involved. Studio is not waiting for other computers to connect.</source>
+            <translation>Windows Firewall האָט נישט צו טאָן. Studio וואַרט נישט אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="62" />
+            <source>Windows Firewall is off for the network you are on, so it does not stop other computers. Studio does not change that setting.</source>
+            <translation>Windows Firewall איז אָפּגעשטעלט פֿאַר דעם נעץ אויף וועלכן איר זײַט, דעריבער האַלט ער נישט אָפּ אַנדערע קאָמפּיוטערס. Studio ענדערט נישט די באַשטימונג.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="71" />
+            <source>Windows Firewall has a rule that lets other computers reach %1.</source>
+            <translation>Windows Firewall האָט אַ כּלל וואָס לאָזט אַנדערע קאָמפּיוטערס דערגרייכן %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="84" />
+            <source>Windows Firewall may stop other computers connecting to %1. Studio can add one rule for this program and this port, after you agree.</source>
+            <translation>Windows Firewall קען פֿאַרהיטן אַנדערע קאָמפּיוטערס זיך צו פֿאַרבינדן צו %1. Studio קען צולייגן איין כּלל פֿאַר דעם פּראָגראַם און דעם פּאָרט, נאָכן ווי איר שטימט צו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="89" />
+            <source>Allow through the firewall</source>
+            <translation>דערלויבן אין פֿײַערוואָל</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="90" />
+            <source>How to allow it</source>
+            <translation>ווי אַזוי צו דערלויבן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="94" />
+            <source>A Windows Firewall rule blocks this program on %1. Studio never removes a block rule; change it in Windows Defender Firewall.</source>
+            <translation>אַ כּלל אין Windows Firewall בלאָקירט דאָס פּראָגראַם אויף %1. Studio מעקט קיינמאָל נישט אויס אַ בלאָקיר־כּלל; ענדערט עס אין Windows Defender Firewall.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="99" />
+            <location filename="../src/support/permission_rows.cpp" line="107" />
+            <source>How to change it</source>
+            <translation>ווי אַזוי צו ענדערן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="103" />
+            <source>Windows Firewall is set to block all incoming connections, which overrides every rule. Change that setting in Windows Security if you want other computers to connect.</source>
+            <translation>דער Windows Firewall איז באַשטימט צו בלאָקירן אַלע אײַנקומענדיקע פֿאַרבינדונגען, וואָס שטעלט אַוועק יעדעס כּלל. ענדערט די באַשטימונג אין Windows Security אויב איר ווילט אַז אַנדערע קאָמפּיוטערס זאָלן זיך קענען פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="156" />
+            <source>Your account is an administrator, so Windows will ask you to confirm.</source>
+            <translation>אײַער קאָנטאָ איז אַ אַדמיניסטראַטאָר, דעריבער וועט Windows בעטן אַז איר זאָלט באַשטעטיקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="159" />
+            <source>Your account is not an administrator, so Windows will ask for an administrator's password.</source>
+            <translation>אײַער קאָנטאָ איז נישט אַ אַדמיניסטראַטאָר, דעריבער וועט Windows פֿרעגן וועגן אַ אַדמיניסטראַטאָרס פּאַראָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/permission_rows.cpp" line="42" />
+            <location filename="../src/support/setup_facts.cpp" line="96" />
+            <location filename="../src/support/setup_facts.cpp" line="461" />
+            <location filename="../src/support/setup_facts.cpp" line="472" />
             <source>Not checked yet</source>
             <translation>נאָך נישט קאָנטראָלירט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="105" />
+            <location filename="../src/support/setup_facts.cpp" line="107" />
             <source>Real serial devices</source>
             <translation>פֿיזישע סעריעלע אַפּאַראַטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="107" />
+            <location filename="../src/support/setup_facts.cpp" line="109" />
             <source>Refresh</source>
             <translation>דערפֿרישן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="113" />
+            <location filename="../src/support/setup_facts.cpp" line="115" />
             <source>Studio did not check the serial devices.</source>
             <translation>Studio האָט נישט קאָנטראָלירט די סעריעלע אַפּאַראַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="134" />
+            <location filename="../src/support/setup_facts.cpp" line="136" />
             <source>Virtual port driver</source>
             <translation>ווירטועלער פּאָרט־דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="140" />
+            <location filename="../src/support/setup_facts.cpp" line="142" />
             <source>Studio did not check for the virtual port driver.</source>
             <translation>Studio האָט נישט קאָנטראָלירט אויף דעם ווירטועלן פּאָרט־דרײַווער.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="146" />
+            <location filename="../src/support/setup_facts.cpp" line="148" />
             <source>The Virtual Serial Studio driver is installed, so other programs can see ports Studio makes as COM ports.</source>
             <translation>דער Virtual Serial Studio דרייווער איז אינסטאַלירט, דעריבער קענען אַנדערע פּראָגראַמען זען די פּאָרטן וואָס Studio שאַפֿט ווי COM פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="153" />
+            <location filename="../src/support/setup_facts.cpp" line="156" />
             <source>Driver version %1.</source>
             <translation>דרייווער ווערסיע: %1.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="160" />
+            <location filename="../src/support/setup_facts.cpp" line="162" />
             <source>com0com is also installed, and Studio tries its own driver first.</source>
             <translation>com0com איז אויך אינסטאַלירט, און Studio פּרובירט צוערשט זײַן אייגענעם דרייווער.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="171" />
+            <location filename="../src/support/setup_facts.cpp" line="173" />
             <source>com0com is installed with %n pair(s), so other programs can see virtual ports as COM ports.</source>
             <translation>com0com איז אינסטאַלירט מיט %n פּאָרן, אַזוי אַז אַנדערע פּראָגראַמען קענען זען ווירטועלע פּאָרטן ווי COM־פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="176" />
+            <location filename="../src/support/setup_facts.cpp" line="178" />
             <source>com0com is installed, so other programs can see virtual ports as COM ports.</source>
             <translation>com0com איז אינסטאַלירט, אַזוי אַז אַנדערע פּראָגראַמען קענען זען ווירטועלע פּאָרטן ווי COM־פּאָרטן.</translation>
         </message>
@@ -4534,196 +4743,201 @@
             <translation type="vanished">com0com איז נישט געפֿונען געוואָרן. Windows דאַרף אַ דרײַווער איידער אַנדערע פּראָגראַמען קענען זען ווירטועלע פּאָרטן ווי COM־פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="185" />
+            <location filename="../src/support/setup_facts.cpp" line="187" />
             <source>Neither the Virtual Serial Studio driver nor com0com was found. Windows needs a driver before other programs can see virtual ports as COM ports.</source>
             <translation>ניט דער Virtual Serial Studio דרייווער און ניט com0com איז געפֿונען געוואָרן. Windows דאַרף אַ דרייווער כּדי אַנדערע פּראָגראַמען זאָלן זען ווירטועלע פּאָרטן ווי COM פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="191" />
-            <location filename="../src/support/setup_facts.cpp" line="293" />
-            <location filename="../src/support/setup_facts.cpp" line="333" />
+            <location filename="../src/support/permission_rows.cpp" line="78" />
+            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="340" />
             <source>Needs attention</source>
             <translation>דאַרף אַכטונג</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="193" />
+            <location filename="../src/support/setup_facts.cpp" line="195" />
             <source>Install com0com</source>
             <translation>אינסטאַלירן com0com</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="201" />
+            <location filename="../src/support/setup_facts.cpp" line="203" />
             <source>Administrator rights</source>
             <translation>אַדמיניסטראַטאָר־רעכטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="207" />
+            <location filename="../src/support/setup_facts.cpp" line="209" />
             <source>Studio could not check for administrator rights.</source>
             <translation>Studio האָט נישט געקענט קאָנטראָלירן אַדמיניסטראַטאָר־רעכטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="215" />
+            <location filename="../src/support/setup_facts.cpp" line="217" />
             <source>The Virtual Serial Studio driver makes ports without administrator rights.</source>
             <translation>דער Virtual Serial Studio דרייווער שאַפֿט פּאָרטן אָן אַדמיניסטראַטאָר־רעכט.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="223" />
+            <location filename="../src/support/setup_facts.cpp" line="225" />
             <source>Studio is running as administrator, so it can create linked pairs.</source>
             <translation>Studio לויפֿט ווי אַדמיניסטראַטאָר, דעריבער קען עס באַשאַפֿן פֿאַרבונדענע פּאָרן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="231" />
+            <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>צו באַשאַפֿן אַ נײַעם פֿאַרבונדענעם פּאָר דאַרף מען אַדמיניסטראַטאָר־רעכטן, איין מאָל פֿאַר יעדן פּאָר. אַלץ אַנדערש לויפֿט אָן זיי.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="236" />
+            <location filename="../src/support/setup_facts.cpp" line="243" />
             <source>Needed later</source>
             <translation>דאַרף מען שפּעטער</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="237" />
+            <location filename="../src/support/setup_facts.cpp" line="244" />
             <source>Restart as administrator</source>
             <translation>ווידער אָנהייבן ווי אַדמיניסטראַטאָר</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="249" />
+            <location filename="../src/support/setup_facts.cpp" line="256" />
             <source>Carry on without a driver</source>
             <translation>ווײַטער אָן אַ דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="250" />
+            <location filename="../src/support/setup_facts.cpp" line="257" />
             <source>You can still use in-process ports, the monitor and the Send panel to try things out.</source>
             <translation>איר קענט נאָך אַלץ ניצן פּאָרטן אין פּראָצעס, דעם מאָניטאָר און דעם שיק־פּאַנעל כדי עפּעס אויסצופּרובירן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="254" />
+            <location filename="../src/support/setup_facts.cpp" line="261" />
             <source>Continue in test mode</source>
             <translation>ווײַטער אין טעסט־מאָדע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="267" />
+            <location filename="../src/support/setup_facts.cpp" line="274" />
             <source>Pseudo terminals</source>
             <translation>פּסעוודאָ־טערמינאַלן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="273" />
+            <location filename="../src/support/setup_facts.cpp" line="280" />
             <source>Studio did not check whether pseudo terminals are available.</source>
             <translation>Studio האָט נישט קאָנטראָלירט צי פּסעוודאָ־טערמינאַלן זענען פֿאַראַנען.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="280" />
+            <location filename="../src/support/setup_facts.cpp" line="287" />
             <source>Pseudo terminals are available, so other programs can open new virtual ports.</source>
             <translation>פּסעוודאָ־טערמינאַלן זענען פֿאַראַנען, דעריבער קענען אַנדערע פּראָגראַמען עפֿענען נײַע ווירטועלע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="288" />
+            <location filename="../src/support/setup_facts.cpp" line="295" />
             <source>Pseudo terminals are not available. Other programs will not be able to open new virtual ports.</source>
             <translation>פּסעוודאָ־טערמינאַלן זענען נישט פֿאַראַנען. אַנדערע פּראָגראַמען וועלן נישט קענען עפֿענען נײַע ווירטועלע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="300" />
+            <location filename="../src/support/setup_facts.cpp" line="307" />
             <source>Serial port access</source>
             <translation>צוטריט צו סעריעלע פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="301" />
+            <location filename="../src/support/setup_facts.cpp" line="308" />
             <source>Serial port group membership</source>
             <translation>מיטגלידערשאַפֿט אין דער גרופע פֿון סעריעלע פּאָרטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="308" />
+            <location filename="../src/support/setup_facts.cpp" line="315" />
             <source>Studio has no group check for macOS. If a device cannot be opened, check its permissions in /dev.</source>
             <translation>Studio האָט קיין גרופע־קאָנטראָלע נישט פֿאַר macOS. אויב מען קען נישט עפֿענען אַן אַפּאַראַט, קאָנטראָלירט זײַנע דערלויבענישן אין /dev.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="312" />
+            <location filename="../src/support/setup_facts.cpp" line="319" />
             <source>Studio did not check your membership of the dialout group.</source>
             <translation>Studio האָט נישט קאָנטראָלירט אײַער מיטגלידערשאַפֿט אין דער dialout־גרופע.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="321" />
+            <location filename="../src/support/setup_facts.cpp" line="328" />
             <source>You are in the dialout group, so programs can open serial devices.</source>
             <translation>איר זענט אין דער dialout־גרופע, דעריבער קענען פּראָגראַמען עפֿענען סעריעלע אַפּאַראַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="329" />
+            <location filename="../src/support/setup_facts.cpp" line="336" />
             <source>Your account is not in the dialout group, so programs may not be able to open serial devices.</source>
             <translation>אײַער חשבון איז נישט אין דער dialout־גרופע, דעריבער קענען פּראָגראַמען אפֿשר נישט עפֿענען סעריעלע אַפּאַראַטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="335" />
+            <location filename="../src/support/setup_facts.cpp" line="342" />
             <source>How to add me</source>
             <translation>ווי צוצולייגן מיך</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="458" />
+            <location filename="../src/support/setup_facts.cpp" line="466" />
             <source>1 thing to fix</source>
             <translation>1 זאַך צו פֿאַרריכטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="459" />
+            <location filename="../src/support/setup_facts.cpp" line="467" />
             <source>%n things to fix</source>
             <translation>%n זאַכן צו פֿאַרריכטן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="471" />
+            <location filename="../src/support/setup_facts.cpp" line="479" />
             <source>Until a driver is installed, new ports only work inside Virtual Serial Studio. Other programs will not see them.</source>
             <translation>ביז אַ דרײַווער ווערט אינסטאַלירט, אַרבעטן נײַע פּאָרטן נאָר אין Virtual Serial Studio. אַנדערע פּראָגראַמען וועלן זיי נישט זען.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="491" />
+            <location filename="../src/support/setup_facts.cpp" line="499" />
             <source>On Linux and macOS this check looks at pseudo terminals and your serial port group membership instead.</source>
             <translation>אויף Linux און macOS קוקט די קאָנטראָלע אַנשטאָט אויף פּסעוודאָ־טערמינאַלן און אויף אײַער מיטגלידערשאַפֿט אין דער סעריעלער־פּאָרט־גרופּע.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="554" />
+            <location filename="../src/support/setup_facts.cpp" line="564" />
             <source>The application path is not known.</source>
             <translation>דער פּאַד פֿון דער פּראָגראַם איז נישט באַקאַנט.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="567" />
-            <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
-            <translation>Windows האָט נישט דערלויבט דעם ווידער־אָנהייב מיט העכערע רעכט. פּרובירט נאָך אַ מאָל פֿון דער סטאַרט־מעניו.</translation>
+            <location filename="../src/support/setup_facts.cpp" line="585" />
+            <source>You declined the Windows permission prompt, so Studio keeps running as before. Nothing was changed.</source>
+            <translation>איר האָט אָפּגעוואָרפֿן די דערלויבעניש־פֿרעג פֿון Windows, דעריבער לויפֿט Studio ווײַטער ווי פֿריִער. גאָרנישט איז געענדערט געוואָרן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="571" />
+            <source>Windows did not allow the elevated restart. Try again from the Start menu.</source>
+            <translation type="vanished">Windows האָט נישט דערלויבט דעם ווידער־אָנהייב מיט העכערע רעכט. פּרובירט נאָך אַ מאָל פֿון דער סטאַרט־מעניו.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/setup_facts.cpp" line="589" />
             <source>Windows could not restart Virtual Serial Studio as administrator.</source>
             <translation>Windows האָט נישט געקענט ווידער אָנהייבן Virtual Serial Studio ווי אַדמיניסטראַטאָר.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_facts.cpp" line="579" />
+            <location filename="../src/support/setup_facts.cpp" line="597" />
             <source>Restarting as administrator is only available on Windows.</source>
             <translation>ווידער אָנהייבן ווי אַדמיניסטראַטאָר איז נאָר פֿאַראַנען אויף Windows.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="49" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="52" />
             <source>Could not open the project page</source>
             <translation>די פּראָיעקט־זײַט האָט זיך נישט געעפֿנט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="51" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="54" />
             <source>Your browser did not open. Copy the link and open it yourself.</source>
             <translation>אײַער בראַוזער האָט זיך נישט געעפֿנט. קאָפּירט דעם לינק און עפֿנט אים אַליין.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="63" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="65" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="77" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="66" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="68" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="80" />
             <source>Install the com0com driver</source>
             <translation>אינסטאַלירן דעם com0com־דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="78" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="81" />
             <source>Virtual Serial Studio does not install drivers for you.</source>
             <translation>Virtual Serial Studio אינסטאַלירט נישט קיין דרײַווערס פֿאַר אײַך.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="84" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="87" />
             <source>Other programs cannot see a virtual port until a driver creates a COM port. On Windows that driver is com0com.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט זען אַ ווירטועלן פּאָרט ביז אַ דרײַווער שאַפֿט אַ COM־פּאָרט. אויף Windows איז דער דרײַווער com0com.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="94" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="97" />
             <source>1. Open the com0com project page.
 2. Download the latest setup program.
 3. Run it as administrator and keep the default options.
@@ -4734,72 +4948,107 @@
 4. קומט צוריק צו דער אײַנשטעלונג־קאָנטראָלע און קלײַבט איבערקאָנטראָלירן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="109" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="112" />
             <source>com0com project page</source>
             <translation>com0com־פּראָיעקט־זײַט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="116" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="119" />
             <source>Open project page</source>
             <translation>עפֿענען פּראָיעקט־זײַט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="127" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="170" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="271" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="130" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="173" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="274" />
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="140" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="142" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="154" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="143" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="145" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="157" />
             <source>Add me to the dialout group</source>
             <translation>צולייגן מיך צו דער dialout־גרופע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="156" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="159" />
             <source>Run this command in a terminal, then sign out and back in.</source>
             <translation>לויפֿט די דאָזיקע קאָמאַנדע אין אַ טערמינאַל, דערנאָך לאָגט זיך אַרויס און ווידער אַרײַן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="163" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="166" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="192" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="193" />
-            <location filename="../src/support/setup_check_dialog.cpp" line="214" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="195" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="196" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="217" />
             <source>Setup check</source>
             <translation>אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="215" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="218" />
             <source>What this PC needs so other programs can use your virtual ports.</source>
             <translation>וואָס דער קאָמפּיוטער דאַרף כדי אַנדערע פּראָגראַמען זאָלן קענען ניצן אײַערע ווירטועלע פּאָרטן.</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="221" />
-            <location filename="../src/support/setup_facts.cpp" line="467" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="224" />
+            <location filename="../src/support/setup_facts.cpp" line="475" />
             <source>All set</source>
             <translation>אַלץ גרייט</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="258" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="261" />
             <source>Why is a driver needed?</source>
             <translation>פֿאַרוואָס דאַרף מען אַ דרײַווער?</translation>
         </message>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="266" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="269" />
             <source>Re-check</source>
             <translation>איבערקאָנטראָלירן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="28" />
+            <source>The firewall rule was removed.</source>
+            <translation>דאָס פֿײַערוואָל־כּלל איז אַוועקגענומען געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="30" />
+            <source>The firewall rule was added.</source>
+            <translation>דאָס פֿײַערוואָל־כּלל איז צוגעלייגט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="33" />
+            <source>You declined the Windows permission prompt, so nothing was changed.</source>
+            <translation>איר האָט אָפּגעוואָרפֿן די דערלויבעניש־פֿרעג פֿון Windows, דעריבער איז גאָרנישט געענדערט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="38" />
+            <source>Not available in this build.</source>
+            <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="41" />
+            <source>Windows did not give the helper administrator rights, so nothing was changed.</source>
+            <translation>Windows האָט נישט געגעבן קיין אַדמיניסטראַטאָר־רעכט דעם העלפֿער, דעריבער איז גאָרנישט געענדערט געוואָרן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="46" />
+            <source>The helper refused the rule, so nothing was changed. Use the command shown instead.</source>
+            <translation>דער העלפֿער האָט אָפּגעוואָרפֿן דאָס כּלל, דעריבער איז גאָרנישט געענדערט געוואָרן. ניצט אַנשטאָט דעם באַפֿעל וואָס ווערט געוויזן.</translation>
+        </message>
+        <message>
+            <location filename="../src/support/elevated_step.cpp" line="53" />
+            <source>The firewall rule could not be changed. Use the command shown instead, in a terminal opened as administrator.</source>
+            <translation>דאָס פֿײַערוואָל־כּלל האָט נישט געקענט ווערן געענדערט. ניצט אַנשטאָט דעם באַפֿעל וואָס ווערט געוויזן, אין אַ טערמינאַל וואָס איז געעפֿנט ווי אַדמיניסטראַטאָר.</translation>
         </message>
     </context>
     <context>
         <name>SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -10172,72 +10421,72 @@
     <context>
         <name>vss::gui::MonitorModel</name>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="202" />
+            <location filename="../src/panes/monitor_model.cpp" line="219" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="204" />
+            <location filename="../src/panes/monitor_model.cpp" line="221" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="206" />
+            <location filename="../src/panes/monitor_model.cpp" line="223" />
             <source>DROP</source>
             <translation>DROP</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="229" />
+            <location filename="../src/panes/monitor_model.cpp" line="246" />
             <source>Not the owner, not forwarded.</source>
             <translation>נישט דער באַזיצער, נישט ווײַטערגעשיקט.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="234" />
+            <location filename="../src/panes/monitor_model.cpp" line="251" />
             <source>received</source>
             <translation>באַקומען</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="235" />
+            <location filename="../src/panes/monitor_model.cpp" line="252" />
             <source>sent</source>
             <translation>געשיקט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="236" />
+            <location filename="../src/panes/monitor_model.cpp" line="253" />
             <source>dropped</source>
             <translation>אַוועקגעוואָרפֿן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="237" />
+            <location filename="../src/panes/monitor_model.cpp" line="254" />
             <source>%1, %2, %3, %4 bytes, %5</source>
             <translation>%1, %2, %3, %4 בײַטן, %5</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="263" />
+            <location filename="../src/panes/monitor_model.cpp" line="280" />
             <source>Time</source>
             <translation>צײַט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="265" />
+            <location filename="../src/panes/monitor_model.cpp" line="282" />
             <source>Port</source>
             <translation>פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="267" />
+            <location filename="../src/panes/monitor_model.cpp" line="284" />
             <source>Direction</source>
             <translation>ריכטונג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="269" />
+            <location filename="../src/panes/monitor_model.cpp" line="286" />
             <source>Bytes</source>
             <translation>בײַטן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="271" />
+            <location filename="../src/panes/monitor_model.cpp" line="288" />
             <source>Preview</source>
             <translation>פֿאָרויסבליק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_model.cpp" line="294" />
+            <location filename="../src/panes/monitor_model.cpp" line="311" />
             <source>not the owner, not forwarded</source>
             <translation>נישט דער באַזיצער, נישט ווײַטערגעשיקט</translation>
         </message>
@@ -10246,7 +10495,7 @@
         <name>vss::gui::MonitorPanel</name>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="280" />
+            <location filename="../src/panes/monitor_panel.cpp" line="289" />
             <source>Monitor</source>
             <translation>מאָניטאָר</translation>
         </message>
@@ -10258,7 +10507,7 @@
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="167" />
             <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Pause</source>
             <translation>פּויזירן</translation>
         </message>
@@ -10282,8 +10531,8 @@
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="430" />
-            <location filename="../src/panes/monitor_panel.cpp" line="443" />
+            <location filename="../src/panes/monitor_panel.cpp" line="441" />
+            <location filename="../src/panes/monitor_panel.cpp" line="454" />
             <source>All ports</source>
             <translation>אַלע פּאָרטן</translation>
         </message>
@@ -10329,69 +10578,73 @@
             <translation>עקספּאָרטירן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="241" />
+            <location filename="../src/panes/monitor_panel.cpp" line="250" />
             <source>Traffic</source>
             <translation>טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="272" />
-            <location filename="../src/panes/monitor_panel.cpp" line="518" />
+            <location filename="../src/panes/monitor_panel.cpp" line="281" />
+            <location filename="../src/panes/monitor_panel.cpp" line="531" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>נאָך קיין טראַפֿיק. שיקט עטלעכע בײַטן, אָדער עפֿנט דעם פּאָרט אין אַ פּראָגראַם.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="284" />
-            <location filename="../src/panes/monitor_panel.cpp" line="287" />
+            <location filename="../src/panes/monitor_panel.cpp" line="293" />
+            <location filename="../src/panes/monitor_panel.cpp" line="296" />
             <source>Log</source>
             <translation>לאָג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>דער טאָפּאָלאָגיע־JSON־רעדאַקטאָר קומט מיט WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="294" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>Topology JSON</source>
             <translation>טאָפּאָלאָגיע־JSON</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="485" />
+            <location filename="../src/panes/monitor_panel.cpp" line="496" />
             <source>Resume</source>
             <translation>פֿאָרזעצן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="514" />
+            <location filename="../src/panes/monitor_panel.cpp" line="527" />
             <source>No traffic matches these filters.</source>
             <translation>קיין טראַפֿיק שטימט נישט מיט די פֿילטערס.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="542" />
+            <location filename="../src/panes/monitor_panel.cpp" line="555" />
             <source>link</source>
             <translation>פֿאַרבינדונג</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="578" />
+            <location filename="../src/panes/monitor_panel.cpp" line="591" />
             <source>Export visible traffic</source>
             <translation>עקספּאָרטירן דעם זעבאַרן טראַפֿיק</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="579" />
+            <location filename="../src/panes/monitor_panel.cpp" line="592" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>טעקסט־טעקעס (*.txt);;אַלע טעקעס (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="585" />
+            <location filename="../src/panes/monitor_panel.cpp" line="598" />
+            <location filename="../src/panes/monitor_panel.cpp" line="638" />
             <source>Could not save %1.</source>
             <translation>נישט געקענט אָפּהיטן %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="589" />
+            <location filename="../src/panes/monitor_panel.cpp" line="602" />
+            <location filename="../src/panes/monitor_panel.cpp" line="641" />
             <source>Exported %1.</source>
             <translation>%1 איז עקספּאָרטירט.</translation>
         </message>
         <message>
             <location filename="../src/panes/monitor_panel.cpp" line="224" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
+            <location filename="../src/panes/monitor_panel.cpp" line="612" />
             <source>Export capture</source>
             <translation>עקספּאָרטירן קאַפּטשער</translation>
         </message>
@@ -10419,205 +10672,222 @@
     <context>
         <name>vss::gui::NetworkEndpointDialog</name>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="119" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="130" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="125" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="136" />
             <source>Put a device on the network</source>
             <translation>אַרויפֿשטעלן אַן אַפּאַראַט אין נעץ</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="132" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="138" />
             <source>Share a serial device with other computers over TCP, UDP or RFC 2217.</source>
             <translation>צעטיילט אַ סעריעלן אַפּאַראַט מיט אַנדערע קאָמפּיוטערס דורך TCP, UDP אָדער RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="141" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="147" />
             <source>Network settings</source>
             <translation>נעץ־פּאַראַמעטערס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="150" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="156" />
             <source>Device to share</source>
             <translation>אַפּאַראַט צום צעטיילן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="151" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
             <source>A real serial device plugged into this PC.</source>
             <translation>אַ פֿיזישער סעריעלער אַפּאַראַט וואָס איז אײַנגעשטעקט אין דעם קאָמפּיוטער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="157" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="160" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="163" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="166" />
             <source>Share it using</source>
             <translation>צעטיילט אים מיט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="172" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="176" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="178" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="182" />
             <source>Wait for other computers to connect (server)</source>
             <translation>וואַרטן אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן (סערווער)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="174" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="177" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="180" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="183" />
             <source>Connect to a server (client)</source>
             <translation>פֿאַרבינדן זיך מיט אַ סערווער (קליענט)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="194" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="200" />
             <source>All network interfaces (0.0.0.0)</source>
             <translation>אַלע נעץ־אינטערפֿייסן (0.0.0.0)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="196" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
             <source>This PC only (127.0.0.1)</source>
             <translation>נאָר דער קאָמפּיוטער (127.0.0.1)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="198" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="202" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="204" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="208" />
             <source>A specific address</source>
             <translation>אַ באַשטימטער אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="211" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="217" />
             <source>Listen on</source>
             <translation>צוהערן אויף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="222" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="228" />
             <source>Server address</source>
             <translation>סערווער־אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="230" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
             <source>Port</source>
             <translation>פּאָרט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="236" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="242" />
             <source>Choose This PC only (127.0.0.1) to test from this machine first.</source>
             <translation>קלײַבט אויס "נאָר דער קאָמפּיוטער (127.0.0.1)" כדי צו טעסטירן פֿון דעם מאַשין פֿריִער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="249" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="255" />
             <source>This build can connect to a server, but cannot wait for other computers to connect. Start the server on the other computer.</source>
             <translation>די דאָזיקע ווערסיע קען זיך פֿאַרבינדן מיט אַ סערווער, אָבער קען נישט וואַרטן אַז אַנדערע קאָמפּיוטערס זאָלן זיך פֿאַרבינדן. הייבט אָן דעם סערווער אויפֿן אַנדערן קאָמפּיוטער.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="256" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="262" />
             <source>Allow Virtual Serial Studio through Windows Firewall, or other computers cannot connect.</source>
             <translation>דערלויבט Virtual Serial Studio דורך דער Windows Firewall, אַנדערש קענען אַנדערע קאָמפּיוטערס זיך נישט פֿאַרבינדן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="271" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="283" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="292" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="666" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="269" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="272" />
+            <source>Check Windows Firewall for this port</source>
+            <translation>קאָנטראָלירן Windows Firewall פֿאַר דעם פּאָרט</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="276" />
+            <source>Shows what Windows Firewall does to this port. Nothing changes until you agree.</source>
+            <translation>ווײַזט וואָס Windows Firewall טוט מיט דעם פּאָרט. גאָרנישט ענדערט זיך ביז איר שטימט צו.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="289" />
+            <source>RFC 2217 has no password. Anyone who can reach this port can use the device. Choose This PC only (127.0.0.1), or in Advanced add ?allow=192.168.1.0/24 to the address to say who may connect.</source>
+            <translation>RFC 2217 האט נישט קיין פּאַראָל. יעדער וואָס קען דערגרייכן דעם פּאָרט קען נוצן דעם מכשיר. קלײַבט אויס דער PC בלויז (127.0.0.1), אָדער לייגט אין Advanced צו ?allow=192.168.1.0/24 צו דער אַדרעס כּדי צו באַשטימען ווער מעג זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/dialogs/network_endpoint.cpp" line="306" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="318" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="717" />
             <source>Address</source>
             <translation>אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="274" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
             <source>Edit address</source>
             <translation>רעדאַקטירן אַדרעס</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="297" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="332" />
             <source>The address wins over the fields above while it is edited.</source>
             <translation>דער אַדרעס האָט פֿאָרראַנג איבער די פֿעלדער אויבן בעת ער ווערט רעדאַקטירט.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="307" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="342" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="309" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="667" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="344" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="718" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="322" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="357" />
             <source>Test from this PC first</source>
             <translation>טעסטירט פֿריִער פֿון דעם קאָמפּיוטער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="324" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="359" />
             <source>Cancel</source>
             <translation>אַנולירן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="327" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="362" />
             <source>Start bridge</source>
             <translation>אָנהייבן בריק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="482" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="515" />
             <source>No serial device is available. Plug one in, then try again.</source>
             <translation>קיין סעריעלער אַפּאַראַט איז נישט פֿאַראַנען. שטעקט אײַן איינעם, און פּרובירט נאָך אַ מאָל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="492" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="525" />
             <source>%1, %2 (%3)</source>
             <translation>%1, %2 (%3)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="493" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="526" />
             <source>real device</source>
             <translation>פֿיזישער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="553" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="567" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="281" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="581" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="595" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="590" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="641" />
             <source>the device</source>
             <translation>דעם אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="600" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="651" />
             <source>Other computers can connect to this PC on port %1 and talk to %2. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן מיט דעם קאָמפּיוטער אויף פּאָרט %1 און רעדן מיט %2. דאַטן פֿליסן אין ביידע ריכטונגען, און דער מאָניטאָר ווײַזט ביידע ריכטונגען.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="608" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="659" />
             <source>Studio connects to %1 on port %2 and talks to %3. Data flows both ways, and the Monitor shows both directions.</source>
             <translation>Studio פֿאַרבינדט זיך מיט %1 אויף פּאָרט %2 און רעדט מיט %3. דאַטן פֿליסן אין ביידע ריכטונגען, און דער מאָניטאָר ווײַזט ביידע ריכטונגען.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="610" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="661" />
             <source>the server</source>
             <translation>דעם סערווער</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="701" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="754" />
             <source>Choose a device to share.</source>
             <translation>קלײַבט אויס אַן אַפּאַראַט צום צעטיילן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="745" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="798" />
             <source>Networking is not available in this build.</source>
             <translation>נעצווערק איז נישט פֿאַראַנען אין דער דאָזיקער ווערסיע.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="746" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="758" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="772" />
-            <location filename="../src/dialogs/network_endpoint.cpp" line="781" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="799" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="811" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="825" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="834" />
             <source>Could not start the bridge</source>
             <translation>נישט געקענט אָנהייבן די בריק</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="773" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="826" />
             <source>Port %1 is already in use. Choose another port, or stop the program using it.</source>
             <translation>פּאָרט %1 איז שוין אין באַנוץ. קלײַבט אויס אַן אַנדערן פּאָרט, אָדער האַלט אָפּ די פּראָגראַם וואָס ניצט אים.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/network_endpoint.cpp" line="782" />
+            <location filename="../src/dialogs/network_endpoint.cpp" line="835" />
             <source>The address may be in use, or the other computer refused the connection. Check the address and try again.</source>
             <translation>דער אַדרעס איז אפֿשר אין באַנוץ, אָדער דער אַנדערער קאָמפּיוטער האָט אָפּגעזאָגט די פֿאַרבינדונג. קאָנטראָלירט דעם אַדרעס און פּרובירט נאָך אַ מאָל.</translation>
         </message>
@@ -11087,155 +11357,155 @@
             <translation>%1 איז אָפּגעקאָפּירט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="200" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט עפֿענען דעם פּאָרט. ער עקזיסטירט נאָר אין Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>אַנדערע פּראָגראַמען קענען נישט עפֿענען דעם פּאָרט. אינסטאַלירט אַ דרײַווער כדי צו באַשאַפֿן פּאָרטן וואָס זיי קענען עפֿענען.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="206" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
             <source>Open setup check</source>
             <translation>עפֿענען אײַנשטעלונג־קאָנטראָלע</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="218" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>קלײַבט אין אײַער פּראָגראַם אויס &lt;b&gt;%1&lt;/b&gt; ווי דעם סעריעלן פּאָרט. פּאַראַמעטערס ווי באָד־גיכקייט ווערן אויסגעקליבן דורך יענער פּראָגראַם. דער פּאָרט בלײַבט פֿאַראַנען בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="224" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>קלײַבט אין אײַער פּראָגראַם אויס %1 ווי דעם סעריעלן פּאָרט. פּאַראַמעטערס ווי באָד־גיכקייט ווערן אויסגעקליבן דורך יענער פּראָגראַם. דער פּאָרט בלײַבט פֿאַראַנען בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="234" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>דער וועג עקזיסטירט בעת Virtual Serial Studio לויפֿט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="248" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="371" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
             <source>Open</source>
             <translation>אָפֿן</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="257" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="381" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
             <source>Show details</source>
             <translation>ווײַזן פּרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="267" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
             <source>Name</source>
             <translation>נאָמען</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
             <source>Kind</source>
             <translation>סאָרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="272" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Path</source>
             <translation>וועג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="278" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>אײַנטראָג אין אַן אָפּגעהיטער אײַנשטעלונג (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="283" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="287" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
             <source>Same thing from the command line</source>
             <translation>דאָס זעלבע פֿון דער קאָמאַנד־שורה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="292" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
             <source>Command</source>
             <translation>קאָמאַנדע</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="315" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
             <source>Connect %1 to something</source>
             <translation>פֿאַרבינדן %1 מיט עפּעס</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="323" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
             <source>Create another</source>
             <translation>באַשאַפֿן נאָך אײנעם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="330" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
             <source>Done</source>
             <translation>פֿאַרטיק</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="352" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
             <source>Waiting</source>
             <translation>וואַרט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
             <source>No program has opened %1 yet. This panel updates when one does.</source>
             <translation>קיין פּראָגראַם האָט נאָך נישט געעפֿנט %1. די פּאַנעל אַקטואַליזירט זיך ווען אַ פּראָגראַם עפֿנט.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
             <source>Program connected</source>
             <translation>פּראָגראַם פֿאַרבונדן</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="364" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
             <source>A program is using %1.</source>
             <translation>אַ פּראָגראַם ניצט %1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
             <source>Hide details</source>
             <translation>באַהאַלטן פּרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="388" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
             <source>In-process loopback</source>
             <translation>לופּבעק אין פּראָצעס</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="391" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
             <source>Pseudo terminal</source>
             <translation>פּסעוודאָ־טערמינאַל</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
             <source>Windows driver</source>
             <translation>Windows־דרײַווער</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אויטאָמאַטיש, אויפֿגעלייזט צום Studio דרייווער</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="401" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
             <source>Auto, resolved to com0com</source>
             <translation>אויטאָמאַטיש, באַשלאָסן אויף com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Real device</source>
             <translation>פֿיזישער אַפּאַראַט</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="405" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
             <source>Auto</source>
             <translation>אויטאָמאַטיש</translation>
         </message>
@@ -13430,7 +13700,7 @@
     <context>
         <name>vss::gui::support::SetupCheckDialog</name>
         <message>
-            <location filename="../src/support/setup_check_dialog.cpp" line="320" />
+            <location filename="../src/support/setup_check_dialog.cpp" line="323" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>

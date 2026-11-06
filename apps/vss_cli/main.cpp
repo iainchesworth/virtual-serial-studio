@@ -9,6 +9,8 @@
 // can be scripted, measured and put in CI.
 //
 
+#include "permissions_command.hpp"
+
 #include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
 #include <vss/studio/capture.hpp>
@@ -155,11 +157,13 @@ void print_usage()
         "  vss_cli selftest\n"
         "      Check the wiring without touching hardware.\n"
         "\n"
+        "%s"
         "  Common: --verbose, --quiet\n"
         "\n"
         "Virtual Serial Studio is free software under the GNU General Public\n"
         "License, version 3 or later.  This program comes with ABSOLUTELY NO\n"
-        "WARRANTY; see LICENSE for details.\n");
+        "WARRANTY; see LICENSE for details.\n",
+        vss_cli::permissions_usage());
 }
 
 void print_topology(studio& app)
@@ -1046,6 +1050,9 @@ int main(int argc, char** argv)
             return command_bench(args);
         if (command == "selftest")
             return command_selftest();
+        if (command == "permissions")
+            return vss_cli::command_permissions(
+                std::vector<std::string>(argv + 1, argv + argc));
     }
     catch (const std::exception& error)
     {

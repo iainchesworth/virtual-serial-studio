@@ -10,6 +10,7 @@ add_library(vss_ports
   src/loopback_transport.cpp
   src/native_lines.cpp
   src/peer_open.cpp
+  src/permissions.cpp
   src/rfc2217.cpp
   src/serial_enumeration.cpp
   src/serial_transport.cpp
@@ -36,7 +37,8 @@ if(UNIX)
 endif()
 
 if(WIN32)
-  target_link_libraries(vss_ports PRIVATE setupapi shell32 advapi32 ws2_32 mswsock)
+  target_link_libraries(vss_ports PRIVATE setupapi shell32 advapi32 ws2_32 mswsock
+    ole32 oleaut32)
   # public.h of the driver (the interface GUID, control codes and the hub state)
   # and the protocol of the helper service.
   target_include_directories(vss_ports PRIVATE

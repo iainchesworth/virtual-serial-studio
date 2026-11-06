@@ -7,6 +7,9 @@
 #include "support/setup_check_dialog.hpp"
 
 #include "support/check_row.hpp"
+#include "support/elevated_step.hpp"
+#include "support/firewall_dialog.hpp"
+#include "support/permission_rows.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
@@ -345,6 +348,19 @@ void SetupCheckDialog::rebuild()
     platform_note_->setText(report_.platform_note);
 }
 
+void SetupCheckDialog::show_firewall_help()
+{
+    // Ask again: the user may have changed the firewall since the last check.
+    const auto fact = firewall_fact(
+        vss::permissions::probe(permission_context(backend_)));
+    if (!fact)
+        return;
+    FirewallDialog dialog(*fact, firewall_step_available(), this);
+    dialog.exec();
+    if (dialog.rule_added())
+        recheck();
+}
+
 void SetupCheckDialog::handle_action(setup_action action)
 {
     switch (action)
@@ -366,6 +382,9 @@ void SetupCheckDialog::handle_action(setup_action action)
         break;
     case setup_action::dialout_help:
         show_dialout_help(this);
+        break;
+    case setup_action::firewall_help:
+        show_firewall_help();
         break;
     }
 }
