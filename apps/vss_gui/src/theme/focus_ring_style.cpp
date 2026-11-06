@@ -6,14 +6,18 @@
 
 #include "theme/focus_ring_style.hpp"
 
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 
 #include <QApplication>
 #include <QFocusEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QStyleFactory>
 #include <QStyleOptionFocusRect>
 #include <QWidget>
+
+#include <algorithm>
 
 namespace vss::gui
 {
@@ -52,11 +56,78 @@ bool FocusRingStyle::eventFilter(QObject* watched, QEvent* event)
     return QProxyStyle::eventFilter(watched, event);
 }
 
+bool FocusRingStyle::draw_chevron(PrimitiveElement element,
+                                  const QStyleOption* option, QPainter* painter)
+{
+    // Fusion's own arrows are filled triangles a few pixels wide; the icon
+    // set uses a 1.5 px stroked chevron, so draw the same shape here for the
+    // combo box and spin box arrows.
+    const bool up = element == PE_IndicatorArrowUp ||
+                    element == PE_IndicatorSpinUp ||
+                    element == PE_IndicatorSpinPlus;
+    const bool enabled = (option->state & State_Enabled) != 0;
+    const QColor colour =
+        enabled ? Theme::instance().colour(colour_role::ink2)
+                : Theme::instance().colour(colour_role::disabledText);
+
+    const QPointF centre = QRectF(option->rect).center();
+    const qreal half = std::min<qreal>(4.0, option->rect.width() / 2.0);
+    const qreal rise = half * 0.55;
+    QPainterPath path;
+    if (up)
+    {
+        path.moveTo(centre.x() - half, centre.y() + rise);
+        path.lineTo(centre.x(), centre.y() - rise);
+        path.lineTo(centre.x() + half, centre.y() + rise);
+    }
+    else
+    {
+        path.moveTo(centre.x() - half, centre.y() - rise);
+        path.lineTo(centre.x(), centre.y() + rise);
+        path.lineTo(centre.x() + half, centre.y() - rise);
+    }
+
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    QPen pen(colour, 1.5);
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setJoinStyle(Qt::RoundJoin);
+    painter->setPen(pen);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPath(path);
+    painter->restore();
+    return true;
+}
+
+QIcon FocusRingStyle::standardIcon(StandardPixmap standard,
+                                   const QStyleOption* option,
+                                   const QWidget* widget) const
+{
+    // The dock title buttons are drawn by the style from standard pixmaps.
+    // The icon set has the close mark, so use it rather than the platform's.
+    if (standard == SP_DockWidgetCloseButton ||
+        standard == SP_TitleBarCloseButton)
+    {
+        return IconProvider::instance().icon(QStringLiteral("remove"),
+                                             colour_role::ink2, 16);
+    }
+    return QProxyStyle::standardIcon(standard, option, widget);
+}
+
 void FocusRingStyle::drawPrimitive(PrimitiveElement element,
                                    const QStyleOption* option,
                                    QPainter* painter,
                                    const QWidget* widget) const
 {
+    if (element == PE_IndicatorArrowDown || element == PE_IndicatorArrowUp ||
+        element == PE_IndicatorSpinDown || element == PE_IndicatorSpinUp ||
+        element == PE_IndicatorSpinMinus || element == PE_IndicatorSpinPlus)
+    {
+        if (option != nullptr && painter != nullptr &&
+            draw_chevron(element, option, painter))
+            return;
+    }
+
     if (element != PE_FrameFocusRect)
     {
         QProxyStyle::drawPrimitive(element, option, painter, widget);

@@ -254,6 +254,8 @@ QWidget* ShareWizard::build_device_page()
     which->addStretch(1);
     refresh_ = make_dialog_action_button(tr("Refresh"), "quiet", page);
     refresh_->setProperty("size", QStringLiteral("small"));
+    refresh_->setIcon(IconProvider::instance().icon(
+        QStringLiteral("refresh"), colour_role::accentStrong, 16));
     polish(refresh_);
     refresh_->setAccessibleName(tr("Refresh the device list"));
     connect(refresh_, &QPushButton::clicked, this,
@@ -1552,6 +1554,8 @@ void ShareWizard::update_ready_table()
             auto* copy =
                 make_dialog_action_button(tr("Copy"), "quiet", ready_table_);
             copy->setProperty("size", QStringLiteral("small"));
+            copy->setIcon(IconProvider::instance().icon(
+                QStringLiteral("copy"), colour_role::accentStrong, 16));
             polish(copy);
             copy->setAccessibleName(tr("Copy %1").arg(path));
             copy->setToolTip(copy->accessibleName());

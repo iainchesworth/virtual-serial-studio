@@ -21,6 +21,11 @@ StatusBar::StatusBar(StudioBackend& backend, QWidget* parent)
     : QStatusBar(parent), backend_(backend)
 {
     setSizeGripEnabled(false);
+    // A top-level window has rounded bottom corners on Windows 11 and macOS.
+    // Content that sits against the edge of the bar is cut by the corner, so
+    // inset both ends by the 12 px step of the spacing scale.
+    const int inset = Theme::instance().space(2);
+    setContentsMargins(inset, 2, inset, 2);
     setAccessibleName(tr("Status bar"));
     rate_timer_.start();
     last_ns_ = rate_timer_.nsecsElapsed();

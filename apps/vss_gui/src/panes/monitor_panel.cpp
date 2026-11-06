@@ -7,6 +7,7 @@
 #include "panes/monitor_panel.hpp"
 
 #include "panes/monitor_model.hpp"
+#include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
@@ -165,6 +166,8 @@ void MonitorPanel::build()
     simple_layout->setContentsMargins(12, 0, 12, 0);
     simple_layout->setSpacing(12);
     simple_pause_ = new QPushButton(tr("Pause"), simple_bar_);
+    simple_pause_->setIcon(IconProvider::instance().icon(
+        QStringLiteral("pause"), colour_role::ink, 16));
     simple_pause_->setProperty("size", QStringLiteral("small"));
     polish(simple_pause_);
     clear_ = new QPushButton(tr("Clear"), simple_bar_);
@@ -211,6 +214,8 @@ void MonitorPanel::build()
     mode_->add_item(tr("ASCII"));
     mode_->add_item(tr("Hex"), 1);
     pause_ = new QPushButton(tr("Pause"), advanced_bar_);
+    pause_->setIcon(IconProvider::instance().icon(QStringLiteral("pause"),
+                                                  colour_role::ink, 16));
     pause_->setProperty("size", QStringLiteral("small"));
     polish(pause_);
     auto* advanced_clear = new QPushButton(tr("Clear"), advanced_bar_);
@@ -494,9 +499,17 @@ void MonitorPanel::update_actions()
     if (model_ == nullptr)
         return;
     const QString pause_text = model_->paused() ? tr("Resume") : tr("Pause");
+    // Resume is the play triangle; Pause keeps its bars.
+    const QIcon pause_icon = IconProvider::instance().icon(
+        model_->paused() ? QStringLiteral("run") : QStringLiteral("pause"),
+        colour_role::ink, 16);
     pause_->setText(pause_text);
+    pause_->setIcon(pause_icon);
     if (simple_pause_ != nullptr)
+    {
         simple_pause_->setText(pause_text);
+        simple_pause_->setIcon(pause_icon);
+    }
     if (export_ != nullptr)
         export_->setEnabled(model_->rowCount() > 0);
     if (export_capture_ != nullptr)
@@ -610,8 +623,8 @@ void MonitorPanel::export_capture()
     QString selected = cap_filter;
     QString path = QFileDialog::getSaveFileName(
         this, tr("Export capture"), QStringLiteral("capture.cap"),
-        cap_filter + QStringLiteral(";;") + csv_filter +
-            QStringLiteral(";;") + jsonl_filter,
+        cap_filter + QStringLiteral(";;") + csv_filter + QStringLiteral(";;") +
+            jsonl_filter,
         &selected);
     if (path.isEmpty())
         return;
