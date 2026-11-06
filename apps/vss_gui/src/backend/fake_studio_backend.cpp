@@ -164,6 +164,98 @@ FakeStudioBackend::create_virtual_port(const QString& name,
     return id;
 }
 
+vss::result<vss::endpoint_id> FakeStudioBackend::create_driver_port(
+    const QString& name, bool capture, unsigned com_number)
+{
+    if (com_number > 255)
+        return vss::make_error_code(vss::errc::invalid_argument);
+    if (com_number != 0 &&
+        (taken_com_numbers_.contains(com_number) ||
+         std::any_of(ports_.begin(), ports_.end(),
+                     [com_number](const port_view& view)
+                     { return view.com_number == com_number; })))
+        return vss::make_error_code(vss::errc::already_exists);
+
+    const auto created = create_virtual_port(
+        name, vss::virtual_port_kind::windows_driver, capture);
+    if (!created)
+        return created;
+    if (port_view* view = find_port(*created))
+    {
+        view->driver_port = true;
+        view->com_number = com_number != 0
+                               ? com_number
+                               : static_cast<unsigned>(next_com_number_++);
+        view->path = QStringLiteral("COM%1").arg(view->com_number);
+        refresh();
+    }
+    return created;
+}
+
+vss::result<QString> FakeStudioBackend::set_com_number(vss::endpoint_id id,
+                                                       unsigned com_number)
+{
+    if (const auto error = take_error())
+        return *error;
+    port_view* view = find_port(id);
+    if (view == nullptr)
+        return vss::make_error_code(vss::errc::not_found);
+    if (!view->driver_port)
+        return vss::make_error_code(vss::errc::unsupported);
+    if (com_number < 1 || com_number > 255)
+        return vss::make_error_code(vss::errc::invalid_argument);
+    if (view->com_number == com_number)
+        return view->path;
+    if (taken_com_numbers_.contains(com_number) ||
+        std::any_of(ports_.begin(), ports_.end(),
+                    [com_number](const port_view& other)
+                    { return other.com_number == com_number; }))
+        return vss::make_error_code(vss::errc::already_exists);
+    if (view->peer == peer_state::open)
+        return vss::make_error_code(vss::errc::device_busy);
+    view->com_number = com_number;
+    view->path = QStringLiteral("COM%1").arg(com_number);
+    return view->path;
+}
+
+std::optional<holder_view> FakeStudioBackend::port_holder(
+    vss::endpoint_id id) const
+{
+    const auto found = holders_.constFind(id);
+    if (found == holders_.constEnd())
+        return std::nullopt;
+    return *found;
+}
+
+void FakeStudioBackend::set_holder(vss::endpoint_id id,
+                                   std::optional<holder_view> holder)
+{
+    if (holder)
+        holders_.insert(id, *holder);
+    else
+        holders_.remove(id);
+}
+
+vss::result<void> FakeStudioBackend::release_port(vss::endpoint_id id,
+                                                  release_method method)
+{
+    if (const auto error = take_error())
+        return *error;
+    port_view* view = find_port(id);
+    if (view == nullptr)
+        return vss::make_error_code(vss::errc::not_found);
+    const auto holder = holders_.constFind(id);
+    if (holder == holders_.constEnd())
+        return vss::make_error_code(vss::errc::not_found);
+    if (method == release_method::end_program && !holder->can_end)
+        return vss::make_error_code(vss::errc::permission_denied);
+    releases_.emplace_back(id, method);
+    holders_.remove(id);
+    view->peer = peer_state::not_open;
+    refresh();
+    return {};
+}
+
 vss::result<vss::endpoint_id>
 FakeStudioBackend::create_auto_port(const QString& name, bool capture)
 {

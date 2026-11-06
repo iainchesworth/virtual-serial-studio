@@ -13,6 +13,7 @@
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
 #include <vss/ports/permissions.hpp>
+#include <vss/ports/process_control.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/studio/studio.hpp>
 
@@ -21,7 +22,9 @@
 #include <QTimer>
 
 #include <algorithm>
+#include <chrono>
 #include <cstddef>
+#include <mutex>
 #include <unordered_map>
 #include <utility>
 
@@ -53,9 +56,46 @@ peer_state to_peer_state(vss::peer_open_state state)
     return peer_state::unknown;
 }
 
+/// The number in a COM name such as `COM7`, or 0.
+unsigned com_number_of(const std::string& name)
+{
+    if (name.size() < 4 || name.compare(0, 3, "COM") != 0)
+        return 0;
+    unsigned number = 0;
+    for (std::size_t index = 3; index < name.size(); ++index)
+    {
+        if (name[index] < '0' || name[index] > '9' || number > 1000)
+            return 0;
+        number = number * 10 + static_cast<unsigned>(name[index] - '0');
+    }
+    return number;
+}
+
+/// Whether the Windows driver is installed.  The answer needs a walk of the
+/// device list and the window asks about once a second, so it is looked at no
+/// more often than every few seconds.
+bool driver_installed()
+{
+    using clock = std::chrono::steady_clock;
+    static std::mutex mutex;
+    static clock::time_point checked{};
+    static bool installed = false;
+
+    const std::lock_guard lock(mutex);
+    const auto now = clock::now();
+    if (checked == clock::time_point{} ||
+        now - checked > std::chrono::seconds(5))
+    {
+        installed = vss::driver_available();
+        checked = now;
+    }
+    return installed;
+}
+
 port_view make_port(
     const vss::endpoint_info& info,
-    const std::unordered_map<vss::endpoint_id, vss::peer_open_state>& peers)
+    const std::unordered_map<vss::endpoint_id, vss::peer_open_state>& peers,
+    const std::unordered_map<vss::endpoint_id, std::string>& drivers)
 {
     port_view view;
     view.id = info.id;
@@ -76,6 +116,11 @@ port_view make_port(
     // not claim what it cannot know.
     if (const auto found = peers.find(info.id); found != peers.end())
         view.peer = to_peer_state(found->second);
+    if (const auto found = drivers.find(info.id); found != drivers.end())
+    {
+        view.driver_port = true;
+        view.com_number = com_number_of(found->second);
+    }
     return view;
 }
 
@@ -122,6 +167,8 @@ bool same_port(const port_view& left, const port_view& right)
            left.lines == right.lines && left.open == right.open &&
            left.supports_control_lines == right.supports_control_lines &&
            left.studio_only == right.studio_only && left.peer == right.peer &&
+           left.driver_port == right.driver_port &&
+           left.com_number == right.com_number &&
            left.stats.bytes_rx == right.stats.bytes_rx &&
            left.stats.bytes_tx == right.stats.bytes_tx &&
            left.stats.read_ops == right.stats.read_ops &&
@@ -210,6 +257,10 @@ capabilities EngineStudioBackend::caps() const
     // A pseudo terminal on Linux can be checked for a program that has it
     // open; every other port reads as unknown and the GUI says nothing.
     caps.peer_open = vss::peer_open_supported();
+    // The Studio driver takes a COM number when a port is made or afterwards,
+    // and its revoke request takes a port back from a program.
+    caps.com_numbers = driver_installed();
+    caps.release_port = driver_installed();
     // The window's Undo history reverses changes with exact inverse
     // operations (see `shell/undo_steps.cpp`), not by restoring a snapshot.
     caps.undo = true;
@@ -356,6 +407,70 @@ vss::result<void> EngineStudioBackend::remove_port(vss::endpoint_id id)
     const auto removed = studio_.remove_port(id);
     if (!removed)
         return removed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<vss::endpoint_id> EngineStudioBackend::create_driver_port(
+    const QString& name, bool capture, unsigned com_number)
+{
+    vss::endpoint_options options = studio_.default_options();
+    options.capture_traffic = capture;
+    const auto created = studio_.create_virtual_port(
+        name.toStdString(), vss::virtual_port_kind::windows_driver, options,
+        com_number);
+    if (!created)
+        return created.error();
+    rebuild();
+    return (*created)->id();
+}
+
+vss::result<QString> EngineStudioBackend::set_com_number(vss::endpoint_id id,
+                                                         unsigned com_number)
+{
+    // Runs on a worker thread: the studio call is safe from any thread, and
+    // nothing here touches the snapshots.
+    const auto renumbered = studio_.set_com_number(id, com_number);
+    if (!renumbered)
+        return renumbered.error();
+    return QString::fromStdString(*renumbered);
+}
+
+std::optional<holder_view> EngineStudioBackend::port_holder(
+    vss::endpoint_id id) const
+{
+    const auto peer = studio_.driver_holder(id);
+    if (!peer || !peer->open || peer->process_id == 0)
+        return std::nullopt;
+    holder_view view;
+    view.process_id = peer->process_id;
+    if (const auto process = vss::describe_process(peer->process_id))
+    {
+        view.process_name = QString::fromStdString(process->name);
+        view.own_user = process->own_user;
+        view.can_end = process->can_end;
+    }
+    return view;
+}
+
+vss::result<void> EngineStudioBackend::release_port(vss::endpoint_id id,
+                                                    release_method method)
+{
+    if (method == release_method::take_back)
+    {
+        const auto taken = studio_.revoke_port(id);
+        if (!taken)
+            return taken.error();
+        rebuild();
+        return {};
+    }
+
+    const auto peer = studio_.driver_holder(id);
+    if (!peer || !peer->open || peer->process_id == 0)
+        return vss::make_error_code(vss::errc::not_found);
+    const auto ended = vss::terminate_process(peer->process_id);
+    if (!ended)
+        return ended.error();
     rebuild();
     return {};
 }
@@ -672,8 +787,9 @@ void EngineStudioBackend::rebuild()
     std::unordered_map<vss::endpoint_id, vss::peer_open_state> peers;
     if (vss::peer_open_supported())
         peers = studio_.peer_states();
+    const auto drivers = studio_.driver_ports();
     for (const auto& info : infos)
-        next_ports.push_back(make_port(info, peers));
+        next_ports.push_back(make_port(info, peers, drivers));
 
     std::vector<link_view> next_links;
     const auto links = studio_.link_infos();

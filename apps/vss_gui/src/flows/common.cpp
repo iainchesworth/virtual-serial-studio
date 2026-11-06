@@ -61,6 +61,64 @@ QString port_display_name(const port_view& port)
     return port.name;
 }
 
+QString com_number_refusal(const vss::error_code& error, unsigned number,
+                           bool changing)
+{
+    if (error == vss::errc::already_exists)
+    {
+        return QObject::tr("COM%1 already belongs to another device on this "
+                           "PC, such as a real port, com0com or an earlier "
+                           "port that Windows remembers. Nothing was "
+                           "changed. Choose a different number.")
+            .arg(number);
+    }
+    if (error == vss::errc::invalid_argument)
+        return QObject::tr("Choose a number from 1 to 255.");
+    if (error == vss::errc::unsupported)
+    {
+        return QObject::tr("Choosing a COM number needs the Virtual Serial "
+                           "Studio helper service, and it is not installed "
+                           "or is too old. Nothing was changed. Install the "
+                           "helper from the driver package, or leave the "
+                           "number on Automatic.");
+    }
+    if (error == vss::errc::device_busy)
+    {
+        if (changing)
+        {
+            return QObject::tr("A program has this port open, and Windows "
+                               "restarts the port to change its number. "
+                               "Nothing was changed. Close the program, or "
+                               "use Release port in Advanced mode, then try "
+                               "again.");
+        }
+        return QObject::tr("Every port of the driver is in use. Nothing was "
+                           "changed. Remove a port you no longer need and "
+                           "try again.");
+    }
+    if (error == vss::errc::port_exhausted)
+    {
+        return QObject::tr("No more ports can be made: one user can hold 16 "
+                           "driver ports and the driver 32 in all. Nothing "
+                           "was changed. Remove a port you no longer need "
+                           "and try again.");
+    }
+    if (error == vss::errc::timeout)
+    {
+        return QObject::tr("The port did not appear in time. Nothing was "
+                           "changed. Try again.");
+    }
+    if (error == vss::errc::permission_denied)
+    {
+        return QObject::tr("Windows did not allow this change. Nothing was "
+                           "changed. Run Virtual Serial Studio as "
+                           "administrator and try again.");
+    }
+    return QObject::tr("The COM number could not be set. Nothing was "
+                       "changed. Open Tools, Setup check to see whether the "
+                       "driver and its helper service are healthy.");
+}
+
 QString error_title(const QString& verb, const QString& thing)
 {
     return QObject::tr("Could not %1 %2").arg(verb, thing);

@@ -11,6 +11,7 @@
 
 #include <QByteArray>
 #include <QHash>
+#include <QSet>
 #include <QString>
 
 #include <chrono>
@@ -35,6 +36,19 @@ public:
 
     void set_capabilities(const capabilities& value) { caps_ = value; }
     void set_peer_state(vss::endpoint_id id, peer_state state);
+    /// COM numbers that another device has, so a driver port cannot take them.
+    void set_taken_com_numbers(QSet<unsigned> numbers)
+    {
+        taken_com_numbers_ = std::move(numbers);
+    }
+    /// The program that has a driver port open, as the driver would name it.
+    void set_holder(vss::endpoint_id id, std::optional<holder_view> holder);
+    /// The releases asked for so far, in order.
+    const std::vector<std::pair<vss::endpoint_id, release_method>>&
+    releases() const noexcept
+    {
+        return releases_;
+    }
     void set_devices(std::vector<device_view> devices);
     void set_facts(const setup_facts& facts) { facts_ = facts; }
     /// Windows-style free driver pairs for `share_serial`; -1 keeps the
@@ -93,6 +107,14 @@ public:
     attach_serial(const QString& name, const QString& uri,
                   const vss::serial_settings& settings, bool capture) override;
     vss::result<void> remove_port(vss::endpoint_id id) override;
+    vss::result<vss::endpoint_id> create_driver_port(const QString& name,
+                                                     bool capture,
+                                                     unsigned com_number) override;
+    vss::result<QString> set_com_number(vss::endpoint_id id,
+                                        unsigned com_number) override;
+    std::optional<holder_view> port_holder(vss::endpoint_id id) const override;
+    vss::result<void> release_port(vss::endpoint_id id,
+                                   release_method method) override;
     vss::result<void> rename_port(vss::endpoint_id id,
                                   const QString& name) override;
 
@@ -189,6 +211,9 @@ private:
     int refresh_interval_ms_ = 250;
     int free_pairs_ = -1;
     int next_com_number_ = 7;
+    QSet<unsigned> taken_com_numbers_;
+    QHash<vss::endpoint_id, holder_view> holders_;
+    std::vector<std::pair<vss::endpoint_id, release_method>> releases_;
     std::optional<std::pair<int, vss::error_code>> share_failure_;
 };
 

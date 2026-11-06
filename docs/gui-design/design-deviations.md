@@ -1032,11 +1032,37 @@ work: one condition, in a branch that used to restart the read. The
 `rfc2217` endpoint kind and the saved `uri` are unchanged; a saved setup
 reopens the server on the same address.
 
+### Driver ports: COM number, programs that hold a port, and release
+
+These additions are not in the original design; the copy is written in the
+same plain style and is not in the copy deck.
+
+- **COM number (Add port, Inspector).** Add port gains one row, *COM number*, a
+  spin box where 0 reads *Automatic*, shown only for *Best available* on Windows
+  when `capabilities::com_numbers` is true. It is disabled and reset when *How
+  many* is above one, because a number names one port. The Inspector gains a
+  *COM number* row with a *Change...* button for a port the backend marks
+  `driver_port`. The change runs on a worker thread, as the benchmark does, since
+  it restarts the port. A refusal is said under the field with
+  `com_number_refusal`, which names the number and the next step, and the dialog
+  stays open with the form as it was.
+- **Release port (Advanced).** A button in the Inspector, visible only in
+  Advanced mode, for a driver port that reads *Program connected*. The dialog
+  has two choices and one confirming button. Wording states a fact (no data for
+  N seconds) and never calls a program stuck, hung or frozen; a test checks the
+  dialog's text for those words. Ending a program is offered only when
+  `holder_view::can_end` is true, which is the user's own programs, or any
+  program when Studio is elevated.
+- **Warnings (removal, New, close).** A port with `peer_state::open` is named in
+  the confirmation of Remove port, in File, New and in a new *Close Studio?*
+  question with *Close Studio* and *Keep Studio open*. A port whose state is
+  unknown is never claimed to be in use.
+
 ### Remaining limits carried past WP9
 
 The capability-gated feature that stays visible is the editable line matrix.
-Peer-open is built for a pseudo terminal on Linux and reads unknown elsewhere
-(see "Peer-open honesty"). Rename (see "Rename" above) is no longer one of them. Benchmark
+Peer-open is built for a pseudo terminal on Linux and for a Studio driver port
+on Windows, and reads unknown elsewhere (see "Peer-open honesty"). Rename (see "Rename" above) is no longer one of them. Benchmark
 extraction (see "Benchmark" above) and fault injection (see
 "Fault injection" above) are no longer among them. The network server role is no
 longer one of them: `vss_ports` listens for `tcp-listen://` and

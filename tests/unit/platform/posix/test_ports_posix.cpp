@@ -7,6 +7,7 @@
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/native_lines.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/ports/process_control.hpp>
 #include <vss/ports/virtual_port.hpp>
 
 #include <vss/testkit/harness.hpp>
@@ -178,4 +179,11 @@ TEST_CASE("peer open: another process holding a pty open is noticed")
     REQUIRE(vss::testkit::wait_until(
         [&] { return peer_open(paths)[0] == peer_open_state::not_open; },
         5000ms));
+}
+
+TEST_CASE("process control: there is nothing to ask where there is no driver")
+{
+    REQUIRE(!vss::describe_process(1).has_value());
+    REQUIRE_EQ(vss::terminate_process(1),
+               vss::make_error_code(vss::errc::unsupported));
 }
