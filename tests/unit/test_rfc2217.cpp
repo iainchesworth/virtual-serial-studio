@@ -404,3 +404,195 @@ TEST_CASE("rfc2217: a plain TCP listener has no control lines")
     transport.set_control_line(control_line::cts, true);
     REQUIRE_EQ(transport.lines().bits, 0U);
 }
+
+TEST_CASE("rfc2217: every parity, stop size and flow control value is mapped")
+{
+    rfc2217::session session = ready_session();
+
+    const struct
+    {
+        unsigned code;
+        parity_mode parity;
+    } parities[] = {{1, parity_mode::none}, {2, parity_mode::odd},
+                    {3, parity_mode::even}, {4, parity_mode::mark},
+                    {5, parity_mode::space}};
+    for (const auto& entry : parities)
+    {
+        const auto result = session.feed(command(3, bytes({entry.code})));
+        REQUIRE(session.settings().parity == entry.parity);
+        REQUIRE_EQ(result.reply, command(103, bytes({entry.code})));
+    }
+
+    const struct
+    {
+        unsigned code;
+        stop_bits_mode stop;
+    } stops[] = {{1, stop_bits_mode::one},
+                 {2, stop_bits_mode::two},
+                 {3, stop_bits_mode::one_point_five}};
+    for (const auto& entry : stops)
+    {
+        const auto result = session.feed(command(4, bytes({entry.code})));
+        REQUIRE(session.settings().stop_bits == entry.stop);
+        REQUIRE_EQ(result.reply, command(104, bytes({entry.code})));
+    }
+    // An unknown value changes nothing and reports the one in force.
+    REQUIRE_EQ(session.feed(command(4, bytes({9}))).reply,
+               command(104, bytes({3})));
+
+    const struct
+    {
+        unsigned code;
+        flow_control_mode flow;
+    } flows[] = {{1, flow_control_mode::none},
+                 {2, flow_control_mode::software},
+                 {3, flow_control_mode::hardware}};
+    for (const auto& entry : flows)
+    {
+        const auto result = session.feed(command(5, bytes({entry.code})));
+        REQUIRE(session.settings().flow_control == entry.flow);
+        REQUIRE_EQ(result.reply, command(105, bytes({entry.code})));
+        REQUIRE(!result.outputs_changed);
+        // Asking for the setting reports the one in force.
+        REQUIRE_EQ(session.feed(command(5, bytes({0}))).reply,
+                   command(105, bytes({entry.code})));
+    }
+
+    // Inbound flow control is not supported: asking says none, and the other
+    // requests are acknowledged as they were sent.
+    REQUIRE_EQ(session.feed(command(5, bytes({13}))).reply,
+               command(105, bytes({14})));
+    REQUIRE_EQ(session.feed(command(5, bytes({15}))).reply,
+               command(105, bytes({15})));
+    REQUIRE_EQ(session.feed(command(5, bytes({19}))).reply,
+               command(105, bytes({19})));
+
+    // An unknown command is ignored, and so is flow control suspend.
+    REQUIRE(session.feed(command(77, {})).reply.empty());
+    REQUIRE(session.feed(command(8, {})).reply.empty());
+    REQUIRE(session.feed(command(9, {})).reply.empty());
+}
+
+TEST_CASE("rfc2217: negotiation can be refused and withdrawn")
+{
+    rfc2217::session session = ready_session();
+
+    // Binary was offered and the client has not agreed yet; refusing it is
+    // silent.
+    REQUIRE(session.feed(bytes({iac, 254, 0})).reply.empty());
+    // Agreeing now is answered with the offer, and withdrawing it is answered.
+    REQUIRE_EQ(session.feed(bytes({iac, do_, 0})).reply,
+               bytes({iac, will, 0}));
+    REQUIRE_EQ(session.feed(bytes({iac, 254, 0})).reply,
+               bytes({iac, 252, 0}));
+    REQUIRE(session.feed(bytes({iac, 254, 0})).reply.empty());
+
+    // The client stops doing something it was not doing, then does and stops.
+    REQUIRE(session.feed(bytes({iac, 252, 3})).reply.empty());
+    REQUIRE_EQ(session.feed(bytes({iac, will, 3})).reply,
+               bytes({iac, do_, 3}));
+    REQUIRE_EQ(session.feed(bytes({iac, 252, 3})).reply,
+               bytes({iac, 254, 3}));
+
+    // An option the server does not know is never agreed to.
+    REQUIRE(session.feed(bytes({iac, 252, 99})).reply.empty());
+    REQUIRE(session.feed(bytes({iac, 254, 99})).reply.empty());
+
+    // Asking again for what is already on is silent.
+    REQUIRE(session.feed(bytes({iac, do_, com_port})).reply.empty());
+    REQUIRE_EQ(session.feed(bytes({iac, will, com_port})).reply,
+               bytes({iac, do_, com_port}));
+    REQUIRE(session.feed(bytes({iac, will, com_port})).reply.empty());
+}
+
+TEST_CASE("rfc2217: damaged subnegotiations are dropped without harm")
+{
+    rfc2217::session session = ready_session();
+
+    // A subnegotiation that is too long is cut, not stored without limit.
+    std::string huge = bytes({iac, sb, com_port, 1});
+    huge.append(1000, 'z');
+    huge += bytes({iac, se});
+    const auto overlong = session.feed(huge + "tail");
+    REQUIRE_EQ(overlong.data, std::string("tail"));
+    REQUIRE_EQ(session.settings().baud_rate, 9600U);
+
+    // A command that interrupts a subnegotiation ends it and is not an SE.
+    const auto interrupted =
+        session.feed(bytes({iac, sb, com_port, 2, 7, iac, 241}) + "after");
+    REQUIRE(interrupted.reply.empty());
+    REQUIRE_EQ(interrupted.data, std::string("after"));
+
+    // Doubled IAC bytes keep a long subnegotiation inside its limit too.
+    std::string doubled = bytes({iac, sb, com_port, 1});
+    for (int index = 0; index < 300; ++index)
+        doubled += bytes({iac, iac});
+    doubled += bytes({iac, se});
+    session.feed(doubled);
+    REQUIRE_EQ(session.settings().baud_rate, 9600U);
+}
+
+TEST_CASE("rfc2217: a mask of zero keeps the modem state quiet")
+{
+    rfc2217::session session = ready_session();
+    session.feed(command(11, bytes({0})));
+
+    control_lines inputs;
+    inputs.set(control_line::cts, true);
+    inputs.set(control_line::dcd, true);
+    REQUIRE(session.modem_state(inputs).empty());
+    // A forced notification still reports the state.
+    REQUIRE_EQ(session.modem_state(inputs, true),
+               command(107, bytes({0x10 | 0x80})));
+}
+
+TEST_CASE("rfc2217: a client that never negotiates still gets its data")
+{
+    loop running;
+    listen_address address;
+    address.protocol = listen_protocol::rfc2217;
+    address.host = "127.0.0.1";
+    error_code ec;
+    listen_transport transport(running.io.get_executor(), address, ec);
+    REQUIRE(!ec);
+    REQUIRE(transport.describe().find("RFC 2217") != std::string::npos);
+    REQUIRE(transport.public_path().find("rfc2217-listen://") == 0);
+
+    // With no client, lines still move.
+    transport.set_control_line(control_line::dsr, true);
+    transport.set_control_line(control_line::dtr, true);
+    REQUIRE(transport.lines().dsr());
+    REQUIRE(transport.lines().dtr());
+
+    asio::io_context client_io;
+    asio::ip::tcp::socket client(client_io);
+    client.connect({asio::ip::make_address("127.0.0.1"),
+                    transport.local_port()});
+    rfc2217::session reference;
+    const std::string greeting = reference.greeting();
+    REQUIRE_EQ(receive(client, greeting.size()), greeting);
+
+    // This client never agrees to COM-PORT, so modem state is not sent to it.
+    transport.set_control_line(control_line::cts, true);
+    transport.set_control_line(control_line::cts, false);
+    asio::write(client, asio::buffer(std::string("plain")));
+    const auto got = read_from(transport);
+    REQUIRE_EQ(got.text, std::string("plain"));
+    REQUIRE(receive(client, 1).empty());
+
+    // The client goes away; the endpoint notices and a write still completes.
+    client.close();
+    for (int attempt = 0; attempt < 300 && transport.peer_count() != 0;
+         ++attempt)
+        std::this_thread::sleep_for(10ms);
+    REQUIRE_EQ(transport.peer_count(), std::size_t{0});
+    auto promise = std::make_shared<std::promise<std::size_t>>();
+    const std::string out = "gone";
+    transport.async_write_some(
+        asio::buffer(out),
+        [promise](boost::system::error_code, std::size_t count)
+        { promise->set_value(count); });
+    auto written = promise->get_future();
+    REQUIRE(written.wait_for(3000ms) == std::future_status::ready);
+    REQUIRE_EQ(written.get(), std::size_t{4});
+}
