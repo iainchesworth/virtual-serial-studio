@@ -6,6 +6,7 @@
 
 #include "flows/watch_dialog.hpp"
 
+#include "backend/other_ports.hpp"
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
@@ -81,7 +82,13 @@ void WatchDialog::build()
                                   : tr("%1 (%2)").arg(port.name, port.path);
         port_->addItem(label, static_cast<qulonglong>(port.id));
     }
-    layout->addWidget(new FormRow(tr("Port to watch"), port_, {}, this));
+    // Ports another program made are not in the list.  Say so beside the
+    // list when there are some, so the list does not look complete.
+    const auto others = backend_.other_program_ports();
+    port_->setPlaceholderText(tr("No ports available"));
+    layout->addWidget(new FormRow(
+        tr("Port to watch"), port_,
+        ports.empty() ? QString() : other_ports_reason(others), this));
 
     name_ = new QLineEdit(this);
     name_->setObjectName(QStringLiteral("watchName"));
@@ -156,14 +163,7 @@ void WatchDialog::build()
             });
 
     if (ports.empty())
-    {
-        auto* empty =
-            new QLabel(tr("No ports to watch yet. Create a port first."), this);
-        empty->setFont(Theme::instance().font(text_style::body));
-        empty->setProperty("muted", true);
-        empty->setWordWrap(true);
-        layout->insertWidget(0, empty);
-    }
+        show_empty_state(others, layout);
     if (!backend_.caps().links)
     {
         unavailable_->setVisible(true);
@@ -172,6 +172,32 @@ void WatchDialog::build()
     }
     update_for_source();
     update_primary_state();
+}
+
+void WatchDialog::show_empty_state(const std::vector<device_view>& others,
+                                   QVBoxLayout* layout)
+{
+    // Say why the list is empty and what to do next.  The reason is either
+    // that nothing exists yet or that what exists belongs to another program,
+    // which the engine can neither list with live state nor watch.
+    port_->setEnabled(false);
+    const QString reason = other_ports_reason(others);
+    auto* empty = new NoteBanner(
+        reason.isEmpty() ? NoteBanner::kind::info : NoteBanner::kind::warn,
+        reason.isEmpty()
+            ? tr("No ports to watch yet. Create a port first.")
+            : tr("%1 Create a port in Studio instead, then watch that.").arg(reason),
+        this);
+    empty->setObjectName(QStringLiteral("watchEmpty"));
+    empty->set_action(tr("Create a port"),
+                      [this]
+                      {
+                          create_port_requested_ = true;
+                          Q_EMIT create_port_requested();
+                          reject();
+                      });
+    empty_ = empty;
+    layout->insertWidget(0, empty);
 }
 
 void WatchDialog::update_for_source()

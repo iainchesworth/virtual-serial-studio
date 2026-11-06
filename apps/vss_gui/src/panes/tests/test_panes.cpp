@@ -363,6 +363,46 @@ TEST_CASE("ports panel: selection stays in sync with the service")
     REQUIRE_EQ(table->model()->rowCount(), 2);
 }
 
+TEST_CASE("ports panel: ports another program made are named, not shown")
+{
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::SelectionService selection;
+    vss::gui::PortsPanel panel(backend, selection);
+    panel.resize(360, 300);
+    panel.show();
+    QApplication::processEvents();
+    REQUIRE(panel.other_program_note() != nullptr);
+    REQUIRE(panel.other_program_note()->isHidden());
+
+    vss::gui::device_view driver;
+    driver.path = QStringLiteral("COM41");
+    driver.hardware_id = QStringLiteral("VSSCOM\\PORT");
+    driver.virtual_device = true;
+    backend.set_devices({driver});
+
+    // A change to the set of ports looks again at once.
+    const auto created = backend.create_virtual_port(
+        QStringLiteral("one"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(created.has_value());
+    QApplication::processEvents();
+    REQUIRE(!panel.other_program_note()->isHidden());
+    REQUIRE(panel.other_program_note()->text().contains(
+        QStringLiteral("Another program made COM41.")));
+    REQUIRE_EQ(panel.other_program_note()->accessibleName(),
+               panel.other_program_note()->text());
+    auto* list = panel.findChild<QListView*>();
+    REQUIRE(list != nullptr);
+    REQUIRE_EQ(list->model()->rowCount(), 1);
+
+    // Once this studio holds that port, it is no longer another program's.
+    const auto attached = backend.attach_serial(
+        QStringLiteral("held"), QStringLiteral("COM41"),
+        vss::serial_settings{}, true);
+    REQUIRE(attached.has_value());
+    QApplication::processEvents();
+    REQUIRE(panel.other_program_note()->isHidden());
+}
+
 TEST_CASE("monitor panel: exact empty state and no row widgets")
 {
     vss::gui::FakeStudioBackend backend;
