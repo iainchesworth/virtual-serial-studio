@@ -50,6 +50,10 @@ add_library(vss_gui_support STATIC
   zip_writer.cpp
   zip_writer.hpp)
 
+# The sign-in entry, one file per platform.
+icl_platform_sources(vss_gui_support
+  DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform)
+
 target_include_directories(vss_gui_support PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 target_link_libraries(vss_gui_support PUBLIC

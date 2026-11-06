@@ -31,6 +31,10 @@ struct sign_in_location
 /// The real location for this platform.  `where` is empty where there is none.
 sign_in_location default_sign_in_location();
 
+/// A location a test may write to: a key of the tests' own on Windows, a
+/// folder under `scratch` on Linux, and none where there is no entry.
+sign_in_location test_sign_in_location(const QString& scratch);
+
 /// True when this platform can start Studio at sign-in.
 bool sign_in_start_available();
 

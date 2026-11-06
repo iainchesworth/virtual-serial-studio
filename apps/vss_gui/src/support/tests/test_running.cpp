@@ -132,30 +132,21 @@ TEST_CASE("sign-in start: the entry runs Studio hidden")
 
 TEST_CASE("sign-in start: the entry is added and removed")
 {
-#if defined(Q_OS_MACOS)
-    // No entry on macOS yet: it must say so rather than pretend.
-    REQUIRE(!vss::gui::support::sign_in_start_available());
-    REQUIRE(!vss::gui::support::set_sign_in_start(true));
-#else
-    vss::gui::support::sign_in_location location;
     QTemporaryDir directory;
-#if defined(Q_OS_WIN)
-    location.where =
-        QStringLiteral("HKEY_CURRENT_USER\\Software\\VSS GUI Tests\\Run");
-#else
-    location.where = directory.filePath(QStringLiteral("autostart"));
-#endif
-    location.name = QStringLiteral("VSS GUI Tests");
+    const auto location =
+        vss::gui::support::test_sign_in_location(directory.path());
+    if (!vss::gui::support::sign_in_start_available())
+    {
+        // No entry on this platform: it must say so rather than pretend.
+        REQUIRE(location.where.isEmpty());
+        REQUIRE(!vss::gui::support::set_sign_in_start(true));
+        REQUIRE(!vss::gui::support::sign_in_start_enabled());
+        return;
+    }
     REQUIRE(vss::gui::support::set_sign_in_start(false, location));
     REQUIRE(!vss::gui::support::sign_in_start_enabled(location));
     REQUIRE(vss::gui::support::set_sign_in_start(true, location));
     REQUIRE(vss::gui::support::sign_in_start_enabled(location));
     REQUIRE(vss::gui::support::set_sign_in_start(false, location));
     REQUIRE(!vss::gui::support::sign_in_start_enabled(location));
-#if defined(Q_OS_WIN)
-    QSettings(QStringLiteral("HKEY_CURRENT_USER\\Software\\VSS GUI Tests"),
-              QSettings::NativeFormat)
-        .remove(QStringLiteral("Run"));
-#endif
-#endif
 }
