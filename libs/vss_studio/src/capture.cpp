@@ -13,7 +13,6 @@
 #include <cctype>
 #include <charconv>
 #include <cmath>
-#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <istream>
@@ -108,33 +107,11 @@ std::string two(unsigned value)
     return out;
 }
 
-/// `Mon Jun  8 15:19:23 2026`, the layout of `ctime` without its newline.
-std::string ctime_text(sys_clock::time_point time, bool local)
+/// `Mon Jun  8 15:19:23 2026`, the layout of `ctime` without its newline, in
+/// UTC.  The zone is named after it, so the line is not mistaken for local time.
+std::string ctime_text(sys_clock::time_point time)
 {
-    civil_time civil;
-    if (local)
-    {
-        const std::time_t seconds = sys_clock::to_time_t(time);
-        std::tm broken{};
-#ifdef _WIN32
-        if (localtime_s(&broken, &seconds) != 0)
-            return {};
-#else
-        if (localtime_r(&seconds, &broken) == nullptr)
-            return {};
-#endif
-        civil.year = broken.tm_year + 1900;
-        civil.month = static_cast<unsigned>(broken.tm_mon) + 1;
-        civil.day = static_cast<unsigned>(broken.tm_mday);
-        civil.hour = static_cast<unsigned>(broken.tm_hour);
-        civil.minute = static_cast<unsigned>(broken.tm_min);
-        civil.second = static_cast<unsigned>(broken.tm_sec);
-        civil.weekday = static_cast<unsigned>(broken.tm_wday);
-    }
-    else
-    {
-        civil = civil_from_ms(ms_since_epoch(time));
-    }
+    const civil_time civil = civil_from_ms(ms_since_epoch(time));
 
     std::string out = weekday_names.at(civil.weekday % 7);
     out += ' ';
@@ -147,6 +124,7 @@ std::string ctime_text(sys_clock::time_point time, bool local)
     out += two(civil.hour) + ':' + two(civil.minute) + ':' + two(civil.second);
     out += ' ';
     out += std::to_string(civil.year);
+    out += " UTC";
     return out;
 }
 
@@ -198,11 +176,6 @@ std::string csv_field(const std::string& text)
     }
     out.push_back('"');
     return out;
-}
-
-std::string json_string(const std::string& text)
-{
-    return json::serialize(json::value(text));
 }
 
 std::string_view trim(std::string_view text)
@@ -373,7 +346,7 @@ capture_writer::capture_writer(std::ostream& out, capture_format format,
     {
     case capture_format::cap:
         out_ << "# Serial recording started at: "
-             << ctime_text(header_.started, header_.local_time) << '\n';
+             << ctime_text(header_.started) << '\n';
         out_ << "# Format: [timestamp_ms] direction byte|byte|byte|...\n";
         out_ << "# Direction: R=read (from device), W=write (to device)\n";
         out_ << "#\n";
@@ -733,7 +706,6 @@ capture_session::capture_session(hub& engine, std::shared_ptr<std::ostream> out,
     , state_(std::make_shared<state>())
 {
     header_.started = sys_clock::now();
-    header_.local_time = options.local_time;
 
     state_->out = std::move(out);
     state_->ports = options.ports;
