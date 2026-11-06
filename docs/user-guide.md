@@ -763,6 +763,7 @@ again.
 | List devices | `vss_cli devices` |
 | Record traffic to a file | `vss_cli capture topology.json --out bus.cap --port master` |
 | Record a port without a topology | `vss_cli capture --uri=serial://COM5 --out run.jsonl --seconds=60` |
+| Play a capture into a port | `vss_cli play bus.cap --uri=serial://COM6 --speed=2` |
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
 | Check what the system may block | `vss_cli permissions check` |
@@ -787,6 +788,39 @@ traffic* is off in the topology is not recorded. `--port` names the ports to
 keep (see [Capture files](#capture-files) for why you usually want one), and
 the command stops with a list of the real names if one is wrong. The file is
 readable by its owner only, where the system has such a setting.
+
+### Replaying with `vss_cli play`
+
+```bash
+vss_cli play <file> [<topology.json>] (--uri=<uri> | --port=<name>)
+             [--speed=X] [--loop] [--direction=R|W] [--from=<name>]
+             [--seconds=N]
+```
+
+`play` reads a `.cap` or `.jsonl` capture (not `.csv`; record JSON Lines when
+you want the port names) and writes the records of one direction into one port,
+each at its recorded time. That lets a recorded master or device drive the
+other programs on a bus without the program that made the recording.
+
+- The port is what a program would open: give `--uri` for a port of the
+  operating system (`serial://COM6`, a pseudo terminal path, `tcp://host:port`),
+  or a topology and `--port=<name>` for a port of that topology. What `play`
+  writes goes out of that port to whatever is on its far end, so for a port
+  Studio made, open the end the program would have opened. A loopback port echoes
+  its writes back in as received bytes, which makes it a stand-in for the
+  program in a topology of its own.
+- **R** records (the default) are the bytes the recorded port received, so they
+  replay what the program on that port *sent*. `--direction=W` plays the other
+  direction. `--from=<name>` keeps only the records captured on that port, for a
+  file that holds several; a `.cap` file has no names, so it needs none.
+- `--speed=2` plays twice as fast and `--speed=0.5` half as fast. Times are
+  absolute deadlines, so they do not drift over a long file.
+- `--loop` starts again after the length of the capture, which is the offset of
+  its last record whichever direction that is, so a recording repeats at the pace
+  it was taken.
+- It stops when the last record has been sent, or at `Ctrl-C`, or after
+  `--seconds`, and prints how many records and bytes it sent. Lines of the file
+  that cannot be read are skipped and counted.
 
 See [ux.md](ux.md) for the design reasoning, [scenarios.md](scenarios.md) for
 worked examples and [the screen specifications](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/00-product-brief.md) for the
