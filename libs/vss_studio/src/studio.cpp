@@ -629,6 +629,46 @@ result<std::string> studio::set_com_number(endpoint_id id, unsigned com_number)
     return renumbered;
 }
 
+std::unordered_map<endpoint_id, std::string> studio::driver_ports() const
+{
+    std::unordered_map<endpoint_id, std::string> out;
+    std::lock_guard lock(record_mutex_);
+    for (const auto& [id, record] : records_)
+    {
+        if (!record.driver.expired())
+            out.emplace(id, record.target);
+    }
+    return out;
+}
+
+std::optional<driver_peer_info> studio::driver_holder(endpoint_id id) const
+{
+    std::string com_name;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end() || it->second.driver.expired())
+            return std::nullopt;
+        com_name = it->second.target;
+    }
+    return driver_peer(com_name);
+}
+
+result<std::uint32_t> studio::revoke_port(endpoint_id id)
+{
+    std::shared_ptr<transport> driver;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        driver = it->second.driver.lock();
+    }
+    if (!driver)
+        return make_error_code(errc::unsupported);
+    return revoke_driver_port(*driver);
+}
+
 std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
 {
     std::vector<endpoint_id> ids;
@@ -771,13 +811,14 @@ result<link_id> studio::monitor(std::string_view from, std::string_view to)
     return hub_->monitor(first->id(), second->id());
 }
 
-result<link_id> studio::bus(const std::vector<std::string>& members)
+result<link_id> studio::bus(const std::vector<std::string>& members,
+                           link_options options)
 {
     error_code ec;
     const auto ids = resolve_all(members, ec);
     if (ec)
         return ec;
-    return hub_->bus(ids);
+    return hub_->bus(ids, options);
 }
 
 result<void> studio::disconnect(link_id id)
@@ -954,10 +995,12 @@ result<void> studio::apply(const config::document& value,
         link_options options;
         options.emulate_modem_lines = link.emulate_modem_lines;
         options.policy = link.policy;
+        options.delay_ms = link.delay_ms;
+        options.jitter_ms = link.jitter_ms;
 
         result<link_id> added = make_error_code(errc::config_error);
         if (link.mode == "bus")
-            added = hub_->bus(members);
+            added = hub_->bus(members, options);
         else if (link.mode == "duplex")
             added = hub_->connect(sources[0], targets[0], options);
         else if (link.mode == "split")
@@ -967,7 +1010,12 @@ result<void> studio::apply(const config::document& value,
         else if (link.mode == "redirect")
             added = hub_->redirect(sources[0], targets[0], options);
         else if (link.mode == "monitor")
-            added = hub_->monitor(sources[0], targets[0]);
+        {
+            // A monitor is a one-way link without modem lines; going through
+            // redirect lets it carry a delay.
+            options.emulate_modem_lines = false;
+            added = hub_->redirect(sources[0], targets[0], options);
+        }
 
         if (!added)
         {
@@ -1045,6 +1093,8 @@ config::document studio::snapshot() const
 
         entry.emulate_modem_lines = link.options.emulate_modem_lines;
         entry.policy = link.options.policy;
+        entry.delay_ms = link.options.delay_ms;
+        entry.jitter_ms = link.options.jitter_ms;
         document.links.push_back(std::move(entry));
     }
 

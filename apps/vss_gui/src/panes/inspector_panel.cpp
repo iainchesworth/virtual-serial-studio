@@ -183,6 +183,30 @@ void InspectorPanel::build()
     path_layout->addWidget(copy_, 0, Qt::AlignTop);
     form->addWidget(path_row, row++, 1);
 
+    com_caption_ = caption(tr("COM number"), content_);
+    form->addWidget(com_caption_, row, 0, Qt::AlignTop);
+    com_row_ = new QWidget(content_);
+    auto* com_layout = new QHBoxLayout(com_row_);
+    com_layout->setContentsMargins(0, 0, 0, 0);
+    com_layout->setSpacing(6);
+    com_value_ = new QLabel(com_row_);
+    com_value_->setFont(Theme::instance().font(text_style::data));
+    com_change_ = new QPushButton(tr("Change..."), com_row_);
+    com_change_->setObjectName(QStringLiteral("inspectorComChange"));
+    com_change_->setProperty("size", QStringLiteral("small"));
+    com_change_->setAccessibleName(tr("Change COM number"));
+    polish(com_change_);
+    connect(com_change_, &QPushButton::clicked, this,
+            [this]
+            {
+                if (selected_ != 0)
+                    Q_EMIT com_number_requested(selected_);
+            });
+    com_layout->addWidget(com_value_);
+    com_layout->addWidget(com_change_);
+    com_layout->addStretch(1);
+    form->addWidget(com_row_, row++, 1);
+
     form->addWidget(caption(tr("Traffic"), content_), row, 0);
     traffic_ = new QLabel(content_);
     traffic_->setFont(Theme::instance().font(text_style::data));
@@ -217,6 +241,19 @@ void InspectorPanel::build()
     help_layout->addWidget(help_text_);
     help_layout->addWidget(help_link_);
     layout->addWidget(help);
+
+    release_ = new QPushButton(tr("Release port..."), content_);
+    release_->setObjectName(QStringLiteral("inspectorRelease"));
+    release_->setProperty("size", QStringLiteral("small"));
+    release_->setAccessibleName(tr("Release port"));
+    polish(release_);
+    connect(release_, &QPushButton::clicked, this,
+            [this]
+            {
+                if (selected_ != 0)
+                    Q_EMIT release_port_requested(selected_);
+            });
+    layout->addWidget(release_, 0, Qt::AlignLeft);
 
     auto* controls_title = caption(tr("Control lines"), content_);
     layout->addWidget(controls_title);
@@ -364,6 +401,24 @@ void InspectorPanel::update_content()
     help_text_->setText(note);
     help_link_->setText(
         tr("<a href=\"troubleshoot\">Why is nothing arriving?</a>"));
+
+    // A driver port has a COM number that can be changed, and in Advanced a
+    // program that has it open can be made to let go.
+    const capabilities caps = backend_.caps();
+    const bool numbered = port.driver_port && port.com_number != 0;
+    com_caption_->setVisible(numbered);
+    com_row_->setVisible(numbered);
+    com_value_->setText(QStringLiteral("COM%1").arg(port.com_number));
+    com_change_->setEnabled(caps.com_numbers);
+    com_change_->setToolTip(caps.com_numbers
+                                ? QString()
+                                : tr("Not available in this build"));
+    release_->setVisible(advanced_ && port.driver_port &&
+                         port.peer == peer_state::open);
+    release_->setEnabled(caps.release_port);
+    release_->setToolTip(caps.release_port
+                             ? QString()
+                             : tr("Not available in this build"));
 
     simple_lines_->setVisible(!advanced_);
     advanced_lines_->setVisible(advanced_);

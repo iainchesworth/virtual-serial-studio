@@ -7,6 +7,7 @@
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/native_lines.hpp>
 #include <vss/ports/peer_open.hpp>
+#include <vss/ports/process_control.hpp>
 #include <vss/ports/virtual_port.hpp>
 
 #include <vss/testkit/harness.hpp>
@@ -228,4 +229,11 @@ TEST_CASE("pseudo terminal: the baud rate and framing a program sets are reporte
     created->port->close();
     // A closed port reports nothing.
     REQUIRE(!created->port->peer_format().has_value());
+}
+
+TEST_CASE("process control: there is nothing to ask where there is no driver")
+{
+    REQUIRE(!vss::describe_process(1).has_value());
+    REQUIRE_EQ(vss::terminate_process(1),
+               vss::make_error_code(vss::errc::unsupported));
 }

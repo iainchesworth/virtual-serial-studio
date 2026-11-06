@@ -14,13 +14,16 @@
 #include "shell/action_registry.hpp"
 #include "shell/command_palette.hpp"
 #include "shell/launcher.hpp"
+#include "panes/selection_service.hpp"
 #include "shell/level_service.hpp"
+#include "shell/port_warnings.hpp"
 #include "shell/shell_window.hpp"
 #include "shell/undo_service.hpp"
 #include "shell/undo_steps.hpp"
 #include "support/setup_facts.hpp"
 
 #include "theme/theme.hpp"
+#include "widgets/dialogs.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -28,6 +31,7 @@
 #include <QDir>
 #include <QDockWidget>
 #include <QLabel>
+#include <QPushButton>
 #include <QSettings>
 #include <QTimer>
 #include <QToolBar>
@@ -746,4 +750,249 @@ TEST_CASE("shell: WP6 actions open the real dialogs")
 
     window.close();
     QApplication::processEvents();
+}
+
+namespace
+{
+
+/// What the next confirmation dialog said, and which button was pressed.
+struct confirm_seen
+{
+    bool shown = false;
+    QString title;
+    QString text;
+};
+
+/// Presses the button called `answer` in the next ConfirmDialog that opens,
+/// looking again until one does.
+void answer_next_confirm(const QString& answer, confirm_seen* seen,
+                         int remaining_ms = 30000)
+{
+    QTimer::singleShot(
+        10,
+        [answer, seen, remaining_ms]
+        {
+            vss::gui::ConfirmDialog* dialog = nullptr;
+            for (QWidget* widget : QApplication::topLevelWidgets())
+            {
+                if (auto* found = qobject_cast<vss::gui::ConfirmDialog*>(widget);
+                    found != nullptr && found->isVisible())
+                    dialog = found;
+            }
+            if (dialog == nullptr)
+            {
+                if (remaining_ms > 10)
+                    answer_next_confirm(answer, seen, remaining_ms - 10);
+                return;
+            }
+            seen->shown = true;
+            seen->title = dialog->windowTitle();
+            for (QLabel* label : dialog->findChildren<QLabel*>())
+                seen->text += label->text() + QLatin1Char('\n');
+            for (QPushButton* button : dialog->findChildren<QPushButton*>())
+            {
+                if (button->text() == answer)
+                {
+                    button->click();
+                    return;
+                }
+            }
+            dialog->reject();
+        });
+}
+
+vss::endpoint_id held_driver_port(vss::gui::FakeStudioBackend& backend,
+                                  const QString& name, unsigned com_number)
+{
+    vss::gui::capabilities caps;
+    caps.peer_open = true;
+    caps.com_numbers = true;
+    caps.release_port = true;
+    backend.set_capabilities(caps);
+    const auto id = backend.create_driver_port(name, true, com_number);
+    REQUIRE(id.has_value());
+    backend.set_peer_state(*id, vss::gui::peer_state::open);
+    return *id;
+}
+
+} // namespace
+
+TEST_CASE("warnings: only a port a program is known to hold is warned about")
+{
+    using namespace vss::gui;
+    port_view held;
+    held.id = 1;
+    held.name = QStringLiteral("meter");
+    held.path = QStringLiteral("COM7");
+    held.open = true;
+    held.peer = peer_state::open;
+    port_view waiting = held;
+    waiting.id = 2;
+    waiting.path = QStringLiteral("COM8");
+    waiting.peer = peer_state::not_open;
+    port_view unknown = held;
+    unknown.id = 3;
+    unknown.path = QStringLiteral("COM9");
+    unknown.peer = peer_state::unknown;
+    port_view closed = held;
+    closed.id = 4;
+    closed.path = QStringLiteral("COM10");
+    closed.open = false;
+
+    const auto in_use = ports_in_use({held, waiting, unknown, closed});
+    REQUIRE_EQ(in_use.size(), std::size_t{1});
+    REQUIRE_EQ(in_use.front().id, vss::endpoint_id{1});
+
+    REQUIRE(removal_warning(waiting).isEmpty());
+    REQUIRE(removal_warning(unknown).isEmpty());
+    REQUIRE(removal_warning(closed).isEmpty());
+    REQUIRE(removal_warning(held).contains(
+        QStringLiteral("A program has COM7 open")));
+
+    REQUIRE(exit_warning({}).isEmpty());
+    REQUIRE(new_setup_warning({}).isEmpty());
+    REQUIRE(exit_warning(in_use).contains(
+        QStringLiteral("A program has COM7 open")));
+    port_view second = held;
+    second.id = 5;
+    second.path = QStringLiteral("COM11");
+    const QString both = exit_warning({held, second});
+    REQUIRE(both.contains(QStringLiteral("COM7, COM11")));
+    REQUIRE(both.contains(QStringLiteral("may stop or show an error")));
+    REQUIRE(new_setup_warning({held, second})
+                .contains(QStringLiteral("COM7, COM11")));
+}
+
+TEST_CASE("shell: closing the window warns while a program holds a port")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    vss::gui::FakeStudioBackend backend;
+    held_driver_port(backend, QStringLiteral("meter"), 7);
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    QApplication::processEvents();
+
+    // Keep Studio open: the window stays and the port is untouched.
+    confirm_seen kept;
+    answer_next_confirm(QStringLiteral("Keep Studio open"), &kept);
+    window.close();
+    QApplication::processEvents();
+    REQUIRE(kept.shown);
+    REQUIRE_EQ(kept.title, QStringLiteral("Close Studio?"));
+    REQUIRE(kept.text.contains(QStringLiteral("A program has COM7 open")));
+    REQUIRE(window.isVisible());
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+
+    // Close Studio: the window closes.
+    confirm_seen closed;
+    answer_next_confirm(QStringLiteral("Close Studio"), &closed);
+    window.close();
+    QApplication::processEvents();
+    REQUIRE(closed.shown);
+    REQUIRE(!window.isVisible());
+    clear_settings();
+}
+
+TEST_CASE("shell: closing the window asks nothing when no program holds a port")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::capabilities caps;
+    caps.peer_open = true;
+    backend.set_capabilities(caps);
+    const auto id =
+        backend.create_driver_port(QStringLiteral("meter"), true, 7);
+    REQUIRE(id.has_value());
+    backend.set_peer_state(*id, vss::gui::peer_state::not_open);
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    QApplication::processEvents();
+    REQUIRE(window.confirm_exit());
+    window.close();
+    QApplication::processEvents();
+    REQUIRE(!window.isVisible());
+    clear_settings();
+}
+
+TEST_CASE("shell: removing a port a program holds says so first")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    vss::gui::FakeStudioBackend backend;
+    const auto id = held_driver_port(backend, QStringLiteral("meter"), 7);
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    QApplication::processEvents();
+
+    auto* selection = window.findChild<vss::gui::SelectionService*>();
+    auto* remove = window.findChild<QAction*>(QStringLiteral("ports.remove"));
+    REQUIRE(selection != nullptr);
+    REQUIRE(remove != nullptr);
+    selection->select_port(id);
+    QApplication::processEvents();
+
+    confirm_seen refused;
+    answer_next_confirm(QStringLiteral("Cancel"), &refused);
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(refused.shown);
+    REQUIRE(refused.text.contains(QStringLiteral("A program has COM7 open")));
+    REQUIRE(refused.text.contains(QStringLiteral("may stop or show an error")));
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+
+    confirm_seen agreed;
+    answer_next_confirm(QStringLiteral("Remove port"), &agreed);
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(agreed.shown);
+    REQUIRE(backend.ports().empty());
+
+    // A port nobody holds is removed with the usual question only.
+    const auto quiet =
+        backend.create_driver_port(QStringLiteral("quiet"), true, 8);
+    REQUIRE(quiet.has_value());
+    backend.set_peer_state(*quiet, vss::gui::peer_state::not_open);
+    selection->select_port(*quiet);
+    QApplication::processEvents();
+    confirm_seen plain;
+    answer_next_confirm(QStringLiteral("Remove port"), &plain);
+    remove->trigger();
+    QApplication::processEvents();
+    REQUIRE(plain.shown);
+    REQUIRE(!plain.text.contains(QStringLiteral("A program has")));
+    REQUIRE(backend.ports().empty());
+    window.close();
+    clear_settings();
+}
+
+TEST_CASE("shell: a new setup warns while a program holds a port")
+{
+    clear_settings();
+    QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+    vss::gui::FakeStudioBackend backend;
+    held_driver_port(backend, QStringLiteral("meter"), 7);
+    vss::gui::ShellWindow window(backend);
+    window.show();
+    QApplication::processEvents();
+
+    auto* file_new = window.findChild<QAction*>(QStringLiteral("file.new"));
+    REQUIRE(file_new != nullptr);
+    confirm_seen refused;
+    answer_next_confirm(QStringLiteral("Cancel"), &refused);
+    file_new->trigger();
+    QApplication::processEvents();
+    REQUIRE(refused.shown);
+    REQUIRE(refused.text.contains(QStringLiteral("removes every port")));
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+
+    confirm_seen agreed;
+    answer_next_confirm(QStringLiteral("Start new"), &agreed);
+    file_new->trigger();
+    QApplication::processEvents();
+    REQUIRE(agreed.shown);
+    REQUIRE(backend.ports().empty());
+    window.close();
+    clear_settings();
 }

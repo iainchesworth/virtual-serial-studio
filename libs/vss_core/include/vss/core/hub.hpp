@@ -34,6 +34,8 @@
 
 namespace vss {
 
+class delay_line;
+
 struct hub_options
 {
     /// Worker threads; 0 selects `std::thread::hardware_concurrency()`.
@@ -82,6 +84,10 @@ public:
     std::vector<std::shared_ptr<endpoint>> endpoints() const;
 
     // -- topology ----------------------------------------------------------
+    //
+    // Every call that takes `link_options` refuses a delay over
+    // #max_link_delay_ms, or a jitter over the delay, with
+    // `errc::invalid_argument`.
 
     /// Bidirectional link between two endpoints.
     result<link_id> connect(endpoint_id a, endpoint_id b,
@@ -118,7 +124,8 @@ public:
     ///
     /// A bus carries no modem lines, so `emulate_modem_lines` is stored as
     /// `false`, and it supports `merge_policy::interleave` only
-    /// (`errc::unsupported` otherwise).  The link counts a delivery to each
+    /// (`errc::unsupported` otherwise).  `delay_ms` and `jitter_ms` apply to
+    /// every route between members.  The link counts a delivery to each
     /// receiving member, as a split does.  Removing a member takes it out of
     /// the bus; the bus itself goes when fewer than two members remain.
     result<link_id> bus(const std::vector<endpoint_id>& members,
@@ -172,6 +179,8 @@ private:
     {
         link_id link = 0;
         endpoint_id to = 0;
+        /// Holds the bytes for the link's delay; null for a link without one.
+        std::shared_ptr<delay_line> delay;
     };
 
     struct link_record
@@ -205,7 +214,7 @@ private:
     endpoint_id cycle_node(endpoint_id id) const;
     bool reaches(endpoint_id start,
                  const std::unordered_set<endpoint_id>& goals) const;
-    void add_route(link_id link, endpoint_id from, endpoint_id to);
+    void add_route(const link_record& link, endpoint_id from, endpoint_id to);
     void erase_routes(link_id link);
     link_info describe(const link_record& record) const;
     void dispatch(const endpoint_event& event);

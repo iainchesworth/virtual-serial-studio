@@ -1075,3 +1075,35 @@ TEST_CASE("json: a bus is refused plainly where the build has no bus")
     // A file without a bus is unaffected.
     REQUIRE(validate_json_document(valid_document(), false).valid());
 }
+
+TEST_CASE("json: a link's delay and jitter are accepted and placed when wrong")
+{
+    using namespace vss::gui;
+    const auto document = [](const QString& extra)
+    {
+        return QStringLiteral(
+                   "{\n\"version\":1,\n\"name\":\"lab\",\n\"ports\":[\n"
+                   "{\"name\":\"a\",\"kind\":\"virtual\"},\n"
+                   "{\"name\":\"b\",\"kind\":\"virtual\"}],\n\"links\":[\n"
+                   "{\"mode\":\"duplex\",\"sources\":[\"a\"],"
+                   "\"targets\":[\"b\"],\n") +
+               extra + QStringLiteral("}]}");
+    };
+
+    const json_validation fine = validate_json_document(
+        document(QStringLiteral("\"delay_ms\":190,\"jitter_ms\":10")));
+    REQUIRE(fine.valid());
+    REQUIRE(fine.formatted.contains(QStringLiteral("\"delay_ms\": 190")));
+
+    const json_validation too_long = validate_json_document(
+        document(QStringLiteral("\"delay_ms\":70000")));
+    REQUIRE(!too_long.valid());
+    REQUIRE(too_long.problem.has_value());
+    REQUIRE_EQ(too_long.problem->line, 9);
+
+    const json_validation too_jittery = validate_json_document(document(
+        QStringLiteral("\"delay_ms\":10,\n\"jitter_ms\":20")));
+    REQUIRE(!too_jittery.valid());
+    REQUIRE(too_jittery.problem.has_value());
+    REQUIRE_EQ(too_jittery.problem->line, 10);
+}

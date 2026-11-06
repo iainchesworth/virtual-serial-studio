@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include "delay_line.hpp"
+
 #include <vss/core/hub.hpp>
 #include <vss/core/profile.hpp>
 
@@ -299,6 +301,8 @@ result<link_id> hub::bus(const std::vector<endpoint_id>& members,
         return make_error_code(errc::invalid_argument);
     if (options.policy != merge_policy::interleave)
         return make_error_code(errc::unsupported);
+    if (!valid_latency(options))
+        return make_error_code(errc::invalid_argument);
 
     const std::unordered_set<endpoint_id> unique(members.begin(),
                                                  members.end());
@@ -334,7 +338,7 @@ result<link_id> hub::bus(const std::vector<endpoint_id>& members,
         for (endpoint_id to : members)
         {
             if (from != to)
-                add_route(record->id, from, to);
+                add_route(*record, from, to);
         }
     }
 
@@ -347,6 +351,8 @@ result<link_id> hub::add_link(link_mode mode,
                               link_options options)
 {
     if (sources.empty() || targets.empty())
+        return make_error_code(errc::invalid_argument);
+    if (!valid_latency(options))
         return make_error_code(errc::invalid_argument);
 
     std::unique_lock lock(mutex_);
@@ -388,9 +394,9 @@ result<link_id> hub::add_link(link_mode mode,
     {
         for (endpoint_id target : targets)
         {
-            add_route(record->id, source, target);
+            add_route(*record, source, target);
             if (duplex)
-                add_route(record->id, target, source);
+                add_route(*record, target, source);
         }
     }
 
@@ -468,9 +474,19 @@ bool hub::bus_would_create_cycle(const std::vector<endpoint_id>& members) const
     return false;
 }
 
-void hub::add_route(link_id link, endpoint_id from, endpoint_id to)
+void hub::add_route(const link_record& link, endpoint_id from, endpoint_id to)
 {
-    routes_[from].push_back(route_entry{link, to});
+    std::shared_ptr<delay_line> delay;
+    if (link.options.has_latency())
+    {
+        // The caller holds the lock and has checked that `to` exists.
+        const auto target = endpoints_.find(to);
+        if (target != endpoints_.end())
+            delay = std::make_shared<delay_line>(
+                io_.get_executor(), target->second, link.options.delay_ms,
+                link.options.jitter_ms);
+    }
+    routes_[from].push_back(route_entry{link.id, to, std::move(delay)});
 }
 
 void hub::erase_routes(link_id link)
@@ -601,7 +617,13 @@ void hub::route_data(endpoint_id from, bytes_view data)
     if (data.empty())
         return;
 
-    std::vector<std::shared_ptr<endpoint>> targets;
+    struct delivery
+    {
+        std::shared_ptr<endpoint> target;
+        std::shared_ptr<delay_line> delay;
+    };
+
+    std::vector<delivery> deliveries;
     {
         std::shared_lock lock(mutex_);
         auto it = routes_.find(from);
@@ -632,12 +654,17 @@ void hub::route_data(endpoint_id from, bytes_view data)
 
             auto target = endpoints_.find(route.to);
             if (target != endpoints_.end())
-                targets.push_back(target->second);
+                deliveries.push_back({target->second, route.delay});
         }
     }
 
-    for (const auto& target : targets)
-        target->write(data);
+    for (const auto& entry : deliveries)
+    {
+        if (entry.delay)
+            entry.delay->push(data);
+        else
+            entry.target->write(data);
+    }
 }
 
 void hub::route_lines(endpoint_id from, control_lines lines)
