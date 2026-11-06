@@ -291,9 +291,9 @@ void AddPortDialog::build_virtual_page()
     }
     layout->addWidget(new FormRow(
         tr("Kind"), kind_,
-        tr("Best available uses com0com on Windows, and a pseudo terminal "
-           "on Linux and macOS. Up to 32 at once. Several ports are named "
-           "port-1, port-2 and so on."),
+        tr("Best available uses the Studio driver or com0com on Windows, and a "
+           "pseudo terminal on Linux and macOS. Up to 32 at once. Several "
+           "ports are named port-1, port-2 and so on."),
         virtual_page_));
 
     result_ = new ResultSentence(virtual_page_);
