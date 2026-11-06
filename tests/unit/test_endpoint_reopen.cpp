@@ -138,7 +138,15 @@ TEST_CASE("reopen: an open endpoint can be restarted on a new transport")
     REQUIRE(first.endpoint->reopen(second));
 
     // The transport it had is closed; the new one carries the traffic.
-    REQUIRE(wait_until([&] { return !first.transport->is_open(); }, 5000ms));
+    // Asked on the endpoint's strand, where the transport lives: the mock port
+    // is a single-threaded object and the close itself happens there.
+    REQUIRE(wait_until(
+        [&] {
+            bool open = true;
+            first.on_strand([&] { open = first.transport->is_open(); });
+            return !open;
+        },
+        5000ms));
     const mock_endpoint now{first.endpoint, second};
     peer.inject_read("to-new");
     REQUIRE(wait_until([&] { return now.written() == "to-new"; }, 5000ms));
