@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_ADVANCED_LINK_SETTINGS_DIALOG_HPP
-#define VSS_GUI_ADVANCED_LINK_SETTINGS_DIALOG_HPP
+#pragma once
 
 #include "backend/view_types.hpp"
 
@@ -56,4 +55,3 @@ private:
 
 } // namespace vss::gui
 
-#endif // VSS_GUI_ADVANCED_LINK_SETTINGS_DIALOG_HPP

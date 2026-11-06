@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SHELL_CANVAS_CONTROLLER_HPP
-#define VSS_GUI_SHELL_CANVAS_CONTROLLER_HPP
+#pragma once
 
 #include "backend/canvas_edit.hpp"
 #include "backend/studio_backend.hpp"
@@ -131,4 +130,3 @@ private:
 
 } // namespace vss::gui
 
-#endif // VSS_GUI_SHELL_CANVAS_CONTROLLER_HPP

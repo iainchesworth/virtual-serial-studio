@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_TOPOLOGY_TOOLBOX_HPP
-#define VSS_GUI_TOPOLOGY_TOOLBOX_HPP
+#pragma once
 
 #include "backend/canvas_edit.hpp"
 #include "backend/capabilities.hpp"
@@ -67,4 +66,3 @@ private:
 
 } // namespace vss::gui::topology
 
-#endif // VSS_GUI_TOPOLOGY_TOOLBOX_HPP
