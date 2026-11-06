@@ -17,6 +17,9 @@
 #   D8-D13 hub end     the second handle, bytes both ways, flow control, lines, purge
 #   D14-D21 control    the control device makes ports on demand and removes them again; write timeouts (D20), hub-end access (D21)
 #   H14 helper         the helper service of the user-mode driver answers and refuses what it should
+#   D23-D25 flow       SetCommState drives DTR and RTS: enable and disable, handshake, toggle
+#   D26-D27 revoke     the hub takes the port back from a program; the program's process id
+#   D28-D31 COM number the helper gives a port the COM number asked for, and refuses what it should
 #
 # D1 to D7 use a port made by hand and run as a loopback: what is written comes
 # back from the next read. D14 to D19 and D21 need something that makes ports on
@@ -271,7 +274,9 @@ public sealed class HubIo : IDisposable
     const uint IOCTL_GET_STATE = 0x80002004;
     const uint IOCTL_WAIT_STATE = 0x80002008;
     const uint IOCTL_SET_LINES = 0x8000200C;
-    const int StateWords = 11;
+    const uint IOCTL_REVOKE = 0x80002010;
+    // Version 3 of the driver adds AppProcessId to the state: twelve words.
+    const int StateWords = 12;
     public const int TimedOut = 258;
 
     IntPtr handle;
@@ -386,7 +391,8 @@ public sealed class HubIo : IDisposable
         finally { CloseHandle(signal); Marshal.FreeHGlobal(ov); Marshal.FreeHGlobal(input); Marshal.FreeHGlobal(output); }
     }
 
-    /// Generation, AppOpen, BaudRate, DataBits, Parity, StopBits, Dtr, Rts, Break, Lines, TxQueued.
+    /// Generation, AppOpen, BaudRate, DataBits, Parity, StopBits, Dtr, Rts, Break, Lines, TxQueued,
+    /// AppProcessId.
     public uint[] GetState() { return StateCall(IOCTL_GET_STATE, 0, false, 5000); }
 
     /// Waits until the generation is not `known`; null when `ms` passes first.
@@ -395,6 +401,27 @@ public sealed class HubIo : IDisposable
     public void Dispose()
     {
         if (handle != IntPtr.Zero) { CloseHandle(handle); handle = IntPtr.Zero; }
+    }
+
+    /// Takes the port back from the program that has the COM end open (version 3). Returns the Win32
+    /// error, 0 for success; `process` is the process that had the port, or 0 when none did.
+    public int Revoke(out uint process)
+    {
+        process = 0;
+        IntPtr signal;
+        IntPtr ov = NewOverlapped(out signal);
+        IntPtr output = Marshal.AllocHGlobal(4);
+        try
+        {
+            Marshal.WriteInt32(output, 0);
+            int error;
+            bool started = DeviceIoControl(handle, IOCTL_REVOKE, IntPtr.Zero, 0, output, 4, IntPtr.Zero, ov);
+            int n = Finish(ov, signal, started, 5000, out error);
+            if (n != 4) return error != 0 ? error : -1;
+            process = (uint)Marshal.ReadInt32(output);
+            return 0;
+        }
+        finally { CloseHandle(signal); Marshal.FreeHGlobal(ov); Marshal.FreeHGlobal(output); }
     }
 
     /// Writes to the application on another thread.
@@ -631,6 +658,9 @@ $KmdfOnly = @{
 # install-driver.ps1 -Helper, and these are skipped without it.
 $NeedsDemand = 'D15', 'D16', 'D17', 'D18', 'D19', 'D21'
 $HelperRunning = [bool]([IO.Directory]::GetFiles('\\.\pipe\') -contains "\\.\pipe\$HelperPipeName")
+# Checks of the COM number, which the helper service gives for either driver: they
+# are skipped when it is not running.
+$NeedsHelper = 'D28', 'D29', 'D30', 'D31'
 # Checks of the helper service alone.
 $HelperOnly = @{
     H14 = 'the kernel-mode driver has no helper service'
@@ -643,6 +673,10 @@ function Add-Test([string] $Id, [string] $Name, [scriptblock] $Body) {
     }
     if ($Flavour -ne 'umdf' -and $HelperOnly.ContainsKey($Id)) {
         $script:tests += New-TestRecord $Id $Name 'skip' $HelperOnly[$Id]
+        return
+    }
+    if ($Id -in $NeedsHelper -and -not $HelperRunning) {
+        $script:tests += New-TestRecord $Id $Name 'skip' 'the helper service is not running (install-driver.ps1 -Helper)'
         return
     }
     if ($Flavour -eq 'umdf' -and ($Id -in $NeedsDemand -or $Id -eq 'H14') -and -not $HelperRunning) {
@@ -1491,6 +1525,469 @@ Add-Test 'D21' 'the hub end of a port opens for the user who made it, not for an
         $hub = Open-Hub $p.Path
         $hub.Dispose()
         "refused for another user: $($answer[0]); COM port and the hand-made hub end open"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
+}
+
+# ---------------------------------------------------------------------------
+# D23 to D31: flow control, revoke, the process id and COM numbers (driver version 3).
+# ---------------------------------------------------------------------------
+
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+
+/// SetCommState with the DTR and RTS control values of the DCB, and what the lines do.
+public static class VssFlow
+{
+    [StructLayout(LayoutKind.Sequential)]
+    struct DCB
+    {
+        public uint DCBlength, BaudRate, Flags;
+        public ushort wReserved, XonLim, XoffLim;
+        public byte ByteSize, Parity, StopBits;
+        public sbyte XonChar, XoffChar, ErrorChar, EofChar, EvtChar;
+        public ushort wReserved1;
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool GetCommState(IntPtr h, ref DCB dcb);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool SetCommState(IntPtr h, ref DCB dcb);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool EscapeCommFunction(IntPtr h, uint function);
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern uint QueryDosDeviceW(string name, System.Text.StringBuilder target, uint max);
+
+    const int DtrShift = 4;
+    const int RtsShift = 12;
+
+    /// fDtrControl and fRtsControl: 0 disable, 1 enable, 2 handshake, 3 toggle (RTS only). A baud rate
+    /// of 0 leaves the rate as it is. Returns the Win32 error, 0 for success.
+    public static int SetFlow(IntPtr h, uint dtr, uint rts, ushort xon, ushort xoff, uint baud)
+    {
+        var dcb = new DCB { DCBlength = (uint)Marshal.SizeOf(typeof(DCB)) };
+        if (!GetCommState(h, ref dcb)) return Marshal.GetLastWin32Error();
+        dcb.Flags = (dcb.Flags & ~(3u << DtrShift) & ~(3u << RtsShift)) | (dtr << DtrShift) | (rts << RtsShift);
+        dcb.XonLim = xon;
+        dcb.XoffLim = xoff;
+        if (baud != 0) dcb.BaudRate = baud;
+        return SetCommState(h, ref dcb) ? 0 : Marshal.GetLastWin32Error();
+    }
+
+    /// DTR control, RTS control, XonLim, XoffLim; null when the call fails.
+    public static uint[] GetFlow(IntPtr h)
+    {
+        var dcb = new DCB { DCBlength = (uint)Marshal.SizeOf(typeof(DCB)) };
+        if (!GetCommState(h, ref dcb)) return null;
+        return new uint[] { (dcb.Flags >> DtrShift) & 3u, (dcb.Flags >> RtsShift) & 3u, dcb.XonLim, dcb.XoffLim };
+    }
+
+    /// EscapeCommFunction; the Win32 error, 0 for success.
+    public static int Escape(IntPtr h, uint function)
+    {
+        return EscapeCommFunction(h, function) ? 0 : Marshal.GetLastWin32Error();
+    }
+
+    /// True when the DOS name (COM5) resolves to something.
+    public static bool DosNameExists(string name)
+    {
+        return QueryDosDeviceW(name, new System.Text.StringBuilder(512), 512) != 0;
+    }
+}
+'@
+
+$ERROR_INVALID_PARAMETER = 87; $ERROR_BUSY = 170; $ERROR_ALREADY_ASSIGNED = 85; $ERROR_NOT_FOUND = 1168
+
+# Reads `$Length` bytes from the application handle, however many reads it takes.
+function Read-AppAll([IntPtr] $H, [int] $Length) {
+    $got = 0
+    while ($got -lt $Length) {
+        $r = Read-App $H ([Math]::Min(16384, $Length - $got))
+        if ($r.Count -eq 0) { throw "the application read stopped after $got of $Length bytes" }
+        $got += $r.Count
+    }
+    $got
+}
+
+Add-Test 'D23' 'SetCommState drives DTR and RTS: enable raises, disable drops, and a fresh open starts clear' {
+    $hub = Open-Hub $hubPath
+    $app = Open-Port $port
+    try {
+        Assert (([VssFlow]::SetFlow($app, 1, 1, 0, 0, 0)) -eq 0) 'SetCommState with DTR and RTS enabled failed'
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 1 -and $state[7] -eq 1) ("enabling did not raise DTR and RTS: {0}" -f ($state -join ','))
+        $flow = [VssFlow]::GetFlow($app)
+        Assert ($flow[0] -eq 1 -and $flow[1] -eq 1) "GetCommState reported DTR control $($flow[0]) and RTS control $($flow[1])"
+
+        Assert (([VssFlow]::SetFlow($app, 0, 0, 0, 0, 0)) -eq 0) 'SetCommState with both disabled failed'
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 0 -and $state[7] -eq 0) ("disabling did not drop DTR and RTS: {0}" -f ($state -join ','))
+
+        # A disabled line is still the application's to set, as on a real port.
+        Assert (([VssFlow]::Escape($app, $SETDTR)) -eq 0) 'SETDTR failed with DTR disabled'
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 1 -and $state[7] -eq 0) ("SETDTR gave {0}" -f ($state -join ','))
+
+        # One line each way.
+        Assert (([VssFlow]::SetFlow($app, 0, 1, 0, 0, 0)) -eq 0) 'SetCommState failed'
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 0 -and $state[7] -eq 1) ("DTR off and RTS on gave {0}" -f ($state -join ','))
+        # The loopback lines are the hub's, so the null-modem wiring is not what is checked here.
+    } finally { [VssComm]::Close($app) }
+
+    # The port went back to its defaults when the program closed it.
+    $app = Open-Port $port
+    try {
+        $flow = [VssFlow]::GetFlow($app)
+        Assert ($flow[0] -eq 0 -and $flow[1] -eq 0) "a new open started with DTR control $($flow[0]) and RTS control $($flow[1])"
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 0 -and $state[7] -eq 0) ("a new open started with the lines {0}" -f ($state -join ','))
+    } finally { [VssComm]::Close($app); $hub.Dispose() }
+    'enable and disable move DTR and RTS; SETDTR still works after a disable; every open starts clear'
+}
+
+Add-Test 'D24' 'DTR and RTS handshake follow the receive buffer, and the application may not set them' {
+    $hub = Open-Hub $hubPath
+    $app = Open-Port $port
+    try {
+        # Low at 4096 bytes or less free, high again at 16384 bytes or less waiting, in a 64 KB buffer.
+        Assert (([VssFlow]::SetFlow($app, 2, 2, 16384, 4096, 0)) -eq 0) 'SetCommState with handshake failed'
+        $flow = [VssFlow]::GetFlow($app)
+        Assert ($flow[0] -eq 2 -and $flow[1] -eq 2) "GetCommState reported DTR control $($flow[0]) and RTS control $($flow[1])"
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 1 -and $state[7] -eq 1) ("an empty buffer should start both lines high: {0}" -f ($state -join ','))
+
+        foreach ($code in $SETDTR, $CLRDTR, $SETRTS, $CLRRTS) {
+            $e = [VssFlow]::Escape($app, $code)
+            Assert ($e -eq $ERROR_INVALID_PARAMETER) "EscapeCommFunction($code) in handshake mode gave error $e"
+        }
+
+        # Fill the buffer to within 3536 bytes of full.
+        $e = 0
+        Assert ($hub.Write((New-Pattern 62000), 5000, [ref]$e) -eq 62000) "the hub write failed ($e)"
+        $state = $hub.GetState()
+        $until = (Get-Date).AddSeconds(3)
+        while (($state[6] -ne 0 -or $state[7] -ne 0) -and (Get-Date) -lt $until) { Start-Sleep -Milliseconds 50; $state = $hub.GetState() }
+        Assert ($state[6] -eq 0 -and $state[7] -eq 0) ("a nearly full buffer should drop both lines: {0}" -f ($state -join ','))
+
+        # Between the limits they stay low.
+        Assert ((Read-AppAll $app 40000) -ge 40000) 'could not read 40000 bytes'
+        $state = $hub.GetState()
+        Assert ($state[6] -eq 0 -and $state[7] -eq 0) ("22000 bytes waiting should keep the lines low: {0}" -f ($state -join ','))
+
+        # At 16384 bytes or fewer waiting they come back.
+        Assert ((Read-AppAll $app 6000) -ge 6000) 'could not read 6000 bytes'
+        $state = $hub.GetState()
+        $until = (Get-Date).AddSeconds(3)
+        while (($state[6] -ne 1 -or $state[7] -ne 1) -and (Get-Date) -lt $until) { Start-Sleep -Milliseconds 50; $state = $hub.GetState() }
+        Assert ($state[6] -eq 1 -and $state[7] -eq 1) ("16000 bytes waiting should raise the lines: {0}" -f ($state -join ','))
+
+        # Leaving handshake gives the lines back to the application.
+        Assert (([VssFlow]::SetFlow($app, 0, 0, 0, 0, 0)) -eq 0) 'SetCommState failed'
+        Assert (([VssFlow]::Escape($app, $SETDTR)) -eq 0) 'SETDTR is still refused after leaving handshake'
+        'both lines drop at 4096 free and rise at 16384 waiting; SETDTR and SETRTS are refused meanwhile'
+    } finally { [VssComm]::Close($app); $hub.Dispose() }
+}
+
+Add-Test 'D25' 'RTS toggle is high from the first queued byte until the last has been sent' {
+    $hub = Open-Hub $hubPath
+    $app = Open-Port $port
+    try {
+        # 1200 baud, 8N1: ten bits a byte, so 60 bytes leave in half a second.
+        Assert ([VssComm]::SetState($app, 1200, 8, 0, 0)) 'SetCommState failed'
+        Assert (([VssFlow]::SetFlow($app, 0, 3, 0, 0, 0)) -eq 0) 'SetCommState with RTS toggle failed'
+        $flow = [VssFlow]::GetFlow($app)
+        Assert ($flow[1] -eq 3) "GetCommState reported RTS control $($flow[1])"
+        $state = $hub.GetState()
+        Assert ($state[7] -eq 0) 'RTS was high with nothing to send'
+
+        # RTS may still be set by hand in toggle mode, as on a real port.
+        Assert (([VssFlow]::Escape($app, $SETRTS)) -eq 0) 'SETRTS was refused in toggle mode'
+        Assert (([VssFlow]::Escape($app, $CLRRTS)) -eq 0) 'CLRRTS was refused in toggle mode'
+
+        $watch = [Diagnostics.Stopwatch]::StartNew()
+        Assert ([VssComm]::Write($app, (New-Pattern 60)) -eq 60) 'the application write was short'
+        $state = $hub.GetState()
+        Assert ($state[7] -eq 1) ("RTS was not high just after the write: {0}" -f ($state -join ','))
+        $got = Read-Hub $hub 60
+        Assert ($got.Length -eq 60) 'the hub did not read the 60 bytes'
+
+        # The hub has them all, but they have not finished leaving: RTS stays up for the sending time.
+        $state = $hub.GetState()
+        Assert ($state[7] -eq 1 -and $watch.ElapsedMilliseconds -lt 300) ("RTS fell early, after $($watch.ElapsedMilliseconds) ms")
+        $until = (Get-Date).AddSeconds(3)
+        while ($state[7] -ne 0 -and (Get-Date) -lt $until) { Start-Sleep -Milliseconds 20; $state = $hub.GetState() }
+        $held = $watch.ElapsedMilliseconds
+        Assert ($state[7] -eq 0) 'RTS never fell'
+        Assert ($held -ge 400 -and $held -le 1500) "RTS was held for $held ms; 60 bytes at 1200 baud take 500"
+        "RTS rose with the first byte and fell after $held ms (500 expected)"
+    } finally { [VssComm]::Close($app); $hub.Dispose() }
+}
+
+Add-Test 'D26' 'revoke takes the port from a program that holds it, and a new program can open it' {
+    $hub = Open-Hub $hubPath
+    $app = Open-Port $port
+    $new = [IntPtr](-1)
+    try {
+        # Three things wait in the driver: a read, a WaitCommEvent, and a write that does not fit.
+        [VssComm]::SetTimeouts($app, 0, 0, 0, 0, 0) | Out-Null
+        [VssComm]::SetMask($app, $EV_CTS) | Out-Null
+        $read = [PendingIo]::BeginRead($app, 16)
+        $wait = [PendingIo]::BeginWait($app)
+        $task = [HubIo]::WriteAsync($app, (New-Pattern 300000))
+        Start-Sleep -Milliseconds 300
+        Assert (-not $read.Completed(0) -and -not $wait.Completed(0) -and -not $task.IsCompleted) 'the requests did not wait'
+
+        $state = $hub.GetState()
+        Assert ($state[1] -eq 1 -and $state[11] -eq $PID) ("the hub saw AppOpen $($state[1]) and process $($state[11]), not 1 and $PID")
+
+        $process = [uint32]0
+        $e = $hub.Revoke([ref]$process)
+        Assert ($e -eq 0) "REVOKE failed with error $e"
+        Assert ($process -eq $PID) "REVOKE named process $process, not $PID"
+
+        Assert ($read.Completed(3000)) 'the waiting read did not end'
+        $readError = 0; $read.Finish($false, [ref]$readError) | Out-Null
+        Assert ($readError -ne 0) 'the waiting read ended as a success'
+        Assert ($wait.Completed(3000)) 'the waiting WaitCommEvent did not end'
+        $waitError = 0; $wait.Finish($false, [ref]$waitError) | Out-Null
+        Assert ($waitError -ne 0) 'the waiting WaitCommEvent ended as a success'
+        Assert ($task.Wait(5000)) 'the blocked write did not end'
+        Assert ($task.Result -lt 300000) 'the blocked write went through'
+        $read.Dispose(); $wait.Dispose()
+
+        $state = $hub.GetState()
+        Assert ($state[1] -eq 0 -and $state[11] -eq 0) ("after the revoke the hub saw AppOpen $($state[1]) and process $($state[11])")
+
+        # Everything on the old handle fails from now on.
+        Assert ([VssComm]::Write($app, [byte[]](1, 2, 3)) -le 0) 'a write on the revoked handle worked'
+        Assert (([VssFlow]::Escape($app, $SETDTR)) -ne 0) 'EscapeCommFunction on the revoked handle worked'
+        Assert ($null -eq [VssComm]::GetState($app)) 'GetCommState on the revoked handle worked'
+        $failed = $false
+        try { $again = [PendingIo]::BeginRead($app, 4); $again.Dispose() } catch { $failed = $true }
+        Assert $failed 'a read on the revoked handle was accepted'
+
+        # A new program opens the port at once and it carries bytes.
+        $new = Open-Port $port
+        $state = $hub.GetState()
+        Assert ($state[1] -eq 1) 'the hub was not told the new program opened'
+        $e = 0
+        Assert ($hub.Write([Text.Encoding]::ASCII.GetBytes('fresh'), 5000, [ref]$e) -eq 5) "the hub write failed ($e)"
+        $r = Read-App $new 5
+        Assert ([Text.Encoding]::ASCII.GetString($r.Bytes) -eq 'fresh') 'the new program read other bytes'
+
+        # The old handle closing later changes nothing for the new program.
+        [VssComm]::Close($app); $app = [IntPtr](-1)
+        Start-Sleep -Milliseconds 200
+        $state = $hub.GetState()
+        Assert ($state[1] -eq 1 -and $state[11] -eq $PID) 'closing the revoked handle took the port from the new program'
+        Assert ($hub.Write([Text.Encoding]::ASCII.GetBytes('still'), 5000, [ref]$e) -eq 5) "the hub write failed ($e)"
+        $r = Read-App $new 5
+        Assert ([Text.Encoding]::ASCII.GetString($r.Bytes) -eq 'still') 'the new program lost its bytes'
+
+        # A revoke with no program on the port is not an error.
+        [VssComm]::Close($new); $new = [IntPtr](-1)
+        Start-Sleep -Milliseconds 200
+        $process = [uint32]99
+        $e = $hub.Revoke([ref]$process)
+        Assert ($e -eq 0 -and $process -eq 0) "REVOKE with no program gave error $e and process $process"
+        "ended a read, a wait and a write (errors $readError, $waitError); a new program opened; the old handle failed"
+    } finally {
+        if ($app -ne [IntPtr](-1)) { [VssComm]::Close($app) }
+        if ($new -ne [IntPtr](-1)) { [VssComm]::Close($new) }
+        $hub.Dispose()
+    }
+}
+
+Add-Test 'D27' 'the hub is told which process has the port, and the settings it chose' {
+    $hub = Open-Hub $hubPath
+    $child = $null
+    try {
+        $state = $hub.GetState()
+        Assert ($state[1] -eq 0 -and $state[11] -eq 0) 'a process is named with nothing open'
+
+        # A program of its own, so that the process id is not this one's.
+        $script = "`$p = New-Object System.IO.Ports.SerialPort '$port', 38400, 'Even', 7, 'Two'; `$p.Open(); Start-Sleep 12; `$p.Close()"
+        $child = Start-Process powershell.exe -ArgumentList '-NoProfile', '-Command', $script -PassThru -WindowStyle Hidden
+        $until = (Get-Date).AddSeconds(30)
+        while ($state[1] -ne 1 -and (Get-Date) -lt $until) {
+            $next = $hub.WaitState($state[0], 1000)
+            if ($next) { $state = $next }
+        }
+        Assert ($state[1] -eq 1) 'the hub was not told a program opened the port'
+        Assert ($state[11] -eq $child.Id) "the hub saw process $($state[11]), not $($child.Id)"
+        Assert ($state[11] -ne $PID) 'the process is this one'
+        $detail = "process $($state[11]) at $($state[2]) baud, $($state[3]) bits, parity $($state[4]), stop $($state[5])"
+
+        $until = (Get-Date).AddSeconds(30)
+        while ($state[1] -ne 0 -and (Get-Date) -lt $until) {
+            $next = $hub.WaitState($state[0], 1000)
+            if ($next) { $state = $next }
+        }
+        Assert ($state[1] -eq 0 -and $state[11] -eq 0) 'the process was still named after the program closed the port'
+        $detail
+    } finally {
+        if ($child -and -not $child.HasExited) { $child.Kill() }
+        $hub.Dispose()
+    }
+}
+
+# What asks the helper to change a number: the helper's own pipe for the user-mode driver (which
+# made the port), and a pipe of its own for the kernel-mode driver (whose control device did).
+function Set-VssComNumber($Ctl, [uint32] $Slot, [uint32] $Number) {
+    $reply = [uint32]0
+    if ($Flavour -eq 'umdf') { return $Ctl.Raw(1, 3, $Slot, $Number, [ref]$reply) }
+    $e = 0
+    $helper = [HelperIo]::Open($HelperPipeName, [ref]$e)
+    if (-not $helper) { throw "opening the helper's pipe failed with error $e" }
+    try { return $helper.Raw(1, 4, $Slot, $Number, [ref]$reply) } finally { $helper.Dispose() }
+}
+
+# A COM number from `$From` up that nothing has: not listed, not resolving.
+function Get-FreeComNumber([int] $From) {
+    for ($n = $From; $n -le 255; $n++) {
+        if (-not [VssFlow]::DosNameExists("COM$n") -and -not (Test-VssSerialComm "COM$n")) { return $n }
+    }
+    throw 'no free COM number'
+}
+
+# Waits until the port in the slot has that COM name.
+function Wait-VssPortNamed([uint32] $Slot, [string] $Name, [int] $Seconds = 40) {
+    $until = (Get-Date).AddSeconds($Seconds)
+    do {
+        $found = Find-VssDemandPort $Slot
+        if ($found -and $found.Port -eq $Name) { return $found }
+        Start-Sleep -Milliseconds 250
+    } while ((Get-Date) -lt $until)
+    $null
+}
+
+Add-Test 'D28' 'a port is given the COM number asked for, keeps it when made again, and frees the one it left' {
+    $first = Get-FreeComNumber 150
+    $second = Get-FreeComNumber ($first + 1)
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        $before = $p.Port
+        $e = Set-VssComNumber $ctl $p.Slot $first
+        Assert ($e -eq 0) "asking for COM$first gave error $e"
+
+        $found = Wait-VssPortNamed $p.Slot "COM$first"
+        Assert ($null -ne $found) "the port in slot $($p.Slot) never became COM$first (it is $((Find-VssDemandPort $p.Slot).Port))"
+        Assert (Test-VssSerialComm "COM$first") "COM$first is not in SERIALCOMM"
+        Assert (Wait-VssSerialCommGone $before) "$before is still in SERIALCOMM"
+        $device = Get-PnpDevice -Class Ports -PresentOnly | Where-Object { $_.FriendlyName -like "*(COM$first)" }
+        Assert ($null -ne $device) "no Ports device is called (COM$first)"
+
+        # The new name works as a port: bytes cross.
+        $hub = Open-Hub $found.Path
+        $app = Open-Port "COM$first"
+        try {
+            $e = 0
+            Assert ([VssComm]::Write($app, [Text.Encoding]::ASCII.GetBytes('numbered')) -eq 8) 'the application write was short'
+            $got = [Text.Encoding]::ASCII.GetString((Read-Hub $hub 8))
+            Assert ($got -eq 'numbered') "the hub read '$got'"
+        } finally { [VssComm]::Close($app); $hub.Dispose() }
+
+        # Again, to another number, with the first one freed.
+        $e = Set-VssComNumber $ctl $p.Slot $second
+        Assert ($e -eq 0) "asking for COM$second gave error $e"
+        Assert ($null -ne (Wait-VssPortNamed $p.Slot "COM$second")) "the port never became COM$second"
+        Assert (Wait-VssSerialCommGone "COM$first") "COM$first is still in SERIALCOMM"
+        $opens = 0
+        $handle = [VssComm]::Open("COM$first", [ref]$opens)
+        if ($handle -ne [IntPtr](-1)) { [VssComm]::Close($handle); throw "COM$first still opens" }
+
+        # Asking for the number it has is not an error.
+        $e = Set-VssComNumber $ctl $p.Slot $second
+        Assert ($e -eq 0) "asking again for COM$second gave error $e"
+
+        # The port goes, and when it is made again in the same slot it has the number.
+        $ctl.Dispose()
+        Assert (Wait-VssDemandPort $p.Slot 60 -Gone) 'the port was still there after its handle closed'
+        $ctl = Open-Ctl
+        $q = New-DemandPort $ctl
+        Assert ($q.Slot -eq $p.Slot -and $q.Port -eq "COM$second") "the port came back as slot $($q.Slot), $($q.Port), not slot $($p.Slot), COM$second"
+        "$before -> COM$first -> COM$second; carried bytes; COM$first freed; kept after being made again"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D29' 'a number another device has, or no number at all, is refused and nothing changes' {
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        $name = $p.Port
+        $taken = [int]($port -replace '\D', '')
+        $e = Set-VssComNumber $ctl $p.Slot $taken
+        Assert ($e -eq $ERROR_ALREADY_ASSIGNED) "asking for COM$taken, which $port has, gave error $e"
+        foreach ($bad in 0, 256, 4096) {
+            $e = Set-VssComNumber $ctl $p.Slot $bad
+            Assert ($e -eq $ERROR_INVALID_PARAMETER) "asking for COM$bad gave error $e"
+        }
+        $now = Find-VssDemandPort $p.Slot
+        Assert ($now.Port -eq $name) "the port is $($now.Port) after the refusals, not $name"
+        Assert (Test-VssSerialComm $name) "$name left SERIALCOMM"
+        "COM$taken refused ($ERROR_ALREADY_ASSIGNED), 0, 256 and 4096 refused ($ERROR_INVALID_PARAMETER); still $name"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D30' 'the number of a port a program has open is not changed, and can be once it is closed' {
+    $number = Get-FreeComNumber 150
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        $name = $p.Port
+        $app = Open-Port $name
+        try {
+            $e = Set-VssComNumber $ctl $p.Slot $number
+            Assert ($e -eq $ERROR_BUSY) "asking with a program on $name gave error $e, not busy ($ERROR_BUSY)"
+            Assert ((Find-VssDemandPort $p.Slot).Port -eq $name) "the port is not $name after the refusal"
+        } finally { [VssComm]::Close($app) }
+
+        # The refusal left the port working: the same request goes through once the program is gone.
+        $e = Set-VssComNumber $ctl $p.Slot $number
+        Assert ($e -eq 0) "asking after the program closed gave error $e"
+        Assert ($null -ne (Wait-VssPortNamed $p.Slot "COM$number")) "the port never became COM$number"
+        "busy while $name was open ($ERROR_BUSY); COM$number once it was closed"
+    } finally {
+        $ctl.Dispose()
+        if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }
+    }
+}
+
+Add-Test 'D31' 'the number of a port that is not the asker''s, or is not there, is not changed' {
+    $number = Get-FreeComNumber 150
+    $ctl = Open-Ctl
+    $p = $null
+    try {
+        $p = New-DemandPort $ctl
+        $name = $p.Port
+        # A slot with no port.
+        $empty = [uint32]31
+        $e = Set-VssComNumber $ctl $empty $number
+        Assert ($e -eq $ERROR_NOT_FOUND) "asking for a slot with no port gave error $e, not not-found ($ERROR_NOT_FOUND)"
+        # The user-mode driver's ports belong to the pipe that made them: another pipe is refused.
+        if ($Flavour -eq 'umdf') {
+            $other = Open-Ctl
+            try {
+                $e = Set-VssComNumber $other $p.Slot $number
+                Assert ($e -eq $ERROR_NOT_FOUND) "another pipe changing the port gave error $e, not not-found"
+            } finally { $other.Dispose() }
+        }
+        Assert ((Find-VssDemandPort $p.Slot).Port -eq $name) "the port is not $name after the refusals"
+        'a slot with no port, and (user-mode driver) a port of another pipe, are refused'
     } finally {
         $ctl.Dispose()
         if ($p) { Wait-VssDemandPort $p.Slot 60 -Gone | Out-Null }

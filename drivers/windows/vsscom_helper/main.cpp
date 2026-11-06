@@ -341,6 +341,21 @@ void write_friendly_name(DEVINST node, const std::wstring& name)
         static_cast<ULONG>((name.size() + 1) * sizeof(wchar_t)), 0);
 }
 
+/// True when no program has the COM port open. A restart with a handle open fails,
+/// and Windows then keeps the port from restarting at all until it is made again,
+/// so the helper looks first, by opening the port itself: the driver lets one
+/// handle in at a time. The handle is let go at once; the restart follows it.
+bool port_is_free(const std::wstring& name)
+{
+    unique_handle probe(::CreateFileW((L"\\.\\" + name).c_str(),
+                                      GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+                                      OPEN_EXISTING, 0, nullptr));
+    if (probe.get() != INVALID_HANDLE_VALUE)
+        return true;
+    const DWORD error = ::GetLastError();
+    return error != ERROR_ACCESS_DENIED && error != ERROR_SHARING_VIOLATION;
+}
+
 /// Restarts the device, as Device Manager does after a COM number changed. Windows
 /// refuses while a program has a handle on it.
 bool restart_device(const std::wstring& instance)
@@ -431,11 +446,12 @@ DWORD set_com_number(const std::wstring& instance, DWORD number, HANDLE stop)
     write_friendly_name(node,
                         vss::helper::friendly_name_for(old_friendly, number));
 
-    if (!restart_device(instance))
+    // Nothing is restarted if a program has the port: the port would not restart
+    // again. A failed restart (the hub end was open after all) leaves the port
+    // that way, and no second try is made.
+    if (!port_is_free(old_name) || !restart_device(instance))
     {
         put_back();
-        // The restart may have stopped the stack before it failed.
-        (void)restart_device(instance);
         return ERROR_BUSY;
     }
     const DWORD started = wait_started(instance, stop);
