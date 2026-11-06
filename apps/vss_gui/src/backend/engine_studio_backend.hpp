@@ -60,6 +60,9 @@ public:
     std::optional<holder_view> port_holder(vss::endpoint_id id) const override;
     vss::result<void> release_port(vss::endpoint_id id,
                                    release_method method) override;
+    vss::result<void>
+    set_port_settings(vss::endpoint_id id,
+                      const vss::serial_settings& settings) override;
     vss::result<void> rename_port(vss::endpoint_id id,
                                   const QString& name) override;
     std::vector<vss::endpoint_id> lost_ports() const override;

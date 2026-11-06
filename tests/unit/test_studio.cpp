@@ -12,6 +12,7 @@
 #include "test_framework.hpp"
 #include "support/test_support.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <string>
 #include <thread>
@@ -272,6 +273,72 @@ TEST_CASE("studio: an echoing fixture sends back what was written to it")
     REQUIRE(app.set_fixture_echo(id, true));
     REQUIRE(app.remove_port(id));
     REQUIRE(!app.fixture_echo(id));
+}
+
+TEST_CASE("studio: a fixture takes new settings and keeps its links and echo")
+{
+    using namespace std::chrono_literals;
+
+    studio app;
+    const auto fixture = app.create_mock_port("device");
+    // A plain fixture: a loopback would send the echo straight back.
+    const auto other = app.create_mock_port("tool");
+    REQUIRE(fixture);
+    REQUIRE(other);
+    const auto id = (*fixture)->id();
+    REQUIRE(app.engine().connect(id, (*other)->id()));
+    REQUIRE(app.set_fixture_echo(id, true));
+
+    serial_settings slow;
+    slow.baud_rate = 9600;
+    slow.data_bits = 7;
+    slow.parity = parity_mode::even;
+    REQUIRE(app.reconfigure_port(id, slow));
+    REQUIRE(app.port_settings(id).has_value());
+    REQUIRE(*app.port_settings(id) == slow);
+    REQUIRE(app.fixture_echo(id));
+    REQUIRE_EQ(app.engine().links().size(), std::size_t{1});
+
+    // The new settings are what a saved setup keeps.
+    const auto saved = app.snapshot();
+    const auto entry =
+        std::find_if(saved.ports.begin(), saved.ports.end(),
+                     [](const config::port_entry& port)
+                     { return port.name == "device"; });
+    REQUIRE(entry != saved.ports.end());
+    REQUIRE_EQ(entry->serial.baud_rate, 9600u);
+
+    // The echo still answers, from the new fixture.
+    event_recorder events;
+    app.engine().subscribe({}, [events](const endpoint_event& e)
+                           { events.record(e); });
+    const std::string text = "ping";
+    (*fixture)->write(as_bytes(text));
+    REQUIRE(wait_until(
+        [&] { return data_on(events, "device", data_direction::rx) == text; },
+        2000ms));
+}
+
+TEST_CASE("studio: reconfigure saves a virtual port's values and refuses bad ones")
+{
+    studio app;
+    const auto loop = app.create_virtual_port("v", virtual_port_kind::loopback);
+    REQUIRE(loop);
+    const auto id = (*loop)->id();
+
+    serial_settings settings;
+    settings.baud_rate = 19200;
+    REQUIRE(app.reconfigure_port(id, settings));
+    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+
+    serial_settings bad;
+    bad.data_bits = 3;
+    REQUIRE_EQ(app.reconfigure_port(id, bad),
+               make_error_code(errc::invalid_argument));
+    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+    REQUIRE_EQ(app.reconfigure_port(endpoint_id{4242}, settings),
+               make_error_code(errc::not_found));
+    REQUIRE(!app.port_settings(endpoint_id{4242}).has_value());
 }
 
 TEST_CASE("studio: removal by id and by name")

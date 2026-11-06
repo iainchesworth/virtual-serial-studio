@@ -71,6 +71,11 @@ struct capabilities
     /// `vss::studio::rename_port`, which keeps the hub, the studio's records
     /// and a saved setup in step.
     bool rename_port = false;
+    /// Give a port new serial settings after it was made
+    /// (`vss::studio::reconfigure_port`).  A backend without it opens the
+    /// Settings dialog read-only, with Apply disabled and "Not available in
+    /// this build".
+    bool port_settings = false;
     /// Undo and redo of changes that have an exact inverse: connecting or
     /// removing a link, and changing an owner.  Never a snapshot restore.
     bool undo = false;

@@ -501,6 +501,7 @@ studio::create_mock_port(const std::string& name,
     record.serial = settings;
     record.capture = options.capture_traffic;
     record.fixture = transport;
+    record.mock_target = target;
 
     return register_port(std::move(record), std::move(transport), options);
 }
@@ -660,6 +661,101 @@ bool studio::fixture_echo(endpoint_id id) const
     std::lock_guard lock(record_mutex_);
     const auto it = records_.find(id);
     return it != records_.end() && it->second.echo != 0;
+}
+
+std::optional<serial_settings> studio::port_settings(endpoint_id id) const
+{
+    std::lock_guard lock(record_mutex_);
+    const auto it = records_.find(id);
+    if (it == records_.end())
+        return std::nullopt;
+    return it->second.serial;
+}
+
+result<void> studio::reconfigure_port(endpoint_id id,
+                                      const serial_settings& settings)
+{
+    if (const auto invalid = validate(settings))
+        return invalid;
+
+    port_record record;
+    {
+        std::lock_guard lock(record_mutex_);
+        const auto it = records_.find(id);
+        if (it == records_.end())
+            return make_error_code(errc::not_found);
+        record = it->second;
+    }
+    const auto found = hub_->find_endpoint(id);
+    if (!found)
+        return make_error_code(errc::not_found);
+
+    const auto store = [this, id, &settings](bool given)
+    {
+        std::lock_guard lock(record_mutex_);
+        if (const auto it = records_.find(id); it != records_.end())
+        {
+            it->second.serial = settings;
+            if (given)
+                it->second.settings_given = true;
+        }
+    };
+
+    if (record.kind == "mock")
+    {
+        boost::system::error_code ec;
+        auto fresh = serial_transport::make_mock(hub_->executor(), settings,
+                                                 record.mock_target, ec);
+        if (ec)
+            return ec;
+        if (!fresh)
+            return make_error_code(errc::internal);
+
+        // The echo holds the old fixture; it is made again on the new one.
+        const bool echo = record.echo != 0;
+        if (echo)
+            static_cast<void>(set_fixture_echo(id, false));
+        const std::weak_ptr<serial_transport> fixture = fresh;
+        if (const auto reopened = found->reopen(std::move(fresh)); !reopened)
+        {
+            if (echo)
+                static_cast<void>(set_fixture_echo(id, true));
+            return reopened.error();
+        }
+        {
+            std::lock_guard lock(record_mutex_);
+            if (const auto it = records_.find(id); it != records_.end())
+                it->second.fixture = fixture;
+        }
+        store(false);
+        if (echo)
+            static_cast<void>(set_fixture_echo(id, true));
+        return {};
+    }
+
+    if (record.uri.empty())
+    {
+        // A virtual port or a loopback: the program on the other side sets
+        // the line itself, so only the saved values change.
+        store(false);
+        return {};
+    }
+
+    const std::string_view uri = record.uri;
+    if (is_listen_uri(record.uri) || uri.starts_with("tcp://") ||
+        uri.starts_with("udp://"))
+        return make_error_code(errc::unsupported);
+
+    boost::system::error_code ec;
+    auto fresh = open_transport(hub_->executor(), record.uri, &settings, ec);
+    if (ec)
+        return ec;
+    if (!fresh)
+        return make_error_code(errc::internal);
+    if (const auto reopened = found->reopen(std::move(fresh)); !reopened)
+        return reopened.error();
+    store(true);
+    return {};
 }
 
 result<void> studio::remove_port(endpoint_id id)

@@ -282,6 +282,8 @@ capabilities EngineStudioBackend::caps() const
     // `vss::studio::rename_port` renames the endpoint, the studio record
     // and a pseudo terminal's stable link together.
     caps.rename_port = true;
+    // `vss::studio::reconfigure_port` gives a port new serial settings.
+    caps.port_settings = true;
     caps.com0com_pair_creation =
         detail::platform_supports_com0com_pair_creation();
     // The rule is made by the elevated command-line helper; the platform must
@@ -532,6 +534,17 @@ vss::result<void> EngineStudioBackend::rename_port(vss::endpoint_id id,
     const auto renamed = studio_.rename_port(id, name.toStdString());
     if (!renamed)
         return renamed.error();
+    rebuild();
+    return {};
+}
+
+vss::result<void>
+EngineStudioBackend::set_port_settings(vss::endpoint_id id,
+                                       const vss::serial_settings& settings)
+{
+    const auto changed = studio_.reconfigure_port(id, settings);
+    if (!changed)
+        return changed.error();
     rebuild();
     return {};
 }
@@ -855,7 +868,13 @@ void EngineStudioBackend::rebuild()
         peers = studio_.peer_states();
     const auto drivers = studio_.driver_ports();
     for (const auto& info : infos)
+    {
         next_ports.push_back(make_port(info, peers, drivers));
+        // The endpoint keeps the settings it was made with; the studio keeps
+        // the ones the user gave it since.
+        if (const auto settings = studio_.port_settings(info.id))
+            next_ports.back().serial = *settings;
+    }
 
     std::vector<link_view> next_links;
     const auto links = studio_.link_infos();

@@ -30,7 +30,7 @@ A bundle is a set of ports and the link between them, added in one step. Each en
 | Split | One port feeds several; their replies merge back | Source, 2 to 8 targets | `split` |
 | Join | Several ports send into one, one way | 2 to 8 sources, target | `join` |
 | Bus | Several ports on one shared line; each hears all the others | 2 to 8 members | `bus` (needs `shared_bus`) |
-| Switch | Several programs share one port, one owner at a time | Device, 2 to 8 programs | `split` with `merge_policy::owner`, then `set_owner` |
+| Switch | Several programs send to one port, one owner at a time | Device, 2 to 8 programs | `join` into the device with `merge_policy::owner`, then `set_owner` to the first program (the owner of a link is one of its sources) |
 | Redirect | Bytes from one port go to another, one way | From, To | `redirect` |
 | Monitor | A passive copy of one port's traffic | Watched, Copy | `monitor` |
 | Share | A real device given to several programs | Device (chosen from the list), 1 to 8 program ports | `share_serial` |

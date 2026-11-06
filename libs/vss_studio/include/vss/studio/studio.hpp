@@ -145,6 +145,27 @@ public:
     /// True while the fixture echoes.
     bool fixture_echo(endpoint_id id) const;
 
+    /// Gives a port new serial settings and keeps its name, id and links.
+    /// What happens depends on how the port was made:
+    /// - a mock fixture gets a new fixture with the settings, under the same
+    ///   endpoint (an echo that was on stays on);
+    /// - a port made from an address (a serial device, `rfc2217://`) is
+    ///   opened again with the settings, as `reopen` does;
+    /// - a virtual port or a loopback keeps running: the program that opens
+    ///   it sets its own speed, so only the values the studio saves change.
+    /// A `tcp://` or `udp://` port has no line settings: `errc::unsupported`.
+    /// `errc::invalid_argument` for settings `validate` refuses and
+    /// `errc::not_found` for an unknown port.  A port that cannot be opened
+    /// with the new settings keeps the old ones and reports why.  It can block
+    /// while a transport opens, so do not call it from the GUI thread.
+    /// `endpoint_info::serial` keeps the value the endpoint was made with;
+    /// `port_settings` returns the current one.
+    result<void> reconfigure_port(endpoint_id id,
+                                  const serial_settings& settings);
+
+    /// The serial settings the studio keeps for a port, which `snapshot` saves.
+    std::optional<serial_settings> port_settings(endpoint_id id) const;
+
     result<void> remove_port(endpoint_id id);
     result<void> remove_port(std::string_view name);
 
@@ -305,6 +326,8 @@ private:
         std::weak_ptr<serial_transport> fixture;
         /// The hub subscription of a fixture's echo, or 0.
         subscriber_id echo = 0;
+        /// The device a mock fixture plays, so it can be made again.
+        std::string mock_target;
         /// For a port of the Windows driver: the number it was asked to have
         /// (0 for whichever Windows picked), and its transport, which the
         /// number is changed through.

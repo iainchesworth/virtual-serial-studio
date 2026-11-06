@@ -121,6 +121,9 @@ public:
                                    release_method method) override;
     vss::result<void> rename_port(vss::endpoint_id id,
                                   const QString& name) override;
+    vss::result<void>
+    set_port_settings(vss::endpoint_id id,
+                      const vss::serial_settings& settings) override;
 
     std::vector<port_view> ports() const override { return ports_; }
     std::vector<link_view> links() const override { return links_; }

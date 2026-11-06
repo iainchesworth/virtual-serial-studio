@@ -117,6 +117,19 @@ public:
         return vss::make_error_code(vss::errc::unsupported);
     }
 
+    /// Gives a port new serial settings and keeps its name, id and links
+    /// (capability: port_settings).  A fixture or a device is opened again
+    /// with them; a virtual port only saves them, because the program that
+    /// opens it sets its own speed.  It can block while a device opens, so a
+    /// dialog calls it from a worker thread and calls `refresh()` afterwards.
+    /// The default is `unsupported`.
+    virtual vss::result<void>
+    set_port_settings(vss::endpoint_id /*id*/,
+                      const vss::serial_settings& /*settings*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
     // -- snapshots ---------------------------------------------------------
 
     virtual std::vector<port_view> ports() const = 0;
