@@ -6442,6 +6442,28 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
+            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>כמה יציאות COM אבדו. שירות העזר או מנהל ההתקן הופעל מחדש והסיר את היציאות שהתוכניות שלכם פתחו.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>צור יציאות מחדש</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>היציאות נוצרו מחדש.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>לא ניתן היה ליצור מחדש את כל היציאות: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>חדש</translation>
@@ -13680,6 +13702,28 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
+            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>כמה יציאות COM אבדו. שירות העזר או מנהל ההתקן הופעל מחדש והסיר את היציאות שהתוכניות שלכם פתחו.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>צור יציאות מחדש</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>היציאות נוצרו מחדש.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>לא ניתן היה ליצור מחדש את כל היציאות: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>חדש</translation>

@@ -25,6 +25,7 @@ class QDockWidget;
 class QLabel;
 class QLineEdit;
 class QStackedWidget;
+class QThread;
 class QToolBar;
 
 namespace vss::gui
@@ -36,6 +37,7 @@ class Launcher;
 class FixtureBehaviours;
 struct setup_group;
 class MonitorPanel;
+class NoteBanner;
 class OwnerBar;
 class PortsPanel;
 class SendPanel;
@@ -85,6 +87,9 @@ private:
     void update_level_ui();
     void update_content();
     void update_title();
+    /// Shows the banner while ports of the Windows driver are lost.
+    void update_lost_banner();
+    void recreate_lost_ports();
     void update_actions();
     void update_status();
     void update_dock_titles();
@@ -204,6 +209,8 @@ private:
     FixtureBehaviours* behaviours_ = nullptr;
     MonitorPanel* monitor_panel_ = nullptr;
     OwnerBar* owner_bar_ = nullptr;
+    NoteBanner* lost_banner_ = nullptr;
+    QThread* recreate_thread_ = nullptr;
     EventLogPanel* event_log_ = nullptr;
     TopologyJsonEditor* json_editor_ = nullptr;
     QAction* advanced_action_ = nullptr;

@@ -61,6 +61,7 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <memory>
 #include <vss/config/document.hpp>
 #include <vss/studio/studio.hpp>
 
@@ -91,6 +92,7 @@
 #include <QStatusBar>
 #include <QStringList>
 #include <QTabWidget>
+#include <QThread>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -190,6 +192,11 @@ ShellWindow::~ShellWindow()
     for (QObject* child : children)
         QObject::disconnect(child, nullptr, this, nullptr);
     QObject::disconnect(&Theme::instance(), nullptr, this, nullptr);
+    if (recreate_thread_ != nullptr)
+    {
+        recreate_thread_->wait();
+        recreate_thread_ = nullptr;
+    }
     monitor_action_ = nullptr;
     advanced_action_ = nullptr;
 }
@@ -676,7 +683,21 @@ void ShellWindow::build_central()
     workspace_ = new QWidget(central_);
     auto* layout = new QVBoxLayout(workspace_);
     layout->setContentsMargins(8, 8, 8, 8);
+
+    // The ports a restart of the helper or the driver took away.  Hidden
+    // until there are any.
+    lost_banner_ = new NoteBanner(
+        NoteBanner::kind::danger,
+        tr("Some COM ports were lost. The helper service or the driver was "
+           "restarted and removed the ports your programs had open."),
+        workspace_);
+    lost_banner_->set_action(tr("Recreate ports"),
+                             [this] { recreate_lost_ports(); });
+    lost_banner_->setVisible(false);
+    layout->addWidget(lost_banner_);
+
     auto* card = new QFrame(workspace_);
+
     card->setProperty("card", true);
     polish(card);
     auto* card_layout = new QVBoxLayout(card);
@@ -1031,6 +1052,8 @@ void ShellWindow::build_status()
 void ShellWindow::connect_backend()
 {
     connect(&backend_, &StudioBackend::ports_changed, this,
+            [this] { update_lost_banner(); });
+    connect(&backend_, &StudioBackend::ports_changed, this,
             &ShellWindow::on_backend_changed);
     connect(&backend_, &StudioBackend::links_changed, this,
             &ShellWindow::on_backend_changed);
@@ -1162,6 +1185,46 @@ void ShellWindow::update_content()
     }
     sync_selection();
     status_->refresh();
+}
+
+void ShellWindow::update_lost_banner()
+{
+    if (lost_banner_ == nullptr)
+        return;
+    const bool lost =
+        backend_.caps().recreate_ports && !backend_.lost_ports().empty();
+    lost_banner_->setVisible(lost);
+}
+
+void ShellWindow::recreate_lost_ports()
+{
+    if (recreate_thread_ != nullptr || lost_banner_ == nullptr)
+        return;
+
+    // Making a port takes a second or two, so it runs off the GUI thread.
+    if (lost_banner_->action_button() != nullptr)
+        lost_banner_->action_button()->setEnabled(false);
+    auto outcome = std::make_shared<vss::result<std::size_t>>(
+        vss::make_error_code(vss::errc::unsupported));
+    recreate_thread_ = QThread::create([this, outcome]
+                                       { *outcome = backend_.recreate_lost_ports(); });
+    connect(recreate_thread_, &QThread::finished, this,
+            [this, outcome]
+            {
+                recreate_thread_->deleteLater();
+                recreate_thread_ = nullptr;
+                if (lost_banner_->action_button() != nullptr)
+                    lost_banner_->action_button()->setEnabled(true);
+                backend_.refresh();
+                update_lost_banner();
+                const QString text =
+                    *outcome ? tr("Ports recreated.")
+                             : tr("Could not recreate every port: %1")
+                                   .arg(error_text(outcome->error()));
+                status_->showMessage(text, 6000);
+                log_local(text);
+            });
+    recreate_thread_->start();
 }
 
 void ShellWindow::update_title()

@@ -51,6 +51,31 @@ vss::endpoint_kind kind_for_uri(const QString& uri)
 
 FakeStudioBackend::FakeStudioBackend(QObject* parent) : StudioBackend(parent) {}
 
+void FakeStudioBackend::set_lost_ports(std::vector<vss::endpoint_id> ids)
+{
+    lost_ = std::move(ids);
+    Q_EMIT ports_changed();
+}
+
+std::vector<vss::endpoint_id> FakeStudioBackend::lost_ports() const
+{
+    return lost_;
+}
+
+vss::result<std::size_t> FakeStudioBackend::recreate_lost_ports()
+{
+    if (next_error_)
+    {
+        const vss::error_code error = *next_error_;
+        next_error_.reset();
+        return error;
+    }
+    const std::size_t made = lost_.size();
+    lost_.clear();
+    Q_EMIT ports_changed();
+    return made;
+}
+
 void FakeStudioBackend::set_peer_state(vss::endpoint_id id, peer_state state)
 {
     if (port_view* view = find_port(id))

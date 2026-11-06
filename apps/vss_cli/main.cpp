@@ -143,10 +143,12 @@ void print_usage()
         "      of the ports like a null-modem cable.  Runs until Ctrl-C or "
         "SIGTERM.\n"
         "\n"
-        "  vss_cli run <topology.json> [--seconds=N]\n"
+        "  vss_cli run <topology.json> [--seconds=N] [--reconnect]\n"
         "      Apply a saved topology and keep it alive.  A virtual port with "
         "a\n"
         "      \"com_number\" gets that COM number from the Windows driver.\n"
+        "      --reconnect opens a tcp:// or rfc2217:// client again when its\n"
+        "      connection drops, after 1 s and then twice as long up to 30 s.\n"
         "\n"
         "  vss_cli capture [<topology.json>] [--uri=<uri>...] --out=<file>\n"
         "                  [--format=cap|csv|jsonl] [--port=<name>[,<name>...]]\n"
@@ -900,6 +902,13 @@ int command_run(const arguments& args)
                      com_failure(applied.error(), first_com_number(*document))
                          .c_str());
         return 1;
+    }
+
+    if (args.has("--reconnect"))
+    {
+        vss::reconnect_policy policy;
+        policy.enabled = true;
+        app.set_reconnect_policy(policy);
     }
 
     print_topology(app);

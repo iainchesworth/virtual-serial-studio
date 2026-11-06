@@ -6440,6 +6440,28 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
+            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>COM ポートが失われました。ヘルパーサービスまたはドライバーが再起動し、プログラムが開いていたポートが削除されました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>ポートを再作成</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>ポートを再作成しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>すべてのポートを再作成できませんでした: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>新規</translation>
@@ -13676,6 +13698,28 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
+            <location filename="../src/shell/shell_window.cpp" line="206" />
+            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
+            <translation>COM ポートが失われました。ヘルパーサービスまたはドライバーが再起動し、プログラムが開いていたポートが削除されました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <source>Recreate ports</source>
+            <translation>ポートを再作成</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <source>Ports recreated.</source>
+            <translation>ポートを再作成しました。</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <source>Could not recreate every port: %1</source>
+            <translation>すべてのポートを再作成できませんでした: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="203" />
             <location filename="../src/shell/shell_window.cpp" line="209" />
             <source>New</source>
             <translation>新規</translation>
