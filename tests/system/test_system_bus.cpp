@@ -67,7 +67,15 @@ constexpr unsigned char remote_device = 0x33; // on another computer
 
 constexpr int short_delay_ms = 150;
 constexpr int long_delay_ms = 380;
-constexpr int remote_delay_ms = 100;
+// The device on another computer is given less time of its own than the others,
+// because the network and the client are in the window too. On Windows and Linux
+// the hop costs about a millisecond. On the macOS runners it was seen to cost
+// 115 to 160 ms (answers after 215 to 257 ms when the device waited 100 ms), a
+// cost the cause of which is not known. 40 ms leaves 150 ms for the hop inside
+// the 190 ms the check allows, so a hop that is slow on one system does not fail
+// the bus, while a hop that grows past that still does. The breakdown printed
+// with a miss says which leg was slow.
+constexpr int remote_delay_ms = 40;
 
 // -- reading the traffic ---------------------------------------------------------
 
@@ -182,6 +190,14 @@ public:
         return said_;
     }
 
+    /// When each of its polls was complete here, and when each reply had been
+    /// written to the socket, on the engine's clock.
+    std::pair<std::vector<time_point>, std::vector<time_point>> legs() const
+    {
+        std::lock_guard lock(mutex_);
+        return {saw_, wrote_};
+    }
+
 private:
     enum class telnet
     {
@@ -264,12 +280,17 @@ private:
         if (window_ != ask)
             return;
         window_.clear();
+        {
+            std::lock_guard lock(mutex_);
+            saw_.push_back(clock_type::now());
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms_));
         const auto reply = answer_frame(address_);
         boost::system::error_code ec;
         boost::asio::write(socket_, boost::asio::buffer(reply), ec);
         std::lock_guard lock(mutex_);
         said_ += reply;
+        wrote_.push_back(clock_type::now());
     }
 
     boost::asio::io_context io_;
@@ -283,6 +304,8 @@ private:
     mutable std::mutex mutex_;
     std::string heard_;
     std::string said_;
+    std::vector<time_point> saw_;
+    std::vector<time_point> wrote_;
     std::thread worker_;
 };
 
@@ -330,6 +353,8 @@ struct measured_reply
     int delay_ms = 0;
     int allowed_ms = 0;
     std::int64_t gap_ms = 0;
+    /// Where the time went, when it is known.
+    std::string detail;
 };
 
 /// Runs the bus once.  Everything about the bytes is checked here, and the
@@ -449,9 +474,29 @@ std::vector<measured_reply> run_scenario()
             REQUIRE(poll_at_index != std::string::npos);
             REQUIRE(answer_at_index != std::string::npos);
             const auto last = answer_at_index + answer_bytes - 1;
-            replies.push_back(
-                {item.what, item.delay_ms, item.allowed_ms,
-                 ms_between(polls.at[poll_at_index], answers.at[last])});
+            measured_reply reply{
+                item.what, item.delay_ms, item.allowed_ms,
+                ms_between(polls.at[poll_at_index], answers.at[last]), {}};
+            if (item.address == remote_device)
+            {
+                // The poll to the client, the client's own wait, and the answer
+                // back to the master, so a slow leg is named when a window is
+                // missed.
+                const auto [saw, wrote] = remote.legs();
+                if (round < saw.size() && round < wrote.size())
+                {
+                    reply.detail =
+                        " (poll reached the client after " +
+                        std::to_string(
+                            ms_between(polls.at[poll_at_index], saw[round])) +
+                        " ms, the client waited " +
+                        std::to_string(ms_between(saw[round], wrote[round])) +
+                        " ms, the answer reached the master after " +
+                        std::to_string(ms_between(wrote[round], answers.at[last])) +
+                        " ms)";
+                }
+            }
+            replies.push_back(std::move(reply));
         }
     }
 
@@ -534,7 +579,7 @@ TEST_CASE("system: a polled bus answers inside 200 ms and 450 ms and no member "
                 reply.gap_ms > reply.allowed_ms - margin_ms)
             {
                 late += "\n  " + reply.what + " took " +
-                        std::to_string(reply.gap_ms) + " ms";
+                        std::to_string(reply.gap_ms) + " ms" + reply.detail;
             }
         }
         if (late.empty())
