@@ -352,3 +352,81 @@ TEST_CASE("document: owner policy roundtrips")
     REQUIRE(!parsed->links[0].emulate_modem_lines);
     REQUIRE_EQ(parsed->links[0].mode, std::string("join"));
 }
+
+TEST_CASE("document: a virtual port can ask for its COM number")
+{
+    document value;
+    value.name = "numbers";
+    port_entry app;
+    app.name = "app";
+    app.kind = "virtual";
+    app.virtual_kind = "windows-driver";
+    app.com_number = 7;
+    value.ports.push_back(app);
+    port_entry automatic;
+    automatic.name = "auto";
+    automatic.kind = "virtual";
+    automatic.virtual_kind = "auto";
+    automatic.com_number = 255;
+    value.ports.push_back(automatic);
+    port_entry plain;
+    plain.name = "plain";
+    value.ports.push_back(plain);
+
+    REQUIRE(!validate(value));
+    const auto text = to_json(value, false);
+    REQUIRE(text.has_value());
+    // Only the ports that ask for a number write one.
+    REQUIRE(text->find("\"com_number\":7") != std::string::npos);
+    REQUIRE(text->find("\"com_number\":255") != std::string::npos);
+    REQUIRE_EQ(text->find("\"com_number\"", text->find("\"com_number\":255") + 1),
+               std::string::npos);
+
+    const auto parsed = from_json(*text);
+    REQUIRE(parsed.has_value());
+    REQUIRE_EQ(parsed->ports.size(), std::size_t{3});
+    REQUIRE_EQ(parsed->ports[0].com_number, 7u);
+    REQUIRE_EQ(parsed->ports[1].com_number, 255u);
+    REQUIRE_EQ(parsed->ports[2].com_number, 0u);
+    REQUIRE(*parsed == value);
+}
+
+TEST_CASE("document: a COM number must be a number a COM port can have, on a port that has one")
+{
+    const auto parse = [](const char* port_fields)
+    {
+        return from_json(std::string(R"({"name":"n","ports":[{"name":"p",)")
+                         + port_fields + "}]}");
+    };
+
+    REQUIRE(parse(R"("kind":"virtual","com_number":1)").has_value());
+    REQUIRE(parse(R"("kind":"virtual","virtual_kind":"windows-driver","com_number":255)")
+                .has_value());
+
+    // Out of range, or not an integer.
+    REQUIRE(!parse(R"("kind":"virtual","com_number":0)").has_value());
+    REQUIRE(!parse(R"("kind":"virtual","com_number":256)").has_value());
+    REQUIRE(!parse(R"("kind":"virtual","com_number":-3)").has_value());
+    REQUIRE(!parse(R"("kind":"virtual","com_number":"7")").has_value());
+    REQUIRE(!parse(R"("kind":"virtual","com_number":4.5)").has_value());
+
+    // A kind of port that has no COM number.
+    REQUIRE(!parse(R"("kind":"virtual","virtual_kind":"pty","com_number":4)").has_value());
+    REQUIRE(!parse(R"("kind":"virtual","virtual_kind":"loopback","com_number":4)").has_value());
+    REQUIRE(!parse(R"("kind":"tcp","uri":"tcp://127.0.0.1:1","com_number":4)").has_value());
+    REQUIRE(!parse(R"("kind":"mock","com_number":4)").has_value());
+
+    // Setting it in memory is held to the same rules.
+    document value;
+    value.name = "n";
+    port_entry port;
+    port.name = "p";
+    port.virtual_kind = "pty";
+    port.com_number = 4;
+    value.ports.push_back(port);
+    REQUIRE(validate(value) == make_error_code(errc::config_error));
+    REQUIRE(!to_json(value).has_value());
+    value.ports[0].virtual_kind = "auto";
+    value.ports[0].com_number = 256;
+    REQUIRE(validate(value) == make_error_code(errc::config_error));
+}

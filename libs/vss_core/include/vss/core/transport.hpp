@@ -61,6 +61,14 @@ public:
 
     /// Re-reads the lines from the device, for transports that poll.
     virtual void refresh_lines() {}
+
+    /// Something a transport has to say about its device that belongs in the
+    /// log, such as that a program opened or closed it.  The endpoint hands the
+    /// transport a function that logs one line against it; the transport may
+    /// call it from any thread, and must stop calling it when it closes.  Most
+    /// transports have nothing to say and ignore it.
+    using notice_sink = std::function<void(std::string)>;
+    virtual void set_notice_sink(notice_sink) {}
 };
 
 } // namespace vss

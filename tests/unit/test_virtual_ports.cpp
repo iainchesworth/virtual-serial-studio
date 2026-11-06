@@ -149,3 +149,54 @@ TEST_CASE("enumeration: the machine can be enumerated")
     const auto names = enumerate_serial_port_names();
     REQUIRE_EQ(names.size(), devices.size());
 }
+
+TEST_CASE("virtual ports: a COM number outside 1 to 255 is refused wherever it is asked")
+{
+    // The same answer on every system and with or without the driver, so that a
+    // mistake in a saved topology is caught at once.
+    boost::asio::io_context io;
+    for (const unsigned number : {256u, 1000u, 4294967295u})
+    {
+        REQUIRE_EQ(create_driver_port(io.get_executor(), "x", number),
+                   make_error_code(errc::invalid_argument));
+        REQUIRE_EQ(create_virtual_port(io.get_executor(),
+                                       virtual_port_kind::windows_driver, "x",
+                                       number),
+                   make_error_code(errc::invalid_argument));
+    }
+    REQUIRE_EQ(static_cast<int>(min_driver_com_number), 1);
+    REQUIRE_EQ(static_cast<int>(max_driver_com_number), 255);
+
+    // A kind of port that has no COM numbers takes the number and ignores it.
+    const auto loop = create_virtual_port(io.get_executor(),
+                                          virtual_port_kind::loopback, "n", 7);
+    REQUIRE(loop.has_value());
+}
+
+TEST_CASE("virtual ports: only a driver port can change its COM number")
+{
+    boost::asio::io_context io;
+    auto loop = create_virtual_port(io.get_executor(),
+                                    virtual_port_kind::loopback, "plain");
+    REQUIRE(loop.has_value());
+
+    // A number out of range is wrong whatever the port is.
+    REQUIRE_EQ(set_driver_com_number(*loop->port, 0),
+               make_error_code(errc::invalid_argument));
+    REQUIRE_EQ(set_driver_com_number(*loop->port, 256),
+               make_error_code(errc::invalid_argument));
+    // A transport that is not a driver port has no number to change: the driver
+    // exists only on Windows, where this is a wrong argument, and nowhere else,
+    // where it is not available at all.
+    const auto changed = set_driver_com_number(*loop->port, 7);
+    REQUIRE(!changed.has_value());
+    REQUIRE(changed.error() == make_error_code(errc::unsupported)
+            || changed.error() == make_error_code(errc::invalid_argument));
+}
+
+TEST_CASE("virtual ports: nothing is known about the program on a port that is not ours")
+{
+    REQUIRE(!driver_peer("COM1").has_value());
+    REQUIRE(!driver_peer("").has_value());
+    REQUIRE(!driver_peer("/dev/pts/3").has_value());
+}

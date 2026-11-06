@@ -89,6 +89,15 @@ void endpoint::start()
     }
     transition(endpoint_state::open);
 
+    // A transport may log what it notices about its device. The sink holds the
+    // endpoint weakly: the transport can outlive a call into it.
+    transport_->set_notice_sink(
+        [weak = weak_from_this()](std::string text)
+        {
+            if (const auto self = weak.lock())
+                self->emit({}, std::move(text), event_kind::log_message);
+        });
+
     // Arm the first read on the strand, like every later one.
     auto self = shared_from_this();
     boost::asio::post(strand_, [self] { self->do_read(); });

@@ -85,9 +85,15 @@ void print_usage()
         "  vss_cli loopback [--seconds=N]\n"
         "      A virtual port, a redirect and a monitor: no hardware needed.\n"
         "\n"
-        "  vss_cli virtual [--kind=auto|loopback|pty] [--seconds=N]\n"
+        "  vss_cli virtual [--kind=auto|loopback|pty|windows-driver] [--com=N]\n"
+        "                  [--seconds=N]\n"
         "      Create one virtual port and print the path to open from an "
         "app.\n"
+        "      --com=N (1 to 255) asks the Windows driver for COM<N>.  It "
+        "needs the\n"
+        "      driver and its helper service, and fails when another device "
+        "has the\n"
+        "      number.  Other systems and kinds of port have no COM numbers.\n"
         "      It runs until Ctrl-C or SIGTERM, or for N seconds.\n"
         "\n"
         "  vss_cli vport --name=<name>[,<name>...] [--link=<a>:<b>[,...]]\n"
@@ -100,7 +106,9 @@ void print_usage()
         "SIGTERM.\n"
         "\n"
         "  vss_cli run <topology.json> [--seconds=N]\n"
-        "      Apply a saved topology and keep it alive.\n"
+        "      Apply a saved topology and keep it alive.  A virtual port with "
+        "a\n"
+        "      \"com_number\" gets that COM number from the Windows driver.\n"
         "\n"
         "  vss_cli bench --from=<uri> --to=<uri> [--bytes=1MB] [--chunk=4KB]\n"
         "      Measure a real end-to-end transfer.\n"
@@ -372,6 +380,45 @@ int command_loopback(const arguments& args)
     return 0;
 }
 
+/// The COM number of --com=N: 0 when there is none, and -1 when the option is
+/// not a whole number from 1 to 255.
+int com_option(const arguments& args)
+{
+    if (args.has("--com"))
+        return -1;
+    const auto found = args.options.find("--com");
+    if (found == args.options.end())
+        return 0;
+
+    const std::string& text = found->second;
+    if (text.empty() || text.size() > 3
+        || !std::all_of(text.begin(), text.end(),
+                        [](char c) { return c >= '0' && c <= '9'; }))
+        return -1;
+    const int number = std::stoi(text);
+    return number >= 1 && number <= 255 ? number : -1;
+}
+
+/// What went wrong when a port was asked for a COM number, in words that say
+/// what to do about it.
+std::string com_failure(const boost::system::error_code& error, int number)
+{
+    if (number != 0)
+    {
+        if (error == vss::make_error_code(vss::errc::already_exists))
+            return "COM" + std::to_string(number)
+                   + " is already used by another device (a real port, com0com"
+                     " or another virtual port); choose another number";
+        if (error == vss::make_error_code(vss::errc::unsupported))
+            return "COM numbers need the Virtual Serial Studio driver and its "
+                   "helper service (vsscom_helper), and one of them is missing"
+                   " or too old";
+        if (error == vss::make_error_code(vss::errc::device_busy))
+            return "a program has COM" + std::to_string(number) + " open";
+    }
+    return error.message();
+}
+
 int command_virtual(const arguments& args)
 {
     catch_stop_signals();
@@ -400,14 +447,33 @@ int command_virtual(const arguments& args)
         return 2;
     }
 
+    const int com = com_option(args);
+    if (com < 0)
+    {
+        std::fprintf(stderr,
+                     "--com wants a COM number from 1 to 255, as in --com=7\n");
+        return 2;
+    }
+    if (com != 0 && !automatic
+        && requested != vss::virtual_port_kind::windows_driver)
+    {
+        std::fprintf(stderr,
+                     "--com is for the Windows driver; --kind=%s has no COM "
+                     "numbers\n",
+                     kind.c_str());
+        return 2;
+    }
+
     studio app;
     const auto created = automatic
-        ? app.create_virtual_port("virtual", vss::virtual_port_kind::pty)
-        : app.create_virtual_port("virtual", requested);
+        ? app.create_virtual_port("virtual", vss::virtual_port_kind::pty, {},
+                                  static_cast<unsigned>(com))
+        : app.create_virtual_port("virtual", requested, {},
+                                  static_cast<unsigned>(com));
     if (!created)
     {
         std::fprintf(stderr, "cannot create the virtual port: %s\n",
-                     created.error().message().c_str());
+                     com_failure(created.error(), com).c_str());
         return 1;
     }
 
@@ -518,6 +584,17 @@ int command_vport(const arguments& args)
     return 0;
 }
 
+/// The first COM number a topology asks for, or 0: enough to word the failure.
+int first_com_number(const vss::config::document& document)
+{
+    for (const auto& port : document.ports)
+    {
+        if (port.com_number != 0)
+            return static_cast<int>(port.com_number);
+    }
+    return 0;
+}
+
 int command_run(const arguments& args)
 {
     if (args.positional.size() < 2)
@@ -538,7 +615,8 @@ int command_run(const arguments& args)
     if (const auto applied = app.apply(*document); !applied)
     {
         std::fprintf(stderr, "cannot apply the topology: %s\n",
-                     applied.error().message().c_str());
+                     com_failure(applied.error(), first_com_number(*document))
+                         .c_str());
         return 1;
     }
 

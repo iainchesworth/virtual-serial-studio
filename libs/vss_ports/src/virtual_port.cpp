@@ -66,7 +66,8 @@ const char* to_string(virtual_port_kind kind) noexcept
 
 result<virtual_port_result>
 create_virtual_port(const transport::executor_type& executor,
-                    virtual_port_kind kind, const std::string& name)
+                    virtual_port_kind kind, const std::string& name,
+                    unsigned com_number)
 {
     switch (kind)
     {
@@ -82,7 +83,7 @@ create_virtual_port(const transport::executor_type& executor,
     case virtual_port_kind::pty:
         return detail::platform_create_pty(executor, name);
     case virtual_port_kind::windows_driver:
-        return create_driver_port(executor, name);
+        return create_driver_port(executor, name, com_number);
     case virtual_port_kind::named_pipe:
         return make_error_code(errc::unsupported);
     }
@@ -91,11 +92,11 @@ create_virtual_port(const transport::executor_type& executor,
 
 result<virtual_port_result>
 create_best_virtual_port(const transport::executor_type& executor,
-                         const std::string& name)
+                         const std::string& name, unsigned com_number)
 {
     if (supports(virtual_port_kind::windows_driver))
         return create_virtual_port(executor, virtual_port_kind::windows_driver,
-                                   name);
+                                   name, com_number);
     if (supports(virtual_port_kind::pty))
         return create_virtual_port(executor, virtual_port_kind::pty, name);
     return create_virtual_port(executor, virtual_port_kind::loopback, name);

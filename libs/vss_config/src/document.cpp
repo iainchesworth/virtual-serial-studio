@@ -273,6 +273,17 @@ error_code validate(const document& value)
             return make_error_code(errc::config_error);
         }
 
+        // A COM number means something to the Windows driver only.
+        if (port.com_number != 0)
+        {
+            if (port.com_number < min_com_number
+                || port.com_number > max_com_number
+                || port.kind != "virtual"
+                || (port.virtual_kind != "auto"
+                    && port.virtual_kind != "windows-driver"))
+                return make_error_code(errc::config_error);
+        }
+
         if (const error_code settings_error = vss::validate(port.serial))
             return settings_error;
     }
@@ -343,6 +354,8 @@ result<std::string> to_json(const document& value, bool pretty)
             object["mock_target"] = port.mock_target;
         object["serial"] = serial_to_json(port.serial);
         object["capture"] = port.capture;
+        if (port.com_number != 0)
+            object["com_number"] = port.com_number;
         ports.push_back(std::move(object));
     }
     root["ports"] = std::move(ports);
@@ -411,6 +424,14 @@ result<document> from_json(std::string_view text)
             port.virtual_kind = string_member(entry, "virtual_kind", "auto");
             port.mock_target = string_member(entry, "mock_target", "scripted");
             port.capture = bool_member(entry, "capture", true);
+
+            if (const auto* number = entry.if_contains("com_number"))
+            {
+                if (!number->is_int64() || number->as_int64() < min_com_number
+                    || number->as_int64() > max_com_number)
+                    return make_error_code(errc::config_error);
+                port.com_number = static_cast<unsigned>(number->as_int64());
+            }
 
             if (const auto* serial = entry.if_contains("serial"))
             {

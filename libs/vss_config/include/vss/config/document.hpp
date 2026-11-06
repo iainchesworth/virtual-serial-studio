@@ -31,6 +31,11 @@ struct port_entry
     std::string mock_target = "scripted";
     serial_settings serial;
     bool capture = true;
+    /// For `virtual` ports of kind `auto` or `windows-driver`: the COM number the
+    /// Windows driver gives the port, 1 to 255.  0 leaves it to Windows, which
+    /// takes the lowest free number.  Other systems and other kinds of port have no
+    /// COM numbers and ignore it.
+    unsigned com_number = 0;
 
     friend bool operator==(const port_entry&, const port_entry&) = default;
 };
@@ -75,6 +80,10 @@ result<void> save_file(const std::string& path, const document& value,
 
 /// Maps a document port kind to the endpoint kind it creates.
 result<endpoint_kind> to_endpoint_kind(std::string_view kind);
+
+/// The numbers a COM port may be given.
+constexpr unsigned min_com_number = 1;
+constexpr unsigned max_com_number = 255;
 
 constexpr const char* port_kinds[] = {"virtual", "physical", "tcp", "udp",
                                       "rfc2217", "mock"};

@@ -23,9 +23,19 @@ std::string platform_driver_version()
 
 result<virtual_port_result>
 platform_create_driver_port(const transport::executor_type&,
-                            const std::string&)
+                            const std::string&, unsigned)
 {
     return make_error_code(errc::unsupported);
+}
+
+result<std::string> platform_set_driver_com_number(transport&, unsigned)
+{
+    return make_error_code(errc::unsupported);
+}
+
+std::optional<driver_peer_info> platform_driver_peer(const std::string&)
+{
+    return std::nullopt;
 }
 
 } // namespace vss::detail

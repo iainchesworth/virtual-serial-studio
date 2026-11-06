@@ -15,6 +15,8 @@
 
 #include <vss/core/error.hpp>
 
+#include <boost/asio/error.hpp>
+#include <boost/asio/post.hpp>
 #include <boost/asio/windows/stream_handle.hpp>
 
 #include <windows.h>
@@ -28,12 +30,18 @@
 #include <vsscom/public.h>
 #include <vsscom_helper/protocol.h>
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
+#include <cstdio>
+#include <ctime>
 #include <cwchar>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -258,59 +266,320 @@ bool read_version(HANDLE handle, VSSCOM_VERSION_INFO& version)
            returned == sizeof(version);
 }
 
+/// Opens the pipe of the helper service. `error` is the Win32 error when it
+/// cannot. A busy pipe is waited for a little: the helper serves a client on
+/// each instance and makes the next at once.
+HANDLE open_helper(DWORD& error)
+{
+    for (int attempt = 0; attempt < 5; ++attempt)
+    {
+        // Identification only: the helper needs to know the user and nothing
+        // more, and has no reason to act as the user.
+        const HANDLE handle = ::CreateFileW(
+            VssComHelperPipeName, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+            OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION,
+            nullptr);
+        if (handle != INVALID_HANDLE_VALUE)
+        {
+            error = 0;
+            return handle;
+        }
+        error = ::GetLastError();
+        if (error != ERROR_PIPE_BUSY)
+            break;
+        ::WaitNamedPipeW(VssComHelperPipeName, 1000);
+    }
+    return INVALID_HANDLE_VALUE;
+}
+
+/// What the helper answers when it could not be asked at all.
+constexpr DWORD helper_failed = 0xFFFFFFFFu;
+
+/// One request to the helper on a pipe in message mode. Waits for the answer:
+/// the helper replies when the work is done, which can take many seconds. The
+/// Win32 error it answered, or `helper_failed`.
+DWORD helper_ask(HANDLE pipe, ULONG op, ULONG slot, ULONG argument)
+{
+    VSSCOM_HELPER_REQUEST request{};
+    request.Version = VSSCOM_HELPER_VERSION;
+    request.Op = op;
+    request.Slot = slot;
+    request.Argument = argument;
+    VSSCOM_HELPER_REPLY reply{};
+    DWORD returned = 0;
+    if (!::TransactNamedPipe(pipe, &request, sizeof(request), &reply,
+                             sizeof(reply), &returned, nullptr) ||
+        returned != sizeof(reply) || reply.Version != VSSCOM_HELPER_VERSION)
+        return helper_failed;
+    return reply.Status;
+}
+
+/// The library's error for a Win32 error that the helper answered to a request
+/// to change a COM number.
+errc errc_of_com_status(DWORD status) noexcept
+{
+    switch (status)
+    {
+    case ERROR_SUCCESS:
+        return errc::success;
+    case ERROR_INVALID_PARAMETER:
+        return errc::invalid_argument;
+    case ERROR_ALREADY_ASSIGNED:
+        return errc::already_exists;
+    case ERROR_BUSY:
+        return errc::device_busy;
+    case ERROR_NOT_FOUND:
+        return errc::not_found;
+    case ERROR_ACCESS_DENIED:
+        return errc::permission_denied;
+    case ERROR_NOT_SUPPORTED: // a helper from before COM numbers
+        return errc::unsupported;
+    case ERROR_TIMEOUT:
+        return errc::timeout;
+    default:
+        return errc::io_error;
+    }
+}
+
+/// How a port came to be, which decides whether its number can be changed: only
+/// a port that something made for this process, and holds for it, has a lease the
+/// helper can check.
+struct port_origin
+{
+    /// Made through the control device or the helper, and kept alive by the lease.
+    bool leased = false;
+    /// The control device made it (and the lease is that handle). Otherwise the
+    /// helper did, and the lease is the pipe that asked.
+    bool kernel_mode = false;
+    ULONG slot = 0;
+    /// The device instance id, as the interface enumeration reports it.
+    std::wstring instance;
+};
+
+/// Asks the helper to give a port the COM number. A port of the user-mode driver
+/// belongs to the pipe that made it; a port of the kernel-mode driver belongs to
+/// the control handle, and the helper asks the control device who made it, so
+/// that request goes on a pipe of its own.
+errc ask_com_number(const port_origin& origin, HANDLE lease, unsigned number)
+{
+    unique_handle own;
+    HANDLE pipe = lease;
+    if (origin.kernel_mode)
+    {
+        DWORD error = 0;
+        own.reset(open_helper(error));
+        if (own.get() == INVALID_HANDLE_VALUE)
+        {
+            if (error == ERROR_ACCESS_DENIED)
+                return errc::permission_denied;
+            // No helper is installed: a COM number needs it.
+            return error == ERROR_FILE_NOT_FOUND ? errc::unsupported
+                                                 : errc::io_error;
+        }
+        DWORD mode = PIPE_READMODE_MESSAGE;
+        if (!::SetNamedPipeHandleState(own.get(), &mode, nullptr, nullptr))
+            return errc::io_error;
+        pipe = own.get();
+    }
+
+    const DWORD status = helper_ask(
+        pipe,
+        origin.kernel_mode ? VSSCOM_HELPER_OP_SET_COM_NUMBER_KM
+                           : VSSCOM_HELPER_OP_SET_COM_NUMBER,
+        origin.slot, number);
+    if (status == helper_failed)
+        return errc::io_error;
+    return errc_of_com_status(status);
+}
+
+bool same_name(const std::string& a, const std::string& b)
+{
+    return a.size() == b.size() &&
+           ::_strnicmp(a.c_str(), b.c_str(), a.size()) == 0;
+}
+
+/// Waits until the port with the instance id has a hub interface, and, when
+/// `expected` is not empty, until its COM name is that. Windows takes the
+/// interface away while it restarts a port and brings it back with the new name.
+std::optional<hub_interface> wait_for_hub(const std::wstring& instance,
+                                          const std::wstring& expected,
+                                          std::chrono::seconds limit)
+{
+    using clock = std::chrono::steady_clock;
+    const auto deadline = clock::now() + limit;
+    for (;;)
+    {
+        for (auto& hub : enumerate_hubs())
+        {
+            if (hub.port.empty() ||
+                ::_wcsicmp(hub.instance.c_str(), instance.c_str()) != 0)
+                continue;
+            if (!expected.empty() &&
+                ::_wcsicmp(hub.port.c_str(), expected.c_str()) != 0)
+                continue;
+            return std::move(hub);
+        }
+        if (clock::now() >= deadline)
+            return std::nullopt;
+        ::Sleep(100);
+    }
+}
+
+/// The local time with milliseconds, for the log lines a hung program is
+/// diagnosed from.
+std::string clock_text()
+{
+    const auto now = std::chrono::system_clock::now();
+    const auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            now.time_since_epoch())
+                            .count() %
+                        1000;
+    const std::time_t seconds = std::chrono::system_clock::to_time_t(now);
+    std::tm local{};
+    ::localtime_s(&local, &seconds);
+    char text[40]{};
+    std::snprintf(text, sizeof(text), "%04d-%02d-%02d %02d:%02d:%02d.%03d",
+                  local.tm_year + 1900, local.tm_mon + 1, local.tm_mday,
+                  local.tm_hour, local.tm_min, local.tm_sec,
+                  static_cast<int>(millis));
+    return text;
+}
+
+class driver_transport;
+void registry_add(const std::shared_ptr<driver_transport>& transport);
+void registry_remove(const driver_transport* transport);
+
+/// The reads and writes that are on the hub handle, so that a change of COM
+/// number can hold them back and give them to the new handle. Shared with the
+/// completion handlers, which can run after the transport has gone.
+struct flight
+{
+    struct read_slot
+    {
+        boost::asio::mutable_buffer buffer;
+        transport::io_handler handler;
+    };
+    struct write_slot
+    {
+        boost::asio::const_buffer buffer;
+        transport::io_handler handler;
+    };
+
+    std::mutex mutex;
+    std::condition_variable idle;
+    /// The handle is being swapped: new operations wait in a slot, and an
+    /// operation that comes back cancelled goes into its slot.
+    bool renaming = false;
+    unsigned reads = 0; // operations the handle still has
+    unsigned writes = 0;
+    std::optional<read_slot> held_read;
+    std::optional<write_slot> held_write;
+};
+
 /// The hub end of one driver port, as the byte channel under an endpoint.
 ///
 /// What the application writes arrives through reads, and what is written
 /// here is what the application reads. From the application's side this end
 /// plays the device, so CTS, DSR, DCD and RI are the lines it sets, and DTR,
 /// RTS and break are the lines the application drives.
-class driver_transport final : public transport
+///
+/// A second thread waits for the driver to announce a change (the program
+/// opened or closed the port, or chose other settings), keeps the answer, and
+/// logs each change of "a program has the port open" against the endpoint with
+/// the time it happened.
+// NOLINTNEXTLINE(misc-multiple-inheritance): shared_from_this is a mixin.
+class driver_transport final
+    : public transport,
+      public std::enable_shared_from_this<driver_transport>
 {
 public:
-    /// `control` is the control handle that made the port, or empty for a port
-    /// that was there already. It is closed after the hub end, and closing it
-    /// removes the port.
+    /// `lease` is the control handle that made the port, or the helper's pipe,
+    /// or empty for a port that was there already. It is closed after the hub
+    /// end, and closing it removes the port.
     driver_transport(const executor_type& executor, HANDLE handle,
                      std::string port, std::string name,
-                     unique_handle control = {})
-        : handle_(executor, handle), raw_(handle), port_(std::move(port)),
-          name_(std::move(name)), control_(std::move(control))
+                     unique_handle lease = {}, port_origin origin = {})
+        : executor_(executor), handle_(executor, handle), raw_(handle),
+          port_(std::move(port)), name_(std::move(name)),
+          lease_(std::move(lease)), origin_(std::move(origin)),
+          flight_(std::make_shared<flight>())
     {
         refresh_lines();
+        start_watch(raw_);
+    }
+
+    /// Makes the transport and lists it among those this process holds, which is
+    /// how `driver_peer` and `set_driver_com_number` find it.
+    static std::shared_ptr<driver_transport> create(
+        const executor_type& executor, HANDLE handle, std::string port,
+        std::string name, unique_handle lease = {}, port_origin origin = {})
+    {
+        auto made = std::make_shared<driver_transport>(
+            executor, handle, std::move(port), std::move(name),
+            std::move(lease), std::move(origin));
+        registry_add(made);
+        return made;
     }
 
     ~driver_transport() override { close(); }
 
     std::string describe() const override
     {
+        std::lock_guard lock(mutex_);
         return "Virtual Serial Studio COM port " + port_ + " (" + name_ + ")";
     }
 
-    std::string public_path() const override { return port_; }
+    std::string public_path() const override
+    {
+        std::lock_guard lock(mutex_);
+        return port_;
+    }
 
     bool is_open() const override { return open_.load(); }
 
     void async_read_some(boost::asio::mutable_buffer buffer,
                          io_handler handler) override
     {
-        handle_.async_read_some(buffer, std::move(handler));
+        start_read(buffer, std::move(handler));
     }
 
     void async_write_some(boost::asio::const_buffer buffer,
                           io_handler handler) override
     {
-        handle_.async_write_some(buffer, std::move(handler));
+        start_write(buffer, std::move(handler));
     }
 
     void close() override
     {
         if (!open_.exchange(false))
             return;
+        registry_remove(this);
+
+        // A change of number in another thread finishes first: it ends because
+        // the transport is no longer open.
+        const std::lock_guard rename_lock(rename_mutex_);
+        stop_watch();
+
+        std::optional<flight::read_slot> read;
+        std::optional<flight::write_slot> write;
+        {
+            std::lock_guard lock(flight_->mutex);
+            flight_->renaming = false;
+            read.swap(flight_->held_read);
+            write.swap(flight_->held_write);
+        }
+        abort_held(std::move(read), std::move(write));
+
+        {
+            std::lock_guard lock(mutex_);
+            notice_ = {};
+            raw_ = INVALID_HANDLE_VALUE;
+        }
         boost::system::error_code ignored;
         handle_.cancel(ignored);
         handle_.close(ignored);
         // The port was made for this transport and goes with it.
-        control_.reset();
+        lease_.reset();
     }
 
     void cancel() override
@@ -341,9 +610,13 @@ public:
             next |= bit;
         else
             next &= ~bit;
-        if (!open_.load() ||
-            !control(raw_, static_cast<DWORD>(IOCTL_VSSCOM_HUB_SET_LINES), &next, sizeof(next),
-                     nullptr, 0))
+        // While the port is being renumbered the lines are kept and given to
+        // the new handle.
+        if (!open_.load())
+            return;
+        if (raw_ != INVALID_HANDLE_VALUE &&
+            !control(raw_, static_cast<DWORD>(IOCTL_VSSCOM_HUB_SET_LINES), &next,
+                     sizeof(next), nullptr, 0))
             return;
         hub_lines_ = next;
         lines_.set(line, state);
@@ -358,15 +631,392 @@ public:
     void refresh_lines() override
     {
         VSSCOM_HUB_STATE state{};
+        {
+            std::lock_guard lock(mutex_);
+            if (!open_.load() || raw_ == INVALID_HANDLE_VALUE ||
+                !read_state(raw_, state))
+                return;
+            lines_.set(control_line::dtr, state.Dtr != 0);
+            lines_.set(control_line::rts, state.Rts != 0);
+            lines_.set(control_line::break_signal, state.Break != 0);
+        }
+        apply_state(state);
+    }
+
+    void set_notice_sink(notice_sink sink) override
+    {
+        std::string text;
+        {
+            std::lock_guard lock(mutex_);
+            notice_ = sink;
+            if (sink && peer_known_ && peer_.open)
+                text = port_ + ": a program already has the port open (process " +
+                       std::to_string(peer_.process_id) + "), seen at " +
+                       clock_text();
+        }
+        if (!text.empty())
+            sink(std::move(text));
+    }
+
+    /// What the driver last said about the program on the port.
+    std::optional<driver_peer_info> peer() const
+    {
         std::lock_guard lock(mutex_);
-        if (!open_.load() || !read_state(raw_, state))
-            return;
-        lines_.set(control_line::dtr, state.Dtr != 0);
-        lines_.set(control_line::rts, state.Rts != 0);
-        lines_.set(control_line::break_signal, state.Break != 0);
+        if (!peer_known_)
+            return std::nullopt;
+        return peer_;
+    }
+
+    bool named(const std::string& com_name) const
+    {
+        std::lock_guard lock(mutex_);
+        return same_name(port_, com_name);
+    }
+
+    /// Changes the COM number: see `set_driver_com_number`.
+    result<std::string> renumber(unsigned number)
+    {
+        const std::lock_guard rename_lock(rename_mutex_);
+        if (!open_.load())
+            return make_error_code(errc::not_open);
+        if (!origin_.leased)
+            return make_error_code(errc::unsupported);
+
+        const std::string wanted = "COM" + std::to_string(number);
+        {
+            std::lock_guard lock(mutex_);
+            if (same_name(port_, wanted))
+                return port_;
+        }
+
+        // The restart would fail with a program on the port, and so would the
+        // user who asked for it, so say so first.
+        VSSCOM_HUB_STATE state{};
+        {
+            std::lock_guard lock(mutex_);
+            if (raw_ == INVALID_HANDLE_VALUE || !read_state(raw_, state))
+                return make_error_code(errc::io_error);
+        }
+        if (state.AppOpen != 0)
+            return make_error_code(errc::device_busy);
+
+        begin_swap();
+        const errc asked = ask_com_number(origin_, lease_.get(), number);
+
+        // Whether it worked or not, the port is back (under the new name or the
+        // old one) and the hub end opens again.
+        const std::wstring expected =
+            asked == errc::success
+                ? std::wstring(wanted.begin(), wanted.end())
+                : std::wstring();
+        if (!finish_swap(expected))
+        {
+            // Nothing to read from any more: the endpoint hears of it as a
+            // failed read.
+            fail_held();
+            return make_error_code(errc::io_error);
+        }
+        if (asked != errc::success)
+            return make_error_code(asked);
+        std::lock_guard lock(mutex_);
+        return port_;
     }
 
 private:
+    // -- Reads and writes -------------------------------------------------
+
+    void start_read(boost::asio::mutable_buffer buffer, io_handler handler)
+    {
+        const std::lock_guard lock(flight_->mutex);
+        if (flight_->renaming)
+        {
+            flight_->held_read = flight::read_slot{buffer, std::move(handler)};
+            return;
+        }
+        ++flight_->reads;
+        auto shared = flight_;
+        handle_.async_read_some(
+            buffer,
+            [shared, buffer, handler = std::move(handler)](
+                boost::system::error_code ec, std::size_t count) mutable
+            {
+                {
+                    std::unique_lock lock(shared->mutex);
+                    --shared->reads;
+                    shared->idle.notify_all();
+                    // The handle went away for a change of number: the read
+                    // goes to the new handle, and the endpoint never knew.
+                    if (ec == boost::asio::error::operation_aborted &&
+                        shared->renaming)
+                    {
+                        shared->held_read =
+                            flight::read_slot{buffer, std::move(handler)};
+                        return;
+                    }
+                }
+                handler(ec, count);
+            });
+    }
+
+    void start_write(boost::asio::const_buffer buffer, io_handler handler)
+    {
+        const std::lock_guard lock(flight_->mutex);
+        if (flight_->renaming)
+        {
+            flight_->held_write = flight::write_slot{buffer, std::move(handler)};
+            return;
+        }
+        ++flight_->writes;
+        auto shared = flight_;
+        handle_.async_write_some(
+            buffer,
+            [shared, buffer, handler = std::move(handler)](
+                boost::system::error_code ec, std::size_t count) mutable
+            {
+                {
+                    std::unique_lock lock(shared->mutex);
+                    --shared->writes;
+                    shared->idle.notify_all();
+                    if (ec == boost::asio::error::operation_aborted &&
+                        shared->renaming)
+                    {
+                        shared->held_write =
+                            flight::write_slot{buffer, std::move(handler)};
+                        return;
+                    }
+                }
+                handler(ec, count);
+            });
+    }
+
+    /// Gives back, as cancelled, the operations a swap was holding.
+    void abort_held(std::optional<flight::read_slot> read,
+                    std::optional<flight::write_slot> write)
+    {
+        if (read)
+            boost::asio::post(executor_,
+                              [handler = std::move(read->handler)]
+                              { handler(boost::asio::error::operation_aborted, 0); });
+        if (write)
+            boost::asio::post(executor_,
+                              [handler = std::move(write->handler)]
+                              { handler(boost::asio::error::operation_aborted, 0); });
+    }
+
+    // -- The state the driver announces ------------------------------------
+
+    void start_watch(HANDLE handle)
+    {
+        watching_ = true;
+        watcher_ = std::thread([this, handle] { watch(handle); });
+    }
+
+    void stop_watch()
+    {
+        if (!watcher_.joinable())
+            return;
+        watching_ = false;
+        // Cancels the wait for a change, and whatever else is on the handle.
+        // The caller closes the handle next, or takes the reads and writes
+        // back through the flight.
+        HANDLE handle;
+        {
+            std::lock_guard lock(mutex_);
+            handle = raw_;
+        }
+        if (handle != INVALID_HANDLE_VALUE)
+            ::CancelIoEx(handle, nullptr);
+        watcher_.join();
+    }
+
+    void watch(HANDLE handle)
+    {
+        ULONG known = 0;
+        {
+            std::lock_guard lock(mutex_);
+            known = generation_;
+        }
+        while (watching_.load())
+        {
+            VSSCOM_HUB_STATE state{};
+            DWORD returned = 0;
+            if (!control(handle, static_cast<DWORD>(IOCTL_VSSCOM_HUB_WAIT_STATE),
+                         &known, sizeof(known), &state, sizeof(state), &returned) ||
+                returned != sizeof(state))
+            {
+                // Cancelled by a stop, or by a cancel() of the transport, or the
+                // port went away. Only a stop ends the watch; the rest is tried
+                // again until the transport closes, so that the answer stays
+                // current when a cancel was all it was.
+                if (!watching_.load())
+                    return;
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                continue;
+            }
+            known = state.Generation;
+            apply_state(state);
+        }
+    }
+
+    /// Takes in what the driver said, and logs a change of "a program has the
+    /// port open".
+    void apply_state(const VSSCOM_HUB_STATE& state)
+    {
+        std::string text;
+        notice_sink sink;
+        {
+            std::lock_guard lock(mutex_);
+            driver_peer_info next;
+            next.open = state.AppOpen != 0;
+            next.process_id = state.AppOpen != 0 ? state.AppProcessId : 0;
+            next.baud_rate = state.BaudRate;
+            next.data_bits = state.DataBits;
+            next.parity = state.Parity;
+            next.stop_bits = state.StopBits;
+
+            if (peer_known_)
+            {
+                if (next.open && !peer_.open)
+                    text = port_ + ": a program opened the port (process " +
+                           std::to_string(next.process_id) + ") at " +
+                           clock_text();
+                else if (!next.open && peer_.open)
+                    text = port_ + ": the program closed the port (process " +
+                           std::to_string(peer_.process_id) + ") at " +
+                           clock_text();
+                else if (next.open && next.process_id != peer_.process_id)
+                    text = port_ + ": the port passed from process " +
+                           std::to_string(peer_.process_id) + " to process " +
+                           std::to_string(next.process_id) + " at " +
+                           clock_text();
+            }
+            peer_ = next;
+            peer_known_ = true;
+            generation_ = state.Generation;
+            sink = notice_;
+        }
+        if (!text.empty() && sink)
+            sink(std::move(text));
+    }
+
+    // -- Changing the COM number ------------------------------------------
+
+    /// Holds back the reads and writes, and closes the hub end, so that Windows
+    /// can restart the port.
+    void begin_swap()
+    {
+        {
+            std::lock_guard lock(flight_->mutex);
+            flight_->renaming = true;
+        }
+        stop_watch();
+        {
+            std::lock_guard lock(mutex_);
+            raw_ = INVALID_HANDLE_VALUE;
+        }
+        boost::system::error_code ignored;
+        handle_.cancel(ignored);
+        handle_.close(ignored);
+
+        // The cancelled operations come back on the executor's threads and
+        // put themselves into their slots. The new handle must not take a new
+        // operation before they have.
+        std::unique_lock lock(flight_->mutex);
+        flight_->idle.wait_for(lock, std::chrono::seconds(5), [this]
+                               { return flight_->reads == 0 && flight_->writes == 0; });
+    }
+
+    /// Opens the hub end again, when the port is back with the name `expected`
+    /// (or with any name, when it is empty), and gives it the held operations.
+    bool finish_swap(const std::wstring& expected)
+    {
+        auto hub = wait_for_hub(origin_.instance, expected,
+                                std::chrono::seconds(30));
+        if (!hub && !expected.empty())
+        {
+            // The change did not take after all: the old name will do.
+            hub = wait_for_hub(origin_.instance, std::wstring(),
+                               std::chrono::seconds(5));
+        }
+        if (!hub)
+            return false;
+
+        DWORD error = 0;
+        const HANDLE handle = open_hub(hub->path, error);
+        if (handle == INVALID_HANDLE_VALUE)
+            return false;
+        VSSCOM_VERSION_INFO version{};
+        if (!read_version(handle, version) || version.Version != VSSCOM_VERSION)
+        {
+            ::CloseHandle(handle);
+            return false;
+        }
+
+        boost::system::error_code ec;
+        handle_.assign(handle, ec);
+        if (ec)
+        {
+            ::CloseHandle(handle);
+            return false;
+        }
+
+        VSSCOM_HUB_STATE state{};
+        {
+            std::lock_guard lock(mutex_);
+            raw_ = handle;
+            port_ = to_utf8(hub->port);
+            // The driver starts a new hub handle with every input line low.
+            if (hub_lines_ != 0)
+                (void)control(raw_, static_cast<DWORD>(IOCTL_VSSCOM_HUB_SET_LINES),
+                              &hub_lines_, sizeof(hub_lines_), nullptr, 0);
+            if (read_state(raw_, state))
+            {
+                lines_.set(control_line::dtr, state.Dtr != 0);
+                lines_.set(control_line::rts, state.Rts != 0);
+                lines_.set(control_line::break_signal, state.Break != 0);
+            }
+        }
+        apply_state(state);
+        start_watch(handle);
+
+        std::optional<flight::read_slot> read;
+        std::optional<flight::write_slot> write;
+        {
+            std::lock_guard lock(flight_->mutex);
+            flight_->renaming = false;
+            read.swap(flight_->held_read);
+            write.swap(flight_->held_write);
+        }
+        if (read)
+            start_read(read->buffer, std::move(read->handler));
+        if (write)
+            start_write(write->buffer, std::move(write->handler));
+        return true;
+    }
+
+    /// The hub end could not be opened again: give the held operations an error
+    /// the endpoint treats as a failure, and close.
+    void fail_held()
+    {
+        std::optional<flight::read_slot> read;
+        std::optional<flight::write_slot> write;
+        {
+            std::lock_guard lock(flight_->mutex);
+            flight_->renaming = false;
+            read.swap(flight_->held_read);
+            write.swap(flight_->held_write);
+        }
+        if (read)
+            boost::asio::post(executor_,
+                              [handler = std::move(read->handler)]
+                              { handler(boost::asio::error::connection_aborted, 0); });
+        if (write)
+            boost::asio::post(executor_,
+                              [handler = std::move(write->handler)]
+                              { handler(boost::asio::error::connection_aborted, 0); });
+    }
+
+    executor_type executor_;
     boost::asio::windows::stream_handle handle_;
     HANDLE raw_;
     std::string port_;
@@ -374,62 +1024,119 @@ private:
     mutable std::mutex mutex_;
     control_lines lines_;
     ULONG hub_lines_ = 0;
+    ULONG generation_ = 0;
+    driver_peer_info peer_;
+    bool peer_known_ = false;
+    notice_sink notice_;
     std::atomic<bool> open_{true};
-    unique_handle control_;
+    std::atomic<bool> watching_{false};
+    std::thread watcher_;
+    std::mutex rename_mutex_;
+    unique_handle lease_;
+    port_origin origin_;
+    std::shared_ptr<flight> flight_;
 };
+
+// -- The transports this process holds ---------------------------------------
+
+std::mutex registry_mutex;
+// Weakly: a transport that is closed and let go is not kept alive by the list.
+std::vector<std::weak_ptr<driver_transport>> registry;
+
+void registry_add(const std::shared_ptr<driver_transport>& transport)
+{
+    const std::lock_guard lock(registry_mutex);
+    std::erase_if(registry, [](const auto& entry) { return entry.expired(); });
+    registry.push_back(transport);
+}
+
+// Also called while the transport is being destroyed, when its entry has already
+// expired.
+void registry_remove(const driver_transport* transport)
+{
+    const std::lock_guard lock(registry_mutex);
+    std::erase_if(registry,
+                  [transport](const auto& entry)
+                  {
+                      const auto held = entry.lock();
+                      return !held || held.get() == transport;
+                  });
+}
+
+/// The transports this process holds, kept alive while the caller looks at them.
+std::vector<std::shared_ptr<driver_transport>> registry_snapshot()
+{
+    std::vector<std::shared_ptr<driver_transport>> out;
+    const std::lock_guard lock(registry_mutex);
+    for (const auto& entry : registry)
+    {
+        if (auto held = entry.lock())
+            out.push_back(std::move(held));
+    }
+    return out;
+}
 
 /// Waits for the hub end of a port that was just made, and opens it. `lease` is
 /// what keeps the port alive (the control handle, or the helper's pipe); it goes
 /// to the transport, and closing it removes the port. It is closed on failure.
 ///
 /// Windows installs the driver on the new device before the hub end exists,
-/// which takes a second or two.
+/// which takes a second or two. With a COM number to give the port, the helper
+/// then changes it and restarts the port before the hub end is opened, so that
+/// nothing has the port open.
 result<virtual_port_result>
 open_made_port(const transport::executor_type& executor,
-               const std::string& name, const std::wstring& instance,
-               unique_handle lease)
+               const std::string& name, port_origin origin, unique_handle lease,
+               unsigned com_number)
 {
-    using clock = std::chrono::steady_clock;
-    const auto deadline = clock::now() + std::chrono::seconds(30);
-    for (;;)
+    auto hub = wait_for_hub(origin.instance, std::wstring(),
+                            std::chrono::seconds(30));
+    if (!hub)
+        return make_error_code(errc::timeout);
+
+    origin.leased = true;
+    if (com_number != 0)
     {
-        for (const auto& hub : enumerate_hubs())
+        const std::string wanted = "COM" + std::to_string(com_number);
+        if (!same_name(to_utf8(hub->port), wanted))
         {
-            if (hub.port.empty() ||
-                ::_wcsicmp(hub.instance.c_str(), instance.c_str()) != 0)
-                continue;
+            const errc asked = ask_com_number(origin, lease.get(), com_number);
+            if (asked != errc::success)
+                return make_error_code(asked);
 
-            DWORD error = 0;
-            const HANDLE handle = open_hub(hub.path, error);
-            if (handle == INVALID_HANDLE_VALUE)
-                return make_error_code(errc::io_error);
-
-            VSSCOM_VERSION_INFO version{};
-            if (!read_version(handle, version) ||
-                version.Version != VSSCOM_VERSION)
-            {
-                ::CloseHandle(handle);
-                return make_error_code(errc::unsupported);
-            }
-
-            virtual_port_result out;
-            out.path = to_utf8(hub.port);
-            out.kind = virtual_port_kind::windows_driver;
-            out.port = std::make_shared<driver_transport>(
-                executor, handle, out.path, name, std::move(lease));
-            return out;
+            hub = wait_for_hub(origin.instance,
+                               std::wstring(wanted.begin(), wanted.end()),
+                               std::chrono::seconds(30));
+            if (!hub)
+                return make_error_code(errc::timeout);
         }
-
-        if (clock::now() >= deadline)
-            return make_error_code(errc::timeout);
-        ::Sleep(100);
     }
+
+    DWORD error = 0;
+    const HANDLE handle = open_hub(hub->path, error);
+    if (handle == INVALID_HANDLE_VALUE)
+        return make_error_code(errc::io_error);
+
+    VSSCOM_VERSION_INFO version{};
+    if (!read_version(handle, version) || version.Version != VSSCOM_VERSION)
+    {
+        ::CloseHandle(handle);
+        return make_error_code(errc::unsupported);
+    }
+
+    virtual_port_result out;
+    out.path = to_utf8(hub->port);
+    out.kind = virtual_port_kind::windows_driver;
+    out.port = driver_transport::create(executor, handle, out.path, name,
+                                        std::move(lease), std::move(origin));
+    return out;
 }
 
 /// Asks the control device for a port and waits for Windows to build it.
 result<virtual_port_result>
 create_port_on_demand(const transport::executor_type& executor,
-                      const std::string& name, const std::wstring& control_path)
+                      const std::string& name, const std::wstring& control_path,
+                      unsigned com_number)
 {
     DWORD error = 0;
     unique_handle control(open_control(control_path, error));
@@ -468,35 +1175,12 @@ create_port_on_demand(const transport::executor_type& executor,
     wchar_t suffix[16]{};
     std::swprintf(suffix, 16, VSSCOM_PORT_INSTANCE_FORMAT,
                   static_cast<unsigned long>(made.Slot));
-    const std::wstring instance =
-        std::wstring(VSSCOM_PORT_HARDWARE_ID) + L"\\" + suffix;
-    return open_made_port(executor, name, instance, std::move(control));
-}
-
-/// Opens the pipe of the helper service. `error` is the Win32 error when it
-/// cannot. A busy pipe is waited for a little: the helper serves a client on
-/// each instance and makes the next at once.
-HANDLE open_helper(DWORD& error)
-{
-    for (int attempt = 0; attempt < 5; ++attempt)
-    {
-        // Identification only: the helper needs to know the user and nothing
-        // more, and has no reason to act as the user.
-        const HANDLE handle = ::CreateFileW(
-            VssComHelperPipeName, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
-            OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION,
-            nullptr);
-        if (handle != INVALID_HANDLE_VALUE)
-        {
-            error = 0;
-            return handle;
-        }
-        error = ::GetLastError();
-        if (error != ERROR_PIPE_BUSY)
-            break;
-        ::WaitNamedPipeW(VssComHelperPipeName, 1000);
-    }
-    return INVALID_HANDLE_VALUE;
+    port_origin origin;
+    origin.kernel_mode = true;
+    origin.slot = made.Slot;
+    origin.instance = std::wstring(VSSCOM_PORT_HARDWARE_ID) + L"\\" + suffix;
+    return open_made_port(executor, name, std::move(origin),
+                          std::move(control), com_number);
 }
 
 /// Asks the helper service for a port of the user-mode driver. The helper
@@ -505,7 +1189,7 @@ HANDLE open_helper(DWORD& error)
 /// errc::unsupported when there is no helper, or it speaks another version.
 result<virtual_port_result>
 create_port_via_helper(const transport::executor_type& executor,
-                       const std::string& name)
+                       const std::string& name, unsigned com_number)
 {
     DWORD error = 0;
     unique_handle pipe(open_helper(error));
@@ -554,9 +1238,12 @@ create_port_via_helper(const transport::executor_type& executor,
     wchar_t suffix[16]{};
     std::swprintf(suffix, 16, VssComUmPortInstanceFormat,
                   static_cast<unsigned long>(reply.Slot));
-    const std::wstring instance =
-        std::wstring(VssComUmPortInstancePrefix) + suffix;
-    return open_made_port(executor, name, instance, std::move(pipe));
+    port_origin origin;
+    origin.kernel_mode = false;
+    origin.slot = reply.Slot;
+    origin.instance = std::wstring(VssComUmPortInstancePrefix) + suffix;
+    return open_made_port(executor, name, std::move(origin), std::move(pipe),
+                          com_number);
 }
 
 } // namespace
@@ -582,7 +1269,7 @@ bool platform_driver_available()
 std::string platform_driver_version()
 {
     // Both devices ship together; the control device speaks version 1 of its
-    // own interface alongside version 2 of the ports.
+    // own interface alongside version 3 of the ports.
     const std::wstring control_path = find_control_path();
     if (!control_path.empty())
     {
@@ -615,22 +1302,32 @@ std::string platform_driver_version()
 
 result<virtual_port_result>
 platform_create_driver_port(const transport::executor_type& executor,
-                            const std::string& name)
+                            const std::string& name, unsigned com_number)
 {
+    // A number is the helper service's to give. Without it, say so before a
+    // port is made that would only be thrown away.
+    if (com_number != 0 && !helper_present())
+    {
+        // A port that already has the number is still all right, below.
+        if (find_control_path().empty() && enumerate_hubs().empty())
+            return make_error_code(errc::unsupported);
+    }
+
     // With the control device installed, make a port of our own: it is ours
     // alone and goes when the transport does. An older driver without one
     // (errc::unsupported) falls back to the ports that exist.
     const std::wstring control_path = find_control_path();
-    if (!control_path.empty())
+    if (!control_path.empty() && (com_number == 0 || helper_present()))
     {
-        auto made = create_port_on_demand(executor, name, control_path);
+        auto made =
+            create_port_on_demand(executor, name, control_path, com_number);
         if (made || made.error() != make_error_code(errc::unsupported))
             return made;
     }
 
     // The user-mode driver has no control device: its helper service makes the
     // port. No helper, or no user-mode driver behind it, falls through as well.
-    auto helped = create_port_via_helper(executor, name);
+    auto helped = create_port_via_helper(executor, name, com_number);
     if (helped || helped.error() != make_error_code(errc::unsupported))
         return helped;
 
@@ -639,10 +1336,19 @@ platform_create_driver_port(const transport::executor_type& executor,
         return make_error_code(errc::unsupported);
 
     // A port is free when nobody has its hub end and no application has the
-    // COM port open. Anything else belongs to somebody.
+    // COM port open. Anything else belongs to somebody. With a number asked for,
+    // only a port that already has it will do: the number of a port that already
+    // existed is not ours to change.
+    const std::string wanted =
+        com_number != 0 ? "COM" + std::to_string(com_number) : std::string();
+    bool numbered = wanted.empty();
     errc failure = errc::device_busy;
     for (const auto& hub : hubs)
     {
+        if (!wanted.empty() && !same_name(to_utf8(hub.port), wanted))
+            continue;
+        numbered = true;
+
         DWORD error = 0;
         const HANDLE handle = open_hub(hub.path, error);
         if (handle == INVALID_HANDLE_VALUE)
@@ -657,7 +1363,7 @@ platform_create_driver_port(const transport::executor_type& executor,
         if (!read_version(handle, version) ||
             version.Version != VSSCOM_VERSION)
         {
-            // A driver of another version: the hub speaks version 2.
+            // A driver of another version: the hub speaks version 3.
             ::CloseHandle(handle);
             failure = errc::unsupported;
             continue;
@@ -671,12 +1377,34 @@ platform_create_driver_port(const transport::executor_type& executor,
         virtual_port_result out;
         out.path = to_utf8(hub.port);
         out.kind = virtual_port_kind::windows_driver;
-        out.port = std::make_shared<driver_transport>(executor, handle,
-                                                     out.path, name);
+        out.port = driver_transport::create(executor, handle, out.path, name);
         return out;
     }
 
-    return make_error_code(failure);
+    return make_error_code(numbered ? failure : errc::not_found);
+}
+
+result<std::string> platform_set_driver_com_number(transport& port,
+                                                   unsigned com_number)
+{
+    // Looked up among the transports of this process, which are all ours, so that
+    // nothing depends on run-time type information.
+    for (const auto& candidate : registry_snapshot())
+    {
+        if (static_cast<transport*>(candidate.get()) == &port)
+            return candidate->renumber(com_number);
+    }
+    return make_error_code(errc::invalid_argument);
+}
+
+std::optional<driver_peer_info> platform_driver_peer(const std::string& com_name)
+{
+    for (const auto& candidate : registry_snapshot())
+    {
+        if (candidate->named(com_name))
+            return candidate->peer();
+    }
+    return std::nullopt;
 }
 
 } // namespace vss::detail
