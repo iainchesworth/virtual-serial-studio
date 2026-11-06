@@ -26,8 +26,7 @@ namespace vss::gui::support
 vss::permissions::context permission_context(const StudioBackend& backend);
 
 /// The same, for one listener the user is about to open.
-vss::permissions::context
-permission_context_for(const QString& uri);
+vss::permissions::context permission_context_for(const QString& uri);
 
 /// Adds the rows the permission facts call for to the Setup check.  Facts for
 /// another system are not in the list, so they add nothing.  The row of a fact
@@ -40,6 +39,11 @@ void append_permission_rows(QVector<setup_row>& rows,
 /// whether Windows will ask for consent or for an administrator's password.
 /// Empty when the facts say nothing.
 QString elevation_sentence(const std::vector<vss::permissions::fact>& facts);
+
+/// The fact about one topic, if there is one.
+std::optional<vss::permissions::fact>
+find_fact(const std::vector<vss::permissions::fact>& facts,
+          vss::permissions::topic what);
 
 /// The Windows Firewall fact, if there is one.
 std::optional<vss::permissions::fact>

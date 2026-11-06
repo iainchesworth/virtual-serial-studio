@@ -35,8 +35,8 @@ QString report_text(perm::step_status status, bool remove)
             "You declined the Windows permission prompt, so nothing was "
             "changed.");
     case perm::step_status::unsupported:
-        return QCoreApplication::translate(
-            "SetupCheck", "Not available in this build.");
+        return QCoreApplication::translate("SetupCheck",
+                                           "Not available in this build.");
     case perm::step_status::not_elevated:
         return QCoreApplication::translate(
             "SetupCheck",
@@ -79,7 +79,8 @@ QString helper_path()
     const QDir directory(QCoreApplication::applicationDirPath());
     for (const char* name : {"vss_cli.exe", "vss_cli"})
     {
-        const QFileInfo candidate(directory.filePath(QString::fromLatin1(name)));
+        const QFileInfo candidate(
+            directory.filePath(QString::fromLatin1(name)));
         if (candidate.isFile())
             return QDir::toNativeSeparators(candidate.absoluteFilePath());
     }
@@ -100,6 +101,53 @@ step_report allow_through_firewall(const perm::firewall_rule_spec& spec)
 step_report remove_firewall_rule(const perm::firewall_rule_spec& spec)
 {
     return run(spec, true);
+}
+
+bool group_step_available()
+{
+    return perm::can_add_user_to_group();
+}
+
+step_report add_to_serial_group(const perm::group_membership_spec& spec)
+{
+    step_report report;
+    if (!group_step_available())
+    {
+        report.status = perm::step_status::unsupported;
+        report.message = QCoreApplication::translate(
+            "SetupCheck", "Not available in this build.");
+        return report;
+    }
+    const perm::step_result result = perm::add_user_to_group(spec);
+    report.status = result.status;
+    switch (result.status)
+    {
+    case perm::step_status::done:
+        report.message = QCoreApplication::translate(
+            "SetupCheck",
+            "Done. Sign out and back in so that the new group takes effect, "
+            "then choose Re-check.");
+        break;
+    case perm::step_status::declined:
+        report.message = QCoreApplication::translate(
+            "SetupCheck",
+            "You dismissed the authentication prompt, so nothing was "
+            "changed.");
+        break;
+    case perm::step_status::not_elevated:
+        report.message = QCoreApplication::translate(
+            "SetupCheck",
+            "The system did not authorise the change, so nothing was "
+            "changed. Use the command shown instead.");
+        break;
+    default:
+        report.message = QCoreApplication::translate(
+            "SetupCheck",
+            "The group could not be changed. Use the command shown instead, "
+            "in a terminal.");
+        break;
+    }
+    return report;
 }
 
 } // namespace vss::gui::support

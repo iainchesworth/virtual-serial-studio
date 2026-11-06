@@ -9,6 +9,7 @@
 #include "support/check_row.hpp"
 #include "support/elevated_step.hpp"
 #include "support/firewall_dialog.hpp"
+#include "support/permission_dialog.hpp"
 #include "support/permission_rows.hpp"
 #include "theme/theme.hpp"
 #include "widgets/chips.hpp"
@@ -351,13 +352,29 @@ void SetupCheckDialog::rebuild()
 void SetupCheckDialog::show_firewall_help()
 {
     // Ask again: the user may have changed the firewall since the last check.
-    const auto fact = firewall_fact(
-        vss::permissions::probe(permission_context(backend_)));
+    const auto facts = vss::permissions::probe(permission_context(backend_));
+    if (const auto windows =
+            find_fact(facts, vss::permissions::topic::windows_firewall))
+    {
+        FirewallDialog dialog(*windows, firewall_step_available(), this);
+        dialog.exec();
+        if (dialog.rule_added())
+            recheck();
+        return;
+    }
+    show_permission_help(vss::permissions::topic::linux_firewall);
+}
+
+void SetupCheckDialog::show_permission_help(vss::permissions::topic what)
+{
+    // Ask again, for the same reason.
+    const auto fact = find_fact(
+        vss::permissions::probe(permission_context(backend_)), what);
     if (!fact)
         return;
-    FirewallDialog dialog(*fact, firewall_step_available(), this);
+    PermissionDialog dialog(*fact, group_step_available(), this);
     dialog.exec();
-    if (dialog.rule_added())
+    if (dialog.step_done())
         recheck();
 }
 
@@ -385,6 +402,12 @@ void SetupCheckDialog::handle_action(setup_action action)
         break;
     case setup_action::firewall_help:
         show_firewall_help();
+        break;
+    case setup_action::serial_access_help:
+        show_permission_help(vss::permissions::topic::serial_access);
+        break;
+    case setup_action::confinement_help:
+        show_permission_help(vss::permissions::topic::confinement);
         break;
     }
 }

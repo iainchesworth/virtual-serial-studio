@@ -54,11 +54,23 @@ bool platform_can_run_elevated() noexcept
     return false;
 }
 
-permissions::step_result
-platform_run_elevated(const std::string&, const std::vector<std::string>&)
+permissions::step_result platform_run_elevated(const std::string&,
+                                               const std::vector<std::string>&)
 {
     return {permissions::step_status::unsupported,
             "this platform has no elevated helper step"};
+}
+
+bool platform_can_add_user_to_group() noexcept
+{
+    return false;
+}
+
+permissions::step_result
+platform_add_user_to_group(const permissions::group_membership_spec&)
+{
+    return {permissions::step_status::unsupported,
+            "this platform has no group step"};
 }
 
 } // namespace vss::detail

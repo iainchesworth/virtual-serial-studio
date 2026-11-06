@@ -26,7 +26,6 @@ namespace
 
 namespace perm = vss::permissions;
 
-
 QString protocol_name(perm::transport_protocol protocol)
 {
     return protocol == perm::transport_protocol::tcp ? QStringLiteral("TCP")
@@ -66,8 +65,10 @@ FirewallDialog::FirewallDialog(const perm::fact& fact, bool step_possible,
 
 void FirewallDialog::build(bool step_possible)
 {
-    setWindowTitle(QCoreApplication::translate("FirewallDialog", "Windows Firewall"));
-    setAccessibleName(QCoreApplication::translate("FirewallDialog", "Windows Firewall"));
+    setWindowTitle(
+        QCoreApplication::translate("FirewallDialog", "Windows Firewall"));
+    setAccessibleName(
+        QCoreApplication::translate("FirewallDialog", "Windows Firewall"));
     setProperty("surface", QStringLiteral("panel"));
     polish(this);
     setMinimumWidth(
@@ -79,17 +80,24 @@ void FirewallDialog::build(bool step_possible)
 
     const bool no_rule = fact_.why == perm::reason::no_allow_rule;
     add_dialog_heading(
-        layout, QCoreApplication::translate("FirewallDialog", "Windows Firewall"),
-        no_rule ? QCoreApplication::translate("FirewallDialog", "Other computers cannot reach this port until a rule "
+        layout,
+        QCoreApplication::translate("FirewallDialog", "Windows Firewall"),
+        no_rule ? QCoreApplication::translate(
+                      "FirewallDialog",
+                      "Other computers cannot reach this port until a rule "
                       "allows it.")
-                : QCoreApplication::translate("FirewallDialog", "Windows Firewall stops other computers reaching this "
+                : QCoreApplication::translate(
+                      "FirewallDialog",
+                      "Windows Firewall stops other computers reaching this "
                       "port."),
         this);
 
     if (no_rule)
     {
         layout->addWidget(paragraph(
-            QCoreApplication::translate("FirewallDialog", "Studio is waiting for other computers to connect. Windows "
+            QCoreApplication::translate(
+                "FirewallDialog",
+                "Studio is waiting for other computers to connect. Windows "
                 "Firewall blocks connections that no rule allows. Studio never "
                 "changes the firewall by itself."),
             this));
@@ -97,7 +105,9 @@ void FirewallDialog::build(bool step_possible)
     else if (fact_.why == perm::reason::blocked_by_rule)
     {
         layout->addWidget(paragraph(
-            QCoreApplication::translate("FirewallDialog", "A rule in Windows Firewall blocks this program on this port. "
+            QCoreApplication::translate(
+                "FirewallDialog",
+                "A rule in Windows Firewall blocks this program on this port. "
                 "A block rule wins over an allow rule, and Studio does not "
                 "remove it. Open Windows Defender Firewall with Advanced "
                 "Security, find the block rule under Inbound Rules, and "
@@ -107,7 +117,9 @@ void FirewallDialog::build(bool step_possible)
     else
     {
         layout->addWidget(paragraph(
-            QCoreApplication::translate("FirewallDialog", "Windows Firewall is set to block all incoming connections, "
+            QCoreApplication::translate(
+                "FirewallDialog",
+                "Windows Firewall is set to block all incoming connections, "
                 "which overrides every rule. Open Windows Security, choose "
                 "Firewall and network protection, pick the network you are on, "
                 "and turn off Block all incoming connections."),
@@ -117,16 +129,24 @@ void FirewallDialog::build(bool step_possible)
     if (fact_.step.has_value())
     {
         const perm::firewall_rule_spec& step = *fact_.step;
-        layout->addWidget(paragraph(
-            QCoreApplication::translate("FirewallDialog", "The rule Studio would add lets only this in:"), this));
+        layout->addWidget(
+            paragraph(QCoreApplication::translate(
+                          "FirewallDialog",
+                          "The rule Studio would add lets only this in:"),
+                      this));
         auto* details = paragraph(
-            QCoreApplication::translate("FirewallDialog", "Program: %1\nProtocol and port: %2 %3\nWho: %4\nNetworks: %5")
+            QCoreApplication::translate(
+                "FirewallDialog",
+                "Program: %1\nProtocol and port: %2 %3\nWho: %4\nNetworks: %5")
                 .arg(QString::fromStdString(step.program),
                      protocol_name(step.protocol))
                 .arg(step.port)
                 .arg(step.scope == perm::rule_scope::local_subnet
-                         ? QCoreApplication::translate("FirewallDialog", "computers on your local network")
-                         : QCoreApplication::translate("FirewallDialog", "any computer"),
+                         ? QCoreApplication::translate(
+                               "FirewallDialog",
+                               "computers on your local network")
+                         : QCoreApplication::translate("FirewallDialog",
+                                                       "any computer"),
                      networks_text(step.profiles)),
             this);
         layout->addWidget(details);
@@ -136,13 +156,19 @@ void FirewallDialog::build(bool step_possible)
     {
         layout->addWidget(paragraph(
             step_possible
-                ? QCoreApplication::translate("FirewallDialog", "The same rule as a command, if you prefer to run it "
+                ? QCoreApplication::translate(
+                      "FirewallDialog",
+                      "The same rule as a command, if you prefer to run it "
                       "yourself in a terminal opened as administrator:")
-                : QCoreApplication::translate("FirewallDialog", "To add the rule yourself, run this in a terminal opened "
+                : QCoreApplication::translate(
+                      "FirewallDialog",
+                      "To add the rule yourself, run this in a terminal opened "
                       "as administrator:"),
             this));
         auto* command = new CodeBlock(this);
-        command->set_text(QString::fromStdString(fact_.remedy), QCoreApplication::translate("FirewallDialog", "Command"));
+        command->set_text(
+            QString::fromStdString(fact_.remedy),
+            QCoreApplication::translate("FirewallDialog", "Command"));
         layout->addWidget(command);
     }
 
@@ -155,26 +181,32 @@ void FirewallDialog::build(bool step_possible)
     QFrame* footer = make_dialog_footer(this, footer_layout);
     if (no_rule)
     {
-        allow_ = make_dialog_button(QCoreApplication::translate("FirewallDialog", "Allow in Windows Firewall"),
-                                    "primary", footer);
+        allow_ = make_dialog_button(
+            QCoreApplication::translate("FirewallDialog",
+                                        "Allow in Windows Firewall"),
+            "primary", footer);
         allow_->setAutoDefault(false);
-        allow_->setAccessibleName(QCoreApplication::translate("FirewallDialog", "Allow in Windows Firewall"));
+        allow_->setAccessibleName(QCoreApplication::translate(
+            "FirewallDialog", "Allow in Windows Firewall"));
         if (step_possible)
         {
-            allow_->setToolTip(
-                QCoreApplication::translate("FirewallDialog", "Windows will ask for administrator permission before the "
-                    "rule is added."));
-            connect(allow_, &QPushButton::clicked, this,
-                    [this] { allow(); });
+            allow_->setToolTip(QCoreApplication::translate(
+                "FirewallDialog",
+                "Windows will ask for administrator permission before the "
+                "rule is added."));
+            connect(allow_, &QPushButton::clicked, this, [this] { allow(); });
         }
         else
         {
             allow_->setEnabled(false);
-            allow_->setToolTip(QCoreApplication::translate("FirewallDialog", "Not available in this build"));
+            allow_->setToolTip(QCoreApplication::translate(
+                "FirewallDialog", "Not available in this build"));
         }
         footer_layout->addWidget(allow_);
     }
-    auto* close = make_dialog_button(QCoreApplication::translate("FirewallDialog", "Close"), nullptr, footer);
+    auto* close = make_dialog_button(
+        QCoreApplication::translate("FirewallDialog", "Close"), nullptr,
+        footer);
     close->setDefault(true);
     connect(close, &QPushButton::clicked, this, &QDialog::accept);
     footer_layout->addWidget(close);
@@ -185,7 +217,8 @@ void FirewallDialog::build(bool step_possible)
 
 void FirewallDialog::allow()
 {
-    // Never starts the operating system prompt unless the build offers the step.
+    // Never starts the operating system prompt unless the build offers the
+    // step.
     if (!can_run_ || allow_ == nullptr)
         return;
     allow_->setEnabled(false);

@@ -19,7 +19,8 @@
 //  * Explained. A fact carries a reason code and, where there is one, the exact
 //    command or text the user can run. The GUI turns the code into a sentence
 //    (translated); the library never writes user-facing prose.
-//  * Never silent. Nothing in this header changes a protection. A step that does
+//  * Never silent. Nothing in this header changes a protection. A step that
+//  does
 //    (a firewall rule) runs only when the caller asks for it by name, after the
 //    user has agreed, in a separate elevated process that does that one thing.
 //
@@ -62,7 +63,16 @@ enum class topic
     /// Windows: is this process elevated, and could the user elevate it.
     windows_elevation,
     /// Windows: would Windows Firewall let other computers reach a listener.
-    windows_firewall
+    windows_firewall,
+    /// Linux and macOS: may this user open the serial devices (group, mode,
+    /// policy or sandbox).
+    serial_access,
+    /// Linux and macOS: does something confine this program (Flatpak, Snap,
+    /// AppArmor, the macOS sandbox,
+    /// SELinux) so that it may be refused devices or directories.
+    confinement,
+    /// Linux: would ufw or firewalld stand between a listener and the network.
+    linux_firewall
 };
 
 enum class transport_protocol
@@ -88,6 +98,13 @@ struct context
     std::string program_path;
     /// The listeners the check should cover. None: only the general facts.
     std::vector<listener> listeners;
+    /// The serial devices the check should cover (`/dev/ttyUSB0`, ...). None:
+    /// no device is checked.
+    std::vector<std::string> device_paths;
+    /// Paths a real open already failed on with "permission denied". A path the
+    /// file mode permits but that was refused is a policy denial (AppArmor,
+    /// SELinux, a sandbox), which the fact says.
+    std::vector<std::string> refused_paths;
 };
 
 /// One reason code per outcome. The GUI chooses the sentence from the topic and
@@ -107,6 +124,23 @@ inline constexpr std::string_view allow_rule = "allow_rule";
 inline constexpr std::string_view no_allow_rule = "no_allow_rule";
 inline constexpr std::string_view blocked_by_rule = "blocked_by_rule";
 inline constexpr std::string_view block_all_inbound = "block_all_inbound";
+// serial_access
+inline constexpr std::string_view devices_open = "devices_open";
+inline constexpr std::string_view no_devices = "no_devices";
+inline constexpr std::string_view not_in_group = "not_in_group";
+inline constexpr std::string_view relogin_needed = "relogin_needed";
+inline constexpr std::string_view mode_denies = "mode_denies";
+inline constexpr std::string_view denied_by_policy = "denied_by_policy";
+// confinement
+inline constexpr std::string_view unconfined = "unconfined";
+inline constexpr std::string_view flatpak = "flatpak";
+inline constexpr std::string_view snap = "snap";
+inline constexpr std::string_view apparmor_profile = "apparmor_profile";
+inline constexpr std::string_view selinux_enforcing = "selinux_enforcing";
+// linux_firewall
+inline constexpr std::string_view ufw_active = "ufw_active";
+inline constexpr std::string_view firewalld_active = "firewalld_active";
+inline constexpr std::string_view rules_need_root = "rules_need_root";
 // every topic
 inline constexpr std::string_view not_asked = "not_asked";
 inline constexpr std::string_view other_platform = "other_platform";
@@ -139,6 +173,15 @@ struct firewall_rule_spec
     long profiles = profile_private;
 };
 
+/// The one privileged step on Linux: put the current user in the group that
+/// owns the serial devices. Only the user running Studio, and only a group on
+/// the short list in `validate`, can be named.
+struct group_membership_spec
+{
+    std::string user;
+    std::string group;
+};
+
 /// One answer.
 struct fact
 {
@@ -154,9 +197,12 @@ struct fact
     /// True when Studio can do the step itself, in an elevated helper, after
     /// the user agrees. The step is named by `firewall_rule_spec`.
     bool can_act = false;
-    /// The step itself, when `can_act`: what the confirmation shows and what the
-    /// elevated helper does.
+    /// The step itself, when `can_act`: what the confirmation shows and what
+    /// the elevated helper does.
     std::optional<firewall_rule_spec> step;
+    /// The Linux step, when the fix is a group membership and `pkexec` can ask
+    /// for it.
+    std::optional<group_membership_spec> group_step;
     /// For a listener fact, the listener it is about (zero: none).
     std::uint16_t port = 0;
     transport_protocol protocol = transport_protocol::tcp;
@@ -202,7 +248,6 @@ struct firewall_rule_record
     long profiles = 0x7fffffff;
 };
 
-
 struct windows_observation
 {
     tri elevated = tri::unknown;
@@ -219,9 +264,63 @@ struct windows_observation
     std::optional<std::vector<firewall_rule_record>> rules;
 };
 
+/// One serial device as the user sees it.
+struct device_access
+{
+    std::string path;
+    bool exists = false;
+    /// Name of the group that owns the device; empty when unknown.
+    std::string group;
+    /// `open(2)` for reading and writing would be allowed by the file mode and
+    /// ownership (`access(2)`). Policy (AppArmor, SELinux, a sandbox) is not
+    /// part of this answer, which is the point: a refusal despite a yes here is
+    /// policy.
+    tri permitted = tri::unknown;
+    /// The running process has the owning group.
+    tri in_group = tri::unknown;
+    /// The account is listed in the owning group in /etc/group, whether or not
+    /// this session has picked it up yet.
+    tri listed_in_group = tri::unknown;
+    /// The group may read and write the device (mode bits).
+    tri group_may_write = tri::unknown;
+};
+
+/// Who confines the program, from the security label in
+/// /proc/self/attr/current.
+struct security_label
+{
+    /// "", "apparmor" or "selinux".
+    std::string module;
+    /// The AppArmor profile, or the SELinux type.
+    std::string name;
+    /// "enforce", "complain", "unconfined" or "" (AppArmor); the SELinux mode
+    /// ("enforcing", "permissive") comes from `selinux_mode`.
+    std::string mode;
+};
+
+struct linux_observation
+{
+    std::string user;
+    tri root = tri::unknown;
+    std::vector<device_access> devices;
+    security_label label;
+    /// "enforcing", "permissive" or "disabled"; empty when it could not be
+    /// read.
+    std::string selinux_mode;
+    /// "", "flatpak" or "snap".
+    std::string sandbox;
+    /// The Flatpak application id or the Snap name.
+    std::string sandbox_name;
+    tri ufw_active = tri::unknown;
+    tri firewalld_active = tri::unknown;
+    /// pkexec and usermod are installed, so the group step can ask polkit.
+    tri can_ask_polkit = tri::unknown;
+};
+
 struct observation
 {
     windows_observation windows;
+    linux_observation linux_host;
 };
 
 /// Reads the host. Nothing is changed. Takes a moment on Windows, where the
@@ -255,9 +354,10 @@ bool port_list_covers(std::string_view list, std::uint16_t port) noexcept;
 
 /// Whether `rules` let a listener in. `program` is compared without regard to
 /// case. Block rules win.
-firewall_verdict firewall_verdict_for(
-    const std::vector<firewall_rule_record>& rules, std::string_view program,
-    const listener& what, long active_profiles);
+firewall_verdict
+firewall_verdict_for(const std::vector<firewall_rule_record>& rules,
+                     std::string_view program, const listener& what,
+                     long active_profiles);
 
 /// Empty when the spec may be applied, otherwise why not.
 std::string validate(const firewall_rule_spec& spec);
@@ -318,9 +418,9 @@ struct step_result
 /// the elevated helper (`vss_cli permissions firewall-allow`).
 step_result apply_firewall_rule(const firewall_rule_spec& spec, bool remove);
 
-/// Starts `executable` with `arguments` elevated, through the operating system's
-/// own prompt, waits and returns its exit code as a status. The user sees the
-/// prompt and may decline.
+/// Starts `executable` with `arguments` elevated, through the operating
+/// system's own prompt, waits and returns its exit code as a status. The user
+/// sees the prompt and may decline.
 step_result run_elevated(const std::string& executable,
                          const std::vector<std::string>& arguments);
 
@@ -335,6 +435,51 @@ bool can_manage_firewall_rules() noexcept;
 
 /// True when this build can start a helper elevated (Windows).
 bool can_run_elevated() noexcept;
+
+// ---------------------------------------------------------------------------
+// Linux
+// ---------------------------------------------------------------------------
+
+/// Groups that may own a serial device on a Linux distribution: `dialout`
+/// (Debian, Ubuntu, Fedora), `uucp` (Arch, Gentoo), `tty`, `lock`. The step
+/// puts the user in one of these and no other.
+bool serial_group_is_allowed(std::string_view group) noexcept;
+
+/// Empty when the step may be asked for: a plain user name, an allowed group.
+std::string validate(const group_membership_spec& spec);
+
+/// `sudo usermod -aG dialout alice`: what the user could run themselves.
+std::string usermod_command(const group_membership_spec& spec);
+
+/// Puts the user in the group by asking `pkexec` (polkit) to run `usermod`. The
+/// desktop shows its own authentication prompt, which names the command. The
+/// user must sign out and in before the group takes effect.
+step_result add_user_to_group(const group_membership_spec& spec);
+
+/// True when this build can run the step (Linux) and polkit's `pkexec` and
+/// `usermod` are installed.
+bool can_add_user_to_group() noexcept;
+
+/// Reads /proc/self/attr/current: `/usr/bin/foo (enforce)` and `unconfined` are
+/// AppArmor, `unconfined_u:unconfined_r:unconfined_t:s0` is SELinux.
+security_label parse_security_label(std::string_view text);
+
+/// The file name of an AppArmor profile in /etc/apparmor.d: the profile path
+/// without the leading slash, with dots for slashes (`/usr/bin/foo` is
+/// `usr.bin.foo`). Empty for a name that is not a path (a snap profile).
+std::string apparmor_profile_file(std::string_view profile);
+
+/// The lines to add to the local override of an AppArmor profile so a serial
+/// device, a pseudo terminal and Studio's link directory are allowed, with the
+/// command that reloads the profile. For the user to read and copy.
+std::string apparmor_snippet(std::string_view profile);
+
+/// The commands that find an SELinux denial and build a policy module for it.
+std::string selinux_commands();
+
+/// The commands that open a port in ufw or firewalld.
+std::string ufw_command(const listener& what);
+std::string firewalld_command(const listener& what);
 
 /// Full path of this program.
 std::string this_program();

@@ -453,6 +453,50 @@ The same check is available from a terminal and changes nothing:
 vss_cli permissions check --listen=tcp-listen://0.0.0.0:4001
 ```
 
+### Linux
+
+**Serial devices.** Who may open `/dev/ttyUSB0` is decided by the group that owns
+it (`dialout` on Debian, Ubuntu and Fedora, `uucp` on Arch). The Setup check row
+*Serial device access* reads the owner and mode of each device it found and says
+which of four things is true:
+
+- you may open it;
+- your account is not in the group, and the row shows
+  `sudo usermod -aG dialout <you>`. If `pkexec` (polkit) is installed the dialog
+  also has **Add me to the dialout group**, which asks your desktop for your
+  password and runs that one command. Sign out and back in afterwards;
+- your account is in the group but this login does not know yet (sign out and
+  in, or `newgrp dialout` in one terminal);
+- the group may not read and write the device: the dialog shows the `ls -l`
+  command. Studio does not change device permissions, because that is a system
+  setting.
+
+**When the file permissions allow it and it is still refused.** AppArmor, SELinux,
+Flatpak and Snap can refuse a device or the folder Studio keeps its link names in
+(`/run/vss`, then `/tmp/vss`). Studio recognises this when a device that the
+permissions allow was refused, and the *Confinement* row (shown only when something
+confines the program) gives the fix for the one that applies:
+
+| Confinement | What Studio shows |
+|---|---|
+| Flatpak | `flatpak override --user --device=all <application id>` |
+| Snap | `snap connections <snap>`; a serial device needs the `serial-port` interface connected |
+| AppArmor | the lines to add to `/etc/apparmor.d/local/<profile>` (devices, pseudo terminals, link folder) and `sudo apparmor_parser -r /etc/apparmor.d/<profile>` |
+| SELinux | `sudo ausearch -m AVC,USER_AVC -ts recent`, then `audit2allow -M vss_studio` and `semodule -i`; read what `audit2allow` proposes before you install it |
+
+SELinux in enforcing mode is normal on Fedora and Red Hat systems, so it is
+information and not a problem. Studio never edits a profile or a policy.
+
+**Firewall.** Studio cannot read `ufw` or `firewalld` rules without administrator
+rights. When a listener is open to other computers and `ufw` or `firewalld` is on,
+the *Firewall* row shows the command that opens the port (`sudo ufw allow
+4001/tcp`, or `sudo firewall-cmd --permanent --add-port=4001/tcp` and a reload).
+With neither on, it says "Not checked yet" because `nftables` or `iptables` may
+still filter.
+
+`vss_cli permissions check --device=/dev/ttyUSB0 --listen=tcp-listen://0.0.0.0:4001`
+prints the same facts.
+
 ## Finding things: the command palette
 
 `Ctrl+K`, or the **Search actions** box in the toolbar, opens a list of every

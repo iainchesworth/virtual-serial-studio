@@ -40,10 +40,22 @@ bool firewall_step_available();
 /// Starts the helper through the operating system's own elevation prompt to add
 /// the one rule of `spec`, and waits.  Call it only after the user has seen the
 /// rule and agreed; nothing here asks again.
-step_report allow_through_firewall(const vss::permissions::firewall_rule_spec& spec);
+step_report
+allow_through_firewall(const vss::permissions::firewall_rule_spec& spec);
 
 /// The same, to remove the rule again.
-step_report remove_firewall_rule(const vss::permissions::firewall_rule_spec& spec);
+step_report
+remove_firewall_rule(const vss::permissions::firewall_rule_spec& spec);
+
+/// True when this build can put the user in a serial device group: Linux with
+/// polkit's pkexec installed.
+bool group_step_available();
+
+/// Asks polkit, through the desktop's own authentication prompt, to put the
+/// user in the group.  Call it only after the user has seen the command and
+/// agreed. The group takes effect at the next login; the message says so.
+step_report
+add_to_serial_group(const vss::permissions::group_membership_spec& spec);
 
 } // namespace vss::gui::support
 

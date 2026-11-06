@@ -133,3 +133,33 @@ the machine the tests run on, so the step itself is covered by unit tests of the
 rule text, the argument round trip and the helper's refusals): adding and removing
 the rule in a Windows guest, the UAC prompt for a standard user, and a machine
 joined to a domain with policy-managed rules.
+
+### Serial access, confinement and the firewall on Linux
+
+The same permissions layer reads what an ordinary user can read: the groups of
+the process, `stat` and `access(2)` of each serial device, `/proc/self/attr/current`
+(an AppArmor profile or an SELinux context), `/sys/fs/selinux/enforce`,
+`FLATPAK_ID` and `SNAP_NAME`, `/etc/ufw/ufw.conf`, and the presence of
+`/run/firewalld.pid`. `access(2)` answers for the file mode only, which is what
+makes a policy denial recognisable: a device the mode allows and an open that was
+refused is AppArmor, SELinux or a sandbox, and the fact says so with the fix for the
+one in force.
+
+- **One privileged step.** Putting the user in the serial group is
+  `pkexec usermod -aG <group> <user>`, started with `posix_spawn` after the user
+  presses the button. polkit's agent shows the command it is asked to run. The step
+  names only the current user and only `dialout`, `uucp`, `tty` or `lock`.
+- **Honest limits.** A bare label such as `kernel` (WSL) is not an AppArmor profile.
+  Firewall rules need root, so without `ufw` or `firewalld` the fact is `unknown`.
+  Whether a polkit agent is running cannot be asked in advance, so a declined or
+  missing prompt is reported after the fact.
+- **Capability.** `capabilities::serial_group_step` is true where `pkexec` and
+  `usermod` are installed; otherwise the dialog only explains and shows the command.
+
+Run for this change: the Linux part of the library compiled with GCC 14 and
+`-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror`, its unit tests, and a
+read-only probe in a Debian WSL distribution, which found `/dev/ttyS0` owned by
+`dialout` with the user outside the group and printed the exact command. Not run:
+the polkit prompt and the group change (they change the account), AppArmor and
+SELinux denials on real profiles, a Flatpak or Snap build, and Clang. Those need the
+Ubuntu guest of `docs/vm-testing.md` and a Fedora guest.

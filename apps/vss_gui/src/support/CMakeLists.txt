@@ -23,6 +23,8 @@ add_library(vss_gui_support STATIC
   firewall_dialog.hpp
   help_contents_dialog.cpp
   help_contents_dialog.hpp
+  permission_dialog.cpp
+  permission_dialog.hpp
   permission_rows.cpp
   permission_rows.hpp
   redact.cpp

@@ -41,6 +41,12 @@ std::string_view topic_name(perm::topic what) noexcept
         return "windows_elevation";
     case perm::topic::windows_firewall:
         return "windows_firewall";
+    case perm::topic::serial_access:
+        return "serial_access";
+    case perm::topic::confinement:
+        return "confinement";
+    case perm::topic::linux_firewall:
+        return "linux_firewall";
     }
     return "unknown";
 }
@@ -98,6 +104,10 @@ int command_check(const std::vector<std::string>& arguments)
         {
             json = true;
         }
+        else if (argument.rfind("--device=", 0) == 0)
+        {
+            ask.device_paths.push_back(argument.substr(9));
+        }
         else if (argument.rfind("--listen=", 0) == 0)
         {
             perm::listener each;
@@ -142,9 +152,9 @@ int command_check(const std::vector<std::string>& arguments)
     std::printf("Host: %s\n", std::string(perm::host_name()).c_str());
     for (const perm::fact& each : facts)
     {
-        std::printf("%-18s %-10s %s", std::string(topic_name(each.what)).c_str(),
-                    std::string(state_name(each.status)).c_str(),
-                    each.why.c_str());
+        std::printf(
+            "%-18s %-10s %s", std::string(topic_name(each.what)).c_str(),
+            std::string(state_name(each.status)).c_str(), each.why.c_str());
         if (!each.subject.empty())
             std::printf("  (%s)", each.subject.c_str());
         std::printf("\n");

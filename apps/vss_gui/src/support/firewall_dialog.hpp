@@ -21,11 +21,12 @@ class NoteBanner;
 namespace vss::gui::support
 {
 
-/// Explains what Windows Firewall does to a listener and, when Studio can, offers
-/// to add the one rule that fixes it.  The dialog is the user's agreement: the
-/// rule is shown exactly (program, protocol, port, who, which networks) with the
-/// command an administrator could run instead, and the button says that
-/// Windows will ask for permission.  Nothing is changed until it is pressed.
+/// Explains what Windows Firewall does to a listener and, when Studio can,
+/// offers to add the one rule that fixes it.  The dialog is the user's
+/// agreement: the rule is shown exactly (program, protocol, port, who, which
+/// networks) with the command an administrator could run instead, and the
+/// button says that Windows will ask for permission.  Nothing is changed until
+/// it is pressed.
 class FirewallDialog final : public QDialog
 {
     Q_OBJECT

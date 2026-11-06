@@ -6,6 +6,8 @@
 
 #include "flows/common.hpp"
 
+#include <vss/ports/permissions.hpp>
+
 #include <QObject>
 
 namespace vss::gui
@@ -69,6 +71,14 @@ QString error_body(const vss::error_code& error, const QString& cause,
 {
     if (error == vss::errc::permission_denied)
     {
+        if (vss::permissions::host_name() != "windows")
+        {
+            return QObject::tr(
+                "The system did not allow this. Nothing was changed. Open "
+                "Tools, Setup check: it says whether your account is missing "
+                "the serial device group or AppArmor, SELinux or a sandbox is "
+                "in the way, and shows the command to fix it.");
+        }
         return QObject::tr("Windows did not allow this change. Nothing was "
                            "changed. Run Virtual Serial Studio as "
                            "administrator and try again.");

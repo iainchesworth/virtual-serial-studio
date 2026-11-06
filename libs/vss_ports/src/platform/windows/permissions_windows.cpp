@@ -55,14 +55,13 @@ std::wstring widen(const std::string& text)
 {
     if (text.empty())
         return {};
-    const int size = ::MultiByteToWideChar(CP_UTF8, 0, text.data(),
-                                           static_cast<int>(text.size()),
-                                           nullptr, 0);
+    const int size = ::MultiByteToWideChar(
+        CP_UTF8, 0, text.data(), static_cast<int>(text.size()), nullptr, 0);
     if (size <= 0)
         return {};
     std::wstring out(static_cast<std::size_t>(size), L'\0');
-    ::MultiByteToWideChar(CP_UTF8, 0, text.data(), static_cast<int>(text.size()),
-                          out.data(), size);
+    ::MultiByteToWideChar(CP_UTF8, 0, text.data(),
+                          static_cast<int>(text.size()), out.data(), size);
     return out;
 }
 
@@ -74,7 +73,8 @@ public:
     {
         const HRESULT result = ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         // S_FALSE: already initialised here, balance it. RPC_E_CHANGED_MODE:
-        // the thread chose another model, which is fine and is not ours to undo.
+        // the thread chose another model, which is fine and is not ours to
+        // undo.
         initialised_ = SUCCEEDED(result);
         usable_ = SUCCEEDED(result) || result == RPC_E_CHANGED_MODE;
     }
@@ -123,8 +123,8 @@ class bstr
 public:
     bstr() = default;
     explicit bstr(const std::wstring& text)
-        : value_(::SysAllocStringLen(text.data(),
-                                     static_cast<UINT>(text.size())))
+        : value_(
+              ::SysAllocStringLen(text.data(), static_cast<UINT>(text.size())))
     {
     }
     ~bstr() { ::SysFreeString(value_); }
@@ -186,8 +186,8 @@ tri token_elevated(HANDLE token, tri& administrator)
     BOOL member = FALSE;
     const BOOL checked = ::CheckTokenMembership(nullptr, group, &member);
     ::FreeSid(group);
-    administrator = checked == 0 ? tri::unknown
-                                 : (member != 0 ? tri::yes : tri::no);
+    administrator =
+        checked == 0 ? tri::unknown : (member != 0 ? tri::yes : tri::no);
     return tri::no;
 }
 
@@ -218,8 +218,7 @@ void observe_firewall(windows_observation& seen)
 
     com_ptr<INetFwPolicy2> policy;
     if (FAILED(::CoCreateInstance(__uuidof(NetFwPolicy2), nullptr,
-                                  CLSCTX_INPROC_SERVER,
-                                  __uuidof(INetFwPolicy2),
+                                  CLSCTX_INPROC_SERVER, __uuidof(INetFwPolicy2),
                                   reinterpret_cast<void**>(policy.out()))))
         return;
 
@@ -241,7 +240,8 @@ void observe_firewall(windows_observation& seen)
     bool block_all_known = false;
     for (const auto& entry : profiles)
     {
-        if (seen.active_profiles != 0 && (seen.active_profiles & entry.bit) == 0)
+        if (seen.active_profiles != 0 &&
+            (seen.active_profiles & entry.bit) == 0)
             continue;
         bool enabled = false;
         if (!read_profile_flag(policy.get(), entry.profile, enabled))
@@ -251,7 +251,8 @@ void observe_firewall(windows_observation& seen)
             continue;
         any_on = true;
         VARIANT_BOOL block = VARIANT_FALSE;
-        if (SUCCEEDED(policy->get_BlockAllInboundTraffic(entry.profile, &block)))
+        if (SUCCEEDED(
+                policy->get_BlockAllInboundTraffic(entry.profile, &block)))
         {
             block_all_known = true;
             any_block_all = any_block_all || block != VARIANT_FALSE;
@@ -317,7 +318,8 @@ void observe_firewall(windows_observation& seen)
                     long protocol = 256;
                     long rule_profiles = profile_all;
                     if (!is_service &&
-                        SUCCEEDED(rule->get_ApplicationName(application.out())) &&
+                        SUCCEEDED(
+                            rule->get_ApplicationName(application.out())) &&
                         SUCCEEDED(rule->get_LocalPorts(ports.out())))
                     {
                         rule->get_Protocol(&protocol);
@@ -338,8 +340,7 @@ void observe_firewall(windows_observation& seen)
 
 std::string quote_argument(const std::string& argument)
 {
-    if (!argument.empty() &&
-        argument.find_first_of(" \t") == std::string::npos)
+    if (!argument.empty() && argument.find_first_of(" \t") == std::string::npos)
         return argument;
     std::string out = "\"";
     out += argument;
@@ -436,8 +437,7 @@ platform_apply_firewall_rule(const permissions::firewall_rule_spec& spec,
 
     com_ptr<INetFwPolicy2> policy;
     if (FAILED(::CoCreateInstance(__uuidof(NetFwPolicy2), nullptr,
-                                  CLSCTX_INPROC_SERVER,
-                                  __uuidof(INetFwPolicy2),
+                                  CLSCTX_INPROC_SERVER, __uuidof(INetFwPolicy2),
                                   reinterpret_cast<void**>(policy.out()))))
         return {step_status::failed, "Windows Firewall could not be opened"};
     com_ptr<INetFwRules> rules;
@@ -464,7 +464,7 @@ platform_apply_firewall_rule(const permissions::firewall_rule_spec& spec,
     const bstr program(widen(spec.program));
     const bstr ports(widen(std::to_string(spec.port)));
     const bstr remote(spec.scope == rule_scope::local_subnet ? L"LocalSubnet"
-                                                              : L"*");
+                                                             : L"*");
 
     const bool ok =
         SUCCEEDED(rule->put_Name(name.get())) &&
@@ -508,8 +508,8 @@ platform_run_elevated(const std::string& executable,
 
     SHELLEXECUTEINFOW info{};
     info.cbSize = sizeof(info);
-    info.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NOASYNC |
-                 SEE_MASK_FLAG_NO_UI;
+    info.fMask =
+        SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NOASYNC | SEE_MASK_FLAG_NO_UI;
     info.lpVerb = L"runas";
     info.lpFile = file.c_str();
     info.lpParameters = parameters.c_str();
@@ -519,9 +519,8 @@ platform_run_elevated(const std::string& executable,
         const DWORD error = ::GetLastError();
         if (error == ERROR_CANCELLED)
             return {step_status::declined, "the elevation prompt was declined"};
-        return {step_status::failed,
-                "the helper could not be started (error " +
-                    std::to_string(error) + ")"};
+        return {step_status::failed, "the helper could not be started (error " +
+                                         std::to_string(error) + ")"};
     }
     if (info.hProcess == nullptr)
         return {step_status::failed, "the helper did not start a process"};
@@ -530,12 +529,24 @@ platform_run_elevated(const std::string& executable,
     // slow machine and short enough to notice a hang.
     const DWORD waited = ::WaitForSingleObject(info.hProcess, 60000);
     DWORD code = 0;
-    const bool have_code =
-        waited == WAIT_OBJECT_0 && ::GetExitCodeProcess(info.hProcess, &code) != 0;
+    const bool have_code = waited == WAIT_OBJECT_0 &&
+                           ::GetExitCodeProcess(info.hProcess, &code) != 0;
     ::CloseHandle(info.hProcess);
     if (!have_code)
         return {step_status::failed, "the helper did not finish"};
     return {status_for_exit(code), "the helper finished"};
+}
+
+bool platform_can_add_user_to_group() noexcept
+{
+    return false;
+}
+
+permissions::step_result
+platform_add_user_to_group(const permissions::group_membership_spec&)
+{
+    return {permissions::step_status::unsupported,
+            "this platform has no group step"};
 }
 
 } // namespace vss::detail

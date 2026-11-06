@@ -63,7 +63,11 @@ enum class setup_action
     continue_test,
     dialout_help,
     /// Explain the firewall fact and, where this build can, offer the one rule.
-    firewall_help
+    firewall_help,
+    /// Explain a refused serial device and, where this build can, offer the group.
+    serial_access_help,
+    /// Explain AppArmor, SELinux, Flatpak or Snap and show the exact fix.
+    confinement_help
 };
 
 struct setup_row

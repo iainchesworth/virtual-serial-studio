@@ -53,6 +53,7 @@ private:
     void rebuild();
     void handle_action(setup_action action);
     void show_firewall_help();
+    void show_permission_help(vss::permissions::topic what);
 
     StudioBackend& backend_;
     setup_report report_;
