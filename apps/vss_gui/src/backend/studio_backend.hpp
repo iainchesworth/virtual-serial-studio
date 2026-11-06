@@ -175,6 +175,19 @@ public:
         return vss::make_error_code(vss::errc::unsupported);
     }
 
+    // -- fixture echo (capability: fixture_echo) ---------------------------
+
+    /// Makes a mock fixture write back every byte it receives, or stops it.
+    /// The default is `unsupported`: a build without
+    /// `Capabilities::fixture_echo` never fakes an echo.
+    virtual vss::result<void> set_echo(vss::endpoint_id /*id*/, bool /*on*/)
+    {
+        return vss::make_error_code(vss::errc::unsupported);
+    }
+
+    /// True while the fixture echoes.
+    virtual bool echo(vss::endpoint_id /*id*/) const { return false; }
+
     // -- documents ---------------------------------------------------------
 
     virtual vss::config::document snapshot() const = 0;

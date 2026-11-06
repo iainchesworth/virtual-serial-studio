@@ -13,6 +13,7 @@
 #include "shell/level_service.hpp"
 #include "shell/undo_service.hpp"
 #include "support/event_log.hpp"
+#include "widgets/port_menu.hpp"
 
 #include <QMainWindow>
 #include <QString>
@@ -32,6 +33,7 @@ namespace vss::gui
 class EventLogPanel;
 class InspectorPanel;
 class Launcher;
+class FixtureBehaviours;
 class MonitorPanel;
 class OwnerBar;
 class PortsPanel;
@@ -95,6 +97,10 @@ private:
     void open_network_endpoint();
     void open_templates();
     void show_monitor();
+    /// Shows the Send dock and puts the cursor in its input.
+    void show_send();
+    port_menu_state port_menu_state_for(vss::endpoint_id id) const;
+    void run_port_action(vss::endpoint_id id, port_menu_action action);
     void run_job(const QString& job);
     void placeholder(const QString& what);
     void later_package(const QString& what, const QString& package);
@@ -184,6 +190,7 @@ private:
     PortsPanel* ports_panel_ = nullptr;
     InspectorPanel* inspector_panel_ = nullptr;
     SendPanel* send_panel_ = nullptr;
+    FixtureBehaviours* behaviours_ = nullptr;
     MonitorPanel* monitor_panel_ = nullptr;
     OwnerBar* owner_bar_ = nullptr;
     EventLogPanel* event_log_ = nullptr;

@@ -11,6 +11,7 @@
 #include "backend/view_types.hpp"
 #include "topology/topology_layout.hpp"
 #include "widgets/notes.hpp"
+#include "widgets/port_menu.hpp"
 
 #include <QGraphicsView>
 #include <QHash>
@@ -20,6 +21,7 @@
 #include <QStringList>
 #include <QVector>
 
+#include <functional>
 #include <vector>
 
 class QLabel;
@@ -52,6 +54,14 @@ public:
     /// the rest of the session; positions never enter the document.
     void set_topology(const std::vector<port_view>& ports,
                       const std::vector<link_view>& links);
+
+    /// How a port's context menu reads its Send, Monitor and fixture actions.
+    /// Without one the menu offers Send bytes and Open in monitor only.
+    void set_menu_state_provider(
+        std::function<port_menu_state(vss::endpoint_id)> provider)
+    {
+        menu_state_ = std::move(provider);
+    }
 
     /// Mirrors the shared selection without emitting the selection signals.
     void set_selection(vss::endpoint_id port, vss::link_id link);
@@ -106,6 +116,9 @@ Q_SIGNALS:
     void remove_link_requested(vss::link_id id);
     /// Emitted only when the build can rename (Capabilities::rename_port).
     void rename_requested(vss::endpoint_id id);
+    /// Send bytes, repeat, Open in monitor, and a fixture's generator and
+    /// echo, chosen from a node's menu.
+    void port_action_requested(vss::endpoint_id id, port_menu_action action);
     void status_message(const QString& text);
 
 protected:
@@ -156,6 +169,7 @@ private:
     QHash<vss::endpoint_id, QPointF> overrides_;
     QHash<vss::endpoint_id, QSizeF> node_sizes_;
 
+    std::function<port_menu_state(vss::endpoint_id)> menu_state_;
     QLabel* empty_ = nullptr;
     QLabel* hint_ = nullptr;
     NoteBanner* loop_note_ = nullptr;

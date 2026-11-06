@@ -14,6 +14,8 @@ add_library(vss_gui_widgets STATIC
   controls.hpp
   dialogs.cpp
   dialogs.hpp
+  port_menu.cpp
+  port_menu.hpp
   gallery.cpp
   gallery.hpp)
 

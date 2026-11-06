@@ -860,6 +860,10 @@ void TopologyView::open_context_menu(const QPoint& viewport_position)
 
         menu->addAction(topology_text::inspect_action(), this,
                         [this, id] { Q_EMIT inspect_requested(id); });
+        add_port_menu_actions(
+            menu, this, menu_state_ ? menu_state_(id) : port_menu_state{},
+            [this, id](port_menu_action action)
+            { Q_EMIT port_action_requested(id, action); });
         menu->addAction(topology_text::copy_name_action(), this,
                         [this, id] { Q_EMIT copy_name_requested(id); });
         if (caps_.rename_port)
@@ -901,6 +905,8 @@ QStringList TopologyView::node_menu_labels(vss::endpoint_id id) const
         return {};
     QStringList labels;
     labels << topology_text::inspect_action()
+           << port_menu_labels(menu_state_ ? menu_state_(id)
+                                           : port_menu_state{})
            << topology_text::copy_name_action();
     if (caps_.rename_port)
         labels << topology_text::rename_action();

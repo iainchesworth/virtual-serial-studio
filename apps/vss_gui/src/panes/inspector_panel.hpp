@@ -17,11 +17,14 @@
 class QLabel;
 class QPushButton;
 class QScrollArea;
+class QVBoxLayout;
 
 namespace vss::gui
 {
 
 class CopyButton;
+class FixtureBehaviours;
+class FixturePanel;
 class StatusChip;
 class Switch;
 
@@ -36,6 +39,9 @@ public:
     void set_advanced(bool advanced);
     void set_selected_port(vss::endpoint_id id);
     void refresh();
+    /// Adds the fixture behaviour section (echo, generator) for a mock
+    /// fixture in Advanced mode.
+    void set_behaviours(FixtureBehaviours* behaviours);
 
 Q_SIGNALS:
     void troubleshoot_requested();
@@ -75,6 +81,8 @@ private:
     Switch* rts_ = nullptr;
     QPushButton* break_ = nullptr;
     QLabel* advanced_link_ = nullptr;
+    FixturePanel* fixture_panel_ = nullptr;
+    QVBoxLayout* content_layout_ = nullptr;
 };
 
 } // namespace vss::gui

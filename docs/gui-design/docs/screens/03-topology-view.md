@@ -11,7 +11,7 @@ Mockups: Workspace, Advanced, Compact. Implemented with `QGraphicsView`/`QGraphi
 
 ## Behaviour
 - Click a node: select the port. Click a line (8px hit tolerance): select the link. Double-click a node: focus the Inspector.
-- Keyboard (required, WCAG 2.5.7): Tab moves through nodes then links. Enter inspects. Delete removes with confirmation and Undo. Arrow keys move the focused node by 8px (Shift 32px). Ctrl+0 fits. Shift+F10 or the menu key opens the context menu: Inspect, Copy name, Rename, Connect from here, Remove.
+- Keyboard (required, WCAG 2.5.7): Tab moves through nodes then links. Enter inspects. Delete removes with confirmation and Undo. Arrow keys move the focused node by 8px (Shift 32px). Ctrl+0 fits. Shift+F10 or the menu key opens the context menu: Inspect, the port actions (Send bytes, Start or Stop repeat in Advanced, Open in monitor, and for a mock fixture in Advanced Start or Stop generator and Echo received bytes; see `screens/02-workspace.md`), Copy name, Rename, Connect from here, Remove.
 - Zoom with Ctrl+wheel and Ctrl+plus or minus. Fit centres and scales to the content.
 - Nothing may require dragging. Every link can be made in the Connect ports dialog.
 

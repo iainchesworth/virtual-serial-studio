@@ -20,6 +20,7 @@ Screen-specific strings are in `docs/screens/`. Take them exactly. This page hol
 | Link | A connection between ports: two-way, one-way, monitor, split, join, shared bus. |
 | Studio only | An in-process port that other programs cannot open. |
 | Fixture | A mock device for testing. |
+| Sending from | The port a send goes out of. For a fixture the bytes arrive on it, as if the device had sent them, and travel along its links. |
 | Advanced mode | The same window with more tools. Not a separate edition. |
 
 ## State words

@@ -100,6 +100,8 @@ public:
                                       const line_wiring& wiring) override;
     vss::result<void> inject_fault(vss::endpoint_id id,
                                    vss::fault_kind fault) override;
+    vss::result<void> set_echo(vss::endpoint_id id, bool on) override;
+    bool echo(vss::endpoint_id id) const override;
 
     vss::config::document snapshot() const override;
     vss::result<void> apply(const vss::config::document& document,
