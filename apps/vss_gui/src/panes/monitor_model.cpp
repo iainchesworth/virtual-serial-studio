@@ -39,6 +39,9 @@ void MonitorModel::append_events(const event_batch& events)
                             : traffic_direction::rx;
         row.bytes = static_cast<std::uint64_t>(event.data.size());
         row.preview = event.data.left(kPreviewBytes);
+        row.data = event.data;
+        row.when = event.when;
+        retained_bytes_ += row.data.size();
         rows_.push_back(std::move(row));
         changed = true;
     }
@@ -72,6 +75,7 @@ void MonitorModel::clear()
 {
     beginResetModel();
     rows_.clear();
+    retained_bytes_ = 0;
     visible_.clear();
     endResetModel();
 }
@@ -123,11 +127,24 @@ void MonitorModel::set_selected_port(vss::endpoint_id id)
 
 void MonitorModel::trim()
 {
-    if (rows_.size() <= static_cast<std::size_t>(kMaxRows))
+    // The newest row always stays, however big it is.
+    std::size_t excess = rows_.size() > static_cast<std::size_t>(kMaxRows)
+        ? rows_.size() - static_cast<std::size_t>(kMaxRows)
+        : 0;
+    qint64 dropped_bytes = 0;
+    for (std::size_t index = 0; index < excess; ++index)
+        dropped_bytes += rows_[index].data.size();
+    while (excess + 1 < rows_.size() &&
+           retained_bytes_ - dropped_bytes > kMaxRetainedBytes)
+    {
+        dropped_bytes += rows_[excess].data.size();
+        ++excess;
+    }
+    if (excess == 0)
         return;
-    const auto excess = rows_.size() - static_cast<std::size_t>(kMaxRows);
     rows_.erase(rows_.begin(),
                 rows_.begin() + static_cast<std::ptrdiff_t>(excess));
+    retained_bytes_ -= dropped_bytes;
 }
 
 void MonitorModel::rebuild_visible()
@@ -350,6 +367,60 @@ QString MonitorModel::export_text() const
                          preview_for(row));
     }
     return lines.join(QLatin1Char('\n'));
+}
+
+capture_export MonitorModel::export_capture() const
+{
+    capture_export out;
+    vss::time_point origin{};
+    bool have_origin = false;
+    for (const traffic_row& row : rows_)
+    {
+        if (!matches(row) || row.dropped || row.data.isEmpty() ||
+            row.when == vss::time_point{})
+            continue;
+        if (!have_origin || row.when < origin)
+        {
+            origin = row.when;
+            have_origin = true;
+        }
+    }
+    if (!have_origin)
+    {
+        out.started = std::chrono::system_clock::now();
+        return out;
+    }
+
+    // The wall clock at offset zero: how long ago the first row happened,
+    // counted back from now on both clocks.
+    out.started = std::chrono::system_clock::now() -
+                  std::chrono::duration_cast<std::chrono::system_clock::duration>(
+                      vss::clock_type::now() - origin);
+
+    for (const traffic_row& row : rows_)
+    {
+        if (!matches(row) || row.dropped || row.data.isEmpty() ||
+            row.when == vss::time_point{})
+            continue;
+        vss::capture_record record;
+        record.offset_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                               row.when - origin)
+                               .count();
+        record.port = row.port.toStdString();
+        record.direction = row.direction == traffic_direction::tx
+                               ? vss::data_direction::tx
+                               : vss::data_direction::rx;
+        record.data.assign(
+            reinterpret_cast<const vss::byte*>(row.data.constData()),
+            reinterpret_cast<const vss::byte*>(row.data.constData()) +
+                row.data.size());
+        out.records.push_back(std::move(record));
+    }
+    std::stable_sort(out.records.begin(), out.records.end(),
+                     [](const vss::capture_record& a,
+                        const vss::capture_record& b)
+                     { return a.offset_ms < b.offset_ms; });
+    return out;
 }
 
 } // namespace vss::gui

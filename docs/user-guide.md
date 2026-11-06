@@ -311,8 +311,45 @@ hub does not publish them.
   hexadecimal. **Follow** keeps the newest row visible.
 - In Advanced you can also filter by port and by RX, TX or Dropped, search the
   payload (`Ctrl+F`), switch between ASCII and Hex, and **Export** the visible
-  rows as text.
-- The monitor keeps the latest 10,000 rows.
+  rows as text. **Export capture** saves the same rows as a capture file
+  (see [Capture files](#capture-files)).
+- The monitor keeps the latest 10,000 rows, and no more than 32 MiB of their
+  bytes, oldest first. The **Preview** column stops at 256 bytes, but the
+  rows keep every byte for **Export capture**. For a record that does not stop
+  at what the window holds, use `vss_cli capture`.
+
+### Capture files
+
+A capture is the traffic written with its exact time, in a form another
+program can read. The monitor's **Export** is for reading: its **Time** is when
+the window received a batch, and it cuts each payload to the preview. **Export
+capture** and `vss_cli capture` write every byte, and the time is the one the
+engine read when the bytes moved. That is a single clock for every port,
+including a port whose other end is on another computer: the remote machine's
+own clock is never used.
+
+Each record has an offset in milliseconds from the start of the capture, the
+port, a direction and the bytes of one transfer. The direction is from the
+port's point of view:
+
+- **R** is bytes the port *received*, from whatever is attached to it: the
+  program that opened it, a device, a remote client.
+- **W** is bytes *written to* the port, which the hub sent on to that attachment.
+
+On a link, one transmission is `R` on the sender's port and `W` on the port of
+every receiver, and a watcher port made with **Watch traffic** shows it once, as
+`W`. To keep one row for each message, capture only the port you want
+(`--port` on the command line); in the window, set the port filter first, as
+the export writes the rows that pass the filters.
+
+| Format | What it holds |
+|---|---|
+| `.cap` | Text: `[         142] R 0x10\|0x02\|0x50`, one line per transfer. The offset is right aligned in ten columns, the bytes are lower-case hexadecimal, and lines starting with `#` are comments. The file has no port names, so capture one port per file. |
+| `.csv` | A header row, then `time_utc,offset_ms,port,direction,bytes,hex` for each transfer: the absolute time, the offset, the port name, `R` or `W`, the length, and the bytes as `10 02 50`. |
+| `.jsonl` | One JSON object per line. The first has `started_utc`, the wall clock at offset zero. Each later one has `offset_ms`, `time_utc`, `port`, `direction`, `bytes` and `hex`. |
+
+Offsets are whole milliseconds, so two transfers in the same millisecond have
+the same offset; the order of the lines is the order the engine delivered them.
 
 **Send** writes bytes into an open port: choose **Send to port**, type text, or
 tick **Hex** for hexadecimal (it is checked as you type), leave **Add CRLF**
@@ -548,8 +585,31 @@ again.
 | Bridge two transports | `vss_cli bridge serial://COM3 tcp-listen://0.0.0.0:4001` |
 | Loopback demo | `vss_cli loopback` |
 | List devices | `vss_cli devices` |
+| Record traffic to a file | `vss_cli capture topology.json --out bus.cap --port master` |
+| Record a port without a topology | `vss_cli capture --uri=serial://COM5 --out run.jsonl --seconds=60` |
 | Measure throughput | `vss_cli bench --from=… --to=…` |
 | Self-test the wiring | `vss_cli selftest` |
+
+### Recording with `vss_cli capture`
+
+```bash
+vss_cli capture <topology.json | --uri=<uri> ...> --out=<file>
+                [--format=cap|csv|jsonl] [--port=<name>[,<name>...]]
+                [--seconds=N]
+```
+
+`capture` applies the topology (or opens each `--uri`, which may be repeated;
+each one is named by its URI), starts recording and keeps the ports open until
+you press `Ctrl-C`, it receives `SIGTERM`, or `--seconds` has passed. It does
+not wait for a window to refresh, and it does not cut payloads, so every byte
+that moves is in the file, with the time the engine saw it. The format is
+`--format`, or comes from the extension of `--out` (`.cap`, `.csv`, `.jsonl`),
+or is `cap`. Each line is flushed as it is written, so a file is complete up to
+the last transfer even if the process is killed. A port whose *Capture
+traffic* is off in the topology is not recorded. `--port` names the ports to
+keep (see [Capture files](#capture-files) for why you usually want one), and
+the command stops with a list of the real names if one is wrong. The file is
+readable by its owner only, where the system has such a setting.
 
 See [ux.md](ux.md) for the design reasoning, [scenarios.md](scenarios.md) for
 worked examples and [the screen specifications](https://github.com/iainchesworthlabs/virtual-serial-studio/blob/develop/docs/gui-design/docs/00-product-brief.md) for the

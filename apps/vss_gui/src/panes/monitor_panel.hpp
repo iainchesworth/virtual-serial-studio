@@ -62,6 +62,7 @@ private:
     void append_log(const gui_event& event);
     void toggle_pause();
     void export_visible();
+    void export_capture();
     void follow_if_enabled();
 
     StudioBackend& backend_;
@@ -85,6 +86,7 @@ private:
     QPushButton* simple_pause_ = nullptr;
     QPushButton* clear_ = nullptr;
     QPushButton* export_ = nullptr;
+    QPushButton* export_capture_ = nullptr;
     QPlainTextEdit* log_ = nullptr;
     QLabel* json_ = nullptr;
     QLabel* all_ports_ = nullptr;
