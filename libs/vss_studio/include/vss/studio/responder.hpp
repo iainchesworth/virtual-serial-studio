@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_STUDIO_RESPONDER_HPP
-#define VSS_STUDIO_RESPONDER_HPP
+#pragma once
 
 #include <vss/core/bytes.hpp>
 #include <vss/core/endpoint.hpp>
@@ -144,4 +143,3 @@ private:
 
 } // namespace vss
 
-#endif // VSS_STUDIO_RESPONDER_HPP
