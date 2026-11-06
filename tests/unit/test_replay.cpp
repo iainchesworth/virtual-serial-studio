@@ -182,10 +182,25 @@ TEST_CASE("replay: a loop starts again after the length of the capture")
     REQUIRE(times.size() >= std::size_t{6});
     REQUIRE(times[5] >= 295);
 
-    // Stopped means stopped.
+    // Stopped means stopped.  Two writes fall on the 300 ms mark (the end of
+    // one pass writes b while the next pass writes a), so a second one can be
+    // on its way when the first is seen.  Wait until every write the player
+    // made has been recorded and the count has held still, then look for more.
+    REQUIRE(wait_until(
+        [&]
+        {
+            const auto sent = (*player)->records_sent();
+            const auto recorded = write_count(events);
+            std::this_thread::sleep_for(50ms);
+            return recorded == sent && write_count(events) == sent &&
+                   (*player)->records_sent() == sent;
+        },
+        3000ms));
     const auto before = write_count(events);
+    const auto sent_before = (*player)->records_sent();
     std::this_thread::sleep_for(250ms);
     REQUIRE_EQ(write_count(events), before);
+    REQUIRE_EQ((*player)->records_sent(), sent_before);
 }
 
 TEST_CASE("replay: nothing to send, a bad speed and no port are refused")
