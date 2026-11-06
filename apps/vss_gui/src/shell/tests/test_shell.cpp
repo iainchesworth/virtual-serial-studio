@@ -625,17 +625,18 @@ TEST_CASE("shell: the status bar readiness comes from the shared facts")
                 ready = true;
         }
         REQUIRE(ready);
-#if defined(Q_OS_WIN)
         // The launcher names the driver it found; it reads the host platform.
-        bool names_driver = false;
-        for (QLabel* label : window.findChildren<QLabel*>())
+        if (vss::gui::support::host_platform() == QLatin1String("windows"))
         {
-            if (label->text().contains(
-                    QStringLiteral("Virtual Serial Studio driver detected")))
-                names_driver = true;
+            bool names_driver = false;
+            for (QLabel* label : window.findChildren<QLabel*>())
+            {
+                if (label->text().contains(QStringLiteral(
+                        "Virtual Serial Studio driver detected")))
+                    names_driver = true;
+            }
+            REQUIRE(names_driver);
         }
-        REQUIRE(names_driver);
-#endif
     }
     clear_settings();
 }
