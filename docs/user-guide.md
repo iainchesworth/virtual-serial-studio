@@ -362,6 +362,37 @@ What to expect:
 - **Ports on other computers.** A TCP, UDP or RFC 2217 port can be a member too,
   so a device on another machine can sit on the same bus.
 
+## Who is on the other side of a port
+
+Next to a port's name the list and the inspector can say what Studio has learned
+about the program or the computer behind it:
+
+- **The speed a program set.** "Program set 19200 7E2" is the baud rate, data
+  bits, parity and stop bits the program chose with `SetCommState` (Windows
+  driver ports) or `tcsetattr` (Linux and macOS pseudo terminals). Studio does
+  not guess: a port nobody has configured, a TCP or UDP pipe and a mock fixture
+  say nothing. On a pseudo terminal, a program that sets exactly 38400 8N1
+  cannot be told from one that set nothing, and the last setting stays after the
+  program closes the port.
+- **Clients of a listener.** A `tcp-listen`, `udp-listen` or `rfc2217-listen`
+  port says "Clients connected: 2", or "No remote connected" when nobody has
+  joined. A device that has dropped off a bus is silent, as an unplugged one
+  would be, and this is where it shows.
+- **A speed mismatch.** If the ports of one link do not run at the same baud
+  rate and framing, the port is marked "Differs from *name* in baud rate or
+  framing" in the warning colour, and `vss_cli run` prints
+  `warning: link 3: members run at different baud rates or framing: ...`. A real
+  serial port and an RFC 2217 client count with the speed they were opened at.
+  Studio still carries the bytes across a mismatch, so a program set to 19200
+  on a 9600 line works in Studio and would fail on a real wire: this is the
+  warning that tells you. A port whose speed is not known is left out of the
+  comparison, so not knowing is never a warning.
+
+`vss_cli run` also prints "program set", "connected" and "last data N s ago"
+under each port. The last activity is the time a port last moved a byte, which
+the engine already keeps for each port (`endpoint_info::stats.last_activity`);
+the window does not show it.
+
 ## Watching traffic
 
 **Topology → Watch traffic** makes a read-only copy of a port. Choose the port

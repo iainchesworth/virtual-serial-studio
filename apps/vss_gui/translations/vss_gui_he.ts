@@ -3885,6 +3885,26 @@ Networks: %5</source>
     <context>
         <name>PortModel</name>
         <message>
+            <location filename="../src/panes/port_model.cpp" line="365" />
+            <source>Program set %1</source>
+            <translation>הוגדר על ידי התוכנית: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="373" />
+            <source>Clients connected: %1</source>
+            <translation>לקוחות מחוברים: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="371" />
+            <source>No remote connected</source>
+            <translation>אין מחשב מרוחק מחובר</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/port_model.cpp" line="376" />
+            <source>Differs from %1 in baud rate or framing</source>
+            <translation>שונה מ-%1 במהירות או במבנה הנתונים</translation>
+        </message>
+        <message>
             <location filename="../src/panes/port_model.cpp" line="182" />
             <source>%1, %2, %3</source>
             <translation>%1, %2, %3</translation>

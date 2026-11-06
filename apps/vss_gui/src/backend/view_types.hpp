@@ -18,9 +18,12 @@
 #include <QByteArray>
 #include <QMetaType>
 #include <QString>
+#include <QStringList>
 #include <QVector>
 
+#include <cstddef>
 #include <cstdint>
+#include <optional>
 
 namespace vss::gui
 {
@@ -68,6 +71,17 @@ struct port_view
     /// A loopback or mock endpoint: no other program can open it.
     bool studio_only = false;
     peer_state peer = peer_state::unknown;
+    /// The baud rate and framing the program on the other side has set, where
+    /// the engine can tell (a Windows driver port, a Linux or macOS pseudo
+    /// terminal).  Empty means unknown, never "default".
+    std::optional<vss::line_format> peer_format;
+    /// Connected remote clients of a listening endpoint; empty for any other
+    /// kind of port, so "none connected" and "not a listener" differ.
+    std::optional<std::size_t> clients;
+    /// The names of the ports on a shared link that run at a different baud
+    /// rate or framing from this one.  Empty when they all agree or the
+    /// formats are not known.
+    QStringList format_conflicts;
 };
 
 /// One link as the GUI needs it.

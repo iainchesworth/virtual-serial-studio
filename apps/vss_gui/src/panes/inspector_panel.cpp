@@ -355,10 +355,13 @@ void InspectorPanel::update_content()
     serial_label_->setText(serial_description());
 
     const bool waiting = port.open && port.peer == peer_state::not_open;
-    help_text_->setVisible(waiting);
-    help_text_->setText(waiting
-                            ? tr("No program has opened %1 yet.").arg(port.path)
-                            : QString());
+    QString note =
+        waiting ? tr("No program has opened %1 yet.").arg(port.path) : QString();
+    const QString status = PortModel::status_text(port);
+    if (!status.isEmpty())
+        note = note.isEmpty() ? status : note + QStringLiteral(" ") + status;
+    help_text_->setVisible(!note.isEmpty());
+    help_text_->setText(note);
     help_link_->setText(
         tr("<a href=\"troubleshoot\">Why is nothing arriving?</a>"));
 

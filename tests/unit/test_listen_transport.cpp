@@ -509,3 +509,28 @@ TEST_CASE("listen: datagrams from outside the allow list are ignored")
     REQUIRE_EQ(transport.peer_count(), std::size_t{0});
     REQUIRE_EQ(read_from(transport, 200ms).error, asio::error::timed_out);
 }
+
+TEST_CASE("listen: the client count is available through the transport interface")
+{
+    loop running;
+    auto transport = listen_on(running, listen_protocol::tcp);
+    const vss::transport& as_transport = *transport;
+
+    // A listener always has a count, even when it is zero; that is how "no
+    // remote connected" differs from "not a listener".
+    REQUIRE(as_transport.client_count().has_value());
+    REQUIRE_EQ(*as_transport.client_count(), std::size_t{0});
+
+    asio::io_context client_io;
+    auto first = connect_to(client_io, transport->local_port());
+    REQUIRE(wait_for_peers(*transport, 1));
+    REQUIRE_EQ(*as_transport.client_count(), std::size_t{1});
+
+    auto second = connect_to(client_io, transport->local_port());
+    REQUIRE(wait_for_peers(*transport, 2));
+    REQUIRE_EQ(*as_transport.client_count(), std::size_t{2});
+
+    first.close();
+    REQUIRE(wait_for_peers(*transport, 1));
+    REQUIRE_EQ(*as_transport.client_count(), std::size_t{1});
+}

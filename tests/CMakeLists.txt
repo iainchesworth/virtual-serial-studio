@@ -9,6 +9,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_control_lines.cpp
   unit/test_document.cpp
   unit/test_endpoint.cpp
+  unit/test_endpoint_status.cpp
   unit/test_error_and_log.cpp
   unit/test_hub_bus.cpp
   unit/test_hub_events.cpp

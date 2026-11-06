@@ -14,6 +14,7 @@
 #include <atomic>
 #include <fcntl.h>
 #include <memory>
+#include <optional>
 #include <stdlib.h>
 #include <string>
 #include <termios.h>
@@ -24,6 +25,60 @@ namespace vss::detail
 {
 namespace
 {
+
+/// The baud rate a `speed_t` stands for, or 0 for one this table lacks.  Only
+/// the rates Linux and macOS both name are here; a faster rate is reported as
+/// unknown rather than guessed.  (macOS uses the rate itself as the speed, so
+/// the cases are distinct constants on both.)
+unsigned baud_from_speed(speed_t speed) noexcept
+{
+    struct entry
+    {
+        speed_t speed;
+        unsigned baud;
+    };
+    static const entry table[] = {
+        {B50, 50},       {B75, 75},       {B110, 110},     {B134, 134},
+        {B150, 150},     {B200, 200},     {B300, 300},     {B600, 600},
+        {B1200, 1200},   {B1800, 1800},   {B2400, 2400},   {B4800, 4800},
+        {B9600, 9600},   {B19200, 19200}, {B38400, 38400}, {B57600, 57600},
+        {B115200, 115200}, {B230400, 230400}};
+    for (const auto& item : table)
+    {
+        if (item.speed == speed)
+            return item.baud;
+    }
+    return 0;
+}
+
+/// The baud rate and framing in `settings`, or empty when its rate is not one
+/// of those above.  Sticky (mark and space) parity is a Linux-only flag that
+/// is not read here, so it shows as odd or even.
+std::optional<line_format> format_from_termios(const struct termios& settings)
+{
+    line_format out;
+    out.baud_rate = baud_from_speed(::cfgetospeed(&settings));
+    if (out.baud_rate == 0)
+        return std::nullopt;
+
+    switch (settings.c_cflag & CSIZE)
+    {
+    case CS5: out.data_bits = 5; break;
+    case CS6: out.data_bits = 6; break;
+    case CS7: out.data_bits = 7; break;
+    default: out.data_bits = 8; break;
+    }
+
+    if ((settings.c_cflag & PARENB) == 0)
+        out.parity = parity_mode::none;
+    else
+        out.parity = (settings.c_cflag & PARODD) != 0 ? parity_mode::odd
+                                                      : parity_mode::even;
+
+    out.stop_bits = (settings.c_cflag & CSTOPB) != 0 ? stop_bits_mode::two
+                                                     : stop_bits_mode::one;
+    return out;
+}
 
 /// A pseudo terminal pair.  The master is ours; the slave path is handed to
 /// the rest of the world.
@@ -44,6 +99,8 @@ public:
         lines_.set(control_line::dsr, true);
         lines_.set(control_line::dcd, true);
         refresh_lines();
+        // What the slave looks like before any program has touched it.
+        initial_format_ = read_format();
     }
 
     ~pty_transport() override { close(); }
@@ -114,9 +171,37 @@ public:
         lines_.set(control_line::ri, status->ri);
     }
 
+    /// The baud rate and framing a program has set on the slave with
+    /// `tcsetattr`, read back through the master (a pseudo terminal pair
+    /// shares one set of terminal settings).  The slave is made raw at 38400
+    /// 8N1 and Studio itself holds it open, so only a setting that differs
+    /// from that start is a program's choice; a program that sets exactly 38400
+    /// 8N1 is not told apart from none.  After the program closes the port the
+    /// last setting stays, because Studio's own descriptor keeps the slave
+    /// open.
+    std::optional<line_format> peer_format() const override
+    {
+        const auto now = read_format();
+        if (!now || now == initial_format_)
+            return std::nullopt;
+        return now;
+    }
+
 private:
+    std::optional<line_format> read_format() const
+    {
+        if (!open_.load())
+            return std::nullopt;
+        struct termios settings{};
+        if (::tcgetattr(descriptor_.native_handle(), &settings) != 0)
+            return std::nullopt;
+        return format_from_termios(settings);
+    }
+
     executor_type executor_;
-    boost::asio::posix::stream_descriptor descriptor_;
+    // Mutable: asking for the native handle is not a const call in Asio.
+    mutable boost::asio::posix::stream_descriptor descriptor_;
+    std::optional<line_format> initial_format_;
     int slave_fd_ = -1;
     std::string path_;
     std::string name_;

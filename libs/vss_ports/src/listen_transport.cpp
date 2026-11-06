@@ -1016,6 +1016,11 @@ std::size_t listen_transport::peer_count() const noexcept
     return state_->peers();
 }
 
+std::optional<std::size_t> listen_transport::client_count() const noexcept
+{
+    return state_->peers();
+}
+
 std::size_t listen_transport::refused_count() const noexcept
 {
     return state_->refused();

@@ -50,7 +50,9 @@ public:
         bytes_rx_role,
         bytes_tx_role,
         dropped_role,
-        serial_role
+        serial_role,
+        status_role,
+        format_warning_role
     };
 
     explicit PortModel(QObject* parent = nullptr);
@@ -78,6 +80,14 @@ public:
                              const std::vector<port_view>& ports,
                              const std::vector<link_view>& links);
     static QString serial_text(const port_view& port);
+    /// What the engine knows about the other side of the port, in one line: the
+    /// baud rate and framing a program set, who is connected to a listener, and
+    /// a warning when the port runs at a different speed from the others on its
+    /// link.  Empty when there is nothing to say; the GUI never claims a speed
+    /// it was not told.
+    static QString status_text(const port_view& port);
+    /// True when #status_text carries the mismatch warning.
+    static bool has_format_warning(const port_view& port);
 
 private:
     void rebuild_visible();

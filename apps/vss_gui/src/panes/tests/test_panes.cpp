@@ -116,6 +116,71 @@ TEST_CASE("ports: state words, role text and filtering")
     REQUIRE_EQ(model.rowCount(), 0);
 }
 
+TEST_CASE("ports: the other side's format, clients and a speed mismatch")
+{
+    using vss::gui::PortModel;
+
+    // Nothing known: nothing said.
+    auto plain = make_port(1, QStringLiteral("plain"), QStringLiteral("COM7"),
+                           vss::endpoint_kind::virtual_port);
+    REQUIRE_EQ(PortModel::status_text(plain), QString());
+    REQUIRE(!PortModel::has_format_warning(plain));
+
+    // A program set its speed on a port Studio made.
+    auto program = make_port(2, QStringLiteral("program"),
+                             QStringLiteral("COM8"),
+                             vss::endpoint_kind::virtual_port);
+    program.peer_format = vss::line_format{
+        19200, 7, vss::parity_mode::even, vss::stop_bits_mode::two};
+    REQUIRE_EQ(PortModel::status_text(program),
+               QStringLiteral("Program set 19200 7E2"));
+    REQUIRE(!PortModel::has_format_warning(program));
+
+    // A real device already shows its own settings, so the format is not
+    // repeated for it.
+    auto device = make_port(3, QStringLiteral("device"), QStringLiteral("COM3"),
+                            vss::endpoint_kind::physical);
+    device.peer_format = vss::line_format{
+        9600, 8, vss::parity_mode::none, vss::stop_bits_mode::one};
+    REQUIRE_EQ(PortModel::status_text(device), QString());
+
+    // A listener with nobody connected still says so; one with clients counts
+    // them.
+    auto listener = make_port(4, QStringLiteral("listener"),
+                              QStringLiteral("tcp-listen://127.0.0.1:2000"),
+                              vss::endpoint_kind::tcp);
+    listener.clients = 0;
+    REQUIRE_EQ(PortModel::status_text(listener),
+               QStringLiteral("No remote connected"));
+    listener.clients = 3;
+    REQUIRE_EQ(PortModel::status_text(listener),
+               QStringLiteral("Clients connected: 3"));
+
+    // A mismatch is a warning that names the others, after the rest.
+    program.format_conflicts = {QStringLiteral("device"),
+                                QStringLiteral("modem")};
+    REQUIRE(PortModel::has_format_warning(program));
+    REQUIRE_EQ(PortModel::status_text(program),
+               QStringLiteral("Program set 19200 7E2. Differs from device, "
+                              "modem in baud rate or framing"));
+
+    // The row carries the same text for the list, the tooltip and a screen
+    // reader.
+    vss::gui::PortModel model;
+    model.set_snapshot({program, listener}, {});
+    const QModelIndex row = model.index(0, 0);
+    REQUIRE_EQ(row.data(vss::gui::PortModel::status_role).toString(),
+               PortModel::status_text(program));
+    REQUIRE(row.data(vss::gui::PortModel::format_warning_role).toBool());
+    REQUIRE(row.data(Qt::ToolTipRole).toString().contains(
+        QStringLiteral("Differs from device")));
+    REQUIRE(row.data(Qt::AccessibleTextRole).toString().contains(
+        QStringLiteral("Differs from device")));
+    REQUIRE(!model.index(1, 0)
+                 .data(vss::gui::PortModel::format_warning_role)
+                 .toBool());
+}
+
 TEST_CASE("monitor: 10,000 row burst stays bounded and responsive")
 {
     vss::gui::MonitorModel model;
