@@ -24,8 +24,6 @@
  *           suspended or left alone. The ready file holds the process id and the handle value.
  */
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 #include <windows.h>
 
 #include <stdarg.h>
@@ -187,16 +185,6 @@ static void add_step(report *r, const char *name, int ok, DWORD error, int requi
 /* What this process is.                                                                 */
 /* ------------------------------------------------------------------------------------ */
 
-#if defined(_M_ARM64)
-#define BUILD_ARCH "arm64"
-#elif defined(_M_X64)
-#define BUILD_ARCH "x64"
-#elif defined(_M_IX86)
-#define BUILD_ARCH "x86"
-#else
-#define BUILD_ARCH "unknown"
-#endif
-
 static const char *machine_name(USHORT machine)
 {
     switch (machine)
@@ -249,7 +237,7 @@ static void put_identity(text_buffer *t, const char *mode)
         }
     }
 
-    text_put(t, "\"program\":\"vss_com_client\",\"arch\":\"" BUILD_ARCH "\"");
+    text_put(t, "\"program\":\"vss_com_client\",\"arch\":\"" VSS_CLIENT_ARCH "\"");
     text_fmt(t, ",\"wow64\":%s,\"native_machine\":", wow64 ? "true" : "false");
     text_string(t, known ? machine_name(native_machine) : "unknown");
     text_put(t, ",\"windows\":");
@@ -1010,7 +998,7 @@ static int run_hold(const char *port, const char *ready_path, const char *scenar
     char content[512];
     (void)_snprintf_s(content, sizeof content, _TRUNCATE,
                       "{\"ready\":true,\"pid\":%lu,\"handle\":%llu,\"port\":\"%s\",\"scenario\":\"%s\","
-                      "\"read_pending\":%s,\"wait_pending\":%s,\"write_pending\":%s,\"arch\":\"" BUILD_ARCH "\"}\n",
+                      "\"read_pending\":%s,\"wait_pending\":%s,\"write_pending\":%s,\"arch\":\"" VSS_CLIENT_ARCH "\"}\n",
                       (unsigned long)GetCurrentProcessId(), (unsigned long long)(ULONG_PTR)h, port, scenario,
                       read_pending ? "true" : "false", wait_pending ? "true" : "false",
                       write_pending ? "true" : "false");

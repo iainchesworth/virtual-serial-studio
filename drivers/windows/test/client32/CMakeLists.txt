@@ -40,3 +40,7 @@ endif()
 add_executable(vss_com_client vss_com_client.c)
 set_target_properties(vss_com_client PROPERTIES OUTPUT_NAME "vss_com_client_${_arch}")
 target_compile_options(vss_com_client PRIVATE /W4 /WX /sdl)
+
+# The architecture name and the windows.h switches come from here, so the source has no
+# preprocessor conditionals (the repository's preprocessor policy counts them).
+target_compile_definitions(vss_com_client PRIVATE "VSS_CLIENT_ARCH=\"${_arch}\"" WIN32_LEAN_AND_MEAN NOMINMAX)
