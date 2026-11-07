@@ -13,6 +13,7 @@
 #include <QFontDatabase>
 #include <QSettings>
 #include <QString>
+#include <QSysInfo>
 
 #include <cstdio>
 #include <cstring>
@@ -40,18 +41,20 @@ bool matches(const std::string& name, const std::vector<std::string>& filters)
 int main(int argc, char** argv)
 {
     qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
-#if defined(Q_OS_WIN)
-    if (qgetenv("QT_QPA_FONTDIR").isEmpty())
+    // The offscreen platform finds no fonts on Windows without the font
+    // folder.  A run-time check keeps this file free of preprocessor
+    // directives (tools/preprocessor-baseline.json).
+    const bool windows =
+        QSysInfo::productType() == QStringLiteral("windows");
+    if (windows && qgetenv("QT_QPA_FONTDIR").isEmpty())
         qputenv("QT_QPA_FONTDIR", QByteArrayLiteral("C:/Windows/Fonts"));
-#endif
     QApplication application(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("VSS GUI Tests"));
     QCoreApplication::setApplicationName(QStringLiteral("VSS GUI Tests"));
     QSettings().clear();
-#if defined(Q_OS_WIN)
-    if (QFontDatabase::families().contains(QStringLiteral("Segoe UI")))
+    if (windows &&
+        QFontDatabase::families().contains(QStringLiteral("Segoe UI")))
         QApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
-#endif
     vss::gui::Theme::instance().initialise();
 
     std::vector<std::string> filters;
