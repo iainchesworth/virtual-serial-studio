@@ -134,16 +134,30 @@ jobs:
           # The reason and the way out are in docs/releasing.md.
           allowed: "2.42"
 
-      - name: Sign the Windows binaries
+      # Every first-party program and library in the package is signed, so a new one is
+      # covered without a change here. The Qt DLLs and plugins are the Qt Company's and
+      # ship as they were built. A dry run on a pull request never signs: the signing
+      # secrets are for tagged, manual and scheduled runs only.
+      - name: List the Windows binaries to sign
+        id: binaries
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = Get-ChildItem stage/bin -File | Where-Object { $_.Name -match '^vss_.*\.(exe|dll)$' } |
+            ForEach-Object { 'stage/bin/' + $_.Name }
+          if (-not ($files -contains 'stage/bin/vss_gui.exe' -and $files -contains 'stage/bin/vss_cli.exe')) {
+            throw 'The package lacks vss_gui.exe or vss_cli.exe.'
+          }
+          "files<<EOF`n" + ($files -join "`n") + "`nEOF" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Sign and verify the Windows binaries
         id: sign
         if: runner.os == 'Windows'
-        uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        uses: ./.github/actions/sign-windows-binaries
         with:
-          mode: ${{ vars.SIGN_WINDOWS || 'false' }}
-          files: |
-            stage/bin/vss_gui.exe
-            stage/bin/vss_cli.exe
-          rename: "false"
+          mode: ${{ (github.event_name != 'pull_request' && vars.SIGN_WINDOWS) || 'false' }}
+          files: ${{ steps.binaries.outputs.files }}
           pfx-base64: ${{ secrets.WIN_TESTSIGN_PFX_BASE64 }}
           pfx-password: ${{ secrets.WIN_TESTSIGN_PFX_PASSWORD }}
 

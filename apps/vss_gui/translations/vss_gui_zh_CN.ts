@@ -2182,6 +2182,10 @@ Networks: %5</source>
             <translation>添加规则之前，Windows 会请求管理员权限。</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>更改防火墙需要管理员权限，因此 Windows 会显示权限提示。提示会显示程序名称和发布者：若两者相符，请选择“是”。Studio 本身无需管理员权限即可继续运行。</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>此版本不可用</translation>
@@ -6419,6 +6423,10 @@ Networks: %5</source>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>创建新的链接串口对需要管理员权限，每对一次。其他所有操作都无需该权限。</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>Windows 提示会显示程序名称和发布者：若两者相符，请选择“是”。随后 Studio 会重新启动，并启动相同的端口。</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />

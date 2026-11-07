@@ -599,18 +599,19 @@ jobs:
       # because its catalog holds the hash of the signed binary. The SIGN_WINDOWS
       # repository variable chooses: false leaves the files unsigned, test signs them
       # with the organisation's test certificate (docs/releasing.md). A pull request
-      # from a fork has no secrets and so is never signed.
+      # from a fork has no secrets and so is never signed; when the secrets are not
+      # created yet the step says so and leaves the files unsigned. Each signed file is
+      # then verified (.github/actions/sign-windows-binaries).
       - name: Build and verify the user-mode driver
         shell: pwsh
         env:
           PLATFORM: ${{ matrix.platform }}
         run: ./drivers/windows/build.ps1 -Platform $env:PLATFORM -Driver umdf -Stage build
       - name: Sign the user-mode driver
-        uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        uses: ./.github/actions/sign-windows-binaries
         with:
           mode: ${{ (github.event.pull_request.head.repo.fork != true && vars.SIGN_WINDOWS) || 'false' }}
           files: drivers/windows/artifacts/package-um/${{ matrix.platform }}/vsscom_um.dll
-          rename: "false"
           pfx-base64: ${{ secrets.WIN_TESTSIGN_PFX_BASE64 }}
           pfx-password: ${{ secrets.WIN_TESTSIGN_PFX_PASSWORD }}
       - name: Make the catalog of the user-mode driver
@@ -620,11 +621,10 @@ jobs:
         run: ./drivers/windows/build.ps1 -Platform $env:PLATFORM -Driver umdf -Stage catalog
       - name: Sign the catalog of the user-mode driver
         id: sign_catalog
-        uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        uses: ./.github/actions/sign-windows-binaries
         with:
           mode: ${{ (github.event.pull_request.head.repo.fork != true && vars.SIGN_WINDOWS) || 'false' }}
           files: drivers/windows/artifacts/package-um/${{ matrix.platform }}/vsscom_um.cat
-          rename: "false"
           pfx-base64: ${{ secrets.WIN_TESTSIGN_PFX_BASE64 }}
           pfx-password: ${{ secrets.WIN_TESTSIGN_PFX_PASSWORD }}
       # The helper service makes the user-mode driver's ports on demand. It is a
@@ -636,11 +636,10 @@ jobs:
         run: ./drivers/windows/build.ps1 -Platform $env:PLATFORM -Driver helper
       - name: Sign the helper service
         id: sign_helper
-        uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        uses: ./.github/actions/sign-windows-binaries
         with:
           mode: ${{ (github.event.pull_request.head.repo.fork != true && vars.SIGN_WINDOWS) || 'false' }}
           files: drivers/windows/artifacts/package-helper/${{ matrix.platform }}/vsscom_helper.exe
-          rename: "false"
           pfx-base64: ${{ secrets.WIN_TESTSIGN_PFX_BASE64 }}
           pfx-password: ${{ secrets.WIN_TESTSIGN_PFX_PASSWORD }}
       - name: Upload the kernel-mode package

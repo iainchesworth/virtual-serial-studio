@@ -152,6 +152,18 @@ void FirewallDialog::build(bool step_possible)
         layout->addWidget(details);
     }
 
+    if (fact_.step.has_value() && step_possible)
+    {
+        layout->addWidget(paragraph(
+            QCoreApplication::translate(
+                "FirewallDialog",
+                "Changing the firewall needs administrator rights, so "
+                "Windows will show a permission prompt. It names the "
+                "program and its publisher: choose Yes if they match. "
+                "Studio itself keeps running without administrator rights."),
+            this));
+    }
+
     if (!fact_.remedy.empty())
     {
         layout->addWidget(paragraph(
