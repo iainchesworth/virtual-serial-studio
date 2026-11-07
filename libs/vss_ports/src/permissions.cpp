@@ -248,6 +248,10 @@ std::vector<fact> windows_facts(const windows_observation& seen,
     {
         firewall.status = state::attention;
         firewall.why = std::string(reason::no_allow_rule);
+        // A no_rule verdict means some listener set `missing`; the check keeps
+        // that true even if the loop above changes.
+        if (missing == nullptr)
+            break;
         firewall_rule_spec spec;
         spec.program = firewall.subject;
         spec.protocol = missing->protocol;
