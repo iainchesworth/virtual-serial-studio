@@ -9,6 +9,8 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QSet>
 
 namespace vss::gui
@@ -87,6 +89,8 @@ QVector<QAction*> ActionRegistry::visible(action_level level) const
 
 QVector<QAction*> ActionRegistry::search(const QString& query) const
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.shell.actions.search");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, query.toStdString());
     const QString needle = query.trimmed();
     QVector<QAction*> out;
     for (QAction* action : order_)
@@ -105,6 +109,7 @@ QVector<QAction*> ActionRegistry::search(const QString& query) const
 
 void ActionRegistry::set_level(action_level level)
 {
+    VSS_PROFILE_ZONE("gui.shell.actions.set_level");
     if (level_ == level)
         return;
     level_ = level;
@@ -119,6 +124,7 @@ void ActionRegistry::set_level(action_level level)
 
 void ActionRegistry::refresh()
 {
+    VSS_PROFILE_ZONE("gui.shell.actions.refresh");
     for (QAction* action : order_)
     {
         const action_spec& spec = specs_[action];

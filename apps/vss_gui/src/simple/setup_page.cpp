@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -101,6 +103,7 @@ bool SetupPage::can_add_program() const
 
 void SetupPage::build()
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.build");
     auto* outer = new QVBoxLayout(this);
     outer->setContentsMargins(0, 0, 0, 0);
     auto* scroll = new QScrollArea(this);
@@ -227,6 +230,7 @@ void SetupPage::build()
 
 void SetupPage::rebuild_top()
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.rebuild_top");
     while (QLayoutItem* item = top_layout_->takeAt(0))
     {
         if (QWidget* widget = item->widget())
@@ -637,6 +641,7 @@ QString SetupPage::render(const QByteArray& bytes) const
 
 void SetupPage::render_data()
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.render_data");
     if (data_ == nullptr || !prefs_.show_data)
         return;
     QStringList text;
@@ -650,6 +655,7 @@ void SetupPage::render_data()
 
 void SetupPage::render_received()
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.render_received");
     if (received_ == nullptr)
         return;
     QStringList text;
@@ -663,6 +669,7 @@ void SetupPage::render_received()
 
 void SetupPage::add_events(const event_batch& events)
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.add_events");
     bool data_changed = false;
     bool conversation_changed = false;
     for (const auto& event : events)
@@ -696,6 +703,7 @@ void SetupPage::add_events(const event_batch& events)
 
 bool SetupPage::send_typed(const QString& text)
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_page.send_typed");
     if (type_target_ == 0 || text.isEmpty())
         return false;
     QByteArray bytes = text.toUtf8();

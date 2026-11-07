@@ -8,6 +8,8 @@
 
 #include "theme/icon_provider.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QAction>
 #include <QMenu>
 #include <QSignalBlocker>
@@ -77,6 +79,7 @@ bool StudioTray::visible() const
 
 void StudioTray::set_state(int ports, int links, bool warn)
 {
+    VSS_PROFILE_ZONE("gui.shell.tray.set_state");
     text_ = tr("%1 ports, %2 links running").arg(ports).arg(links);
     status_->setText(text_);
     icon_->setToolTip(tr("Virtual Serial Studio: %1").arg(text_));
@@ -103,6 +106,8 @@ void StudioTray::set_sign_in(bool available, bool enabled)
 
 void StudioTray::notify(const QString& title, const QString& text, bool warn)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.shell.tray.notify");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, title.toStdString());
     if (!QSystemTrayIcon::supportsMessages() || !icon_->isVisible())
         return;
     icon_->showMessage(title, text,

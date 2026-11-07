@@ -6053,6 +6053,31 @@ Networks: %5</source>
             <source>Close</source>
             <translation>إغلاق</translation>
         </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Profiling</source>
+            <translation>التحليل الأدائي</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Record a performance trace</source>
+            <translation>تسجيل أثر الأداء</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Let other computers connect</source>
+            <translation>السماح لأجهزة الكمبيوتر الأخرى بالاتصال</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Restart Studio with --profile-remote to allow this</source>
+            <translation>أعد تشغيل Studio باستخدام ‎--profile-remote للسماح بذلك</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>For finding out why Studio is slow. It records timings only and sends nothing until you connect the Tracy profiler to the address above. It is off again each time Studio starts.</source>
+            <translation>لمعرفة سبب بطء Studio. يسجّل الأزمنة فقط ولا يرسل شيئًا حتى توصل محلل Tracy بالعنوان أعلاه. يُغلق مرة أخرى في كل مرة يبدأ فيها Studio.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheck</name>
@@ -18187,6 +18212,64 @@ Networks: %5</source>
             <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1، %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>Profiling</name>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>This build does not include the profiler.</source>
+            <translation>لا يتضمن هذا الإصدار المحلل.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>No port is free for the profiler. Close the program that uses port 8086 and try again.</source>
+            <translation>لا يوجد منفذ حر للمحلل. أغلق البرنامج الذي يستخدم المنفذ 8086 وحاول مرة أخرى.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>all interfaces:%1</source>
+            <translation>كل الواجهات:%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling is off. Nothing is recorded and no port is open.</source>
+            <translation>التحليل الأدائي متوقف. لا يُسجَّل شيء ولا يوجد منفذ مفتوح.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. A profiler is connected to %1.</source>
+            <translation>التسجيل جارٍ. محلل متصل بـ %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Other computers can connect.</source>
+            <translation>التسجيل جارٍ. في انتظار محلل على %1. يمكن لأجهزة كمبيوتر أخرى الاتصال.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Only this computer can connect.</source>
+            <translation>التسجيل جارٍ. في انتظار محلل على %1. هذا الكمبيوتر وحده يستطيع الاتصال.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording is paused. %1 stays open until Studio quits.</source>
+            <translation>التسجيل متوقف مؤقتًا. يبقى %1 مفتوحًا حتى يُغلق Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling, connected</source>
+            <translation>التحليل الأدائي، متصل</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling :%1</source>
+            <translation>التحليل الأدائي :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling paused</source>
+            <translation>التحليل الأدائي متوقف مؤقتًا</translation>
         </message>
     </context>
 </TS>

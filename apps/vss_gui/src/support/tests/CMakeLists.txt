@@ -9,6 +9,7 @@ if(VSS_BUILD_TESTS)
     main.cpp
     test_permission_dialog.cpp
     test_permission_rows.cpp
+    test_profiling.cpp
     test_running.cpp
     test_support.cpp)
 

@@ -10,6 +10,8 @@
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -68,6 +70,7 @@ SendPanel::SendPanel(StudioBackend& backend, QWidget* parent)
 
 void SendPanel::build()
 {
+    VSS_PROFILE_ZONE("gui.panes.send.build");
     setAccessibleName(tr("Send"));
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(8, 8, 8, 8);
@@ -232,6 +235,7 @@ void SendPanel::set_advanced(bool advanced)
 
 void SendPanel::refresh_ports()
 {
+    VSS_PROFILE_ZONE("gui.panes.send.refresh_ports");
     if (repeat_port_ != 0 && !backend_.port(repeat_port_))
     {
         const QString name = repeat_name_;
@@ -303,6 +307,7 @@ QString SendPanel::text() const
 
 void SendPanel::validate_hex()
 {
+    VSS_PROFILE_ZONE("gui.panes.send.validate_hex");
     if (!hex_->isChecked())
     {
         error_->setVisible(false);
@@ -361,6 +366,7 @@ void SendPanel::send_now()
 
 SendPanel::send_outcome SendPanel::send_to(vss::endpoint_id id)
 {
+    VSS_PROFILE_ZONE("gui.panes.send.send");
     bool ok = false;
     const QByteArray bytes = payload(ok);
     if (!ok)
@@ -396,6 +402,7 @@ void SendPanel::send_repeat()
 
 void SendPanel::start_repeat()
 {
+    VSS_PROFILE_ZONE("gui.panes.send.start_repeat");
     if (!repeat_->isChecked())
         return;
     const vss::endpoint_id id = selected_port();
@@ -530,6 +537,7 @@ void SendPanel::update_repeat_status()
 
 void SendPanel::remember_send(const QString& text)
 {
+    VSS_PROFILE_ZONE("gui.panes.send.remember");
     if (text.isEmpty())
         return;
     QSettings settings;
@@ -547,6 +555,7 @@ void SendPanel::remember_send(const QString& text)
 
 void SendPanel::load_saved_sends()
 {
+    VSS_PROFILE_ZONE("gui.panes.send.load_saved");
     const QSignalBlocker blocker(saved_);
     saved_->clear();
     const QStringList saved =

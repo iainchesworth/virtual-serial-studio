@@ -10,6 +10,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -103,6 +105,7 @@ void RenameDialog::update_state()
 
 void RenameDialog::rename()
 {
+    VSS_PROFILE_ZONE("gui.flows.rename.rename");
     const QString reason = problem();
     if (!reason.isEmpty())
     {

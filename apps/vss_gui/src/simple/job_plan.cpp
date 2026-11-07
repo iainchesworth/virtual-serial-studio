@@ -6,6 +6,8 @@
 
 #include "simple/job_plan.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QRegularExpression>
 #include <QSet>
 
@@ -84,6 +86,7 @@ QString unique_name(const QString& wanted, const QSet<QString>& taken)
 
 vss::result<vss::link_id> relink(StudioBackend& backend, const link_view& link)
 {
+    VSS_PROFILE_ZONE("gui.simple.job_plan.relink");
     const std::vector<vss::endpoint_id> sources(link.sources.begin(),
                                                 link.sources.end());
     const std::vector<vss::endpoint_id> targets(link.targets.begin(),
@@ -139,6 +142,7 @@ QString device_uri(const end_plan& end, const vss::serial_settings& serial)
 
 job_plan plan_from(const setup_view& setup, const std::vector<port_view>& ports)
 {
+    VSS_PROFILE_ZONE("gui.simple.job_plan.plan_from");
     job_plan plan;
     plan.kind = setup.kind;
     const auto ends = [&ports](const QVector<vss::endpoint_id>& ids)
@@ -203,6 +207,7 @@ job_plan plan_from(const setup_view& setup, const std::vector<port_view>& ports)
 
 plan_changes compare(const job_plan& plan, const setup_view& previous)
 {
+    VSS_PROFILE_ZONE("gui.simple.job_plan.compare");
     plan_changes changes;
     QSet<vss::endpoint_id> kept;
     for (const auto* list : {&plan.first, &plan.second})
@@ -236,6 +241,7 @@ vss::result<vss::endpoint_id> build_setup(StudioBackend& backend,
                                           const job_plan& plan,
                                           const setup_view* previous)
 {
+    VSS_PROFILE_ZONE("gui.simple.job_plan.build_setup");
     const auto before = backend.ports();
     QSet<QString> taken;
     for (const auto& port : before)

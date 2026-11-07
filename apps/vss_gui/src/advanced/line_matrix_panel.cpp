@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QAbstractButton>
 #include <QCheckBox>
 #include <QCoreApplication>
@@ -101,6 +103,7 @@ LineMatrixPanel::LineMatrixPanel(StudioBackend& backend,
 
 void LineMatrixPanel::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.line_matrix.build");
     auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(Theme::instance().space(4));
@@ -383,6 +386,7 @@ void LineMatrixPanel::set_endpoint(vss::endpoint_id endpoint)
 
 void LineMatrixPanel::refresh()
 {
+    VSS_PROFILE_ZONE("gui.advanced.line_matrix.refresh");
     const capabilities caps = backend_.caps();
     const auto port = backend_.port(endpoint_);
 
@@ -668,6 +672,7 @@ void LineMatrixPanel::on_preset_changed(int id)
 
 void LineMatrixPanel::apply_wiring(const line_wiring& wiring)
 {
+    VSS_PROFILE_ZONE("gui.advanced.line_matrix.apply_wiring");
     if (!link_)
     {
         Q_EMIT message(tr("Link this fixture to another port first."));
@@ -687,6 +692,7 @@ void LineMatrixPanel::apply_wiring(const line_wiring& wiring)
 
 void LineMatrixPanel::inject_fault(std::size_t index)
 {
+    VSS_PROFILE_ZONE("gui.advanced.line_matrix.inject_fault");
     const auto& tiles = fault_tiles();
     if (index >= tiles.size())
         return;
@@ -716,6 +722,7 @@ void LineMatrixPanel::inject_fault(std::size_t index)
 
 void LineMatrixPanel::update_line_state()
 {
+    VSS_PROFILE_ZONE("gui.advanced.line_matrix.update_line_state");
     const auto port = backend_.port(endpoint_);
     const bool available = port.has_value();
     const bool supports = available && port->supports_control_lines;

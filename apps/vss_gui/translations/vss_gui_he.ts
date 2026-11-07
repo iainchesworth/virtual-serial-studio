@@ -6041,6 +6041,31 @@ Networks: %5</source>
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Profiling</source>
+            <translation>פרופיילינג</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Record a performance trace</source>
+            <translation>הקלט מעקב ביצועים</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Let other computers connect</source>
+            <translation>אפשר למחשבים אחרים להתחבר</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Restart Studio with --profile-remote to allow this</source>
+            <translation>הפעל מחדש את Studio עם ‎--profile-remote כדי לאפשר זאת</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>For finding out why Studio is slow. It records timings only and sends nothing until you connect the Tracy profiler to the address above. It is off again each time Studio starts.</source>
+            <translation>לבירור הסיבה לאיטיות של Studio. מתעד זמנים בלבד ואינו שולח דבר עד שתחבר את הפרופיילר Tracy לכתובת שלמעלה. הוא כבוי שוב בכל הפעלה של Studio.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheck</name>
@@ -18107,6 +18132,64 @@ Networks: %5</source>
             <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>Profiling</name>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>This build does not include the profiler.</source>
+            <translation>המהדורה הזו אינה כוללת את הפרופיילר.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>No port is free for the profiler. Close the program that uses port 8086 and try again.</source>
+            <translation>אין יציאה פנויה עבור הפרופיילר. סגור את התוכנית שמשתמשת ביציאה 8086 ונסה שוב.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>all interfaces:%1</source>
+            <translation>כל הממשקים:%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling is off. Nothing is recorded and no port is open.</source>
+            <translation>הפרופיילינג כבוי. דבר אינו מוקלט ואין יציאה פתוחה.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. A profiler is connected to %1.</source>
+            <translation>מקליט. פרופיילר מחובר אל %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Other computers can connect.</source>
+            <translation>מקליט. ממתין לפרופיילר ב-%1. מחשבים אחרים יכולים להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Only this computer can connect.</source>
+            <translation>מקליט. ממתין לפרופיילר ב-%1. רק מחשב זה יכול להתחבר.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording is paused. %1 stays open until Studio quits.</source>
+            <translation>ההקלטה מושהית. %1 נשאר פתוח עד שתצא מ-Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling, connected</source>
+            <translation>פרופיילינג, מחובר</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling :%1</source>
+            <translation>פרופיילינג :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling paused</source>
+            <translation>הפרופיילינג מושהה</translation>
         </message>
     </context>
 </TS>

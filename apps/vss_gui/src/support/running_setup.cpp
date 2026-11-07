@@ -6,6 +6,8 @@
 
 #include "support/running_setup.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -92,6 +94,8 @@ bool save_running_setup(const QString& path,
                         const vss::config::document& document,
                         const running_state& state)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.running_setup.save");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     const auto text = vss::config::to_json(document, false);
     if (!text)
         return false;
@@ -110,6 +114,9 @@ bool save_running_setup(const QString& path,
 
 bool save_running_state(const QString& path, const running_state& state)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone,
+                           "gui.support.running_setup.save_state");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     bool exists = false;
     auto object = read_object(path, &exists);
     if (!object)
@@ -122,6 +129,9 @@ bool save_running_state(const QString& path, const running_state& state)
 
 running_state load_running_state(const QString& path)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone,
+                           "gui.support.running_setup.load_state");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     bool exists = false;
     const auto object = read_object(path, &exists);
     return object ? state_of(*object) : running_state{};
@@ -130,6 +140,8 @@ running_state load_running_state(const QString& path)
 std::optional<running_setup> load_running_setup(const QString& path,
                                                 bool* damaged)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.running_setup.load");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     if (damaged != nullptr)
         *damaged = false;
     bool exists = false;

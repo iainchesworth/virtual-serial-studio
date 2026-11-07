@@ -14,6 +14,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFrame>
@@ -67,6 +69,8 @@ WatchDialog::WatchDialog(StudioBackend& backend, vss::endpoint_id selected,
 
 void WatchDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.flows.watch.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.watch.opened");
     auto* layout = new QVBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(14);
@@ -202,6 +206,7 @@ void WatchDialog::show_empty_state(const std::vector<device_view>& others,
 
 void WatchDialog::update_for_source()
 {
+    VSS_PROFILE_ZONE("gui.flows.watch.update_for_source");
     if (port_ == nullptr || info_ == nullptr)
         return;
     const auto id =
@@ -239,6 +244,7 @@ void WatchDialog::update_primary_state()
 
 void WatchDialog::start_watching()
 {
+    VSS_PROFILE_ZONE("gui.flows.watch.start");
     name_row_->clear_error();
     const auto id =
         static_cast<vss::endpoint_id>(port_->currentData().toULongLong());

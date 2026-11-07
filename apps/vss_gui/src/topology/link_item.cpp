@@ -8,6 +8,8 @@
 
 #include "theme/theme.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QFontMetricsF>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -59,6 +61,7 @@ LinkItem::LinkItem(link_data data, link_item_callbacks callbacks)
 
 void LinkItem::compute_label_rects()
 {
+    VSS_PROFILE_ZONE("gui.topology.link.label_rects");
     const QFontMetricsF metrics(Theme::instance().font(text_style::caption));
     primary_rect_ =
         label_rect(data_.primary, geometry_.primary_anchor, true, metrics);
@@ -68,6 +71,7 @@ void LinkItem::compute_label_rects()
 
 void LinkItem::set_geometry(const topo_link_placement& geometry)
 {
+    VSS_PROFILE_ZONE("gui.topology.link.set_geometry");
     prepareGeometryChange();
     geometry_ = geometry;
     compute_label_rects();
@@ -156,6 +160,7 @@ QPainterPath LinkItem::shape() const
 void LinkItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                      QWidget* widget)
 {
+    VSS_PROFILE_ZONE("gui.paint.link");
     Q_UNUSED(option);
     Q_UNUSED(widget);
 

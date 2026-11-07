@@ -6,6 +6,8 @@
 
 #include "support/redact.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QDir>
 #include <QRegularExpression>
 
@@ -14,6 +16,7 @@ namespace vss::gui::support
 
 QString redact_secrets(QString text)
 {
+    VSS_PROFILE_ZONE("gui.support.redact");
     // scheme://user:password@host -> scheme://[redacted]@host
     static const QRegularExpression credentials(
         QStringLiteral(R"((://)[^/\s:@]+:[^/\s@]+@)"));

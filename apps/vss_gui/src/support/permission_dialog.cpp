@@ -12,6 +12,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -275,6 +277,8 @@ PermissionDialog::PermissionDialog(const perm::fact& fact, bool step_possible,
 
 void PermissionDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.permission_dialog.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.permission.opened");
     const wording words = wording_for(fact_);
     setWindowTitle(words.title);
     setAccessibleName(words.title);
@@ -343,6 +347,7 @@ void PermissionDialog::build()
 
 void PermissionDialog::run_step()
 {
+    VSS_PROFILE_ZONE("gui.support.permission_dialog.run_step");
     // Never starts the system prompt unless the build offers the step.
     if (!can_run_ || step_ == nullptr || !fact_.group_step.has_value())
         return;

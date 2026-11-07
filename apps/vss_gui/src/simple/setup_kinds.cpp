@@ -6,6 +6,8 @@
 
 #include "simple/setup_kinds.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QRegularExpression>
 #include <QSet>
@@ -200,6 +202,7 @@ setup_view describe_setup(const setup_group& group,
                           const std::vector<port_view>& ports,
                           const std::vector<link_view>& links)
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_kinds.describe");
     setup_view view;
     view.group = group;
     if (group.ports.size() == 1 && group.links.isEmpty())
@@ -249,6 +252,7 @@ setup_view describe_setup(const setup_group& group,
 std::vector<setup_view> list_setups(const std::vector<port_view>& ports,
                                     const std::vector<link_view>& links)
 {
+    VSS_PROFILE_ZONE("gui.simple.setup_kinds.list");
     std::vector<setup_view> result;
     QSet<vss::endpoint_id> seen;
     for (const auto& port : ports)

@@ -6041,6 +6041,31 @@ Réseaux : %5</translation>
             <source>Close</source>
             <translation>Fermer</translation>
         </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Profiling</source>
+            <translation>Profilage</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Record a performance trace</source>
+            <translation>Enregistrer une trace de performance</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Let other computers connect</source>
+            <translation>Autoriser la connexion d'autres ordinateurs</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Restart Studio with --profile-remote to allow this</source>
+            <translation>Redémarrez Studio avec --profile-remote pour l'autoriser</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>For finding out why Studio is slow. It records timings only and sends nothing until you connect the Tracy profiler to the address above. It is off again each time Studio starts.</source>
+            <translation>Sert à comprendre pourquoi Studio est lent. Il n'enregistre que des durées et n'envoie rien tant que vous n'avez pas connecté le profileur Tracy à l'adresse ci-dessus. Il est de nouveau désactivé à chaque démarrage de Studio.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheck</name>
@@ -18107,6 +18132,64 @@ Réseaux : %5</translation>
             <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>Profiling</name>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>This build does not include the profiler.</source>
+            <translation>Cette version n'inclut pas le profileur.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>No port is free for the profiler. Close the program that uses port 8086 and try again.</source>
+            <translation>Aucun port n'est libre pour le profileur. Fermez le programme qui utilise le port 8086 et réessayez.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>all interfaces:%1</source>
+            <translation>toutes les interfaces :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling is off. Nothing is recorded and no port is open.</source>
+            <translation>Le profilage est désactivé. Rien n'est enregistré et aucun port n'est ouvert.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. A profiler is connected to %1.</source>
+            <translation>Enregistrement en cours. Un profileur est connecté à %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Other computers can connect.</source>
+            <translation>Enregistrement en cours. En attente d'un profileur sur %1. D'autres ordinateurs peuvent se connecter.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Only this computer can connect.</source>
+            <translation>Enregistrement en cours. En attente d'un profileur sur %1. Seul cet ordinateur peut se connecter.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording is paused. %1 stays open until Studio quits.</source>
+            <translation>L'enregistrement est en pause. %1 reste ouvert jusqu'à la fermeture de Studio.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling, connected</source>
+            <translation>Profilage, connecté</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling :%1</source>
+            <translation>Profilage :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling paused</source>
+            <translation>Profilage en pause</translation>
         </message>
     </context>
 </TS>

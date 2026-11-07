@@ -12,6 +12,8 @@
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -198,6 +200,7 @@ TopologyJsonEditor::TopologyJsonEditor(StudioBackend& backend, QWidget* parent)
 
 void TopologyJsonEditor::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.build");
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -383,6 +386,7 @@ QWidget* TopologyJsonEditor::build_error_panel()
 
 void TopologyJsonEditor::load_from_backend()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.load");
     const auto text = vss::config::to_json(backend_.snapshot(), true);
     if (!text)
     {
@@ -425,6 +429,7 @@ void TopologyJsonEditor::set_text(const QString& text)
 
 void TopologyJsonEditor::revalidate()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.revalidate");
     validation_ = validate_json_document(text(), backend_.caps().shared_bus);
     apply_error_summary_.clear();
     apply_error_detail_.clear();
@@ -449,6 +454,7 @@ void TopologyJsonEditor::revert()
 
 void TopologyJsonEditor::format()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.format");
     if (!validation_.json_valid)
         return;
     QString formatted = validation_.formatted;
@@ -469,6 +475,7 @@ void TopologyJsonEditor::format()
 
 bool TopologyJsonEditor::apply()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.apply");
     if (!can_apply())
         return false;
     applying_ = true;
@@ -537,6 +544,7 @@ void TopologyJsonEditor::update_ui()
 
 void TopologyJsonEditor::update_checks()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.update_checks");
     auto* layout = qobject_cast<QVBoxLayout*>(checks_holder_->layout());
     if (layout != nullptr)
     {
@@ -587,6 +595,7 @@ void TopologyJsonEditor::update_checks()
 
 void TopologyJsonEditor::update_error_panel()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.update_error_panel");
     const bool has_apply_error = !apply_error_summary_.isEmpty();
     const bool has_problem = validation_.problem.has_value();
     if (!has_apply_error && !has_problem)
@@ -655,6 +664,7 @@ void TopologyJsonEditor::copy_as_command()
 
 bool TopologyJsonEditor::export_file()
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_editor.export_file");
     if (!validation_.json_valid)
     {
         Q_EMIT message(tr("Fix the JSON before exporting it."));

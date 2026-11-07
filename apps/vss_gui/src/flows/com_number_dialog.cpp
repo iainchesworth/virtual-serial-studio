@@ -9,6 +9,8 @@
 #include "flows/common.hpp"
 #include "widgets/controls.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QMetaObject>
 #include <QPushButton>
 #include <QSpinBox>
@@ -109,6 +111,7 @@ void ComNumberDialog::update_state()
 
 void ComNumberDialog::change()
 {
+    VSS_PROFILE_ZONE("gui.flows.com_number.change");
     if (busy_)
         return;
     const unsigned number = static_cast<unsigned>(number_->value());
@@ -139,6 +142,7 @@ void ComNumberDialog::change()
 void ComNumberDialog::on_finished(unsigned number,
                                   const vss::result<QString>& outcome)
 {
+    VSS_PROFILE_ZONE("gui.flows.com_number.finished");
     if (worker_.joinable())
         worker_.join();
     busy_ = false;

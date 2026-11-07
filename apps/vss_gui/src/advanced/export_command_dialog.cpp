@@ -12,6 +12,7 @@
 #include "widgets/dialogs.hpp"
 
 #include <vss/config/document.hpp>
+#include <vss/core/profile.hpp>
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -35,6 +36,8 @@ ExportCommandDialog::ExportCommandDialog(StudioBackend& backend,
 
 void ExportCommandDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.export_command.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.export_command.opened");
     const QString title = tr("Export as command");
     setWindowTitle(title);
     setAccessibleName(title);
@@ -103,6 +106,7 @@ void ExportCommandDialog::set_document_path(const QString& path)
 
 void ExportCommandDialog::update_command()
 {
+    VSS_PROFILE_ZONE("gui.advanced.export_command.update");
     const QString file =
         path_.isEmpty() ? suggested_name() : QFileInfo(path_).fileName();
     panel_->set_command(
@@ -123,6 +127,7 @@ void ExportCommandDialog::update_command()
 
 bool ExportCommandDialog::export_file()
 {
+    VSS_PROFILE_ZONE("gui.advanced.export_command.export_file");
     const QString start = path_.isEmpty() ? suggested_name() : path_;
     QString path = QFileDialog::getSaveFileName(
         this, tr("Export the setup"), start,

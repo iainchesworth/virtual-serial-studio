@@ -65,6 +65,9 @@ set(VSS_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # Qt Widgets.
 add_subdirectory(src/backend)
 
+# Tracy: the instrumented QApplication and the profiling switch.
+add_subdirectory(src/profiling)
+
 # Design tokens, resources, icons and the focus style.
 add_subdirectory(src/theme)
 
@@ -104,6 +107,7 @@ target_link_libraries(vss_gui PRIVATE
   Vss::studio
   Qt6::Widgets
   vss_gui_backend
+  vss_gui_profiling
   vss_gui_theme
   vss_gui_widgets
   vss_gui_panes

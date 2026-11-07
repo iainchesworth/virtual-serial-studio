@@ -6,6 +6,8 @@
 
 #include "topology/topology_layout.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QMap>
 #include <QSet>
 
@@ -103,6 +105,9 @@ topology_layout compute_topology_layout(const QVector<topo_node_input>& nodes,
                                         const QVector<topo_link_input>& links,
                                         const topology_metrics& metrics)
 {
+    VSS_PROFILE_ZONE("gui.topology.layout.compute");
+    VSS_PROFILE_PLOT("gui.topology.nodes", nodes.size());
+    VSS_PROFILE_PLOT("gui.topology.links", links.size());
     topology_layout result;
     if (nodes.isEmpty())
         return result;
@@ -493,6 +498,7 @@ bool segment_blocked(const QLineF& line, const QVector<QRectF>& obstacles,
 QVector<QPointF> route_around(const QPointF& from, const QPointF& to,
                               const QVector<QRectF>& obstacles, qreal clearance)
 {
+    VSS_PROFILE_ZONE("gui.topology.link.route_around");
     QVector<QRectF> zones;
     zones.reserve(obstacles.size());
     for (const QRectF& obstacle : obstacles)
@@ -586,6 +592,7 @@ QPointF find_free_position(const QSizeF& size, const QRectF& anchor,
                            anchor_side side, const QVector<QRectF>& occupied,
                            const topology_metrics& metrics)
 {
+    VSS_PROFILE_ZONE("gui.topology.layout.find_free_position");
     QRectF content;
     for (const QRectF& rect : occupied)
         content = content.isNull() ? rect : content.united(rect);
@@ -668,6 +675,7 @@ QPointF find_free_position(const QSizeF& size, const QRectF& anchor,
 QRectF push_clear(const QRectF& rect, const QVector<QRectF>& occupied,
                   qreal gap)
 {
+    VSS_PROFILE_ZONE("gui.topology.layout.push_clear");
     QVector<QRectF> zones;
     zones.reserve(occupied.size());
     for (const QRectF& other : occupied)
@@ -925,6 +933,7 @@ compute_link_geometry(const QVector<topo_link_input>& links,
 QVector<vss::endpoint_id> find_cycle(const QVector<topo_link_input>& links,
                                      const QVector<vss::endpoint_id>& node_ids)
 {
+    VSS_PROFILE_ZONE("gui.topology.layout.find_cycle");
     QHash<vss::endpoint_id, QVector<vss::endpoint_id>> adjacency;
     for (const auto& link : links)
     {

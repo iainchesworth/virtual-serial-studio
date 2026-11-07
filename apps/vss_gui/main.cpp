@@ -6,6 +6,8 @@
 
 #include "backend/engine_studio_backend.hpp"
 #include "language/language_choice.hpp"
+#include "profiling/profiled_application.hpp"
+#include "profiling/profiling_controller.hpp"
 #include "shell/shell_window.hpp"
 #include "shell/single_instance.hpp"
 #include "shell/studio_tray.hpp"
@@ -13,6 +15,8 @@
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
 
+#include <vss/core/profile.hpp>
+#include <vss/core/profiling.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QAction>
@@ -23,12 +27,26 @@
 #include <QPixmap>
 #include <QSettings>
 
+#include <algorithm>
 #include <chrono>
 #include <cstdio>
 #include <cstring>
 #include <exception>
 #include <memory>
 #include <thread>
+
+namespace
+{
+
+/// Ends the Tracy session when the program is about to exit. It sits after the
+/// application object and before everything that owns threads, so by the time
+/// it runs the studio and the window are gone.
+struct ProfilingSession
+{
+    ~ProfilingSession() { vss::profiling::shutdown(); }
+};
+
+} // namespace
 
 int main(int argc, char* argv[])
 {
@@ -41,6 +59,15 @@ int main(int argc, char* argv[])
         if (std::strncmp(argv[index], "--screenshot", 12) == 0)
             screenshot = true;
     }
+
+    // Profiling is off unless asked for: --profile, --profile=PORT,
+    // --profile-remote, VSS_PROFILE=1. Debug builds ask for it themselves,
+    // except for the unattended self-test and screenshot runs, which start it
+    // only when it was asked for in so many words.
+    auto profile = vss::profiling::request_from_environment(
+        vss::profiling::default_on() && !selftest && !screenshot);
+    for (int index = 1; index < argc; ++index)
+        static_cast<void>(vss::profiling::take_argument(argv[index], profile));
 
     // The self-test and the documentation screenshot are headless by
     // contract: set the platform plugin before QApplication reads it.  The
@@ -57,7 +84,25 @@ int main(int argc, char* argv[])
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
-    QApplication application(argc, argv);
+    vss::gui::ProfiledApplication application(argc, argv);
+    const ProfilingSession profiling_session;
+    vss::gui::ProfiledApplication::install_loop_marks();
+    VSS_PROFILE_THREAD("gui.main");
+    if (profile.enable)
+    {
+        const auto started = vss::profiling::start(profile);
+        if (started)
+        {
+            std::fprintf(stderr, "%s\n",
+                         vss::profiling::describe(*started).c_str());
+            VSS_PROFILE_MESSAGE("gui.startup");
+        }
+        else
+        {
+            std::fprintf(stderr, "vss_gui: cannot start profiling: %s\n",
+                         started.error().message().c_str());
+        }
+    }
     QApplication::setApplicationName(QStringLiteral("Virtual Serial Studio"));
     QApplication::setApplicationDisplayName(
         QStringLiteral("Virtual Serial Studio"));
@@ -97,7 +142,35 @@ int main(int argc, char* argv[])
                                                      "take its place."));
     replace_option.setFlags(QCommandLineOption::HiddenFromHelp);
     parser.addOption(replace_option);
-    parser.process(application);
+    // The profiling options are read before the parser runs; they are declared
+    // here so --help lists them, and filtered out of what the parser sees.
+    const QCommandLineOption profile_option(
+        QStringLiteral("profile"),
+        QStringLiteral("Start the Tracy profiler listener on this computer "
+                       "only (--profile=<port> picks the port; VSS_PROFILE=1 "
+                       "does the same)."));
+    parser.addOption(profile_option);
+    const QCommandLineOption profile_remote_option(
+        QStringLiteral("profile-remote"),
+        QStringLiteral("Start the profiler and let other computers connect."));
+    parser.addOption(profile_remote_option);
+    const QCommandLineOption no_profile_option(
+        QStringLiteral("no-profile"),
+        QStringLiteral("Do not start the profiler, even where it is on by "
+                       "default."));
+    parser.addOption(no_profile_option);
+    {
+        QStringList arguments = application.arguments();
+        arguments.erase(std::remove_if(arguments.begin() + 1, arguments.end(),
+                                       [](const QString& argument)
+                                       {
+                                           vss::profiling::request ignored;
+                                           return vss::profiling::take_argument(
+                                               argument.toStdString(), ignored);
+                                       }),
+                        arguments.end());
+        parser.process(arguments);
+    }
 
     const bool headless = parser.isSet(selftest_option) ||
                           parser.isSet(screenshot_option) ||
@@ -230,8 +303,11 @@ int main(int argc, char* argv[])
         else
         {
             window.show();
+            VSS_PROFILE_MESSAGE("gui.window_shown");
         }
-        return application.exec();
+        const int exit_code = application.exec();
+        VSS_PROFILE_MESSAGE("gui.shutdown");
+        return exit_code;
     }
     catch (const std::exception& error)
     {

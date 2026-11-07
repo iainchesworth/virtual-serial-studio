@@ -8,6 +8,8 @@
 
 #include "dialogs/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QSet>
 #include <QStringList>
 
@@ -79,6 +81,7 @@ setup_group find_setup(const std::vector<port_view>& ports,
                        const std::vector<link_view>& links,
                        vss::endpoint_id port)
 {
+    VSS_PROFILE_ZONE("gui.shell.setup_group.find");
     bool known = false;
     for (const port_view& candidate : ports)
         known = known || candidate.id == port;
@@ -91,6 +94,7 @@ setup_group find_setup_of_link(const std::vector<port_view>& ports,
                                const std::vector<link_view>& links,
                                vss::link_id link)
 {
+    VSS_PROFILE_ZONE("gui.shell.setup_group.find_of_link");
     for (const link_view& candidate : links)
     {
         if (candidate.id != link)

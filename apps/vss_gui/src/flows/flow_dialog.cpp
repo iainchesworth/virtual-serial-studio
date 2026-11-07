@@ -9,6 +9,8 @@
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QFrame>
 #include <QGuiApplication>
 #include <QHBoxLayout>
@@ -191,6 +193,7 @@ void FlowDialog::focus_first(QWidget* widget)
 
 void FlowDialog::finish_layout(int preferred_height)
 {
+    VSS_PROFILE_ZONE("gui.flows.dialog.finish_layout");
     // Keep short bodies at the top instead of stretching the last frame to
     // fill the viewport.  Tall bodies simply scroll.
     body_layout_->addStretch(1);
@@ -214,6 +217,7 @@ void FlowDialog::finish_layout(int preferred_height)
 
 void FlowDialog::apply_theme()
 {
+    VSS_PROFILE_ZONE("gui.flows.dialog.apply_theme");
     title_->setFont(Theme::instance().font(text_style::title));
     subtitle_->setFont(Theme::instance().font(text_style::body));
     const QColor panel = Theme::instance().colour(colour_role::panel);

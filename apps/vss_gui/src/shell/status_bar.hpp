@@ -41,6 +41,7 @@ Q_SIGNALS:
 
 private:
     void update_readiness();
+    void update_profiling();
 
     StudioBackend& backend_;
     QLabel* ports_ = nullptr;
@@ -49,6 +50,7 @@ private:
     QLabel* hub_ = nullptr;
     StatusChip* readiness_ = nullptr;
     StatusChip* dropped_ = nullptr;
+    StatusChip* profiling_ = nullptr;
     SegmentedControl* level_ = nullptr;
 
     QElapsedTimer rate_timer_;

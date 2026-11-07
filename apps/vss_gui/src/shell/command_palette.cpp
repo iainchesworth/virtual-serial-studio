@@ -11,6 +11,8 @@
 #include "widgets/chips.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QKeyEvent>
@@ -138,6 +140,7 @@ void CommandPalette::set_query(const QString& query)
 
 void CommandPalette::activate_current()
 {
+    VSS_PROFILE_ZONE("gui.shell.palette.activate");
     QAction* action = selected_action();
     if (action == nullptr)
     {
@@ -236,6 +239,7 @@ void CommandPalette::keyPressEvent(QKeyEvent* event)
 
 void CommandPalette::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.shell.palette.rebuild");
     const QString query = search_->text();
     const QVector<QAction*> matches = registry_.search(query);
     QVector<QAction*> available;
