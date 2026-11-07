@@ -134,10 +134,16 @@ target_compile_definitions(vss_gui PRIVATE
   # Q_* spellings everywhere keeps both worlds intact.
   QT_NO_KEYWORDS)
 
-# Keep a console subsystem: --selftest has to print its diagnostics to the
-# caller's terminal (and its exit code drives CI).
+# On Windows the program belongs to the Windows subsystem, so that starting it
+# from the Start menu, Explorer or the sign-in entry never opens a console
+# window. WIN32_EXECUTABLE also makes Qt6::Core link Qt6::EntryPoint, which
+# supplies WinMain and calls main(). --version, --help and --selftest still
+# print: main() calls support::attach_parent_console() first, which attaches
+# to the console of a parent that has one. tests/CMakeLists.txt checks the
+# subsystem of the built program (gui_subsystem). Other platforms ignore the
+# property.
 set_target_properties(vss_gui PROPERTIES
-  WIN32_EXECUTABLE OFF
+  WIN32_EXECUTABLE ON
   OUTPUT_NAME vss_gui)
 
 vss_set_warnings(vss_gui)

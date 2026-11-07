@@ -81,8 +81,10 @@ These are not in the repository and an agent does not create them.
   Without them `vss_gui` stops at start with "Could not load the Qt platform plugin
   xcb". There is no Wayland plugin.
   The platform matrix (T9) found this on a machine without them.
-- On Windows the GUI keeps a console window, because `vss_gui --selftest` has
-  to print to its caller. A double click shows the console beside the window.
+- On Windows `vss_gui.exe` belongs to the Windows subsystem, so it opens no console window. Started from a
+  terminal it attaches to that terminal and prints `--version`, `--help` and `--selftest` there. `cmd` and
+  PowerShell do not wait for such a program: use `start /wait` or `Start-Process -Wait` when the exit code
+  matters. The `gui_subsystem` test checks the subsystem of the built program.
 - The GUI package has no installer. Unpack it where you like.
 
 ## macOS signing and notarisation

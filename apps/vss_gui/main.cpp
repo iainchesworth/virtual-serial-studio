@@ -11,6 +11,7 @@
 #include "shell/shell_window.hpp"
 #include "shell/single_instance.hpp"
 #include "shell/studio_tray.hpp"
+#include "support/console.hpp"
 #include "support/running_setup.hpp"
 #include "support/stall_probe.hpp"
 #include "theme/theme.hpp"
@@ -23,6 +24,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QMessageBox>
 #include <QPixmap>
@@ -52,6 +54,10 @@ struct ProfilingSession
 int main(int argc, char* argv[])
 try
 {
+    // First of all, so that anything printed from here on reaches the
+    // terminal that ran us (Windows builds the program without a console).
+    vss::gui::support::attach_parent_console();
+
     bool selftest = false;
     bool screenshot = false;
     for (int index = 1; index < argc; ++index)
@@ -118,8 +124,8 @@ try
     parser.setApplicationDescription(
         QStringLiteral("Virtual Serial Studio - a playground for real, virtual "
                        "and networked serial ports."));
-    parser.addHelpOption();
-    parser.addVersionOption();
+    const QCommandLineOption help_option = parser.addHelpOption();
+    const QCommandLineOption version_option = parser.addVersionOption();
     const QCommandLineOption selftest_option(
         QStringLiteral("selftest"),
         QStringLiteral("Run the headless end-to-end check (offscreen "
@@ -171,7 +177,36 @@ try
                                                argument.toStdString(), ignored);
                                        }),
                         arguments.end());
-        parser.process(arguments);
+        // process() would show --help, --version and a bad argument in a
+        // message box on Windows when no console is attached (a pipe in CI, a
+        // double click), and a message box has nobody to click it in a script.
+        // They are printed to the standard streams instead, whatever the
+        // platform, with the exit codes process() gives them.
+        if (!parser.parse(arguments))
+        {
+            std::fprintf(stderr, "%s\n",
+                         parser.errorText().toLocal8Bit().constData());
+            return 1;
+        }
+        if (parser.isSet(version_option))
+        {
+            std::fprintf(stdout, "%s %s\n",
+                         QCoreApplication::applicationName()
+                             .toLocal8Bit()
+                             .constData(),
+                         QCoreApplication::applicationVersion()
+                             .toLocal8Bit()
+                             .constData());
+            std::fflush(stdout);
+            return 0;
+        }
+        if (parser.isSet(help_option))
+        {
+            std::fprintf(stdout, "%s",
+                         parser.helpText().toLocal8Bit().constData());
+            std::fflush(stdout);
+            return 0;
+        }
     }
 
     const bool headless = parser.isSet(selftest_option) ||

@@ -13,6 +13,7 @@ add_library(vss_gui_support STATIC
   bundle.hpp
   check_row.cpp
   check_row.hpp
+  console.hpp
   diagnostic_bundle_dialog.cpp
   diagnostic_bundle_dialog.hpp
   elevated_step.cpp

@@ -347,3 +347,13 @@ if(Python3_FOUND)
             -s ${PROJECT_SOURCE_DIR}/tools/matrix -p "test_*.py")
   set_tests_properties(matrix_tools PROPERTIES TIMEOUT 120)
 endif()
+
+# vss_gui must belong to the Windows subsystem: a console-subsystem program gets
+# a console window whenever it is not started from a terminal. This reads the
+# PE header, so it needs no desktop session.
+if(WIN32 AND TARGET vss_gui AND Python3_FOUND)
+  add_test(NAME gui_subsystem
+    COMMAND ${Python3_EXECUTABLE} -I ${PROJECT_SOURCE_DIR}/tools/check_pe_subsystem.py
+            $<TARGET_FILE:vss_gui> windows)
+  set_tests_properties(gui_subsystem PROPERTIES TIMEOUT 30)
+endif()

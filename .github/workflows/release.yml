@@ -111,6 +111,8 @@ jobs:
             Windows)
               stage/bin/vss_cli.exe selftest
               stage/bin/vss_gui.exe --version
+              # A console-subsystem GUI opens a console window beside it.
+              python3 tools/check_pe_subsystem.py stage/bin/vss_gui.exe windows
               ;;
             macOS)
               stage/bin/vss_cli selftest
