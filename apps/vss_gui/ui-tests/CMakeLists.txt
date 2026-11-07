@@ -24,9 +24,17 @@ vss_set_warnings(vss_gui_journey_tests)
 
 # The suite. One program, several CTest entries: each entry runs the journeys
 # whose names start with one prefix (see tests/CMakeLists.txt).
+# The platform's part of the harness (CPU time, crash hooks, fonts).
+if(WIN32)
+  set(VSS_UI_PLATFORM_SOURCE platform/ui_platform_windows.cpp)
+else()
+  set(VSS_UI_PLATFORM_SOURCE platform/ui_platform_posix.cpp)
+endif()
+
 add_executable(vss_gui_ui_tests
   ui_main.cpp
   ui_harness.cpp
+  ${VSS_UI_PLATFORM_SOURCE}
   simple_steps.cpp
   advanced_steps.cpp
   test_simple_journeys.cpp
@@ -36,7 +44,8 @@ add_executable(vss_gui_ui_tests
   test_action_journeys.cpp)
 
 target_include_directories(vss_gui_ui_tests PRIVATE
-  ${CMAKE_SOURCE_DIR}/tests/framework)
+  ${CMAKE_SOURCE_DIR}/tests/framework
+  ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(vss_gui_ui_tests PRIVATE QT_NO_KEYWORDS)
 target_link_libraries(vss_gui_ui_tests PRIVATE
   vss_gui_backend

@@ -13,6 +13,7 @@
 #include "test_framework.hpp"
 
 #include "ui_harness.hpp"
+#include "ui_platform.hpp"
 
 #include "theme/theme.hpp"
 
@@ -71,10 +72,7 @@ void record_perf(const std::string& path, const char* name,
 int main(int argc, char** argv)
 {
     qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
-#if defined(Q_OS_WIN)
-    if (qgetenv("QT_QPA_FONTDIR").isEmpty())
-        qputenv("QT_QPA_FONTDIR", QByteArrayLiteral("C:/Windows/Fonts"));
-#endif
+    vss::gui::ui::platform::prepare_environment();
     vss::gui::ui::install_crash_reporter();
     QApplication application(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("VSS GUI UI Tests"));
@@ -91,10 +89,7 @@ int main(int argc, char** argv)
         QDir::setCurrent(working_directory.path());
     QSettings().clear();
 
-#if defined(Q_OS_WIN)
-    if (QFontDatabase::families().contains(QStringLiteral("Segoe UI")))
-        QApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
-#endif
+    vss::gui::ui::platform::prepare_application();
     vss::gui::Theme::instance().initialise();
 
     // VSS_UI_PERF_REPORT names a CSV file to append one line per journey to.

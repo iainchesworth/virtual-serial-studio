@@ -150,11 +150,11 @@ TEST_CASE("engine: a repeat keeps the window responsive")
     // The fastest repeat the dock allows is 50 ms. A debug build cannot take
     // that rate from the real engine (each refresh costs it about a second of
     // the GUI thread), and the events then queue up faster than they run.
-#ifdef NDEBUG
-    const QString interval_ms = QStringLiteral("50");
-#else
-    const QString interval_ms = QStringLiteral("250");
-#endif
+    // VSS_UI_BUDGET_SCALE is 1 for a release build.
+    const bool fast_build =
+        qEnvironmentVariableIntValue("VSS_UI_BUDGET_SCALE") <= 1;
+    const QString interval_ms =
+        fast_build ? QStringLiteral("50") : QStringLiteral("250");
     s.step(QStringLiteral("repeat every ") + interval_ms +
            QStringLiteral(" ms for a second and a half"));
     click(checkbox(dock, QStringLiteral("Repeat")));

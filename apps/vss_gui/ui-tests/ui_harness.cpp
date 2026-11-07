@@ -12,6 +12,7 @@
 #include "topology/links_list.hpp"
 #include "topology/toolbox.hpp"
 #include "topology/topology_view.hpp"
+#include "ui_platform.hpp"
 
 #include <QAbstractButton>
 #include <QAbstractScrollArea>
@@ -42,16 +43,6 @@
 #include <mutex>
 #include <thread>
 
-#if !defined(_WIN32)
-#include <time.h>
-#endif
-
-#if defined(_WIN32)
-#include <crtdbg.h>
-#include <stdlib.h>
-#include <windows.h>
-#endif
-
 namespace vss::gui::ui
 {
 namespace
@@ -68,25 +59,7 @@ std::int64_t now_ns()
 
 std::int64_t thread_cpu_ns()
 {
-#if defined(_WIN32)
-    FILETIME created{};
-    FILETIME exited{};
-    FILETIME kernel{};
-    FILETIME user{};
-    GetThreadTimes(GetCurrentThread(), &created, &exited, &kernel, &user);
-    const auto join = [](const FILETIME& time)
-    {
-        return static_cast<std::int64_t>(
-            (static_cast<std::uint64_t>(time.dwHighDateTime) << 32) |
-            time.dwLowDateTime);
-    };
-    return (join(kernel) + join(user)) * 100;
-#else
-    timespec time{};
-    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &time);
-    return static_cast<std::int64_t>(time.tv_sec) * 1'000'000'000 +
-           time.tv_nsec;
-#endif
+    return platform::thread_cpu_ns();
 }
 
 int env_int(const char* name, int fallback)
@@ -168,10 +141,8 @@ const budget_table& budgets()
     {
         budget_table loaded;
         QString path = qEnvironmentVariable("VSS_UI_BUDGETS_FILE");
-#if defined(VSS_UI_BUDGETS_PATH)
         if (path.isEmpty())
             path = QStringLiteral(VSS_UI_BUDGETS_PATH);
-#endif
         QFile file(path);
         if (path.isEmpty() || !file.open(QIODevice::ReadOnly))
             return loaded;
@@ -471,35 +442,7 @@ void install_crash_reporter()
             crash_exit(what.c_str());
         });
     std::signal(SIGABRT, [](int) { crash_exit("abort() was called"); });
-#if defined(_WIN32)
-    SetUnhandledExceptionFilter(
-        [](EXCEPTION_POINTERS* info) -> LONG
-        {
-            char what[96];
-            std::snprintf(what, sizeof what, "unhandled exception 0x%08lx",
-                          static_cast<unsigned long>(
-                              info->ExceptionRecord->ExceptionCode));
-            crash_exit(what);
-        });
-    _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
-#if defined(_DEBUG)
-    // A failed assertion of the debug runtime, which Qt's Q_ASSERT also ends
-    // in, opens a message box and waits for a click nobody gives. Print it
-    // with the step instead.
-    _CrtSetReportHook(
-        [](int type, char* text, int*) -> int
-        {
-            if (type == _CRT_ASSERT || type == _CRT_ERROR)
-                crash_exit(text != nullptr ? text : "a runtime assertion");
-            return FALSE;
-        });
-    for (const int type : {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT})
-    {
-        _CrtSetReportMode(type, _CRTDBG_MODE_FILE);
-        _CrtSetReportFile(type, _CRTDBG_FILE_STDERR);
-    }
-#endif
-#endif
+    platform::install_crash_hooks([](const char* what) { crash_exit(what); });
 }
 
 // ---- Pilot ---------------------------------------------------------------
