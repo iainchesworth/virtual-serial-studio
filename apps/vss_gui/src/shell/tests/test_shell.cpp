@@ -16,6 +16,7 @@
 #include "panes/selection_service.hpp"
 #include "shell/action_registry.hpp"
 #include "shell/command_palette.hpp"
+#include "shell/format.hpp"
 #include "shell/launcher.hpp"
 #include "shell/level_service.hpp"
 #include "shell/port_warnings.hpp"
@@ -45,6 +46,8 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
+
+#include <cmath>
 
 namespace
 {
@@ -1598,4 +1601,16 @@ TEST_CASE("background: the tray icon says what runs")
     REQUIRE(!sign_in->isChecked());
     REQUIRE(sign_in->toolTip() ==
             QStringLiteral("Not available in this build"));
+}
+
+TEST_CASE("shell: a transfer rate is formatted for any double")
+{
+    // Rates far above the range of std::uint64_t used to be converted out of
+    // range (UBSan); negative and not-a-number rates read as zero.
+    REQUIRE_EQ(vss::gui::format_rate(-5.0), QStringLiteral("0 B/s"));
+    REQUIRE_EQ(vss::gui::format_rate(std::nan("")), QStringLiteral("0 B/s"));
+    REQUIRE_EQ(vss::gui::format_rate(512.0), QStringLiteral("512 B/s"));
+    REQUIRE(vss::gui::format_rate(2048.0).endsWith(QStringLiteral("/s")));
+    REQUIRE(vss::gui::format_rate(7.7e20).endsWith(QStringLiteral("/s")));
+    REQUIRE(vss::gui::format_rate(1.0e300).endsWith(QStringLiteral("/s")));
 }
