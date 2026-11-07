@@ -240,6 +240,14 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             !who.isEmpty())
         {
             administrator.sentence += QLatin1Char(' ') + who;
+            // Said before the prompt, so the prompt is not a surprise.
+            administrator.sentence +=
+                QLatin1Char(' ') +
+                QCoreApplication::translate(
+                    "SetupCheck",
+                    "The Windows prompt names the program and its publisher: "
+                    "choose Yes if they match. Studio then restarts and "
+                    "starts the same ports.");
         }
         administrator.chip =
             QCoreApplication::translate("SetupCheck", "Needed later");

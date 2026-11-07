@@ -26,6 +26,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QContextMenuEvent>
+#include <QDialog>
 #include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -37,6 +38,7 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QStackedWidget>
+#include <QTimer>
 
 namespace topo = vss::gui::topology;
 using vss::gui::canvas_item;
@@ -502,14 +504,15 @@ TEST_CASE("canvas: a pair of two fixtures is built from the canvas and undone")
     REQUIRE(toolbox->isVisible());
 
     canvas->set_sheet(
-        [](canvas_item item, const QString&)
+        [](canvas_item item,
+           const vss::gui::CanvasController::attempt_function& attempt)
         {
             vss::gui::bundle_request request;
             request.item = item;
             request.slots = {
                 {slot_kind::new_fixture, QStringLiteral("rx-sim")},
                 {slot_kind::new_fixture, QStringLiteral("tx-sim")}};
-            return std::optional<vss::gui::bundle_request>(request);
+            return attempt(request).isEmpty();
         });
     Q_EMIT toolbox->add_requested(canvas_item::pair);
     QApplication::processEvents();
@@ -565,6 +568,128 @@ TEST_CASE("canvas: a pair of two fixtures is built from the canvas and undone")
 
     // Closing would ask about the unsaved changes; the window just goes.
     clear_canvas_settings();
+}
+
+TEST_CASE("canvas: a failed Add keeps its sheet open with the reason")
+{
+    // The bug: Add that failed closed the sheet and opened a new one with the
+    // default names and a small caption, again and again, so it looked like
+    // Add did nothing.  The sheet now stays, says why and keeps what was typed.
+    clear_canvas_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::ShellWindow window(backend);
+    window.resize(1280, 800);
+    window.show();
+    QApplication::processEvents();
+    QAction* advanced =
+        window.findChild<QAction*>(QStringLiteral("view.advanced"));
+    REQUIRE(advanced != nullptr);
+    if (!advanced->isChecked())
+        advanced->trigger();
+    QApplication::processEvents();
+    auto* toolbox = window.findChild<topo::Toolbox*>();
+    REQUIRE(toolbox != nullptr);
+
+    struct drive
+    {
+        int sheets = 0;
+        int step = 0;
+        bool open_after_failure = false;
+        bool sheet_same = false;
+        QString error;
+        QString typed_after_failure;
+        std::size_t ports_after_failure = 99;
+    } seen;
+    QWidget* first_sheet = nullptr;
+
+    QTimer driver;
+    driver.setInterval(5);
+    QObject::connect(
+        &driver, &QTimer::timeout,
+        [&]
+        {
+            auto* sheet = qobject_cast<topo::AddSheet*>(
+                QApplication::activeModalWidget());
+            if (sheet == nullptr)
+                return;
+            if (first_sheet == nullptr)
+            {
+                first_sheet = sheet;
+                ++seen.sheets;
+            }
+            if (seen.step == 0)
+            {
+                sheet->set_slot_name(0, QStringLiteral("my-port"));
+                backend.fail_next(vss::make_error_code(vss::errc::unsupported));
+                sheet->add_button()->click();
+                seen.open_after_failure = sheet->isVisible();
+                seen.sheet_same = sheet == first_sheet;
+                seen.error = sheet->error_text();
+                seen.typed_after_failure = sheet->request().slots.at(0).name;
+                seen.ports_after_failure = backend.ports().size();
+                seen.step = 1;
+            }
+            else if (seen.step == 1)
+            {
+                // Same sheet, same text, second try with the backend well.
+                seen.step = 2;
+                sheet->add_button()->click();
+            }
+        });
+    driver.start();
+    // A hung sheet must not hang the suite.
+    QTimer::singleShot(5000,
+                       [&]
+                       {
+                           if (auto* modal = qobject_cast<QDialog*>(
+                                   QApplication::activeModalWidget()))
+                               modal->reject();
+                       });
+
+    Q_EMIT toolbox->add_requested(canvas_item::port);
+    driver.stop();
+
+    REQUIRE_EQ(seen.sheets, 1);
+    REQUIRE(seen.open_after_failure);
+    REQUIRE(seen.sheet_same);
+    REQUIRE(seen.error.startsWith(QStringLiteral("Nothing was added")));
+    REQUIRE_EQ(seen.typed_after_failure, QStringLiteral("my-port"));
+    REQUIRE_EQ(seen.ports_after_failure, std::size_t{0});
+    // The retry made exactly one port, with the typed name.
+    REQUIRE_EQ(seen.step, 2);
+    REQUIRE_EQ(backend.ports().size(), std::size_t{1});
+    REQUIRE(named(backend, QStringLiteral("my-port")).has_value());
+    clear_canvas_settings();
+}
+
+TEST_CASE("canvas: Add that fails twice then is cancelled makes nothing")
+{
+    clear_canvas_settings();
+    vss::gui::FakeStudioBackend backend;
+    vss::gui::UndoService undo;
+    vss::gui::CanvasController canvas(backend, undo, nullptr, nullptr, nullptr);
+
+    int attempts = 0;
+    canvas.set_sheet(
+        [&](canvas_item item,
+            const vss::gui::CanvasController::attempt_function& attempt)
+        {
+            vss::gui::bundle_request request;
+            request.item = item;
+            request.slots = {{slot_kind::new_port, QStringLiteral("a")}};
+            for (int tries = 0; tries < 2; ++tries)
+            {
+                backend.fail_next(vss::make_error_code(vss::errc::unsupported));
+                ++attempts;
+                if (attempt(request).isEmpty())
+                    return true;
+            }
+            return false; // the user cancels
+        });
+    REQUIRE(!canvas.add_item(canvas_item::port));
+    REQUIRE_EQ(attempts, 2);
+    REQUIRE(backend.ports().empty());
+    REQUIRE(!undo.can_undo());
 }
 
 TEST_CASE("canvas: wiring from the canvas links two ports and undoes it")

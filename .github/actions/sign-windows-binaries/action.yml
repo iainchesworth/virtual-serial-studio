@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Sign and verify Windows binaries
+description: >
+  Signs Windows programs with the organisation's sign-windows action (icl-common-infra) and then
+  checks the result, so a leg cannot ship a binary that is meant to be signed and is not.
+
+  The requested mode is the SIGN_WINDOWS repository variable (false, test or production). When
+  the mode is test and the signing secrets are absent, which is the case until the owner creates
+  them and always for a pull request from a fork, the step does not fail: it signs nothing, says
+  so in the log and in the job summary, and the outputs name the files unsigned. A mode of test or
+  production that did run is verified: a file that is unsigned, altered after signing or without a
+  timestamp fails the leg (tools/ci/verify-windows-signatures.ps1).
+
+  Call it on release and packaging legs only, with the secrets passed as inputs. Run on a Windows
+  runner, after checkout.
+
+inputs:
+  mode:
+    description: The SIGN_WINDOWS repository variable. Empty means false.
+    default: "false"
+  files:
+    description: Newline-separated paths of the .exe, .dll and .cat files to sign and verify.
+    required: true
+  pfx-base64:
+    description: Secret WIN_TESTSIGN_PFX_BASE64.
+    default: ""
+  pfx-password:
+    description: Secret WIN_TESTSIGN_PFX_PASSWORD.
+    default: ""
+
+outputs:
+  suffix:
+    description: "-unsigned or -testsigned, or empty for production, to put on the package name."
+    value: ${{ steps.sign.outputs.suffix }}
+  mode:
+    description: The mode that ran, which is false when the request could not be met.
+    value: ${{ steps.decide.outputs.mode }}
+
+runs:
+  using: composite
+  steps:
+    - name: Decide whether to sign
+      id: decide
+      shell: pwsh
+      env:
+        REQUESTED: ${{ inputs.mode }}
+        PFX_B64: ${{ inputs.pfx-base64 }}
+        PFX_PASSWORD: ${{ inputs.pfx-password }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $requested = if ([string]::IsNullOrWhiteSpace($env:REQUESTED)) { 'false' } else { $env:REQUESTED.Trim() }
+        $mode = $requested
+        $reason = ''
+        if ($requested -eq 'test' -and ([string]::IsNullOrEmpty($env:PFX_B64) -or [string]::IsNullOrEmpty($env:PFX_PASSWORD))) {
+          $mode = 'false'
+          $reason = 'SIGN_WINDOWS is test, but the secrets WIN_TESTSIGN_PFX_BASE64 and WIN_TESTSIGN_PFX_PASSWORD are not available to this run (not created yet, or a pull request from a fork). The files are left unsigned.'
+          Write-Host "::warning title=Windows signing skipped::$reason"
+          Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Value @('', '### Windows signing skipped', '', $reason)
+        }
+        elseif ($requested -eq 'false') {
+          Write-Host 'SIGN_WINDOWS is false: Windows binaries are not signed.'
+        }
+        "mode=$mode" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+    - name: Sign
+      id: sign
+      uses: iainchesworthlabs/icl-common-infra/actions/sign-windows@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+      with:
+        mode: ${{ steps.decide.outputs.mode }}
+        files: ${{ inputs.files }}
+        rename: "false"
+        pfx-base64: ${{ inputs.pfx-base64 }}
+        pfx-password: ${{ inputs.pfx-password }}
+
+    - name: Verify the signatures
+      shell: pwsh
+      env:
+        MODE: ${{ steps.decide.outputs.mode }}
+        FILES: ${{ inputs.files }}
+        VERIFY_SCRIPT: ${{ github.action_path }}/../../../tools/ci/verify-windows-signatures.ps1
+      run: |
+        $ErrorActionPreference = 'Stop'
+        & $env:VERIFY_SCRIPT -Mode $env:MODE -Files $env:FILES -SummaryFile $env:GITHUB_STEP_SUMMARY

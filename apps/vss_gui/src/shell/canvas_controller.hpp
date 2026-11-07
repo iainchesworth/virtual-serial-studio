@@ -50,10 +50,16 @@ public:
     void set_editing(bool on);
     bool in_batch() const noexcept { return batch_depth_ > 0; }
 
-    /// The Add sheet.  The default shows `AddSheet`; the tests replace it.
-    /// `error` is the reason the previous Add failed, or empty.
-    using sheet_function = std::function<std::optional<bundle_request>(
-        canvas_item item, const QString& error)>;
+    /// What Add does with the sheet's request: builds it and returns an empty
+    /// string, or returns the reason it failed.
+    using attempt_function =
+        std::function<QString(const bundle_request& request)>;
+    /// The Add sheet.  The default shows `AddSheet`; the tests replace it.  It
+    /// calls `attempt` each time the user chooses Add and stays open while the
+    /// answer is a reason, showing it.  It returns true once an attempt
+    /// worked, false when the user cancelled.
+    using sheet_function =
+        std::function<bool(canvas_item item, const attempt_function& attempt)>;
     void set_sheet(sheet_function sheet) { sheet_ = std::move(sheet); }
     /// The Delete confirmation; the default shows `ConfirmDialog`.
     using confirm_function =

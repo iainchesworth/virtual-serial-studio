@@ -24,7 +24,7 @@ are not in the packages.
 
 | System | State |
 |---|---|
-| Windows | The `SIGN_WINDOWS` repository variable chooses: `false` (the default) leaves the files unsigned and names the package `-unsigned`, `test` signs with a leaf certificate from the owner's own certificate authority (`-testsigned`), and `production` is reserved for the signing service that has not been chosen yet |
+| Windows | The `SIGN_WINDOWS` repository variable chooses: `false` (the default) leaves the files unsigned and names the package `-unsigned`, `test` signs with a leaf certificate from the owner's own certificate authority (`-testsigned`), and `production` is reserved for the signing service that has not been chosen yet. `vss_gui.exe`, `vss_cli.exe` and any `vss_*.dll` are signed before the zip is made and the signatures are verified; a run without the secrets leaves them unsigned and says so in the job summary |
 | macOS | Not signed or notarised yet. Gatekeeper asks the user to allow the app. The owner signs and notarises with `tools/macos/sign-and-notarize.sh` (below) |
 | Linux | Not signed beyond the GPG signature on the file |
 
