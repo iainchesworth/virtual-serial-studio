@@ -44,6 +44,25 @@ function(vss_enable_coverage target)
   endif()
 endfunction()
 
+# Instruments every target created from now on in this directory and below. The
+# GUI has some twenty libraries and test programs, so they are marked together
+# instead of one `vss_enable_coverage` call each.
+function(vss_enable_coverage_directory)
+  if(NOT VSS_COVERAGE)
+    return()
+  endif()
+  if(MSVC AND NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    return()
+  endif()
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-fprofile-instr-generate -fcoverage-mapping)
+    add_link_options(-fprofile-instr-generate)
+  else()
+    add_compile_options(--coverage -O0 -fno-inline -fno-inline-small-functions)
+    add_link_options(--coverage)
+  endif()
+endfunction()
+
 # Marks a target whose own sources are the subject under test; lets the
 # report hide executables and the test framework itself.
 function(vss_mark_coverage_subject target)

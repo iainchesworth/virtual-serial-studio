@@ -256,6 +256,25 @@
       }
     },
     {
+      "name": "linux-coverage-gui",
+      "displayName": "Linux, coverage with the GUI (Clang, fails without Qt)",
+      "inherits": "linux-coverage",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON"
+      }
+    },
+    {
+      "name": "windows-llvm-coverage-gui",
+      "displayName": "Windows, coverage with the GUI (clang-cl, fails without Qt)",
+      "inherits": "windows-llvm-coverage",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON",
+        "CMAKE_C_COMPILER": "clang-cl"
+      }
+    },
+    {
       "name": "linux-tracy",
       "displayName": "Linux, profiling (Release with Tracy; needs VCPKG_ROOT)",
       "inherits": "linux-base",
@@ -368,6 +387,14 @@
     {
       "name": "windows-llvm-coverage",
       "configurePreset": "windows-llvm-coverage"
+    },
+    {
+      "name": "linux-coverage-gui",
+      "configurePreset": "linux-coverage-gui"
+    },
+    {
+      "name": "windows-llvm-coverage-gui",
+      "configurePreset": "windows-llvm-coverage-gui"
     },
     {
       "name": "linux-tracy",
@@ -533,6 +560,84 @@
       },
       "execution": {
         "timeout": 180
+      }
+    },
+    {
+      "name": "linux-debug-gui-ui",
+      "displayName": "UI journeys only (linux-debug-gui)",
+      "inherits": "linux-debug-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "linux-release-gui-ui",
+      "displayName": "UI journeys only (linux-release-gui)",
+      "inherits": "linux-release-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "macos-debug-gui-ui",
+      "displayName": "UI journeys only (macos-debug-gui)",
+      "inherits": "macos-debug-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "macos-release-gui-ui",
+      "displayName": "UI journeys only (macos-release-gui)",
+      "inherits": "macos-release-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "windows-msvc-debug-gui-ui",
+      "displayName": "UI journeys only (windows-msvc-debug-gui)",
+      "inherits": "windows-msvc-debug-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
+      }
+    },
+    {
+      "name": "windows-msvc-release-gui-ui",
+      "displayName": "UI journeys only (windows-msvc-release-gui)",
+      "inherits": "windows-msvc-release-gui",
+      "filter": {
+        "include": {
+          "label": "ui"
+        }
+      },
+      "execution": {
+        "timeout": 600
       }
     },
     {

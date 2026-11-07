@@ -211,8 +211,55 @@ if(TARGET vss_gui_journey_tests)
   add_test(NAME gui_journeys COMMAND vss_gui_journey_tests --verbose)
   set_tests_properties(gui_journeys PROPERTIES
     LABELS ui
+    RUN_SERIAL TRUE
     TIMEOUT 300
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
+# The UI suite: journeys driven only by simulated input (docs/testing.md).
+# One program, one CTest entry per group, so each has its own timeout and can
+# be run alone. RUN_SERIAL keeps CTest from starting any other test beside a
+# GUI test: on Windows the settings, the clipboard and the window station are
+# shared between processes, and a GUI test that waits for a window needs the
+# machine quiet. The programs keep their QSettings in a directory of their own.
+# VSS_UI_BUDGET_MS is how long the GUI thread may be blocked inside one step.
+if(TARGET vss_gui_ui_tests)
+  set(VSS_UI_ENV
+    "${VSS_QT_FONT_ENV}QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+  set(VSS_UI_ENV
+    "${VSS_UI_ENV};VSS_UI_FAILURE_DIR=${CMAKE_BINARY_DIR}/ui-test-failures")
+  # The budgets in ui-tests/perf_budgets.json are for a release build. A debug
+  # build, or one with sanitizers or coverage, is slower by a known factor, so
+  # the budget is multiplied by it. A loose budget still fails a journey that
+  # freezes.
+  if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    set(VSS_UI_BUDGET_SCALE 1)
+  elseif(VSS_COVERAGE)
+    set(VSS_UI_BUDGET_SCALE 60)
+  else()
+    set(VSS_UI_BUDGET_SCALE 12)
+  endif()
+  set(VSS_UI_ENV "${VSS_UI_ENV};VSS_UI_BUDGET_SCALE=${VSS_UI_BUDGET_SCALE}")
+  foreach(group simple advanced edge engine)
+    add_test(NAME ui_${group}
+      COMMAND vss_gui_ui_tests --verbose --filter=${group}:)
+    set(_labels ui ui-${group})
+    set_tests_properties(ui_${group} PROPERTIES
+      LABELS "${_labels}"
+      TIMEOUT 900
+      RUN_SERIAL TRUE
+      ENVIRONMENT
+        "${VSS_UI_ENV};VSS_UI_PERF_REPORT=${CMAKE_BINARY_DIR}/ui-test-perf/${group}.csv")
+  endforeach()
+  # The edge cases again at 200 percent scale, where text is twice as large.
+  add_test(NAME ui_edge_200
+    COMMAND vss_gui_ui_tests --verbose --filter=edge:)
+  set_tests_properties(ui_edge_200 PROPERTIES
+    LABELS "ui;ui-edge"
+    TIMEOUT 900
+    RUN_SERIAL TRUE
+    ENVIRONMENT
+      "${VSS_UI_ENV};QT_SCALE_FACTOR=2;QT_FONT_DPI=192;VSS_UI_PERF_REPORT=${CMAKE_BINARY_DIR}/ui-test-perf/edge-200.csv")
 endif()
 
 # Theme and widget tests need a QApplication but stay offscreen.
