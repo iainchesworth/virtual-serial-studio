@@ -905,7 +905,8 @@ void expect_failure(const char* issue, const std::function<void()>& body)
     catch (const vss_test::failure& failure)
     {
         std::string first = failure.what();
-        first = first.substr(0, first.find('\n'));
+        if (const auto cut = first.find('\n'); cut != std::string::npos)
+            first.resize(cut);
         std::printf("[XFAIL] %s: %s\n", issue, first.c_str());
         return;
     }

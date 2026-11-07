@@ -47,7 +47,8 @@ QString plain_text(QString text)
 /// One menu entry: the titles to open, from the menu bar down.
 using entry_path = std::vector<QString>;
 
-void collect(QMenu* menu, entry_path prefix, std::vector<entry_path>& out)
+void collect(QMenu* menu, const entry_path& prefix,
+             std::vector<entry_path>& out)
 {
     for (QAction* entry : menu->actions())
     {
