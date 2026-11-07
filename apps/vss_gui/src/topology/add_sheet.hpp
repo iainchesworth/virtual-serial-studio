@@ -13,6 +13,8 @@
 #include <QStringList>
 #include <QVector>
 
+#include <functional>
+#include <utility>
 #include <vector>
 
 class QComboBox;
@@ -23,6 +25,11 @@ class QPushButton;
 class QSpinBox;
 class QToolButton;
 class QWidget;
+
+namespace vss::gui
+{
+class NoteBanner;
+}
 
 namespace vss::gui::topology
 {
@@ -36,7 +43,9 @@ QString slot_label(canvas_item item, int index, int slots);
 /// already on the canvas) and a name; "How many" for the bundles with a count;
 /// "More settings" for the serial settings of the new ports.  Enter adds, Esc
 /// cancels.  The sheet builds a `bundle_request` and does not call the
-/// backend.
+/// backend itself.  With an attempt set, Add hands the request to it: an empty
+/// answer closes the sheet, anything else is the reason the add failed, shown
+/// in the sheet, which stays open with what was typed so it can be fixed.
 class AddSheet final : public QDialog
 {
     Q_OBJECT
@@ -44,6 +53,13 @@ class AddSheet final : public QDialog
 public:
     AddSheet(canvas_item item, const std::vector<port_view>& ports,
              QWidget* parent = nullptr);
+
+    using attempt_function =
+        std::function<QString(const bundle_request& request)>;
+    void set_attempt(attempt_function attempt)
+    {
+        attempt_ = std::move(attempt);
+    }
 
     bundle_request request() const;
     int count() const;
@@ -57,6 +73,8 @@ public:
     /// Shows the reason the last Add failed, under the sheet.
     void show_error(const QString& text);
     QString error_text() const;
+    /// What Add does: the attempt, or accept when there is none.
+    void submit();
 
 private:
     struct row
@@ -81,7 +99,8 @@ private:
     QWidget* settings_ = nullptr;
     QComboBox* baud_ = nullptr;
     QComboBox* framing_ = nullptr;
-    QLabel* error_ = nullptr;
+    NoteBanner* error_ = nullptr;
+    attempt_function attempt_;
     QPushButton* add_ = nullptr;
 };
 

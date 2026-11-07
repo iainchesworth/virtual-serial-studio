@@ -11,6 +11,7 @@
 #include "topology/toolbox.hpp"
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
+#include "widgets/notes.hpp"
 
 #include <QComboBox>
 #include <QGridLayout>
@@ -182,9 +183,8 @@ AddSheet::AddSheet(canvas_item item, const std::vector<port_view>& ports,
                 adjustSize();
             });
 
-    error_ = make_label({}, text_style::caption, this);
+    error_ = new NoteBanner(NoteBanner::kind::danger, {}, this);
     error_->setObjectName(QStringLiteral("addSheetError"));
-    error_->setWordWrap(true);
     error_->hide();
     layout->addWidget(error_);
 
@@ -197,7 +197,7 @@ AddSheet::AddSheet(canvas_item item, const std::vector<port_view>& ports,
     add_->setObjectName(QStringLiteral("addSheetAdd"));
     set_role(add_, "primary");
     add_->setDefault(true);
-    connect(add_, &QPushButton::clicked, this, &QDialog::accept);
+    connect(add_, &QPushButton::clicked, this, [this] { submit(); });
     buttons->addWidget(add_);
     layout->addLayout(buttons);
 
@@ -451,7 +451,7 @@ QString AddSheet::slot_row_label(int index) const
 
 void AddSheet::show_error(const QString& text)
 {
-    error_->setText(text);
+    error_->set_text(text);
     error_->setVisible(!text.isEmpty());
     adjustSize();
 }
@@ -459,6 +459,35 @@ void AddSheet::show_error(const QString& text)
 QString AddSheet::error_text() const
 {
     return error_->isHidden() ? QString() : error_->text();
+}
+
+void AddSheet::submit()
+{
+    if (!add_->isEnabled())
+        return;
+    if (!attempt_)
+    {
+        accept();
+        return;
+    }
+    const QString failure = attempt_(request());
+    if (failure.isEmpty())
+    {
+        accept();
+        return;
+    }
+    // Stay open with what was typed, say why, and put the cursor back in the
+    // first name so the next try is one edit away.
+    show_error(failure);
+    for (const row& line : rows_)
+    {
+        if (line.name->isVisibleTo(this))
+        {
+            line.name->setFocus(Qt::OtherFocusReason);
+            line.name->selectAll();
+            break;
+        }
+    }
 }
 
 } // namespace vss::gui::topology
