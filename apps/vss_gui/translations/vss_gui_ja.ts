@@ -2182,6 +2182,10 @@ Networks: %5</source>
             <translation>ルールを追加する前に、Windows が管理者の許可を求めます。</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>ファイアウォールの変更には管理者権限が必要なため、Windows が許可の確認画面を表示します。画面にはプログラム名と発行元が表示されます。一致している場合は「はい」を選んでください。Studio 自体は管理者権限なしで動作し続けます。</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>このビルドでは利用できません</translation>
@@ -6419,6 +6423,10 @@ Networks: %5</source>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>新しいリンクペアの作成には、ペアごとに1回、管理者権限が必要です。それ以外の操作は管理者権限なしで動作します。</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>Windows の確認画面にはプログラム名と発行元が表示されます。一致している場合は「はい」を選んでください。その後 Studio が再起動し、同じポートを開始します。</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />

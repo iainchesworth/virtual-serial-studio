@@ -2182,6 +2182,10 @@ Redes: %5</translation>
             <translation>Windows pedirá permiso de administrador antes de añadir la regla.</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>Cambiar el firewall requiere derechos de administrador, así que Windows mostrará un aviso de permiso. Indica el programa y su editor: elige «Sí» si coinciden. Studio en sí sigue funcionando sin derechos de administrador.</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>No disponible en esta compilación</translation>
@@ -6422,6 +6426,10 @@ Redes: %5</translation>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>Crear un par enlazado nuevo requiere derechos de administrador, una vez por par. Todo lo demás funciona sin ellos.</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>El aviso de Windows indica el programa y su editor: elige «Sí» si coinciden. Studio se reinicia y arranca los mismos puertos.</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />

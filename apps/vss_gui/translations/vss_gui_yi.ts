@@ -2182,6 +2182,10 @@ Networks: %5</source>
             <translation>Windows וועט פֿרעגן וועגן אַדמיניסטראַטאָר־דערלויבעניש איידער דאָס כּלל ווערט צוגעגעבן.</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>דאס טוישן דעם פײַערוואל דארף אַדמיניסטראטאר־רעכט, דעריבער ווײַזט Windows אַן דערלויבעניש־פראמפט. עס נאָמענט דעם פראגראם און זײַן פארעפנטלעכער: קלײַבט אויס „יאָ“ אויב זיי שטימען. Studio אַלײן לויפט ווײַטער אָן אַדמיניסטראטאר־רעכט.</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>נישט פֿאַראַנען אין דער דאָזיקער ווערסיע</translation>
@@ -6422,6 +6426,10 @@ Networks: %5</source>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>צו באַשאַפֿן אַ נײַעם פֿאַרבונדענעם פּאָר דאַרף מען אַדמיניסטראַטאָר־רעכטן, איין מאָל פֿאַר יעדן פּאָר. אַלץ אַנדערש לויפֿט אָן זיי.</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>דער Windows־פראמפט נאָמענט דעם פראגראם און זײַן פארעפנטלעכער: קלײַבט אויס „יאָ“ אויב זיי שטימען. Studio הייבט זיך דערנאָך אָן פון נײַ און סטאַרט די זעלבע פּאָרטן.</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />

@@ -2182,6 +2182,10 @@ Networks: %5</source>
             <translation>سيطلب Windows إذن مسؤول قبل إضافة القاعدة.</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>يتطلب تغيير جدار الحماية صلاحيات المسؤول، لذلك ستعرض Windows رسالة طلب إذن. تذكر الرسالة اسم البرنامج وناشره: اختر «نعم» إذا تطابقا. يواصل Studio نفسه العمل دون صلاحيات المسؤول.</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>غير متاح في هذا الإصدار</translation>
@@ -6434,6 +6438,10 @@ Networks: %5</source>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>يتطلب إنشاء زوج مرتبط جديد صلاحيات المسؤول، مرة واحدة لكل زوج. وكل ما عدا ذلك يعمل بدونها.</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>تعرض رسالة Windows اسم البرنامج وناشره: اختر «نعم» إذا تطابقا. بعد ذلك يعيد Studio التشغيل ويبدأ المنافذ نفسها.</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />
