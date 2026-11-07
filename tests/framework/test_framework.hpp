@@ -77,8 +77,8 @@ struct registrar
 class profiling_session
 {
 public:
-    // An inline variable is initialised before main, so nothing may escape:
-    // a failure to describe or start profiling is reported and the run goes on.
+    // Noexcept because it runs as a static initialiser, where nothing could
+    // catch an exception.
     profiling_session() noexcept
     {
         try
