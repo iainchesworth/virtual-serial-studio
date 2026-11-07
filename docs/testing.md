@@ -262,7 +262,8 @@ assertion prints the journey and its steps in the same way.
 
 Each journey has a budget in `apps/vss_gui/ui-tests/perf_budgets.json`
 (150 ms unless it lists one), written for a release build; CMake multiplies it
-by 12 for a debug build and 60 for a coverage build (`VSS_UI_BUDGET_SCALE`).
+by 12 for a debug build, 6 under AddressSanitizer, 25 under ThreadSanitizer
+and 60 for a coverage build (`VSS_UI_BUDGET_SCALE`).
 `VSS_UI_BUDGET_MS` replaces the table with one number, and `VSS_UI_TRACE=1`
 prints each step as it starts. The table is a ratchet: a journey that is
 slower than its entry fails, and an entry is lowered when the application gets

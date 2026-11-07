@@ -232,10 +232,14 @@ if(TARGET vss_gui_ui_tests)
   # build, or one with sanitizers or coverage, is slower by a known factor, so
   # the budget is multiplied by it. A loose budget still fails a journey that
   # freezes.
-  if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    set(VSS_UI_BUDGET_SCALE 1)
+  if(ICL_SANITIZERS MATCHES "thread")
+    set(VSS_UI_BUDGET_SCALE 25)
+  elseif(ICL_SANITIZERS)
+    set(VSS_UI_BUDGET_SCALE 6)
   elseif(VSS_COVERAGE)
     set(VSS_UI_BUDGET_SCALE 60)
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    set(VSS_UI_BUDGET_SCALE 1)
   else()
     set(VSS_UI_BUDGET_SCALE 12)
   endif()
