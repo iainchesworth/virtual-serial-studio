@@ -126,8 +126,14 @@ void StatusBar::refresh()
     double tx_rate = 0.0;
     if (seconds > 0.0)
     {
-        rx_rate = static_cast<double>(rx - previous_rx_) / seconds;
-        tx_rate = static_cast<double>(tx - previous_tx_) / seconds;
+        // The totals are sums over the ports that exist now, so they fall
+        // when a port is removed; a fall is no traffic, not a wrapped count.
+        const std::uint64_t rx_delta =
+            rx >= previous_rx_ ? rx - previous_rx_ : 0;
+        const std::uint64_t tx_delta =
+            tx >= previous_tx_ ? tx - previous_tx_ : 0;
+        rx_rate = static_cast<double>(rx_delta) / seconds;
+        tx_rate = static_cast<double>(tx_delta) / seconds;
     }
     previous_rx_ = rx;
     previous_tx_ = tx;

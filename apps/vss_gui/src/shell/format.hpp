@@ -12,6 +12,7 @@
 #include <QLocale>
 #include <QString>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 
@@ -40,8 +41,10 @@ inline QString format_rate(double bytes_per_second)
         return QStringLiteral("%1 B/s").arg(
             static_cast<qulonglong>(std::llround(bytes_per_second)));
     }
-    return QStringLiteral("%1/s").arg(
-        format_bytes(static_cast<std::uint64_t>(bytes_per_second)));
+    // A double above the range of std::uint64_t cannot be converted.
+    constexpr double kLargest = 1.0e19;
+    return QStringLiteral("%1/s").arg(format_bytes(
+        static_cast<std::uint64_t>(std::min(bytes_per_second, kLargest))));
 }
 
 } // namespace vss::gui
