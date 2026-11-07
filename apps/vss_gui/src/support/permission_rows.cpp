@@ -396,9 +396,9 @@ perm::context permission_context(const StudioBackend& backend)
 
 perm::context permission_context_for(const QString& uri)
 {
-    VSS_PROFILE_ZONE_NAMED(profile_zone,
+    VSS_PROFILE_ZONE_NAMED(kProfileZone,
                            "gui.support.permission_rows.context_for");
-    VSS_PROFILE_ZONE_TEXT(profile_zone, uri.toStdString());
+    VSS_PROFILE_ZONE_TEXT(kProfileZone, uri.toStdString());
     perm::context ask;
     perm::listener each;
     if (perm::parse_listen_uri(uri.toStdString(), each))
