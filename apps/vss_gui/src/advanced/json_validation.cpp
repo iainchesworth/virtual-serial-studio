@@ -8,6 +8,8 @@
 
 #include "backend/view_types.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QHash>
 #include <QJsonArray>
@@ -436,6 +438,7 @@ QString json_validation::status_text() const
 
 json_validation validate_json_document(const QString& text, bool shared_bus)
 {
+    VSS_PROFILE_ZONE("gui.advanced.json_validate");
     json_validation out;
 
     QJsonParseError parse_error;

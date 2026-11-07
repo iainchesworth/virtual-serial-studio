@@ -10,9 +10,12 @@
 // the dispatcher, operations per second for configuration round-trips.
 //
 
+#include "perf_common.hpp"
+
 #include <vss/config/document.hpp>
 #include <vss/core/hub.hpp>
 #include <vss/core/profile.hpp>
+#include <vss/core/profiling.hpp>
 #include <vss/ports/serial_transport.hpp>
 #include <vss/studio/studio.hpp>
 #include <vss/testkit/harness.hpp>
@@ -95,20 +98,8 @@ private:
     bool open_ = true;
 };
 
-struct measurement
-{
-    std::string name;
-    double value = 0.0;
-    std::string unit;
-    std::string note;
-};
-
-double seconds_since(std::chrono::steady_clock::time_point start)
-{
-    return std::chrono::duration<double>(std::chrono::steady_clock::now() -
-                                         start)
-        .count();
-}
+using vss_perf::measurement;
+using vss_perf::seconds_since;
 
 /// A one-connection echo server, so the benchmark can cross a real socket
 /// boundary instead of a mock.
@@ -336,6 +327,53 @@ measurement bench_mock_write()
             "MB/s", "scriptable fixture"};
 }
 
+// -- instrumentation cost ---------------------------------------------------
+//
+// What one VSS_PROFILE_ZONE costs in the three states a build can be in: the
+// profiler never started (dormant, the state of a release build), recording
+// switched on but no profiler attached, and a profiler attached. The figure is
+// nanoseconds per zone with the empty loop subtracted.
+
+double zone_loop_ns(std::size_t iterations, bool with_zone)
+{
+    std::atomic<std::uint64_t> sink{0};
+    std::uint64_t counter = 0;
+    const auto start = std::chrono::steady_clock::now();
+    if (with_zone)
+    {
+        for (std::size_t index = 0; index < iterations; ++index)
+        {
+            VSS_PROFILE_ZONE("perf.zone_cost");
+            counter += index;
+        }
+    }
+    else
+    {
+        for (std::size_t index = 0; index < iterations; ++index)
+        {
+            counter += index;
+        }
+    }
+    const double elapsed = seconds_since(start);
+    sink.store(counter, std::memory_order_relaxed);
+    return elapsed * 1e9 / static_cast<double>(iterations);
+}
+
+measurement bench_zone_cost(const char* name, const char* note,
+                            std::size_t iterations)
+{
+    // Best of five: the figure is a floor on the cost, not a mean over whatever
+    // else the machine was doing.
+    double best = 1e9;
+    for (int round = 0; round < 5; ++round)
+    {
+        const double with = zone_loop_ns(iterations, true);
+        const double without = zone_loop_ns(iterations, false);
+        best = std::min(best, std::max(0.0, with - without));
+    }
+    return {name, best, "ns/zone", note};
+}
+
 // -- end to end -------------------------------------------------------------
 //
 // These two cross a real boundary (a socket, or a pair of pseudo terminals),
@@ -434,6 +472,9 @@ int main(int argc, char** argv)
     bool quick = false;
     bool tracy = false;
     std::string output;
+    // Profiling is never on by itself here, not even in Debug: the zone cost
+    // benchmarks below need to see the dormant state first.
+    auto profile = vss::profiling::request_from_environment(false);
     for (int index = 1; index < argc; ++index)
     {
         const std::string argument = argv[index];
@@ -441,25 +482,68 @@ int main(int argc, char** argv)
             quick = true;
         else if (argument == "--tracy")
             tracy = true;
+        else if (vss::profiling::take_argument(argument, profile))
+            continue;
         else if (argument.rfind("--output=", 0) == 0)
             output = argument.substr(9);
         else if (argument.rfind("--output", 0) == 0 && index + 1 < argc)
             output = argv[++index];
+        else if (argument == "--help" || argument == "-h")
+        {
+            std::printf("usage: vss_perf [--quick] [--tracy] [--output=FILE]\n"
+                        "  --quick            skip the slower benchmarks\n"
+                        "  --tracy            profile with Tracy and run the "
+                        "end-to-end phases\n"
+                        "                     (waits for a profiler to "
+                        "connect)\n%.*s",
+                        static_cast<int>(vss::profiling::usage().size()),
+                        vss::profiling::usage().data());
+            return 0;
+        }
     }
+    if (tracy)
+        profile.enable = true;
+    tracy = tracy || profile.enable;
 
     vss::hub_options options;
     options.io_threads = 2;
 
-#if defined(VSS_TRACY)
-    if (tracy)
+    std::vector<measurement> results;
+
+    // The dormant figure first, before anything starts the profiler.
+    constexpr std::size_t zone_iterations = 20'000'000;
+    results.push_back(bench_zone_cost("zone_dormant", "profiler not started",
+                                      zone_iterations));
+
+    if (profile.enable)
     {
+        const auto started = vss::profiling::start(profile);
+        if (!started)
+        {
+            std::fprintf(stderr, "cannot start profiling: %s\n",
+                         started.error().message().c_str());
+            return 1;
+        }
+        std::printf("%s\n", vss::profiling::describe(*started).c_str());
+        std::fflush(stdout);
+
+        if (!vss::profiling::current().profiler_connected)
+            results.push_back(bench_zone_cost(
+                "zone_armed", "recording on, no profiler attached",
+                zone_iterations / 4));
+
         // On-demand profiling records nothing until the profiler connects, and
         // that handshake is asynchronous. Wait for it so the trace starts at
         // the first benchmark instead of part way through.
-        for (int attempt = 0; attempt < 300 && !TracyIsConnected; ++attempt)
+        for (int attempt = 0;
+             attempt < 6000 && !vss::profiling::current().profiler_connected;
+             ++attempt)
             std::this_thread::sleep_for(10ms);
+
+        if (vss::profiling::current().profiler_connected)
+            results.push_back(bench_zone_cost(
+                "zone_recording", "profiler attached", zone_iterations / 200));
     }
-#endif
 
     auto hub = std::make_shared<vss::hub>(options);
     hub->start();
@@ -471,8 +555,6 @@ int main(int argc, char** argv)
             std::make_shared<sink_transport>(hub->executor()),
             vss::endpoint_options{});
     };
-
-    std::vector<measurement> results;
 
     const auto source = add_sink("source");
     const auto target = add_sink("target");
@@ -494,6 +576,8 @@ int main(int argc, char** argv)
     results.push_back(bench_config_roundtrip());
     if (!quick)
         results.push_back(bench_mock_write());
+    for (auto& result : vss_perf::run_component_benchmarks(quick))
+        results.push_back(std::move(result));
 
     if (tracy)
     {
@@ -535,10 +619,9 @@ int main(int argc, char** argv)
         stream.close();
     }
 
-    // Give the Tracy client a moment to flush the closing zones before the
-    // process exits and the capture tool saves the trace.
-    if (tracy)
-        std::this_thread::sleep_for(300ms);
+    // Flush the closing zones to a connected profiler before the process
+    // exits and the capture tool saves the trace.
+    vss::profiling::shutdown();
 
     return 0;
 }

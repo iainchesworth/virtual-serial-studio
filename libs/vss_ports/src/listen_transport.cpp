@@ -6,6 +6,7 @@
 
 #include <vss/ports/listen_transport.hpp>
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/rfc2217.hpp>
 
 #include "platform/listen_socket_platform.hpp"
@@ -154,6 +155,7 @@ bool rules_admit(const std::vector<allow_rule>& rules,
 bool allow_list_admits(const std::vector<std::string>& list,
                        std::string_view address)
 {
+    VSS_PROFILE_ZONE("ports.listen.allow_check");
     if (list.empty())
         return true;
     boost::system::error_code ec;
@@ -179,6 +181,7 @@ bool is_listen_uri(std::string_view uri) noexcept
 
 result<listen_address> parse_listen_uri(std::string_view uri)
 {
+    VSS_PROFILE_ZONE("ports.listen.parse_uri");
     listen_address address;
     if (uri.starts_with(tcp_scheme))
     {
@@ -316,6 +319,7 @@ public:
 
     error_code open()
     {
+        VSS_PROFILE_ZONE("ports.listen.open");
         boost::system::error_code ec;
         const auto rules = parse_allow_list(address_.allow);
         if (!rules)
@@ -359,6 +363,7 @@ public:
             port_.store(datagrams_.local_endpoint(ec).port());
         }
         open_.store(true);
+        VSS_PROFILE_MESSAGE("ports.listen.opened");
         return {};
     }
 
@@ -387,6 +392,7 @@ public:
                    [self = shared_from_this(), buffer,
                     handler = std::move(handler)]() mutable
                    {
+                       VSS_PROFILE_ZONE("ports.listen.read");
                        if (self->closed_ || !self->open_.load())
                        {
                            self->complete(std::move(handler),
@@ -421,6 +427,7 @@ public:
                    [self = shared_from_this(), payload,
                     handler = std::move(handler)]() mutable
                    {
+                       VSS_PROFILE_ZONE("ports.listen.write");
                        self->send(payload, std::move(handler));
                    });
     }
@@ -432,6 +439,7 @@ public:
     // endpoint has closed), the cycle would never be broken.
     void close()
     {
+        VSS_PROFILE_ZONE("ports.listen.close");
         open_.store(false);
         abort_pending_read();
         asio::post(strand_, [self = shared_from_this()] { self->shut_down(); });
@@ -547,6 +555,7 @@ private:
             [self = shared_from_this()](error_code ec,
                                         asio::ip::tcp::socket socket)
             {
+                VSS_PROFILE_ZONE("ports.tcp.accept");
                 if (ec)
                 {
                     if (!self->closed_ && ec != asio::error::operation_aborted)
@@ -561,6 +570,7 @@ private:
                     boost::system::error_code ignored;
                     socket.close(ignored);
                     self->refused_.fetch_add(1);
+                    VSS_PROFILE_MESSAGE("ports.tcp.refused");
                     self->accept_next();
                     return;
                 }
@@ -576,6 +586,8 @@ private:
                 }
                 self->clients_.push_back(made);
                 self->peers_.store(self->clients_.size());
+                VSS_PROFILE_PLOT("ports.tcp.clients", self->clients_.size());
+                VSS_PROFILE_MESSAGE("ports.tcp.client_connected");
                 self->read_client(made);
                 self->accept_next();
             });
@@ -592,6 +604,8 @@ private:
             asio::buffer(peer->buffer),
             [self = shared_from_this(), peer](error_code ec, std::size_t count)
             {
+                VSS_PROFILE_ZONE_NAMED(zone, "ports.tcp.receive");
+                VSS_PROFILE_ZONE_VALUE(zone, count);
                 peer->reading = false;
                 if (ec)
                 {
@@ -609,6 +623,8 @@ private:
                         peer->buffer.begin() +
                             static_cast<std::ptrdiff_t>(count));
                 }
+                VSS_PROFILE_PLOT("ports.listen.received",
+                                 self->received_.size());
                 self->deliver();
                 self->read_client(peer);
             });
@@ -621,6 +637,7 @@ private:
         auto& slot = peer->session;
         if (!slot)
             return;
+        VSS_PROFILE_ZONE("ports.rfc2217.consume");
         rfc2217::session& session = *slot;
         const auto fed = session.feed(
             std::string_view(peer->buffer.data(), count));
@@ -679,6 +696,7 @@ private:
             peer->socket, asio::buffer(*item.bytes),
             [self = shared_from_this(), peer, item](error_code ec, std::size_t)
             {
+                VSS_PROFILE_ZONE("ports.tcp.sent");
                 if (!peer->queue.empty())
                     peer->queue.pop_front();
                 if (item.done)
@@ -703,10 +721,13 @@ private:
 
     void drop(const std::shared_ptr<client>& peer)
     {
+        VSS_PROFILE_ZONE("ports.tcp.drop");
         boost::system::error_code ignored;
         peer->socket.close(ignored);
         std::erase(clients_, peer);
         peers_.store(clients_.size());
+        VSS_PROFILE_PLOT("ports.tcp.clients", clients_.size());
+        VSS_PROFILE_MESSAGE("ports.tcp.client_dropped");
     }
 
     // -- UDP ---------------------------------------------------------------
@@ -725,6 +746,8 @@ private:
             asio::buffer(datagram_buffer_), sender_,
             [self = shared_from_this()](error_code ec, std::size_t count)
             {
+                VSS_PROFILE_ZONE_NAMED(zone, "ports.udp.receive");
+                VSS_PROFILE_ZONE_VALUE(zone, count);
                 self->receiving_ = false;
                 if (ec == asio::error::operation_aborted || self->closed_)
                     return;
@@ -758,6 +781,7 @@ private:
 
     void deliver()
     {
+        VSS_PROFILE_ZONE("ports.listen.deliver");
         std::optional<pending> taken;
         {
             std::lock_guard lock(read_mutex_);
@@ -799,6 +823,7 @@ private:
     void send(const std::shared_ptr<std::vector<char>>& payload,
               io_handler handler)
     {
+        VSS_PROFILE_ZONE("ports.listen.send");
         const std::size_t size = payload->size();
         if (closed_)
         {
@@ -860,6 +885,7 @@ private:
     /// Tells every RFC 2217 client the modem lines that changed.
     void notify_modem(control_lines inputs)
     {
+        VSS_PROFILE_ZONE("ports.rfc2217.modem");
         for (const auto& peer : clients_)
         {
             auto& slot = peer->session;
@@ -875,6 +901,8 @@ private:
     {
         if (closed_)
             return;
+        VSS_PROFILE_ZONE("ports.listen.shutdown");
+        VSS_PROFILE_MESSAGE("ports.listen.closed");
         closed_ = true;
         boost::system::error_code ignored;
         acceptor_.close(ignored);

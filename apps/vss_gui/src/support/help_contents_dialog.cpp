@@ -10,6 +10,8 @@
 #include "widgets/common.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -37,6 +39,8 @@ HelpContentsDialog::HelpContentsDialog(QWidget* parent) : QDialog(parent)
 
 void HelpContentsDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.help.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.help.opened");
     setWindowTitle(QCoreApplication::translate("Help", "Help contents"));
     setAccessibleName(QCoreApplication::translate("Help", "Help contents"));
     setProperty("surface", QStringLiteral("panel"));
@@ -143,6 +147,7 @@ void HelpContentsDialog::build()
 
 void HelpContentsDialog::choose(help_topic topic)
 {
+    VSS_PROFILE_ZONE("gui.support.help.choose");
     requested_ = topic;
     accept();
 }

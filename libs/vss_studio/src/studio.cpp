@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/studio.hpp>
 
 #include <vss/ports/listen_transport.hpp>
@@ -126,6 +128,7 @@ config::port_entry record_to_entry(const std::string& name,
 studio::studio(const studio_options& options)
     : options_(options), hub_(std::make_shared<vss::hub>(options_.hub))
 {
+    VSS_PROFILE_ZONE("studio.create");
     if (options_.start_hub)
         hub_->start();
 
@@ -173,6 +176,7 @@ studio::studio(const studio_options& options)
 
 studio::~studio()
 {
+    VSS_PROFILE_ZONE("studio.destroy");
     if (hub_ && reconnect_subscription_ != 0)
         hub_->unsubscribe(reconnect_subscription_);
     // Ends the tries first: one may be in the middle of opening a transport.
@@ -199,11 +203,13 @@ studio::~studio()
 
 void studio::start()
 {
+    VSS_PROFILE_ZONE("studio.start");
     hub_->start();
 }
 
 void studio::stop()
 {
+    VSS_PROFILE_ZONE("studio.stop");
     hub_->stop();
     hub_->join();
 }
@@ -247,6 +253,7 @@ void studio::claim_paths(const std::string& target,
 
 result<void> studio::link_pty(port_record& record)
 {
+    VSS_PROFILE_ZONE("studio.link_pty");
     if (!options_.stable_links ||
         record.virtual_kind != to_string(virtual_port_kind::pty))
         return {};
@@ -273,6 +280,7 @@ result<std::shared_ptr<endpoint>>
 studio::register_port(port_record record, std::shared_ptr<transport> transport,
                       endpoint_options options)
 {
+    VSS_PROFILE_ZONE("studio.register_port");
     if (!transport)
         return make_error_code(errc::invalid_argument);
 
@@ -306,6 +314,7 @@ result<std::shared_ptr<endpoint>>
 studio::create_virtual_port(const std::string& name, virtual_port_kind kind,
                             endpoint_options options, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("studio.create_virtual_port");
     if (kind == virtual_port_kind::pty && !supports(virtual_port_kind::pty))
         return create_auto_virtual_port(name, options, com_number);
 
@@ -336,6 +345,7 @@ result<std::shared_ptr<endpoint>>
 studio::create_auto_virtual_port(const std::string& name,
                                  endpoint_options options, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("studio.create_auto_virtual_port");
     const std::string final_name = unique_name(name);
 
     // A COM port from our own driver is the goal state: no third-party
@@ -422,6 +432,9 @@ result<std::shared_ptr<endpoint>>
 studio::attach_serial(const std::string& name, const std::string& uri,
                       endpoint_options options)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "studio.attach_serial");
+    if (zone.active())
+        zone.text(uri);
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
@@ -448,6 +461,9 @@ result<std::shared_ptr<endpoint>>
 studio::attach_serial(const std::string& name, const std::string& uri,
                       const serial_settings& settings, endpoint_options options)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "studio.attach_serial");
+    if (zone.active())
+        zone.text(uri);
     if (const error_code invalid = validate(settings))
         return invalid;
 
@@ -480,6 +496,7 @@ studio::create_mock_port(const std::string& name,
                          const serial_settings& settings,
                          const std::string& target)
 {
+    VSS_PROFILE_ZONE("studio.create_mock_port");
     const std::string final_name = unique_name(name);
 
     boost::system::error_code ec;
@@ -507,6 +524,7 @@ studio::create_mock_port(const std::string& name,
 
 result<void> studio::inject_fault(endpoint_id id, fault_kind fault)
 {
+    VSS_PROFILE_ZONE("studio.inject_fault");
     std::shared_ptr<serial_transport> fixture;
     {
         std::lock_guard lock(record_mutex_);
@@ -591,6 +609,7 @@ void post_inject(const std::shared_ptr<endpoint>& target,
 
 result<void> studio::inject_data(endpoint_id id, bytes_view data)
 {
+    VSS_PROFILE_ZONE("studio.inject_data");
     const auto fixture = fixture_for(id);
     if (!fixture)
         return fixture.error();
@@ -603,6 +622,7 @@ result<void> studio::inject_data(endpoint_id id, bytes_view data)
 
 result<void> studio::set_fixture_echo(endpoint_id id, bool on)
 {
+    VSS_PROFILE_ZONE("studio.set_fixture_echo");
     const auto fixture = fixture_for(id);
     if (!fixture)
         return fixture.error();
@@ -674,6 +694,7 @@ std::optional<serial_settings> studio::port_settings(endpoint_id id) const
 result<void> studio::reconfigure_port(endpoint_id id,
                                       const serial_settings& settings)
 {
+    VSS_PROFILE_ZONE("studio.reconfigure_port");
     if (const auto invalid = validate(settings))
         return invalid;
 
@@ -759,6 +780,7 @@ result<void> studio::reconfigure_port(endpoint_id id,
 
 result<void> studio::remove_port(endpoint_id id)
 {
+    VSS_PROFILE_ZONE("studio.remove_port");
     std::string target;
     std::string advertised;
     subscriber_id echo = 0;
@@ -797,6 +819,7 @@ result<void> studio::remove_port(endpoint_id id)
 
 result<void> studio::remove_port(std::string_view name)
 {
+    VSS_PROFILE_ZONE("studio.remove_port_by_name");
     const auto endpoint = hub_->find_endpoint(name);
     if (!endpoint)
         return make_error_code(errc::not_found);
@@ -805,6 +828,7 @@ result<void> studio::remove_port(std::string_view name)
 
 result<void> studio::rename_port(endpoint_id id, const std::string& name)
 {
+    VSS_PROFILE_ZONE("studio.rename_port");
     if (name.empty())
         return make_error_code(errc::invalid_argument);
 
@@ -865,6 +889,7 @@ result<void> studio::rename_port(endpoint_id id, const std::string& name)
 
 result<std::string> studio::set_com_number(endpoint_id id, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("studio.set_com_number");
     std::shared_ptr<transport> driver;
     {
         std::lock_guard lock(record_mutex_);
@@ -898,6 +923,7 @@ result<std::string> studio::set_com_number(endpoint_id id, unsigned com_number)
 
 std::unordered_map<endpoint_id, std::string> studio::driver_ports() const
 {
+    VSS_PROFILE_ZONE("studio.driver_ports");
     std::unordered_map<endpoint_id, std::string> out;
     std::lock_guard lock(record_mutex_);
     for (const auto& [id, record] : records_)
@@ -910,6 +936,7 @@ std::unordered_map<endpoint_id, std::string> studio::driver_ports() const
 
 std::optional<driver_peer_info> studio::driver_holder(endpoint_id id) const
 {
+    VSS_PROFILE_ZONE("studio.driver_holder");
     std::string com_name;
     {
         std::lock_guard lock(record_mutex_);
@@ -923,6 +950,7 @@ std::optional<driver_peer_info> studio::driver_holder(endpoint_id id) const
 
 result<std::uint32_t> studio::revoke_port(endpoint_id id)
 {
+    VSS_PROFILE_ZONE("studio.revoke_port");
     std::shared_ptr<transport> driver;
     {
         std::lock_guard lock(record_mutex_);
@@ -938,6 +966,7 @@ result<std::uint32_t> studio::revoke_port(endpoint_id id)
 
 std::unordered_map<endpoint_id, peer_open_state> studio::peer_states() const
 {
+    VSS_PROFILE_ZONE("studio.peer_states");
     std::vector<endpoint_id> ids;
     std::vector<std::string> paths;
     {
@@ -978,6 +1007,7 @@ bool studio::reconnects(const port_record& record)
 
 result<void> studio::reopen(endpoint_id id)
 {
+    VSS_PROFILE_ZONE("studio.reopen");
     port_record record;
     {
         std::lock_guard lock(record_mutex_);
@@ -1050,6 +1080,7 @@ result<void> studio::reopen(endpoint_id id)
 
 result<void> studio::reconnect_attempt(endpoint_id id)
 {
+    VSS_PROFILE_ZONE("studio.reconnect_attempt");
     if (!hub_->running())
         return make_error_code(errc::unsupported);
     const auto found = hub_->find_endpoint(id);
@@ -1075,6 +1106,7 @@ reconnect_policy studio::current_reconnect_policy() const
 
 std::vector<endpoint_id> studio::lost_ports() const
 {
+    VSS_PROFILE_ZONE("studio.lost_ports");
     std::vector<endpoint_id> candidates;
     {
         std::lock_guard lock(record_mutex_);
@@ -1103,6 +1135,7 @@ std::vector<endpoint_id> studio::lost_ports() const
 
 studio::recreate_report studio::recreate_lost_ports()
 {
+    VSS_PROFILE_ZONE("studio.recreate_lost_ports");
     recreate_report report;
     for (const endpoint_id id : lost_ports())
     {
@@ -1117,6 +1150,7 @@ studio::recreate_report studio::recreate_lost_ports()
 
 std::vector<format_mismatch> studio::format_mismatches() const
 {
+    VSS_PROFILE_ZONE("studio.format_mismatches");
     return find_format_mismatches(endpoint_infos(), link_infos());
 }
 
@@ -1136,6 +1170,7 @@ std::shared_ptr<endpoint> studio::find(std::string_view name) const
 
 std::vector<endpoint_info> studio::endpoint_infos() const
 {
+    VSS_PROFILE_ZONE("studio.endpoint_infos");
     std::vector<endpoint_info> out;
     for (const auto& endpoint : hub_->endpoints())
     {
@@ -1150,12 +1185,14 @@ std::vector<endpoint_info> studio::endpoint_infos() const
 
 std::vector<link_info> studio::link_infos() const
 {
+    VSS_PROFILE_ZONE("studio.link_infos");
     return hub_->links();
 }
 
 std::vector<endpoint_id>
 studio::resolve_all(const std::vector<std::string>& names, error_code& ec) const
 {
+    VSS_PROFILE_ZONE("studio.resolve_all");
     std::vector<endpoint_id> ids;
     ids.reserve(names.size());
     for (const auto& name : names)
@@ -1173,6 +1210,7 @@ studio::resolve_all(const std::vector<std::string>& names, error_code& ec) const
 
 result<link_id> studio::connect(std::string_view a, std::string_view b)
 {
+    VSS_PROFILE_ZONE("studio.connect");
     const auto first = hub_->find_endpoint(a);
     const auto second = hub_->find_endpoint(b);
     if (!first || !second)
@@ -1183,6 +1221,7 @@ result<link_id> studio::connect(std::string_view a, std::string_view b)
 result<link_id> studio::split(std::string_view source,
                               const std::vector<std::string>& targets)
 {
+    VSS_PROFILE_ZONE("studio.split");
     const auto origin = hub_->find_endpoint(source);
     if (!origin)
         return make_error_code(errc::not_found);
@@ -1197,6 +1236,7 @@ result<link_id> studio::split(std::string_view source,
 result<link_id> studio::join(const std::vector<std::string>& sources,
                              std::string_view target)
 {
+    VSS_PROFILE_ZONE("studio.join");
     const auto destination = hub_->find_endpoint(target);
     if (!destination)
         return make_error_code(errc::not_found);
@@ -1210,6 +1250,7 @@ result<link_id> studio::join(const std::vector<std::string>& sources,
 
 result<link_id> studio::redirect(std::string_view from, std::string_view to)
 {
+    VSS_PROFILE_ZONE("studio.redirect");
     const auto first = hub_->find_endpoint(from);
     const auto second = hub_->find_endpoint(to);
     if (!first || !second)
@@ -1219,6 +1260,7 @@ result<link_id> studio::redirect(std::string_view from, std::string_view to)
 
 result<link_id> studio::monitor(std::string_view from, std::string_view to)
 {
+    VSS_PROFILE_ZONE("studio.monitor");
     const auto first = hub_->find_endpoint(from);
     const auto second = hub_->find_endpoint(to);
     if (!first || !second)
@@ -1229,6 +1271,7 @@ result<link_id> studio::monitor(std::string_view from, std::string_view to)
 result<link_id> studio::bus(const std::vector<std::string>& members,
                             link_options options)
 {
+    VSS_PROFILE_ZONE("studio.bus");
     error_code ec;
     const auto ids = resolve_all(members, ec);
     if (ec)
@@ -1238,12 +1281,14 @@ result<link_id> studio::bus(const std::vector<std::string>& members,
 
 result<void> studio::disconnect(link_id id)
 {
+    VSS_PROFILE_ZONE("studio.disconnect");
     return hub_->disconnect(id);
 }
 
 result<studio::share_result> studio::share_serial(const std::string& uri,
                                                   int listeners)
 {
+    VSS_PROFILE_ZONE("studio.share_serial");
     if (listeners < 1 || listeners > 64)
         return make_error_code(errc::invalid_argument);
 
@@ -1285,6 +1330,7 @@ result<studio::share_result> studio::share_serial(const std::string& uri,
 result<link_id> studio::join_ports(const std::vector<std::string>& source_uris,
                                    const std::string& target_uri)
 {
+    VSS_PROFILE_ZONE("studio.join_ports");
     if (source_uris.empty())
         return make_error_code(errc::invalid_argument);
 
@@ -1308,6 +1354,7 @@ result<link_id> studio::join_ports(const std::vector<std::string>& source_uris,
 result<link_id> studio::bridge(const std::string& from_uri,
                                const std::string& to_uri)
 {
+    VSS_PROFILE_ZONE("studio.bridge");
     auto from = attach_serial("bridge-a", from_uri);
     if (!from)
         return from.error();
@@ -1331,6 +1378,8 @@ result<link_id> studio::bridge(const std::string& from_uri,
 result<void> studio::apply(const config::document& value,
                            bool rollback_on_error)
 {
+    VSS_PROFILE_ZONE("studio.apply");
+    VSS_PROFILE_MESSAGE("studio.apply_config");
     if (const error_code invalid = config::validate(value))
         return invalid;
 
@@ -1444,6 +1493,7 @@ result<void> studio::apply(const config::document& value,
 
 config::document studio::snapshot() const
 {
+    VSS_PROFILE_ZONE("studio.snapshot");
     config::document document;
     document.name = "studio";
 
@@ -1518,11 +1568,13 @@ config::document studio::snapshot() const
 
 com0com_installation studio::detect_com0com() const
 {
+    VSS_PROFILE_ZONE("studio.detect_com0com");
     return vss::detect_com0com();
 }
 
 std::vector<serial_device_info> studio::serial_devices() const
 {
+    VSS_PROFILE_ZONE("studio.serial_devices");
     return enumerate_serial_devices();
 }
 

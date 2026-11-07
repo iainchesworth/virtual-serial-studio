@@ -10,6 +10,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
@@ -111,6 +113,7 @@ WidgetGallery::WidgetGallery(QWidget* parent) : QDialog(parent)
 
 void WidgetGallery::build()
 {
+    VSS_PROFILE_ZONE("gui.widgets.gallery.build");
     auto* root = new QVBoxLayout(this);
     root->setContentsMargins(20, 18, 20, 18);
     root->setSpacing(12);

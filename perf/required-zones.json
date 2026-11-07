@@ -1,0 +1,33 @@
+{
+  "comment": "What a capture must contain, per workload. tools/tracy_report.py --profile NAME fails when a listed zone is missing or when no zone of a listed area is present, which is how CI notices that instrumentation or the workload stopped covering a layer. `area.*` entries come from the \"areas\" list.",
+  "perf": {
+    "zones": [
+      "perf.e2e.tcp",
+      "perf.route",
+      "hub.route",
+      "hub.dispatch",
+      "endpoint.read",
+      "endpoint.write",
+      "config.to_json",
+      "config.from_json",
+      "bench.studio_apply"
+    ],
+    "areas": ["hub", "endpoint", "config", "core", "studio", "ports", "bench", "perf"]
+  },
+  "gui": {
+    "zones": [
+      "gui.event",
+      "gui.theme.apply",
+      "gui.paint.canvas_background",
+      "gui.simple.page.build"
+    ],
+    "areas": ["gui", "studio", "ports", "hub", "endpoint", "config"]
+  },
+  "tests": {
+    "zones": [
+      "hub.route",
+      "endpoint.read"
+    ],
+    "areas": ["test", "hub", "endpoint", "studio", "ports", "config", "link", "core"]
+  }
+}

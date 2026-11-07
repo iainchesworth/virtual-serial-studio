@@ -10,6 +10,8 @@
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -106,6 +108,7 @@ EventLogPanel::EventLogPanel(QWidget* parent) : QWidget(parent)
 
 void EventLogPanel::append(const event_batch& events)
 {
+    VSS_PROFILE_ZONE("gui.advanced.event_log.append");
     const QString now =
         QTime::currentTime().toString(QStringLiteral("HH:mm:ss.zzz"));
     for (const gui_event& event : events)

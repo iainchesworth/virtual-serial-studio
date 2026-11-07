@@ -79,32 +79,42 @@ Indicative results (Windows 11, MSVC 19.51, x64, Release, `vss_perf`):
 
 ## Profiling
 
-Tracy is compiled into Debug builds by default, and can be turned on in a
-Release build when a field problem needs triage. It runs in on-demand mode, so
-no data is recorded until a profiler connects — attaching to an already
-running process is the normal workflow.
+Tracy is compiled into Debug builds by default, and can be compiled into a
+Release build too (`VSS_TRACY=ON`, or a `*-tracy*` preset). In a Release build
+it is dormant: no profiler thread, no socket, and each zone costs one relaxed
+load until the program is started with `--profile` (or `VSS_PROFILE=1`, or the
+switch in Settings, Performance, Profiling). The listener is bound to this
+computer, never broadcasts, and sends nothing until a profiler connects. Once
+started it runs in on-demand mode, so nothing is recorded until a profiler
+connects and attaching to an already running process is the normal workflow.
 
 ```bash
 # Debug: Tracy is on when configured with the vcpkg toolchain
 cmake --preset linux-debug \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 
-# Release: opt in explicitly when something needs profiling
-cmake -S . -B build-rel-tracy -DCMAKE_BUILD_TYPE=Release -DVSS_TRACY=ON \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build build-rel-tracy
+# Release with the profiler compiled in but dormant
+cmake --preset linux-tracy-gui
+cmake --build --preset linux-tracy-gui
 
-# Attach at any point, then export
-tracy-capture -o trace.tracy &
-./build-rel-tracy/bin/vss_perf --tracy
+# Capture a run, then export it
+tracy-capture -a 127.0.0.1 -o trace.tracy &
+./build/linux-tracy-gui/bin/vss_perf --tracy --profile-wait=30
 wait
 tracy-csvexport trace.tracy > trace.csv
-python tools/tracy_report.py trace.csv
+python tools/tracy_report.py trace.csv --areas
 ```
 
-The report covers the hub, endpoint, JSON and transport paths plus a real
-socket echo and a pseudo-terminal round trip. CI publishes it for every push;
-see [the profiling page](profiling.md) for the zone list and caveats.
+Every test case runs in a zone named after it, so `VSS_PROFILE=1` on any test
+program (or `--tracy` on `vss_unit_tests` and `vss_system_tests`) gives each
+test's duration and the zones it called. `vss_perf` adds a micro-benchmark per
+component; `perf/floors.json` gates them, with `max` limits for costs such as
+the dormant cost of a zone.
+
+CI captures the performance suite, the offscreen GUI self-test and the unit
+tests, checks each capture against its profile in `perf/required-zones.json`
+and publishes the tables; see [the profiling page](profiling.md) for the zone
+list, the options and the caveats.
 
 ## Sanitizers
 

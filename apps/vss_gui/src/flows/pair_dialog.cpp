@@ -8,6 +8,8 @@
 
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -45,6 +47,7 @@ PairDialog::PairDialog(StudioBackend& backend, bool advanced,
 
 void PairDialog::create_pair()
 {
+    VSS_PROFILE_ZONE("gui.flows.pair.create");
     flow_error error;
     auto created = panel_->create_pair(&error);
     if (!created)

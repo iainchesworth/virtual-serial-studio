@@ -40,6 +40,9 @@ CSV = "\n".join(
 REQUIRED = "perf.e2e.tcp,hub.route,endpoint.read"
 
 
+nl = "\n"
+
+
 class tracy_report_test(unittest.TestCase):
     def setUp(self) -> None:
         self._directory = tempfile.TemporaryDirectory()
@@ -108,6 +111,62 @@ class tracy_report_test(unittest.TestCase):
         empty = self.root / "empty.csv"
         empty.write_text("", encoding="utf-8")
         self.assertEqual(tracy_report.main([str(empty)]), 2)
+
+    def test_a_name_with_a_comma_keeps_its_columns(self) -> None:
+        commas = self.root / "commas.csv"
+        commas.write_text(
+            CSV + nl + "driver client: a, b, c,test.cpp,12,500,0.5,1,500,500,500,0.0" + nl,
+            encoding="utf-8",
+        )
+        zones = tracy_report.load(commas)
+        self.assertEqual(zones[-1].name, "driver client: a, b, c")
+        self.assertEqual(zones[-1].source, "test.cpp")
+        self.assertEqual(zones[-1].total_ns, 500)
+
+    def test_areas_group_on_the_first_word_and_tests_together(self) -> None:
+        extra = self.root / "areas.csv"
+        extra.write_text(
+            CSV
+            + nl
+            + "hub.add_link,hub.cpp,1,100,0.1,2,50,40,60,1.0"
+            + nl
+            + "gui.event,app.cpp,1,900,0.2,3,300,200,400,1.0"
+            + nl
+            + "reconnect: it gives up,t.cpp,1,700,0.1,1,700,700,700,0.0"
+            + nl,
+            encoding="utf-8",
+        )
+        zones = tracy_report.load(extra)
+        areas = {row[0]: row for row in tracy_report.by_area(zones)}
+        self.assertEqual(areas["hub"][1], 2)  # hub.route and hub.add_link
+        self.assertIn("gui", areas)
+        self.assertIn("test", areas)
+        self.assertIn("| `test` |", tracy_report.render_areas(zones))
+
+    def test_an_area_wildcard_needs_any_zone_of_the_area(self) -> None:
+        zones = tracy_report.load(self.csv)
+        self.assertEqual(tracy_report.missing_required(zones, ["hub.*", "gui.*"]), ["gui.*"])
+
+    def test_a_profile_adds_its_zones_and_areas(self) -> None:
+        profiles = self.root / "profiles.json"
+        profiles.write_text(
+            json.dumps({"mine": {"zones": ["hub.route"], "areas": ["endpoint"]}}),
+            encoding="utf-8",
+        )
+        self.assertEqual(
+            tracy_report.load_profile(profiles, "mine"), ["hub.route", "endpoint.*"]
+        )
+        with self.assertRaises(ValueError):
+            tracy_report.load_profile(profiles, "other")
+        code = tracy_report.main(
+            [str(self.csv), "--profile", "mine", "--profiles", str(profiles)]
+        )
+        self.assertEqual(code, 0)
+        profiles.write_text(json.dumps({"mine": {"areas": ["gui"]}}), encoding="utf-8")
+        code = tracy_report.main(
+            [str(self.csv), "--profile", "mine", "--profiles", str(profiles)]
+        )
+        self.assertEqual(code, 1)
 
     def test_default_required_list_covers_the_pipeline(self) -> None:
         required = tracy_report.DEFAULT_REQUIRED.split(",")

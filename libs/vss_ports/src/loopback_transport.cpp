@@ -6,6 +6,8 @@
 
 #include <vss/ports/loopback_transport.hpp>
 
+#include <vss/core/profile.hpp>
+
 #include <boost/asio/associated_executor.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/asio/post.hpp>
@@ -69,6 +71,7 @@ loopback_transport::io_handler loopback_transport::take_pending_read()
 void loopback_transport::async_read_some(boost::asio::mutable_buffer buffer,
                                          io_handler handler)
 {
+    VSS_PROFILE_ZONE("ports.loopback.read");
     std::lock_guard lock(mutex_);
     if (!open_.load())
     {
@@ -99,6 +102,7 @@ void loopback_transport::async_read_some(boost::asio::mutable_buffer buffer,
 void loopback_transport::async_write_some(boost::asio::const_buffer buffer,
                                           io_handler handler)
 {
+    VSS_PROFILE_ZONE("ports.loopback.write");
     const auto* data = static_cast<const byte*>(buffer.data());
     const std::size_t size = buffer.size();
 
@@ -128,6 +132,7 @@ void loopback_transport::async_write_some(boost::asio::const_buffer buffer,
         }
 
         buffer_.insert(buffer_.end(), data, data + size);
+        VSS_PROFILE_PLOT("ports.loopback.buffered", buffer_.size());
     }
 
     complete_on(executor_, handler, boost::system::error_code{}, size);
@@ -135,6 +140,7 @@ void loopback_transport::async_write_some(boost::asio::const_buffer buffer,
 
 void loopback_transport::inject(bytes_view data)
 {
+    VSS_PROFILE_ZONE("ports.loopback.inject");
     std::lock_guard lock(mutex_);
     if (!open_.load() || data.empty())
         return;
@@ -181,6 +187,7 @@ void loopback_transport::finish_pending_read()
 
 void loopback_transport::close()
 {
+    VSS_PROFILE_ZONE("ports.loopback.close");
     {
         std::lock_guard lock(mutex_);
         if (!open_.exchange(false))

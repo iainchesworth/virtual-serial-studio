@@ -17,6 +17,7 @@ target_include_directories(vss_gui_theme PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 target_link_libraries(vss_gui_theme PUBLIC
+  Vss::core
   Qt6::Widgets
   Qt6::Svg)
 

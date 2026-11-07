@@ -6,6 +6,7 @@
 
 #include "support/settings_dialog.hpp"
 
+#include "profiling/profiling_controller.hpp"
 #include "support/setup_facts.hpp"
 #include "support/sign_in_start.hpp"
 #include "theme/theme.hpp"
@@ -432,6 +433,36 @@ void SettingsDialog::build()
                                     "is lighter on a busy machine."),
         refresh_holder));
     performance_layout->addWidget(refresh_holder);
+
+    // -- Profiling ---------------------------------------------------------
+    performance_layout->addWidget(section_title(
+        QCoreApplication::translate("Settings", "Profiling"), performance));
+    auto* profiling_holder = new QWidget(performance);
+    profiling_holder->setMaximumWidth(460);
+    auto* profiling_layout = new QVBoxLayout(profiling_holder);
+    profiling_layout->setContentsMargins(0, 0, 0, 0);
+    profiling_layout->setSpacing(8);
+    profiling_ = new Switch(
+        QCoreApplication::translate("Settings", "Record a performance trace"),
+        profiling_holder);
+    profiling_->setObjectName(QStringLiteral("profilingSwitch"));
+    profiling_layout->addWidget(profiling_);
+    profiling_remote_ = new Switch(
+        QCoreApplication::translate("Settings", "Let other computers connect"),
+        profiling_holder);
+    profiling_remote_->setObjectName(QStringLiteral("profilingRemoteSwitch"));
+    profiling_layout->addWidget(profiling_remote_);
+    profiling_status_ = hint_label({}, profiling_holder);
+    profiling_status_->setObjectName(QStringLiteral("profilingStatus"));
+    profiling_layout->addWidget(profiling_status_);
+    profiling_layout->addWidget(hint_label(
+        QCoreApplication::translate(
+            "Settings",
+            "For finding out why Studio is slow. It records timings only and "
+            "sends nothing until you connect the Tracy profiler to the address "
+            "above. It is off again each time Studio starts."),
+        profiling_holder));
+    performance_layout->addWidget(profiling_holder);
     performance_layout->addStretch(1);
     pages_->addWidget(scroll_page(performance, pages_));
 
@@ -486,6 +517,21 @@ void SettingsDialog::build()
                 apply_refresh();
             });
     apply_refresh();
+
+    auto& profiling = ProfilingController::instance();
+    connect(profiling_, &Switch::toggled, this,
+            [this](bool on)
+            {
+                auto& controller = ProfilingController::instance();
+                if (on)
+                    controller.enable(profiling_remote_->isChecked());
+                else
+                    controller.disable();
+                sync_profiling();
+            });
+    connect(&profiling, &ProfilingController::changed, this,
+            [this] { sync_profiling(); });
+    sync_profiling();
     outer->addWidget(content, 1);
 
     QHBoxLayout* footer_layout = nullptr;
@@ -540,6 +586,45 @@ void SettingsDialog::apply_density()
 {
     Theme::instance().set_density(settings_.density);
     persist();
+}
+
+void SettingsDialog::sync_profiling()
+{
+    const auto& controller = ProfilingController::instance();
+    const auto status = controller.status();
+    const bool available = controller.available();
+    const bool recording = status.current == vss::profiling::state::recording;
+    const bool listening = status.port != 0;
+    {
+        const QSignalBlocker first(profiling_);
+        const QSignalBlocker second(profiling_remote_);
+        profiling_->setChecked(recording);
+        profiling_remote_->setChecked(
+            listening ? status.remote : profiling_remote_->isChecked());
+    }
+    profiling_->setEnabled(available);
+    // The choice is made when the listener opens; after that it cannot change
+    // until Studio restarts.
+    profiling_remote_->setEnabled(available && !listening);
+    if (!available)
+    {
+        profiling_->setToolTip(QCoreApplication::translate(
+            "Settings", "Not available in this build"));
+    }
+    else if (listening && !status.remote)
+    {
+        profiling_remote_->setToolTip(QCoreApplication::translate(
+            "Settings", "Restart Studio with --profile-remote to allow this"));
+    }
+    else
+    {
+        profiling_remote_->setToolTip({});
+    }
+    QString text = controller.summary();
+    if (!controller.last_error().isEmpty())
+        text = controller.last_error();
+    profiling_status_->setText(text);
+    profiling_status_->setAccessibleName(text);
 }
 
 void SettingsDialog::apply_refresh()

@@ -13,6 +13,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QFontDatabase>
@@ -94,6 +96,8 @@ AboutDialog::AboutDialog(QWidget* parent)
 
 void AboutDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.about.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.about.opened");
     setWindowTitle(
         QCoreApplication::translate("About", "About Virtual Serial Studio"));
     setAccessibleName(

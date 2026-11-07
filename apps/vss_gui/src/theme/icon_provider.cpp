@@ -6,6 +6,8 @@
 
 #include "theme/icon_provider.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QFile>
 #include <QHash>
 #include <QIconEngine>
@@ -174,6 +176,8 @@ void IconProvider::flush()
 QIcon IconProvider::render(const QString& name, std::optional<colour_role> role,
                            const QColor& colour)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.theme.icon.render");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, name.toStdString());
     QFile file(QStringLiteral(":/icons/%1.svg").arg(name));
     if (!file.open(QIODevice::ReadOnly))
     {

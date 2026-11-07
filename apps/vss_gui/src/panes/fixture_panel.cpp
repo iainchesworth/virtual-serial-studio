@@ -10,6 +10,8 @@
 #include "theme/theme.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
@@ -50,6 +52,7 @@ FixturePanel::FixturePanel(FixtureBehaviours& behaviours, QWidget* parent)
 
 void FixturePanel::build()
 {
+    VSS_PROFILE_ZONE("gui.panes.fixture.build");
     setProperty("card", true);
     polish(this);
     setAccessibleName(tr("Fixture behaviour"));
@@ -194,6 +197,7 @@ void FixturePanel::update_field_visibility(generator_kind kind)
 
 void FixturePanel::apply_edits()
 {
+    VSS_PROFILE_ZONE("gui.panes.fixture.apply_edits");
     if (port_ == 0)
         return;
     generator_config config;
@@ -206,6 +210,7 @@ void FixturePanel::apply_edits()
 
 void FixturePanel::sync()
 {
+    VSS_PROFILE_ZONE("gui.panes.fixture.sync");
     const bool fixture = port_ != 0 && behaviours_.is_fixture(port_);
     setVisible(fixture);
     if (!fixture)

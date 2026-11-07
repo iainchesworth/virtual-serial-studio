@@ -18,6 +18,8 @@
 #include "widgets/notes.hpp"
 #include "widgets/surfaces.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -194,6 +196,8 @@ SetupCheckDialog::SetupCheckDialog(StudioBackend& backend, QWidget* parent)
 
 void SetupCheckDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.setup_check.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.setup_check.opened");
     setWindowTitle(QCoreApplication::translate("SetupCheck", "Setup check"));
     setAccessibleName(QCoreApplication::translate("SetupCheck", "Setup check"));
     setProperty("surface", QStringLiteral("panel"));
@@ -292,6 +296,7 @@ void SetupCheckDialog::build()
 
 void SetupCheckDialog::recheck()
 {
+    VSS_PROFILE_ZONE("gui.support.setup_check.recheck");
     report_ = query_setup_report(backend_);
     rebuild();
 }
@@ -305,6 +310,7 @@ CheckRowWidget* SetupCheckDialog::row_widget(int index) const
 
 void SetupCheckDialog::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.support.setup_check.rebuild");
     while (QLayoutItem* item = rows_layout_->takeAt(0))
     {
         if (QWidget* widget = item->widget())

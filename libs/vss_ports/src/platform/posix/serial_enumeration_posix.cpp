@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../serial_enumeration_platform.hpp"
 
 #include <vss/ports/stable_link.hpp>
@@ -36,6 +38,7 @@ bool looks_like_serial(const std::string& name)
 
 std::vector<serial_device_info> platform_enumerate_serial_devices()
 {
+    VSS_PROFILE_ZONE("ports.enumerate.posix");
     std::vector<serial_device_info> devices;
     std::error_code ec;
 

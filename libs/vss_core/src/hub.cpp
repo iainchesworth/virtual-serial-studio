@@ -62,14 +62,25 @@ void hub::start()
     const unsigned count =
         options_.io_threads == 0 ? default_thread_count() : options_.io_threads;
     threads_.reserve(count);
+    VSS_PROFILE_MESSAGE("hub.started");
     for (unsigned index = 0; index < count; ++index)
-        threads_.emplace_back([this] { io_.run(); });
+    {
+        threads_.emplace_back(
+            [this]
+            {
+                VSS_PROFILE_THREAD("vss.hub.io");
+                io_.run();
+            });
+    }
 }
 
 void hub::stop()
 {
     if (!running_.exchange(false))
         return;
+
+    VSS_PROFILE_ZONE("hub.stop");
+    VSS_PROFILE_MESSAGE("hub.stopping");
 
     // The work guard stays until join(). Releasing it here would let the worker
     // threads leave an idle io_context before the shutdown handlers below are
@@ -107,6 +118,7 @@ void hub::endpoint_closed()
 
 void hub::join()
 {
+    VSS_PROFILE_ZONE("hub.join");
     for (auto& thread : threads_)
     {
         if (thread.joinable())
@@ -121,6 +133,9 @@ result<std::shared_ptr<endpoint>> hub::add_endpoint(
     std::shared_ptr<transport> transport,
     endpoint_options options)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "hub.add_endpoint");
+    if (zone.active())
+        zone.text(name);
     if (name.empty())
         return make_error_code(errc::invalid_argument);
     if (!transport)
@@ -139,14 +154,17 @@ result<std::shared_ptr<endpoint>> hub::add_endpoint(
             new endpoint(*this, id, name, kind, std::move(transport), options));
         endpoints_.emplace(id, created);
         names_.emplace(name, id);
+        VSS_PROFILE_PLOT("hub.endpoints", endpoints_.size());
     }
 
+    VSS_PROFILE_MESSAGE_TEXT(std::string("hub.endpoint_added ") + name);
     created->start();
     return created;
 }
 
 result<void> hub::remove_endpoint(endpoint_id id)
 {
+    VSS_PROFILE_ZONE("hub.remove_endpoint");
     std::shared_ptr<endpoint> victim;
     {
         std::unique_lock lock(mutex_);
@@ -209,7 +227,11 @@ result<void> hub::remove_endpoint(endpoint_id id)
 
         names_.erase(victim->name());
         endpoints_.erase(it);
+        VSS_PROFILE_PLOT("hub.endpoints", endpoints_.size());
+        VSS_PROFILE_PLOT("hub.links", links_.size());
     }
+    VSS_PROFILE_MESSAGE_TEXT(std::string("hub.endpoint_removed ") +
+                             victim->name());
 
     closing_.fetch_add(1);
     victim->shutdown([this] { endpoint_closed(); });
@@ -218,6 +240,7 @@ result<void> hub::remove_endpoint(endpoint_id id)
 
 result<void> hub::rename_endpoint(endpoint_id id, const std::string& name)
 {
+    VSS_PROFILE_ZONE("hub.rename_endpoint");
     if (name.empty())
         return make_error_code(errc::invalid_argument);
 
@@ -297,6 +320,7 @@ result<link_id> hub::monitor(endpoint_id from, endpoint_id to)
 result<link_id> hub::bus(const std::vector<endpoint_id>& members,
                          link_options options)
 {
+    VSS_PROFILE_ZONE("hub.add_bus");
     if (members.size() < 2 || members.size() > max_bus_members)
         return make_error_code(errc::invalid_argument);
     if (options.policy != merge_policy::interleave)
@@ -331,6 +355,8 @@ result<link_id> hub::bus(const std::vector<endpoint_id>& members,
     record->sources = members;
 
     links_.emplace(record->id, record);
+    VSS_PROFILE_PLOT("hub.links", links_.size());
+    VSS_PROFILE_MESSAGE("hub.bus_added");
 
     for (endpoint_id from : members)
     {
@@ -350,6 +376,7 @@ result<link_id> hub::add_link(link_mode mode,
                               const std::vector<endpoint_id>& targets,
                               link_options options)
 {
+    VSS_PROFILE_ZONE("hub.add_link");
     if (sources.empty() || targets.empty())
         return make_error_code(errc::invalid_argument);
     if (!valid_latency(options))
@@ -389,6 +416,8 @@ result<link_id> hub::add_link(link_mode mode,
     record->targets = targets;
 
     links_.emplace(record->id, record);
+    VSS_PROFILE_PLOT("hub.links", links_.size());
+    VSS_PROFILE_MESSAGE("hub.link_added");
 
     for (endpoint_id source : sources)
     {
@@ -412,6 +441,7 @@ endpoint_id hub::cycle_node(endpoint_id id) const
 bool hub::reaches(endpoint_id start,
                   const std::unordered_set<endpoint_id>& goals) const
 {
+    VSS_PROFILE_ZONE("hub.cycle_check");
     std::unordered_set<endpoint_id> visited;
     std::vector<endpoint_id> pending{start};
 
@@ -504,6 +534,7 @@ void hub::erase_routes(link_id link)
 
 result<void> hub::disconnect(link_id id)
 {
+    VSS_PROFILE_ZONE("hub.disconnect");
     std::unique_lock lock(mutex_);
     const auto found = links_.find(id);
     if (found == links_.end())
@@ -515,6 +546,8 @@ result<void> hub::disconnect(link_id id)
     }
     links_.erase(found);
     erase_routes(id);
+    VSS_PROFILE_PLOT("hub.links", links_.size());
+    VSS_PROFILE_MESSAGE("hub.link_removed");
     return {};
 }
 
@@ -581,6 +614,7 @@ result<void> hub::release_owner(link_id id)
 
 result<void> hub::set_link_wiring(link_id id, const modem_wiring& wiring)
 {
+    VSS_PROFILE_ZONE("hub.set_link_wiring");
     std::vector<std::pair<endpoint_id, control_lines>> senders;
     {
         std::unique_lock lock(mutex_);
@@ -616,6 +650,7 @@ void hub::route_data(endpoint_id from, bytes_view data)
 
     if (data.empty())
         return;
+    VSS_PROFILE_PLOT("hub.route_bytes", data.size());
 
     struct delivery
     {
@@ -669,6 +704,7 @@ void hub::route_data(endpoint_id from, bytes_view data)
 
 void hub::route_lines(endpoint_id from, control_lines lines)
 {
+    VSS_PROFILE_ZONE("hub.route_lines");
     struct update
     {
         std::shared_ptr<endpoint> target;
@@ -708,8 +744,16 @@ void hub::publish(endpoint_event event)
         traffic_.push(traffic_record{event.endpoint, event.name,
                                      event.direction, event.data, event.when});
     }
+    // The counter moves whether or not anyone is recording, so it stays
+    // balanced when recording starts between a post and its delivery.
+    [[maybe_unused]] const auto queued = pending_events_.up();
+    VSS_PROFILE_PLOT("hub.dispatch_queue", queued);
     boost::asio::post(event_strand_,
-                      [this, event = std::move(event)]() mutable {
+                      [this, event = std::move(event)]() mutable
+                      {
+                          [[maybe_unused]] const auto left =
+                              pending_events_.down();
+                          VSS_PROFILE_PLOT("hub.dispatch_queue", left);
                           dispatch(event);
                       });
 }
@@ -747,6 +791,7 @@ void hub::dispatch(const endpoint_event& event)
 
 subscriber_id hub::subscribe(event_filter filter, event_sink sink)
 {
+    VSS_PROFILE_ZONE("hub.subscribe");
     std::lock_guard lock(subscriber_mutex_);
     const subscriber_id id = next_subscriber_id_++;
     subscribers_.push_back(subscription{id, filter, std::move(sink)});
@@ -765,6 +810,7 @@ void hub::unsubscribe(subscriber_id id)
 
 std::vector<traffic_record> hub::traffic(std::size_t limit) const
 {
+    VSS_PROFILE_ZONE("hub.traffic_snapshot");
     return traffic_.snapshot(limit);
 }
 

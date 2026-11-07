@@ -14,6 +14,8 @@
 #include "topology/topology_view.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QCursor>
 #include <QHash>
@@ -150,6 +152,7 @@ void CanvasController::push_created(const QString& text,
 
 bool CanvasController::add_item(canvas_item item, std::optional<QPointF> at)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.add_item");
     if (!item_available(backend_.caps(), item))
     {
         Q_EMIT message(QCoreApplication::translate(
@@ -197,6 +200,7 @@ bool CanvasController::add_item(canvas_item item, std::optional<QPointF> at)
 bool CanvasController::add_request(const bundle_request& request,
                                    std::optional<QPointF> at)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.add_request");
     const auto made = batch(
         [&]
         {
@@ -220,6 +224,7 @@ bool CanvasController::add_request(const bundle_request& request,
 bool CanvasController::wire(vss::endpoint_id from, vss::endpoint_id to,
                             wire_kind kind)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.wire");
     const auto made =
         batch([&] { return make_wire(backend_, from, to, kind); });
     if (!made)
@@ -267,6 +272,7 @@ bool CanvasController::wire(vss::endpoint_id from, vss::endpoint_id to,
 bool CanvasController::wire_new(vss::endpoint_id from, slot_kind kind,
                                 wire_kind wire, std::optional<QPointF> at)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.wire_new");
     const auto source = backend_.port(from);
     if (!source)
         return false;
@@ -311,6 +317,7 @@ bool CanvasController::wire_new(vss::endpoint_id from, slot_kind kind,
 
 bool CanvasController::duplicate(const QVector<vss::endpoint_id>& ports)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.duplicate");
     QPointF anchor;
     bool placed = false;
     if (view_ != nullptr && !ports.isEmpty())
@@ -372,6 +379,7 @@ QString CanvasController::describe(const QVector<vss::endpoint_id>& ports,
 bool CanvasController::remove(const QVector<vss::endpoint_id>& ports,
                               const QVector<vss::link_id>& links)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.remove");
     if (ports.isEmpty() && links.isEmpty())
         return false;
     const removal what = describe_removal(backend_, ports, links);
@@ -429,6 +437,7 @@ bool CanvasController::remove(const QVector<vss::endpoint_id>& ports,
 bool CanvasController::link_selected(const QVector<vss::endpoint_id>& ports,
                                      vss::endpoint_id hub, canvas_item shape)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.link_selected");
     bundle_request request;
     request.item = shape;
     QVector<vss::endpoint_id> order;
@@ -479,6 +488,7 @@ bool CanvasController::link_selected(const QVector<vss::endpoint_id>& ports,
 bool CanvasController::change_link(vss::link_id id,
                                    const vss::link_options& options)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.change_link");
     const auto before = backend_.link(id);
     if (!before)
         return false;
@@ -511,6 +521,7 @@ bool CanvasController::change_link(vss::link_id id,
 
 bool CanvasController::reverse(vss::link_id id)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.reverse");
     const auto link = backend_.link(id);
     if (!link || link->shape != link_shape::one_way)
         return false;
@@ -546,6 +557,7 @@ void CanvasController::record_settings(
     const QVector<QPair<QString, vss::serial_settings>>& before,
     const vss::serial_settings& after)
 {
+    VSS_PROFILE_ZONE("gui.shell.canvas.record_settings");
     if (before.isEmpty())
         return;
     const auto apply =

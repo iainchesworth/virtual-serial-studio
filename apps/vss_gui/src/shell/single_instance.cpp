@@ -6,6 +6,8 @@
 
 #include "shell/single_instance.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCryptographicHash>
 #include <QDeadlineTimer>
 #include <QLocalServer>
@@ -49,6 +51,7 @@ QString SingleInstance::default_name()
 
 bool SingleInstance::activate_running() const
 {
+    VSS_PROFILE_ZONE("gui.shell.single_instance.activate");
     QLocalSocket socket;
     socket.connectToServer(name_);
     if (!socket.waitForConnected(kConnectMs))
@@ -71,6 +74,7 @@ bool SingleInstance::answering() const
 
 bool SingleInstance::listen(int wait_ms)
 {
+    VSS_PROFILE_ZONE("gui.shell.single_instance.listen");
     if (server_ != nullptr)
         return true;
     server_ = new QLocalServer(this);
@@ -110,6 +114,7 @@ void SingleInstance::close()
 
 void SingleInstance::on_connection()
 {
+    VSS_PROFILE_ZONE("gui.shell.single_instance.connection");
     while (QLocalSocket* socket = server_->nextPendingConnection())
     {
         connect(socket, &QLocalSocket::disconnected, socket,

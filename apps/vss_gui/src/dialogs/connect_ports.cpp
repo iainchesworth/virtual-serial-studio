@@ -14,6 +14,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
@@ -147,6 +149,8 @@ ConnectPortsDialog::ConnectPortsDialog(StudioBackend& backend,
 
 void ConnectPortsDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.connect_ports.opened");
     prepare_dialog(this, tr("Connect ports"), 920, 700);
     setMinimumWidth(760);
 
@@ -479,6 +483,7 @@ void ConnectPortsDialog::build_footer(QVBoxLayout* outer)
 
 void ConnectPortsDialog::reload_ports()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.reload_ports");
     ports_ = backend_.ports();
     const vss::endpoint_id old_from = combo_port_id(from_combo_);
     const vss::endpoint_id old_to = combo_port_id(to_combo_);
@@ -602,6 +607,7 @@ void ConnectPortsDialog::rebuild_checklist(QWidget* card, QVBoxLayout* layout,
                                            vss::endpoint_id excluded,
                                            const QString& excluded_reason)
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.rebuild_checklist");
     Q_UNUSED(card);
     clear_layout(layout);
     for (const port_view& port : ports_)
@@ -665,6 +671,7 @@ void ConnectPortsDialog::on_mode_selected(mode value)
 
 void ConnectPortsDialog::update_ui()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.update_ui");
     if (stack_ != nullptr)
     {
         int index = 0;
@@ -751,6 +758,7 @@ ConnectPortsDialog::names_for(const QVector<vss::endpoint_id>& ids) const
 
 void ConnectPortsDialog::update_result()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.update_result");
     if (result_ == nullptr)
         return;
 
@@ -1152,6 +1160,7 @@ void ConnectPortsDialog::show_backend_error(const vss::error_code& error,
 
 bool ConnectPortsDialog::submit()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.connect_ports.submit");
     if (!primary_enabled())
     {
         update_ui();

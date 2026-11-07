@@ -39,6 +39,7 @@ struct build_info
     QString architecture;
     QString kernel;
     /// The language chosen at start-up and the languages the system offered.
+    QString profiling;
     QString language;
 };
 

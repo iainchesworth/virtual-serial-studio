@@ -18,6 +18,8 @@
 #include "widgets/notes.hpp"
 #include "widgets/pick_row.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QAbstractButton>
 #include <QButtonGroup>
 #include <QClipboard>
@@ -179,6 +181,8 @@ ShareWizard::ShareWizard(StudioBackend& backend, bool advanced, QWidget* parent)
 
 void ShareWizard::build()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.share_wizard.opened");
     prepare_dialog(this, tr("Share a device with several programs"), 760, 700);
     // prepare_dialog fixes a minimum height.  Drop it so the layout's own
     // minimum applies: the page scrolls and the footer is always on screen.
@@ -737,6 +741,7 @@ void ShareWizard::refresh_devices()
 
 void ShareWizard::update_device_list()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.update_device_list");
     while (QLayoutItem* item = device_layout_->takeAt(0))
     {
         delete item->widget();
@@ -1012,6 +1017,7 @@ void ShareWizard::update_footer()
 
 void ShareWizard::set_step(int step)
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.set_step");
     step_ = std::clamp(step, 0, 2);
     pages_->setCurrentIndex(step_);
     stepper_->set_current(step_);
@@ -1151,6 +1157,7 @@ QStringList ShareWizard::program_names() const
 
 void ShareWizard::update_programs_table()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.update_programs_table");
     if (programs_table_ == nullptr)
         return;
     const QStringList previous = program_names();
@@ -1201,6 +1208,7 @@ void ShareWizard::update_programs_table()
 
 void ShareWizard::update_warning()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.update_warning");
     if (warn_note_ == nullptr)
         return;
     const setup_facts facts = backend_.facts();
@@ -1310,6 +1318,7 @@ bool ShareWizard::acknowledge_studio_only()
 
 bool ShareWizard::create_another_pair()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.create_another_pair");
     if (!backend_.caps().com0com_pair_creation)
         return false;
     clear_error();
@@ -1334,6 +1343,7 @@ bool ShareWizard::create_another_pair()
 
 void ShareWizard::undo_share()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.undo_share");
     if (shared_.link != 0)
     {
         const auto disconnected = backend_.disconnect(shared_.link);
@@ -1359,6 +1369,7 @@ void ShareWizard::undo_share()
 
 bool ShareWizard::share()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.share");
     if (step_ != 1)
         return false;
     if (!validate_source())
@@ -1417,6 +1428,7 @@ QString ShareWizard::shared_title(int programs) const
 
 bool ShareWizard::add_another_program()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.add_program");
     if (step_ != 2 || shared_.source == 0)
         return false;
     if (listener_ids_.size() >= 32)
@@ -1508,6 +1520,7 @@ QString ShareWizard::row_state(int index) const
 
 void ShareWizard::update_ready_table()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.update_ready_table");
     if (ready_table_ == nullptr)
         return;
     ready_table_->setRowCount(static_cast<int>(listener_ids_.size()));
@@ -1574,6 +1587,7 @@ void ShareWizard::update_ready_table()
 
 void ShareWizard::update_ready_note()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.share_wizard.update_ready_note");
     if (ready_note_ == nullptr)
         return;
     const QString name = source_name();

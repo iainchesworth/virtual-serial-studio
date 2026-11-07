@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/ports/process_control.hpp>
 
 #include <windows.h>
@@ -103,6 +105,7 @@ std::string image_name(HANDLE process)
 
 std::optional<process_summary> describe_process(std::uint32_t id)
 {
+    VSS_PROFILE_ZONE("ports.process.describe");
     if (id == 0)
         return std::nullopt;
     const handle_owner process(
@@ -126,6 +129,7 @@ std::optional<process_summary> describe_process(std::uint32_t id)
 
 result<void> terminate_process(std::uint32_t id)
 {
+    VSS_PROFILE_ZONE("ports.process.terminate");
     if (id == 0 || id == ::GetCurrentProcessId())
         return make_error_code(errc::invalid_argument);
 

@@ -45,6 +45,7 @@ Options: `VSS_BUILD_TESTS`, `VSS_BUILD_GUI`, `VSS_GUI_REQUIRED`,
 | the same three with `-gui` | The same plus the GUI, so the GUI test suites run under the sanitizer too; **fails** if Qt is missing. These are the presets the pull request gate and the nightly run use; see [Sanitizers](testing.md#sanitizers) |
 | `linux-fuzz` | The libFuzzer targets with AddressSanitizer and UBSan at -O1 (Clang); see [Fuzzing](fuzzing.md) |
 | `linux-tracy`, `windows-msvc-tracy` | Performance suite with Tracy, no GUI; needs `VCPKG_ROOT` |
+| `linux-tracy-gui`, `windows-msvc-tracy-gui` | Release with Tracy compiled in but dormant: the GUI, CLI, tests and `vss_perf`; needs `VCPKG_ROOT` and Qt |
 
 A preset only exists on the operating system it names. Each builds in `build/<preset>`. The compiler is the one in `CC` and `CXX`, or the platform default.
 
@@ -71,9 +72,14 @@ error; `-DVSS_GUI_REQUIRED=OFF` restores the old "build the CLI only"
 behaviour.
 
 `VSS_TRACY` is on by default in Debug builds configured through the vcpkg
-toolchain and off in Release. Pass `-DVSS_TRACY=ON` to a Release build when a
-release binary needs to be profiled; the client idles until a profiler
-attaches.
+toolchain and off in Release. Pass `-DVSS_TRACY=ON` (or use a `*-tracy*`
+preset) to a Release build when a release binary needs to be profiled. The
+instrumentation is compiled in but dormant: no profiler thread and no socket
+exist until the program is told to start profiling (`--profile`,
+`VSS_PROFILE=1`, or Settings, Performance in the GUI). Debug builds start
+profiling by themselves, on this computer only. See [profiling](profiling.md).
+Tracy comes from vcpkg through a small overlay port in `cmake/vcpkg-ports`,
+which turns on the manual lifetime and no-broadcast builds of the client.
 
 ## Language standard
 

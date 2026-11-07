@@ -14,6 +14,8 @@
 #include "widgets/notes.hpp"
 #include "widgets/pick_row.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
@@ -115,6 +117,8 @@ AttachDialog::AttachDialog(StudioBackend& backend, bool advanced,
 
 void AttachDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.flows.attach.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.attach.opened");
     build_device_section();
     build_settings_section();
 
@@ -413,12 +417,14 @@ void AttachDialog::build_settings_section()
 
 void AttachDialog::refresh_devices()
 {
+    VSS_PROFILE_ZONE("gui.flows.attach.refresh_devices");
     backend_.refresh();
     rebuild_rows();
 }
 
 void AttachDialog::rebuild_rows()
 {
+    VSS_PROFILE_ZONE("gui.flows.attach.rebuild_rows");
     selecting_ = true;
     if (group_ != nullptr)
         group_->deleteLater();
@@ -598,6 +604,7 @@ void AttachDialog::refresh_row_styles()
 
 void AttachDialog::update_result()
 {
+    VSS_PROFILE_ZONE("gui.flows.attach.update_result");
     if (result_ == nullptr)
         return;
     const QString path = current_device_path();
@@ -734,6 +741,7 @@ vss::serial_settings AttachDialog::current_settings() const
 
 void AttachDialog::attach()
 {
+    VSS_PROFILE_ZONE("gui.flows.attach.attach");
     update_primary_state();
     if (name_->text().trimmed().isEmpty())
     {

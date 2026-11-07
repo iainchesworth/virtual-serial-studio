@@ -6,6 +6,8 @@
 
 #include <vss/ports/rfc2217.hpp>
 
+#include <vss/core/profile.hpp>
+
 #include <cstdint>
 
 namespace vss::rfc2217
@@ -190,6 +192,7 @@ session::option& session::option_for(unsigned char code)
 
 feed_result session::feed(std::string_view bytes)
 {
+    VSS_PROFILE_ZONE("ports.rfc2217.feed");
     feed_result result;
     for (const char raw : bytes)
     {
@@ -449,6 +452,7 @@ void session::command(unsigned char code, const std::string& value,
 
 std::string session::modem_state(control_lines inputs, bool force)
 {
+    VSS_PROFILE_ZONE("ports.rfc2217.modem_state");
     unsigned state = 0;
     if (inputs.cts())
         state |= 0x10U;

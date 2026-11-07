@@ -271,6 +271,17 @@
       }
     },
     {
+      "name": "linux-tracy-gui",
+      "displayName": "Linux, profiling with the GUI (Release with Tracy; needs VCPKG_ROOT and Qt)",
+      "inherits": "linux-tracy",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON",
+        "VSS_BUILD_TESTS": "ON",
+        "VSS_BUILD_TOOLS": "ON"
+      }
+    },
+    {
       "name": "windows-msvc-tracy",
       "displayName": "Windows, MSVC, profiling (Release with Tracy; needs VCPKG_ROOT)",
       "inherits": "windows-base",
@@ -283,6 +294,17 @@
         "VSS_BUILD_TESTS": "OFF",
         "VSS_BUILD_TOOLS": "OFF",
         "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    },
+    {
+      "name": "windows-msvc-tracy-gui",
+      "displayName": "Windows, MSVC, profiling with the GUI (Release with Tracy; needs VCPKG_ROOT and Qt)",
+      "inherits": "windows-msvc-tracy",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON",
+        "VSS_BUILD_TESTS": "ON",
+        "VSS_BUILD_TOOLS": "ON"
       }
     }
   ],
@@ -352,8 +374,16 @@
       "configurePreset": "linux-tracy"
     },
     {
+      "name": "linux-tracy-gui",
+      "configurePreset": "linux-tracy-gui"
+    },
+    {
       "name": "windows-msvc-tracy",
       "configurePreset": "windows-msvc-tracy"
+    },
+    {
+      "name": "windows-msvc-tracy-gui",
+      "configurePreset": "windows-msvc-tracy-gui"
     },
     {
       "name": "linux-asan-ubsan",

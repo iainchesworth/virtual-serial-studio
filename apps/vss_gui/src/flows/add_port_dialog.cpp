@@ -12,6 +12,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QButtonGroup>
 #include <QComboBox>
 #include <QCoreApplication>
@@ -123,6 +125,8 @@ AddPortDialog::AddPortDialog(StudioBackend& backend, bool advanced,
 
 void AddPortDialog::build(bool advanced, mode initial)
 {
+    VSS_PROFILE_ZONE("gui.flows.add_port.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.add_port.opened");
     advanced_ = advanced;
 
     auto* cards_layout = new QVBoxLayout();
@@ -435,6 +439,7 @@ void AddPortDialog::set_mode(mode value)
 
 void AddPortDialog::refresh_mode()
 {
+    VSS_PROFILE_ZONE("gui.flows.add_port.refresh_mode");
     if (pages_ == nullptr)
         return;
     pages_->setCurrentIndex(static_cast<int>(mode_));
@@ -496,6 +501,7 @@ void AddPortDialog::refresh_mode()
 
 void AddPortDialog::refresh_result()
 {
+    VSS_PROFILE_ZONE("gui.flows.add_port.refresh_result");
     if (result_ == nullptr)
         return;
     const QVector<QString> names = planned_names();
@@ -598,6 +604,7 @@ QString AddPortDialog::validation_error() const
 
 void AddPortDialog::create_virtual_ports()
 {
+    VSS_PROFILE_ZONE("gui.flows.add_port.create_virtual");
     validate_count();
     name_row_->clear_error();
     if (!validation_error().isEmpty())
@@ -665,6 +672,7 @@ void AddPortDialog::create_virtual_ports()
 
 void AddPortDialog::create_pair()
 {
+    VSS_PROFILE_ZONE("gui.flows.add_port.create_pair");
     flow_error error;
     auto outcome = pair_panel_->create_pair(&error);
     if (!outcome)

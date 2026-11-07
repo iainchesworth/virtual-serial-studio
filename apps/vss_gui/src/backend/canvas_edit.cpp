@@ -6,6 +6,8 @@
 
 #include "backend/canvas_edit.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QHash>
 #include <QRegularExpression>
 #include <QSet>
@@ -312,6 +314,7 @@ bundle_request default_request(canvas_item item,
 vss::result<bundle_made> build_bundle(StudioBackend& backend,
                                       const bundle_request& request)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.build_bundle");
     if (!is_bundle(request.item) ||
         !item_available(backend.caps(), request.item))
         return vss::make_error_code(vss::errc::unsupported);
@@ -474,6 +477,7 @@ std::optional<link_view> find_link(const StudioBackend& backend,
 vss::result<vss::link_id> make_link(StudioBackend& backend,
                                     const link_recipe& recipe)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.make_link");
     const auto sources = ids_of(backend, recipe.sources);
     const auto targets = ids_of(backend, recipe.targets);
     if (!sources || !targets || sources->isEmpty())
@@ -534,6 +538,7 @@ vss::result<vss::endpoint_id> make_port(StudioBackend& backend,
                                         const vss::config::port_entry& entry,
                                         const QString& name)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.make_port");
     vss::result<vss::endpoint_id> made = failure();
     if (entry.kind == "mock")
     {
@@ -581,6 +586,7 @@ bool can_duplicate(const port_view& port)
 vss::result<bundle_made> duplicate_ports(StudioBackend& backend,
                                          const QVector<vss::endpoint_id>& ids)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.duplicate");
     const std::vector<port_view> ports = backend.ports();
     QHash<QString, QString> copies;
     QStringList order;
@@ -652,6 +658,7 @@ removal describe_removal(const StudioBackend& backend,
                          const QVector<vss::endpoint_id>& ports,
                          const QVector<vss::link_id>& links)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.describe_removal");
     removal what;
     const std::vector<port_view> views = backend.ports();
     QSet<vss::endpoint_id> going(ports.begin(), ports.end());
@@ -682,6 +689,7 @@ removal describe_removal(const StudioBackend& backend,
 
 vss::result<void> apply_removal(StudioBackend& backend, const removal& what)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.apply_removal");
     for (const link_recipe& recipe : what.links)
     {
         if (const auto link = find_link(backend, recipe))
@@ -706,6 +714,7 @@ vss::result<void> apply_removal(StudioBackend& backend, const removal& what)
 vss::result<QVector<QStringList>> restore_removal(StudioBackend& backend,
                                                   const removal& what)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.restore_removal");
     QVector<QStringList> moved;
     for (qsizetype index = 0; index < what.ports.size(); ++index)
     {
@@ -733,6 +742,7 @@ vss::result<QVector<QStringList>> restore_removal(StudioBackend& backend,
 vss::result<vss::link_id> remake_link(StudioBackend& backend, vss::link_id id,
                                       const vss::link_options& options)
 {
+    VSS_PROFILE_ZONE("gui.backend.canvas.remake_link");
     const auto link = backend.link(id);
     if (!link)
         return vss::make_error_code(vss::errc::not_found);

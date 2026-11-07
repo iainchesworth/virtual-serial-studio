@@ -6,6 +6,8 @@
 
 #include "backend/share_edit.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QSet>
 
 #include <algorithm>
@@ -106,6 +108,7 @@ vss::result<share_added> add_program_port(StudioBackend& backend,
                                           const share_ref& share,
                                           const QString& name, bool capture)
 {
+    VSS_PROFILE_ZONE("gui.backend.share.add_program");
     const auto link = backend.link(share.link);
     if (!link)
         return vss::make_error_code(vss::errc::not_found);
@@ -145,6 +148,7 @@ vss::result<vss::link_id> remove_program_port(StudioBackend& backend,
                                               const share_ref& share,
                                               vss::endpoint_id program)
 {
+    VSS_PROFILE_ZONE("gui.backend.share.remove_program");
     if (!share.programs.contains(program))
         return vss::make_error_code(vss::errc::invalid_argument);
     const auto link = backend.link(share.link);

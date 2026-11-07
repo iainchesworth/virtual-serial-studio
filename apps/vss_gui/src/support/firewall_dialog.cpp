@@ -12,6 +12,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -65,6 +67,8 @@ FirewallDialog::FirewallDialog(const perm::fact& fact, bool step_possible,
 
 void FirewallDialog::build(bool step_possible)
 {
+    VSS_PROFILE_ZONE("gui.support.firewall.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.firewall.opened");
     setWindowTitle(
         QCoreApplication::translate("FirewallDialog", "Windows Firewall"));
     setAccessibleName(
@@ -229,6 +233,7 @@ void FirewallDialog::build(bool step_possible)
 
 void FirewallDialog::allow()
 {
+    VSS_PROFILE_ZONE("gui.support.firewall.allow");
     // Never starts the operating system prompt unless the build offers the
     // step.
     if (!can_run_ || allow_ == nullptr)

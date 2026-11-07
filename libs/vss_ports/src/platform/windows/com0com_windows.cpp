@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../com0com_platform.hpp"
 
 #include <vss/ports/serial_enumeration.hpp>
@@ -139,6 +141,7 @@ result<void> run_setupc(const com0com_installation& installation,
 
 com0com_installation platform_detect_com0com()
 {
+    VSS_PROFILE_ZONE("ports.com0com.detect_windows");
     com0com_installation installation;
 
     const std::string install_dir = read_install_dir();
@@ -170,6 +173,7 @@ platform_create_com0com_pair(const com0com_installation& installation,
                              std::string_view port_a, std::string_view port_b,
                              bool request_elevation)
 {
+    VSS_PROFILE_ZONE("ports.com0com.create_windows");
     if (port_a.empty() || port_b.empty())
         return make_error_code(errc::invalid_argument);
     if (port_a == port_b)
@@ -184,6 +188,7 @@ result<void>
 platform_remove_com0com_pair(const com0com_installation& installation,
                              int index, bool request_elevation)
 {
+    VSS_PROFILE_ZONE("ports.com0com.remove_windows");
     if (index < 0)
         return make_error_code(errc::invalid_argument);
     return run_setupc(installation, "remove " + std::to_string(index),

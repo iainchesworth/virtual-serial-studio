@@ -11,6 +11,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QComboBox>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -79,6 +81,7 @@ PairPanel::PairPanel(StudioBackend& backend, bool advanced,
 
 void PairPanel::build(bool advanced)
 {
+    VSS_PROFILE_ZONE("gui.flows.pair_panel.build");
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(16);
@@ -332,6 +335,7 @@ void PairPanel::set_advanced(bool advanced)
 
 QVector<PairPanel::free_pair> PairPanel::free_pairs() const
 {
+    VSS_PROFILE_ZONE("gui.flows.pair_panel.free_pairs");
     QMap<int, std::pair<QString, QString>> ends;
     const auto devices = backend_.devices();
     for (const auto& device : devices)
@@ -367,6 +371,7 @@ QVector<PairPanel::free_pair> PairPanel::free_pairs() const
 
 void PairPanel::refresh()
 {
+    VSS_PROFILE_ZONE("gui.flows.pair_panel.refresh");
     const setup_facts facts = backend_.facts();
     const bool windows = windows_platform(platform_);
     studio_driver_ = windows && facts.driver_found;
@@ -506,6 +511,7 @@ void PairPanel::refresh_result()
 
 bool PairPanel::validate()
 {
+    VSS_PROFILE_ZONE("gui.flows.pair_panel.validate");
     pair_name_row_->clear_error();
     first_port_row_->clear_error();
     second_port_row_->clear_error();
@@ -568,6 +574,7 @@ bool PairPanel::validate()
 
 std::optional<pair_outcome> PairPanel::create_pair(flow_error* error)
 {
+    VSS_PROFILE_ZONE("gui.flows.pair_panel.create");
     if (error != nullptr)
         *error = {};
     if (!validate())

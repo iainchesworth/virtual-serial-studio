@@ -1516,6 +1516,7 @@ void TopologyView::wheelEvent(QWheelEvent* event)
 
 void TopologyView::drawBackground(QPainter* painter, const QRectF& rect)
 {
+    VSS_PROFILE_ZONE("gui.paint.canvas_background");
     // The canvas is the sunken ground with a quiet dot grid, so the raised
     // node cards stand out (design language, `10-design-language.md`).
     const Theme& theme = Theme::instance();

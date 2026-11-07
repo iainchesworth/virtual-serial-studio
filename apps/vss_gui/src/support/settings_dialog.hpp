@@ -53,6 +53,7 @@ private:
     void apply_theme();
     void apply_density();
     void apply_refresh();
+    void sync_profiling();
     void persist();
 
     StudioBackend& backend_;
@@ -70,6 +71,9 @@ private:
     Switch* sign_in_ = nullptr;
     QSlider* refresh_ = nullptr;
     QLabel* refresh_value_ = nullptr;
+    Switch* profiling_ = nullptr;
+    Switch* profiling_remote_ = nullptr;
+    QLabel* profiling_status_ = nullptr;
     QStackedWidget* pages_ = nullptr;
     QButtonGroup* nav_ = nullptr;
 };

@@ -15,6 +15,14 @@
 #include <boost/system/error_code.hpp>
 #include <boost/system/result.hpp>
 
+// Every test case runs inside a Tracy zone named after the case, so a profile
+// of a test run lists each test with its duration and the zones it called. The
+// instrumentation is dormant unless the run asks for profiling (VSS_PROFILE=1
+// in the environment, or --tracy on the unit and system runners); see
+// docs/profiling.md.
+#include <vss/core/profile.hpp>
+#include <vss/core/profiling.hpp>
+
 #include <chrono>
 #include <cstdio>
 #include <exception>
@@ -49,6 +57,36 @@ struct registrar
         registry().push_back(test_info{name, file, line, function});
     }
 };
+
+/// Starts profiling for the whole run when the environment asks for it
+/// (VSS_PROFILE=1, VSS_PROFILE_PORT, VSS_PROFILE_WAIT=<seconds> to hold the
+/// first test until a profiler is attached). It never starts by itself, not
+/// even in Debug, so an ordinary test run opens no port. Being an inline
+/// variable it sits in every test executable that includes this header.
+class profiling_session
+{
+public:
+    profiling_session()
+    {
+        const auto request = vss::profiling::request_from_environment(false);
+        if (!request.enable)
+            return;
+        const auto started = vss::profiling::start(request);
+        if (started)
+            std::fprintf(stderr, "%s\n",
+                         vss::profiling::describe(*started).c_str());
+        else
+            std::fprintf(stderr, "cannot start profiling: %s\n",
+                         started.error().message().c_str());
+    }
+
+    ~profiling_session() { vss::profiling::shutdown(); }
+
+    profiling_session(const profiling_session&) = delete;
+    profiling_session& operator=(const profiling_session&) = delete;
+};
+
+inline profiling_session session;
 
 /// Thrown by VSS_SKIP; the runner reports the case as skipped, not failed.
 class skip_signal final : public std::exception
@@ -196,13 +234,18 @@ void check_near(const First& first, const Second& second, double tolerance,
 #define VSS_DETAIL_CONCAT_INNER(a, b) a##b
 #define VSS_DETAIL_CONCAT(a, b) VSS_DETAIL_CONCAT_INNER(a, b)
 
-#define TEST_CASE(name)                                                     \
-    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)();          \
-    static ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,     \
-                                                   __LINE__)(               \
-        name, __FILE__, __LINE__,                                           \
-        &VSS_DETAIL_CONCAT(vss_test_function_, __LINE__));                  \
-    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)()
+#define TEST_CASE(name)                                                        \
+    static void VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)();                 \
+    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)()              \
+    {                                                                          \
+        VSS_PROFILE_ZONE(name);                                                \
+        VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)();                         \
+    }                                                                          \
+    static ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,        \
+                                                   __LINE__)(                  \
+        name, __FILE__, __LINE__,                                              \
+        &VSS_DETAIL_CONCAT(vss_test_function_, __LINE__));                     \
+    static void VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)()
 
 #define REQUIRE(expression)                                                 \
     do                                                                      \

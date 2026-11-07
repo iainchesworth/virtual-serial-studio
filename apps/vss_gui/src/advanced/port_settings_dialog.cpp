@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QColor>
 #include <QComboBox>
 #include <QGridLayout>
@@ -127,6 +129,8 @@ PortSettingsDialog::~PortSettingsDialog()
 
 void PortSettingsDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.port_settings.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.port_settings.opened");
     const QString title = before_.size() == 1
                               ? tr("Settings for %1").arg(before_.first().first)
                               : tr("Settings for %n ports", nullptr,
@@ -408,6 +412,7 @@ bool PortSettingsDialog::timeouts_enabled() const
 
 void PortSettingsDialog::apply()
 {
+    VSS_PROFILE_ZONE("gui.advanced.port_settings.apply");
     if (busy_ || !apply_->isEnabled())
         return;
     const vss::serial_settings value = settings();
@@ -443,6 +448,7 @@ void PortSettingsDialog::apply()
 
 void PortSettingsDialog::on_finished(const vss::error_code& error)
 {
+    VSS_PROFILE_ZONE("gui.advanced.port_settings.finished");
     if (worker_.joinable())
         worker_.join();
     busy_ = false;

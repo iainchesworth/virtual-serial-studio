@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/replay.hpp>
 
 #include "timed_queue.hpp"
@@ -47,6 +49,7 @@ struct replay_player::state : std::enable_shared_from_this<state>
     /// the next, so a loop never holds more than two passes at once.
     void schedule_pass(std::uint64_t pass)
     {
+        VSS_PROFILE_ZONE("studio.replay.schedule_pass");
         auto self = shared_from_this();
         for (std::size_t index = 0; index < records.size(); ++index)
         {
@@ -92,6 +95,8 @@ result<std::shared_ptr<replay_player>> replay_player::start(
     hub& engine, std::shared_ptr<endpoint> target,
     const std::vector<capture_record>& records, const replay_options& options)
 {
+    VSS_PROFILE_ZONE("studio.replay.start");
+    VSS_PROFILE_MESSAGE("studio.replay.started");
     if (!target || !(options.speed > 0.0) || !std::isfinite(options.speed))
         return make_error_code(errc::invalid_argument);
 
@@ -131,6 +136,7 @@ result<std::shared_ptr<replay_player>> replay_player::start(
 
 void replay_player::stop()
 {
+    VSS_PROFILE_ZONE("studio.replay.stop");
     state_->stopped.store(true);
     state_->queue->stop();
 }

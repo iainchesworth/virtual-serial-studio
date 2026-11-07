@@ -6,6 +6,8 @@
 
 #include "dialogs/templates.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QFile>
 #include <QStringList>
 
@@ -20,6 +22,7 @@ namespace vss::gui
 
 QVector<bundled_template> bundled_templates()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.templates.list");
     return {
         {QStringLiteral("test-bench"), QObject::tr("Test bench, no hardware"),
          QObject::tr("Two Studio-only ports and a one-way link, so a fresh "
@@ -49,6 +52,8 @@ QVector<bundled_template> bundled_templates()
 
 vss::result<vss::config::document> load_bundled_template(const QString& id)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.dialogs.templates.load");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, id.toStdString());
     vss_init_template_resources();
 
     for (const bundled_template& entry : bundled_templates())

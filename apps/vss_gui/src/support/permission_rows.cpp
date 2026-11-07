@@ -6,6 +6,8 @@
 
 #include "support/permission_rows.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 
 #include <algorithm>
@@ -394,6 +396,9 @@ perm::context permission_context(const StudioBackend& backend)
 
 perm::context permission_context_for(const QString& uri)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone,
+                           "gui.support.permission_rows.context_for");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, uri.toStdString());
     perm::context ask;
     perm::listener each;
     if (perm::parse_listen_uri(uri.toStdString(), each))
@@ -404,6 +409,7 @@ perm::context permission_context_for(const QString& uri)
 void append_permission_rows(QVector<setup_row>& rows,
                             const std::vector<perm::fact>& facts)
 {
+    VSS_PROFILE_ZONE("gui.support.permission_rows.append");
     // Before "Carry on without a driver", which stays the last row.
     for (const perm::fact& fact : facts)
     {

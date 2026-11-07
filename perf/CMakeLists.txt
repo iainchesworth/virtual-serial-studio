@@ -4,7 +4,7 @@
 # binary in Release and gates it with tools/perf_report.py.
 #
 
-add_executable(vss_perf perf_main.cpp)
+add_executable(vss_perf perf_main.cpp component_benchmarks.cpp perf_common.hpp)
 target_compile_features(vss_perf PRIVATE cxx_std_23)
 target_link_libraries(vss_perf PRIVATE Vss::studio Vss::ports Vss::testkit)
 vss_set_warnings(vss_perf)

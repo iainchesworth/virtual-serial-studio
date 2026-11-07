@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/loopback_transport.hpp>
 #include <vss/ports/vcom_driver.hpp>
 #include <vss/ports/virtual_port.hpp>
@@ -37,6 +38,7 @@ bool supports(virtual_port_kind kind) noexcept
 
 std::vector<virtual_port_kind> available_kinds()
 {
+    VSS_PROFILE_ZONE("ports.virtual.available_kinds");
     std::vector<virtual_port_kind> kinds;
     if (supports(virtual_port_kind::windows_driver))
         kinds.push_back(virtual_port_kind::windows_driver);
@@ -69,6 +71,9 @@ create_virtual_port(const transport::executor_type& executor,
                     virtual_port_kind kind, const std::string& name,
                     unsigned com_number)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.virtual.create");
+    if (zone.active())
+        zone.text(name);
     switch (kind)
     {
     case virtual_port_kind::loopback:
@@ -94,6 +99,7 @@ result<virtual_port_result>
 create_best_virtual_port(const transport::executor_type& executor,
                          const std::string& name, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.virtual.create_best");
     if (supports(virtual_port_kind::windows_driver))
         return create_virtual_port(executor, virtual_port_kind::windows_driver,
                                    name, com_number);

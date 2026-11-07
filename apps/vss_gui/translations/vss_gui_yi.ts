@@ -6041,6 +6041,31 @@ Networks: %5</source>
             <source>Close</source>
             <translation>פֿאַרמאַכן</translation>
         </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Profiling</source>
+            <translation>פּראָפֿילירונג</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Record a performance trace</source>
+            <translation>רעקאָרדירן אַ פּערפֿאָרמאַנס־שפּור</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Let other computers connect</source>
+            <translation>לאָז אַנדערע קאָמפּיוטערס זיך פֿאַרבינדן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Restart Studio with --profile-remote to allow this</source>
+            <translation>סטאַרט Studio איבער מיט ‎--profile-remote כּדי דאָס צו דערלויבן</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>For finding out why Studio is slow. It records timings only and sends nothing until you connect the Tracy profiler to the address above. It is off again each time Studio starts.</source>
+            <translation>כּדי צו פֿאַרשטיין פֿאַרוואָס Studio איז לאַנגזאַם. עס רעקאָרדירט נאָר צײַטן און שיקט גאָרנישט ביז דו פֿאַרבינדסט דעם Tracy־פּראָפֿילער צו דער אַדרעס אויבן. עס איז ווידער אויס יעדעס מאָל ווען Studio הייבט זיך אָן.</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheck</name>
@@ -18107,6 +18132,64 @@ Networks: %5</source>
             <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>Profiling</name>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>This build does not include the profiler.</source>
+            <translation>דער בילד אַנטהאַלט נישט דעם פּראָפֿילער.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>No port is free for the profiler. Close the program that uses port 8086 and try again.</source>
+            <translation>קיין פּאָרט איז נישט פֿרײַ פֿאַרן פּראָפֿילער. שליס די פּראָגראַם וואָס ניצט פּאָרט 8086 און פּרובירט נאָכאַמאָל.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>all interfaces:%1</source>
+            <translation>אַלע ינטערפֿייסן:%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling is off. Nothing is recorded and no port is open.</source>
+            <translation>פּראָפֿילירונג איז אויס. גאָרנישט ווערט רעקאָרדירט און קיין פּאָרט איז נישט אָפֿן.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. A profiler is connected to %1.</source>
+            <translation>רעקאָרדירט. אַ פּראָפֿילער איז פֿאַרבונדן מיט %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Other computers can connect.</source>
+            <translation>רעקאָרדירט. ווארט אויף אַ פּראָפֿילער אויף %1. אַנדערע קאָמפּיוטערס קענען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Only this computer can connect.</source>
+            <translation>רעקאָרדירט. ווארט אויף אַ פּראָפֿילער אויף %1. נאָר דער קאָמפּיוטער קען זיך פֿאַרבינדן.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording is paused. %1 stays open until Studio quits.</source>
+            <translation>די רעקאָרדירונג איז אָפּגעשטעלט. %1 בלײַבט אָפֿן ביז Studio ענדיקט זיך.</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling, connected</source>
+            <translation>פּראָפֿילירונג, פֿאַרבונדן</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling :%1</source>
+            <translation>פּראָפֿילירונג :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling paused</source>
+            <translation>פּראָפֿילירונג אָפּגעשטעלט</translation>
         </message>
     </context>
 </TS>

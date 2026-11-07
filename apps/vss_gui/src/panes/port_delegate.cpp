@@ -10,6 +10,8 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QApplication>
 #include <QEvent>
 #include <QFontMetrics>
@@ -163,6 +165,7 @@ QRect PortDelegate::copy_rect_for(const QStyleOptionViewItem& option,
 void PortDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
                          const QModelIndex& index) const
 {
+    VSS_PROFILE_ZONE("gui.paint.port_row");
     const Theme& theme = Theme::instance();
     const bool selected = (option.state & QStyle::State_Selected) != 0;
     painter->save();
