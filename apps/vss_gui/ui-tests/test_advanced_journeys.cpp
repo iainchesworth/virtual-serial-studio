@@ -631,8 +631,10 @@ TEST_CASE("advanced: rename, change the settings of, and wire a port")
                 port_of(s.backend(), a).serial.baud_rate == 9600;
             choose(baud,
                    at_9600 ? QStringLiteral("19200") : QStringLiteral("9600"));
-            // Enter in the edited field already applies and closes it.
-            if (d->isVisible())
+            // Enter in the edited field can already apply it, which turns
+            // Apply off while the dialog closes.
+            if (d->isVisible() &&
+                button(d, QStringLiteral("Apply"))->isEnabled())
                 click(button(d, QStringLiteral("Apply")));
         });
     QMenu* menu = open_context_menu(view->viewport(), node_point(view, a));
