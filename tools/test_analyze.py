@@ -49,6 +49,29 @@ class ParseDiagnostics(unittest.TestCase):
         self.assertEqual(tool.parse_diagnostics(text), [])
 
 
+class ExceptionEscape(unittest.TestCase):
+    HEAD = (f"{ROOT}/libs/vss_core/src/hub.cpp:45:6: warning: an exception may be thrown in function '~hub' "
+            "which should not throw exceptions [bugprone-exception-escape]\n   45 | hub::~hub()\n")
+
+    @staticmethod
+    def note(kind):
+        return f"/usr/include/x.hpp:1:1: note: frame #0: unhandled exception of type '{kind}' may be thrown\n"
+
+    def test_allocation_failure_is_dropped(self):
+        self.assertEqual(tool.parse_diagnostics(self.HEAD + self.note("bad_array_new_length")), [])
+
+    def test_qualified_allocation_failure_is_dropped(self):
+        self.assertEqual(tool.parse_diagnostics(self.HEAD + self.note("std::bad_alloc")), [])
+
+    def test_other_exceptions_are_kept(self):
+        self.assertEqual(len(tool.parse_diagnostics(self.HEAD + self.note("runtime_error"))), 1)
+
+    def test_the_next_finding_is_not_affected(self):
+        other = f"{ROOT}/libs/vss_core/src/hub.cpp:50:1: warning: other [bugprone-foo]\n"
+        found = tool.parse_diagnostics(self.HEAD + self.note("bad_alloc") + other)
+        self.assertEqual([f.rule for f in found], ["bugprone-foo"])
+
+
 class Sarif(unittest.TestCase):
     def test_shape(self):
         sarif = tool.to_sarif("clang-tidy", [tool.Finding("bugprone-foo", "warning", "msg", "libs/a.cpp", 4, 2)])

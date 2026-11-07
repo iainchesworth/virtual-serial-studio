@@ -80,6 +80,10 @@ DIAGNOSTIC = re.compile(
 )
 
 
+ALLOCATION_NOTE = re.compile(r"note: frame #0: unhandled exception of type '(?P<type>[\w:]+)'")
+ALLOCATION_ERRORS = {"bad_alloc", "bad_array_new_length", "length_error"}
+
+
 @dataclass(frozen=True)
 class Finding:
     rule: str
@@ -150,19 +154,36 @@ def relative(path: str) -> str | None:
 
 
 def parse_diagnostics(text: str) -> list[Finding]:
-    """Parse clang-tidy and cppcheck text output. Findings outside the repository are dropped."""
+    """Parse clang-tidy and cppcheck text output. Findings outside the repository are dropped.
+
+    A bugprone-exception-escape finding whose escaping exception is an allocation or length
+    failure is dropped too. A destructor or main() that can only fail by running out of memory
+    ends the program either way, and the MSVC standard library, whose bodies clang-tidy can see,
+    reports every container call as one.
+    """
     found: dict[tuple, Finding] = {}
+    pending: Finding | None = None
+    keep = True
+
+    def commit() -> None:
+        if pending is not None and keep:
+            found.setdefault((pending.rule, pending.path, pending.line, pending.message), pending)
+
     for raw in text.splitlines():
-        m = DIAGNOSTIC.match(raw.strip())
+        line = raw.strip()
+        m = DIAGNOSTIC.match(line)
         if not m:
+            if pending is not None and (n := ALLOCATION_NOTE.search(line)) and pending.rule == "bugprone-exception-escape":
+                keep = keep and n["type"].rsplit("::", 1)[-1] not in ALLOCATION_ERRORS
             continue
+        commit()
+        pending, keep = None, True
         rel = relative(m["path"])
         if rel is None:
             continue
         level = "error" if m["severity"] == "error" else "warning"
-        rule = m["rule"] or "unknown"
-        key = (rule, rel, int(m["line"]), m["message"])
-        found.setdefault(key, Finding(rule, level, m["message"], rel, int(m["line"]), int(m["col"])))
+        pending = Finding(m["rule"] or "unknown", level, m["message"], rel, int(m["line"]), int(m["col"]))
+    commit()
     return sorted(found.values(), key=lambda f: (f.path, f.line, f.rule))
 
 
