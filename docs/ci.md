@@ -12,9 +12,11 @@ vcpkg baseline and REUSE) and a planner that skips the builds for
 documentation-only changes. It then builds with GCC, Clang, AppleClang and
 MSVC, runs the GUI self-test and journey tests on Linux with Qt, enforces the
 coverage gates, runs the performance floors, captures a Tracy profile of the
-end-to-end path, runs the tests under AddressSanitizer with UBSan, replays the
-fuzz corpora, and analyses the workflows with zizmor. ThreadSanitizer runs for
-merge-queue entries and pushes. Boost is fetched by `tools/fetch_boost.py`, so no
+end-to-end path, runs the tests, the GUI suites included, under
+AddressSanitizer with UBSan, replays the fuzz corpora, and analyses the
+workflows with zizmor. ThreadSanitizer, GUI suites included, runs when threading
+code changed and for merge-queue entries (see
+[Testing](testing.md#sanitizers)). Boost is fetched by `tools/fetch_boost.py`, so no
 job depends on a system Boost.
 
 The branch protection ruleset requires two checks, `CI Status` and
