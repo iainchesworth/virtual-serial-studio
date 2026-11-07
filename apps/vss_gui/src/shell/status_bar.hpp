@@ -42,6 +42,7 @@ Q_SIGNALS:
 
 private:
     void update_readiness();
+    void update_profiling();
 
     StudioBackend& backend_;
     support::setup_report_cache setup_cache_;
@@ -51,6 +52,7 @@ private:
     QLabel* hub_ = nullptr;
     StatusChip* readiness_ = nullptr;
     StatusChip* dropped_ = nullptr;
+    StatusChip* profiling_ = nullptr;
     SegmentedControl* level_ = nullptr;
 
     QElapsedTimer rate_timer_;

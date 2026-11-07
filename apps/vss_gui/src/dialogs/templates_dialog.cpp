@@ -15,6 +15,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QButtonGroup>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -78,6 +80,8 @@ TemplatesDialog::TemplatesDialog(StudioBackend& backend, QWidget* parent)
 
 void TemplatesDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.templates.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.templates.opened");
     prepare_dialog(this, tr("Setups"), 920, 700);
     setMinimumWidth(760);
 
@@ -380,6 +384,7 @@ QString TemplatesDialog::search() const
 
 void TemplatesDialog::apply_filter()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.templates.apply_filter");
     const QString needle = search_->text().trimmed();
     for (int index = 0; index < cards_.size(); ++index)
     {
@@ -430,6 +435,7 @@ void TemplatesDialog::apply_filter()
 
 void TemplatesDialog::refresh_recent()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.templates.refresh_recent");
     const QVector<recent_entry> entries = recent_entries();
     recent_table_->setRowCount(static_cast<int>(entries.size()));
     for (int row = 0; row < entries.size(); ++row)
@@ -493,6 +499,7 @@ QString TemplatesDialog::recent_name(int index) const
 
 bool TemplatesDialog::use_current()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.templates.use");
     if (tabs_->currentIndex() != 0)
         return false;
     const int index = current_template();
@@ -532,6 +539,8 @@ bool TemplatesDialog::use_current()
 
 bool TemplatesDialog::open_file(const QString& path)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.dialogs.templates.open_file");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     clear_error();
     const auto document = vss::config::load_file(path.toStdString());
     if (!document)
@@ -554,6 +563,8 @@ bool TemplatesDialog::open_file(const QString& path)
 
 bool TemplatesDialog::save_current_template(const QString& path)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.dialogs.templates.save");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     clear_error();
     const auto saved =
         vss::config::save_file(path.toStdString(), backend_.snapshot());

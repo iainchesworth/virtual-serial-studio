@@ -6,6 +6,7 @@
 
 #include "shell/status_bar.hpp"
 
+#include "profiling/profiling_controller.hpp"
 #include "shell/format.hpp"
 #include "support/setup_facts.hpp"
 
@@ -47,6 +48,16 @@ StatusBar::StatusBar(StudioBackend& backend, QWidget* parent)
     dropped_->set_small(true);
     dropped_->hide();
     addWidget(dropped_, 0);
+
+    // Shown only while the profiler is listening, so a person can always see
+    // that it is and on which port.
+    profiling_ = new StatusChip({}, StatusChip::kind::open, this);
+    profiling_->set_small(true);
+    profiling_->hide();
+    addPermanentWidget(profiling_, 0);
+    connect(&ProfilingController::instance(), &ProfilingController::changed,
+            this, [this] { update_profiling(); });
+    update_profiling();
 
     readiness_ =
         new StatusChip(tr("Setup ready"), StatusChip::kind::healthy, this);
@@ -159,6 +170,27 @@ void StatusBar::refresh()
     }
 
     update_readiness();
+}
+
+void StatusBar::update_profiling()
+{
+    const auto& controller = ProfilingController::instance();
+    const QString text = controller.chip_text();
+    if (text.isEmpty())
+    {
+        profiling_->hide();
+        return;
+    }
+    const auto status = controller.status();
+    profiling_->set_kind(status.current == vss::profiling::state::paused
+                             ? StatusChip::kind::closed
+                             : (status.profiler_connected
+                                    ? StatusChip::kind::connected
+                                    : StatusChip::kind::open));
+    profiling_->set_text(text);
+    profiling_->setAccessibleName(controller.summary());
+    profiling_->setToolTip(controller.summary());
+    profiling_->show();
 }
 
 void StatusBar::update_readiness()

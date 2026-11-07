@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/serial_enumeration.hpp>
 
 #include "platform/serial_enumeration_platform.hpp"
@@ -100,6 +101,7 @@ parse_com0com_instance_id(std::string_view instance_id)
 std::vector<serial_device_info>
 normalise(std::vector<serial_device_info> devices)
 {
+    VSS_PROFILE_ZONE("ports.enumerate.normalise");
     std::vector<serial_device_info> out;
     out.reserve(devices.size());
 
@@ -123,7 +125,11 @@ normalise(std::vector<serial_device_info> devices)
 
 std::vector<serial_device_info> enumerate_serial_devices()
 {
-    return normalise(detail::platform_enumerate_serial_devices());
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.enumerate");
+    auto devices = normalise(detail::platform_enumerate_serial_devices());
+    VSS_PROFILE_ZONE_VALUE(zone, devices.size());
+    VSS_PROFILE_PLOT("ports.enumerate.devices", devices.size());
+    return devices;
 }
 
 std::vector<std::string> enumerate_serial_port_names()

@@ -15,6 +15,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QClipboard>
 #include <QCoreApplication>
@@ -103,6 +105,8 @@ DiagnosticBundleDialog::DiagnosticBundleDialog(StudioBackend& backend,
 
 void DiagnosticBundleDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.bundle_dialog.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.diagnostic_bundle.opened");
     setWindowTitle(
         QCoreApplication::translate("Bundle", "Create a diagnostic bundle"));
     setAccessibleName(
@@ -324,6 +328,7 @@ QString DiagnosticBundleDialog::suggested_path() const
 
 void DiagnosticBundleDialog::update_counts()
 {
+    VSS_PROFILE_ZONE("gui.support.bundle_dialog.update_counts");
     if (count_ == nullptr)
         return;
     const int files = selected_file_count();
@@ -336,6 +341,8 @@ void DiagnosticBundleDialog::update_counts()
 
 bool DiagnosticBundleDialog::write_bundle(const QString& path, QString* error)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.bundle_dialog.write");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     const QVector<bundle_file> files =
         build_bundle_files(backend_, log_, selection_);
     StoredZipWriter writer;
@@ -376,6 +383,7 @@ bool DiagnosticBundleDialog::write_bundle(const QString& path, QString* error)
 
 void DiagnosticBundleDialog::save()
 {
+    VSS_PROFILE_ZONE("gui.support.bundle_dialog.save");
     QString path = QFileDialog::getSaveFileName(
         this, QCoreApplication::translate("Bundle", "Save diagnostic bundle"),
         suggested_path(),

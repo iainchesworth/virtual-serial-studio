@@ -6,6 +6,8 @@
 
 #include "support/zip_writer.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <algorithm>
 #include <array>
 
@@ -73,6 +75,8 @@ std::uint32_t StoredZipWriter::crc32(const QByteArray& data)
 bool StoredZipWriter::add_file(const QString& name, const QByteArray& data,
                                const QDateTime& modified)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.zip.add_file");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, name.toStdString());
     if (entries_.size() >= kMaxEntries)
         return false;
 
@@ -95,6 +99,7 @@ bool StoredZipWriter::add_file(const QString& name, const QByteArray& data,
 
 QByteArray StoredZipWriter::data() const
 {
+    VSS_PROFILE_ZONE("gui.support.zip.finish");
     QByteArray out;
     QVector<std::uint32_t> offsets;
     offsets.reserve(entries_.size());

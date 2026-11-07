@@ -33,6 +33,7 @@
 #include <QTextDocumentFragment>
 #include <QVBoxLayout>
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/permissions.hpp>
 
 #include <algorithm>
@@ -121,6 +122,8 @@ NetworkEndpointDialog::NetworkEndpointDialog(StudioBackend& backend,
 
 void NetworkEndpointDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.network_endpoint.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.network_endpoint.opened");
     prepare_dialog(this, tr("Put a device on the network"), 760, 760);
     setMinimumWidth(640);
 
@@ -479,6 +482,7 @@ void NetworkEndpointDialog::build()
 
 void NetworkEndpointDialog::reload_devices()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.network_endpoint.reload_devices");
     devices_ = backend_.devices();
     device_combo_->clear();
     device_path_.clear();
@@ -620,6 +624,7 @@ void NetworkEndpointDialog::update_warning()
 
 void NetworkEndpointDialog::show_firewall_dialog()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.network_endpoint.firewall_dialog");
     // Ask now, for the listener as it is in the form.  A transport without a
     // server role (RFC 2217) never gets here.
     const auto facts = vss::permissions::probe(
@@ -636,6 +641,7 @@ void NetworkEndpointDialog::show_firewall_dialog()
 
 void NetworkEndpointDialog::update_result()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.network_endpoint.update_result");
     if (result_ == nullptr)
         return;
     const QString device =

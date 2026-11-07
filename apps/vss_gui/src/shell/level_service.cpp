@@ -6,6 +6,8 @@
 
 #include "shell/level_service.hpp"
 
+#include <vss/core/profile.hpp>
+
 namespace vss::gui
 {
 
@@ -20,6 +22,7 @@ void LevelService::set_advanced(bool advanced)
     if (advanced_ == advanced)
         return;
     advanced_ = advanced;
+    VSS_PROFILE_MESSAGE(advanced ? "gui.level.advanced" : "gui.level.simple");
     QSettings settings;
     settings.setValue(QStringLiteral("ui/advanced"), advanced_);
     Q_EMIT changed(advanced_);

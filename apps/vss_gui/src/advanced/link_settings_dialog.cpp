@@ -11,6 +11,8 @@
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -146,6 +148,7 @@ bool LinkSettingsDialog::modem_lines_shown() const
 
 void LinkSettingsDialog::update_state()
 {
+    VSS_PROFILE_ZONE("gui.advanced.link_settings.update_state");
     const bool valid = vss::valid_latency(options());
     error_->setText(valid ? QString()
                           : tr("The jitter can be no more than the delay."));

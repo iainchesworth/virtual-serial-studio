@@ -52,7 +52,7 @@ inline void announce_name_change(QWidget* widget)
 {
     if (widget == nullptr)
         return;
-    // updateAccessibility() does not take the event, so it stays on the stack.
+    // Qt does not take the event: it only reads it during the call.
     QAccessibleEvent event(widget, QAccessible::NameChanged);
     QAccessible::updateAccessibility(&event);
 }

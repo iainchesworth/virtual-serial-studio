@@ -1,9 +1,17 @@
 {
-  "comment": "Conservative CI floors. Shared runners are noisy; the JSON artefacts are the source of truth for comparisons.",
+  "comment": "Conservative CI limits. Shared runners are noisy; the JSON artefacts are the source of truth for comparisons. A limit with \"min\" is a rate that must not fall below it; one with \"max\" is a cost that must not rise above it.",
   "floors": [
     { "name": "hub_route", "min": 20.0, "unit": "MB/s" },
     { "name": "event_dispatch", "min": 20000.0, "unit": "events/s" },
     { "name": "config_roundtrip", "min": 50.0, "unit": "ops/s" },
-    { "name": "mock_write", "min": 20.0, "unit": "MB/s" }
+    { "name": "mock_write", "min": 20.0, "unit": "MB/s" },
+    { "name": "zone_dormant", "max": 15.0, "unit": "ns/zone" },
+    { "name": "bytes_hex", "min": 20.0, "unit": "MB/s" },
+    { "name": "traffic_log_push", "min": 200000.0, "unit": "records/s" },
+    { "name": "serial_settings_label", "min": 100000.0, "unit": "ops/s" },
+    { "name": "config_validate", "min": 200.0, "unit": "ops/s" },
+    { "name": "studio_port_cycle", "min": 50.0, "unit": "ops/s" },
+    { "name": "studio_snapshot", "min": 100.0, "unit": "ops/s" },
+    { "name": "studio_apply", "min": 3.0, "unit": "ops/s" }
   ]
 }

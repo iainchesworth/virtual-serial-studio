@@ -362,9 +362,13 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: gcc
+          qt: "true"
           ccache: linux-gcc-tracy
 
       - uses: ./.github/actions/prepare-deps
+
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
 
       - name: Set up vcpkg
         uses: iainchesworthlabs/icl-common-infra/actions/setup-vcpkg@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
@@ -409,10 +413,19 @@ jobs:
           key: ${{ steps.tracy-tools.outputs.cache-primary-key }}
 
       - name: Configure with instrumentation
-        run: cmake --preset linux-tracy
+        run: cmake --preset linux-tracy-gui
 
       - name: Build
-        run: cmake --build --preset linux-tracy --target vss_perf --parallel
+        run: cmake --build --preset linux-tracy-gui --target vss_perf vss_gui vss_unit_tests --parallel
+
+      # The instrumentation is compiled in but dormant here, as in a release build. This is its
+      # cost per zone when nothing has asked for profiling, gated by perf/floors.json.
+      - name: Dormant cost of a zone
+        run: |
+          ./build/linux-tracy-gui/bin/vss_perf --quick --output=perf-dormant.json
+          python3 tools/perf_report.py perf-dormant.json --floors perf/floors.json \
+            --only zone_dormant --markdown | tee perf-dormant.md
+          { echo "### Dormant cost of a Tracy zone"; cat perf-dormant.md; } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Create a serial pair for the terminal path
         run: |
@@ -428,28 +441,67 @@ jobs:
           echo "VSS_LOOPBACK_A=$A" >> "$GITHUB_ENV"
           echo "VSS_LOOPBACK_B=$B" >> "$GITHUB_ENV"
 
-      - name: Capture and report
+      # Each workload is captured the same way: tracy-capture waits for the program to listen,
+      # the program is started with --profile-wait so its first zone is recorded, and the trace
+      # is exported and checked against the zones its profile in perf/required-zones.json names.
+      - name: Capture the performance suite
         run: |
-          ./tracy-tools/capture/tracy-capture -o tracy.trace -s 120 &
+          ./tracy-tools/capture/tracy-capture -o tracy-perf.trace -a 127.0.0.1 -s 300 &
           CAP=$!
-          sleep 2
-          ./build/linux-tracy/bin/vss_perf --tracy | tee perf-tracy.txt
+          ./build/linux-tracy-gui/bin/vss_perf --tracy --profile-wait=60 | tee perf-tracy.txt
           wait $CAP
-          ./tracy-tools/csvexport/tracy-csvexport tracy.trace > tracy.csv
-          echo "### Tracy zones" >> "$GITHUB_STEP_SUMMARY"
-          python3 tools/tracy_report.py tracy.csv \
-            --require perf.e2e.tcp,perf.e2e.pty,perf.e2e.pty.chunk,hub.route,config.to_json \
-            --markdown tracy-report.md --json tracy-zones.json | tee -a "$GITHUB_STEP_SUMMARY"
+          ./tracy-tools/csvexport/tracy-csvexport tracy-perf.trace > tracy-perf.csv
+          {
+            echo "### Tracy zones: performance suite"
+            python3 tools/tracy_report.py tracy-perf.csv --profile perf --areas \
+              --require perf.e2e.pty,perf.e2e.pty.chunk \
+              --markdown tracy-perf.md --json tracy-perf.json
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Capture the GUI scenario
+        run: |
+          ./tracy-tools/capture/tracy-capture -o tracy-gui.trace -a 127.0.0.1 -s 600 &
+          CAP=$!
+          QT_QPA_PLATFORM=offscreen ./build/linux-tracy-gui/bin/vss_gui --selftest --profile --profile-wait=60
+          wait $CAP
+          ./tracy-tools/csvexport/tracy-csvexport tracy-gui.trace > tracy-gui.csv
+          {
+            echo "### Tracy zones: GUI self-test (offscreen)"
+            python3 tools/tracy_report.py tracy-gui.csv --profile gui --areas \
+              --markdown tracy-gui.md --json tracy-gui.json
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Capture the unit tests
+        run: |
+          ./tracy-tools/capture/tracy-capture -o tracy-tests.trace -a 127.0.0.1 -s 900 &
+          CAP=$!
+          ./build/linux-tracy-gui/bin/vss_unit_tests --tracy --profile-wait=60
+          wait $CAP
+          ./tracy-tools/csvexport/tracy-csvexport tracy-tests.trace > tracy-tests.csv
+          {
+            echo "### Tracy zones: unit tests (every test is a zone)"
+            python3 tools/tracy_report.py tracy-tests.csv --profile tests --areas \
+              --markdown tracy-tests.md --json tracy-tests.json
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tracy-profile
           path: |
-            tracy.trace
-            tracy.csv
-            tracy-report.md
-            tracy-zones.json
+            tracy-perf.trace
+            tracy-perf.csv
+            tracy-perf.md
+            tracy-perf.json
+            tracy-gui.trace
+            tracy-gui.csv
+            tracy-gui.md
+            tracy-gui.json
+            tracy-tests.trace
+            tracy-tests.csv
+            tracy-tests.md
+            tracy-tests.json
             perf-tracy.txt
+            perf-dormant.json
 
       - name: Save caches
         if: always()
@@ -480,13 +532,17 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
           ccache: linux-clang-asan
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-asan-ubsan
+          preset: linux-asan-ubsan-gui
 
   # Builds the libFuzzer targets and replays the seed corpus and the regression inputs under AddressSanitizer
   # and UBSan. The fuzz workflow does the fuzzing itself, on pushes to develop and at night.
@@ -546,7 +602,7 @@ jobs:
       contents: read
     env:
       BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
-      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1:ignore_noninstrumented_modules=1:suppressions=${{ github.workspace }}/tests/tsan.supp
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -555,13 +611,17 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
           ccache: linux-clang-tsan
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-tsan
+          preset: linux-tsan-gui
 
       - name: Save ccache
         if: always()

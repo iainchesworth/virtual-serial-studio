@@ -851,7 +851,8 @@ void ToastManager::show(QWidget* anchor, const QString& text,
             {
                 for (int index = 0; index < toasts_.size(); ++index)
                 {
-                    if (toasts_.at(index).data() == toast)
+                    if (toasts_.at(index).data()
+                        == static_cast<QWidget*>(toast))
                     {
                         toasts_.removeAt(index);
                         break;
@@ -867,14 +868,14 @@ void ToastManager::show(QWidget* anchor, const QString& text,
 void ToastManager::position_toasts(QWidget* window)
 {
     toasts_.erase(std::remove_if(toasts_.begin(), toasts_.end(),
-                                 [](const QPointer<Toast>& toast)
+                                 [](const QPointer<QWidget>& toast)
                                  { return toast.isNull(); }),
                   toasts_.end());
 
     int bottom = window->height() - 24;
     for (int index = static_cast<int>(toasts_.size()) - 1; index >= 0; --index)
     {
-        Toast* toast = toasts_.at(index);
+        auto* toast = qobject_cast<Toast*>(toasts_.at(index).data());
         if (toast == nullptr || !toast->isVisible())
             continue;
         toast->adjustSize();

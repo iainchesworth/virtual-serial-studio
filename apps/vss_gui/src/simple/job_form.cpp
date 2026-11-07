@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QApplication>
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -435,6 +437,7 @@ QStringList JobForm::end_names(const std::vector<end_plan>& ends) const
 
 void JobForm::build()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.build");
     auto* outer = new QVBoxLayout(this);
     outer->setContentsMargins(0, 0, 0, 0);
     outer->setSpacing(0);
@@ -703,6 +706,7 @@ void JobForm::build()
 
 void JobForm::rebuild_ends()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.rebuild_ends");
     QWidget* focused = QApplication::focusWidget();
     const bool focus_inside =
         focused != nullptr && ends_->isAncestorOf(focused);
@@ -730,6 +734,7 @@ void JobForm::rebuild_ends()
 
 void JobForm::build_list(bool second)
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.build_list");
     const auto list_spec_value = spec(second);
     if (!list_spec_value)
         return;
@@ -1121,6 +1126,7 @@ void JobForm::set_extras(bool type_here, bool show_data)
 
 void JobForm::update_all()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.update_all");
     bool has_device = false;
     for (const auto* ends : {&plan_.first, &plan_.second})
     {
@@ -1156,6 +1162,7 @@ void JobForm::update_all()
 
 void JobForm::update_diagram()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.update_diagram");
     QStringList left = end_names(plan_.first);
     QStringList right = end_names(plan_.second);
     auto style = WireDiagram::arrows::both;
@@ -1286,6 +1293,7 @@ void JobForm::update_result()
 
 void JobForm::update_changes()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.update_changes");
     if (!previous_ || changes_ == nullptr)
         return;
     const plan_changes changes = compare(plan_, *previous_);
@@ -1318,6 +1326,7 @@ void JobForm::update_changes()
 
 void JobForm::validate()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.validate");
     blocker_.clear();
     QSet<QString> devices;
     QSet<unsigned> numbers;
@@ -1361,6 +1370,7 @@ void JobForm::validate()
 
 bool JobForm::submit()
 {
+    VSS_PROFILE_ZONE("gui.simple.job_form.submit");
     validate();
     if (!blocker_.isEmpty())
         return false;

@@ -10,6 +10,8 @@
 #include "theme/theme.hpp"
 #include "topology/topology_text.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QApplication>
 #include <QFontMetricsF>
 #include <QGraphicsSceneHoverEvent>
@@ -105,6 +107,7 @@ QSizeF node_size_for(const node_data& data, bool compact,
                      const QFont& name_font, const QFont& detail_font,
                      const QFont& badge_font)
 {
+    VSS_PROFILE_ZONE("gui.topology.node.measure");
     return measure(data, compact, name_font, detail_font, badge_font).size;
 }
 
@@ -185,6 +188,7 @@ QRectF NodeItem::boundingRect() const
 void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                      QWidget* widget)
 {
+    VSS_PROFILE_ZONE("gui.paint.node");
     Q_UNUSED(option);
     Q_UNUSED(widget);
 

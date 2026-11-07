@@ -10,6 +10,7 @@
 #include "support/redact.hpp"
 
 #include <vss/config/document.hpp>
+#include <vss/core/profile.hpp>
 
 #include <QCoreApplication>
 #include <QStringList>
@@ -116,6 +117,7 @@ QString port_state_label(vss::endpoint_state state)
 
 QString render_traffic(const std::vector<traffic_view>& traffic)
 {
+    VSS_PROFILE_ZONE("gui.support.bundle.render_traffic");
     QString out = QCoreApplication::translate(
         "Bundle",
         "# Traffic contents from Virtual Serial Studio. These bytes may "
@@ -159,6 +161,7 @@ QVector<bundle_file> build_bundle_files(const StudioBackend& backend,
                                         const EventLog& log,
                                         const bundle_selection& selection)
 {
+    VSS_PROFILE_ZONE("gui.support.bundle.build");
     QVector<bundle_file> files;
     if (selection.setup)
         files.push_back({QStringLiteral("setup.json"), setup_json(backend)});

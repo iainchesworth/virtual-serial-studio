@@ -6038,6 +6038,31 @@ Networks: %5</source>
             <source>Close</source>
             <translation>閉じる</translation>
         </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Profiling</source>
+            <translation>プロファイリング</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Record a performance trace</source>
+            <translation>パフォーマンストレースを記録する</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Let other computers connect</source>
+            <translation>他のコンピューターからの接続を許可する</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>Restart Studio with --profile-remote to allow this</source>
+            <translation>許可するには、--profile-remote を付けて Studio を再起動してください</translation>
+        </message>
+        <message>
+            <location filename="../src/support/settings_dialog.cpp" line="1" />
+            <source>For finding out why Studio is slow. It records timings only and sends nothing until you connect the Tracy profiler to the address above. It is off again each time Studio starts.</source>
+            <translation>Studio が遅い原因を調べるための機能です。記録するのは処理時間だけで、上のアドレスに Tracy プロファイラーを接続するまで何も送信しません。Studio を起動するたびに、再びオフになります。</translation>
+        </message>
     </context>
     <context>
         <name>SetupCheck</name>
@@ -18087,6 +18112,64 @@ Networks: %5</source>
             <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1、%2</translation>
+        </message>
+    </context>
+    <context>
+        <name>Profiling</name>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>This build does not include the profiler.</source>
+            <translation>このビルドにはプロファイラーが含まれていません。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>No port is free for the profiler. Close the program that uses port 8086 and try again.</source>
+            <translation>プロファイラー用の空きポートがありません。ポート 8086 を使用しているプログラムを閉じて、もう一度お試しください。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>all interfaces:%1</source>
+            <translation>すべてのインターフェイス:%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling is off. Nothing is recorded and no port is open.</source>
+            <translation>プロファイリングはオフです。何も記録されず、開いているポートもありません。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. A profiler is connected to %1.</source>
+            <translation>記録中です。プロファイラーが %1 に接続されています。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Other computers can connect.</source>
+            <translation>記録中です。%1 でプロファイラーを待っています。他のコンピューターから接続できます。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording. Waiting for a profiler on %1. Only this computer can connect.</source>
+            <translation>記録中です。%1 でプロファイラーを待っています。接続できるのはこのコンピューターだけです。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Recording is paused. %1 stays open until Studio quits.</source>
+            <translation>記録は一時停止中です。%1 は Studio を終了するまで開いたままです。</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling, connected</source>
+            <translation>プロファイリング、接続済み</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling :%1</source>
+            <translation>プロファイリング :%1</translation>
+        </message>
+        <message>
+            <location filename="../src/profiling/profiling_controller.cpp" line="1" />
+            <source>Profiling paused</source>
+            <translation>プロファイリング一時停止中</translation>
         </message>
     </context>
 </TS>

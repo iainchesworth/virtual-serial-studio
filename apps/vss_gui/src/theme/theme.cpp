@@ -8,6 +8,8 @@
 
 #include "theme/focus_ring_style.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QApplication>
 #include <QFile>
 #include <QFontDatabase>
@@ -152,6 +154,7 @@ Theme::Theme(QObject* parent) : QObject(parent)
 
 void Theme::initialise()
 {
+    VSS_PROFILE_ZONE("gui.theme.initialise");
     if (ready_)
         return;
 
@@ -184,6 +187,7 @@ void Theme::set_mode(theme_mode value)
     if (mode_ == value)
         return;
     mode_ = value;
+    VSS_PROFILE_MESSAGE("gui.theme.mode_changed");
     apply_palette_and_style();
 }
 
@@ -192,6 +196,7 @@ void Theme::set_density(density_mode value)
     if (density_ == value)
         return;
     density_ = value;
+    VSS_PROFILE_MESSAGE("gui.theme.density_changed");
     apply_palette_and_style();
 }
 
@@ -398,6 +403,7 @@ QPalette Theme::palette() const
 
 QString Theme::style_sheet() const
 {
+    VSS_PROFILE_ZONE("gui.theme.style_sheet");
     const QString source =
         read_resource(QStringLiteral(":/tokens/style.qss.in"));
     const auto& colours = current_colours();
@@ -456,6 +462,7 @@ void Theme::apply()
 
 void Theme::apply_palette_and_style()
 {
+    VSS_PROFILE_ZONE("gui.theme.apply");
     if (qApp == nullptr)
         return;
 
@@ -582,6 +589,7 @@ QString Theme::style_name(text_style style)
 
 void Theme::load_tokens()
 {
+    VSS_PROFILE_ZONE("gui.theme.load_tokens");
     QJsonParseError error{};
     const QJsonDocument document = QJsonDocument::fromJson(
         read_resource(QStringLiteral(":/tokens/tokens.json")).toUtf8(), &error);

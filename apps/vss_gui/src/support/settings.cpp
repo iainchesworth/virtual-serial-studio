@@ -6,6 +6,8 @@
 
 #include "support/settings.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QSettings>
 
 #include <algorithm>
@@ -32,6 +34,7 @@ ui_settings default_ui_settings()
 
 ui_settings load_ui_settings()
 {
+    VSS_PROFILE_ZONE("gui.support.settings.load");
     const QSettings store;
     ui_settings settings;
     settings.advanced = store.value(QLatin1String(kAdvanced), false).toBool();
@@ -56,6 +59,7 @@ ui_settings load_ui_settings()
 
 void save_ui_settings(const ui_settings& settings)
 {
+    VSS_PROFILE_ZONE("gui.support.settings.save");
     QSettings store;
     store.setValue(QLatin1String(kAdvanced), settings.advanced);
     store.setValue(QLatin1String(kTheme), theme_key(settings.theme));

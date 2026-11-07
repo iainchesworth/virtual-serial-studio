@@ -14,6 +14,7 @@
 #include "widgets/notes.hpp"
 
 #include <vss/core/bytes.hpp>
+#include <vss/core/profile.hpp>
 
 #include <QClipboard>
 #include <QComboBox>
@@ -73,6 +74,8 @@ void BenchmarkDialog::done(int result)
 
 void BenchmarkDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.benchmark.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.benchmark.opened");
     const QString title = tr("Benchmark a connection");
     setWindowTitle(title);
     setAccessibleName(title);
@@ -253,6 +256,7 @@ void BenchmarkDialog::build()
 
 void BenchmarkDialog::refresh()
 {
+    VSS_PROFILE_ZONE("gui.advanced.benchmark.refresh");
     const vss::endpoint_id previous_from =
         from_->count() == 0
             ? 0
@@ -363,6 +367,7 @@ QString BenchmarkDialog::block_note_text() const
 
 void BenchmarkDialog::update_command()
 {
+    VSS_PROFILE_ZONE("gui.advanced.benchmark.update_command");
     const auto path_of = [this](QComboBox* combo)
     {
         // An angle-bracket placeholder is copy-deck style: the command is not
@@ -449,6 +454,7 @@ void BenchmarkDialog::run()
 
 void BenchmarkDialog::start()
 {
+    VSS_PROFILE_ZONE("gui.advanced.benchmark.start");
     const auto bytes =
         vss::parse_byte_size(amount_->currentData().toString().toStdString());
     const auto chunk =
@@ -517,6 +523,7 @@ void BenchmarkDialog::on_progress(const vss::benchmark_progress& progress)
 void BenchmarkDialog::on_finished(
     const vss::result<vss::benchmark_result>& outcome)
 {
+    VSS_PROFILE_ZONE("gui.advanced.benchmark.finished");
     if (worker_.joinable())
         worker_.join();
     running_ = false;

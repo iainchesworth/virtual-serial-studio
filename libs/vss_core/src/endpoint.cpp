@@ -82,6 +82,8 @@ void endpoint::start()
     if (running_.exchange(true))
         return;
 
+    VSS_PROFILE_ZONE("endpoint.start");
+
     transition(endpoint_state::opening);
 
     const auto current = active_transport();
@@ -115,6 +117,8 @@ void endpoint::start()
 
 result<void> endpoint::reopen(std::shared_ptr<transport> fresh)
 {
+    VSS_PROFILE_ZONE("endpoint.reopen");
+    VSS_PROFILE_MESSAGE("endpoint.reopen");
     if (!fresh)
         return make_error_code(errc::invalid_argument);
     if (!fresh->is_open())
@@ -172,8 +176,11 @@ void endpoint::shutdown(std::function<void()> done)
         return;
     }
 
+    VSS_PROFILE_ZONE("endpoint.shutdown");
+
     auto self = shared_from_this();
     boost::asio::post(strand_, [self, done = std::move(done)] {
+        VSS_PROFILE_ZONE("endpoint.shutdown.close");
         if (const auto current = self->active_transport())
         {
             current->cancel();
@@ -193,6 +200,7 @@ void endpoint::shutdown(std::function<void()> done)
 
 void endpoint::close()
 {
+    VSS_PROFILE_ZONE("endpoint.close");
     running_ = false;
     if (const auto current = active_transport())
     {
@@ -206,6 +214,8 @@ void endpoint::do_read()
 {
     if (!running_.load())
         return;
+
+    VSS_PROFILE_ZONE("endpoint.arm_read");
 
     // The transport takes a std::function, which carries no executor, so a
     // bind_executor around the handler would be lost on the way. The completion
@@ -228,7 +238,8 @@ void endpoint::do_read()
 
 void endpoint::on_read(boost::system::error_code ec, std::size_t count)
 {
-    VSS_PROFILE_ZONE("endpoint.read");
+    VSS_PROFILE_ZONE_NAMED(zone, "endpoint.read");
+    VSS_PROFILE_ZONE_VALUE(zone, count);
 
     if (!running_.load())
         return;
@@ -278,6 +289,7 @@ void endpoint::handle_read_failure(const boost::system::error_code& ec,
         return;
     }
 
+    VSS_PROFILE_ZONE("endpoint.read_failure");
     running_ = false;
     {
         std::lock_guard lock(stats_mutex_);
@@ -331,6 +343,7 @@ void endpoint::request_write()
 
 void endpoint::start_next_write()
 {
+    VSS_PROFILE_ZONE("endpoint.arm_write");
     std::shared_ptr<pending_write> next;
     {
         std::lock_guard lock(write_mutex_);
@@ -370,7 +383,8 @@ void endpoint::start_next_write()
 void endpoint::on_write(const std::shared_ptr<pending_write>& write,
                         boost::system::error_code ec, std::size_t count)
 {
-    VSS_PROFILE_ZONE("endpoint.write");
+    VSS_PROFILE_ZONE_NAMED(zone, "endpoint.write");
+    VSS_PROFILE_ZONE_VALUE(zone, count);
 
     if (ec)
     {
@@ -409,6 +423,7 @@ void endpoint::on_write(const std::shared_ptr<pending_write>& write,
             if (!write_queue_.empty() && write_queue_.front() == write)
                 write_queue_.pop_front();
             write_queue_bytes_ -= std::min(write_queue_bytes_, write->data->size());
+            VSS_PROFILE_PLOT("endpoint.write_queue", write_queue_bytes_);
         }
         if (options_.capture_traffic)
         {
@@ -433,6 +448,7 @@ void endpoint::write(bytes_view data, write_handler handler)
 
 void endpoint::write(byte_buffer data, write_handler handler)
 {
+    VSS_PROFILE_ZONE("endpoint.enqueue_write");
     if (data.empty())
     {
         if (handler)
@@ -453,6 +469,7 @@ void endpoint::write(byte_buffer data, write_handler handler)
                 std::lock_guard stats_lock(stats_mutex_);
                 stats_.dropped += size;
             }
+            VSS_PROFILE_MESSAGE("endpoint.write_queue_full");
             if (handler)
             {
                 auto rejected = std::move(handler);
@@ -469,6 +486,7 @@ void endpoint::write(byte_buffer data, write_handler handler)
         pending->handler = std::move(handler);
         write_queue_.push_back(std::move(pending));
         write_queue_bytes_ += size;
+        VSS_PROFILE_PLOT("endpoint.write_queue", write_queue_bytes_);
     }
 
     request_write();
@@ -477,6 +495,7 @@ void endpoint::write(byte_buffer data, write_handler handler)
 result<std::size_t> endpoint::write_sync(bytes_view data,
                                          std::chrono::milliseconds timeout)
 {
+    VSS_PROFILE_ZONE("endpoint.write_sync");
     auto promise = std::make_shared<std::promise<std::pair<error_code, std::size_t>>>();
     auto future = promise->get_future();
 
@@ -509,6 +528,7 @@ control_lines endpoint::lines() const
 
 void endpoint::refresh_lines()
 {
+    VSS_PROFILE_ZONE("endpoint.refresh_lines");
     const auto current = active_transport();
     if (!current)
         return;
@@ -529,6 +549,7 @@ void endpoint::refresh_lines()
 
 error_code endpoint::set_line(control_line line, bool state)
 {
+    VSS_PROFILE_ZONE("endpoint.set_line");
     const auto current = active_transport();
     if (!current)
         return make_error_code(errc::not_open);
@@ -624,6 +645,10 @@ void endpoint::transition(endpoint_state next)
     const endpoint_state previous = state_.exchange(next);
     if (previous == next)
         return;
+
+    VSS_PROFILE_ZONE("endpoint.transition");
+    VSS_PROFILE_MESSAGE_TEXT(std::string("endpoint.") +
+                             std::string(to_string(next)) + ' ' + name());
 
     endpoint_event event;
     event.kind = next == endpoint_state::open ? event_kind::started

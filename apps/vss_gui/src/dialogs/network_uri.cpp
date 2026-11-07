@@ -6,6 +6,8 @@
 
 #include "dialogs/network_uri.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QStringList>
 
@@ -82,6 +84,8 @@ bool parse_port(const QString& text, int& port)
 std::optional<network_endpoint> parse_network_uri(const QString& text,
                                                   QString* error)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.dialogs.network_uri.parse");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, text.toStdString());
     if (error != nullptr)
         error->clear();
     const QString value = text.trimmed();
@@ -192,6 +196,9 @@ bool is_loopback_host(const QString& host)
 
 bool rfc2217_server_is_open(const QString& uri)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone,
+                           "gui.dialogs.network_uri.rfc2217_probe");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, uri.toStdString());
     const auto parsed = parse_network_uri(uri);
     if (!parsed || parsed->role != network_role::server ||
         parsed->transport != network_transport::rfc2217)

@@ -45,6 +45,9 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--floors", type=Path)
     parser.add_argument("--markdown", action="store_true",
                         help="print a Markdown table instead of plain text")
+    parser.add_argument("--only",
+                        help="comma separated measurements to report and gate; "
+                        "the rest are ignored")
     args = parser.parse_args(argv)
 
     merged: dict[str, dict] = {}
@@ -52,6 +55,9 @@ def main(argv: list[str]) -> int:
         for entry in load(path):
             merged.setdefault(entry["name"], entry)
 
+    if args.only:
+        wanted = {name.strip() for name in args.only.split(",") if name.strip()}
+        merged = {name: entry for name, entry in merged.items() if name in wanted}
     results = list(merged.values())
     print(render(results) if args.markdown else "\n".join(
         f"{entry['name']:<20} {entry['value']:>12.1f} {entry['unit']}"
@@ -64,22 +70,29 @@ def main(argv: list[str]) -> int:
     floors = json.loads(args.floors.read_text(encoding="utf-8"))
     failures = 0
     for floor in floors.get("floors", []):
+        if args.only and floor["name"] not in wanted:
+            continue
         entry = merged.get(floor["name"])
+        # A floor has `min` (a rate that must not fall below it) or `max` (a
+        # cost that must not rise above it, such as nanoseconds per zone).
+        limit = floor["max"] if "max" in floor else floor["min"]
+        word = "<=" if "max" in floor else ">="
         if entry is None:
-            print(f"MISSING  {floor['name']} (floor {floor['min']} {floor['unit']})",
+            print(f"MISSING  {floor['name']} (limit {limit} {floor['unit']})",
                   file=sys.stderr)
             failures += 1
             continue
-        if entry["value"] < floor["min"]:
+        failed = entry["value"] > limit if "max" in floor else entry["value"] < limit
+        if failed:
             print(
                 f"FAIL     {floor['name']}: {entry['value']:.1f} "
-                f"{entry['unit']} < {floor['min']} {floor['unit']}",
+                f"{entry['unit']} not {word} {limit} {floor['unit']}",
                 file=sys.stderr,
             )
             failures += 1
         else:
             print(f"ok       {floor['name']}: {entry['value']:.1f} "
-                  f"{entry['unit']} >= {floor['min']}")
+                  f"{entry['unit']} {word} {limit}")
 
     return 1 if failures else 0
 

@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../peer_open_platform.hpp"
 
 #include <vss/ports/vcom_driver.hpp>
@@ -58,6 +60,7 @@ bool platform_peer_open_supported() noexcept
 std::vector<peer_open_state>
 platform_peer_open(const std::vector<std::string>& paths)
 {
+    VSS_PROFILE_ZONE("ports.peer_open.windows");
     std::vector<peer_open_state> states;
     states.reserve(paths.size());
     for (const auto& path : paths)

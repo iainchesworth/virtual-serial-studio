@@ -9,6 +9,8 @@
 #include "theme/theme.hpp"
 #include "topology/topology_text.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QHash>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -54,6 +56,8 @@ LinksList::LinksList(QWidget* parent) : QWidget(parent)
 void LinksList::set_links(const std::vector<link_view>& links,
                           const std::vector<port_view>& ports)
 {
+    VSS_PROFILE_ZONE("gui.topology.links_list.update");
+    VSS_PROFILE_PLOT("gui.topology.links", links.size());
     QHash<vss::endpoint_id, QString> names;
     for (const auto& port : ports)
         names.insert(port.id, port.name);

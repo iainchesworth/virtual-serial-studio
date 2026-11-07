@@ -6,6 +6,8 @@
 
 #include "support/troubleshoot.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QStringList>
 
@@ -183,6 +185,7 @@ QString port_display_path(const port_view& port)
 
 troubleshoot_report build_troubleshoot_report(const troubleshoot_facts& facts)
 {
+    VSS_PROFILE_ZONE("gui.support.troubleshoot.report");
     troubleshoot_report report;
     const port_view* port = find_port(facts.ports, facts.port);
     const QString path = port != nullptr ? port_display_path(*port) : QString();

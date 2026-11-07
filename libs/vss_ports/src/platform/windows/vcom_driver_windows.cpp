@@ -11,6 +11,8 @@
 // protocol.h). Both kinds of port answer the same hub requests.
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../vcom_driver_platform.hpp"
 
 #include <vss/core/error.hpp>
@@ -100,6 +102,7 @@ std::wstring read_port_name(HDEVINFO set, SP_DEVINFO_DATA& info)
 /// The present ports of the driver, in the order Windows lists them.
 std::vector<hub_interface> enumerate_hubs()
 {
+    VSS_PROFILE_ZONE("ports.vcom.enumerate_hubs");
     std::vector<hub_interface> hubs;
     GUID guid = GUID_DEVINTERFACE_VSSCOM;
     const HDEVINFO set = ::SetupDiGetClassDevsW(
@@ -146,6 +149,7 @@ std::vector<hub_interface> enumerate_hubs()
 /// device is not installed.
 std::wstring find_control_path()
 {
+    VSS_PROFILE_ZONE("ports.vcom.find_control");
     GUID guid = GUID_DEVINTERFACE_VSSCOMCTL;
     const HDEVINFO set = ::SetupDiGetClassDevsW(
         &guid, nullptr, nullptr, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
@@ -193,6 +197,7 @@ using unique_handle = std::unique_ptr<void, handle_closer>;
 /// for. A port made through it lives as long as this handle does.
 HANDLE open_control(const std::wstring& path, DWORD& error)
 {
+    VSS_PROFILE_ZONE("ports.vcom.open_control");
     const auto handle = ::CreateFileW(
         path.c_str(), GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
@@ -213,6 +218,7 @@ bool control_request(HANDLE handle, DWORD code, void* input, DWORD input_size,
 /// Opens the hub end. An overlapped handle, so that asio can use it.
 HANDLE open_hub(const std::wstring& path, DWORD& error)
 {
+    VSS_PROFILE_ZONE("ports.vcom.open_hub");
     const auto handle = ::CreateFileW(
         path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING,
         FILE_FLAG_OVERLAPPED, nullptr);
@@ -274,6 +280,7 @@ bool read_version(HANDLE handle, VSSCOM_VERSION_INFO& version)
 /// each instance and makes the next at once.
 HANDLE open_helper(DWORD& error)
 {
+    VSS_PROFILE_ZONE("ports.vcom.open_helper");
     for (int attempt = 0; attempt < 5; ++attempt)
     {
         // Identification only: the helper needs to know the user and nothing
@@ -303,6 +310,8 @@ constexpr DWORD helper_failed = 0xFFFFFFFFu;
 /// Win32 error it answered, or `helper_failed`.
 DWORD helper_ask(HANDLE pipe, ULONG op, ULONG slot, ULONG argument)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.vcom.helper_ask");
+    VSS_PROFILE_ZONE_VALUE(zone, op);
     VSSCOM_HELPER_REQUEST request{};
     request.Version = VSSCOM_HELPER_VERSION;
     request.Op = op;
@@ -365,6 +374,7 @@ struct port_origin
 /// that request goes on a pipe of its own.
 errc ask_com_number(const port_origin& origin, HANDLE lease, unsigned number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.ask_com_number");
     unique_handle own;
     HANDLE pipe = lease;
     if (origin.kernel_mode)
@@ -408,6 +418,7 @@ std::optional<hub_interface> wait_for_hub(const std::wstring& instance,
                                           const std::wstring& expected,
                                           std::chrono::seconds limit)
 {
+    VSS_PROFILE_ZONE("ports.vcom.wait_for_hub");
     using clock = std::chrono::steady_clock;
     const auto deadline = clock::now() + limit;
     for (;;)
@@ -566,6 +577,7 @@ public:
 
     void close() override
     {
+        VSS_PROFILE_ZONE("ports.vcom.close");
         if (!open_.exchange(false))
             return;
         registry_remove(this);
@@ -607,6 +619,7 @@ public:
 
     void set_control_line(control_line line, bool state) override
     {
+        VSS_PROFILE_ZONE("ports.vcom.set_line");
         // Only the inputs are ours to drive; DTR, RTS and break belong to the
         // application.
         ULONG bit = 0;
@@ -645,6 +658,7 @@ public:
 
     void refresh_lines() override
     {
+        VSS_PROFILE_ZONE("ports.vcom.refresh_lines");
         VSSCOM_HUB_STATE state{};
         {
             std::lock_guard lock(mutex_);
@@ -742,6 +756,8 @@ public:
     /// Changes the COM number: see `set_driver_com_number`.
     result<std::string> renumber(unsigned number)
     {
+        VSS_PROFILE_ZONE("ports.vcom.renumber");
+        VSS_PROFILE_MESSAGE("ports.vcom.renumber");
         const std::lock_guard rename_lock(rename_mutex_);
         if (!open_.load())
             return make_error_code(errc::not_open);
@@ -794,6 +810,7 @@ private:
     void start_read(const boost::asio::mutable_buffer& buffer,
                     io_handler handler)
     {
+        VSS_PROFILE_ZONE("ports.vcom.read");
         const std::lock_guard lock(flight_->mutex);
         if (flight_->renaming)
         {
@@ -828,6 +845,7 @@ private:
     void start_write(const boost::asio::const_buffer& buffer,
                      io_handler handler)
     {
+        VSS_PROFILE_ZONE("ports.vcom.write");
         const std::lock_guard lock(flight_->mutex);
         if (flight_->renaming)
         {
@@ -876,7 +894,12 @@ private:
     void start_watch(HANDLE handle)
     {
         watching_ = true;
-        watcher_ = std::thread([this, handle] { watch(handle); });
+        watcher_ = std::thread(
+            [this, handle]
+            {
+                VSS_PROFILE_THREAD("vss.vcom.watch");
+                watch(handle);
+            });
     }
 
     void stop_watch()
@@ -930,6 +953,7 @@ private:
     /// port open".
     void apply_state(const VSSCOM_HUB_STATE& state)
     {
+        VSS_PROFILE_ZONE("ports.vcom.apply_state");
         std::string text;
         notice_sink sink;
         {
@@ -973,6 +997,7 @@ private:
     /// can restart the port.
     void begin_swap()
     {
+        VSS_PROFILE_ZONE("ports.vcom.begin_swap");
         {
             std::lock_guard lock(flight_->mutex);
             flight_->renaming = true;
@@ -998,6 +1023,7 @@ private:
     /// (or with any name, when it is empty), and gives it the held operations.
     bool finish_swap(const std::wstring& expected)
     {
+        VSS_PROFILE_ZONE("ports.vcom.finish_swap");
         auto hub = wait_for_hub(origin_.instance, expected,
                                 std::chrono::seconds(30));
         if (!hub && !expected.empty())
@@ -1066,6 +1092,8 @@ private:
     /// the endpoint treats as a failure, and close.
     void fail_held()
     {
+        VSS_PROFILE_ZONE("ports.vcom.fail_held");
+        VSS_PROFILE_MESSAGE("ports.vcom.held_failed");
         std::optional<flight::read_slot> read;
         std::optional<flight::write_slot> write;
         {
@@ -1157,6 +1185,7 @@ open_made_port(const transport::executor_type& executor,
                const std::string& name, port_origin origin, unique_handle lease,
                unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.open_made_port");
     auto hub = wait_for_hub(origin.instance, std::wstring(),
                             std::chrono::seconds(30));
     if (!hub)
@@ -1206,6 +1235,7 @@ create_port_on_demand(const transport::executor_type& executor,
                       const std::string& name, const std::wstring& control_path,
                       unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.create_on_demand");
     DWORD error = 0;
     unique_handle control(open_control(control_path, error));
     if (control.get() == INVALID_HANDLE_VALUE)
@@ -1259,6 +1289,7 @@ result<virtual_port_result>
 create_port_via_helper(const transport::executor_type& executor,
                        const std::string& name, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.create_via_helper");
     DWORD error = 0;
     unique_handle pipe(open_helper(error));
     if (pipe.get() == INVALID_HANDLE_VALUE)
@@ -1322,6 +1353,7 @@ namespace
 /// True when the helper service has its pipe. A pipe that is busy is there.
 bool helper_present()
 {
+    VSS_PROFILE_ZONE("ports.vcom.helper_present");
     return ::WaitNamedPipeW(VssComHelperPipeName, 1) != FALSE ||
            ::GetLastError() != ERROR_FILE_NOT_FOUND;
 }
@@ -1330,12 +1362,14 @@ bool helper_present()
 
 bool platform_driver_available()
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_available");
     return !find_control_path().empty() || helper_present() ||
            !enumerate_hubs().empty();
 }
 
 std::string platform_driver_version()
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_version");
     // Both devices ship together; the control device speaks version 1 of its
     // own interface alongside version 3 of the ports.
     const std::wstring control_path = find_control_path();
@@ -1372,6 +1406,7 @@ result<virtual_port_result>
 platform_create_driver_port(const transport::executor_type& executor,
                             const std::string& name, unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_create_port");
     // A number is the helper service's to give. Without it, say so before a
     // port is made that would only be thrown away.
     if (com_number != 0 && !helper_present())
@@ -1455,6 +1490,7 @@ platform_create_driver_port(const transport::executor_type& executor,
 result<std::string> platform_set_driver_com_number(transport& port,
                                                    unsigned com_number)
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_set_com_number");
     // Looked up among the transports of this process, which are all ours, so that
     // nothing depends on run-time type information.
     for (const auto& candidate : registry_snapshot())
@@ -1467,6 +1503,7 @@ result<std::string> platform_set_driver_com_number(transport& port,
 
 result<std::uint32_t> platform_revoke_driver_port(transport& port)
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_revoke");
     for (const auto& candidate : registry_snapshot())
     {
         if (static_cast<transport*>(candidate.get()) == &port)
@@ -1477,6 +1514,7 @@ result<std::uint32_t> platform_revoke_driver_port(transport& port)
 
 std::optional<driver_peer_info> platform_driver_peer(const std::string& com_name)
 {
+    VSS_PROFILE_ZONE("ports.vcom.platform_peer");
     for (const auto& candidate : registry_snapshot())
     {
         if (candidate->named(com_name))

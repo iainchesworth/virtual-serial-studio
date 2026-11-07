@@ -8,6 +8,7 @@
 // one firewall step. The host is read in src/platform/<os>/.
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/permissions.hpp>
 
 #include "platform/permissions_platform.hpp"
@@ -715,6 +716,7 @@ firewall_verdict_for(const std::vector<firewall_rule_record>& rules,
                      std::string_view program, const listener& what,
                      long active_profiles)
 {
+    VSS_PROFILE_ZONE("ports.permissions.firewall_verdict");
     bool allowed = false;
     for (const firewall_rule_record& rule : rules)
     {
@@ -952,6 +954,7 @@ std::string usermod_command(const group_membership_spec& spec)
 
 step_result add_user_to_group(const group_membership_spec& spec)
 {
+    VSS_PROFILE_ZONE("ports.permissions.add_user_to_group");
     if (const std::string why = validate(spec); !why.empty())
         return {step_status::invalid, why};
     if (!detail::platform_can_add_user_to_group())
@@ -1141,12 +1144,14 @@ std::string_view host_name() noexcept
 
 observation observe(const context& ask)
 {
+    VSS_PROFILE_ZONE("ports.permissions.observe");
     return detail::platform_observe(ask);
 }
 
 std::vector<fact> evaluate(const observation& seen, const context& ask,
                            std::string_view host)
 {
+    VSS_PROFILE_ZONE("ports.permissions.evaluate");
     if (host == "windows")
         return windows_facts(seen.windows, ask);
     if (host == "linux")
@@ -1158,11 +1163,16 @@ std::vector<fact> evaluate(const observation& seen, const context& ask,
 
 std::vector<fact> probe(const context& ask)
 {
-    return evaluate(observe(ask), ask, host_name());
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.permissions.probe");
+    auto facts = evaluate(observe(ask), ask, host_name());
+    VSS_PROFILE_ZONE_VALUE(zone, facts.size());
+    VSS_PROFILE_MESSAGE("ports.permissions.probed");
+    return facts;
 }
 
 step_result apply_firewall_rule(const firewall_rule_spec& spec, bool remove)
 {
+    VSS_PROFILE_ZONE("ports.permissions.apply_firewall_rule");
     if (const std::string why = validate(spec); !why.empty())
         return {step_status::invalid, why};
     if (!detail::platform_can_manage_firewall_rules())
@@ -1174,6 +1184,7 @@ step_result apply_firewall_rule(const firewall_rule_spec& spec, bool remove)
 step_result run_elevated(const std::string& executable,
                          const std::vector<std::string>& arguments)
 {
+    VSS_PROFILE_ZONE("ports.permissions.run_elevated");
     if (!detail::platform_can_run_elevated())
         return {step_status::unsupported,
                 "this build cannot start a helper elevated"};

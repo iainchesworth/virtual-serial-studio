@@ -6,3 +6,11 @@ path = "**"
 precedence = "closest"
 SPDX-FileCopyrightText = "Iain Chesworth Labs contributors"
 SPDX-License-Identifier = "GPL-3.0-or-later"
+
+# The overlay port is the vcpkg port of Tracy, which vcpkg publishes under the MIT licence,
+# with two features added.
+[[annotations]]
+path = "cmake/vcpkg-ports/tracy/**"
+precedence = "override"
+SPDX-FileCopyrightText = "Microsoft Corporation and vcpkg contributors"
+SPDX-License-Identifier = "MIT"

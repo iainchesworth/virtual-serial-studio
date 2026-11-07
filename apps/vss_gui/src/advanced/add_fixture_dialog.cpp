@@ -11,6 +11,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QComboBox>
 #include <QCoreApplication>
 #include <QFrame>
@@ -36,6 +38,8 @@ AddFixtureDialog::AddFixtureDialog(StudioBackend& backend,
 
 void AddFixtureDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.advanced.add_fixture.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.add_fixture.opened");
     setWindowTitle(tr("Add a mock fixture"));
     setAccessibleName(tr("Add a mock fixture"));
     setProperty("surface", QStringLiteral("panel"));
@@ -216,6 +220,7 @@ QString AddFixtureDialog::result_text() const
 
 void AddFixtureDialog::update_result()
 {
+    VSS_PROFILE_ZONE("gui.advanced.add_fixture.update_result");
     const QString name =
         fixture_name().isEmpty() ? QStringLiteral("modem") : fixture_name();
     const QString baud = QString::number(baud_rate());
@@ -285,6 +290,8 @@ void AddFixtureDialog::clear_error()
 
 bool AddFixtureDialog::add_fixture()
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.advanced.add_fixture.add");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, fixture_name().toStdString());
     clear_error();
     if (!backend_.caps().fixtures)
     {

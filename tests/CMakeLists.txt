@@ -23,6 +23,7 @@ set(VSS_UNIT_TEST_SOURCES
   unit/test_permissions.cpp
   unit/test_permissions_linux.cpp
   unit/test_permissions_macos.cpp
+  unit/test_profiling.cpp
   unit/test_serial_settings.cpp
   unit/test_serial_transport.cpp
   unit/test_stable_link.cpp
@@ -137,6 +138,35 @@ if(VSS_PWSH)
               ${PROJECT_SOURCE_DIR}/tools/vm/test-seed.ps1)
     set_tests_properties(vm_seed PROPERTIES TIMEOUT 180)
   endif()
+endif()
+
+# A sanitizer build runs several times slower than a plain one (ThreadSanitizer five to fifteen
+# times), so the fixed per-test timeouts below would fail a run that is only slow. At the end of
+# this directory, whatever was added above or by a later change, every test's TIMEOUT is multiplied.
+set(VSS_SANITIZER_TIMEOUT_FACTOR 5 CACHE STRING
+  "Multiplier for the test timeouts in a build with ICL_SANITIZERS")
+function(vss_scale_test_timeouts)
+  get_directory_property(_vss_tests TESTS)
+  foreach(_vss_test IN LISTS _vss_tests)
+    get_test_property(${_vss_test} TIMEOUT _vss_timeout)
+    if(_vss_timeout)
+      math(EXPR _vss_timeout "${_vss_timeout} * ${VSS_SANITIZER_TIMEOUT_FACTOR}")
+      set_tests_properties(${_vss_test} PROPERTIES TIMEOUT ${_vss_timeout})
+    endif()
+  endforeach()
+endfunction()
+if(ICL_SANITIZERS)
+  cmake_language(DEFER CALL vss_scale_test_timeouts)
+endif()
+
+# The GUI tests set PATH=${VSS_QT_BIN_DIR};$ENV{PATH}, but ENVIRONMENT is a
+# list, so the semicolon ends the entry and PATH is the Qt directory alone. That is
+# enough for Qt, and not for the MSVC AddressSanitizer runtime DLL, which lives in
+# the compiler's directory. Put that directory in the same entry, with the
+# semicolon escaped so that it stays inside it.
+if(MSVC AND ICL_SANITIZERS AND VSS_QT_BIN_DIR)
+  get_filename_component(_vss_asan_dll_dir "${CMAKE_CXX_COMPILER}" DIRECTORY)
+  set(VSS_QT_BIN_DIR "${VSS_QT_BIN_DIR}\\;${_vss_asan_dll_dir}")
 endif()
 
 if(TARGET vss_gui)

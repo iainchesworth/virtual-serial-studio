@@ -11,6 +11,8 @@
 #include "widgets/common.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QComboBox>
 #include <QGuiApplication>
@@ -282,6 +284,7 @@ QLabel* make_field_label(const QString& text, QWidget* parent)
 
 void fill_port_combo(QComboBox* combo, const std::vector<port_view>& ports)
 {
+    VSS_PROFILE_ZONE("gui.dialogs.fill_port_combo");
     combo->clear();
     for (const port_view& port : ports)
     {

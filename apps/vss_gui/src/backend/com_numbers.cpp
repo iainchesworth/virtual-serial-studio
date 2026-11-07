@@ -6,6 +6,8 @@
 
 #include "backend/com_numbers.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <algorithm>
 #include <cctype>
 #include <cstddef>
@@ -36,6 +38,7 @@ unsigned first_free_from(unsigned from, const std::vector<unsigned>& in_use)
 
 std::vector<unsigned> com_numbers_in_use(const std::vector<std::string>& paths)
 {
+    VSS_PROFILE_ZONE("gui.backend.com_numbers.in_use");
     std::vector<unsigned> numbers;
     for (const std::string& path : paths)
     {

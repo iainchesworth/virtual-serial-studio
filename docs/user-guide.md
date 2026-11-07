@@ -1034,7 +1034,15 @@ need Advanced mode are listed with a prompt that offers to turn it on.
   (comfortable or compact). Text size, display scale, high contrast and reduced
   motion follow your operating system.
 - **Performance**: *Refresh interval*, 50 to 5000 ms. Shorter feels live;
-  longer is lighter on a busy machine.
+  longer is lighter on a busy machine. Under *Profiling*, *Record a performance
+  trace* lets a Tracy profiler watch where Studio spends its time, which is how
+  a slowdown is found. It is off every time Studio starts, listens on this
+  computer only, and sends nothing until you connect the profiler; the status
+  bar shows the address while it is listening. *Let other computers connect*
+  opens it to your network and can be chosen only before the first start.
+  Turning the trace off stops recording, but the port stays open until Studio
+  quits. Builds without the profiler show both switches as unavailable. See
+  [profiling](profiling.md).
 
 **Reset to defaults** restores them. The values are stored with `QSettings` (the
 registry on Windows, a configuration file on Linux and macOS).

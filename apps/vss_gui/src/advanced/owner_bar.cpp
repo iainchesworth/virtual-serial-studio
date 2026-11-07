@@ -11,6 +11,8 @@
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QComboBox>
 #include <QCoreApplication>
 #include <QHBoxLayout>
@@ -202,6 +204,7 @@ vss::endpoint_id OwnerBar::give_target() const
 
 void OwnerBar::refresh()
 {
+    VSS_PROFILE_ZONE("gui.advanced.owner_bar.refresh");
     const capabilities caps = backend_.caps();
     if (!link_)
         return;
@@ -272,6 +275,7 @@ void OwnerBar::refresh()
 
 void OwnerBar::release_owner()
 {
+    VSS_PROFILE_ZONE("gui.advanced.owner_bar.release");
     if (!link_)
         return;
     const auto released = backend_.release_owner(link_->id);
@@ -289,6 +293,7 @@ void OwnerBar::release_owner()
 
 void OwnerBar::give_owner()
 {
+    VSS_PROFILE_ZONE("gui.advanced.owner_bar.give");
     if (!link_)
         return;
     const vss::endpoint_id target = give_target();

@@ -6,6 +6,8 @@
 
 #include "shell/undo_service.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <utility>
 
 namespace vss::gui
@@ -15,10 +17,12 @@ UndoService::UndoService(QObject* parent) : QObject(parent) {}
 
 void UndoService::push(undo_step step)
 {
+    VSS_PROFILE_ZONE("gui.shell.undo.push");
     redo_.clear();
     undo_.push_back(std::move(step));
     while (undo_.size() > kMaxDepth)
         undo_.pop_front();
+    VSS_PROFILE_PLOT("gui.undo.depth", undo_.size());
     Q_EMIT changed();
 }
 
@@ -34,6 +38,7 @@ QString UndoService::redo_text() const
 
 bool UndoService::undo()
 {
+    VSS_PROFILE_ZONE("gui.shell.undo.apply");
     if (undo_.empty())
         return false;
     undo_step step = std::move(undo_.back());
@@ -46,12 +51,15 @@ bool UndoService::undo()
         return false;
     }
     redo_.push_back(std::move(step));
+    VSS_PROFILE_PLOT("gui.undo.depth", undo_.size());
+    VSS_PROFILE_MESSAGE("gui.undo.applied");
     Q_EMIT changed();
     return true;
 }
 
 bool UndoService::redo()
 {
+    VSS_PROFILE_ZONE("gui.shell.redo.apply");
     if (redo_.empty())
         return false;
     undo_step step = std::move(redo_.back());
@@ -64,6 +72,8 @@ bool UndoService::redo()
         return false;
     }
     undo_.push_back(std::move(step));
+    VSS_PROFILE_PLOT("gui.undo.depth", undo_.size());
+    VSS_PROFILE_MESSAGE("gui.redo.applied");
     Q_EMIT changed();
     return true;
 }

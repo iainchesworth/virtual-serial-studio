@@ -6,6 +6,8 @@
 
 #include "language/language_choice.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFile>
 #include <QGuiApplication>
@@ -72,6 +74,7 @@ QStringList supported_languages()
 language_choice choose_language(const QStringList& preferred,
                                 const QStringList& available)
 {
+    VSS_PROFILE_ZONE("gui.language.choose");
     for (const QString& tag : preferred)
     {
         const QString code = catalogue_for(tag, available);
@@ -108,6 +111,7 @@ QString language_choice_description()
 
 language_choice apply_language()
 {
+    VSS_PROFILE_ZONE("gui.language.apply");
     // Only a language whose catalogue is in the program can be chosen, so the
     // layout direction never mirrors English text.
     QStringList available{QStringLiteral("en")};

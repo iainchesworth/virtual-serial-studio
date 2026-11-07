@@ -6,6 +6,8 @@
 
 #include "dialogs/recent_files.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCryptographicHash>
 #include <QSettings>
 #include <QStringList>
@@ -32,6 +34,7 @@ QString entry_key(const QString& path)
 
 QVector<recent_entry> recent_entries()
 {
+    VSS_PROFILE_ZONE("gui.dialogs.recent_files.read");
     QSettings settings;
     const QStringList files =
         settings.value(QLatin1String(kRecentFiles)).toStringList();
@@ -54,6 +57,8 @@ QVector<recent_entry> recent_entries()
 
 void record_recent(const QString& path, const QString& summary)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.dialogs.recent_files.record");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
     if (path.isEmpty())
         return;
 

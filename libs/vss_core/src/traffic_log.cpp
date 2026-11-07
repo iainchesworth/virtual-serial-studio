@@ -6,6 +6,8 @@
 
 #include <vss/core/traffic_log.hpp>
 
+#include <vss/core/profile.hpp>
+
 #include <algorithm>
 
 namespace vss {
@@ -21,10 +23,12 @@ void traffic_log::push(traffic_record record)
     records_.push_back(std::move(record));
     while (records_.size() > capacity_)
         records_.pop_front();
+    VSS_PROFILE_PLOT("hub.traffic_log", records_.size());
 }
 
 std::vector<traffic_record> traffic_log::snapshot(std::size_t limit) const
 {
+    VSS_PROFILE_ZONE("hub.traffic_log_snapshot");
     std::lock_guard lock(mutex_);
     const std::size_t count =
         limit == 0 ? records_.size() : std::min(limit, records_.size());

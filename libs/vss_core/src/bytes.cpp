@@ -5,6 +5,7 @@
 //
 
 #include <vss/core/bytes.hpp>
+#include <vss/core/profile.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -72,6 +73,7 @@ std::string to_string(bytes_view data)
 
 std::string to_hex(bytes_view data, char separator)
 {
+    VSS_PROFILE_ZONE("core.to_hex");
     static constexpr char digits[] = "0123456789abcdef";
     std::string out;
     out.reserve(data.size() * (separator == '\0' ? 2 : 3));
@@ -87,6 +89,7 @@ std::string to_hex(bytes_view data, char separator)
 
 result<byte_buffer> from_hex(std::string_view text)
 {
+    VSS_PROFILE_ZONE("core.from_hex");
     byte_buffer out;
     int high = -1;
 
@@ -127,6 +130,7 @@ result<byte_buffer> from_hex(std::string_view text)
 
 std::string to_printable(bytes_view data, char placeholder)
 {
+    VSS_PROFILE_ZONE("core.to_printable");
     std::string out;
     out.reserve(data.size());
     for (byte value : data)
@@ -147,6 +151,7 @@ std::string to_printable(bytes_view data, char placeholder)
 
 result<std::uint64_t> parse_byte_size(std::string_view text)
 {
+    VSS_PROFILE_ZONE("core.parse_byte_size");
     std::string_view input = trim(text);
     if (input.empty())
         return make_error_code(errc::invalid_argument);

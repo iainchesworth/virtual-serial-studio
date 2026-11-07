@@ -11,6 +11,7 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
 #include <vss/core/types.hpp>
 
 #include <QButtonGroup>
@@ -160,6 +161,7 @@ void ReleasePortDialog::update_state()
 
 void ReleasePortDialog::release()
 {
+    VSS_PROFILE_ZONE("gui.flows.release_port.release");
     if (!primary_button()->isEnabled())
         return;
     const release_method chosen = method();

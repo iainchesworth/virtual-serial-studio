@@ -8,6 +8,7 @@
 
 #include "panes/format.hpp"
 
+#include <vss/core/profile.hpp>
 #include <vss/core/serial_settings.hpp>
 
 #include <QStringList>
@@ -71,6 +72,8 @@ PortModel::PortModel(QObject* parent) : QAbstractTableModel(parent) {}
 void PortModel::set_snapshot(std::vector<port_view> ports,
                              std::vector<link_view> links)
 {
+    VSS_PROFILE_ZONE("gui.panes.port_model.update");
+    VSS_PROFILE_PLOT("gui.panes.port_model.rows", ports.size());
     const bool same_ids =
         ports.size() == ports_.size() &&
         std::equal(ports.begin(), ports.end(), ports_.begin(),
@@ -117,6 +120,7 @@ void PortModel::set_filter(const QString& filter)
 
 void PortModel::rebuild_visible()
 {
+    VSS_PROFILE_ZONE("gui.panes.port_model.filter");
     visible_.clear();
     visible_.reserve(static_cast<qsizetype>(ports_.size()));
     for (int index = 0; index < static_cast<int>(ports_.size()); ++index)

@@ -12,6 +12,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QFrame>
 #include <QGridLayout>
@@ -124,6 +126,8 @@ PortReadyDialog::PortReadyDialog(StudioBackend& backend, vss::endpoint_id port,
 
 void PortReadyDialog::build(bool advanced)
 {
+    VSS_PROFILE_ZONE("gui.flows.port_ready.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.port_ready.opened");
     path_block_ = new QFrame(this);
     path_block_->setObjectName(QStringLiteral("portReadyPath"));
     auto* path_layout = new QHBoxLayout(path_block_);
@@ -336,6 +340,7 @@ void PortReadyDialog::build(bool advanced)
 
 void PortReadyDialog::refresh_peer()
 {
+    VSS_PROFILE_ZONE("gui.flows.port_ready.refresh_peer");
     if (peer_card_ == nullptr || peer_chip_ == nullptr)
         return;
 

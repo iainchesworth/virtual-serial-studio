@@ -13,6 +13,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -206,6 +208,7 @@ AddSheet::AddSheet(canvas_item item, const std::vector<port_view>& ports,
 
 void AddSheet::rebuild_rows(int slots)
 {
+    VSS_PROFILE_ZONE("gui.topology.add_sheet.rebuild_rows");
     // Keep what the user typed in the rows that stay.
     QVector<bundle_slot> kept;
     for (const row& line : rows_)
@@ -343,6 +346,7 @@ void AddSheet::sync_name_visibility(int index)
 
 void AddSheet::update_state()
 {
+    VSS_PROFILE_ZONE("gui.topology.add_sheet.update_state");
     const bundle_request value = request();
     QStringList names;
     bool ok = true;
@@ -463,6 +467,7 @@ QString AddSheet::error_text() const
 
 void AddSheet::submit()
 {
+    VSS_PROFILE_ZONE("gui.topology.add_sheet.submit");
     if (!add_->isEnabled())
         return;
     if (!attempt_)

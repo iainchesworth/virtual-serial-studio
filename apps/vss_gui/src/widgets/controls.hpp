@@ -237,7 +237,9 @@ private:
     explicit ToastManager(QObject* parent = nullptr);
     void position_toasts(QWidget* window);
 
-    QList<QPointer<Toast>> toasts_;
+    // QWidget pointers, not Toast: the list is read while a toast is being destroyed,
+    // when its dynamic type is already QWidget.
+    QList<QPointer<QWidget>> toasts_;
 };
 
 } // namespace vss::gui

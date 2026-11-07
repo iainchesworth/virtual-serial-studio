@@ -9,6 +9,8 @@
 #include "theme/icon_provider.hpp"
 #include "theme/theme.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <QMimeData>
@@ -208,6 +210,7 @@ void Toolbox::set_capabilities(const capabilities& caps)
 
 void Toolbox::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.topology.toolbox.rebuild");
     clear();
     const QFont label_font = Theme::instance().font(text_style::caption);
     const auto add_group = [this, &label_font](const QString& text)

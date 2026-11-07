@@ -13,6 +13,7 @@
 #include <QtGlobal>
 
 #include <boost/version.hpp>
+#include <vss/core/profiling.hpp>
 
 namespace vss::gui::support
 {
@@ -66,6 +67,8 @@ build_info current_build_info()
     info.architecture = QSysInfo::currentCpuArchitecture();
     info.kernel = QStringLiteral("%1 %2").arg(QSysInfo::kernelType(),
                                               QSysInfo::kernelVersion());
+    info.profiling = QString::fromStdString(
+        vss::profiling::describe(vss::profiling::current()));
     info.language = vss::gui::language_choice_description();
     return info;
 }
@@ -84,6 +87,7 @@ QVector<environment_row> environment_rows(const build_info& info)
         {QStringLiteral("Operating system"), info.operating_system},
         {QStringLiteral("Architecture"),
          QStringLiteral("%1, kernel %2").arg(info.architecture, info.kernel)},
+        {QStringLiteral("Profiling"), info.profiling},
         {QStringLiteral("Language"), info.language},
     };
 }

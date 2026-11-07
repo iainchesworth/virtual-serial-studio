@@ -65,6 +65,9 @@ set(VSS_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # Qt Widgets.
 add_subdirectory(src/backend)
 
+# Tracy: the instrumented QApplication and the profiling switch.
+add_subdirectory(src/profiling)
+
 # Design tokens, resources, icons and the focus style.
 add_subdirectory(src/theme)
 
@@ -104,6 +107,7 @@ target_link_libraries(vss_gui PRIVATE
   Vss::studio
   Qt6::Widgets
   vss_gui_backend
+  vss_gui_profiling
   vss_gui_theme
   vss_gui_widgets
   vss_gui_panes
@@ -120,9 +124,6 @@ target_compile_definitions(vss_gui PRIVATE
   VSS_BUILD_TYPE="${VSS_BUILD_TYPE}"
   VSS_COMPILER="${VSS_COMPILER}"
   VSS_GUI_VERSION="${PROJECT_VERSION}"
-  # 1 when this is a profiling build (VSS_TRACY), so `main` can decide with an
-  # `if constexpr` instead of a preprocessor conditional.
-  VSS_GUI_PROFILING=$<BOOL:${VSS_TRACY}>
   # vss::endpoint has a member function called `emit`; Qt's keyword macro
   # would rewrite it to nothing inside the moc translation unit.  Using the
   # Q_* spellings everywhere keeps both worlds intact.

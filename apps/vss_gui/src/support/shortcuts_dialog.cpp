@@ -13,6 +13,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/surfaces.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -101,6 +103,8 @@ QString ShortcutsDialog::macos_text(const QKeySequence& shortcut)
 
 void ShortcutsDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.shortcuts.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.shortcuts.opened");
     setWindowTitle(
         QCoreApplication::translate("Shortcuts", "Keyboard shortcuts"));
     setAccessibleName(
@@ -213,6 +217,7 @@ void ShortcutsDialog::build()
 
 void ShortcutsDialog::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.support.shortcuts.rebuild");
     const QVector<shortcut_entry> shown = [this]
     {
         QVector<shortcut_entry> out;
@@ -281,6 +286,8 @@ void ShortcutsDialog::fit_key_columns()
 
 void ShortcutsDialog::set_filter(const QString& text)
 {
+    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.shortcuts.filter");
+    VSS_PROFILE_ZONE_TEXT(profile_zone, text.toStdString());
     const QString needle = text.trimmed();
     for (int row = 0; row < table_->rowCount(); ++row)
     {

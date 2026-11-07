@@ -6,6 +6,8 @@
 
 #include "delay_line.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <boost/asio/post.hpp>
 
 #include <algorithm>
@@ -31,6 +33,8 @@ void delay_line::push(bytes_view data)
     if (data.empty())
         return;
 
+    VSS_PROFILE_ZONE("link.delay_push");
+
     bool was_empty = false;
     {
         std::lock_guard lock(mutex_);
@@ -50,6 +54,7 @@ void delay_line::push(bytes_view data)
         last_due_ = due;
         was_empty = queue_.empty();
         queue_.push_back(item{due, byte_buffer(data.begin(), data.end())});
+        VSS_PROFILE_PLOT("link.delay_queue", queue_.size());
     }
 
     if (!was_empty)
@@ -85,6 +90,7 @@ void delay_line::arm()
 
 void delay_line::fire()
 {
+    VSS_PROFILE_ZONE("link.delay_fire");
     std::vector<byte_buffer> ready;
     {
         std::lock_guard lock(mutex_);

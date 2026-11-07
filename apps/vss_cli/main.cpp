@@ -11,6 +11,8 @@
 
 #include "permissions_command.hpp"
 
+#include <vss/core/profile.hpp>
+#include <vss/core/profiling.hpp>
 #include <vss/ports/listen_transport.hpp>
 #include <vss/studio/benchmark.hpp>
 #include <vss/studio/format_check.hpp>
@@ -194,10 +196,14 @@ void print_usage()
         "%s"
         "  Common: --verbose, --quiet\n"
         "\n"
+        "  Profiling (Tracy; off unless asked, this computer only):\n"
+        "%s"
+        "\n"
         "Virtual Serial Studio is free software under the GNU General Public\n"
         "License, version 3 or later.  This program comes with ABSOLUTELY NO\n"
         "WARRANTY; see LICENSE for details.\n",
-        vss_cli::permissions_usage());
+        vss_cli::permissions_usage(),
+        std::string(vss::profiling::usage()).c_str());
 }
 
 /// The sentence for a link whose members run at different speeds, such as
@@ -1376,11 +1382,40 @@ arguments parse(int argc, char** argv)
     return parsed;
 }
 
+/// Ends the profiler, flushing to a connected one, on every way out of main.
+struct profiling_session
+{
+    profiling_session() = default;
+    profiling_session(const profiling_session&) = delete;
+    profiling_session& operator=(const profiling_session&) = delete;
+    ~profiling_session() { vss::profiling::shutdown(); }
+};
+
 } // namespace
 
 int main(int argc, char** argv)
 try
 {
+    // Profiling options are global: they are taken from anywhere on the line
+    // and are not passed on to the command.
+    auto profile = vss::profiling::request_from_environment();
+    bool profile_asked = !vss::profiling::default_on() && profile.enable;
+    std::vector<std::string> command_line;
+    command_line.emplace_back(argc > 0 ? argv[0] : "vss_cli");
+    for (int index = 1; index < argc; ++index)
+    {
+        if (vss::profiling::take_argument(argv[index], profile))
+            profile_asked = true;
+        else
+            command_line.emplace_back(argv[index]);
+    }
+    std::vector<char*> filtered;
+    filtered.reserve(command_line.size());
+    for (auto& word : command_line)
+        filtered.push_back(word.data());
+    argc = static_cast<int>(filtered.size());
+    argv = filtered.data();
+
     const arguments args = parse(argc, argv);
     if (args.positional.empty() || args.has("--help") || args.has("-h"))
     {
@@ -1388,40 +1423,99 @@ try
         return args.positional.empty() ? 2 : 0;
     }
 
+    const profiling_session profiling;
+    const auto started = vss::profiling::start(profile);
+    if (!started)
+    {
+        std::fprintf(stderr, "cannot start profiling: %s\n",
+                     started.error().message().c_str());
+        return 1;
+    }
+    if (profile.enable && profile_asked)
+    {
+        std::fprintf(stderr, "%s\n",
+                     vss::profiling::describe(*started).c_str());
+    }
+
     const std::string command = args.positional[0];
     try
     {
         if (command == "devices")
+        {
+            VSS_PROFILE_ZONE("cli.devices");
             return command_devices(args);
+        }
         if (command == "share")
+        {
+            VSS_PROFILE_ZONE("cli.share");
             return command_share(args);
+        }
         if (command == "join")
+        {
+            VSS_PROFILE_ZONE("cli.join");
             return command_join(args);
+        }
         if (command == "bus")
+        {
+            VSS_PROFILE_ZONE("cli.bus");
             return command_bus(args);
+        }
         if (command == "bridge")
+        {
+            VSS_PROFILE_ZONE("cli.bridge");
             return command_bridge(args);
+        }
         if (command == "loopback")
+        {
+            VSS_PROFILE_ZONE("cli.loopback");
             return command_loopback(args);
+        }
         if (command == "virtual")
+        {
+            VSS_PROFILE_ZONE("cli.virtual");
             return command_virtual(args);
+        }
         if (command == "vport")
+        {
+            VSS_PROFILE_ZONE("cli.vport");
             return command_vport(args);
+        }
         if (command == "run")
+        {
+            VSS_PROFILE_ZONE("cli.run");
             return command_run(args);
+        }
         if (command == "capture")
+        {
+            VSS_PROFILE_ZONE("cli.capture");
             return command_capture(args);
+        }
         if (command == "play")
+        {
+            VSS_PROFILE_ZONE("cli.play");
             return command_play(args);
+        }
         if (command == "respond")
+        {
+            VSS_PROFILE_ZONE("cli.respond");
             return command_respond(args);
+        }
         if (command == "bench")
+        {
+            VSS_PROFILE_ZONE("cli.bench");
             return command_bench(args);
+        }
         if (command == "selftest")
+        {
+            VSS_PROFILE_ZONE("cli.selftest");
             return command_selftest();
+        }
         if (command == "permissions")
+        {
+            VSS_PROFILE_ZONE("cli.permissions");
             return vss_cli::command_permissions(
                 std::vector<std::string>(argv + 1, argv + argc));
+        }
     }
     catch (const std::exception& error)
     {

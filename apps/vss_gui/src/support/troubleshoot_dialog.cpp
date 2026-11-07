@@ -14,6 +14,8 @@
 #include "widgets/dialogs.hpp"
 #include "widgets/surfaces.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QFrame>
@@ -81,6 +83,8 @@ TroubleshootDialog::TroubleshootDialog(StudioBackend& backend,
 
 void TroubleshootDialog::build()
 {
+    VSS_PROFILE_ZONE("gui.support.troubleshoot_dialog.build");
+    VSS_PROFILE_MESSAGE("gui.dialog.troubleshoot.opened");
     setWindowTitle(QCoreApplication::translate("Troubleshoot",
                                                "Why is nothing arriving?"));
     setAccessibleName(QCoreApplication::translate("Troubleshoot",
@@ -227,6 +231,7 @@ void TroubleshootDialog::build()
 
 void TroubleshootDialog::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.support.troubleshoot_dialog.rebuild");
     const QVector<port_view> ports = to_ports(backend_.ports());
     if (port_id_ == 0 && !ports.isEmpty())
         port_id_ = ports.first().id;

@@ -12,6 +12,8 @@
 #include "theme/icon_provider.hpp"
 #include "widgets/common.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QLabel>
@@ -120,6 +122,7 @@ SimplePage::SimplePage(StudioBackend& backend, QWidget* parent)
 
 void SimplePage::build()
 {
+    VSS_PROFILE_ZONE("gui.simple.page.build");
     auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(8, 8, 8, 8);
     layout->setSpacing(8);
@@ -268,6 +271,7 @@ void SimplePage::store_prefs(const setup_view& setup, const setup_prefs& prefs)
 
 void SimplePage::refresh()
 {
+    VSS_PROFILE_ZONE("gui.simple.page.refresh");
     setups_ = list_setups(backend_.ports(), backend_.links());
     // Forget the choices of setups that are gone.
     QSet<vss::endpoint_id> alive;
@@ -301,6 +305,7 @@ void SimplePage::refresh()
 
 void SimplePage::rebuild_list()
 {
+    VSS_PROFILE_ZONE("gui.simple.page.rebuild_list");
     const QSignalBlocker blocker(list_);
     list_->clear();
     const auto ports = backend_.ports();
@@ -368,6 +373,7 @@ void SimplePage::open_job(job kind)
 
 void SimplePage::show_form(job kind, const std::optional<setup_view>& previous)
 {
+    VSS_PROFILE_ZONE("gui.simple.page.show_form");
     if (form_ != nullptr)
         form_->deleteLater();
     const setup_prefs prefs = previous ? prefs_of(*previous) : setup_prefs{};
@@ -421,6 +427,7 @@ void SimplePage::select_setup(vss::endpoint_id port)
 
 void SimplePage::show_setup(const setup_view& setup)
 {
+    VSS_PROFILE_ZONE("gui.simple.page.show_setup");
     const bool same = page_ != nullptr && shown_ != 0 &&
                       setup.group.ports.contains(shown_) &&
                       stack_->currentWidget() == page_;
@@ -490,6 +497,7 @@ void SimplePage::show_setup(const setup_view& setup)
 void SimplePage::change_programs(const setup_view& setup,
                                  vss::endpoint_id close)
 {
+    VSS_PROFILE_ZONE("gui.simple.page.change_programs");
     job_plan plan = plan_from(setup, backend_.ports());
     auto& programs = setup.kind == job::share || setup.kind == job::attach
                          ? plan.second
@@ -558,6 +566,7 @@ void SimplePage::change_programs(const setup_view& setup,
 
 void SimplePage::add_events(const event_batch& events)
 {
+    VSS_PROFILE_ZONE("gui.simple.page.add_events");
     if (page_ != nullptr && stack_->currentWidget() == page_)
         page_->add_events(events);
 }

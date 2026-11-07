@@ -13,6 +13,8 @@
 // to netsh, and nothing here changes a setting except `apply` below.
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../permissions_platform.hpp"
 
 #include <algorithm>
@@ -390,6 +392,7 @@ std::string_view platform_host_name() noexcept
 
 permissions::observation platform_observe(const permissions::context&)
 {
+    VSS_PROFILE_ZONE("ports.permissions.observe_windows");
     observation seen;
     observe_elevation(seen.windows);
     observe_firewall(seen.windows);
@@ -425,6 +428,7 @@ permissions::step_result
 platform_apply_firewall_rule(const permissions::firewall_rule_spec& spec,
                              bool remove)
 {
+    VSS_PROFILE_ZONE("ports.permissions.firewall_windows");
     windows_observation seen;
     observe_elevation(seen);
     if (seen.elevated != tri::yes)
@@ -496,6 +500,7 @@ permissions::step_result
 platform_run_elevated(const std::string& executable,
                       const std::vector<std::string>& arguments)
 {
+    VSS_PROFILE_ZONE("ports.permissions.elevate_windows");
     std::string command_line;
     for (const std::string& argument : arguments)
     {

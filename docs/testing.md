@@ -79,32 +79,97 @@ Indicative results (Windows 11, MSVC 19.51, x64, Release, `vss_perf`):
 
 ## Profiling
 
-Tracy is compiled into Debug builds by default, and can be turned on in a
-Release build when a field problem needs triage. It runs in on-demand mode, so
-no data is recorded until a profiler connects — attaching to an already
-running process is the normal workflow.
+Tracy is compiled into Debug builds by default, and can be compiled into a
+Release build too (`VSS_TRACY=ON`, or a `*-tracy*` preset). In a Release build
+it is dormant: no profiler thread, no socket, and each zone costs one relaxed
+load until the program is started with `--profile` (or `VSS_PROFILE=1`, or the
+switch in Settings, Performance, Profiling). The listener is bound to this
+computer, never broadcasts, and sends nothing until a profiler connects. Once
+started it runs in on-demand mode, so nothing is recorded until a profiler
+connects and attaching to an already running process is the normal workflow.
 
 ```bash
 # Debug: Tracy is on when configured with the vcpkg toolchain
 cmake --preset linux-debug \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 
-# Release: opt in explicitly when something needs profiling
-cmake -S . -B build-rel-tracy -DCMAKE_BUILD_TYPE=Release -DVSS_TRACY=ON \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
-cmake --build build-rel-tracy
+# Release with the profiler compiled in but dormant
+cmake --preset linux-tracy-gui
+cmake --build --preset linux-tracy-gui
 
-# Attach at any point, then export
-tracy-capture -o trace.tracy &
-./build-rel-tracy/bin/vss_perf --tracy
+# Capture a run, then export it
+tracy-capture -a 127.0.0.1 -o trace.tracy &
+./build/linux-tracy-gui/bin/vss_perf --tracy --profile-wait=30
 wait
 tracy-csvexport trace.tracy > trace.csv
-python tools/tracy_report.py trace.csv
+python tools/tracy_report.py trace.csv --areas
 ```
 
-The report covers the hub, endpoint, JSON and transport paths plus a real
-socket echo and a pseudo-terminal round trip. CI publishes it for every push;
-see [the profiling page](profiling.md) for the zone list and caveats.
+Every test case runs in a zone named after it, so `VSS_PROFILE=1` on any test
+program (or `--tracy` on `vss_unit_tests` and `vss_system_tests`) gives each
+test's duration and the zones it called. `vss_perf` adds a micro-benchmark per
+component; `perf/floors.json` gates them, with `max` limits for costs such as
+the dormant cost of a zone.
+
+CI captures the performance suite, the offscreen GUI self-test and the unit
+tests, checks each capture against its profile in `perf/required-zones.json`
+and publishes the tables; see [the profiling page](profiling.md) for the zone
+list, the options and the caveats.
+
+## Sanitizers
+
+Every CTest suite runs under a sanitizer, the GUI suites included, at -O1 (/O1 on
+MSVC), and the first finding fails the run.
+
+| Preset | Sanitizers | Runs | Where |
+|---|---|---|---|
+| `linux-asan-ubsan-gui` | AddressSanitizer, LeakSanitizer, UBSan | Everything: `unit`, `system`, `headers`, every `gui_*` suite, the fuzz replays | Pull request gate (Clang); nightly (GCC) |
+| `linux-tsan-gui` | ThreadSanitizer | The same list | Gate when threading code changed, and every merge-queue entry (Clang); nightly |
+| `windows-msvc-asan-gui` | AddressSanitizer | The same list | Nightly |
+
+MSVC has no UBSan, ThreadSanitizer or LeakSanitizer. The plain presets
+(`linux-asan-ubsan`, `linux-tsan`, `windows-msvc-asan`) build without the GUI and are
+the quick local check. A new test is picked up with no change here, as the presets run
+the whole of CTest. The GUI runs on `QT_QPA_PLATFORM=offscreen`.
+
+```bash
+cmake --preset linux-asan-ubsan-gui        # or linux-tsan-gui, windows-msvc-asan-gui
+cmake --build --preset linux-asan-ubsan-gui
+ASAN_OPTIONS=detect_leaks=1:strict_string_checks=1 ctest --preset linux-asan-ubsan-gui
+TSAN_OPTIONS=halt_on_error=1:second_deadlock_stack=1:ignore_noninstrumented_modules=1:suppressions=$PWD/tests/tsan.supp \
+  ctest --preset linux-tsan-gui
+```
+
+Run the system tests with a serial pair, as CI does (`tools/pty_loopback.py`, then
+`VSS_LOOPBACK_A`, `VSS_LOOPBACK_B` and `VSS_REQUIRE_LOOPBACK=1`). Use the pinned Qt
+(`.github/toolchain-versions.json`): a distribution Qt of another version can differ in
+what it compiles, and CMake may pick it up in place of the kit in `QT_ROOT_DIR` unless
+you pass `-DQt6_DIR=<kit>/lib/cmake/Qt6`.
+
+* **Timeouts.** A sanitizer build runs several times slower, and the GUI self-test takes
+  about ten minutes under MSVC AddressSanitizer. `VSS_SANITIZER_TIMEOUT_FACTOR` (default 5)
+  multiplies every test timeout in a sanitizer build. The timing tests (`system: a polled
+  bus ...`) measure real replies, so run them on an idle machine.
+* **Qt and ThreadSanitizer.** Qt comes as a prebuilt kit that is not instrumented, and its
+  locks and queues use futexes and atomics that ThreadSanitizer cannot see. Without help it
+  reports races between Qt's own allocations in its thread pool, and in events that a
+  worker posts to the GUI thread through a queued connection, though Qt orders them
+  correctly. `ignore_noninstrumented_modules=1` stops it tracking accesses made inside Qt
+  and keeps checking every access made by this project's code, so a race between the hub
+  or endpoint threads and the GUI thread in our own code is reported. A deliberate race in
+  a small program still fails under the same setting.
+* **Suppressions.** `tests/tsan.supp` (passed as `suppressions=` in the CI jobs) has one
+  entry, for the construction of Qt's `QCallableObject` slot object, which a worker builds
+  for a queued call and the GUI thread runs. The header template is compiled into our code
+  and so is instrumented, but the queue lock that orders the two is inside Qt. The entry
+  matches only that constructor, not the lambda bodies, so a race on the data a queued
+  lambda touches is still reported. Add an entry only with a reason that holds for every
+  report it can match.
+* **Found and fixed by this work.** `announce_name_change` leaked a `QAccessibleEvent` on
+  every name change, thousands per GUI test run (LeakSanitizer); `ToastManager` downcast a
+  toast that was being destroyed (UBSan); and `reconnector::run` waited on a time point
+  that lives in a map entry another thread could erase, a heap-use-after-free
+  (AddressSanitizer).
 
 ## Static analysis
 

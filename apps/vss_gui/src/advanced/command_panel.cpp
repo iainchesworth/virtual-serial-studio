@@ -10,6 +10,8 @@
 #include "theme/icon_provider.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QClipboard>
 #include <QCoreApplication>
 #include <QGuiApplication>
@@ -82,6 +84,7 @@ void CommandPanel::set_export_enabled(bool enabled)
 
 void CommandPanel::copy_command()
 {
+    VSS_PROFILE_ZONE("gui.advanced.command.copy");
     QGuiApplication::clipboard()->setText(command());
     Q_EMIT copy_requested();
     Q_EMIT message(tr("Copied the command."));

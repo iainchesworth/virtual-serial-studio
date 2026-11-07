@@ -35,6 +35,8 @@
 #include "theme/theme.hpp"
 #include "widgets/dialogs.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QAbstractButton>
 #include <QAbstractScrollArea>
 #include <QAbstractSpinBox>
@@ -296,6 +298,7 @@ void configure_fake(FakeStudioBackend& backend)
 QStringList run_accessibility_checks(ActionRegistry& registry,
                                      QWidget* main_window)
 {
+    VSS_PROFILE_ZONE("gui.shell.accessibility.check");
     QStringList failures;
     Checker checker(failures);
 
