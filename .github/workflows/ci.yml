@@ -480,13 +480,17 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
           ccache: linux-clang-asan
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-asan-ubsan
+          preset: linux-asan-ubsan-gui
 
   # Builds the libFuzzer targets and replays the seed corpus and the regression inputs under AddressSanitizer
   # and UBSan. The fuzz workflow does the fuzzing itself, on pushes to develop and at night.
@@ -555,13 +559,17 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
           ccache: linux-clang-tsan
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-tsan
+          preset: linux-tsan-gui
 
       - name: Save ccache
         if: always()
