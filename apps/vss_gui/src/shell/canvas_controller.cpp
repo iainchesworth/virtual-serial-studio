@@ -403,9 +403,13 @@ bool CanvasController::remove(const QVector<vss::endpoint_id>& ports,
             tr("Could not delete: %1").arg(error_text(removed.error())));
         return false;
     }
-    const QString subject = names_in(what).isEmpty()
-                                ? tr("link")
-                                : names_in(what).join(QStringLiteral(", "));
+    // The name goes into the Edit menu ("Undo Delete ..."), so a long list of
+    // ports is counted rather than spelled out.
+    const QStringList removed_names = names_in(what);
+    const QString subject =
+        removed_names.isEmpty()  ? tr("link")
+        : removed_names.size() > 3 ? tr("%1 ports").arg(removed_names.size())
+                                   : removed_names.join(QStringLiteral(", "));
     undo_.push(
         {tr("Delete %1").arg(subject),
          [this, what]
