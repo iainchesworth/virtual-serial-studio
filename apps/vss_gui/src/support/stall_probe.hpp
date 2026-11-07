@@ -4,8 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#ifndef VSS_GUI_SUPPORT_STALL_PROBE_HPP
-#define VSS_GUI_SUPPORT_STALL_PROBE_HPP
+#pragma once
 
 #include <QElapsedTimer>
 #include <QObject>
@@ -30,8 +29,8 @@ namespace vss::gui::support
 /// that must give the same answer on a loaded build machine asks for that one
 /// (`busy_over`).
 ///
-/// Profiling builds (`VSS_TRACY`) also plot each stall, so a Tracy timeline
-/// shows which zone was running under it.
+/// Profiling builds also plot each stall, so a Tracy timeline shows which zone
+/// was running under it.
 class StallProbe : public QObject
 {
     Q_OBJECT
@@ -62,7 +61,7 @@ public:
     static constexpr qint64 kMinRecorded = 5;
 
     /// CPU time the calling thread has used, in nanoseconds; zero where the
-    /// platform cannot say.
+    /// platform cannot say. One file per platform in `support/platform`.
     static qint64 thread_cpu_ns();
 
 private:
@@ -81,5 +80,3 @@ private:
 };
 
 } // namespace vss::gui::support
-
-#endif // VSS_GUI_SUPPORT_STALL_PROBE_HPP

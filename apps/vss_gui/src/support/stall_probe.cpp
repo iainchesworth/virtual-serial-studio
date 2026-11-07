@@ -12,18 +12,6 @@
 
 #include <algorithm>
 
-#if defined(Q_OS_WIN)
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#else
-#include <ctime>
-#endif
-
 namespace vss::gui::support
 {
 
@@ -37,35 +25,6 @@ StallProbe::StallProbe(int interval_ms, QObject* parent)
 }
 
 StallProbe::~StallProbe() = default;
-
-qint64 StallProbe::thread_cpu_ns()
-{
-#if defined(Q_OS_WIN)
-    FILETIME created{};
-    FILETIME exited{};
-    FILETIME kernel{};
-    FILETIME user{};
-    if (GetThreadTimes(GetCurrentThread(), &created, &exited, &kernel, &user) ==
-        0)
-        return 0;
-    const auto ticks = [](const FILETIME& time)
-    {
-        ULARGE_INTEGER value;
-        value.LowPart = time.dwLowDateTime;
-        value.HighPart = time.dwHighDateTime;
-        return static_cast<qint64>(value.QuadPart);
-    };
-    // Units of 100 ns. The system counts them in scheduler ticks, so the
-    // answer is good to about 16 ms.
-    return (ticks(kernel) + ticks(user)) * 100;
-#else
-    timespec now{};
-    if (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now) != 0)
-        return 0;
-    return static_cast<qint64>(now.tv_sec) * 1'000'000'000 +
-           static_cast<qint64>(now.tv_nsec);
-#endif
-}
 
 void StallProbe::start()
 {

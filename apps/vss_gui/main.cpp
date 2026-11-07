@@ -141,13 +141,14 @@ int main(int argc, char* argv[])
         }
         vss::gui::ShellWindow window(backend);
 
-#if defined(VSS_TRACY)
         // A profiling build names the GUI thread and plots every stretch in
         // which it did not return to its event loop (see docs/profiling.md).
-        VSS_PROFILE_THREAD("gui");
         vss::gui::support::StallProbe stall_probe;
-        stall_probe.start();
-#endif
+        if constexpr (VSS_GUI_PROFILING != 0)
+        {
+            VSS_PROFILE_THREAD("gui");
+            stall_probe.start();
+        }
 
         if (parser.isSet(selftest_option))
         {
