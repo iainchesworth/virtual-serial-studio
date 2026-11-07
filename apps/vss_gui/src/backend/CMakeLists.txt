@@ -37,6 +37,12 @@ icl_platform_sources(vss_gui_backend
 set_target_properties(vss_gui_backend PROPERTIES AUTOMOC ON)
 vss_set_warnings(vss_gui_backend)
 
+# boost::system::error_category deliberately has a non-virtual destructor and
+# is meant to be derived from; GCC warns about the base anyway (the same
+# exception libs/vss_core makes for its own category).
+set_source_files_properties(driver_error.cpp PROPERTIES
+  COMPILE_OPTIONS "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wno-non-virtual-dtor>")
+
 if(VSS_BUILD_TESTS)
   add_executable(vss_gui_backend_tests
     tests/main.cpp
