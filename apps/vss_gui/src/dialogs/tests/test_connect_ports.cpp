@@ -82,7 +82,7 @@ TEST_CASE("connect: every mode makes the right link")
         REQUIRE_EQ(link.sources.size(), 1);
         REQUIRE_EQ(link.sources.front(), ports.alpha);
         REQUIRE_EQ(link.targets.front(), ports.beta);
-        REQUIRE(dialog.result().has_value());
+        REQUIRE(dialog.created_link().has_value());
     }
     {
         vss::gui::FakeStudioBackend backend;
@@ -329,7 +329,7 @@ TEST_CASE("connect: a refused loop keeps the dialog open")
     REQUIRE(
         dialog.error_body().contains(QStringLiteral("Nothing was changed")));
     REQUIRE(dialog.last_error().contains(QStringLiteral("cycle")));
-    REQUIRE(!dialog.result().has_value());
+    REQUIRE(!dialog.created_link().has_value());
     REQUIRE(backend.links().empty());
 
     dialog.select_to(ports.delta);

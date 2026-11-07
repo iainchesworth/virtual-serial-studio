@@ -20,11 +20,11 @@ bool taken(unsigned number, const std::vector<unsigned>& in_use)
     return std::find(in_use.begin(), in_use.end(), number) != in_use.end();
 }
 
-/// The first number from `from` to `last_gui_com_number` that is free, or 0.
+/// The first number from `from` to `kLastGuiComNumber` that is free, or 0.
 unsigned first_free_from(unsigned from, const std::vector<unsigned>& in_use)
 {
-    for (unsigned number = std::max(from, first_gui_com_number);
-         number <= last_gui_com_number; ++number)
+    for (unsigned number = std::max(from, kFirstGuiComNumber);
+         number <= kLastGuiComNumber; ++number)
     {
         if (!taken(number, in_use))
             return number;
@@ -74,16 +74,16 @@ unsigned first_com_candidate(const std::vector<unsigned>& in_use)
     const unsigned above = first_free_from(highest + 1, in_use);
     if (above != 0)
         return above;
-    return first_free_from(first_gui_com_number, in_use);
+    return first_free_from(kFirstGuiComNumber, in_use);
 }
 
 unsigned next_com_candidate(unsigned candidate, unsigned start,
                             const std::vector<unsigned>& in_use)
 {
     unsigned next = candidate;
-    for (unsigned step = 0; step <= last_gui_com_number; ++step)
+    for (unsigned step = 0; step <= kLastGuiComNumber; ++step)
     {
-        next = next >= last_gui_com_number ? first_gui_com_number : next + 1;
+        next = next >= kLastGuiComNumber ? kFirstGuiComNumber : next + 1;
         if (next == start)
             return 0;
         if (!taken(next, in_use))

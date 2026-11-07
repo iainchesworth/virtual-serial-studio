@@ -203,7 +203,8 @@ TEST_CASE("owner bar: join owner actions reach the engine")
     mixed.policy = vss::merge_policy::interleave;
     const auto split = backend.split(device, {recipe}, mixed);
     REQUIRE(split.has_value());
-    REQUIRE(!OwnerBar::supports_owner(*backend.link(*split)));
+    REQUIRE(!OwnerBar::supports_owner(
+        vss_test::require_value(backend.link(*split))));
 }
 
 TEST_CASE("owner bar: capability off disables the actions with one tooltip")

@@ -97,7 +97,7 @@ share_plan make_driver_share_plan(int programs, int ports_held)
     plan.driver_ports_held = std::max(0, ports_held);
     plan.free_pairs = 0;
     const int available =
-        std::max(0, studio_driver_user_limit - plan.driver_ports_held);
+        std::max(0, kStudioDriverUserLimit - plan.driver_ports_held);
     plan.openable = std::min(plan.programs, available);
     plan.studio_only = plan.programs - plan.openable;
     return plan;

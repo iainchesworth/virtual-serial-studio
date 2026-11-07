@@ -14,8 +14,8 @@
 
 using vss::gui::com_numbers_in_use;
 using vss::gui::first_com_candidate;
-using vss::gui::first_gui_com_number;
-using vss::gui::last_gui_com_number;
+using vss::gui::kFirstGuiComNumber;
+using vss::gui::kLastGuiComNumber;
 using vss::gui::next_com_candidate;
 
 TEST_CASE("com numbers: reads COM paths and ignores everything else")
@@ -32,8 +32,8 @@ TEST_CASE("com numbers: reads COM paths and ignores everything else")
 TEST_CASE("com numbers: a new port starts above every port in use")
 {
     REQUIRE_EQ(first_com_candidate({3, 5, 7, 9, 13, 15, 16}), 17U);
-    REQUIRE_EQ(first_com_candidate({1, 2}), first_gui_com_number);
-    REQUIRE_EQ(first_com_candidate({}), first_gui_com_number);
+    REQUIRE_EQ(first_com_candidate({1, 2}), kFirstGuiComNumber);
+    REQUIRE_EQ(first_com_candidate({}), kFirstGuiComNumber);
     REQUIRE_EQ(first_com_candidate({4}), 5U);
 }
 
@@ -47,11 +47,11 @@ TEST_CASE("com numbers: never COM1 or COM2")
 
 TEST_CASE("com numbers: falls back below the highest when nothing is above")
 {
-    std::vector<unsigned> in_use{last_gui_com_number, 3, 4};
+    std::vector<unsigned> in_use{kLastGuiComNumber, 3, 4};
     REQUIRE_EQ(first_com_candidate(in_use), 5U);
 
     in_use.clear();
-    for (unsigned number = first_gui_com_number; number <= last_gui_com_number;
+    for (unsigned number = kFirstGuiComNumber; number <= kLastGuiComNumber;
          ++number)
         in_use.push_back(number);
     REQUIRE_EQ(first_com_candidate(in_use), 0U);
@@ -65,7 +65,7 @@ TEST_CASE("com numbers: the next candidate skips what is in use and stops")
     // Refused 7: 8 is next.
     REQUIRE_EQ(next_com_candidate(7, 4, in_use), 8U);
     // Past the top it wraps to the first GUI number, skipping what is taken.
-    REQUIRE_EQ(next_com_candidate(last_gui_com_number, 100, in_use), 4U);
+    REQUIRE_EQ(next_com_candidate(kLastGuiComNumber, 100, in_use), 4U);
     // It stops once it has gone all the way round to where it started.
     REQUIRE_EQ(next_com_candidate(9, 10, in_use), 0U);
 }

@@ -170,7 +170,9 @@ TEST_CASE("simple: build a share, add and close a program without touching the "
                QStringLiteral("PuTTY"));
     REQUIRE_EQ(vss_test::require_value(backend.port(first_program)).path,
                QStringLiteral("COM5"));
-    REQUIRE_EQ(program_label(*backend.port(second_program)), QString());
+    REQUIRE_EQ(
+        program_label(vss_test::require_value(backend.port(second_program))),
+        QString());
 
     // Add one: the two ports that were there keep their identities.
     job_plan plan = plan_from(found[0], backend.ports());

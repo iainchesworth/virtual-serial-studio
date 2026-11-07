@@ -185,7 +185,7 @@ void ReleasePortDialog::release()
         }
         flow_error error;
         error.title = tr("Could not release %1").arg(port_name_);
-        error.body = body;
+        error.body = std::move(body);
         error.details = error_text(outcome.error());
         Q_EMIT error_shown(error.title);
         ErrorDialog dialog(error.title, error.body, error.details, this);

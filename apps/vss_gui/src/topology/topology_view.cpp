@@ -737,7 +737,7 @@ void TopologyView::update_accessibility()
     }
     if (next == summary_)
         return;
-    summary_ = next;
+    summary_ = std::move(next);
     setAccessibleDescription(summary_);
     QAccessibleEvent event(this, QAccessible::DescriptionChanged);
     QAccessible::updateAccessibility(&event);

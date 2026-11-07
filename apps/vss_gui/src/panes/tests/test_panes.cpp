@@ -980,19 +980,19 @@ TEST_CASE("ports: a driver port shows both program states and nothing else")
     const auto id = make_driver_port(backend);
 
     // The backend says nothing about a program: the port is plainly open.
-    auto port = *backend.port(id);
+    auto port = vss_test::require_value(backend.port(id));
     REQUIRE(port.peer == vss::gui::peer_state::unknown);
     REQUIRE_EQ(vss::gui::PortModel::state_text(port), QStringLiteral("Open"));
 
     backend.set_peer_state(id, vss::gui::peer_state::not_open);
-    port = *backend.port(id);
+    port = vss_test::require_value(backend.port(id));
     REQUIRE_EQ(vss::gui::PortModel::state_text(port),
                QStringLiteral("Waiting for program"));
     REQUIRE(vss::gui::PortModel::state_kind(port) ==
             vss::gui::port_state_kind::waiting);
 
     backend.set_peer_state(id, vss::gui::peer_state::open);
-    port = *backend.port(id);
+    port = vss_test::require_value(backend.port(id));
     REQUIRE_EQ(vss::gui::PortModel::state_text(port),
                QStringLiteral("Program connected"));
     REQUIRE(vss::gui::PortModel::state_kind(port) ==

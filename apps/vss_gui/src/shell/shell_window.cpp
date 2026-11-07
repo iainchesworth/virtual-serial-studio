@@ -1333,7 +1333,7 @@ void ShellWindow::on_backend_changed()
     }
     if (!loading_ && signature != last_signature_)
         set_dirty(true);
-    last_signature_ = signature;
+    last_signature_ = std::move(signature);
     {
         VSS_PROFILE_ZONE("gui.shell.status_refresh");
         status_->refresh();
@@ -1729,9 +1729,9 @@ void ShellWindow::open_connect_ports()
             });
     if (dialog.exec() != QDialog::Accepted)
         return;
-    if (dialog.result())
+    if (dialog.created_link())
     {
-        if (const auto made = backend_.link(*dialog.result()))
+        if (const auto made = backend_.link(*dialog.created_link()))
             undo_.push(connect_step(backend_, *made, tr("Connect ports")));
     }
     status_->refresh();
@@ -2945,7 +2945,7 @@ void ShellWindow::save_document_as()
         return;
     if (!path.endsWith(QLatin1String(".json"), Qt::CaseInsensitive))
         path += QStringLiteral(".json");
-    document_path_ = path;
+    document_path_ = std::move(path);
     title_override_.clear();
     save_document();
 }

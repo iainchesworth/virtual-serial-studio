@@ -560,7 +560,7 @@ const setup_report& setup_report_cache::get(const StudioBackend& backend)
         return report_;
 
     report_ = query_setup_report(backend);
-    ports_key_ = key;
+    ports_key_ = std::move(key);
     taken_ = now;
     valid_ = true;
     return report_;

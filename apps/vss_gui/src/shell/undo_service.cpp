@@ -17,7 +17,7 @@ void UndoService::push(undo_step step)
 {
     redo_.clear();
     undo_.push_back(std::move(step));
-    while (undo_.size() > max_depth)
+    while (undo_.size() > kMaxDepth)
         undo_.pop_front();
     Q_EMIT changed();
 }

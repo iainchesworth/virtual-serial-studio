@@ -437,14 +437,14 @@ TEST_CASE("undo: a step that cannot be applied clears the history")
     REQUIRE(!history.can_undo());
     REQUIRE(!history.can_redo());
 
-    for (std::size_t count = 0; count < vss::gui::UndoService::max_depth + 5;
+    for (std::size_t count = 0; count < vss::gui::UndoService::kMaxDepth + 5;
          ++count)
         history.push(
             {QStringLiteral("step"), [] { return true; }, [] { return true; }});
     std::size_t undone = 0;
     while (history.undo())
         ++undone;
-    REQUIRE_EQ(undone, vss::gui::UndoService::max_depth);
+    REQUIRE_EQ(undone, vss::gui::UndoService::kMaxDepth);
 }
 
 TEST_CASE("undo: link steps use exact inverse operations")

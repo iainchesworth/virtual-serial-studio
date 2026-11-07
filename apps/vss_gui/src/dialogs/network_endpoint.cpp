@@ -760,7 +760,7 @@ bool NetworkEndpointDialog::validate(QString& error) const
         QString parse_error;
         if (!parse_network_uri(override_edit_->text(), &parse_error))
         {
-            error = parse_error;
+            error = std::move(parse_error);
             return false;
         }
         return true;
