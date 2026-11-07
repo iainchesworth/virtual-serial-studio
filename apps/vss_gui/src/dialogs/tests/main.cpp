@@ -5,6 +5,7 @@
 //
 
 #include "test_framework.hpp"
+#include "qt_settings.hpp"
 
 #include "theme/theme.hpp"
 
@@ -48,6 +49,9 @@ int main(int argc, char** argv)
     QApplication application(argc, argv);
     QCoreApplication::setOrganizationName(QStringLiteral("VSS GUI Tests"));
     QCoreApplication::setApplicationName(QStringLiteral("VSS GUI Tests"));
+    // Settings in a directory of this process, so two GUI test programs
+    // never share them (see tests/framework/qt_settings.hpp).
+    vss_test::isolated_settings isolated;
     QSettings().clear();
 #if defined(Q_OS_WIN)
     if (QFontDatabase::families().contains(QStringLiteral("Segoe UI")))
