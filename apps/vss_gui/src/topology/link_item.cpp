@@ -98,15 +98,34 @@ void LinkItem::set_in_loop(bool value)
 
 QRectF LinkItem::boundingRect() const
 {
-    QRectF bounds;
-    const auto note = [&bounds](const QRectF& rect)
+    // A point or a horizontal line has no area, and QRectF::united() ignores
+    // a rectangle without one, so the extent is kept as plain extremes.
+    bool any = false;
+    qreal left = 0.0;
+    qreal top = 0.0;
+    qreal right = 0.0;
+    qreal bottom = 0.0;
+    const auto note_point = [&](const QPointF& point)
+    {
+        if (!any)
+        {
+            left = right = point.x();
+            top = bottom = point.y();
+            any = true;
+            return;
+        }
+        left = std::min(left, point.x());
+        right = std::max(right, point.x());
+        top = std::min(top, point.y());
+        bottom = std::max(bottom, point.y());
+    };
+    const auto note = [&note_point](const QRectF& rect)
     {
         if (!rect.isValid())
             return;
-        bounds = bounds.isNull() ? rect : bounds.united(rect);
+        note_point(rect.topLeft());
+        note_point(rect.bottomRight());
     };
-    const auto note_point = [&note](const QPointF& point)
-    { note(QRectF(point, QSizeF(0.0, 0.0))); };
 
     for (const QLineF& line : geometry_.segments)
     {
@@ -123,11 +142,11 @@ QRectF LinkItem::boundingRect() const
     note(primary_rect_);
     note(secondary_rect_);
 
-    if (bounds.isNull())
+    if (!any)
         return QRectF();
-    return bounds.adjusted(
-        -kFocusPadding - kArrowPadding, -kFocusPadding - kArrowPadding,
-        kFocusPadding + kArrowPadding, kFocusPadding + kArrowPadding);
+    return QRectF(QPointF(left, top), QPointF(right, bottom))
+        .adjusted(-kFocusPadding - kArrowPadding, -kFocusPadding - kArrowPadding,
+                  kFocusPadding + kArrowPadding, kFocusPadding + kArrowPadding);
 }
 
 QPainterPath LinkItem::shape() const
