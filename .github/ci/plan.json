@@ -32,6 +32,7 @@
     "CMakeLists.txt",
     "CMakePresets.json",
     "vcpkg.json",
+    "vcpkg-configuration.json",
     "cmake/**",
     "drivers/windows/vsscom/core/**"
   ],
@@ -42,6 +43,7 @@
     "CMakeLists.txt",
     "CMakePresets.json",
     "vcpkg.json",
+    "vcpkg-configuration.json",
     "**/*.qml",
     "**/*.ui",
     "**/*.ts"
@@ -63,6 +65,7 @@
     "CMakeLists.txt",
     "CMakePresets.json",
     "vcpkg.json",
+    "vcpkg-configuration.json",
     "drivers/windows/vsscom/core/**"
   ],
   "platform": [
@@ -73,13 +76,15 @@
     "CMakeLists.txt",
     "CMakePresets.json",
     "vcpkg.json",
+    "vcpkg-configuration.json",
     "tools/pty_loopback.py"
   ],
   "threads_always": [
     "cmake/**",
     "CMakeLists.txt",
     "CMakePresets.json",
-    "vcpkg.json"
+    "vcpkg.json",
+    "vcpkg-configuration.json"
   ],
   "threads_scan": [
     "libs/**",

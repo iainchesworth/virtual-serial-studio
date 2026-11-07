@@ -10,7 +10,9 @@
     {
       "name": "tracy",
       "features": [
-        "on-demand"
+        "on-demand",
+        "manual-lifetime",
+        "no-broadcast"
       ]
     }
   ]

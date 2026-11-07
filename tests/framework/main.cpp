@@ -23,6 +23,7 @@ struct options
     bool list = false;
     bool verbose = false;
     int repeat = 1;
+    bool tracy = false; ///< profile the run (the same as --profile)
 };
 
 struct outcome
@@ -92,6 +93,8 @@ options parse(int argc, char** argv)
             parsed.junit_path = value("--junit=");
         else if (argument.rfind("--repeat=", 0) == 0)
             parsed.repeat = std::max(1, std::stoi(value("--repeat=")));
+        else if (argument == "--tracy")
+            parsed.tracy = true;
     }
     return parsed;
 }
@@ -158,6 +161,28 @@ bool write_junit(const std::string& path, const std::vector<outcome>& outcomes,
 int main(int argc, char** argv)
 {
     const options configuration = parse(argc, argv);
+
+    // --tracy, --profile[=PORT], --profile-wait=S and VSS_PROFILE=1 turn
+    // profiling on for this run. Each case is a zone named after it, and the
+    // duration of each lands on the test.duration_us plot.
+    {
+        auto profile = vss::profiling::request_from_environment(false);
+        for (int index = 1; index < argc; ++index)
+            static_cast<void>(
+                vss::profiling::take_argument(argv[index], profile));
+        if (configuration.tracy)
+            profile.enable = true;
+        if (profile.enable)
+        {
+            const auto started = vss::profiling::start(profile);
+            if (started)
+                std::cerr << vss::profiling::describe(*started) << '\n';
+            else
+                std::cerr << "cannot start profiling: "
+                          << started.error().message() << '\n';
+        }
+    }
+    VSS_PROFILE_THREAD("test.main");
 
     std::vector<const vss_test::test_info*> selected;
     for (const auto& test : vss_test::registry())
@@ -231,6 +256,11 @@ int main(int argc, char** argv)
 
             entry.duration = std::chrono::duration_cast<std::chrono::microseconds>(
                 std::chrono::steady_clock::now() - case_started);
+            VSS_PROFILE_PLOT("test.duration_us", entry.duration.count());
+            VSS_PROFILE_FRAME_NAMED("test.case");
+            if (entry.result == outcome::status::failed)
+                VSS_PROFILE_MESSAGE_TEXT(std::string("test.failed ") +
+                                         test->name);
 
             if (configuration.verbose
                 || entry.result != outcome::status::passed)
