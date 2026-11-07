@@ -55,6 +55,12 @@ public:
     vss::result<std::size_t> recreate_lost_ports() override;
     void set_devices(std::vector<device_view> devices);
     void set_facts(const setup_facts& facts) { facts_ = facts; }
+    /// How long the setup report may be reused (see
+    /// `StudioBackend::probe_cache_age`); zero, the default, asks every time.
+    void set_probe_cache_age(std::chrono::milliseconds age)
+    {
+        probe_cache_age_ = age;
+    }
     /// Windows-style free driver pairs for `share_serial`; -1 keeps the
     /// pseudo-terminal behaviour.  Matches the share plan's free-pair count
     /// in tests that exercise the read-only warning and studio-only rows.
@@ -130,6 +136,10 @@ public:
     std::vector<device_view> devices() const override { return devices_; }
     std::vector<traffic_view> traffic(int limit) const override;
     setup_facts facts() const override { return facts_; }
+    std::chrono::milliseconds probe_cache_age() const override
+    {
+        return probe_cache_age_;
+    }
     std::optional<port_view> port(vss::endpoint_id id) const override;
     std::optional<link_view> link(vss::link_id id) const override;
 
@@ -208,6 +218,7 @@ private:
     std::vector<device_view> devices_;
     std::vector<traffic_view> traffic_;
     setup_facts facts_;
+    std::chrono::milliseconds probe_cache_age_{};
     std::vector<QByteArray> sent_;
     std::vector<vss::endpoint_id> sent_to_;
     std::vector<vss::endpoint_id> echoing_;

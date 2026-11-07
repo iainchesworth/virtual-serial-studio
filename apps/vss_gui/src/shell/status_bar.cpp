@@ -9,6 +9,8 @@
 #include "shell/format.hpp"
 #include "support/setup_facts.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QSignalBlocker>
 
 #include <algorithm>
@@ -84,6 +86,7 @@ SegmentedControl* StatusBar::release_level_switch(QWidget* parent)
 
 void StatusBar::refresh()
 {
+    VSS_PROFILE_ZONE("gui.status.refresh");
     const auto ports = backend_.ports();
     const auto links = backend_.links();
 
@@ -160,7 +163,7 @@ void StatusBar::refresh()
 
 void StatusBar::update_readiness()
 {
-    const setup_report report = query_setup_report(backend_);
+    const support::setup_report& report = setup_cache_.get(backend_);
     switch (report.state)
     {
     case setup_report::readiness::ready:

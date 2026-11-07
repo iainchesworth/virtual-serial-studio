@@ -11,6 +11,7 @@
 #include "backend/platform/com0com_platform.hpp"
 
 #include <vss/core/hub.hpp>
+#include <vss/core/profile.hpp>
 #include <vss/ports/com0com.hpp>
 #include <vss/ports/peer_open.hpp>
 #include <vss/ports/permissions.hpp>
@@ -162,7 +163,8 @@ link_view make_link(const vss::link_info& info)
     return view;
 }
 
-bool same_port(const port_view& left, const port_view& right)
+/// Everything about a port except its traffic counters.
+bool same_port_shape(const port_view& left, const port_view& right)
 {
     return left.id == right.id && left.name == right.name &&
            left.path == right.path && left.description == right.description &&
@@ -174,7 +176,12 @@ bool same_port(const port_view& left, const port_view& right)
            left.clients == right.clients &&
            left.format_conflicts == right.format_conflicts &&
            left.driver_port == right.driver_port &&
-           left.com_number == right.com_number &&
+           left.com_number == right.com_number;
+}
+
+bool same_port(const port_view& left, const port_view& right)
+{
+    return same_port_shape(left, right) &&
            left.stats.bytes_rx == right.stats.bytes_rx &&
            left.stats.bytes_tx == right.stats.bytes_tx &&
            left.stats.read_ops == right.stats.read_ops &&
@@ -183,7 +190,8 @@ bool same_port(const port_view& left, const port_view& right)
            left.stats.dropped == right.stats.dropped;
 }
 
-bool same_link(const link_view& left, const link_view& right)
+/// Everything about a link except its traffic counters.
+bool same_link_shape(const link_view& left, const link_view& right)
 {
     return left.id == right.id && left.shape == right.shape &&
            left.mode == right.mode &&
@@ -191,7 +199,13 @@ bool same_link(const link_view& left, const link_view& right)
            left.options.emulate_modem_lines ==
                right.options.emulate_modem_lines &&
            left.sources == right.sources && left.targets == right.targets &&
-           left.owner == right.owner && left.stats.bytes == right.stats.bytes &&
+           left.owner == right.owner;
+}
+
+bool same_link(const link_view& left, const link_view& right)
+{
+    return same_link_shape(left, right) &&
+           left.stats.bytes == right.stats.bytes &&
            left.stats.messages == right.stats.messages &&
            left.stats.dropped == right.stats.dropped;
 }
@@ -216,13 +230,17 @@ EngineStudioBackend::EngineStudioBackend(vss::studio& studio, QObject* parent)
     connect(bridge_.get(), &EventBridge::batch_ready, this,
             [this](const event_batch& events)
             {
+                VSS_PROFILE_ZONE("gui.backend.batch");
                 for (const auto& event : events)
                 {
                     if (event.kind == vss::event_kind::lines)
                         Q_EMIT lines_changed(event.endpoint);
                 }
-                Q_EMIT batch_ready(events);
-                rebuild();
+                {
+                    VSS_PROFILE_ZONE("gui.backend.emit_batch_ready");
+                    Q_EMIT batch_ready(events);
+                }
+                schedule_rebuild();
             });
     bridge_->start();
 
@@ -612,13 +630,24 @@ std::vector<traffic_view> EngineStudioBackend::traffic(int limit) const
 setup_facts EngineStudioBackend::facts() const
 {
     setup_facts facts;
-    facts.driver_found = vss::driver_available();
-    if (facts.driver_found)
-        facts.driver_version = QString::fromStdString(vss::driver_version());
-    const auto installation = studio_.detect_com0com();
-    facts.com0com_found = installation.found;
-    facts.com0com_pairs = static_cast<int>(installation.pairs.size());
-    facts.serial_devices = static_cast<int>(studio_.serial_devices().size());
+    {
+        VSS_PROFILE_ZONE("gui.setup.facts.driver");
+        facts.driver_found = vss::driver_available();
+        if (facts.driver_found)
+            facts.driver_version =
+                QString::fromStdString(vss::driver_version());
+    }
+    {
+        VSS_PROFILE_ZONE("gui.setup.facts.com0com");
+        const auto installation = studio_.detect_com0com();
+        facts.com0com_found = installation.found;
+        facts.com0com_pairs = static_cast<int>(installation.pairs.size());
+    }
+    {
+        VSS_PROFILE_ZONE("gui.setup.facts.serial_devices");
+        facts.serial_devices =
+            static_cast<int>(studio_.serial_devices().size());
+    }
     facts.platform = platform_name();
     // No platform helper proves elevation yet.  Leave it unknown rather than
     // telling the user something the build cannot check.
@@ -856,14 +885,31 @@ void EngineStudioBackend::set_refresh_interval(int milliseconds)
     bridge_->set_interval(milliseconds);
 }
 
+void EngineStudioBackend::schedule_rebuild()
+{
+    if (rebuild_scheduled_)
+        return;
+    rebuild_scheduled_ = true;
+    QTimer::singleShot(50, this,
+                       [this]
+                       {
+                           rebuild_scheduled_ = false;
+                           rebuild();
+                       });
+}
+
 void EngineStudioBackend::rebuild()
 {
+    VSS_PROFILE_ZONE("gui.backend.rebuild");
     std::vector<port_view> next_ports;
     const auto infos = studio_.endpoint_infos();
     next_ports.reserve(infos.size());
     std::unordered_map<vss::endpoint_id, vss::peer_open_state> peers;
     if (vss::peer_open_supported())
+    {
+        VSS_PROFILE_ZONE("gui.backend.peer_states");
         peers = studio_.peer_states();
+    }
     const auto drivers = studio_.driver_ports();
     for (const auto& info : infos)
     {
@@ -908,18 +954,36 @@ void EngineStudioBackend::rebuild()
 
     const bool ports_differ = next_ports.size() != ports_.size() ||
                               !std::equal(next_ports.begin(), next_ports.end(),
-                                          ports_.begin(), same_port);
+                                          ports_.begin(), same_port_shape);
     const bool links_differ = next_links.size() != links_.size() ||
                               !std::equal(next_links.begin(), next_links.end(),
-                                          links_.begin(), same_link);
+                                          links_.begin(), same_link_shape);
+    // Counters move with every byte; they are a signal of their own so a
+    // window does not rebuild itself for a number.
+    const bool stats_differ = !ports_differ && !links_differ &&
+                              (!std::equal(next_ports.begin(), next_ports.end(),
+                                           ports_.begin(), same_port) ||
+                               !std::equal(next_links.begin(), next_links.end(),
+                                           links_.begin(), same_link));
 
     ports_ = std::move(next_ports);
     links_ = std::move(next_links);
 
     if (ports_differ)
+    {
+        VSS_PROFILE_ZONE("gui.backend.emit_ports_changed");
         Q_EMIT ports_changed();
+    }
     if (links_differ)
+    {
+        VSS_PROFILE_ZONE("gui.backend.emit_links_changed");
         Q_EMIT links_changed();
+    }
+    if (stats_differ)
+    {
+        VSS_PROFILE_ZONE("gui.backend.emit_stats_changed");
+        Q_EMIT stats_changed();
+    }
 }
 
 } // namespace vss::gui

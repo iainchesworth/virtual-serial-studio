@@ -73,6 +73,10 @@ public:
     std::vector<device_view> devices() const override;
     std::vector<traffic_view> traffic(int limit) const override;
     setup_facts facts() const override;
+    std::chrono::milliseconds probe_cache_age() const override
+    {
+        return std::chrono::seconds(5);
+    }
     std::optional<port_view> port(vss::endpoint_id id) const override;
     std::optional<link_view> link(vss::link_id id) const override;
 
@@ -139,12 +143,16 @@ private:
                                 const vss::endpoint_options& options);
 
     void rebuild();
+    /// Looks at the engine soon, once for however many batches arrive until
+    /// then.  The slices of a flood would otherwise each pay for a look.
+    void schedule_rebuild();
 
     vss::studio& studio_;
     std::unique_ptr<EventBridge> bridge_;
     /// Looks for a program that opened a pseudo terminal; null where the
     /// platform cannot tell.
     QTimer* peer_timer_ = nullptr;
+    bool rebuild_scheduled_ = false;
     std::vector<port_view> ports_;
     std::vector<link_view> links_;
 };
