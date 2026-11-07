@@ -240,7 +240,7 @@ if(TARGET vss_gui_ui_tests)
     set(VSS_UI_BUDGET_SCALE 12)
   endif()
   set(VSS_UI_ENV "${VSS_UI_ENV};VSS_UI_BUDGET_SCALE=${VSS_UI_BUDGET_SCALE}")
-  foreach(group simple advanced edge engine)
+  foreach(group simple advanced edge actions engine)
     add_test(NAME ui_${group}
       COMMAND vss_gui_ui_tests --verbose --filter=${group}:)
     set(_labels ui ui-${group})

@@ -61,6 +61,37 @@ branches**. The report lists every file and marks the ones outside the gated
 set; `vcom_driver.cpp` is outside it until the driver exists, because its
 detection path needs an installed kernel driver to exercise.
 
+### GUI coverage
+
+The GUI (`apps/vss_gui`) has its own coverage job, `coverage-gui` in CI. It
+builds `linux-coverage-gui`, runs every GUI test program (the unit-level
+suites, `gui_journeys`, the UI suite) and `vss_gui --selftest` instrumented,
+and reports on `apps/vss_gui` without the tests and the generated moc files.
+To do the same by hand (Windows, with LLVM installed; the `-B` keeps the large
+build off the repository drive):
+
+```bash
+cmake --preset windows-llvm-coverage-gui -B E:/vss-cov
+cmake --build E:/vss-cov
+mkdir E:/vss-cov/profiles
+LLVM_PROFILE_FILE="E:/vss-cov/profiles/%p-%m.profraw" QT_QPA_PLATFORM=offscreen   VSS_UI_BUDGET_MS=1000000 E:/vss-cov/bin/vss_gui_ui_tests     # and each other vss_gui_*_tests
+python tools/coverage_report.py --build E:/vss-cov --include apps/vss_gui/   --exclude tests/ --exclude moc_ --exclude mocs_compilation --exclude qrc_   --objects E:/vss-cov/bin/vss_gui.exe E:/vss-cov/bin/vss_gui_*_tests.exe
+```
+
+(`clang-cl` stops at `__uuidof` in `permissions_windows.cpp` under `-Werror`;
+set `CCC_OVERRIDE_OPTIONS=x-Werror` for a local measurement.) The standard is
+**90% of statements and 80% of branches**. Measured on Windows 11 with
+clang-cl, Debug, all GUI programs together: **83.5% of statements and 68.9%
+of branches**. The CI gate stands just below that (80% and 65%) so a change
+cannot lose ground, and is raised as journeys are added. The largest gaps, by
+uncovered lines: `shell_window.cpp` (the tray and background paths, drag and
+drop, window-state restore, rarely used menu paths), `topology_view.cpp`
+(wire-from-keyboard, loop note, rubber band, accessibility navigation),
+`json_validation.cpp`, `engine_studio_backend.cpp` (driver-only paths),
+`job_form.cpp` (the network and bus variants), the setup check and permission
+dialogs (they act on the machine), and `elevated_step.cpp` (it needs an
+elevated process).
+
 ## Performance
 
 ```bash
@@ -211,6 +242,7 @@ Presets for the other platforms are `macos-debug-gui-ui`,
 | | save a workspace, start over and reopen it; attach a real device; put a device on the network; share a device with the wizard; connect ports with the Connect dialog; rename, change the settings of, and wire a port | File menu with Qt's file dialog, every flow dialog |
 | | every Simple job can be built by hand and Simple knows it | The same outcome by hand on the canvas is recognised as that job in Simple mode |
 | `ui_edge`, `ui-edge`, and `ui_edge_200` | cancelling every dialog; empty and duplicate names; a failing backend; adding many items; links between every pair of port types; rapid clicking; small and large windows; text at 200 percent; both themes; removing everything while a repeat runs | `ui_edge_200` runs the group again with `QT_SCALE_FACTOR=2` |
+| `ui_actions`, `ui-actions` | every menu entry in Simple mode; every menu entry in Advanced mode; edit the setup as JSON and apply it; the JSON editor explains each kind of mistake | Walks every enabled entry of every menu, looks at each dialog it opens by trying its buttons, check boxes and lists (not those that remove, install or restart), and closes it; the JSON editor takes pasted text, validates it, formats, reverts and applies |
 | `ui_engine`, `ui-engine` | link a loopback to a fixture and keep working; bytes cross a link and are counted; a repeat keeps the window responsive; Simple mode builds and removes a pair; save, tear down and reopen a workspace | The real `vss::studio` and `EngineStudioBackend`: the hub threads, the event bridge and the GUI thread together. Only in-process ports are used, so no driver or device is needed; the Simple journey skips itself when the Studio driver is installed, because it would make real COM ports |
 
 ### Responsiveness
@@ -263,6 +295,7 @@ once left a window waiting for the "save changes?" prompt of another test.
 Windows still shares the clipboard, the file dialogs' recent places and the
 window station, so on Windows run them with nothing else going on.
 
-On the CI runners one pass of the groups takes about a minute and a half on
-the release build; see the pull request that added it for the measured cost.
+The groups take about two to five minutes together on a release build (more
+on a busy machine and about ten times that in a debug build; the job summary
+of the `gui` leg lists every journey).
 

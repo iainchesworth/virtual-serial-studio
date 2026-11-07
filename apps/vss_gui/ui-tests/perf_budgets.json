@@ -2,6 +2,8 @@
   "_comment": "Release-build stall budgets, in milliseconds of GUI-thread CPU time inside one step (docs/testing.md, 'Responsiveness'). A journey not listed gets default_ms. Measured with the UI suite on a release build of 2026-11 (a busy Windows machine, so on the high side), times 1.6, rounded up to 50. This is a ratchet: lower an entry when the application gets faster; never raise one to make a journey pass.",
   "default_ms": 150,
   "journeys": {
+    "actions: every menu entry in Advanced mode": 450,
+    "actions: every menu entry in Simple mode": 700,
     "advanced: add a port, a fixture and a loopback": 200,
     "advanced: add by dropping a tile and from the canvas menu": 400,
     "advanced: add every bundle from the toolbox": 500,

@@ -8,10 +8,12 @@
 
 #include "qt_wait.hpp"
 #include "simple/simple_page.hpp"
+#include "theme/theme.hpp"
 #include "topology/links_list.hpp"
 #include "topology/toolbox.hpp"
 #include "topology/topology_view.hpp"
 
+#include <QAbstractButton>
 #include <QAbstractScrollArea>
 #include <QContextMenuEvent>
 #include <QDir>
@@ -25,6 +27,7 @@
 #include <QSettings>
 #include <QStatusBar>
 #include <QTemporaryDir>
+#include <QToolButton>
 
 #include <algorithm>
 #include <atomic>
@@ -518,9 +521,16 @@ struct Pilot::state
     };
 
     QTimer* timer = nullptr;
+    /// While a step runs, the poll timer is mid-slot and Qt does not fire it
+    /// again, so a dialog the step opens (and waits for) would never be seen.
+    /// This second timer polls for it until the step returns.
+    QTimer* nested = nullptr;
     std::vector<expectation> expectations;
     std::vector<handled_dialog> handled;
     QStringList unexpected;
+    QStringList visited;
+    Step fallback;
+    int depth = 0;
     std::vector<std::string> errors;
     int ran = 0;
 
@@ -562,6 +572,8 @@ struct Pilot::state
                 continue;
             expectation.used = true;
             ++ran;
+            if (nested != nullptr)
+                nested->start();
             try
             {
                 expectation.step(modal);
@@ -572,12 +584,43 @@ struct Pilot::state
                 if (modal != nullptr)
                     modal->close();
             }
+            if (nested != nullptr && depth == 0)
+                nested->stop();
             // The time a dialog may stay open counts from the end of its step.
             for (auto& dialog : handled)
             {
                 if (dialog.widget == modal)
                     dialog.age.restart();
             }
+            return;
+        }
+        if (fallback && depth < 1)
+        {
+            visited << describe(modal);
+            ++depth;
+            if (nested != nullptr)
+                nested->start();
+            try
+            {
+                fallback(modal);
+            }
+            catch (const std::exception& error)
+            {
+                errors.push_back("the fallback on " +
+                                 describe(modal).toStdString() + ": " +
+                                 error.what());
+            }
+            --depth;
+            if (nested != nullptr && depth == 0)
+                nested->stop();
+            if (modal != nullptr && modal->isVisible())
+                modal->close();
+            return;
+        }
+        if (fallback)
+        {
+            visited << describe(modal);
+            modal->close();
             return;
         }
         unexpected << describe(modal);
@@ -596,10 +639,19 @@ Pilot::Pilot() : state_(std::make_unique<state>())
                          state_->poll();
                      });
     state_->timer->start();
+    state_->nested = new QTimer();
+    state_->nested->setInterval(5);
+    QObject::connect(state_->nested, &QTimer::timeout, state_->nested,
+                     [this]
+                     {
+                         Probe::instance().beat();
+                         state_->poll();
+                     });
 }
 
 Pilot::~Pilot()
 {
+    delete state_->nested;
     delete state_->timer;
 }
 
@@ -632,6 +684,16 @@ bool Pilot::all_ran() const
     return true;
 }
 
+void Pilot::fallback(Step step)
+{
+    state_->fallback = std::move(step);
+}
+
+QStringList Pilot::visited() const
+{
+    return state_->visited;
+}
+
 QStringList Pilot::unexpected() const
 {
     return state_->unexpected;
@@ -662,6 +724,19 @@ void Pilot::check()
 
 // ---- Session -------------------------------------------------------------
 
+namespace
+{
+
+/// The look every journey starts from; a journey that changes it must not
+/// leave it to the next one.
+void reset_look()
+{
+    Theme::instance().set_mode(theme_mode::light);
+    Theme::instance().set_density(density_mode::comfortable);
+}
+
+} // namespace
+
 Session::Session(std::string journey, mode where, capabilities caps)
     : journey_(std::move(journey)),
       owned_(std::make_unique<FakeStudioBackend>()), backend_(owned_.get())
@@ -689,6 +764,7 @@ Session::Session(std::string journey, StudioBackend& backend, mode where)
 
 void Session::build_window()
 {
+    reset_look();
     window_ = std::make_unique<ShellWindow>(*backend_);
     window_->resize(1280, 800);
     window_->show();
@@ -1359,6 +1435,85 @@ QStringList accessible_names(QWidget* root)
             names << candidate->accessibleName();
     }
     return names;
+}
+
+int exercise(QWidget* root, const QStringList& avoid, int milliseconds)
+{
+    QElapsedTimer clock;
+    clock.start();
+    const auto avoided = [&avoid](const QString& text)
+    {
+        for (const QString& word : avoid)
+        {
+            if (text.contains(word, Qt::CaseInsensitive))
+                return true;
+        }
+        return false;
+    };
+    int used = 0;
+    QPointer<QWidget> guard(root);
+    // Snapshots: a click may rebuild the page it is on.
+    QList<QPointer<QAbstractButton>> buttons;
+    for (auto* candidate : root->findChildren<QAbstractButton*>())
+        buttons.append(candidate);
+    for (const auto& pointer : buttons)
+    {
+        if (guard == nullptr || clock.hasExpired(milliseconds))
+            return used;
+        QAbstractButton* candidate = pointer;
+        if (candidate == nullptr || !candidate->isVisibleTo(root) ||
+            !candidate->isEnabled() || candidate->parentWidget() == nullptr)
+            continue;
+        const QString text =
+            plain(candidate->text()) + candidate->accessibleName();
+        if (avoided(text) || qobject_cast<QToolButton*>(candidate) != nullptr)
+            continue;
+        const bool toggles = candidate->isCheckable() ||
+                             qobject_cast<QCheckBox*>(candidate) != nullptr;
+        // Trying controls is exploring, not asserting: one that cannot be
+        // reached is skipped, not a failure of the journey.
+        try
+        {
+            click(candidate);
+            ++used;
+            if (toggles && pointer != nullptr && candidate->isEnabled())
+                click(candidate);
+        }
+        catch (const vss_test::failure&)
+        {
+        }
+    }
+    QList<QPointer<QComboBox>> combos;
+    for (auto* candidate : root->findChildren<QComboBox*>())
+        combos.append(candidate);
+    for (const auto& pointer : combos)
+    {
+        QComboBox* combo = pointer;
+        if (guard == nullptr || combo == nullptr || !combo->isVisibleTo(root) ||
+            !combo->isEnabled() || combo->isEditable() ||
+            clock.hasExpired(milliseconds))
+            continue;
+        if (avoided(combo->accessibleName()))
+            continue;
+        const int original = combo->currentIndex();
+        for (int row = 0; row < combo->count() && row < 6; ++row)
+        {
+            if (row == original || guard == nullptr)
+                continue;
+            try
+            {
+                choose(combo, combo->itemText(row));
+                ++used;
+            }
+            catch (const vss_test::failure&)
+            {
+            }
+        }
+        if (original >= 0 && original < combo->count() &&
+            combo->currentIndex() != original)
+            choose(combo, combo->itemText(original));
+    }
+    return used;
 }
 
 // ---- Waiting -------------------------------------------------------------

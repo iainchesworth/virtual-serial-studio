@@ -23,6 +23,7 @@
 #include <QFontDatabase>
 #include <QSettings>
 #include <QString>
+#include <QTemporaryDir>
 
 #include <chrono>
 #include <cstdio>
@@ -83,6 +84,11 @@ int main(int argc, char** argv)
     // tests/framework/qt_settings.hpp), so nothing reaches the registry and a
     // second test process cannot read them.
     vss_test::isolated_settings isolated;
+    // Anything a journey saves without being given a place (Save writes
+    // "lab.json" to the current directory) lands here, not in the repository.
+    QTemporaryDir working_directory;
+    if (working_directory.isValid())
+        QDir::setCurrent(working_directory.path());
     QSettings().clear();
 
 #if defined(Q_OS_WIN)

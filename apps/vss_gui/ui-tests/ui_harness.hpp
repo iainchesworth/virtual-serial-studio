@@ -179,6 +179,13 @@ public:
     /// The dialogs nobody expected, as "Class: title".
     QStringList unexpected() const;
 
+    /// What to do with a dialog nobody expected, instead of failing: `step`
+    /// runs on it and it is closed afterwards. For the journeys that walk
+    /// every menu entry and have to look at whatever opens.
+    void fallback(Step step);
+    /// The dialogs the fallback handled, as "Class: title".
+    QStringList visited() const;
+
 private:
     struct state;
     std::unique_ptr<state> state_;
@@ -311,6 +318,13 @@ void require_entry(const QMenu* menu, const QString& text);
 /// The text the status bar shows now.
 QString status_text(Session& session);
 void close_menu(QMenu* menu);
+
+/// Looks at a window the way a person trying every control would: clicks
+/// each enabled button, flips each check box and switch there and back, and
+/// picks each entry of each list, skipping controls whose text contains one of
+/// `avoid` (those that remove, install or restart something). Dialogs the
+/// clicks open are the pilot's business. Returns how many controls it used.
+int exercise(QWidget* root, const QStringList& avoid, int milliseconds = 6000);
 
 // ---- Finding things ------------------------------------------------------
 
