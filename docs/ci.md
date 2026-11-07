@@ -32,20 +32,25 @@ was cancelled or was skipped.
 
 ## Nightly analysis
 
-These run on a schedule and on request, never on a pull request, so a finding
-never blocks a merge. Only CodeQL and MSVC code analysis report to Security >
-Code scanning. The others fail their job and open or update one issue labelled
-`nightly-analysis`; the owner closes it once the findings are fixed.
+These run on a schedule and on request, never as a required check, so a finding
+never blocks a merge. The static analysers also run on a pull request that
+changes source, workflows or analysis settings (not on a draft), over the files
+the pull request changes. The first five rows report to Security >
+Code scanning as SARIF, and a nightly failure on `develop` opens or updates one
+issue labelled `nightly-analysis`; the owner closes it once the findings are
+fixed. Each analyser has a local command; see [Testing](testing.md#static-analysis).
 
 | Analysis | Workflow | Where the result lands |
 |---|---|---|
-| CodeQL: C++ (libraries, command line tool, GUI), Python and Actions | `codeql.yml` | Code scanning alerts; a failed run opens an issue |
-| MSVC code analysis (PREfast) over the Windows build | `msvc-analysis.yml` | Code scanning alerts under the tool PREfast; new alerts open an issue |
-| clang-tidy: bugprone, concurrency, performance, portability, misc, analyzer | `static-analysis.yml` | The job and an issue |
+| CodeQL: C++ (libraries, command line tool, GUI, tests), Python and Actions | `codeql.yml` | Code scanning alerts; a failed run opens an issue |
+| MSVC code analysis (PREfast) over the Windows build, GUI and tests included | `msvc-analysis.yml` | Code scanning alerts under the tool PREfast; new alerts open an issue |
+| clang-tidy: bugprone, concurrency, performance, portability, misc, analyzer, naming | `static-analysis.yml` | Code scanning alerts under the tool clang-tidy; a nightly failure opens an issue |
+| cppcheck | `static-analysis.yml` | Code scanning alerts under the tool cppcheck; a nightly failure opens an issue |
+| zizmor, with the same rules as the pull request gate | `static-analysis.yml` | Code scanning alerts under the tool zizmor |
 | Newest GCC and Clang, GCC ASan/UBSan, TSan, MSVC ASan | `nightly.yml` | The job and an issue |
 | Fuzzing, 10 minutes per target | `fuzz.yml` | The job and an issue |
 | Hosted platform matrix | `platform-matrix.yml` | The job and an issue |
 
-The sanitizers, clang-tidy and fuzzing do not upload to code scanning. Their
-findings are failed tests and reproducers, not alerts that can be dismissed.
+The sanitizers and fuzzing do not upload to code scanning. Their findings are
+failed tests and reproducers, not alerts that can be dismissed.
 Include-what-you-use, OSV-Scanner and OpenSSF Scorecard are not run yet.

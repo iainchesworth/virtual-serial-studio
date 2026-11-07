@@ -106,6 +106,72 @@ The report covers the hub, endpoint, JSON and transport paths plus a real
 socket echo and a pseudo-terminal round trip. CI publishes it for every push;
 see [the profiling page](profiling.md) for the zone list and caveats.
 
+## Static analysis
+
+Five analysers read the source without running it. Each has one local command,
+`tools/analyze.py`, that CI runs too, so a clean local run is a clean job.
+They cover the libraries, the command line tool, the Qt GUI, the tests and the
+workflows.
+
+| Analyser | Looks for | Local command | Runs in CI |
+|---|---|---|---|
+| clang-tidy | bugprone, concurrency, performance, portability, misc and clang-analyzer defects, and the naming rules | `python tools/analyze.py clang-tidy` | `static-analysis.yml`: changed files on a pull request, everything nightly |
+| cppcheck | warnings, performance and portability | `python tools/analyze.py cppcheck` | `static-analysis.yml`, as clang-tidy |
+| MSVC `/analyze` (PREfast) | defects specific to the MSVC build | `python tools/analyze.py msvc` | `msvc-analysis.yml`, nightly |
+| zizmor | workflow injection, unpinned actions, excess permissions | `python tools/analyze.py zizmor` | `ci.yml` gates on it; `static-analysis.yml` uploads it |
+| CodeQL (C++, Python, Actions) | security and quality queries | not run locally | `codeql.yml`, nightly |
+
+```bash
+cmake --preset linux-debug-gui                  # windows-msvc-debug-gui elsewhere
+cmake --build --preset linux-debug-gui          # the GUI includes generated headers
+python tools/analyze.py clang-tidy cppcheck zizmor
+python tools/analyze.py clang-tidy --changed    # only the files changed since origin/develop
+python tools/analyze.py msvc                    # Windows; needs Visual Studio
+python tools/analyze.py all                     # everything this machine can run
+```
+
+`clang-tidy` and `cppcheck` read the `compile_commands.json` of the newest tree
+under `build/`, or the one named with `--build`. Build a `*-gui` preset first, so
+the GUI and the tests are in it. A tool that is not installed is a SKIP in
+`all`, and a failure when named. Install them with LLVM (clang-tidy),
+`winget install Cppcheck.Cppcheck` or `apt install cppcheck`, and
+`python -m pip install -r requirements/zizmor.txt`. On Windows the script loads
+the Visual Studio environment itself.
+
+`msvc` configures the `windows-msvc-analysis` preset, which is the Debug GUI
+build with `/analyze` and the `NativeRecommendedRules` rule set, builds it, and
+reads the `.sarif` file each compile leaves beside its object file. Analysis
+warnings do not stop that build. CI uses Microsoft's `msvc-code-analysis-action`
+with the same rule set over the same sources.
+
+Every run writes `build/analysis/<analyser>.sarif`. CI uploads the same files
+to GitHub code scanning, so a finding is an alert under Security > Code
+scanning (tools `clang-tidy`, `cppcheck`, `zizmor`, `PREfast` and `CodeQL`)
+and, for a pull request, an annotation on the changed line. None of these jobs
+is a required check; a finding is fixed or dismissed in code scanning with a
+reason. A nightly failure on `develop` also opens one `nightly-analysis` issue.
+
+The clang-tidy check set is the `CLANG_TIDY_CHECKS` constant in
+`tools/analyze.py`, and the naming rules are in `.clang-tidy`. Five checks are
+left out on purpose:
+
+* `misc-const-correctness` asks for `const` on almost every local; it is style,
+  not a defect.
+* `performance-enum-size` asks for narrower enum bases; the saving is a few
+  bytes.
+* `bugprone-unused-return-value` flags the `error_code` out-parameter calls that
+  ignore a result on purpose (`non_blocking(true, ignored)`).
+* `bugprone-signed-bitwise` flags the POSIX flag macros (`O_RDWR | O_NOCTTY`,
+  termios bits) and byte arithmetic that C++ promotes to `int`. Neither can be
+  written another way.
+* `portability-avoid-pragma-once` asks for include guards. The project standard
+  allows `#pragma once` and counts every guard against the ratchet in
+  `tools/preprocessor-baseline.json`.
+
+Fix a finding in the code. A suppression (`// NOLINT(check)` or
+`// cppcheck-suppress id`) names the check and carries the reason on the same
+line.
+
 ## Fuzzing and the GUI journeys
 
 The topology and endpoint URI parsers are fuzzed; see [Fuzzing](fuzzing.md).
