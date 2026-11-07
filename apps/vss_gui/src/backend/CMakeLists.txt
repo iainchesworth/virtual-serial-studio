@@ -13,6 +13,7 @@ add_library(vss_gui_backend STATIC
   share_edit.cpp
   canvas_edit.cpp
   com_numbers.cpp
+  driver_error.cpp
   studio_backend.hpp
   engine_studio_backend.hpp
   fake_studio_backend.hpp
@@ -20,6 +21,7 @@ add_library(vss_gui_backend STATIC
   share_edit.hpp
   canvas_edit.hpp
   com_numbers.hpp
+  driver_error.hpp
   capabilities.hpp
   other_ports.hpp
   view_types.hpp)
@@ -42,7 +44,8 @@ if(VSS_BUILD_TESTS)
     tests/test_event_bridge.cpp
     tests/test_share_edit.cpp
     tests/test_canvas_edit.cpp
-    tests/test_com_numbers.cpp)
+    tests/test_com_numbers.cpp
+    tests/test_driver_error.cpp)
 
   target_include_directories(vss_gui_backend_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/tests/framework)
