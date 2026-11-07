@@ -414,6 +414,11 @@ void TopologyView::rebuild_items()
         callbacks.pressed = [this](vss::link_id id)
         {
             setFocus(Qt::MouseFocusReason);
+            // As with a node, a plain press starts a new selection. Without
+            // this the ports an Add left selected stay selected, and Delete
+            // removes them instead of the link that was clicked.
+            if (!multi_links_.contains(id))
+                clear_multi();
             const qsizetype index = focus_index_of_link(id);
             if (index >= 0)
                 focus_at(index, true);
