@@ -18,7 +18,9 @@
 #include <QVector>
 
 #include <chrono>
+#include <cstddef>
 #include <cstdint>
+#include <deque>
 #include <vector>
 
 namespace vss::gui
@@ -114,9 +116,15 @@ private:
     void rebuild_visible();
     bool matches(const traffic_row& row) const;
     QString preview_for(const traffic_row& row) const;
-    void trim();
+    /// Drops the oldest rows beyond the caps and returns how many went.
+    std::size_t trim();
+    /// Tells the views about rows pushed onto `rows_` since it had `before`
+    /// rows: the oldest rows that were trimmed leave, the new rows that pass
+    /// the filters arrive.  No reset, so a view keeps its scroll position and
+    /// does not lay out 10,000 rows again for every batch.
+    void commit_appended(std::size_t before);
 
-    std::vector<traffic_row> rows_;
+    std::deque<traffic_row> rows_;
     qint64 retained_bytes_ = 0;
     QVector<int> visible_;
     vss::endpoint_id port_filter_ = 0;

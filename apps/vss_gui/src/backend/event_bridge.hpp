@@ -47,6 +47,12 @@ public:
         int interval_ms = 250;
         /// Events kept between drains.  Oldest are dropped first.
         std::size_t max_events = 8192;
+        /// Events delivered in one batch from the timer.  What is left is
+        /// delivered in further batches, each from its own turn of the event
+        /// loop, so a flood of events cannot hold the GUI thread for the time
+        /// it takes to handle all of them: input and painting run between
+        /// the slices.  `flush` ignores it.
+        std::size_t max_batch = 256;
     };
 
     explicit EventBridge(vss::hub& hub, QObject* parent = nullptr);
@@ -75,12 +81,19 @@ private:
     struct state;
 
     void drain();
+    /// Delivers up to `limit` of the oldest events as one batch.  True when
+    /// events are left.
+    bool deliver(std::size_t limit);
+    void continue_draining();
 
     vss::hub& hub_;
     std::shared_ptr<state> state_;
     QTimer* timer_ = nullptr;
     vss::subscriber_id subscription_ = 0;
     bool running_ = false;
+    bool continuing_ = false;
+    int last_slice_ms_ = 0;
+    std::size_t max_batch_ = 256;
 };
 
 } // namespace vss::gui

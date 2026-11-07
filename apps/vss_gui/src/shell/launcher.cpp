@@ -280,7 +280,7 @@ void Launcher::build()
 
 void Launcher::refresh()
 {
-    const setup_report report = query_setup_report(backend_);
+    const support::setup_report& report = setup_cache_.get(backend_);
     const bool windows = host_platform() == QLatin1String("windows");
     if (report.state == setup_report::readiness::not_checked)
     {

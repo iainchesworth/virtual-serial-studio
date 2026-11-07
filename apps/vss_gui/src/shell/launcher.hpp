@@ -8,6 +8,7 @@
 #define VSS_GUI_SHELL_LAUNCHER_HPP
 
 #include "backend/studio_backend.hpp"
+#include "support/setup_facts.hpp"
 #include "widgets/notes.hpp"
 
 #include <QFrame>
@@ -66,6 +67,7 @@ private:
     void update_saved_setups();
 
     StudioBackend& backend_;
+    support::setup_report_cache setup_cache_;
     NoteBanner* readiness_ = nullptr;
     QLabel* recent_name_ = nullptr;
     QLabel* recent_summary_ = nullptr;

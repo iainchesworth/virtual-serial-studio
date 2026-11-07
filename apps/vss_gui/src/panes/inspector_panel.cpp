@@ -120,6 +120,8 @@ InspectorPanel::InspectorPanel(StudioBackend& backend, QWidget* parent)
     build();
     connect(&backend_, &StudioBackend::ports_changed, this,
             [this] { refresh(); });
+    connect(&backend_, &StudioBackend::stats_changed, this,
+            [this] { refresh(); });
     connect(&backend_, &StudioBackend::lines_changed, this,
             [this](vss::endpoint_id id)
             {
@@ -254,8 +256,8 @@ void InspectorPanel::build()
                 if (!port_)
                     return;
                 QGuiApplication::clipboard()->setText(port_->path);
-                ToastManager::instance().show(this,
-                                              tr("%1 copied.").arg(port_->path));
+                ToastManager::instance().show(
+                    this, tr("%1 copied.").arg(port_->path));
             });
     help_layout->addWidget(help_text_);
     help_layout->addWidget(help_copy_, 0, Qt::AlignLeft);
@@ -446,15 +448,13 @@ void InspectorPanel::update_content()
     com_row_->setVisible(numbered);
     com_value_->setText(QStringLiteral("COM%1").arg(port.com_number));
     com_change_->setEnabled(caps.com_numbers);
-    com_change_->setToolTip(caps.com_numbers
-                                ? QString()
-                                : tr("Not available in this build"));
+    com_change_->setToolTip(
+        caps.com_numbers ? QString() : tr("Not available in this build"));
     release_->setVisible(advanced_ && port.driver_port &&
                          port.peer == peer_state::open);
     release_->setEnabled(caps.release_port);
-    release_->setToolTip(caps.release_port
-                             ? QString()
-                             : tr("Not available in this build"));
+    release_->setToolTip(caps.release_port ? QString()
+                                           : tr("Not available in this build"));
 
     simple_lines_->setVisible(!advanced_);
     advanced_lines_->setVisible(advanced_);
@@ -463,8 +463,7 @@ void InspectorPanel::update_content()
     if (fixture_panel_ != nullptr)
     {
         // The behaviours are an Advanced control of a mock fixture.
-        const bool fixture =
-            advanced_ && port.kind == vss::endpoint_kind::mock;
+        const bool fixture = advanced_ && port.kind == vss::endpoint_kind::mock;
         fixture_panel_->set_port(fixture ? port.id : 0);
         fixture_panel_->setVisible(fixture);
     }

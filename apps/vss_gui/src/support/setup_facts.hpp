@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QVector>
 
+#include <chrono>
 #include <vector>
 
 namespace vss::gui::support
@@ -34,9 +35,9 @@ struct platform_facts
     bool pty_available = false;
     bool dialout_known = false;
     bool dialout_member = false;
-    /// What the operating system may stop Studio doing: elevation, the firewall,
-    /// and on other systems the equivalents (see `vss/ports/permissions.hpp`).
-    /// Empty until asked.
+    /// What the operating system may stop Studio doing: elevation, the
+    /// firewall, and on other systems the equivalents (see
+    /// `vss/ports/permissions.hpp`). Empty until asked.
     std::vector<vss::permissions::fact> permissions;
 };
 
@@ -64,7 +65,8 @@ enum class setup_action
     dialout_help,
     /// Explain the firewall fact and, where this build can, offer the one rule.
     firewall_help,
-    /// Explain a refused serial device and, where this build can, offer the group.
+    /// Explain a refused serial device and, where this build can, offer the
+    /// group.
     serial_access_help,
     /// Explain AppArmor, SELinux, Flatpak or Snap and show the exact fix.
     confinement_help,
@@ -117,6 +119,26 @@ setup_report build_setup_report(const setup_facts& facts,
 
 /// Reads the engine facts and probes the platform, then builds the report.
 setup_report query_setup_report(const StudioBackend& backend);
+
+/// Keeps the last `query_setup_report` for the surfaces that redraw with every
+/// engine event (the status bar, the Simple page, the launcher).  The query
+/// asks the operating system and takes tens of milliseconds, which on the GUI
+/// thread for every event is a frozen window.  The report is reused while it
+/// is younger than `StudioBackend::probe_cache_age()` and the ports have not
+/// changed; a backend that answers zero is asked every time.  The setup
+/// check window asks for a fresh report and does not use this.
+class setup_report_cache
+{
+public:
+    const setup_report& get(const StudioBackend& backend);
+    void invalidate() noexcept { valid_ = false; }
+
+private:
+    setup_report report_;
+    QString ports_key_;
+    std::chrono::steady_clock::time_point taken_;
+    bool valid_ = false;
+};
 
 /// The official com0com project page, the one place the instructions URL is
 /// named.  The GUI never downloads anything itself.

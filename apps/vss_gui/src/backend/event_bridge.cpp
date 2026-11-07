@@ -7,7 +7,9 @@
 #include "backend/event_bridge.hpp"
 
 #include <vss/core/hub.hpp>
+#include <vss/core/profile.hpp>
 
+#include <QElapsedTimer>
 #include <QMetaType>
 #include <QThread>
 #include <QTimer>
@@ -15,6 +17,8 @@
 #include <algorithm>
 #include <atomic>
 #include <deque>
+#include <iterator>
+#include <limits>
 #include <mutex>
 #include <utility>
 #include <vector>
@@ -66,6 +70,7 @@ EventBridge::EventBridge(vss::hub& hub, options settings, QObject* parent)
     : QObject(parent), hub_(hub), state_(std::make_shared<state>())
 {
     state_->max_events = std::max<std::size_t>(settings.max_events, 1);
+    max_batch_ = std::max<std::size_t>(settings.max_batch, 1);
     timer_ = new QTimer(this);
     timer_->setInterval(std::max(settings.interval_ms, 1));
     connect(timer_, &QTimer::timeout, this, &EventBridge::drain);
@@ -141,7 +146,7 @@ void EventBridge::flush()
                "drain on the GUI thread");
     if (QThread::currentThread() != thread())
         return;
-    drain();
+    deliver(std::numeric_limits<std::size_t>::max());
 }
 
 std::uint64_t EventBridge::delivered() const noexcept
@@ -162,21 +167,75 @@ std::size_t EventBridge::pending() const
 
 void EventBridge::drain()
 {
+    QElapsedTimer spent;
+    spent.start();
+    const bool more = deliver(max_batch_);
+    last_slice_ms_ = static_cast<int>(spent.elapsed());
+    if (more)
+        continue_draining();
+}
+
+void EventBridge::continue_draining()
+{
+    if (continuing_)
+        return;
+    continuing_ = true;
+    // A turn of the event loop of its own, after a pause twice as long as the
+    // last slice took, so the window keeps at least two thirds of its time for
+    // input, painting and its other timers however fast events arrive.
+    const int pause = std::max(1, 2 * last_slice_ms_);
+    QTimer::singleShot(pause, this,
+                       [this]
+                       {
+                           continuing_ = false;
+                           if (!running_)
+                               return;
+                           QElapsedTimer spent;
+                           spent.start();
+                           const bool more = deliver(max_batch_);
+                           last_slice_ms_ = static_cast<int>(spent.elapsed());
+                           if (more)
+                               continue_draining();
+                       });
+}
+
+bool EventBridge::deliver(std::size_t limit)
+{
+    VSS_PROFILE_ZONE("gui.bridge.drain");
     std::deque<vss::endpoint_event> pending;
+    bool more = false;
     {
         std::lock_guard lock(state_->mutex);
-        pending.swap(state_->events);
+        if (state_->events.size() <= limit)
+        {
+            pending.swap(state_->events);
+        }
+        else
+        {
+            const auto cut =
+                state_->events.begin() + static_cast<std::ptrdiff_t>(limit);
+            pending.assign(std::make_move_iterator(state_->events.begin()),
+                           std::make_move_iterator(cut));
+            state_->events.erase(state_->events.begin(), cut);
+            more = true;
+        }
     }
 
     if (pending.empty())
-        return;
+        return false;
+    VSS_PROFILE_PLOT("gui.bridge.batch_events", pending.size());
+    VSS_PROFILE_PLOT("gui.bridge.backlog", more ? state_->events.size() : 0);
 
     event_batch batch;
     batch.reserve(static_cast<qsizetype>(pending.size()));
     for (const auto& event : pending)
         batch.push_back(convert(event));
 
-    Q_EMIT batch_ready(batch);
+    {
+        VSS_PROFILE_ZONE("gui.bridge.emit");
+        Q_EMIT batch_ready(batch);
+    }
+    return more;
 }
 
 } // namespace vss::gui

@@ -10,9 +10,11 @@
 #include "shell/single_instance.hpp"
 #include "shell/studio_tray.hpp"
 #include "support/running_setup.hpp"
+#include "support/stall_probe.hpp"
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
 
+#include <vss/core/profile.hpp>
 #include <vss/studio/studio.hpp>
 
 #include <QAction>
@@ -138,6 +140,15 @@ int main(int argc, char* argv[])
                 qEnvironmentVariableIsSet("VSS_SCREENSHOT_ADVANCED"));
         }
         vss::gui::ShellWindow window(backend);
+
+        // A profiling build names the GUI thread and plots every stretch in
+        // which it did not return to its event loop (see docs/profiling.md).
+        vss::gui::support::StallProbe stall_probe;
+        if constexpr (VSS_GUI_PROFILING != 0)
+        {
+            VSS_PROFILE_THREAD("gui");
+            stall_probe.start();
+        }
 
         if (parser.isSet(selftest_option))
         {
