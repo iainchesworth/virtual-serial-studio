@@ -230,7 +230,7 @@ void observe_firewall(windows_observation& seen)
     const struct
     {
         long bit = 0;
-        NET_FW_PROFILE_TYPE2 profile{};
+        NET_FW_PROFILE_TYPE2 profile = NET_FW_PROFILE2_DOMAIN;
     } profiles[] = {{profile_domain, NET_FW_PROFILE2_DOMAIN},
                     {profile_private, NET_FW_PROFILE2_PRIVATE},
                     {profile_public, NET_FW_PROFILE2_PUBLIC}};

@@ -323,7 +323,7 @@ TEST_CASE("monitor: the capture export keeps every byte and the event time")
 TEST_CASE("monitor: payloads kept for the capture export are bounded")
 {
     vss::gui::MonitorModel model;
-    const QByteArray chunk(1024 * 1024, 'z');
+    const QByteArray chunk(1024LL * 1024, 'z');
     const auto when = vss::clock_type::now();
     vss::gui::event_batch events;
     for (int index = 0; index < 40; ++index)

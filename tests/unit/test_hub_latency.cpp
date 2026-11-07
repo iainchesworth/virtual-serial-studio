@@ -44,6 +44,7 @@ void require_nothing_before_due(const std::vector<const mock_endpoint*>& targets
     for (;;)
     {
         std::vector<std::string> seen;
+        seen.reserve(targets.size());
         for (const auto* target : targets)
             seen.push_back(target->written());
         const auto ended = std::chrono::steady_clock::now();

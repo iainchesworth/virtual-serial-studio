@@ -22,6 +22,8 @@
 #include <system_error>
 #include <vector>
 
+// libFuzzer looks for exactly this name.
+// NOLINTNEXTLINE(readability-identifier-naming)
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t* data,
                                       std::size_t size);
 

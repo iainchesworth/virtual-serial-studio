@@ -143,7 +143,7 @@ TEST_CASE("studio: every fault stops a fixture with an error")
         studio app;
         const auto created = app.create_mock_port("device");
         REQUIRE(created);
-        const auto endpoint = *created;
+        const auto& endpoint = *created;
         REQUIRE_EQ(endpoint->state(), endpoint_state::open);
 
         REQUIRE(app.inject_fault(endpoint->id(), fault));

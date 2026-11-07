@@ -456,11 +456,10 @@ TEST_CASE("support: setup report degrades and never fakes a check")
                    .rows.size(),
                3);
 
-    vss::gui::setup_facts unknown = facts;
     support::platform_facts unknown_platform = platform;
     unknown_platform.elevation_known = false;
     const support::setup_report unknown_report =
-        support::build_setup_report(unknown, unknown_platform, devices);
+        support::build_setup_report(facts, unknown_platform, devices);
     REQUIRE_EQ(
         find_row(unknown_report, QStringLiteral("Administrator rights"))->chip,
         QStringLiteral("Not checked yet"));

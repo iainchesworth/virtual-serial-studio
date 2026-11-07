@@ -31,6 +31,9 @@
 #include <windows.h>
 #endif
 
+// Q_INIT_RESOURCE declares the generated symbol in the scope it is used in,
+// so this wrapper has to be at global scope, not in an unnamed namespace.
+// NOLINTNEXTLINE(misc-use-anonymous-namespace)
 static void init_gui_theme_resources()
 {
     Q_INIT_RESOURCE(theme_resources);

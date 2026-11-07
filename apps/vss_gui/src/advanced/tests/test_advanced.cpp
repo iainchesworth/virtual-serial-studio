@@ -718,7 +718,7 @@ TEST_CASE("benchmark: a short count fails and says by how much")
     capabilities caps;
     caps.benchmark = true;
     backend.set_capabilities(caps);
-    backend.set_benchmark_outcome(1024 * 1024, std::chrono::milliseconds(0));
+    backend.set_benchmark_outcome(1024ULL * 1024, std::chrono::milliseconds(0));
     make_port(backend, QStringLiteral("first"));
     make_port(backend, QStringLiteral("second"));
 

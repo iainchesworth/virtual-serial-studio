@@ -22,8 +22,8 @@ error_code last_error()
 /// The portable interface carries an operating-system handle as an integer.
 HANDLE as_handle(std::intptr_t handle) noexcept
 {
-    // NOLINTNEXTLINE(performance-no-int-to-ptr): the integer is a HANDLE that
-    // the caller got from the operating system.
+    // The integer is a HANDLE that the caller got from the operating system.
+    // NOLINTNEXTLINE(performance-no-int-to-ptr)
     return reinterpret_cast<HANDLE>(handle);
 }
 
