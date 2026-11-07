@@ -77,7 +77,7 @@ std::vector<entry_path> all_entries(Session& s)
 /// Entries that would end the program, or change the machine.
 bool avoided(const entry_path& path)
 {
-    const QString last = path.back();
+    const QString& last = path.back();
     return last == QLatin1String("Quit") || last == QLatin1String("New") ||
            last.contains(QLatin1String("administrator"), Qt::CaseInsensitive);
 }

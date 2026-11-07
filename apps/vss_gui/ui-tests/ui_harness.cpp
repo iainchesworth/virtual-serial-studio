@@ -243,7 +243,7 @@ void Probe::start(const std::string& journey)
     {
         const int hang_ms = env_int("VSS_UI_HANG_MS", 30000);
         state_->watchdog = std::jthread(
-            [this, hang_ms](std::stop_token token)
+            [this, hang_ms](const std::stop_token& token)
             {
                 while (!token.stop_requested())
                 {
@@ -1395,6 +1395,7 @@ int exercise(QWidget* root, const QStringList& avoid, int milliseconds)
         return false;
     };
     int used = 0;
+    int skipped = 0;
     QPointer<QWidget> guard(root);
     // Snapshots: a click may rebuild the page it is on.
     QList<QPointer<QAbstractButton>> buttons;
@@ -1425,6 +1426,7 @@ int exercise(QWidget* root, const QStringList& avoid, int milliseconds)
         }
         catch (const vss_test::failure&)
         {
+            ++skipped;
         }
     }
     QList<QPointer<QComboBox>> combos;
@@ -1451,12 +1453,16 @@ int exercise(QWidget* root, const QStringList& avoid, int milliseconds)
             }
             catch (const vss_test::failure&)
             {
+                ++skipped;
             }
         }
         if (original >= 0 && original < combo->count() &&
             combo->currentIndex() != original)
             choose(combo, combo->itemText(original));
     }
+    if (skipped > 0 && qEnvironmentVariableIsSet("VSS_UI_TRACE"))
+        std::printf("        exercise: %d control(s) could not be reached\n",
+                    skipped);
     return used;
 }
 
@@ -1498,6 +1504,13 @@ vss::endpoint_id port_id(StudioBackend& backend, const QString& name)
             return port.id;
     }
     throw vss_test::failure("no port named " + name.toStdString());
+}
+
+port_view port_of(StudioBackend& backend, vss::endpoint_id id)
+{
+    if (const auto found = backend.port(id))
+        return *found;
+    throw vss_test::failure("no port with id " + std::to_string(id));
 }
 
 std::vector<QString> port_names(StudioBackend& backend)

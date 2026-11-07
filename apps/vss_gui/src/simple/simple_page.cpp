@@ -494,7 +494,11 @@ void SimplePage::show_setup(const setup_view& setup)
     Q_EMIT setup_selected(shown_);
 }
 
-void SimplePage::change_programs(setup_view setup, vss::endpoint_id close)
+// A copy is the point: refresh() below rebuilds setups_ under the caller's
+// reference.
+void SimplePage::change_programs(
+    setup_view setup, // NOLINT(performance-unnecessary-value-param)
+    vss::endpoint_id close)
 {
     VSS_PROFILE_ZONE("gui.simple.page.change_programs");
     job_plan plan = plan_from(setup, backend_.ports());

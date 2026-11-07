@@ -218,7 +218,7 @@ TEST_CASE("edge: adding many items stays quick")
         s.pilot().check();
     }
     REQUIRE_EQ(s.backend().ports().size(),
-               static_cast<std::size_t>(kPorts + 20));
+               static_cast<std::size_t>(kPorts) + 20);
     REQUIRE_EQ(s.backend().links().size(), 10);
     ad::require_consistent(s);
     s.step(QStringLiteral("Fit, Tidy layout and select everything"));
@@ -241,7 +241,7 @@ TEST_CASE("edge: adding many items stays quick")
     choose_menu(s, QStringLiteral("Edit"), QStringLiteral("Undo"), true);
     s.settle();
     vss_test::spin(500);
-    if (s.backend().ports().size() != static_cast<std::size_t>(kPorts + 20))
+    if (s.backend().ports().size() != static_cast<std::size_t>(kPorts) + 20)
         throw vss_test::failure(
             "Undo left " + std::to_string(s.backend().ports().size()) +
             " ports, not 50; the status says: " + status_text(s).toStdString());

@@ -372,6 +372,8 @@ void deliver_traffic(Session& session, vss::endpoint_id port,
 // ---- Topology helpers ----------------------------------------------------
 
 vss::endpoint_id port_id(StudioBackend& backend, const QString& name);
+/// The port with this id; throws when there is none.
+port_view port_of(StudioBackend& backend, vss::endpoint_id id);
 std::vector<QString> port_names(StudioBackend& backend);
 QPoint node_point(topology::TopologyView* view, vss::endpoint_id id);
 QPoint link_point(topology::TopologyView* view, vss::link_id id);

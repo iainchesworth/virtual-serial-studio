@@ -73,9 +73,10 @@ TEST_CASE("advanced: add a port, a fixture and a loopback")
     const auto fixture = make(s, "Fixture", "modem");
     s.step(QStringLiteral("add a loopback"));
     const auto loopback = make(s, "Loopback", "echo");
-    REQUIRE_EQ(s.backend().port(port)->kind, vss::endpoint_kind::virtual_port);
-    REQUIRE_EQ(s.backend().port(fixture)->kind, vss::endpoint_kind::mock);
-    REQUIRE(s.backend().port(loopback)->studio_only);
+    REQUIRE_EQ(port_of(s.backend(), port).kind,
+               vss::endpoint_kind::virtual_port);
+    REQUIRE_EQ(port_of(s.backend(), fixture).kind, vss::endpoint_kind::mock);
+    REQUIRE(port_of(s.backend(), loopback).studio_only);
     ad::require_consistent(s);
     s.step(QStringLiteral("each is a node on the canvas that can be selected"));
     for (const auto id : {port, fixture, loopback})
@@ -611,9 +612,9 @@ TEST_CASE("advanced: rename, change the settings of, and wire a port")
     key(view, Qt::Key_F2);
     s.settle();
     s.pilot().check();
-    REQUIRE_EQ(s.backend().port(a)->name, QStringLiteral("console"));
+    REQUIRE_EQ(port_of(s.backend(), a).name, QStringLiteral("console"));
     s.step(QStringLiteral("Settings... from the menu changes the baud rate"));
-    const auto baud_before = s.backend().port(a)->serial.baud_rate;
+    const auto baud_before = port_of(s.backend(), a).serial.baud_rate;
     s.pilot().expect_type<PortSettingsDialog>(
         "the port settings",
         [&s, a](QWidget* d)
@@ -626,7 +627,8 @@ TEST_CASE("advanced: rename, change the settings of, and wire a port")
             }
             REQUIRE(baud != nullptr);
             // A value other than the one the port has, or Apply stays off.
-            const bool at_9600 = s.backend().port(a)->serial.baud_rate == 9600;
+            const bool at_9600 =
+                port_of(s.backend(), a).serial.baud_rate == 9600;
             choose(baud,
                    at_9600 ? QStringLiteral("19200") : QStringLiteral("9600"));
             // Enter in the edited field already applies and closes it.
@@ -638,7 +640,7 @@ TEST_CASE("advanced: rename, change the settings of, and wire a port")
     choose_entry(menu, QStringLiteral("Settings..."));
     s.settle();
     s.pilot().check();
-    REQUIRE_NE(s.backend().port(a)->serial.baud_rate, baud_before);
+    REQUIRE_NE(port_of(s.backend(), a).serial.baud_rate, baud_before);
     s.step(QStringLiteral("the link wiring dialog, preset Loopback"));
     s.pilot().expect_type<WiringDialog>(
         "the wiring dialog",
