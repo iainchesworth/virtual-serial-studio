@@ -425,8 +425,8 @@ TEST_CASE("rfc2217: every parity, stop size and flow control value is mapped")
 
     const struct
     {
-        unsigned code;
-        stop_bits_mode stop;
+        unsigned code = 0;
+        stop_bits_mode stop{};
     } stops[] = {{1, stop_bits_mode::one},
                  {2, stop_bits_mode::two},
                  {3, stop_bits_mode::one_point_five}};
@@ -442,8 +442,8 @@ TEST_CASE("rfc2217: every parity, stop size and flow control value is mapped")
 
     const struct
     {
-        unsigned code;
-        flow_control_mode flow;
+        unsigned code = 0;
+        flow_control_mode flow{};
     } flows[] = {{1, flow_control_mode::none},
                  {2, flow_control_mode::software},
                  {3, flow_control_mode::hardware}};
