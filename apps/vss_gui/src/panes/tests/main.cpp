@@ -37,6 +37,7 @@ bool matches(const std::string& name, const std::vector<std::string>& filters)
 } // namespace
 
 int main(int argc, char** argv)
+try
 {
     qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("offscreen"));
 #if defined(Q_OS_WIN)
@@ -107,4 +108,14 @@ int main(int argc, char** argv)
     std::printf("\n%zu tests, %zu passed, %zu failed, %zu skipped\n", selected,
                 passed, failed, skipped);
     return failed == 0 ? 0 : 1;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
+    return 2;
 }

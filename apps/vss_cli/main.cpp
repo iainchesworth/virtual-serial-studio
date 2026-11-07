@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <exception>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -1378,6 +1379,7 @@ arguments parse(int argc, char** argv)
 } // namespace
 
 int main(int argc, char** argv)
+try
 {
     const arguments args = parse(argc, argv);
     if (args.positional.empty() || args.has("--help") || args.has("-h"))
@@ -1429,5 +1431,15 @@ int main(int argc, char** argv)
 
     std::fprintf(stderr, "unknown command: %s\n", command.c_str());
     print_usage();
+    return 2;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
     return 2;
 }
