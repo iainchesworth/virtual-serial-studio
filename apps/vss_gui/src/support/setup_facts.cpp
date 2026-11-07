@@ -239,7 +239,8 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
         {
             administrator.sentence += QLatin1Char(' ') + who;
             // Said before the prompt, so the prompt is not a surprise.
-            administrator.sentence += QLatin1Char(' ') +
+            administrator.sentence +=
+                QLatin1Char(' ') +
                 QCoreApplication::translate(
                     "SetupCheck",
                     "The Windows prompt names the program and its publisher: "
