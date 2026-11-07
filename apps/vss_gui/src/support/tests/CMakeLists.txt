@@ -9,6 +9,7 @@ if(VSS_BUILD_TESTS)
     main.cpp
     test_permission_dialog.cpp
     test_permission_rows.cpp
+    test_running.cpp
     test_support.cpp)
 
   target_include_directories(vss_gui_support_tests PRIVATE

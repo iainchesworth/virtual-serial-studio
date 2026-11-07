@@ -41,7 +41,10 @@ and TX. The language works with the system font and plain Qt widgets.
     10 and a `line` border, and `line` dividers between rows. A `group` label sits above it.
 11. **Dialogs.** Padding is 24. The title (`title`, 20/600) has a one-line `ink2` subtitle under it. Choices are cards
     (radius 12, `line2` border; when selected, 2 px `accent` border on `accentSoft`). The result sentence is a note.
-    The footer is right-aligned with no divider line, and the primary button is last.
+    The footer is right-aligned with no band or divider line, inset by the same 24, and the primary button is last.
+    A list of checks or statuses (Setup check, "Why is nothing arriving?") is one group with a divider between rows,
+    and each row starts with a kind tile in its state's tint. Figures inside a group (a benchmark's Sent, Received,
+    Lost) sit on `raised` tiles: `panel`, radius 9, no border.
 12. **Notes.** A note is a tinted block (radius 10) with an icon and no border: `accentSoft` for info, `amberSoft` for
     warning, `okSoft` for success, `badSoft` for danger.
 13. **Act on what is selected.** An action sits next to the thing it acts on. Do not add a second picker for something

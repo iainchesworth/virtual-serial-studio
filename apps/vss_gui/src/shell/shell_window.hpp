@@ -26,6 +26,7 @@ class QLabel;
 class QLineEdit;
 class QStackedWidget;
 class QThread;
+class QTimer;
 class QToolBar;
 
 namespace vss::gui
@@ -44,6 +45,7 @@ class PaneHeader;
 class PortsPanel;
 class SendPanel;
 class StatusBar;
+class StudioTray;
 class TopologyJsonEditor;
 
 namespace topology
@@ -75,6 +77,30 @@ public:
     /// Asks whether to close while programs have Studio's ports open, which
     /// closing removes under them.  True when none do, or the user agrees.
     bool confirm_exit();
+
+    /// Turns on running in the background (see
+    /// `docs/gui-design/docs/10-running-in-the-background.md`): closing the
+    /// window keeps the ports running behind the notification-area icon, the
+    /// running setup is kept in `running_path` a second after each change,
+    /// and what was running when Studio last stopped without a Quit starts
+    /// again now.  `use_tray` false is a desktop without a notification area.
+    /// Only `main` calls this, so tests and the self-test keep the old
+    /// close-means-quit behaviour unless they ask for it.
+    void enable_background(const QString& running_path, bool use_tray);
+    bool background_enabled() const noexcept { return background_; }
+
+    /// Shows the window again and puts it in front: the notification-area
+    /// icon, and a second Studio that was started while this one runs.
+    void bring_to_front();
+
+    /// Quit Studio: asks, stops every port and link, and ends the program.
+    void quit_studio();
+
+    /// Writes the running setup now.  `stopped` records a Quit.
+    void save_running_now(bool stopped = false);
+
+    StudioTray* tray() const noexcept { return tray_; }
+    NoteBanner* resume_banner() const noexcept { return resume_banner_; }
 
 protected:
     void closeEvent(QCloseEvent* event) override;
@@ -192,6 +218,16 @@ private:
     void apply_density_setting();
     void apply_menu_palette();
 
+    // Running in the background.
+    void schedule_running_save();
+    /// Starts the running setup in `running_path_`.  `automatic` is the start
+    /// after a restart; otherwise the user chose Start again.
+    void start_running_setup(bool automatic);
+    void update_resume_banner();
+    void update_tray();
+    void show_background_notice();
+    void finish_quit();
+
     StudioBackend& backend_;
     ActionRegistry registry_{this};
     LevelService level_{this};
@@ -251,6 +287,15 @@ private:
     bool layout_sized_ = false;
     bool restored_state_ = false;
     bool restarting_ = false;
+
+    bool background_ = false;
+    bool quitting_ = false;
+    bool was_lost_ = false;
+    QString running_path_;
+    QByteArray running_written_;
+    QTimer* running_save_ = nullptr;
+    StudioTray* tray_ = nullptr;
+    NoteBanner* resume_banner_ = nullptr;
 };
 
 } // namespace vss::gui

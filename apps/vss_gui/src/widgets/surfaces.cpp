@@ -324,7 +324,7 @@ void ActionTile::leaveEvent(QEvent* event)
 GroupLabel::GroupLabel(const QString& text, QWidget* parent)
     : QLabel(text, parent)
 {
-    setProperty("group", true);
+    setProperty("groupLabel", true);
     setFont(Theme::instance().font(text_style::group));
     setAccessibleName(text);
     connect(&Theme::instance(), &Theme::theme_changed, this,
@@ -339,15 +339,18 @@ Group::Group(QWidget* parent) : QFrame(parent)
     layout_->setSpacing(0);
 }
 
+QFrame* make_group_divider(QWidget* parent)
+{
+    auto* divider = new QFrame(parent);
+    divider->setProperty("groupDivider", true);
+    divider->setFixedHeight(1);
+    return divider;
+}
+
 void Group::add_row(QWidget* row)
 {
     if (count_ > 0)
-    {
-        auto* divider = new QFrame(this);
-        divider->setProperty("groupDivider", true);
-        divider->setFixedHeight(1);
-        layout_->addWidget(divider);
-    }
+        layout_->addWidget(make_group_divider(this));
     row->setParent(this);
     layout_->addWidget(row);
     ++count_;
@@ -378,7 +381,7 @@ QWidget* Group::add_field(const QString& label, QWidget* value)
 DialogFrame::DialogFrame(QWidget* parent) : QWidget(parent)
 {
     const Theme& theme = Theme::instance();
-    const int padding = theme.metric(QStringLiteral("dialogPadding"));
+    const int padding = theme.metric(QStringLiteral("layout.dialogPadding"));
     auto* outer = new QVBoxLayout(this);
     outer->setContentsMargins(0, 0, 0, 0);
     outer->setSpacing(0);
@@ -409,14 +412,14 @@ DialogFrame::DialogFrame(QWidget* parent) : QWidget(parent)
     scroll_->viewport()->setAutoFillBackground(false);
     body_ = new QVBoxLayout(content);
     body_->setContentsMargins(padding, 0, padding, theme.space(1));
-    body_->setSpacing(theme.metric(QStringLiteral("groupGap")));
+    body_->setSpacing(theme.metric(QStringLiteral("layout.groupGap")));
     scroll_->setWidget(content);
     outer->addWidget(scroll_, 1);
 
     auto* foot = new QFrame(this);
     foot->setObjectName(QStringLiteral("dialogFooter"));
     footer_ = new QHBoxLayout(foot);
-    footer_->setContentsMargins(padding, theme.space(3), padding, padding - 4);
+    footer_->setContentsMargins(padding, theme.space(2), padding, padding - 4);
     footer_->setSpacing(theme.space(1));
     footer_->addStretch(1);
     outer->addWidget(foot);

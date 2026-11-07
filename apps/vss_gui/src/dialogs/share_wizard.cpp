@@ -185,7 +185,7 @@ void ShareWizard::build()
     setMinimumSize(640, 0);
 
     auto* outer = new QVBoxLayout(this);
-    outer->setContentsMargins(20, 20, 20, 0);
+    outer->setContentsMargins(24, 24, 24, 0);
     outer->setSpacing(12);
 
     auto* header = new QVBoxLayout();

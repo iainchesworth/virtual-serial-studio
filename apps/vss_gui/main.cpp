@@ -7,6 +7,9 @@
 #include "backend/engine_studio_backend.hpp"
 #include "language/language_choice.hpp"
 #include "shell/shell_window.hpp"
+#include "shell/single_instance.hpp"
+#include "shell/studio_tray.hpp"
+#include "support/running_setup.hpp"
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
 
@@ -80,7 +83,37 @@ int main(int argc, char* argv[])
         QStringLiteral("Render the main window to <file> and exit (headless)."),
         QStringLiteral("file"));
     parser.addOption(screenshot_option);
+    const QCommandLineOption background_option(
+        QStringLiteral("background"),
+        QStringLiteral("Start in the notification area and start the ports "
+                       "that were running before. Quits at once when there "
+                       "are none. This is what start at sign-in runs."));
+    parser.addOption(background_option);
+    // A restart as administrator starts the new Studio before the old one has
+    // quit; this waits for the old one instead of handing it the window.
+    QCommandLineOption replace_option(QStringLiteral("replace"),
+                                      QStringLiteral("Wait for a running "
+                                                     "Studio to quit, then "
+                                                     "take its place."));
+    replace_option.setFlags(QCommandLineOption::HiddenFromHelp);
+    parser.addOption(replace_option);
     parser.process(application);
+
+    const bool headless = parser.isSet(selftest_option) ||
+                          parser.isSet(screenshot_option) ||
+                          qEnvironmentVariableIsSet("VSS_WIDGET_GALLERY");
+    const bool hidden_start = parser.isSet(background_option);
+
+    // One Studio per user.  A second one shows the first and leaves, so the
+    // Start menu brings back a Studio that runs in the notification area.
+    vss::gui::SingleInstance instance(vss::gui::SingleInstance::default_name());
+    if (!headless)
+    {
+        const bool replace = parser.isSet(replace_option);
+        if (!replace && instance.activate_running())
+            return 0;
+        static_cast<void>(instance.listen(replace ? 15000 : 0));
+    }
 
     if (qEnvironmentVariableIsSet("VSS_WIDGET_GALLERY"))
     {
@@ -180,7 +213,24 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        window.show();
+        const bool use_tray = vss::gui::StudioTray::available();
+        window.enable_background(vss::gui::support::running_setup_path(),
+                                 use_tray);
+        QObject::connect(&instance,
+                         &vss::gui::SingleInstance::activation_requested,
+                         &window, &vss::gui::ShellWindow::bring_to_front);
+        if (hidden_start)
+        {
+            // Start at sign-in with nothing to run has nothing to do.
+            if (backend.ports().empty())
+                return 0;
+            if (!use_tray)
+                window.showMinimized();
+        }
+        else
+        {
+            window.show();
+        }
         return application.exec();
     }
     catch (const std::exception& error)

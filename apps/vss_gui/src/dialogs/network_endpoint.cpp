@@ -16,7 +16,6 @@
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
 #include "widgets/controls.hpp"
-#include "widgets/dialogs.hpp"
 #include "widgets/notes.hpp"
 
 #include <QComboBox>
@@ -126,7 +125,7 @@ void NetworkEndpointDialog::build()
     setMinimumWidth(640);
 
     auto* outer = new QVBoxLayout(this);
-    outer->setContentsMargins(20, 20, 20, 0);
+    outer->setContentsMargins(24, 24, 24, 0);
     outer->setSpacing(12);
 
     auto* header = new QVBoxLayout();
@@ -265,7 +264,7 @@ void NetworkEndpointDialog::build()
     firewall_note_->hide();
     layout->addWidget(firewall_note_);
 
-    firewall_button_ = make_dialog_button(
+    firewall_button_ = make_dialog_action_button(
         tr("Check Windows Firewall for this port"), "quiet", body);
     firewall_button_->setObjectName(QStringLiteral("networkFirewall"));
     firewall_button_->setAccessibleName(
@@ -354,7 +353,8 @@ void NetworkEndpointDialog::build()
 
     QHBoxLayout* footer_layout = nullptr;
     QFrame* footer = make_dialog_footer(this, footer_layout);
-    test_ = make_dialog_action_button(tr("Test from this PC first"), "quiet", footer);
+    test_ = make_dialog_action_button(tr("Test from this PC first"), "quiet",
+                                      footer);
     footer_layout->insertWidget(0, test_);
     auto* cancel = make_dialog_action_button(tr("Cancel"), nullptr, footer);
     connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
@@ -627,9 +627,10 @@ void NetworkEndpointDialog::show_firewall_dialog()
     const auto fact = support::firewall_fact(facts);
     if (!fact)
         return;
-    support::FirewallDialog dialog(
-        *fact, backend_.caps().firewall_rule && support::firewall_step_available(),
-        this);
+    support::FirewallDialog dialog(*fact,
+                                   backend_.caps().firewall_rule &&
+                                       support::firewall_step_available(),
+                                   this);
     dialog.exec();
 }
 

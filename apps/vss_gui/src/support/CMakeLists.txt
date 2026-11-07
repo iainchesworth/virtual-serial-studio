@@ -29,6 +29,8 @@ add_library(vss_gui_support STATIC
   permission_rows.hpp
   redact.cpp
   redact.hpp
+  running_setup.cpp
+  running_setup.hpp
   settings.cpp
   settings.hpp
   settings_dialog.cpp
@@ -38,6 +40,8 @@ add_library(vss_gui_support STATIC
   setup_facts.cpp
   setup_facts.hpp
   shortcuts_dialog.cpp
+  sign_in_start.cpp
+  sign_in_start.hpp
   shortcuts_dialog.hpp
   troubleshoot.cpp
   troubleshoot.hpp
@@ -45,6 +49,10 @@ add_library(vss_gui_support STATIC
   troubleshoot_dialog.hpp
   zip_writer.cpp
   zip_writer.hpp)
+
+# The sign-in entry, one file per platform.
+icl_platform_sources(vss_gui_support
+  DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform)
 
 target_include_directories(vss_gui_support PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 

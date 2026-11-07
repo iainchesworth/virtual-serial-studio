@@ -23,7 +23,7 @@ QWidget:disabled { color: %disabledText%; }
 QToolTip { background: %toastBg%; color: %toastText%; border: 0; border-radius: 6px; padding: 6px 10px; }
 QLabel[muted="true"] { color: %ink3%; }
 QLabel[secondary="true"] { color: %ink2%; }
-QLabel[group="true"] { color: %ink3%; }
+QLabel[groupLabel="true"] { color: %ink3%; }
 QLabel[link="true"] { color: %accentText%; }
 
 /* menu, header and toolbar sit on the ground */
@@ -150,6 +150,7 @@ QFrame[tile="accent"] { background: %accentSoft%; border: 0; border-radius: %rad
 QFrame[tile="violet"] { background: %violetSoft%; border: 0; border-radius: %radius.tile%; }
 QFrame[tile="ok"] { background: %okSoft%; border: 0; border-radius: %radius.tile%; }
 QFrame[tile="neutral"] { background: %fill%; border: 0; border-radius: %radius.tile%; }
+QFrame[tile="raised"] { background: %panel%; border: 0; border-radius: %radius.tile%; }
 QFrame[card="true"] { background: %panel%; border: 1px solid %line%; border-radius: %radius.card%; }
 QFrame[pick="true"] { background: %panel%; border: 1px solid %line2%; border-radius: %radius.card%; }
 QFrame[pick="true"]:hover { border-color: %control%; }

@@ -22,9 +22,13 @@ class QVBoxLayout;
 namespace vss::gui
 {
 
-/// The sunken footer bar shared by every dialog.  `layout` receives the
-/// right-aligned stretch the caller appends its buttons to.
+/// The footer shared by every dialog: no band and no divider, inset by the
+/// dialog padding.  `layout` receives the right-aligned stretch the caller
+/// appends its buttons to.
 QFrame* make_dialog_footer(QDialog* dialog, QHBoxLayout*& layout);
+
+/// Gives a dialog footer row the dialog padding and button spacing.
+void set_dialog_footer_margins(QHBoxLayout* layout);
 
 /// A button with the shared cursor and an optional token role
 /// ("primary", "quiet" or "danger").

@@ -8,6 +8,7 @@
 
 #include "widgets/chips.hpp"
 #include "widgets/common.hpp"
+#include "widgets/dialogs.hpp"
 
 #include <QCoreApplication>
 #include <QFrame>
@@ -47,19 +48,6 @@ void apply_ink2(QWidget* widget)
     widget->setPalette(palette);
 }
 
-void apply_footer_style(QFrame* footer)
-{
-    footer->setStyleSheet(
-        QStringLiteral(
-            "QFrame#dialogFooter { background: %1; border-top: 1px solid %2; }")
-            .arg(Theme::instance()
-                     .colour(colour_role::sunken)
-                     .name(QColor::HexRgb),
-                 Theme::instance()
-                     .colour(colour_role::line)
-                     .name(QColor::HexRgb)));
-}
-
 } // namespace
 
 void set_ink2(QWidget* widget)
@@ -85,12 +73,10 @@ QWidget* make_header(const QString& title, const QString& subtitle,
     row->setSpacing(10);
     auto* title_label = new QLabel(title, header);
     title_label->setFont(Theme::instance().font(text_style::title));
-    title_label->setWordWrap(true);
-    // A word-wrapped label reports a narrow size hint until it has a width,
-    // which made long titles break after the first word.  Its full width is
-    // the minimum the title needs; the dialog can grow instead.
-    title_label->setMinimumWidth(
-        title_label->fontMetrics().horizontalAdvance(title));
+    // A word-wrapped title reported a narrow size hint and broke after the
+    // first word ("Inspector:" over "console").  Titles are one line; the
+    // dialog grows instead.
+    title_label->setWordWrap(false);
     row->addWidget(title_label, 0, Qt::AlignVCenter);
     for (QWidget* chip : chips)
     {
@@ -133,12 +119,12 @@ QFrame* make_footer(QWidget* parent, QHBoxLayout*& layout)
     footer->setObjectName(QStringLiteral("dialogFooter"));
     footer->setAttribute(Qt::WA_StyledBackground);
     footer->setFrameShape(QFrame::NoFrame);
-    apply_footer_style(footer);
-    QObject::connect(&Theme::instance(), &Theme::theme_changed, footer,
-                     [footer] { apply_footer_style(footer); });
     layout = new QHBoxLayout(footer);
-    layout->setContentsMargins(20, 10, 20, 10);
-    layout->setSpacing(8);
+    set_dialog_footer_margins(layout);
+    // These dialogs already inset their whole layout by the dialog padding,
+    // footer included, so the footer adds none of its own at the sides.
+    const QMargins margins = layout->contentsMargins();
+    layout->setContentsMargins(0, margins.top(), 0, margins.bottom());
     layout->addStretch(1);
     return footer;
 }

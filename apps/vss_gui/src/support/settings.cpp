@@ -21,6 +21,7 @@ constexpr const char* kDensity = "ui/density";
 constexpr const char* kRefreshMs = "ui/refreshMs";
 constexpr const char* kDefaultBaud = "ui/defaultBaud";
 constexpr const char* kAskOnDiscard = "ui/askOnDiscard";
+constexpr const char* kCloseAction = "ui/closeAction";
 
 } // namespace
 
@@ -47,6 +48,9 @@ ui_settings load_ui_settings()
         store.value(QLatin1String(kDefaultBaud), kDefaultBaudRate).toInt();
     settings.ask_on_discard =
         store.value(QLatin1String(kAskOnDiscard), true).toBool();
+    settings.keep_running_on_close =
+        store.value(QLatin1String(kCloseAction), QStringLiteral("background"))
+            .toString() != QLatin1String("quit");
     return settings;
 }
 
@@ -61,6 +65,9 @@ void save_ui_settings(const ui_settings& settings)
         std::clamp(settings.refresh_ms, kRefreshMinMs, kRefreshMaxMs));
     store.setValue(QLatin1String(kDefaultBaud), settings.default_baud);
     store.setValue(QLatin1String(kAskOnDiscard), settings.ask_on_discard);
+    store.setValue(QLatin1String(kCloseAction),
+                   settings.keep_running_on_close ? QStringLiteral("background")
+                                                  : QStringLiteral("quit"));
 }
 
 QString theme_key(theme_mode mode)
