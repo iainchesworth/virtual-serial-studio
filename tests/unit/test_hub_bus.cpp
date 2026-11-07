@@ -419,6 +419,7 @@ TEST_CASE("bus: concurrent publishers each reach everyone else intact")
     REQUIRE(fixture.hub->bus(fixture.ids(0, members)));
 
     std::vector<std::thread> threads;
+    threads.reserve(members);
     for (std::size_t index = 0; index < members; ++index)
     {
         threads.emplace_back(
