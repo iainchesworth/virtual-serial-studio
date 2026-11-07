@@ -509,21 +509,21 @@ struct Pilot::state
         handled.push_back({QPointer<QWidget>(modal), {}, false});
         handled.back().age.start();
 
-        for (auto& expectation : expectations)
+        for (auto& pending : expectations)
         {
-            if (expectation.used || !expectation.match(modal))
+            if (pending.used || !pending.match(modal))
                 continue;
-            expectation.used = true;
+            pending.used = true;
             ++ran;
             if (nested != nullptr)
                 nested->start();
             try
             {
-                expectation.step(modal);
+                pending.step(modal);
             }
             catch (const std::exception& error)
             {
-                errors.push_back(expectation.what + ": " + error.what());
+                errors.push_back(pending.what + ": " + error.what());
                 if (modal != nullptr)
                     modal->close();
             }
