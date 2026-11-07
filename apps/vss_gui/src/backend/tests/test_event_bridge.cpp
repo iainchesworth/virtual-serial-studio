@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QThread>
 
+#include <algorithm>
 #include <atomic>
 #include <cstdint>
 #include <memory>
@@ -315,13 +316,14 @@ TEST_CASE("engine backend: the line wiring of a link can be read and changed")
     REQUIRE(!backend.link_wiring(vss::link_id{9999}).has_value());
 }
 
-TEST_CASE("engine backend: a send from a fixture reaches the far end of its link")
+TEST_CASE(
+    "engine backend: a send from a fixture reaches the far end of its link")
 {
     vss::studio studio;
     vss::gui::EngineStudioBackend backend(studio);
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     const auto peer = backend.create_virtual_port(
         QStringLiteral("peer"), vss::virtual_port_kind::loopback, true);
     REQUIRE(fixture.has_value());
@@ -346,9 +348,9 @@ TEST_CASE("engine backend: a fixture can echo, and a plain port cannot")
     vss::studio studio;
     vss::gui::EngineStudioBackend backend(studio);
     REQUIRE(backend.caps().fixture_echo);
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     const auto plain = backend.create_virtual_port(
         QStringLiteral("plain"), vss::virtual_port_kind::loopback, true);
     REQUIRE(fixture.has_value());
@@ -370,4 +372,90 @@ TEST_CASE("engine backend: a fixture can echo, and a plain port cannot")
 
     REQUIRE(backend.set_echo(*fixture, false).has_value());
     REQUIRE(!backend.echo(*fixture));
+}
+
+TEST_CASE("event bridge: a flood is delivered in slices, none of them larger "
+          "than the limit")
+{
+    vss::hub hub{make_hub_options()};
+    hub.start();
+
+    vss::gui::EventBridge::options options;
+    options.interval_ms = 20;
+    options.max_events = 1000;
+    options.max_batch = 25;
+
+    {
+        vss::gui::EventBridge bridge(hub, options);
+        int batches = 0;
+        std::size_t largest = 0;
+        std::size_t total = 0;
+        QObject::connect(
+            &bridge, &vss::gui::EventBridge::batch_ready, &bridge,
+            [&](const vss::gui::event_batch& events)
+            {
+                ++batches;
+                largest =
+                    std::max(largest, static_cast<std::size_t>(events.size()));
+                total += static_cast<std::size_t>(events.size());
+            });
+
+        bridge.start();
+        for (int index = 0; index < 200; ++index)
+            hub.publish(make_event(index));
+        REQUIRE(wait_until([&bridge] { return bridge.delivered() >= 200; }));
+
+        // Every event arrives, but the timer path never hands the window more
+        // than a slice at a time.
+        REQUIRE(wait_until([&] { return total == 200; }));
+        REQUIRE(largest <= std::size_t{25});
+        REQUIRE(batches >= 8);
+        REQUIRE_EQ(bridge.pending(), std::size_t{0});
+    }
+
+    hub.stop();
+    hub.join();
+}
+
+TEST_CASE("engine backend: traffic raises stats_changed and leaves "
+          "ports_changed alone")
+{
+    vss::studio studio;
+    vss::gui::EngineStudioBackend backend(studio);
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
+    const auto peer = backend.create_virtual_port(
+        QStringLiteral("peer"), vss::virtual_port_kind::loopback, true);
+    REQUIRE(fixture.has_value());
+    REQUIRE(peer.has_value());
+    REQUIRE(backend.connect_ports(*fixture, *peer, vss::link_options{})
+                .has_value());
+    // Let the setup settle, so the opening of the ports is not counted.
+    spin(100);
+    backend.refresh();
+
+    int ports_changed = 0;
+    int links_changed = 0;
+    int stats_changed = 0;
+    QObject::connect(&backend, &vss::gui::StudioBackend::ports_changed,
+                     [&ports_changed] { ++ports_changed; });
+    QObject::connect(&backend, &vss::gui::StudioBackend::links_changed,
+                     [&links_changed] { ++links_changed; });
+    QObject::connect(&backend, &vss::gui::StudioBackend::stats_changed,
+                     [&stats_changed] { ++stats_changed; });
+
+    REQUIRE(backend.send(*fixture, QByteArrayLiteral("hello")).has_value());
+    REQUIRE(wait_until(
+        [&]
+        {
+            backend.refresh();
+            return backend.port(*peer)->stats.bytes_tx >= 5;
+        }));
+
+    // The numbers moved, and only the numbers: nothing is told that a port or
+    // a link changed, so no pane rebuilds itself for a byte count.
+    REQUIRE(stats_changed > 0);
+    REQUIRE_EQ(ports_changed, 0);
+    REQUIRE_EQ(links_changed, 0);
 }

@@ -72,8 +72,9 @@
 #include <vss/config/document.hpp>
 #include <vss/studio/studio.hpp>
 
+#include <vss/core/profile.hpp>
+
 #include <QAction>
-#include <QSet>
 #include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
@@ -94,6 +95,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QResizeEvent>
+#include <QSet>
 #include <QSettings>
 #include <QSignalBlocker>
 #include <QStackedWidget>
@@ -824,7 +826,6 @@ void ShellWindow::build_central()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(Theme::instance().space(1));
 
-
     auto* card = new QFrame(workspace_);
 
     card->setObjectName(QStringLiteral("topologyPane"));
@@ -1284,18 +1285,24 @@ void ShellWindow::connect_backend()
             &ShellWindow::on_backend_changed);
     connect(&backend_, &StudioBackend::links_changed, this,
             &ShellWindow::on_backend_changed);
+    connect(&backend_, &StudioBackend::stats_changed, this,
+            [this]
+            {
+                VSS_PROFILE_ZONE("gui.shell.on_stats_changed");
+                status_->refresh();
+            });
     connect(&backend_, &StudioBackend::lines_changed, this,
             [this](vss::endpoint_id) { status_->refresh(); });
     connect(&backend_, &StudioBackend::batch_ready, this,
             [this](const event_batch& events)
             {
+                VSS_PROFILE_ZONE("gui.shell.batch_support_log");
                 support_log_.append(events);
-                status_->refresh();
-                backend_.refresh();
             });
     connect(&backend_, &StudioBackend::batch_ready, this,
             [this](const event_batch& events)
             {
+                VSS_PROFILE_ZONE("gui.shell.batch_event_log");
                 if (event_log_ != nullptr)
                     event_log_->append(events);
             });
@@ -1303,6 +1310,7 @@ void ShellWindow::connect_backend()
 
 void ShellWindow::on_backend_changed()
 {
+    VSS_PROFILE_ZONE("gui.shell.on_backend_changed");
     if (canvas_ != nullptr && canvas_->in_batch())
         return;
     // A port that is added or removed has an identity the history cannot
@@ -1318,20 +1326,45 @@ void ShellWindow::on_backend_changed()
     }
     if (!backend_.ports().empty())
         launcher_forced_ = false;
-    const QString signature = document_signature();
+    QString signature;
+    {
+        VSS_PROFILE_ZONE("gui.shell.document_signature");
+        signature = document_signature();
+    }
     if (!loading_ && signature != last_signature_)
         set_dirty(true);
     last_signature_ = signature;
-    status_->refresh();
-    update_content();
-    update_owner_bar();
+    {
+        VSS_PROFILE_ZONE("gui.shell.status_refresh");
+        status_->refresh();
+    }
+    {
+        VSS_PROFILE_ZONE("gui.shell.update_content");
+        update_content();
+    }
+    {
+        VSS_PROFILE_ZONE("gui.shell.update_owner_bar");
+        update_owner_bar();
+    }
     if (json_editor_ != nullptr)
+    {
+        VSS_PROFILE_ZONE("gui.shell.json_reload");
         json_editor_->reload_if_clean();
+    }
     validate_selection();
-    update_dock_titles();
-    update_actions();
+    {
+        VSS_PROFILE_ZONE("gui.shell.update_dock_titles");
+        update_dock_titles();
+    }
+    {
+        VSS_PROFILE_ZONE("gui.shell.update_actions");
+        update_actions();
+    }
     update_resume_banner();
-    update_tray();
+    {
+        VSS_PROFILE_ZONE("gui.shell.update_tray");
+        update_tray();
+    }
     schedule_running_save();
 }
 
@@ -1837,6 +1870,7 @@ void ShellWindow::show_send()
 
 port_menu_state ShellWindow::port_menu_state_for(vss::endpoint_id id) const
 {
+    VSS_PROFILE_ZONE("gui.shell.port_menu_state");
     port_menu_state state;
     state.advanced = level_.advanced();
     state.repeating = send_panel_ != nullptr && send_panel_->repeating() &&
@@ -2084,10 +2118,14 @@ void ShellWindow::later_package(const QString& what, const QString& package)
 
 void ShellWindow::refresh_topology()
 {
+    VSS_PROFILE_ZONE("gui.shell.refresh_topology");
     if (topology_ != nullptr)
         topology_->set_topology(backend_.ports(), backend_.links());
     if (links_ != nullptr)
+    {
+        VSS_PROFILE_ZONE("gui.shell.links_list");
         links_->set_links(backend_.links(), backend_.ports());
+    }
 }
 
 void ShellWindow::sync_selection()
@@ -2406,11 +2444,10 @@ void ShellWindow::remove_all_setups()
     }
     selection_.clear();
     backend_.refresh();
-    status_->showMessage(failed == 0
-                             ? tr("Removed all setups.")
-                             : tr("%n port(s) could not be removed.", nullptr,
-                                  failed),
-                         5000);
+    status_->showMessage(
+        failed == 0 ? tr("Removed all setups.")
+                    : tr("%n port(s) could not be removed.", nullptr, failed),
+        5000);
 }
 
 vss::link_id ShellWindow::share_link_of_selection() const
@@ -3514,8 +3551,7 @@ bool ShellWindow::run_selftest()
         backend_.refresh();
         QApplication::processEvents();
         if (!level_.advanced() && central_->currentWidget() != simple_page_)
-            fail(QStringLiteral(
-                "the setups page did not stay after removal"));
+            fail(QStringLiteral("the setups page did not stay after removal"));
         if (level_.advanced() && central_->currentWidget() != workspace_)
             fail(QStringLiteral("the empty canvas did not stay after removal"));
     }

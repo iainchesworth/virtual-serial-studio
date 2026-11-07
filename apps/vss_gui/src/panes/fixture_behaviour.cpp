@@ -6,6 +6,8 @@
 
 #include "panes/fixture_behaviour.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QRandomGenerator>
 #include <QTimer>
 
@@ -173,8 +175,8 @@ QByteArray FixtureBehaviours::next_payload(vss::endpoint_id id)
     case generator_kind::random_bytes:
         for (int index = 0; index < config.chunk; ++index)
         {
-            bytes.append(static_cast<char>(
-                QRandomGenerator::global()->bounded(256)));
+            bytes.append(
+                static_cast<char>(QRandomGenerator::global()->bounded(256)));
         }
         break;
     case generator_kind::text_line:
@@ -187,6 +189,7 @@ QByteArray FixtureBehaviours::next_payload(vss::endpoint_id id)
 
 void FixtureBehaviours::tick(vss::endpoint_id id)
 {
+    VSS_PROFILE_ZONE("gui.fixture.tick");
     const auto found = states_.constFind(id);
     if (found == states_.constEnd() || !found->running)
         return;

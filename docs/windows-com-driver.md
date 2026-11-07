@@ -267,6 +267,66 @@ the first byte, then for a gap". The driver has to implement all of them.
 The certificate is the long-lead item: procurement and identity validation can
 take weeks, and Windows 10+ will not load an unsigned kernel driver.
 
+### Signing the studio's Windows programs
+
+The programs people start are signed in CI by the same mechanism as the driver
+package: the shared `sign-windows` action of `icl-common-infra`, behind the
+`SIGN_WINDOWS` repository variable. Today that action signs with a leaf
+certificate from the owner's personal certificate authority (`test`); its
+`production` mode, for a certificate that Windows trusts everywhere (an OV or EV
+certificate, or a cloud signing service), is reserved and fails until the owner
+chooses one. The repository wraps it in `.github/actions/sign-windows-binaries`,
+which signs, then runs `tools/ci/verify-windows-signatures.ps1` and fails the leg
+when a file is unsigned, altered after signing or has no timestamp.
+
+| Program | Where it is signed | When |
+|---|---|---|
+| `vss_gui.exe`, `vss_cli.exe`, any `vss_*.dll` | `release.yml`, job `package`, before the zip is made | A tag, a manual run and the Monday run, never a pull request |
+| `vsscom_um.dll`, `vsscom_um.cat`, `vsscom_helper.exe` | `ci.yml`, job `driver` | A pull request from this repository, never one from a fork |
+
+The Qt libraries in the package are the Qt Company's and ship as built. There is
+no installer; a zip cannot carry an Authenticode signature.
+
+**What the user sees.** The studio and the helper do not ask for administrator
+rights when they start: every program has a manifest with `asInvoker`, and
+`tests/unit/platform/windows/test_manifest_windows.cpp` and the verify script both
+refuse `requireAdministrator` and `highestAvailable`. The helper is a service
+that runs as SYSTEM, so it needs no prompt at all. A prompt appears only when
+the user chooses *Restart as administrator* (it starts `vss_gui.exe`) or *Allow
+in Windows Firewall* (it starts `vss_cli.exe`), and the window explains why first
+(`docs/gui-design/docs/07-copy-deck.md`). The prompt names the program and the
+publisher of its signature. **Verified publisher** appears only on a machine
+that trusts the certificate chain. A test-signed build shows **Unknown
+publisher** everywhere except where the owner's CA is installed
+(`docs/test-signing.md` in `icl-common-infra`). A name such as "Iain Chesworth
+Labs" in the prompt needs the `production` mode.
+
+**What the owner creates** (an agent does not): the organisation secrets
+`WIN_TESTSIGN_PFX_BASE64` and `WIN_TESTSIGN_PFX_PASSWORD`, and the repository
+variable `SIGN_WINDOWS=test`. Until they exist the signing step logs a warning,
+writes a note in the job summary and leaves the files unsigned (named
+`-unsigned`); the leg still passes.
+
+**Trying it on your own machine** with a throwaway self-signed certificate, from
+PowerShell with the Windows SDK installed and a built `vss_gui.exe`:
+
+```powershell
+$cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=Studio local test' `
+  -CertStoreLocation Cert:\CurrentUser\My -NotAfter (Get-Date).AddDays(7)
+Copy-Item build\windows-msvc-debug-gui\bin\vss_gui.exe $env:TEMP\vss_gui.exe
+Set-AuthenticodeSignature $env:TEMP\vss_gui.exe -Certificate $cert -HashAlgorithm SHA256 `
+  -TimestampServer http://timestamp.digicert.com
+./tools/ci/verify-windows-signatures.ps1 -Mode test -Files $env:TEMP\vss_gui.exe
+```
+
+The check passes with `UnknownError` as the status, because this machine does not
+trust the certificate. Change one byte of the copy and it fails with
+`HashMismatch`. To see the prompt name the publisher, import the certificate
+into `Cert:\LocalMachine\Root` and `Cert:\LocalMachine\TrustedPublisher` from an
+elevated shell, start the signed copy with *Run as administrator*, and remove
+both entries afterwards. Never do this with the owner's keys: they exist only in
+CI.
+
 ## Effort
 
 | Phase | Scope | Estimate |

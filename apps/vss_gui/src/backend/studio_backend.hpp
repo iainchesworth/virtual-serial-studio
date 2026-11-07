@@ -24,6 +24,7 @@
 #include <QString>
 
 #include <atomic>
+#include <chrono>
 #include <optional>
 #include <vector>
 
@@ -149,6 +150,14 @@ public:
     /// opens or on a slow timer, not for every event.
     virtual std::vector<device_view> other_program_ports() const;
     virtual setup_facts facts() const = 0;
+
+    /// How long the answer of `facts()` and the platform probes behind the
+    /// setup report may be reused.  A real backend asks the operating system
+    /// (the driver, com0com, the serial devices, the firewall), which takes
+    /// tens of milliseconds, so the window must not ask for every event. Zero,
+    /// the default, means always ask; the in-memory fake keeps it so a test
+    /// sees a change at once.
+    virtual std::chrono::milliseconds probe_cache_age() const { return {}; }
     virtual std::optional<port_view> port(vss::endpoint_id id) const = 0;
     virtual std::optional<link_view> link(vss::link_id id) const = 0;
 
@@ -296,8 +305,16 @@ public:
     virtual void set_refresh_interval(int milliseconds) = 0;
 
 Q_SIGNALS:
+    /// A port was added, removed, renamed, opened or closed, or anything
+    /// about it other than its traffic counters changed.
     void ports_changed();
+    /// A link was added, removed or changed, other than its counters.
     void links_changed();
+    /// Only traffic counters changed: bytes, operations, errors, drops.  Under
+    /// load this fires with every batch of engine events, so a listener must
+    /// do no more than redraw the numbers.  A change of anything else emits
+    /// `ports_changed` or `links_changed` and the counters come with it.
+    void stats_changed();
     void lines_changed(vss::endpoint_id id);
     /// One coalesced batch of engine events, on the GUI thread.
     void batch_ready(const vss::gui::event_batch& events);

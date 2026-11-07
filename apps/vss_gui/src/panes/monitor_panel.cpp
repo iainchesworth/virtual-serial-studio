@@ -13,6 +13,8 @@
 #include "widgets/controls.hpp"
 #include "widgets/notes.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFile>
@@ -135,6 +137,9 @@ MonitorPanel::MonitorPanel(StudioBackend& backend, QWidget* parent)
                 update_drop_rows();
                 refresh_ports();
             });
+    // Drops are counted per link, and they are what the counters change for.
+    connect(&backend_, &StudioBackend::stats_changed, this,
+            [this] { update_drop_rows(); });
     refresh_ports();
     update_actions();
     update_empty();
@@ -460,6 +465,7 @@ void MonitorPanel::refresh_ports()
 
 void MonitorPanel::handle_events(const event_batch& events)
 {
+    VSS_PROFILE_ZONE("gui.monitor.handle_events");
     model_->append_events(events);
     for (const gui_event& event : events)
     {

@@ -18,6 +18,7 @@
 #include "panes/send_panel.hpp"
 #include "widgets/port_menu.hpp"
 
+#include <QAction>
 #include <QApplication>
 #include <QCheckBox>
 #include <QClipboard>
@@ -25,7 +26,6 @@
 #include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QLabel>
-#include <QAction>
 #include <QLineEdit>
 #include <QListView>
 #include <QMenu>
@@ -136,11 +136,11 @@ TEST_CASE("ports: the other side's format, clients and a speed mismatch")
     REQUIRE(!PortModel::has_format_warning(plain));
 
     // A program set its speed on a port Studio made.
-    auto program = make_port(2, QStringLiteral("program"),
-                             QStringLiteral("COM8"),
-                             vss::endpoint_kind::virtual_port);
-    program.peer_format = vss::line_format{
-        19200, 7, vss::parity_mode::even, vss::stop_bits_mode::two};
+    auto program =
+        make_port(2, QStringLiteral("program"), QStringLiteral("COM8"),
+                  vss::endpoint_kind::virtual_port);
+    program.peer_format = vss::line_format{19200, 7, vss::parity_mode::even,
+                                           vss::stop_bits_mode::two};
     REQUIRE_EQ(PortModel::status_text(program),
                QStringLiteral("Program set 19200 7E2"));
     REQUIRE(!PortModel::has_format_warning(program));
@@ -149,8 +149,8 @@ TEST_CASE("ports: the other side's format, clients and a speed mismatch")
     // repeated for it.
     auto device = make_port(3, QStringLiteral("device"), QStringLiteral("COM3"),
                             vss::endpoint_kind::physical);
-    device.peer_format = vss::line_format{
-        9600, 8, vss::parity_mode::none, vss::stop_bits_mode::one};
+    device.peer_format = vss::line_format{9600, 8, vss::parity_mode::none,
+                                          vss::stop_bits_mode::one};
     REQUIRE_EQ(PortModel::status_text(device), QString());
 
     // A listener with nobody connected still says so; one with clients counts
@@ -181,10 +181,12 @@ TEST_CASE("ports: the other side's format, clients and a speed mismatch")
     REQUIRE_EQ(row.data(vss::gui::PortModel::status_role).toString(),
                PortModel::status_text(program));
     REQUIRE(row.data(vss::gui::PortModel::format_warning_role).toBool());
-    REQUIRE(row.data(Qt::ToolTipRole).toString().contains(
-        QStringLiteral("Differs from device")));
-    REQUIRE(row.data(Qt::AccessibleTextRole).toString().contains(
-        QStringLiteral("Differs from device")));
+    REQUIRE(row.data(Qt::ToolTipRole)
+                .toString()
+                .contains(QStringLiteral("Differs from device")));
+    REQUIRE(row.data(Qt::AccessibleTextRole)
+                .toString()
+                .contains(QStringLiteral("Differs from device")));
     REQUIRE(!model.index(1, 0)
                  .data(vss::gui::PortModel::format_warning_role)
                  .toBool());
@@ -220,6 +222,73 @@ TEST_CASE("monitor: 10,000 row burst stays bounded and responsive")
     model.append_events(more);
     REQUIRE_EQ(model.total_rows(), 10'000);
     REQUIRE_EQ(model.rowCount(), 10'000);
+}
+
+TEST_CASE("monitor: new traffic is added without resetting the model")
+{
+    // A reset makes the view lay out every row again and forget its scroll
+    // position, for each batch of traffic. Rows must arrive as insertions at
+    // the end and leave as removals from the front.
+    vss::gui::MonitorModel model;
+    int resets = 0;
+    int inserted = 0;
+    int removed = 0;
+    QObject::connect(&model, &QAbstractItemModel::modelReset,
+                     [&resets] { ++resets; });
+    QObject::connect(&model, &QAbstractItemModel::rowsInserted,
+                     [&inserted](const QModelIndex&, int first, int last)
+                     { inserted += last - first + 1; });
+    QObject::connect(&model, &QAbstractItemModel::rowsRemoved,
+                     [&removed](const QModelIndex&, int first, int last)
+                     { removed += last - first + 1; });
+
+    vss::gui::event_batch first;
+    for (int index = 0; index < 5; ++index)
+    {
+        first.push_back(data_event(1, QStringLiteral("a"),
+                                   vss::data_direction::rx,
+                                   QByteArrayLiteral("x")));
+    }
+    model.append_events(first);
+    REQUIRE_EQ(model.rowCount(), 5);
+    REQUIRE_EQ(inserted, 5);
+    REQUIRE_EQ(resets, 0);
+
+    // Only one port is shown: a row of another port is kept but not listed,
+    // and nothing is inserted for it.
+    model.set_filters(1, true, true, true, {});
+    const int resets_after_filter = resets;
+    vss::gui::event_batch mixed;
+    mixed.push_back(data_event(2, QStringLiteral("b"), vss::data_direction::rx,
+                               QByteArrayLiteral("y")));
+    mixed.push_back(data_event(1, QStringLiteral("a"), vss::data_direction::tx,
+                               QByteArrayLiteral("z")));
+    model.append_events(mixed);
+    REQUIRE_EQ(model.total_rows(), 7);
+    REQUIRE_EQ(model.rowCount(), 6);
+    REQUIRE_EQ(inserted, 6);
+    REQUIRE_EQ(resets, resets_after_filter);
+    REQUIRE_EQ(model.row_at(5)->preview, QByteArrayLiteral("z"));
+
+    // Past the cap the oldest rows leave from the front, and the rows that
+    // stay keep their order.
+    model.set_filters(0, true, true, true, {});
+    vss::gui::event_batch flood;
+    for (int index = 0; index < vss::gui::MonitorModel::kMaxRows; ++index)
+    {
+        flood.push_back(data_event(1, QStringLiteral("a"),
+                                   vss::data_direction::rx,
+                                   QByteArray::number(index)));
+    }
+    const int resets_before_flood = resets;
+    model.append_events(flood);
+    REQUIRE_EQ(model.total_rows(), vss::gui::MonitorModel::kMaxRows);
+    REQUIRE_EQ(model.rowCount(), vss::gui::MonitorModel::kMaxRows);
+    REQUIRE(removed > 0);
+    REQUIRE_EQ(resets, resets_before_flood);
+    REQUIRE_EQ(model.row_at(0)->preview, QByteArrayLiteral("0"));
+    REQUIRE_EQ(model.row_at(vss::gui::MonitorModel::kMaxRows - 1)->preview,
+               QByteArray::number(vss::gui::MonitorModel::kMaxRows - 1));
 }
 
 TEST_CASE("monitor: ascii, hex, filtering, pause and drop rows")
@@ -296,8 +365,8 @@ TEST_CASE("monitor: the capture export keeps every byte and the event time")
     events.push_back(timed_event(1, QStringLiteral("master"),
                                  vss::data_direction::rx, big, base + 100ms));
     events.push_back(timed_event(2, QStringLiteral("tap"),
-                                 vss::data_direction::tx, QByteArrayLiteral("ab"),
-                                 base + 350ms));
+                                 vss::data_direction::tx,
+                                 QByteArrayLiteral("ab"), base + 350ms));
     model.append_events(events);
     model.append_drop(QStringLiteral("master"), 5);
 
@@ -359,9 +428,9 @@ TEST_CASE("monitor panel: Export capture is named and follows the rows")
     // Nothing to export yet, the same as the text export beside it.
     REQUIRE(!button->isEnabled());
 
-    panel.handle_events({data_event(1, QStringLiteral("terminal"),
-                                    vss::data_direction::rx,
-                                    QByteArrayLiteral("x"))});
+    panel.handle_events(
+        {data_event(1, QStringLiteral("terminal"), vss::data_direction::rx,
+                    QByteArrayLiteral("x"))});
     QApplication::processEvents();
     REQUIRE(button->isEnabled());
 }
@@ -469,9 +538,9 @@ TEST_CASE("ports panel: ports another program made are named, not shown")
     REQUIRE_EQ(list->model()->rowCount(), 1);
 
     // Once this studio holds that port, it is no longer another program's.
-    const auto attached = backend.attach_serial(
-        QStringLiteral("held"), QStringLiteral("COM41"),
-        vss::serial_settings{}, true);
+    const auto attached =
+        backend.attach_serial(QStringLiteral("held"), QStringLiteral("COM41"),
+                              vss::serial_settings{}, true);
     REQUIRE(attached.has_value());
     QApplication::processEvents();
     REQUIRE(panel.other_program_note()->isHidden());
@@ -528,11 +597,12 @@ TEST_CASE("inspector: waiting sentence and control line chips")
             names_port = true;
     }
     REQUIRE(names_port);
-    auto* copy_name = panel.findChild<QPushButton*>(
-        QStringLiteral("inspectorCopyName"));
+    auto* copy_name =
+        panel.findChild<QPushButton*>(QStringLiteral("inspectorCopyName"));
     REQUIRE(copy_name != nullptr);
     REQUIRE(!copy_name->isHidden());
-    REQUIRE(copy_name->accessibleName().startsWith(QStringLiteral("Copy name")));
+    REQUIRE(
+        copy_name->accessibleName().startsWith(QStringLiteral("Copy name")));
     copy_name->click();
     REQUIRE_EQ(QGuiApplication::clipboard()->text(),
                vss_test::require_value(backend.port(*id)).path);
@@ -711,9 +781,9 @@ TEST_CASE("send: the menu starts and stops a repeat on one port")
 TEST_CASE("fixture behaviours: the generator is bound to its fixture")
 {
     vss::gui::FakeStudioBackend backend;
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     const auto other = backend.create_virtual_port(
         QStringLiteral("plain"), vss::virtual_port_kind::pty, true);
     REQUIRE(fixture.has_value());
@@ -752,9 +822,9 @@ TEST_CASE("fixture behaviours: the generator is bound to its fixture")
 TEST_CASE("fixture behaviours: pattern, counter and random bytes")
 {
     vss::gui::FakeStudioBackend backend;
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     REQUIRE(fixture.has_value());
     vss::gui::FixtureBehaviours behaviours(backend);
 
@@ -776,8 +846,10 @@ TEST_CASE("fixture behaviours: pattern, counter and random bytes")
     config.kind = vss::gui::generator_kind::counter;
     config.chunk = 3;
     behaviours.set_config(*fixture, config);
-    REQUIRE_EQ(behaviours.next_payload(*fixture), QByteArray::fromHex("000102"));
-    REQUIRE_EQ(behaviours.next_payload(*fixture), QByteArray::fromHex("030405"));
+    REQUIRE_EQ(behaviours.next_payload(*fixture),
+               QByteArray::fromHex("000102"));
+    REQUIRE_EQ(behaviours.next_payload(*fixture),
+               QByteArray::fromHex("030405"));
 
     config.kind = vss::gui::generator_kind::random_bytes;
     config.chunk = 16;
@@ -788,9 +860,9 @@ TEST_CASE("fixture behaviours: pattern, counter and random bytes")
 TEST_CASE("fixture behaviours: a removed fixture loses its generator")
 {
     vss::gui::FakeStudioBackend backend;
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     REQUIRE(fixture.has_value());
     vss::gui::FixtureBehaviours behaviours(backend);
     REQUIRE(behaviours.start_generator(*fixture));
@@ -802,9 +874,9 @@ TEST_CASE("fixture behaviours: a removed fixture loses its generator")
 TEST_CASE("fixture behaviours: echo is refused where the build has none")
 {
     vss::gui::FakeStudioBackend backend;
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     REQUIRE(fixture.has_value());
     vss::gui::FixtureBehaviours behaviours(backend);
 
@@ -829,9 +901,9 @@ TEST_CASE("fixture behaviours: echo is refused where the build has none")
 TEST_CASE("fixture panel: start, stop and the degraded echo")
 {
     vss::gui::FakeStudioBackend backend;
-    const auto fixture = backend.create_mock_port(
-        QStringLiteral("modem"), vss::serial_settings{},
-        QStringLiteral("scripted"));
+    const auto fixture = backend.create_mock_port(QStringLiteral("modem"),
+                                                  vss::serial_settings{},
+                                                  QStringLiteral("scripted"));
     REQUIRE(fixture.has_value());
     vss::gui::FixtureBehaviours behaviours(backend);
     vss::gui::FixturePanel panel(behaviours);
@@ -871,8 +943,8 @@ TEST_CASE("port menu: Send, Monitor, repeat and the fixture actions")
                             QStringLiteral("Start repeat"),
                             QStringLiteral("Open in monitor")}));
     advanced.repeating = true;
-    REQUIRE(vss::gui::port_menu_labels(advanced)
-                .contains(QStringLiteral("Stop repeat")));
+    REQUIRE(vss::gui::port_menu_labels(advanced).contains(
+        QStringLiteral("Stop repeat")));
 
     vss::gui::port_menu_state fixture;
     fixture.advanced = true;
@@ -884,8 +956,8 @@ TEST_CASE("port menu: Send, Monitor, repeat and the fixture actions")
                             QStringLiteral("Start generator"),
                             QStringLiteral("Echo received bytes")}));
     fixture.generating = true;
-    REQUIRE(vss::gui::port_menu_labels(fixture)
-                .contains(QStringLiteral("Stop generator")));
+    REQUIRE(vss::gui::port_menu_labels(fixture).contains(
+        QStringLiteral("Stop generator")));
 
     // Echo is present but disabled when the build cannot do it.
     QMenu menu;

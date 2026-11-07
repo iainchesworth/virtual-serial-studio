@@ -40,11 +40,16 @@ public:
 
     /// The one-line rendering used by text() and by tests.
     static QString format(const gui_event& event);
+    /// Same, with the time already rendered, so a batch of thousands of
+    /// events reads the clock once.
+    static QString format(const gui_event& event, const QString& stamp);
 
     /// Entries retained before the oldest is dropped.
     static constexpr int kMaxLines = 5000;
 
 private:
+    void append(const gui_event& event, const QString& stamp);
+
     QStringList lines_;
 };
 

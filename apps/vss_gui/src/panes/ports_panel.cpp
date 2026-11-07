@@ -38,6 +38,8 @@ PortsPanel::PortsPanel(StudioBackend& backend, SelectionService& selection,
             [this] { refresh(); });
     connect(&backend_, &StudioBackend::links_changed, this,
             [this] { refresh(); });
+    connect(&backend_, &StudioBackend::stats_changed, this,
+            [this] { refresh(); });
     connect(&selection_, &SelectionService::port_changed, this,
             [this](vss::endpoint_id id) { select_port(id); });
     refresh();
@@ -299,7 +301,8 @@ void PortsPanel::open_menu(QAbstractItemView* view, const QPoint& position)
         index = view->currentIndex();
         if (!index.isValid())
             return;
-        global = view->viewport()->mapToGlobal(view->visualRect(index).center());
+        global =
+            view->viewport()->mapToGlobal(view->visualRect(index).center());
     }
     const vss::endpoint_id id = model_->port_id(index.row());
     selection_.select_port(id);
@@ -316,7 +319,8 @@ void PortsPanel::open_menu(QAbstractItemView* view, const QPoint& position)
     const auto port = model_->port_at(index.row());
     if (port && !port->path.isEmpty())
     {
-        menu->addAction(tr("Copy path"), this, [this] { copy_selected_path(); });
+        menu->addAction(tr("Copy path"), this,
+                        [this] { copy_selected_path(); });
     }
     menu->popup(global);
 }

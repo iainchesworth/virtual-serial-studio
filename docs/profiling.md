@@ -33,6 +33,36 @@ That is what makes "attach when something looks wrong" work.
 | `endpoint.write` | `endpoint::on_write` | write queue progress |
 | `config.to_json` / `config.from_json` | the JSON document | topology round-trips |
 | `perf.*` | `perf/perf_main.cpp` | the benchmark phases themselves |
+| `gui.bridge.*` | `EventBridge` | draining the engine's events into slices for the window |
+| `gui.backend.*` | `EngineStudioBackend` | the look at the engine (`rebuild`), and the time spent in each signal it raises |
+| `gui.shell.*`, `gui.status.refresh`, `gui.setup.*` | the main window, the status bar, the setup report | what the window does for a change of ports or a batch of events, and the operating-system probes behind the readiness chip |
+| `gui.topology.*`, `gui.monitor.*`, `gui.fixture.tick` | the canvas, the Monitor, the byte generator | layout, link routing, context menus, the traffic list |
+| `gui.stall_ms`, `gui.busy_ms` (plots) | `support::StallProbe`, started in `main` when profiling is on | how late the window's event loop ran and how much CPU the window used between two ticks |
+
+## Finding a frozen window
+
+The GUI thread must never be called from, or wait for, the engine's threads, so
+a "Not responding" window is always work on that thread: a slot that does too
+much, or too many small ones. To find it:
+
+1. Build and run `vss_gui` with Tracy on (`windows-msvc-debug-gui` with the
+   vcpkg toolchain has it on by default) and attach a profiler or
+   `tracy-capture`.
+2. Look at the `gui.stall_ms` plot for the spikes. The zones under a spike are
+   the cause; `gui.bridge.emit` contains everything that runs for a batch of
+   events and `gui.backend.emit_ports_changed` / `emit_links_changed` /
+   `emit_stats_changed` contain the pane refreshes.
+3. Reproduce it in a test where you can. `apps/vss_gui/src/shell/tests/
+   test_responsiveness.cpp` drives the real engine and the real window with a
+   busy loopback and fixture and fails if the GUI thread uses more than the
+   budget of CPU time between two ticks of the probe. Set
+   `VSS_GUI_STALL_BUDGET_MS=100` to hold it to the strict figure on a quiet
+   computer; the default leaves room for a loaded build machine.
+
+A profiling build is for developers: the Tracy client listens for a profiler on
+this computer's network port (8086) from the moment the program starts, and
+records nothing until one connects. Release builds do not contain it unless
+they are configured with `-DVSS_TRACY=ON`.
 
 `vss_perf --tracy` adds two end-to-end phases: a real socket echo through the
 hub (`tcp://127.0.0.1`, one connection) and, when `VSS_LOOPBACK_A` and

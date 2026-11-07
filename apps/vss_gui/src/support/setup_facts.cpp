@@ -8,6 +8,8 @@
 
 #include "support/permission_rows.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QDir>
@@ -238,6 +240,14 @@ void add_windows_rows(QVector<setup_row>& rows, const setup_facts& facts,
             !who.isEmpty())
         {
             administrator.sentence += QLatin1Char(' ') + who;
+            // Said before the prompt, so the prompt is not a surprise.
+            administrator.sentence +=
+                QLatin1Char(' ') +
+                QCoreApplication::translate(
+                    "SetupCheck",
+                    "The Windows prompt names the program and its publisher: "
+                    "choose Yes if they match. Studio then restarts and "
+                    "starts the same ports.");
         }
         administrator.chip =
             QCoreApplication::translate("SetupCheck", "Needed later");
@@ -502,19 +512,58 @@ setup_report build_setup_report(const setup_facts& facts,
 
 setup_report query_setup_report(const StudioBackend& backend)
 {
-    const setup_facts facts = backend.facts();
-    platform_facts platform = probe_platform_facts();
-    platform.permissions =
-        vss::permissions::probe(permission_context(backend));
+    VSS_PROFILE_ZONE("gui.setup.query_report");
+    setup_facts facts;
+    {
+        VSS_PROFILE_ZONE("gui.setup.facts");
+        facts = backend.facts();
+    }
+    platform_facts platform;
+    {
+        VSS_PROFILE_ZONE("gui.setup.platform_facts");
+        platform = probe_platform_facts();
+    }
+    {
+        VSS_PROFILE_ZONE("gui.setup.permissions");
+        platform.permissions =
+            vss::permissions::probe(permission_context(backend));
+    }
     const bool checks_available = backend.caps().setup_check;
 
     QStringList paths;
-    for (const device_view& device : backend.devices())
     {
-        if (!device.path.isEmpty())
-            paths.push_back(device.path);
+        VSS_PROFILE_ZONE("gui.setup.devices");
+        for (const device_view& device : backend.devices())
+        {
+            if (!device.path.isEmpty())
+                paths.push_back(device.path);
+        }
     }
     return build_setup_report(facts, platform, paths, checks_available);
+}
+
+const setup_report& setup_report_cache::get(const StudioBackend& backend)
+{
+    VSS_PROFILE_ZONE("gui.setup.cache_get");
+    // The firewall rows depend on the listening ports, so a change of those
+    // asks again; any other port coming or going does not.
+    QString key;
+    for (const port_view& port : backend.ports())
+    {
+        if (port.path.contains(QLatin1String("listen")))
+            key += port.path + QLatin1Char('\n');
+    }
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto age = backend.probe_cache_age();
+    if (valid_ && age.count() > 0 && key == ports_key_ && now - taken_ < age)
+        return report_;
+
+    report_ = query_setup_report(backend);
+    ports_key_ = key;
+    taken_ = now;
+    valid_ = true;
+    return report_;
 }
 
 QString com0com_project_url()

@@ -57,3 +57,10 @@ Simple mode asks about the user's things only: their device and their programs. 
 "Let me type to COM3 from this window"; seeing traffic is "Show me the data going through"; an echo is "Send everything
 straight back". Every choice has one sentence on what it does and when it helps. The program's name is optional and is a
 label only: "Program, e.g. PuTTY (optional)". Full strings: `screens/08-simple-mode.md`.
+
+## Asking for administrator rights (Windows)
+Studio starts without administrator rights and never asks for them at start-up. Two steps ask, and only after the user chose them: Restart as administrator (Setup check) and Allow in Windows Firewall. Each says why in the window, before the Windows prompt appears, and tells the user what to look for in the prompt:
+- Setup check, Administrator rights row: "Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them." then, from the account's state, "Your account is an administrator, so Windows will ask you to confirm." or "Your account is not an administrator, so Windows will ask for an administrator's password.", then "The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports."
+- Firewall dialog, above the command: "Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights."
+- Declined: "You declined the Windows permission prompt, so nothing was changed."
+The prompt names the signer of the program that asks (`vss_gui.exe` for the restart, `vss_cli.exe` for the firewall rule). A build that is not signed with a certificate the machine trusts shows "Unknown publisher", and the owner's docs (`docs/windows-com-driver.md`, Signing) say why.

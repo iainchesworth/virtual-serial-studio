@@ -2182,6 +2182,10 @@ Networks: %5</source>
             <translation>Windows תבקש הרשאת מנהל לפני הוספת הכלל.</translation>
         </message>
         <message>
+            <source>Changing the firewall needs administrator rights, so Windows will show a permission prompt. It names the program and its publisher: choose Yes if they match. Studio itself keeps running without administrator rights.</source>
+            <translation>שינוי חומת האש דורש הרשאות מנהל, ולכן Windows תציג בקשת הרשאה. היא מציינת את שם התוכנית ואת המפרסם שלה: בחרו „כן“ אם הם תואמים. Studio עצמו ממשיך לפעול ללא הרשאות מנהל.</translation>
+        </message>
+        <message>
             <location filename="../src/support/firewall_dialog.cpp" line="202" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
@@ -6422,6 +6426,10 @@ Networks: %5</source>
             <location filename="../src/support/setup_facts.cpp" line="233" />
             <source>Creating a new linked pair needs administrator rights, once per pair. Everything else runs without them.</source>
             <translation>יצירת זוג מקושר חדש דורשת הרשאות מנהל, פעם אחת לכל זוג. כל השאר פועל בלעדיהן.</translation>
+        </message>
+        <message>
+            <source>The Windows prompt names the program and its publisher: choose Yes if they match. Studio then restarts and starts the same ports.</source>
+            <translation>הודעת Windows מציגה את שם התוכנית ואת המפרסם שלה: בחרו „כן“ אם הם תואמים. לאחר מכן Studio יופעל מחדש ויפעיל את אותן יציאות.</translation>
         </message>
         <message>
             <location filename="../src/support/setup_facts.cpp" line="243" />

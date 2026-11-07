@@ -30,6 +30,28 @@ was cancelled or was skipped.
 | `docs.yml` | A pull request that changes the docs, a push to `main` | Builds this site with `mkdocs build --strict` and, from `main`, publishes it |
 | `dependabot-auto-merge.yml` | Dependabot pull requests | Turns on auto-merge for minor and patch updates of actions |
 
+## Windows signing
+
+Release packaging and the driver job sign the Windows programs with the
+`sign-windows` action of `icl-common-infra`, through the local action
+`.github/actions/sign-windows-binaries`, which also verifies the result. The
+`SIGN_WINDOWS` repository variable chooses the mode (`false`, `test`,
+`production`); the secrets `WIN_TESTSIGN_PFX_BASE64` and
+`WIN_TESTSIGN_PFX_PASSWORD` hold the test certificate.
+
+- **Never on a pull request build** of the packages (`release.yml` passes mode
+  `false` on a pull request), and never for a pull request from a fork, which has no
+  secrets.
+- **Without the secrets** the step writes a warning and a note in the job summary
+  and leaves the files unsigned; the leg passes.
+- **With them** every file is checked: a signature, an RFC 3161 timestamp and an
+  intact hash, plus a manifest that never asks for administrator rights. A
+  failure fails the leg. In `production` mode the chain must also be trusted
+  and `signtool verify /pa` must pass.
+
+`tools/ci/verify-windows-signatures.ps1` runs by hand too. How to test it with a
+self-signed certificate is in [the Windows driver notes](windows-com-driver.md#signing-the-studios-windows-programs).
+
 ## Nightly analysis
 
 These run on a schedule and on request, never as a required check, so a finding

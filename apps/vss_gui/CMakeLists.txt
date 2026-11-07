@@ -120,6 +120,9 @@ target_compile_definitions(vss_gui PRIVATE
   VSS_BUILD_TYPE="${VSS_BUILD_TYPE}"
   VSS_COMPILER="${VSS_COMPILER}"
   VSS_GUI_VERSION="${PROJECT_VERSION}"
+  # 1 when this is a profiling build (VSS_TRACY), so `main` can decide with an
+  # `if constexpr` instead of a preprocessor conditional.
+  VSS_GUI_PROFILING=$<BOOL:${VSS_TRACY}>
   # vss::endpoint has a member function called `emit`; Qt's keyword macro
   # would rewrite it to nothing inside the moc translation unit.  Using the
   # Q_* spellings everywhere keeps both worlds intact.
