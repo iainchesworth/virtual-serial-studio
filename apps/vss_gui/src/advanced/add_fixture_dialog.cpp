@@ -290,8 +290,8 @@ void AddFixtureDialog::clear_error()
 
 bool AddFixtureDialog::add_fixture()
 {
-    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.advanced.add_fixture.add");
-    VSS_PROFILE_ZONE_TEXT(profile_zone, fixture_name().toStdString());
+    VSS_PROFILE_ZONE_NAMED(kProfileZone, "gui.advanced.add_fixture.add");
+    VSS_PROFILE_ZONE_TEXT(kProfileZone, fixture_name().toStdString());
     clear_error();
     if (!backend_.caps().fixtures)
     {

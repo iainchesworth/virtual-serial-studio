@@ -224,6 +224,25 @@ jobs:
       - name: GUI self-test
         run: QT_QPA_PLATFORM=offscreen ./build/linux-release-gui/bin/vss_gui --selftest
 
+      # The UI journeys drive the real window with simulated mouse and key
+      # events, offscreen, one test at a time (RUN_SERIAL). Every journey also
+      # fails if the GUI thread is blocked for longer than its budget.
+      - name: UI journeys
+        run: ctest --preset linux-release-gui-ui
+
+      - name: UI journey timings
+        if: always()
+        run: python3 tools/ci/ui_perf_summary.py build/linux-release-gui/ui-test-perf >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the window grabs of failed journeys
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ui-test-failures
+          path: build/linux-release-gui/ui-test-failures
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Save ccache
         if: always()
         uses: ./.github/actions/save-ccache
@@ -292,6 +311,79 @@ jobs:
             --min-lines 90 --min-branches 80 \
             --markdown coverage.md
           cat coverage.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save ccache
+        if: always()
+        uses: ./.github/actions/save-ccache
+
+  coverage-gui:
+    runs-on: ubuntu-26.04
+    name: GUI coverage (ratchet toward 90% statements, 80% branches)
+    needs: plan
+    if: needs.plan.outputs.run_coverage == 'true'
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: clang
+          qt: "true"
+          ccache: linux-clang-coverage-gui
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
+      - name: Put the LLVM tools on the path
+        run: |
+          LLVM=$(python3 -c "import json; print(json.load(open('.github/toolchain-versions.json'))['llvm'])")
+          echo "/usr/lib/llvm-$LLVM/bin" >> "$GITHUB_PATH"
+
+      - name: Configure
+        run: cmake --preset linux-coverage-gui
+
+      - name: Build
+        run: cmake --build --preset linux-coverage-gui
+
+      # Every GUI test program, the UI suite among them, and the self-test run
+      # instrumented. The UI journeys' stall budget is a performance check for
+      # a release build and means nothing in an instrumented one, so it is
+      # raised to a freeze detector here.
+      - name: Run the GUI programs with profiling
+        env:
+          QT_QPA_PLATFORM: offscreen
+          VSS_UI_BUDGET_MS: "60000"
+        run: |
+          mkdir -p build/linux-coverage-gui/profiles
+          export LLVM_PROFILE_FILE="$PWD/build/linux-coverage-gui/profiles/%p-%m.profraw"
+          for program in build/linux-coverage-gui/bin/vss_gui_*_tests; do
+            "$program"
+          done
+          ./build/linux-coverage-gui/bin/vss_gui --selftest
+
+      # The standard is 90% of statements and 80% of branches. The GUI measured
+      # 83.5% and 68.9% (Windows, clang-cl, every GUI test program and the UI
+      # suite) when this job was added, so the gate stands a little below that
+      # and moves up as journeys are added; docs/testing.md lists the biggest
+      # gaps. Raise it, never lower it.
+      - name: Enforce the gates
+        run: |
+          python3 tools/coverage_report.py --build build/linux-coverage-gui \
+            --objects build/linux-coverage-gui/bin/vss_gui \
+            build/linux-coverage-gui/bin/vss_gui_*_tests \
+            --include apps/vss_gui/ --exclude tests/ --exclude moc_ \
+            --exclude mocs_compilation --exclude qrc_ \
+            --min-lines 80 --min-branches 65 \
+            --markdown coverage-gui.md
+          cat coverage-gui.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save ccache
         if: always()
@@ -785,7 +877,7 @@ jobs:
   ci-status:
     name: CI Status
     if: always()
-    needs: [policy, plan, changelog, design, build, macos, gui, coverage, performance, profiling, asan-ubsan, fuzz-regress, tsan, driver, zizmor, dependency-scan]
+    needs: [policy, plan, changelog, design, build, macos, gui, coverage, coverage-gui, performance, profiling, asan-ubsan, fuzz-regress, tsan, driver, zizmor, dependency-scan]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -801,6 +893,7 @@ jobs:
               "macos": ${{ needs.plan.outputs.run_macos == 'true' }},
               "gui": ${{ needs.plan.outputs.run_gui == 'true' }},
               "coverage": ${{ needs.plan.outputs.run_coverage == 'true' }},
+              "coverage-gui": ${{ needs.plan.outputs.run_coverage == 'true' }},
               "performance": ${{ needs.plan.outputs.run_performance == 'true' }},
               "profiling": ${{ needs.plan.outputs.run_profiling == 'true' }},
               "asan-ubsan": ${{ needs.plan.outputs.run_asan_ubsan == 'true' }},

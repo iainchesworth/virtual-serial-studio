@@ -1215,8 +1215,14 @@ void ShellWindow::build_docks()
         connect(action, &QAction::toggled, this,
                 [this, dock](bool shown)
                 {
-                    if (dock != nullptr)
-                        dock->setVisible(shown && level_.advanced());
+                    if (dock == nullptr)
+                        return;
+                    dock->setVisible(shown && level_.advanced());
+                    // The Log and the JSON editor are tabs behind the Monitor:
+                    // choosing one from the View menu has to bring it up, or
+                    // the command seems to do nothing.
+                    if (shown && level_.advanced())
+                        dock->raise();
                 });
         connect(dock, &QDockWidget::visibilityChanged, this,
                 [this, action](bool visible)

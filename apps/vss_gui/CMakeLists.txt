@@ -37,6 +37,11 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
+# With -DVSS_COVERAGE=ON the GUI, its libraries and its tests are instrumented,
+# so the UI suite can show which of the GUI it exercises (tools/coverage_report.py
+# --include apps/vss_gui/).
+vss_enable_coverage_directory()
 set(CMAKE_AUTOUIC OFF)
 
 # Build identity for the About window and for `environment.txt` in the

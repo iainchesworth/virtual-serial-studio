@@ -414,6 +414,11 @@ void TopologyView::rebuild_items()
         callbacks.pressed = [this](vss::link_id id)
         {
             setFocus(Qt::MouseFocusReason);
+            // As with a node, a plain press starts a new selection. Without
+            // this the ports an Add left selected stay selected, and Delete
+            // removes them instead of the link that was clicked.
+            if (!multi_links_.contains(id))
+                clear_multi();
             const qsizetype index = focus_index_of_link(id);
             if (index >= 0)
                 focus_at(index, true);
@@ -945,6 +950,25 @@ bool TopologyView::focusNextPrevChild(bool next)
 
     focus_at(target, true);
     return true;
+}
+
+bool TopologyView::event(QEvent* event)
+{
+    // The window's Remove shortcut (Delete) removes one port at a time and
+    // knows nothing of the canvas selection or its Undo step. On the editing
+    // canvas, claim Delete first so the canvas deletes what is selected.
+    if (event->type() == QEvent::ShortcutOverride && editing_)
+    {
+        const auto* key = static_cast<QKeyEvent*>(event);
+        if (key->key() == Qt::Key_Delete &&
+            (!selected_ports().isEmpty() || !selected_links().isEmpty() ||
+             focused_port_ != 0 || focused_link_ != 0))
+        {
+            event->accept();
+            return true;
+        }
+    }
+    return QGraphicsView::event(event);
 }
 
 void TopologyView::keyPressEvent(QKeyEvent* event)

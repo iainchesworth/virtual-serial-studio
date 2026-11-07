@@ -341,8 +341,8 @@ void DiagnosticBundleDialog::update_counts()
 
 bool DiagnosticBundleDialog::write_bundle(const QString& path, QString* error)
 {
-    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.bundle_dialog.write");
-    VSS_PROFILE_ZONE_TEXT(profile_zone, path.toStdString());
+    VSS_PROFILE_ZONE_NAMED(kProfileZone, "gui.support.bundle_dialog.write");
+    VSS_PROFILE_ZONE_TEXT(kProfileZone, path.toStdString());
     const QVector<bundle_file> files =
         build_bundle_files(backend_, log_, selection_);
     StoredZipWriter writer;

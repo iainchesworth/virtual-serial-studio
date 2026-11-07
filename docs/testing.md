@@ -61,6 +61,37 @@ branches**. The report lists every file and marks the ones outside the gated
 set; `vcom_driver.cpp` is outside it until the driver exists, because its
 detection path needs an installed kernel driver to exercise.
 
+### GUI coverage
+
+The GUI (`apps/vss_gui`) has its own coverage job, `coverage-gui` in CI. It
+builds `linux-coverage-gui`, runs every GUI test program (the unit-level
+suites, `gui_journeys`, the UI suite) and `vss_gui --selftest` instrumented,
+and reports on `apps/vss_gui` without the tests and the generated moc files.
+To do the same by hand (Windows, with LLVM installed; the `-B` keeps the large
+build off the repository drive):
+
+```bash
+cmake --preset windows-llvm-coverage-gui -B E:/vss-cov
+cmake --build E:/vss-cov
+mkdir E:/vss-cov/profiles
+LLVM_PROFILE_FILE="E:/vss-cov/profiles/%p-%m.profraw" QT_QPA_PLATFORM=offscreen   VSS_UI_BUDGET_MS=1000000 E:/vss-cov/bin/vss_gui_ui_tests     # and each other vss_gui_*_tests
+python tools/coverage_report.py --build E:/vss-cov --include apps/vss_gui/   --exclude tests/ --exclude moc_ --exclude mocs_compilation --exclude qrc_   --objects E:/vss-cov/bin/vss_gui.exe E:/vss-cov/bin/vss_gui_*_tests.exe
+```
+
+(`clang-cl` stops at `__uuidof` in `permissions_windows.cpp` under `-Werror`;
+set `CCC_OVERRIDE_OPTIONS=x-Werror` for a local measurement.) The standard is
+**90% of statements and 80% of branches**. Measured on Windows 11 with
+clang-cl, Debug, all GUI programs together: **83.5% of statements and 68.9%
+of branches**. The CI gate stands just below that (80% and 65%) so a change
+cannot lose ground, and is raised as journeys are added. The largest gaps, by
+uncovered lines: `shell_window.cpp` (the tray and background paths, drag and
+drop, window-state restore, rarely used menu paths), `topology_view.cpp`
+(wire-from-keyboard, loop note, rubber band, accessibility navigation),
+`json_validation.cpp`, `engine_studio_backend.cpp` (driver-only paths),
+`job_form.cpp` (the network and bus variants), the setup check and permission
+dialogs (they act on the machine), and `elevated_step.cpp` (it needs an
+elevated process).
+
 ## Performance
 
 ```bash
@@ -242,8 +273,101 @@ Fix a finding in the code. A suppression (`// NOLINT(check)` or
 `// cppcheck-suppress id`) names the check and carries the reason on the same
 line.
 
-## Fuzzing and the GUI journeys
+## Fuzzing
 
 The topology and endpoint URI parsers are fuzzed; see [Fuzzing](fuzzing.md).
-The `gui_journeys` test sends key presses and mouse clicks to the real
-window through QTest and runs wherever Qt and its Test module are installed.
+
+## The UI suite
+
+The UI suite drives the real main window with simulated input and nothing
+else: QTest mouse clicks, key presses, drags, context-menu events and drops are
+sent to the widgets, and the dialogs they open are answered the same way. It
+checks what a person would see (the Simple page, the Ports dock, the canvas,
+the Send and Monitor docks) and what the backend holds, and then takes the
+thing it made away again. It runs offscreen (`QT_QPA_PLATFORM=offscreen`) on
+the in-memory backend, with a separate group on the real engine, and uses the
+project's own framework (`tests/framework`); QTest supplies only the input.
+
+```bash
+ctest --preset linux-debug-gui-ui          # every UI test, one at a time
+ctest --preset linux-debug-gui -R ui_edge  # one group
+ctest --preset linux-debug-gui -LE ui-engine   # all but the real engine
+./build/linux-debug-gui/bin/vss_gui_ui_tests --list
+./build/linux-debug-gui/bin/vss_gui_ui_tests --verbose --filter="share my device"
+```
+
+`--filter` takes part of a journey's name and may be given more than once.
+Presets for the other platforms are `macos-debug-gui-ui`,
+`windows-msvc-debug-gui-ui` and the `-release-gui-ui` forms. The older
+`gui_journeys` test (five journeys) runs under the same label.
+
+### The journeys
+
+| Group (CTest, label) | Journeys | What they cover |
+|---|---|---|
+| `ui_simple`, `ui-simple` | One per job of the Simple page: give my program a serial port, connect two programs, use my device through a new port, share my device with several programs, try my device from this window, let other computers use my device, put several on one line, send several into one, let programs take turns | Each starts at the window, chooses the tile, fills the form, clicks Create, checks the ports and links in the backend, on the setup page and (through the View menu) in the Ports dock and on the canvas, and removes the setup with Remove setup and its confirmation |
+| | change a setup; close one program of a shared device; see the data on a port; check this PC is ready; start from an example, then remove everything; cancelling leaves nothing behind | Change and Apply, the Add a program and Close buttons of the setup page, the data box, the setup check, the templates dialog, Remove all, and every Cancel |
+| `ui_advanced`, `ui-advanced` | the toolbox offers every tile; add a port, a fixture and a loopback; add every bundle (pair, split, join, bus, switch, redirect, monitor, bench); add by dropping a tile and from the canvas menu | The toolbox, the Add sheet and its defaults, and the three ways to add |
+| | link and unlink ports by dragging a wire; link selected ports from the selection menu; move nodes by dragging and with the keyboard; the right-click menu of a node and of a link | Wire chooser, loop refusal, clicking a line, Split from the selection menu, drag, arrow keys, Fit, zoom, Tidy layout, Reverse, Duplicate, Delete |
+| | send once and repeat from the Send dock; the Monitor shows traffic and can pause and clear; undo and redo (menu, shortcut, after a delete) | A repeat stays on the port it started on when the selection changes; Pause, Resume, Clear |
+| | save a workspace, start over and reopen it; attach a real device; put a device on the network; share a device with the wizard; connect ports with the Connect dialog; rename, change the settings of, and wire a port | File menu with Qt's file dialog, every flow dialog |
+| | every Simple job can be built by hand and Simple knows it | The same outcome by hand on the canvas is recognised as that job in Simple mode |
+| `ui_edge`, `ui-edge`, and `ui_edge_200` | cancelling every dialog; empty and duplicate names; a failing backend; adding many items; links between every pair of port types; rapid clicking; small and large windows; text at 200 percent; both themes; removing everything while a repeat runs | `ui_edge_200` runs the group again with `QT_SCALE_FACTOR=2` |
+| `ui_actions`, `ui-actions` | every menu entry in Simple mode; every menu entry in Advanced mode; edit the setup as JSON and apply it; the JSON editor explains each kind of mistake | Walks every enabled entry of every menu, looks at each dialog it opens by trying its buttons, check boxes and lists (not those that remove, install or restart), and closes it; the JSON editor takes pasted text, validates it, formats, reverts and applies |
+| `ui_engine`, `ui-engine` | link a loopback to a fixture and keep working; bytes cross a link and are counted; a repeat keeps the window responsive; Simple mode builds and removes a pair; save, tear down and reopen a workspace | The real `vss::studio` and `EngineStudioBackend`: the hub threads, the event bridge and the GUI thread together. Only in-process ports are used, so no driver or device is needed; the Simple journey skips itself when the Studio driver is installed, because it would make real COM ports |
+
+### Responsiveness
+
+Every journey is also a responsiveness test. `Probe` (in `ui-tests/ui_harness`)
+beats before and after each simulated input and from a timer while the event
+loop runs. A gap in which the GUI thread computed for longer than the budget,
+or in which it waited for ten times the budget, is a handler that blocked the
+window, and the journey fails at its end, naming each slow step with the time
+and the CPU time of the gap. Only computing is held to the plain budget:
+on a busy machine every wait grows, and what the budget judges is the
+application's own work. A long wait still fails, which is how a lock a freeze
+sits in shows. A second thread ends a journey that stays in
+one step for 30 seconds and prints the step, so a freeze fails with a name and
+not at the CTest timeout; a crash, an uncaught exception or a failed debug
+assertion prints the journey and its steps in the same way.
+
+Each journey has a budget in `apps/vss_gui/ui-tests/perf_budgets.json`
+(150 ms unless it lists one), written for a release build; CMake multiplies it
+by 12 for a debug build, 6 under AddressSanitizer, 25 under ThreadSanitizer
+and 60 for a coverage build (`VSS_UI_BUDGET_SCALE`).
+`VSS_UI_BUDGET_MS` replaces the table with one number, and `VSS_UI_TRACE=1`
+prints each step as it starts. The table is a ratchet: a journey that is
+slower than its entry fails, and an entry is lowered when the application gets
+faster, never raised to make a journey pass. `VSS_UI_PERF_REPORT=file.csv`
+appends a line per journey (time, steps, worst wall and CPU time of the GUI
+thread, budget), which CI prints as a table in the job summary. A step that handles many
+things at once (deleting fifty ports, restyling every widget for a theme)
+declares it with `allow_bulk(items)` and gets a quarter of the budget more
+for each item. A step that hands the thread to the operating system on
+purpose, such as Qt's file dialog listing the drives, uses `tolerate(true)`.
+
+### When a journey fails
+
+The output lists the steps taken, and the harness writes a PNG of the window
+(and of the dialog on top, if one is open) to `ui-test-failures` in the build
+directory (`VSS_UI_FAILURE_DIR` changes it). The PNGs are not committed; CI
+keeps them as the `ui-test-failures` artifact for 14 days. A known failure is
+marked with `expect_failure("reason", body)`, which reports it as `[XFAIL]` and
+fails the journey the day it stops failing, so the marker is removed with the
+fix; a test is never disabled.
+
+### Running them
+
+GUI tests must be run alone. CTest's `RUN_SERIAL` keeps it from starting any
+other test beside a UI test, but a second `ctest` or an IDE test run next to
+it is still a second process. Their `QSettings` are kept in a directory of the
+process (`tests/framework/qt_settings.hpp`, used by every GUI test program), so
+two programs no longer clear each other's saved mode and recent files, which
+once left a window waiting for the "save changes?" prompt of another test.
+Windows still shares the clipboard, the file dialogs' recent places and the
+window station, so on Windows run them with nothing else going on.
+
+The groups take about two to five minutes together on a release build (more
+on a busy machine and about ten times that in a debug build; the job summary
+of the `gui` leg lists every journey).
+

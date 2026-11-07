@@ -176,8 +176,8 @@ void IconProvider::flush()
 QIcon IconProvider::render(const QString& name, std::optional<colour_role> role,
                            const QColor& colour)
 {
-    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.theme.icon.render");
-    VSS_PROFILE_ZONE_TEXT(profile_zone, name.toStdString());
+    VSS_PROFILE_ZONE_NAMED(kProfileZone, "gui.theme.icon.render");
+    VSS_PROFILE_ZONE_TEXT(kProfileZone, name.toStdString());
     QFile file(QStringLiteral(":/icons/%1.svg").arg(name));
     if (!file.open(QIODevice::ReadOnly))
     {

@@ -286,8 +286,8 @@ void ShortcutsDialog::fit_key_columns()
 
 void ShortcutsDialog::set_filter(const QString& text)
 {
-    VSS_PROFILE_ZONE_NAMED(profile_zone, "gui.support.shortcuts.filter");
-    VSS_PROFILE_ZONE_TEXT(profile_zone, text.toStdString());
+    VSS_PROFILE_ZONE_NAMED(kProfileZone, "gui.support.shortcuts.filter");
+    VSS_PROFILE_ZONE_TEXT(kProfileZone, text.toStdString());
     const QString needle = text.trimmed();
     for (int row = 0; row < table_->rowCount(); ++row)
     {

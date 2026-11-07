@@ -1,0 +1,1 @@
+**View > Log and View > Topology JSON bring the panel to the front.** Both are tabs behind the Monitor in Advanced mode, and choosing them only made the tab appear, so the command seemed to do nothing until the tab was clicked. The panel is now raised when it is chosen.
