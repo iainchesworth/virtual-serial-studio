@@ -1509,18 +1509,21 @@ void TopologyView::drawBackground(QPainter* painter, const QRectF& rect)
     // node cards stand out (design language, `10-design-language.md`).
     const Theme& theme = Theme::instance();
     painter->fillRect(rect, theme.colour(colour_role::sunken));
-    constexpr qreal grid = 16.0;
-    if (transform().m11() * grid < 6.0)
+    constexpr qreal kGrid = 16.0;
+    if (transform().m11() * kGrid < 6.0)
         return;
     painter->setPen(QPen(theme.colour(colour_role::line2), 1.5, Qt::SolidLine,
                          Qt::RoundCap));
-    const qreal left = std::floor(rect.left() / grid) * grid;
-    const qreal top = std::floor(rect.top() / grid) * grid;
+    const qreal left = std::floor(rect.left() / kGrid) * kGrid;
+    const qreal top = std::floor(rect.top() / kGrid) * kGrid;
+    const int columns = static_cast<int>((rect.right() - left) / kGrid) + 1;
+    const int rows = static_cast<int>((rect.bottom() - top) / kGrid) + 1;
     QVector<QPointF> dots;
-    for (qreal y = top; y <= rect.bottom(); y += grid)
+    dots.reserve(static_cast<qsizetype>(columns) * rows);
+    for (int row = 0; row < rows; ++row)
     {
-        for (qreal x = left; x <= rect.right(); x += grid)
-            dots.append(QPointF(x, y));
+        for (int column = 0; column < columns; ++column)
+            dots.append(QPointF(left + column * kGrid, top + row * kGrid));
     }
     painter->drawPoints(dots.constData(), static_cast<int>(dots.size()));
 }

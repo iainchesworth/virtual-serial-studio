@@ -52,8 +52,9 @@ inline void announce_name_change(QWidget* widget)
 {
     if (widget == nullptr)
         return;
-    auto* event = new QAccessibleEvent(widget, QAccessible::NameChanged);
-    QAccessible::updateAccessibility(event);
+    // updateAccessibility() does not take the event, so it stays on the stack.
+    QAccessibleEvent event(widget, QAccessible::NameChanged);
+    QAccessible::updateAccessibility(&event);
 }
 
 } // namespace vss::gui
