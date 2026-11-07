@@ -392,7 +392,7 @@ TEST_CASE("monitor: the capture export keeps every byte and the event time")
 TEST_CASE("monitor: payloads kept for the capture export are bounded")
 {
     vss::gui::MonitorModel model;
-    const QByteArray chunk(1024 * 1024, 'z');
+    const QByteArray chunk(1024LL * 1024, 'z');
     const auto when = vss::clock_type::now();
     vss::gui::event_batch events;
     for (int index = 0; index < 40; ++index)
@@ -604,7 +604,8 @@ TEST_CASE("inspector: waiting sentence and control line chips")
     REQUIRE(
         copy_name->accessibleName().startsWith(QStringLiteral("Copy name")));
     copy_name->click();
-    REQUIRE_EQ(QGuiApplication::clipboard()->text(), backend.port(*id)->path);
+    REQUIRE_EQ(QGuiApplication::clipboard()->text(),
+               vss_test::require_value(backend.port(*id)).path);
 
     bool has_dtr = false;
     for (QLabel* label : panel.findChildren<QLabel*>())
@@ -979,19 +980,19 @@ TEST_CASE("ports: a driver port shows both program states and nothing else")
     const auto id = make_driver_port(backend);
 
     // The backend says nothing about a program: the port is plainly open.
-    auto port = *backend.port(id);
+    auto port = vss_test::require_value(backend.port(id));
     REQUIRE(port.peer == vss::gui::peer_state::unknown);
     REQUIRE_EQ(vss::gui::PortModel::state_text(port), QStringLiteral("Open"));
 
     backend.set_peer_state(id, vss::gui::peer_state::not_open);
-    port = *backend.port(id);
+    port = vss_test::require_value(backend.port(id));
     REQUIRE_EQ(vss::gui::PortModel::state_text(port),
                QStringLiteral("Waiting for program"));
     REQUIRE(vss::gui::PortModel::state_kind(port) ==
             vss::gui::port_state_kind::waiting);
 
     backend.set_peer_state(id, vss::gui::peer_state::open);
-    port = *backend.port(id);
+    port = vss_test::require_value(backend.port(id));
     REQUIRE_EQ(vss::gui::PortModel::state_text(port),
                QStringLiteral("Program connected"));
     REQUIRE(vss::gui::PortModel::state_kind(port) ==

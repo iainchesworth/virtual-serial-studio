@@ -65,7 +65,7 @@ public:
     };
 
     explicit DirectionBadge(QWidget* parent = nullptr);
-    DirectionBadge(direction value, QWidget* parent = nullptr);
+    explicit DirectionBadge(direction value, QWidget* parent = nullptr);
 
     void set_direction(direction value);
     direction get_direction() const noexcept { return direction_; }

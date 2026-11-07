@@ -86,7 +86,7 @@ bool valid_remote_host(const QString& text)
 
 QString listen_host(QComboBox* combo, QLineEdit* custom)
 {
-    const QString data = combo->currentData().toString();
+    QString data = combo->currentData().toString();
     if (!data.isEmpty())
         return data;
     return custom == nullptr ? QString() : custom->text().trimmed();
@@ -766,7 +766,7 @@ bool NetworkEndpointDialog::validate(QString& error) const
         QString parse_error;
         if (!parse_network_uri(override_edit_->text(), &parse_error))
         {
-            error = parse_error;
+            error = std::move(parse_error);
             return false;
         }
         return true;

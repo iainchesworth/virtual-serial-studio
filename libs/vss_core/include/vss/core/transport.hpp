@@ -85,6 +85,8 @@ public:
     /// call it from any thread, and must stop calling it when it closes.  Most
     /// transports have nothing to say and ignore it.
     using notice_sink = std::function<void(std::string)>;
+    // The overrides take the sink by value and keep it, so the base does too.
+    // NOLINTNEXTLINE(performance-unnecessary-value-param)
     virtual void set_notice_sink(notice_sink) {}
 };
 

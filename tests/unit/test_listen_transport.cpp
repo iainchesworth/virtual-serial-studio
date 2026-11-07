@@ -42,7 +42,14 @@ struct loop
     ~loop()
     {
         guard.reset();
-        io.stop();
+        try
+        {
+            io.stop();
+        }
+        catch (...)
+        {
+            // best effort: a destructor must not throw, and nothing can act on a failed stop
+        }
         thread.join();
     }
 };

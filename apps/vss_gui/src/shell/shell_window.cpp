@@ -1339,7 +1339,7 @@ void ShellWindow::on_backend_changed()
     }
     if (!loading_ && signature != last_signature_)
         set_dirty(true);
-    last_signature_ = signature;
+    last_signature_ = std::move(signature);
     {
         VSS_PROFILE_ZONE("gui.shell.status_refresh");
         status_->refresh();
@@ -1541,7 +1541,7 @@ void ShellWindow::update_undo_actions()
     const bool supported = backend_.caps().undo;
     const struct
     {
-        const char* id;
+        const char* id = nullptr;
         QString plain;
         QString with_step;
         QString step;
@@ -1735,9 +1735,9 @@ void ShellWindow::open_connect_ports()
             });
     if (dialog.exec() != QDialog::Accepted)
         return;
-    if (dialog.result())
+    if (dialog.created_link())
     {
-        if (const auto made = backend_.link(*dialog.result()))
+        if (const auto made = backend_.link(*dialog.created_link()))
             undo_.push(connect_step(backend_, *made, tr("Connect ports")));
     }
     status_->refresh();
@@ -2011,13 +2011,16 @@ void ShellWindow::show_pair()
             });
     connect(&dialog, &PairDialog::setup_check_requested, this,
             [this] { open_setup_check(); });
-    if (dialog.exec() != QDialog::Accepted || !dialog.outcome())
+    if (dialog.exec() != QDialog::Accepted)
         return;
-    selection_.select_port(dialog.outcome()->first);
+    const auto outcome = dialog.outcome();
+    if (!outcome)
+        return;
+    selection_.select_port(outcome->first);
     update_actions();
     status_->showMessage(
         tr("Linked pair created. Program A opens %1; Program B opens %2.")
-            .arg(dialog.outcome()->first_path, dialog.outcome()->second_path),
+            .arg(outcome->first_path, outcome->second_path),
         8000);
 }
 
@@ -2948,7 +2951,7 @@ void ShellWindow::save_document_as()
         return;
     if (!path.endsWith(QLatin1String(".json"), Qt::CaseInsensitive))
         path += QStringLiteral(".json");
-    document_path_ = path;
+    document_path_ = std::move(path);
     title_override_.clear();
     save_document();
 }

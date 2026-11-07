@@ -47,7 +47,7 @@ QString error_text(const vss::error_code& error)
 {
     if (!error)
         return {};
-    const QString message = QString::fromStdString(error.message());
+    QString message = QString::fromStdString(error.message());
     if (!message.isEmpty())
         return message;
     return QObject::tr("Error %1").arg(error.value());

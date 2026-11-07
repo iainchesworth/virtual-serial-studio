@@ -207,6 +207,15 @@
       }
     },
     {
+      "name": "windows-msvc-analysis",
+      "displayName": "Windows, MSVC, Debug, with the GUI, PREfast code analysis (/analyze)",
+      "description": "Compiles every first-party file with /analyze and the NativeRecommendedRules rule set and leaves one .sarif file per object file. Analysis warnings do not stop the build. Run through tools/analyze.py msvc.",
+      "inherits": "windows-msvc-debug-gui",
+      "environment": {
+        "CXXFLAGS": "/analyze /analyze:WX- /analyze:external- /analyze:ruleset \"$env{VSINSTALLDIR}Team Tools\\Static Analysis Tools\\Rule Sets\\NativeRecommendedRules.ruleset\" /analyze:log:format:sarif /analyze:autolog"
+      }
+    },
+    {
       "name": "linux-asan-ubsan-gui",
       "displayName": "Linux, AddressSanitizer and UBSan, -O1, with the GUI (fails without Qt)",
       "inherits": "linux-asan-ubsan",
@@ -423,6 +432,10 @@
     {
       "name": "windows-msvc-asan",
       "configurePreset": "windows-msvc-asan"
+    },
+    {
+      "name": "windows-msvc-analysis",
+      "configurePreset": "windows-msvc-analysis"
     },
     {
       "name": "linux-asan-ubsan-gui",

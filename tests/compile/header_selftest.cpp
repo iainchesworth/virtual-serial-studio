@@ -33,12 +33,24 @@
 #include <vss/testkit/harness.hpp>
 
 #include <cstdio>
+#include <exception>
 
 int main()
+try
 {
     // Touch a few symbols so the translation unit is not optimised away.
     const auto size = vss::parse_byte_size("64KB");
     const auto label = vss::to_label(vss::serial_settings{});
     std::printf("headers ok: %s %s\n", size ? "size" : "no-size", label.c_str());
-    return size && *size == 64 * 1024 ? 0 : 1;
+    return size && *size == std::uint64_t{64} * 1024 ? 0 : 1;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
+    return 2;
 }

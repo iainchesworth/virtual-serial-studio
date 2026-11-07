@@ -97,7 +97,7 @@ share_plan make_driver_share_plan(int programs, int ports_held)
     plan.driver_ports_held = std::max(0, ports_held);
     plan.free_pairs = 0;
     const int available =
-        std::max(0, studio_driver_user_limit - plan.driver_ports_held);
+        std::max(0, kStudioDriverUserLimit - plan.driver_ports_held);
     plan.openable = std::min(plan.programs, available);
     plan.studio_only = plan.programs - plan.openable;
     return plan;
@@ -237,17 +237,15 @@ QStringList planned_share_paths(const share_plan& plan,
             paths << QCoreApplication::translate("ShareWizard", "PTY");
             continue;
         }
-        if (plan.studio_driver && index < plan.openable)
-        {
-            // The driver picks the COM number when it makes the port.
-            paths << QCoreApplication::translate("ShareWizard", "A free port");
-        }
-        else if (index < plan.openable && index < free_pair_paths.size())
+        if (index < plan.openable && !plan.studio_driver &&
+            index < free_pair_paths.size())
         {
             paths << free_pair_paths.at(index);
         }
         else if (index < plan.openable)
         {
+            // The driver picks the COM number when it makes the port, and a
+            // pair with no path to show yet is also "a free port".
             paths << QCoreApplication::translate("ShareWizard", "A free port");
         }
         else

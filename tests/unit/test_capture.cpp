@@ -30,7 +30,7 @@ std::chrono::system_clock::time_point fixture_start()
 {
     // 20,612 days after 1970-01-01, plus noon.
     return std::chrono::system_clock::time_point(
-        std::chrono::seconds(std::int64_t{20'612} * 86'400 + 12 * 3600));
+        std::chrono::seconds(std::int64_t{20'612} * 86'400 + std::int64_t{12} * 3600));
 }
 
 capture_header fixture_header()

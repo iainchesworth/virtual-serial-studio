@@ -58,9 +58,9 @@ const char* input_name(int column)
 
 struct fault_tile
 {
-    const char* title;
-    const char* description;
-    vss::fault_kind kind;
+    const char* title = nullptr;
+    const char* description = nullptr;
+    vss::fault_kind kind{};
 };
 
 const std::array<fault_tile, 6>& fault_tiles()
@@ -605,8 +605,8 @@ void LineMatrixPanel::update_caption()
     caption_palette.setColor(QPalette::Window,
                              Theme::instance().colour(colour_role::sunken));
     caption_->setPalette(caption_palette);
-    const QString this_name =
-        backend_.port(endpoint_) ? backend_.port(endpoint_)->name : QString();
+    const auto this_port = backend_.port(endpoint_);
+    const QString this_name = this_port ? this_port->name : QString();
     sentence_->set_text(wiring_sentence(current_wiring(), this_name, other));
 }
 

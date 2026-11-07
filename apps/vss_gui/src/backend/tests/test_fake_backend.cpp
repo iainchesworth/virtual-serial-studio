@@ -94,7 +94,7 @@ TEST_CASE("fake backend: links, owner, lines and send")
             vss::make_error_code(vss::errc::not_found));
 
     REQUIRE(backend.set_line(*a, vss::control_line::dtr, true).has_value());
-    REQUIRE(backend.port(*a)->lines.dtr());
+    REQUIRE(vss_test::require_value(backend.port(*a)).lines.dtr());
 }
 
 TEST_CASE("fake backend: snapshot and apply round trip")
@@ -149,5 +149,6 @@ TEST_CASE("fake backend: errors are returned and capabilities are visible")
         QStringLiteral("a"), vss::virtual_port_kind::loopback, true);
     REQUIRE(port.has_value());
     backend.set_peer_state(*port, vss::gui::peer_state::not_open);
-    REQUIRE_EQ(backend.port(*port)->peer, vss::gui::peer_state::not_open);
+    REQUIRE_EQ(vss_test::require_value(backend.port(*port)).peer,
+               vss::gui::peer_state::not_open);
 }

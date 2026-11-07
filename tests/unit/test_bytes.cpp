@@ -67,8 +67,8 @@ TEST_CASE("bytes: parse_byte_size understands binary multiples")
     REQUIRE_EQ(*parse_byte_size("64"), std::uint64_t{64});
     REQUIRE_EQ(*parse_byte_size("1KB"), std::uint64_t{1024});
     REQUIRE_EQ(*parse_byte_size("1 kb"), std::uint64_t{1024});
-    REQUIRE_EQ(*parse_byte_size("10MB"), std::uint64_t{10 * 1024 * 1024});
-    REQUIRE_EQ(*parse_byte_size("1.5MiB"), std::uint64_t{1536 * 1024});
+    REQUIRE_EQ(*parse_byte_size("10MB"), std::uint64_t{10} * 1024 * 1024);
+    REQUIRE_EQ(*parse_byte_size("1.5MiB"), std::uint64_t{1536} * 1024);
     REQUIRE_EQ(*parse_byte_size("2GiB"), std::uint64_t{2ull * 1024 * 1024 * 1024});
 }
 
@@ -86,7 +86,7 @@ TEST_CASE("bytes: format_byte_size picks a unit")
     REQUIRE_EQ(format_byte_size(0), std::string("0 B"));
     REQUIRE_EQ(format_byte_size(512), std::string("512 B"));
     REQUIRE_EQ(format_byte_size(1024), std::string("1.0 KB"));
-    REQUIRE_EQ(format_byte_size(1536 * 1024), std::string("1.5 MB"));
+    REQUIRE_EQ(format_byte_size(1536ULL * 1024), std::string("1.5 MB"));
     REQUIRE_EQ(format_byte_size(3ull * 1024 * 1024 * 1024), std::string("3.0 GB"));
 }
 

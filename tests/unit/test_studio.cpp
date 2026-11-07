@@ -143,7 +143,7 @@ TEST_CASE("studio: every fault stops a fixture with an error")
         studio app;
         const auto created = app.create_mock_port("device");
         REQUIRE(created);
-        const auto endpoint = *created;
+        const auto& endpoint = *created;
         REQUIRE_EQ(endpoint->state(), endpoint_state::open);
 
         REQUIRE(app.inject_fault(endpoint->id(), fault));
@@ -298,7 +298,7 @@ TEST_CASE("studio: a fixture takes new settings and keeps its links and echo")
     slow.parity = parity_mode::even;
     REQUIRE(app.reconfigure_port(id, slow));
     REQUIRE(app.port_settings(id).has_value());
-    REQUIRE(*app.port_settings(id) == slow);
+    REQUIRE(vss_test::require_value(app.port_settings(id)) == slow);
     REQUIRE(app.fixture_echo(id));
     REQUIRE_EQ(app.engine().links().size(), std::size_t{1});
 
@@ -332,13 +332,13 @@ TEST_CASE(
     serial_settings settings;
     settings.baud_rate = 19200;
     REQUIRE(app.reconfigure_port(id, settings));
-    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+    REQUIRE_EQ(vss_test::require_value(app.port_settings(id)).baud_rate, 19200u);
 
     serial_settings bad;
     bad.data_bits = 3;
     REQUIRE_EQ(app.reconfigure_port(id, bad),
                make_error_code(errc::invalid_argument));
-    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+    REQUIRE_EQ(vss_test::require_value(app.port_settings(id)).baud_rate, 19200u);
     REQUIRE_EQ(app.reconfigure_port(endpoint_id{4242}, settings),
                make_error_code(errc::not_found));
     REQUIRE(!app.port_settings(endpoint_id{4242}).has_value());

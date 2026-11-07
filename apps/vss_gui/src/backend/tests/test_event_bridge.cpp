@@ -260,7 +260,8 @@ TEST_CASE("engine backend: ports, links and sends go through the adapter")
         // processes has a definite answer; a loopback port never does.
         REQUIRE_EQ(backend.caps().peer_open, vss::peer_open_supported());
         REQUIRE(backend.caps().line_format);
-        REQUIRE_EQ(backend.port(*first)->peer, vss::gui::peer_state::unknown);
+        REQUIRE_EQ(vss_test::require_value(backend.port(*first)).peer,
+                   vss::gui::peer_state::unknown);
 
         const auto link =
             backend.connect_ports(*first, *second, vss::link_options{});

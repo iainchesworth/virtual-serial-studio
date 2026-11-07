@@ -75,7 +75,7 @@ public:
     /// the link; on failure it stays open with the error pattern shown.
     bool submit();
 
-    std::optional<vss::link_id> result() const { return result_link_; }
+    std::optional<vss::link_id> created_link() const { return result_link_; }
     QString result_summary() const { return result_summary_; }
     QString last_error() const;
     QString error_title() const;

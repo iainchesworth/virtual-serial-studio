@@ -56,13 +56,6 @@ chip_palette palette_for(StatusChip::kind kind)
                 false,
                 true};
     case StatusChip::kind::studio_only:
-        return {theme.colour(colour_role::fill),
-                none,
-                theme.colour(colour_role::ink2),
-                theme.colour(colour_role::ink3),
-                true,
-                false,
-                true};
     case StatusChip::kind::closed:
         return {theme.colour(colour_role::fill),
                 none,

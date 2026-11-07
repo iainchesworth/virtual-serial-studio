@@ -16,8 +16,10 @@
 #include <cstdlib>
 #include <string_view>
 
+// libFuzzer looks for exactly this name.
+// NOLINTNEXTLINE(readability-identifier-naming)
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t* data,
-                                      std::size_t size) // NOLINT
+                                      std::size_t size)
 {
     const std::string_view text(reinterpret_cast<const char*>(data), size);
 

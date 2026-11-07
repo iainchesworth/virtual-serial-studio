@@ -16,9 +16,9 @@ namespace {
 
 struct line_name
 {
-    control_line line;
-    const char* short_name;
-    const char* long_name;
+    control_line line{};
+    const char* short_name = nullptr;
+    const char* long_name = nullptr;
 };
 
 constexpr line_name line_names[] = {

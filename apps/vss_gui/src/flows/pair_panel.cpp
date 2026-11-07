@@ -448,17 +448,13 @@ void PairPanel::refresh_warning()
         driver_note_->setVisible(true);
         driver_note_->clear_action();
     }
-    else if (!windows)
-    {
-        driver_note_->setVisible(false);
-    }
-    else if (!driver_available_)
+    else if (windows && !driver_available_)
     {
         driver_note_->set_text(tr("Linked pairs need a driver. Open the setup "
                                   "check."));
         driver_note_->setVisible(true);
     }
-    else if (!studio_driver_ && free_pair_count_ < 2)
+    else if (windows && !studio_driver_ && free_pair_count_ < 2)
     {
         driver_note_->set_text(
             tr("There are not enough free driver pairs. Open the setup "

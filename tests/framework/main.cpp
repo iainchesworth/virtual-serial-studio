@@ -8,6 +8,8 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdio>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -159,6 +161,7 @@ bool write_junit(const std::string& path, const std::vector<outcome>& outcomes,
 } // namespace
 
 int main(int argc, char** argv)
+try
 {
     const options configuration = parse(argc, argv);
 
@@ -299,4 +302,14 @@ int main(int argc, char** argv)
               << " ms\n";
 
     return failures == 0 && report_written ? 0 : 1;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
+    return 2;
 }

@@ -48,7 +48,14 @@ public:
 
     ~tcp_server()
     {
-        io_.stop();
+        try
+        {
+            io_.stop();
+        }
+        catch (...)
+        {
+            // best effort: a destructor must not throw, and nothing can act on a failed stop
+        }
         if (thread_.joinable())
             thread_.join();
     }

@@ -293,7 +293,7 @@ TEST_CASE("bus: modem lines are never carried")
     asked.emulate_modem_lines = true;
     const auto bus = hub->bus({first->id(), second->id(), third->id()}, asked);
     REQUIRE(bus);
-    REQUIRE(!hub->find_link(*bus)->options.emulate_modem_lines);
+    REQUIRE(!vss_test::require_value(hub->find_link(*bus)).options.emulate_modem_lines);
 
     // Raising a line on one member does not move an input on another.
     const control_lines before = second->lines();
@@ -370,6 +370,7 @@ TEST_CASE("bus: stats and the traffic ring count every delivery")
 
     // The link counts a delivery to each receiver, as a split does.
     const auto info = fixture.hub->find_link(*bus);
+    REQUIRE(info);
     REQUIRE_EQ(info->stats.bytes, std::uint64_t{10});
     REQUIRE_EQ(info->stats.messages, std::uint64_t{2});
     REQUIRE_EQ(info->stats.dropped, std::uint64_t{0});
@@ -418,6 +419,7 @@ TEST_CASE("bus: concurrent publishers each reach everyone else intact")
     REQUIRE(fixture.hub->bus(fixture.ids(0, members)));
 
     std::vector<std::thread> threads;
+    threads.reserve(members);
     for (std::size_t index = 0; index < members; ++index)
     {
         threads.emplace_back(

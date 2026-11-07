@@ -246,7 +246,7 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     {
         // The wiring handles: a ring on each side edge, filled on the node a
         // wire starts from.
-        constexpr qreal handle_radius = 5.0;
+        constexpr qreal kHandleRadius = 5.0;
         for (const QPointF& centre : {left_handle(), right_handle()})
         {
             painter->setPen(
@@ -255,7 +255,7 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                      1.5));
             painter->setBrush(theme.colour(wire_source_ ? colour_role::accent
                                                         : colour_role::panel));
-            painter->drawEllipse(centre, handle_radius, handle_radius);
+            painter->drawEllipse(centre, kHandleRadius, kHandleRadius);
         }
     }
 

@@ -8,7 +8,9 @@
 #   template parameters: CamelCase
 #
 # apps/vss_gui/.clang-tidy adds the Qt-facing exceptions. Only the naming check
-# is enabled here; the wider check set arrives with the CI restructure.
+# is enabled here, so an editor stays quiet. The wider check set (bugprone,
+# concurrency, performance, portability, misc, clang-analyzer) is
+# CLANG_TIDY_CHECKS in tools/analyze.py, which CI and developers both run.
 Checks: >-
   -*,
   readability-identifier-naming
@@ -32,3 +34,5 @@ CheckOptions:
   - { key: readability-identifier-naming.ProtectedMemberSuffix,  value: _ }
   - { key: readability-identifier-naming.ClassMemberSuffix,      value: _ }
   - { key: readability-identifier-naming.TemplateParameterCase,  value: CamelCase }
+  # An empty catch block is allowed when a comment says "best effort" and why.
+  - { key: bugprone-empty-catch.IgnoreCatchWithKeywords,         value: '@TODO;@FIXME;best effort' }

@@ -40,7 +40,7 @@ class UndoService final : public QObject
     Q_OBJECT
 
 public:
-    static constexpr std::size_t max_depth = 50;
+    static constexpr std::size_t kMaxDepth = 50;
 
     explicit UndoService(QObject* parent = nullptr);
 

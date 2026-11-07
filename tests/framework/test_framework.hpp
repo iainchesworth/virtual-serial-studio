@@ -28,6 +28,7 @@
 #include <exception>
 #include <functional>
 #include <iostream>
+#include <source_location>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -52,9 +53,19 @@ inline std::vector<test_info>& registry()
 
 struct registrar
 {
-    registrar(const char* name, const char* file, int line, void (*function)())
+    // A failure to register a case at start-up ends the program: no test can run without the
+    // registry, and a static initialiser has nowhere to report it.
+    registrar(const char* name, const char* file, int line,
+              void (*function)()) noexcept
     {
-        registry().push_back(test_info{name, file, line, function});
+        try
+        {
+            registry().push_back(test_info{name, file, line, function});
+        }
+        catch (...)
+        {
+            std::terminate();
+        }
     }
 };
 
@@ -162,6 +173,22 @@ inline std::string to_text(const std::exception& value)
     throw failure(out.str());
 }
 
+/// The value of an optional, or a failed requirement when it is empty. A
+/// temporary is returned by value and a named optional by reference.
+template <class Optional>
+decltype(auto) require_value(
+    Optional&& optional,
+    std::source_location where = std::source_location::current())
+{
+    if (!optional)
+        raise("the optional holds a value", where.file_name(),
+              static_cast<int>(where.line()));
+    if constexpr (std::is_lvalue_reference_v<Optional>)
+        return (*optional);
+    else
+        return std::remove_cvref_t<decltype(*optional)>(std::move(*optional));
+}
+
 /// True for the integer types std::cmp_equal accepts: not bool, not a
 /// character type.
 template <class T>
@@ -234,18 +261,26 @@ void check_near(const First& first, const Second& second, double tolerance,
 #define VSS_DETAIL_CONCAT_INNER(a, b) a##b
 #define VSS_DETAIL_CONCAT(a, b) VSS_DETAIL_CONCAT_INNER(a, b)
 
+// The case is a static member of a class in an unnamed namespace, so it has internal linkage
+// without `static`, which clang-tidy's misc-use-anonymous-namespace asks for.
 #define TEST_CASE(name)                                                        \
-    static void VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)();                 \
-    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)()              \
+    namespace                                                                  \
     {                                                                          \
-        VSS_PROFILE_ZONE(name);                                                \
-        VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)();                         \
-    }                                                                          \
-    static ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,        \
-                                                   __LINE__)(                  \
+    struct VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)                         \
+    {                                                                          \
+        static void body();                                                    \
+        static void run()                                                      \
+        {                                                                      \
+            VSS_PROFILE_ZONE(name);                                            \
+            body();                                                            \
+        }                                                                      \
+    };                                                                         \
+    const ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,         \
+                                                  __LINE__)(                   \
         name, __FILE__, __LINE__,                                              \
-        &VSS_DETAIL_CONCAT(vss_test_function_, __LINE__));                     \
-    static void VSS_DETAIL_CONCAT(vss_test_body_, __LINE__)()
+        &VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)::run);                    \
+    }                                                                          \
+    void VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)::body()
 
 #define REQUIRE(expression)                                                 \
     do                                                                      \

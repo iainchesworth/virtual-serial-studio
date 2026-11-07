@@ -21,9 +21,12 @@ namespace vss_test_support {
 /// becomes readable on the other end, and nothing is echoed back.  Two
 /// endpoints on the two ends are like a port in Studio and the program that
 /// has opened it.
+// NOLINTBEGIN(misc-multiple-inheritance): enable_shared_from_this is a mixin, not a second
+// interface.
 class cable_end final : public vss::transport,
                         public std::enable_shared_from_this<cable_end>
 {
+// NOLINTEND(misc-multiple-inheritance)
 public:
     static std::pair<std::shared_ptr<cable_end>, std::shared_ptr<cable_end>>
     make_pair(const executor_type& executor, const std::string& name)

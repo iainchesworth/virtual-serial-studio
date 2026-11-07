@@ -49,7 +49,7 @@ public:
         bool framed = true;
     };
 
-    CheckRowWidget(const spec& row, QWidget* parent = nullptr);
+    explicit CheckRowWidget(const spec& row, QWidget* parent = nullptr);
 
     QPushButton* action_button() const noexcept { return action_; }
     QString title_text() const;

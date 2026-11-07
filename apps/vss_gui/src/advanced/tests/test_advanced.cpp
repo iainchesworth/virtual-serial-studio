@@ -190,20 +190,21 @@ TEST_CASE("owner bar: join owner actions reach the engine")
 
     bar.give_button()->click();
     QApplication::processEvents();
-    REQUIRE(backend.link(*joined)->owner == recipe);
+    REQUIRE(vss_test::require_value(backend.link(*joined)).owner == recipe);
     REQUIRE_EQ(bar.owner_name(), QStringLiteral("recipe-tool"));
     REQUIRE_EQ(bar.give_button()->text(), QStringLiteral("Give to qa-runner"));
     REQUIRE(bar.release_button()->isEnabled());
 
     bar.release_button()->click();
     QApplication::processEvents();
-    REQUIRE(backend.link(*joined)->owner == 0);
+    REQUIRE(vss_test::require_value(backend.link(*joined)).owner == 0);
 
     vss::link_options mixed;
     mixed.policy = vss::merge_policy::interleave;
     const auto split = backend.split(device, {recipe}, mixed);
     REQUIRE(split.has_value());
-    REQUIRE(!OwnerBar::supports_owner(*backend.link(*split)));
+    REQUIRE(!OwnerBar::supports_owner(
+        vss_test::require_value(backend.link(*split))));
 }
 
 TEST_CASE("owner bar: capability off disables the actions with one tooltip")
@@ -530,7 +531,7 @@ TEST_CASE("json: every schema error names the line of its field")
         "}\n");
     const json_validation type = validate_json_document(bad_type);
     REQUIRE(!type.valid());
-    REQUIRE_EQ(type.problem->line, 6);
+    REQUIRE_EQ(vss_test::require_value(type.problem).line, 6);
 
     const QString not_a_list = QStringLiteral(
         "{\n"
@@ -539,7 +540,7 @@ TEST_CASE("json: every schema error names the line of its field")
         "}\n");
     const json_validation list = validate_json_document(not_a_list);
     REQUIRE(!list.valid());
-    REQUIRE_EQ(list.problem->line, 3);
+    REQUIRE_EQ(vss_test::require_value(list.problem).line, 3);
 
     const QString missing_port = QStringLiteral(
         "{\n"
@@ -553,7 +554,7 @@ TEST_CASE("json: every schema error names the line of its field")
         "}\n");
     const json_validation missing = validate_json_document(missing_port);
     REQUIRE(!missing.valid());
-    REQUIRE_EQ(missing.problem->line, 7);
+    REQUIRE_EQ(vss_test::require_value(missing.problem).line, 7);
 
     const QString empty_name = QStringLiteral(
         "{\n"
@@ -563,7 +564,7 @@ TEST_CASE("json: every schema error names the line of its field")
         "}\n");
     const json_validation unnamed = validate_json_document(empty_name);
     REQUIRE(!unnamed.valid());
-    REQUIRE_EQ(unnamed.problem->line, 3);
+    REQUIRE_EQ(vss_test::require_value(unnamed.problem).line, 3);
 }
 
 TEST_CASE("json editor: apply only when valid and dirty")
@@ -718,7 +719,7 @@ TEST_CASE("benchmark: a short count fails and says by how much")
     capabilities caps;
     caps.benchmark = true;
     backend.set_capabilities(caps);
-    backend.set_benchmark_outcome(1024 * 1024, std::chrono::milliseconds(0));
+    backend.set_benchmark_outcome(1024ULL * 1024, std::chrono::milliseconds(0));
     make_port(backend, QStringLiteral("first"));
     make_port(backend, QStringLiteral("second"));
 

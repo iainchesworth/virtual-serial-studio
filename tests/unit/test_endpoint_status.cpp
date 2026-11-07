@@ -131,7 +131,8 @@ TEST_CASE("endpoint info: the format and client count follow the transport")
     REQUIRE_EQ(*info.clients, std::size_t{0});
 
     transport->set_clients(3);
-    REQUIRE_EQ(*(*added)->info().clients, std::size_t{3});
+    REQUIRE_EQ(vss_test::require_value((*added)->info().clients),
+               std::size_t{3});
 
     transport->set_format(std::nullopt);
     REQUIRE(!(*added)->info().peer_format.has_value());
@@ -156,16 +157,16 @@ TEST_CASE("line format: labels and the framing of serial settings")
 TEST_CASE("format check: what each kind of endpoint runs at")
 {
     // A program's choice wins over everything.
-    REQUIRE(running_format(info_of(1, endpoint_kind::virtual_port,
-                                   format(9600)))
-                .value() == format(9600));
+    REQUIRE(vss_test::require_value(running_format(info_of(
+                1, endpoint_kind::virtual_port, format(9600)))) ==
+            format(9600));
     // A real port and an RFC 2217 client run at their configured settings.
-    REQUIRE(running_format(info_of(2, endpoint_kind::physical, std::nullopt,
-                                   57600))
-                .value() == format(57600));
-    REQUIRE(running_format(info_of(3, endpoint_kind::rfc2217, std::nullopt,
-                                   2400))
-                .value() == format(2400));
+    REQUIRE(vss_test::require_value(running_format(info_of(
+                2, endpoint_kind::physical, std::nullopt, 57600))) ==
+            format(57600));
+    REQUIRE(vss_test::require_value(running_format(info_of(
+                3, endpoint_kind::rfc2217, std::nullopt, 2400))) ==
+            format(2400));
     // Everything else has no format to compare.
     REQUIRE(!running_format(info_of(4, endpoint_kind::virtual_port)).has_value());
     REQUIRE(!running_format(info_of(5, endpoint_kind::tcp)).has_value());

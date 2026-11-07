@@ -106,11 +106,11 @@ error_code serial_from_json(const json::value& value, serial_settings& out)
 }
 
 std::string string_member(const json::object& object, std::string_view key,
-                          std::string fallback = {})
+                          std::string_view fallback = {})
 {
     const auto* item = object.if_contains(key);
     if (!item || !item->is_string())
-        return fallback;
+        return std::string(fallback);
     return std::string(item->as_string());
 }
 

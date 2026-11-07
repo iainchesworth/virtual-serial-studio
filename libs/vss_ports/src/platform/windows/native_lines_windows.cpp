@@ -19,6 +19,14 @@ error_code last_error()
                       boost::system::system_category());
 }
 
+/// The portable interface carries an operating-system handle as an integer.
+HANDLE as_handle(std::intptr_t handle) noexcept
+{
+    // The integer is a HANDLE that the caller got from the operating system.
+    // NOLINTNEXTLINE(performance-no-int-to-ptr)
+    return reinterpret_cast<HANDLE>(handle);
+}
+
 } // namespace
 
 result<native::modem_status> platform_read_modem_status(std::intptr_t handle)
@@ -26,7 +34,7 @@ result<native::modem_status> platform_read_modem_status(std::intptr_t handle)
     native::modem_status out;
 
     DWORD status = 0;
-    if (!::GetCommModemStatus(reinterpret_cast<HANDLE>(handle), &status))
+    if (!::GetCommModemStatus(as_handle(handle), &status))
         return last_error();
 
     out.cts = (status & MS_CTS_ON) != 0;
@@ -55,14 +63,14 @@ result<void> platform_write_line(std::intptr_t handle, control_line line,
         // CTS/DSR/DCD/RI are driven by the device, never by us.
         return make_error_code(errc::unsupported);
     }
-    if (!::EscapeCommFunction(reinterpret_cast<HANDLE>(handle), function))
+    if (!::EscapeCommFunction(as_handle(handle), function))
         return last_error();
     return {};
 }
 
 result<void> platform_set_break(std::intptr_t handle, bool active)
 {
-    if (!::EscapeCommFunction(reinterpret_cast<HANDLE>(handle),
+    if (!::EscapeCommFunction(as_handle(handle),
                               active ? SETBREAK : CLRBREAK))
         return last_error();
     return {};

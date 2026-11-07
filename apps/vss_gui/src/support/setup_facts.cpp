@@ -466,7 +466,7 @@ setup_report build_setup_report(const setup_facts& facts,
         else if (row.state == setup_state::not_checked)
             ++not_checked;
     }
-    if (!checks_available)
+    if (!checks_available || (attention == 0 && not_checked > 0))
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "Not checked yet");
     else if (attention > 0)
@@ -477,9 +477,6 @@ setup_report build_setup_report(const setup_facts& facts,
                 : plural(QT_TRANSLATE_NOOP("SetupCheck", "%n things to fix"),
                          attention);
     }
-    else if (not_checked > 0)
-        report.header_chip =
-            QCoreApplication::translate("SetupCheck", "Not checked yet");
     else
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "All set");
@@ -563,7 +560,7 @@ const setup_report& setup_report_cache::get(const StudioBackend& backend)
         return report_;
 
     report_ = query_setup_report(backend);
-    ports_key_ = key;
+    ports_key_ = std::move(key);
     taken_ = now;
     valid_ = true;
     return report_;

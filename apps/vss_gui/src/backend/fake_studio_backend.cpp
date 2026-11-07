@@ -123,7 +123,7 @@ std::optional<link_view> FakeStudioBackend::link(vss::link_id id) const
 
 QString FakeStudioBackend::unique_name(const QString& base) const
 {
-    const QString stem = base.isEmpty() ? QStringLiteral("port") : base;
+    QString stem = base.isEmpty() ? QStringLiteral("port") : base;
     const auto taken = [this](const QString& candidate)
     {
         return std::any_of(ports_.begin(), ports_.end(),
@@ -635,17 +635,17 @@ vss::result<vss::benchmark_result> FakeStudioBackend::run_benchmark(
     result.expected = options.bytes;
     const std::uint64_t arriving =
         options.bytes > benchmark_lost_ ? options.bytes - benchmark_lost_ : 0;
-    constexpr int steps = 10;
-    for (int step = 1; step <= steps; ++step)
+    constexpr int kSteps = 10;
+    for (int step = 1; step <= kSteps; ++step)
     {
         if (cancel != nullptr && cancel->load())
         {
             result.cancelled = true;
             return result;
         }
-        std::this_thread::sleep_for(benchmark_duration_ / steps);
-        result.sent = options.bytes * static_cast<std::uint64_t>(step) / steps;
-        result.received = arriving * static_cast<std::uint64_t>(step) / steps;
+        std::this_thread::sleep_for(benchmark_duration_ / kSteps);
+        result.sent = options.bytes * static_cast<std::uint64_t>(step) / kSteps;
+        result.received = arriving * static_cast<std::uint64_t>(step) / kSteps;
         if (progress)
             progress({result.sent, result.received, options.bytes});
     }

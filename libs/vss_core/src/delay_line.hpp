@@ -33,7 +33,7 @@ namespace vss {
 class delay_line : public std::enable_shared_from_this<delay_line>
 {
 public:
-    delay_line(boost::asio::any_io_executor executor,
+    delay_line(const boost::asio::any_io_executor& executor,
                std::shared_ptr<endpoint> target, std::uint32_t delay_ms,
                std::uint32_t jitter_ms);
 
