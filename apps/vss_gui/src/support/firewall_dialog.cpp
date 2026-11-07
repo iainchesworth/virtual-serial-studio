@@ -236,7 +236,7 @@ void FirewallDialog::allow()
     VSS_PROFILE_ZONE("gui.support.firewall.allow");
     // Never starts the operating system prompt unless the build offers the
     // step.
-    if (!can_run_ || allow_ == nullptr)
+    if (!can_run_ || allow_ == nullptr || !fact_.step)
         return;
     allow_->setEnabled(false);
     const step_report report = allow_through_firewall(*fact_.step);

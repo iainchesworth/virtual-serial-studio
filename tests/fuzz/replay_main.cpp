@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -20,6 +22,8 @@
 #include <system_error>
 #include <vector>
 
+// libFuzzer looks for exactly this name.
+// NOLINTNEXTLINE(readability-identifier-naming)
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t* data,
                                       std::size_t size);
 
@@ -75,6 +79,7 @@ std::optional<std::vector<char>> read_file(const fs::path& path)
 } // namespace
 
 int main(int argc, char** argv)
+try
 {
     std::vector<fs::path> files;
     for (int i = 1; i < argc; ++i)
@@ -113,4 +118,14 @@ int main(int argc, char** argv)
     }
     std::cout << "fuzz replay: " << files.size() << " inputs\n";
     return 0;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
+    return 2;
 }

@@ -21,7 +21,7 @@ using namespace vss::permissions;
 namespace
 {
 
-const std::string program = "C:\\Studio\\bin\\vss_gui.exe";
+constexpr char program[] = "C:\\Studio\\bin\\vss_gui.exe";
 
 firewall_rule_record allow_rule(std::string path, std::string ports,
                                 int protocol = 6)

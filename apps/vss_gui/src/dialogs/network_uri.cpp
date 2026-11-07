@@ -182,7 +182,7 @@ std::optional<network_endpoint> parse_network_uri(const QString& text,
         return std::nullopt;
     }
 
-    endpoint.host = host;
+    endpoint.host = std::move(host);
     endpoint.port = port;
     return endpoint;
 }

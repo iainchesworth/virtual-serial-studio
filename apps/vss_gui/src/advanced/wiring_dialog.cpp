@@ -93,7 +93,7 @@ WiringDialog::WiringDialog(StudioBackend& backend, vss::endpoint_id endpoint,
             break;
         }
     }
-    other_name_ = other_name;
+    other_name_ = std::move(other_name);
     linked_ = linked;
 
     auto* layout = new QVBoxLayout(this);

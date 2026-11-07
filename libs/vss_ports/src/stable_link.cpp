@@ -197,15 +197,22 @@ result<stable_link> make_stable_link(const std::filesystem::path& directory,
 void remove_stable_link(const stable_link& link) noexcept
 {
     VSS_PROFILE_ZONE("ports.stable_link.remove");
-    std::error_code ec;
-    const std::filesystem::path path(link.path);
-    const auto status = std::filesystem::symlink_status(path, ec);
-    if (ec || status.type() != std::filesystem::file_type::symlink)
-        return;
-    const auto current = std::filesystem::read_symlink(path, ec);
-    if (ec || current != std::filesystem::path(link.target))
-        return;
-    std::filesystem::remove(path, ec);
+    try
+    {
+        std::error_code ec;
+        const std::filesystem::path path(link.path);
+        const auto status = std::filesystem::symlink_status(path, ec);
+        if (ec || status.type() != std::filesystem::file_type::symlink)
+            return;
+        const auto current = std::filesystem::read_symlink(path, ec);
+        if (ec || current != std::filesystem::path(link.target))
+            return;
+        std::filesystem::remove(path, ec);
+    }
+    catch (...)
+    {
+        // best effort: a path that cannot be built or encoded names no link of ours
+    }
 }
 
 } // namespace vss

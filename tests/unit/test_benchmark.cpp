@@ -104,7 +104,7 @@ TEST_CASE("benchmark: a run stops when asked to")
     const auto port = loopback(app, "echo");
 
     benchmark_options options;
-    options.bytes = 1024 * 1024;
+    options.bytes = 1024ULL * 1024;
     std::atomic<bool> stop{true};
     const auto ran = run_benchmark(*port, *port, options, {}, &stop);
     REQUIRE(ran);
@@ -131,6 +131,6 @@ TEST_CASE("benchmark: empty options are refused")
 
 TEST_CASE("benchmark: throughput is written with a unit, or n/a")
 {
-    REQUIRE_EQ(format_throughput(1024 * 1024, 1000ms), std::string("1.0 MB/s"));
+    REQUIRE_EQ(format_throughput(1024ULL * 1024, 1000ms), std::string("1.0 MB/s"));
     REQUIRE_EQ(format_throughput(10, 0ms), std::string("n/a"));
 }

@@ -69,14 +69,14 @@ public:
     using Ready = std::function<bool(QWidget*)>;
     using Step = std::function<void(QWidget*)>;
 
-    static constexpr int poll_milliseconds = 10;
-    static constexpr int give_up_milliseconds = 8000;
+    static constexpr int kPollMilliseconds = 10;
+    static constexpr int kGiveUpMilliseconds = 8000;
 
     Waiting(Ready ready, Step step)
         : ready_(std::move(ready)), step_(std::move(step)),
           timer_(new QTimer(QApplication::instance()))
     {
-        timer_->setInterval(poll_milliseconds);
+        timer_->setInterval(kPollMilliseconds);
         QObject::connect(timer_, &QTimer::timeout, timer_, [this] { poll(); });
         timer_->start();
     }
@@ -99,7 +99,7 @@ public:
 private:
     void poll()
     {
-        elapsed_ += poll_milliseconds;
+        elapsed_ += kPollMilliseconds;
         QWidget* modal = QApplication::activeModalWidget();
         if (modal != nullptr && ready_(modal))
         {
@@ -116,7 +116,7 @@ private:
             }
             return;
         }
-        if (elapsed_ >= give_up_milliseconds)
+        if (elapsed_ >= kGiveUpMilliseconds)
         {
             timer_->stop();
             if (modal != nullptr)

@@ -64,6 +64,7 @@ public:
         std::vector<std::string> storage{program};
         storage.insert(storage.end(), arguments.begin(), arguments.end());
         std::vector<char*> argv;
+        argv.reserve(storage.size() + 1);
         for (auto& item : storage)
             argv.push_back(item.data());
         argv.push_back(nullptr);

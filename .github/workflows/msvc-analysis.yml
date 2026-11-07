@@ -2,8 +2,10 @@
 name: MSVC Code Analysis
 
 # MSVC /analyze (PREfast) over the Windows build, nightly on develop. CodeQL builds the Linux
-# GCC leg only, so defects that are specific to MSVC would go unseen without this. There is no
-# pull request trigger and nothing gates on it. Findings are uploaded as code-scanning alerts;
+# GCC leg only, so defects that are specific to MSVC would go unseen without this. The build
+# includes the Qt GUI and the tests, so all of the first-party code is analysed. There is no
+# pull request trigger and nothing gates on it; `python tools/analyze.py msvc` runs the same
+# analysis locally before a push (docs/testing.md). Findings are uploaded as code-scanning alerts;
 # upload-sarif does not fail on findings, so the second job asks the API for alerts created since
 # the last night and opens or updates one `nightly-analysis` issue.
 
@@ -36,32 +38,35 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: msvc
+          qt: "true"
 
       - uses: ./.github/actions/prepare-deps
 
       # The debug preset keeps assert() in the code the analyser sees.
       - name: Configure
         shell: bash
-        run: cmake --preset windows-msvc-debug
+        run: cmake --preset windows-msvc-debug-gui
 
       - name: Build
         shell: bash
-        run: cmake --build --preset windows-msvc-debug
+        run: cmake --build --preset windows-msvc-debug-gui
 
-      # Test code, the fetched library and the build tree are not ours to fix here.
+      # The fetched library and the build tree (generated moc and resource files) are not ours to
+      # fix here. The GUI and the tests are analysed.
       - name: Run MSVC Code Analysis
         id: run-analysis
         uses: microsoft/msvc-code-analysis-action@24c285ab36952c9e9182f4b78dfafbac38a7e5ee # v0.1.1
         with:
-          cmakeBuildDirectory: ${{ github.workspace }}/build/windows-msvc-debug
+          cmakeBuildDirectory: ${{ github.workspace }}/build/windows-msvc-debug-gui
           buildConfiguration: Debug
           ruleset: NativeRecommendedRules.ruleset
-          ignoredPaths: tests;.cache;build
+          ignoredPaths: .cache;build
 
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           sarif_file: ${{ steps.run-analysis.outputs.sarif }}
+          category: msvc-prefast
 
   surface:
     name: Surface findings

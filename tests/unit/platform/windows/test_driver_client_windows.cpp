@@ -149,7 +149,7 @@ bool wait_gone(const std::string& name)
     const auto until = std::chrono::steady_clock::now() + 60s;
     while (std::chrono::steady_clock::now() < until)
     {
-        const HANDLE handle = open_com(name);
+        const auto handle = open_com(name);
         if (handle == INVALID_HANDLE_VALUE)
             return true;
         ::CloseHandle(handle);
@@ -199,7 +199,7 @@ TEST_CASE("driver client: against the real driver, a port is made, carries bytes
         REQUIRE(second.has_value());
         REQUIRE(second->path != name);
 
-        const HANDLE app = open_com(name);
+        const auto app = open_com(name);
         REQUIRE(app != INVALID_HANDLE_VALUE);
         COMMTIMEOUTS timeouts{};
         timeouts.ReadIntervalTimeout = 100;
@@ -380,7 +380,7 @@ TEST_CASE("driver client: COM numbers with the helper service")
                    make_error_code(errc::device_busy));
         ::CloseHandle(app);
         REQUIRE(noted("the program closed the port"));
-        REQUIRE(!driver_peer(name1)->open);
+        REQUIRE(!vss_test::require_value(driver_peer(name1)).open);
 
         // A read that is waiting survives the change.
         std::promise<std::pair<boost::system::error_code, std::size_t>> answered;
@@ -398,7 +398,7 @@ TEST_CASE("driver client: COM numbers with the helper service")
         REQUIRE(!driver_peer(name1).has_value());
 
         // The old name is gone, the new one opens, and the read is still ours.
-        const HANDLE old_name = open_com(name1);
+        const auto old_name = open_com(name1);
         REQUIRE(old_name == INVALID_HANDLE_VALUE);
         app = open_com(name2);
         REQUIRE(app != INVALID_HANDLE_VALUE);

@@ -48,6 +48,8 @@ TEST_CASE("error: category and messages")
                std::string("no ports of this kind are available"));
     REQUIRE_EQ(make_error_code(errc::internal).message(),
                std::string("internal error"));
+    // The value is outside the enumeration on purpose.
+    // NOLINTNEXTLINE(clang-analyzer-optin.core.EnumCastOutOfRange)
     REQUIRE_EQ(make_error_code(static_cast<errc>(999)).message(),
                std::string("unknown vss error"));
 }

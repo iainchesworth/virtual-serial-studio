@@ -102,8 +102,9 @@ TEST_CASE("network URI: builds, parses and rejects every transport")
     REQUIRE_EQ(listening->role, network_role::server);
     REQUIRE_EQ(listening->host, QStringLiteral("127.0.0.1"));
     REQUIRE_EQ(listening->port, 4001);
-    REQUIRE_EQ(vss::gui::parse_network_uri(QStringLiteral("udp-listen://[::1]:5"))
-                   ->role,
+    REQUIRE_EQ(vss_test::require_value(vss::gui::parse_network_uri(
+                                 QStringLiteral("udp-listen://[::1]:5")))
+                   .role,
                network_role::server);
     REQUIRE_EQ(parsed->role, network_role::client);
     const auto rfc_server =

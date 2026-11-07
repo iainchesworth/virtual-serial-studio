@@ -73,9 +73,9 @@ void HelpContentsDialog::build()
 
     struct topic
     {
-        help_topic value;
-        const char* title;
-        const char* description;
+        help_topic value{};
+        const char* title = nullptr;
+        const char* description = nullptr;
     };
     const topic topics[] = {
         {help_topic::setup_check, QT_TRANSLATE_NOOP("Help", "Setup check"),

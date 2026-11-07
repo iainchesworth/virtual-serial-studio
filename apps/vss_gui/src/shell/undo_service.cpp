@@ -20,7 +20,7 @@ void UndoService::push(undo_step step)
     VSS_PROFILE_ZONE("gui.shell.undo.push");
     redo_.clear();
     undo_.push_back(std::move(step));
-    while (undo_.size() > max_depth)
+    while (undo_.size() > kMaxDepth)
         undo_.pop_front();
     VSS_PROFILE_PLOT("gui.undo.depth", undo_.size());
     Q_EMIT changed();

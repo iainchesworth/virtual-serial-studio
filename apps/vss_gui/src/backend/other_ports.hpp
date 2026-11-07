@@ -22,17 +22,17 @@ namespace vss::gui
 /// another program made, as a screen names them.  Empty for none.
 inline QString other_ports_names(const std::vector<device_view>& ports)
 {
-    constexpr std::size_t shown_limit = 3;
+    constexpr std::size_t kShownLimit = 3;
     QStringList names;
-    for (std::size_t i = 0; i < ports.size() && i < shown_limit; ++i)
+    for (std::size_t i = 0; i < ports.size() && i < kShownLimit; ++i)
         names.push_back(ports[i].path);
     if (names.isEmpty())
         return {};
-    if (ports.size() > shown_limit)
+    if (ports.size() > kShownLimit)
         return QCoreApplication::translate("vss::gui::other_ports",
                                            "%1 and %2 more")
             .arg(names.join(QStringLiteral(", ")))
-            .arg(ports.size() - shown_limit);
+            .arg(ports.size() - kShownLimit);
     if (names.size() == 1)
         return names.front();
     const QString last = names.takeLast();

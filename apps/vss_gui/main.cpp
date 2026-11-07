@@ -50,6 +50,7 @@ struct ProfilingSession
 } // namespace
 
 int main(int argc, char* argv[])
+try
 {
     bool selftest = false;
     bool screenshot = false;
@@ -345,4 +346,14 @@ int main(int argc, char* argv[])
         }
         return 1;
     }
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
+    return 2;
 }

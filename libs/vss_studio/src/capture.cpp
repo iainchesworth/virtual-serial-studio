@@ -732,7 +732,14 @@ capture_session::capture_session(hub& engine, std::shared_ptr<std::ostream> out,
 
 capture_session::~capture_session()
 {
-    stop();
+    try
+    {
+        stop();
+    }
+    catch (...)
+    {
+        // best effort: a destructor must not throw, and nothing can act on a failed stop
+    }
 }
 
 result<std::unique_ptr<capture_session>> capture_session::start(

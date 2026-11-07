@@ -34,7 +34,7 @@ class InspectorPanel final : public QWidget
     Q_OBJECT
 
 public:
-    InspectorPanel(StudioBackend& backend, QWidget* parent = nullptr);
+    explicit InspectorPanel(StudioBackend& backend, QWidget* parent = nullptr);
 
     void set_advanced(bool advanced);
     void set_selected_port(vss::endpoint_id id);

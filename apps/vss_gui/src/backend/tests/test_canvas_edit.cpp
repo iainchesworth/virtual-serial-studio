@@ -44,7 +44,7 @@ TEST_CASE("canvas edit: a pair of two fixtures is made in one step")
     REQUIRE_EQ(made->created.size(), 2);
     REQUIRE_EQ(backend.ports().size(), std::size_t{2});
     REQUIRE_EQ(backend.links().size(), std::size_t{1});
-    REQUIRE(named(backend, QStringLiteral("rx-sim"))->kind ==
+    REQUIRE(vss_test::require_value(named(backend, QStringLiteral("rx-sim"))).kind ==
             vss::endpoint_kind::mock);
     REQUIRE(backend.links().front().shape == link_shape::two_way);
 }
@@ -127,7 +127,7 @@ TEST_CASE("canvas edit: duplicate copies the ports and the link between them")
     REQUIRE(copied->created.contains(QStringLiteral("fixture-2")));
     REQUIRE_EQ(backend.ports().size(), std::size_t{4});
     REQUIRE_EQ(backend.links().size(), std::size_t{2});
-    REQUIRE(named(backend, QStringLiteral("fixture-2"))->kind ==
+    REQUIRE(vss_test::require_value(named(backend, QStringLiteral("fixture-2"))).kind ==
             vss::endpoint_kind::mock);
 }
 
@@ -189,7 +189,7 @@ TEST_CASE("canvas edit: port settings change on a fixture")
     settings.data_bits = 7;
     settings.parity = vss::parity_mode::even;
     REQUIRE(backend.set_port_settings(*a, settings));
-    REQUIRE(backend.port(*a)->serial == settings);
+    REQUIRE(vss_test::require_value(backend.port(*a)).serial == settings);
     settings.data_bits = 2;
     REQUIRE(!backend.set_port_settings(*a, settings));
 }

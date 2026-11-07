@@ -438,7 +438,7 @@ TEST_CASE("canvas: port Settings change a fixture and say what they do")
     while (dialog.isVisible() && timer.elapsed() < 5000)
         QApplication::processEvents();
     REQUIRE(dialog.result() == QDialog::Accepted);
-    REQUIRE(fixture.backend.port(fixture.rx)->serial == slow);
+    REQUIRE(vss_test::require_value(fixture.backend.port(fixture.rx)).serial == slow);
 
     vss::gui::PortSettingsDialog virtual_port(fixture.backend, {fixture.lone});
     REQUIRE(virtual_port.note_text().contains(QStringLiteral("own speed")));
@@ -521,7 +521,7 @@ TEST_CASE("canvas: a pair of two fixtures is built from the canvas and undone")
     REQUIRE_EQ(view->node_count(), 2);
     REQUIRE_EQ(view->link_count(), 1);
     REQUIRE_EQ(view->selected_ports().size(), 2);
-    REQUIRE(named(backend, QStringLiteral("rx-sim"))->kind ==
+    REQUIRE(vss_test::require_value(named(backend, QStringLiteral("rx-sim"))).kind ==
             vss::endpoint_kind::mock);
 
     QAction* undo = window.findChild<QAction*>(QStringLiteral("edit.undo"));
@@ -541,13 +541,15 @@ TEST_CASE("canvas: a pair of two fixtures is built from the canvas and undone")
 
     // Settings from the canvas, recorded for undo.
     const auto rx = named(backend, QStringLiteral("rx-sim"));
+    REQUIRE(rx);
     vss::serial_settings slow;
     slow.baud_rate = 9600;
     REQUIRE(backend.set_port_settings(rx->id, slow));
     canvas->record_settings({{QStringLiteral("rx-sim"), rx->serial}}, slow);
     undo->trigger();
     QApplication::processEvents();
-    REQUIRE_EQ(named(backend, QStringLiteral("rx-sim"))->serial.baud_rate,
+    REQUIRE_EQ(vss_test::require_value(named(backend, QStringLiteral("rx-sim")))
+                   .serial.baud_rate,
                115200u);
 
     // Duplicate, then delete everything and bring it back.
@@ -759,6 +761,7 @@ TEST_CASE("canvas: renders a review screenshot in both themes")
     REQUIRE(canvas->add_request(port));
     QApplication::processEvents();
     const auto lone = named(backend, QStringLiteral("port-1"));
+    REQUIRE(lone);
     view->setFocus();
     view->begin_wire(lone->id);
     QApplication::processEvents();

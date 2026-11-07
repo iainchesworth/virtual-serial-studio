@@ -50,6 +50,8 @@ namespace
 {
     unsigned value = 0;
     const auto* end = text.data() + text.size();
+    // The end pointer carries the size, so the data() call is bounded.
+    // NOLINTNEXTLINE(bugprone-suspicious-stringview-data-usage)
     const auto [stop, ec] = std::from_chars(text.data(), end, value);
     if (ec != std::errc{} || stop != end)
     {

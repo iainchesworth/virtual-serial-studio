@@ -27,7 +27,7 @@ constexpr WORD version_type = 16;
 
 std::string own_resource(WORD type, WORD id)
 {
-    const HRSRC found = ::FindResourceW(nullptr, MAKEINTRESOURCEW(id), MAKEINTRESOURCEW(type));
+    const auto found = ::FindResourceW(nullptr, MAKEINTRESOURCEW(id), MAKEINTRESOURCEW(type));
     if (found == nullptr)
         return {};
     const HGLOBAL loaded = ::LoadResource(nullptr, found);

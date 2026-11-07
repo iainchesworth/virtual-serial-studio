@@ -1,13 +1,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 name: Static Analysis
 
-# clang-tidy over the libraries and the command line tool, nightly on develop. The naming rules in
-# .clang-tidy are the only checks the pull request gate runs. This job adds the bugprone,
-# concurrency, performance, portability, misc and clang-analyzer groups, which find real defects
-# but take longer. It builds first, because clang-tidy reads the compile database and the
-# generated files. A finding fails the job and opens or updates one `nightly-analysis` issue.
+# clang-tidy, cppcheck and zizmor over the libraries, the command line tool, the Qt GUI, the tests
+# and the workflows. Every job runs tools/analyze.py, the same command a developer runs before a
+# push (docs/testing.md), and uploads its SARIF file to code scanning, so a finding shows as an
+# alert in Security > Code scanning and, on a pull request, as an annotation on the changed line.
 #
-# Five checks are left out on purpose:
+# On a pull request the two C++ analysers look at the files the pull request changes. Nightly on
+# develop they look at everything, and a failure opens or updates one `nightly-analysis` issue.
+# None of these jobs is a required check, so a finding never blocks a merge; the code-scanning
+# alert is the record. CodeQL (codeql.yml) and MSVC /analyze (msvc-analysis.yml) are the other
+# two analysers that report there.
+#
+# The clang-tidy check set lives in tools/analyze.py. Five checks are left out on purpose:
 #   misc-const-correctness       asks for const on almost every local; it is style, not a defect.
 #   performance-enum-size        asks for narrower enum bases; the saving is a few bytes.
 #   bugprone-unused-return-value flags the error_code out-parameter calls that ignore a result
@@ -24,71 +29,182 @@ on:
   schedule:
     - cron: "29 2 * * *"
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "libs/**"
+      - "apps/**"
+      - "tests/**"
+      - "perf/**"
+      - "tools/analyze.py"
+      - "requirements/zizmor.txt"
+      - ".clang-tidy"
+      - "**/.clang-tidy"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - "CMakeLists.txt"
+      - "CMakePresets.json"
+      - "cmake/**"
 
 permissions: {}
 
 concurrency:
-  group: static-analysis-nightly-${{ github.ref_name }}
-  cancel-in-progress: false
+  group: static-analysis-${{ github.event_name == 'pull_request' && github.ref || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   clang-tidy:
     name: clang-tidy
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-26.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     permissions:
       contents: read
       issues: write
+      security-events: write
     env:
       BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
-      CHECKS: >-
-        -*,
-        bugprone-*,
-        -bugprone-easily-swappable-parameters,
-        -bugprone-signed-bitwise,
-        -bugprone-unused-return-value,
-        concurrency-*,
-        -concurrency-mt-unsafe,
-        performance-*,
-        -performance-enum-size,
-        portability-*,
-        -portability-avoid-pragma-once,
-        clang-analyzer-*,
-        misc-*,
-        -misc-include-cleaner,
-        -misc-const-correctness,
-        -misc-non-private-member-variables-in-classes,
-        -misc-no-recursion,
-        readability-identifier-naming
+      PR_BASE: ${{ github.base_ref }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
 
       - uses: ./.github/actions/prepare-deps
 
-      # The debug preset keeps assert() in the code clang-tidy parses.
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
+      # clang-tidy reads the compile database and the generated moc and UI headers, so the tree
+      # is built first. The debug preset keeps assert() in the code it parses.
       - name: Configure and build
         run: |
           set -euo pipefail
-          cmake --preset linux-debug
-          cmake --build --preset linux-debug
+          cmake --preset linux-debug-gui
+          cmake --build --preset linux-debug-gui
 
       - name: clang-tidy
         run: |
           set -euo pipefail
-          version="$(python3 -c "import json; print(json.load(open('.github/toolchain-versions.json'))['llvm'])")"
-          "run-clang-tidy-${version}" -j "$(nproc)" -p build/linux-debug \
-            -warnings-as-errors='*' -checks="$(echo "$CHECKS" | tr -d ' \n')" \
-            '(libs/[^/]+/src/.*|apps/vss_cli/.*)\.cpp'
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            python3 tools/analyze.py clang-tidy --build build/linux-debug-gui --changed --base "origin/${PR_BASE}"
+          else
+            python3 tools/analyze.py clang-tidy --build build/linux-debug-gui
+          fi
+
+      - name: Upload SARIF to code scanning
+        if: ${{ !cancelled() && hashFiles('build/analysis/clang-tidy.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: build/analysis/clang-tidy.sarif
+          category: clang-tidy
 
       - name: Report the failure
         if: failure() && github.ref == 'refs/heads/develop'
         uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
         with:
           engine: clang-tidy
-          detail: clang-tidy reported a finding in the nightly check set (the job fails on any), or the debug build it analyses failed. The run log names the file and the check.
+          detail: clang-tidy reported a finding in the nightly check set (the job fails on any), or the debug build it analyses failed. The run log names the file and the check, and the alert is in Security > Code scanning under the tool clang-tidy.
+
+  cppcheck:
+    name: cppcheck
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+      security-events: write
+    env:
+      BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
+      PR_BASE: ${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-toolchain
+        with:
+          compiler: gcc
+          qt: "true"
+
+      - uses: ./.github/actions/prepare-deps
+
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck libgl1-mesa-dev
+
+      # cppcheck needs the compile database only; it does not read generated headers.
+      - name: Configure
+        run: cmake --preset linux-debug-gui
+
+      - name: cppcheck
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            python3 tools/analyze.py cppcheck --build build/linux-debug-gui --changed --base "origin/${PR_BASE}"
+          else
+            python3 tools/analyze.py cppcheck --build build/linux-debug-gui
+          fi
+
+      - name: Upload SARIF to code scanning
+        if: ${{ !cancelled() && hashFiles('build/analysis/cppcheck.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: build/analysis/cppcheck.sarif
+          category: cppcheck
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: cppcheck
+          detail: cppcheck reported a finding (the job fails on any). The run log names the file and the check, and the alert is in Security > Code scanning under the tool cppcheck.
+
+  # The pull request gate in ci.yml already fails on a zizmor finding of medium severity or above.
+  # This job runs the same version and rules to put the findings into code scanning.
+  zizmor:
+    name: zizmor
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: zizmor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet -r requirements/zizmor.txt
+          python3 tools/analyze.py zizmor
+
+      - name: Upload SARIF to code scanning
+        if: ${{ !cancelled() && hashFiles('build/analysis/zizmor.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: build/analysis/zizmor.sarif
+          category: zizmor
+
+      - name: Report the failure
+        if: failure() && github.ref == 'refs/heads/develop'
+        uses: iainchesworthlabs/icl-common-infra/actions/report-nightly-failure@c412e6a542644c2316d21db351ef4218fa3e185d # v0.1.19
+        with:
+          engine: zizmor
+          detail: zizmor reported a workflow finding of medium severity or above, in the nightly run. The run log names the file and the audit, and the alert is in Security > Code scanning under the tool zizmor.

@@ -66,7 +66,7 @@ Q_SIGNALS:
     void port_action_requested(vss::endpoint_id id, port_menu_action action);
     void status_message(const QString& message);
 
-protected:
+public:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:

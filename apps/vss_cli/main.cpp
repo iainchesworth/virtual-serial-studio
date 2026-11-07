@@ -29,6 +29,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <exception>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -1393,6 +1394,7 @@ struct profiling_session
 } // namespace
 
 int main(int argc, char** argv)
+try
 {
     // Profiling options are global: they are taken from anywhere on the line
     // and are not passed on to the command.
@@ -1523,5 +1525,15 @@ int main(int argc, char** argv)
 
     std::fprintf(stderr, "unknown command: %s\n", command.c_str());
     print_usage();
+    return 2;
+}
+catch (const std::exception& error)
+{
+    std::fprintf(stderr, "error: %s\n", error.what());
+    return 2;
+}
+catch (...)
+{
+    std::fputs("error: unknown exception\n", stderr);
     return 2;
 }

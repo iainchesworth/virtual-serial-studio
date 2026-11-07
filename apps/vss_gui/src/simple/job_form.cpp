@@ -327,8 +327,8 @@ std::vector<unsigned> JobForm::free_com_numbers(const end_plan* keep) const
         }
     }
     std::vector<unsigned> free;
-    for (unsigned number = first_gui_com_number;
-         number <= last_gui_com_number && free.size() < 8; ++number)
+    for (unsigned number = kFirstGuiComNumber;
+         number <= kLastGuiComNumber && free.size() < 8; ++number)
     {
         if (std::find(in_use.begin(), in_use.end(), number) == in_use.end())
             free.push_back(number);
@@ -401,7 +401,7 @@ QString JobForm::end_name(const end_plan& end) const
     {
         if (const auto port = backend_.port(end.existing))
         {
-            const QString shown = port_shown_name(*port);
+            QString shown = port_shown_name(*port);
             if (end.what == end_plan::kind::program && !end.label.isEmpty())
                 return tr("%1 (%2)").arg(shown, end.label);
             return shown;
@@ -458,7 +458,7 @@ void JobForm::build()
     connect(back, &QPushButton::clicked, this, [this] { Q_EMIT cancelled(); });
     titles->addWidget(back, 0, Qt::AlignLeft);
     QString heading = job_title(kind_);
-    if (editing())
+    if (previous_)
         heading =
             prefs_.name.isEmpty()
                 ? tr("Change %1").arg(setup_title(*previous_, backend_.ports()))

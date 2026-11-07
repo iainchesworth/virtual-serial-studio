@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <mutex>
@@ -235,7 +236,8 @@ result<responder_script> load_responder_script(const std::string& path,
         return bad_script(detail, "no such file");
     if (!std::filesystem::is_regular_file(status))
         return bad_script(detail, "not a regular file");
-    if (std::filesystem::file_size(path, status_error) > 1024 * 1024)
+    if (std::filesystem::file_size(path, status_error) >
+        (std::uintmax_t{1} << 20))
         return bad_script(detail, "the script is over 1 MiB");
 
     std::ifstream stream(path, std::ios::binary);
@@ -260,7 +262,7 @@ struct responder::state : std::enable_shared_from_this<state>
 
     std::mutex mutex; // the stream buffer and the generator
     byte_buffer buffer;
-    std::mt19937_64 generator;
+    std::mt19937_64 generator{std::random_device{}()};
 
     std::atomic<bool> stopped{false};
     std::atomic<std::uint64_t> trigger_count{0};
@@ -363,6 +365,8 @@ struct responder::state : std::enable_shared_from_this<state>
     void schedule_cycle(std::uint64_t cycle)
     {
         VSS_PROFILE_ZONE("studio.responder.poll_cycle");
+        if (!script.poll)
+            return;
         const auto& poll = *script.poll;
         const time_point begin =
             origin + poll.start +
@@ -403,7 +407,14 @@ responder::responder(std::shared_ptr<state> shared)
 
 responder::~responder()
 {
-    stop();
+    try
+    {
+        stop();
+    }
+    catch (...)
+    {
+        // best effort: a destructor must not throw, and nothing can act on a failed stop
+    }
 }
 
 result<std::shared_ptr<responder>> responder::start(
@@ -426,7 +437,8 @@ result<std::shared_ptr<responder>> responder::start(
     shared->target = std::move(target);
     shared->script = script;
     shared->queue = std::make_shared<detail::timed_queue>(engine.executor());
-    shared->generator.seed(script.seed ? *script.seed : std::random_device{}());
+    if (script.seed)
+        shared->generator.seed(*script.seed);
     for (const auto& rule : shared->script.rules)
         shared->longest_match = std::max(shared->longest_match, rule.match.size());
     shared->origin = clock_type::now();

@@ -866,7 +866,7 @@ void ShareWizard::update_device_list()
                 {
                     const QSignalBlocker blocker(button);
                     button->setChecked(true);
-                    selected_device_ = first_available;
+                    selected_device_ = std::move(first_available);
                     break;
                 }
             }

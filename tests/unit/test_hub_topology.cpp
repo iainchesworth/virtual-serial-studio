@@ -234,6 +234,7 @@ TEST_CASE("hub: join merges publishers into one target")
     REQUIRE(link);
 
     const auto info = fixture.hub->find_link(*link);
+    REQUIRE(info);
     REQUIRE_EQ(info->mode, link_mode::one_way);
     REQUIRE_EQ(info->sources.size(), std::size_t{2});
 
@@ -275,6 +276,7 @@ TEST_CASE("hub: monitor does not drive modem lines")
                                            fixture.b.endpoint->id());
     REQUIRE(link);
     const auto info = fixture.hub->find_link(*link);
+    REQUIRE(info);
     REQUIRE(!info->options.emulate_modem_lines);
     REQUIRE_EQ(info->mode, link_mode::one_way);
 }
@@ -323,6 +325,7 @@ TEST_CASE("hub: owner policy arbitrates publishers")
     REQUIRE(wait_until([&] { return written(fixture.c) == "ownednow-mine"; },
                        2000ms));
     const auto info = fixture.hub->find_link(*link);
+    REQUIRE(info);
     REQUIRE_EQ(info->owner, fixture.b.endpoint->id());
 
     REQUIRE_EQ(fixture.hub->set_owner(*link, fixture.c.endpoint->id()),

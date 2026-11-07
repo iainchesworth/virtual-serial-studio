@@ -154,9 +154,12 @@ private:
 };
 
 /// A transport that accepts writes and never completes them.
+// NOLINTBEGIN(misc-multiple-inheritance): enable_shared_from_this is a mixin, not a second
+// interface.
 class stalled_transport final : public vss::transport,
                                 public std::enable_shared_from_this<stalled_transport>
 {
+// NOLINTEND(misc-multiple-inheritance)
 public:
     explicit stalled_transport(const executor_type& executor)
         : executor_(executor)
@@ -193,7 +196,7 @@ public:
     subscription_guard(vss::hub& hub, vss::event_filter filter,
                        vss::event_sink sink)
         : hub_(&hub)
-        , id_(hub.subscribe(std::move(filter), std::move(sink)))
+        , id_(hub.subscribe(filter, std::move(sink)))
     {
     }
 
@@ -221,9 +224,12 @@ private:
 
 /// A transport that accepts writes in two halves, to exercise the partial
 /// completion path of the endpoint write queue.
+// NOLINTBEGIN(misc-multiple-inheritance): enable_shared_from_this is a mixin, not a second
+// interface.
 class partial_transport final : public vss::transport,
                                 public std::enable_shared_from_this<partial_transport>
 {
+// NOLINTEND(misc-multiple-inheritance)
 public:
     explicit partial_transport(const executor_type& executor)
         : executor_(executor)

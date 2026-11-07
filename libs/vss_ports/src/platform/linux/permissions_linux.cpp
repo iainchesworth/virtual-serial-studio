@@ -185,6 +185,7 @@ platform_add_user_to_group(const permissions::group_membership_spec& spec)
     std::vector<std::string> words = {"/usr/bin/pkexec", usermod, "-aG",
                                       spec.group, spec.user};
     std::vector<char*> argv;
+    argv.reserve(words.size() + 1);
     for (std::string& word : words)
         argv.push_back(word.data());
     argv.push_back(nullptr);
