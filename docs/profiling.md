@@ -262,9 +262,23 @@ zone, empty loop subtracted):
 | `zone_armed` | recording switched on, no profiler attached |
 | `zone_recording` | a profiler is attached |
 
-The figures for the build that wrote this page are in the pull request that added
-it; the `zone_dormant` limit in `perf/floors.json` keeps the dormant cost from
-growing.
+Measured on Windows 11 with MSVC 19.51 in Release, one zone, loop cost
+subtracted (the "before" column is the previous design, where the on-demand
+client started a profiler thread and a listening socket at program start):
+
+| State | ns per zone |
+|---|---:|
+| `VSS_TRACY` off (compiled out) | 0 |
+| before: compiled in, profiler thread listening, no profiler attached | 1.8 |
+| **dormant** (compiled in, not started) | **1.0** (2.2 inside `vss_perf`, beside other code) |
+| armed (recording on, no profiler attached) | 6.5 |
+| recording (a profiler is attached) | 36 to 39 |
+
+Throughput through the hub is unchanged within the noise of the machine
+(`hub_route`, `config_roundtrip` and `event_dispatch` medians of five runs are
+within a few percent of each other with the instrumentation compiled out,
+before, and dormant). The `zone_dormant` limit in `perf/floors.json` keeps the
+dormant cost from growing.
 
 ## Design notes
 
