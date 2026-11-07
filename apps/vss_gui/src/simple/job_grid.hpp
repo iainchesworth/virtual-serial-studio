@@ -15,6 +15,7 @@
 #include <QWidget>
 
 class QKeyEvent;
+class QLabel;
 class QMouseEvent;
 class QPaintEvent;
 
@@ -54,7 +55,7 @@ private:
     QString title_;
     QString icon_;
     QFrame* tile_ = nullptr;
-    class QLabel* glyph_ = nullptr;
+    QLabel* glyph_ = nullptr;
     bool pressed_ = false;
 };
 

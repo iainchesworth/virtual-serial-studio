@@ -132,7 +132,8 @@ void WireDiagram::paintEvent(QPaintEvent*)
     const auto column_rects = [&](const QStringList& names, qreal x)
     {
         QVector<QRectF> rects;
-        const qreal total = names.size() * (row_height + 8) - 8;
+        const qreal total =
+            static_cast<qreal>(names.size()) * (row_height + 8) - 8;
         qreal y = area.center().y() - total / 2;
         for (int index = 0; index < names.size(); ++index)
         {
