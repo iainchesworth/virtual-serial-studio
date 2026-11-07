@@ -51,7 +51,14 @@ public:
 
     ~udp_probe()
     {
-        io_.stop();
+        try
+        {
+            io_.stop();
+        }
+        catch (...)
+        {
+            // best effort: a destructor must not throw, and nothing can act on a failed stop
+        }
         boost::system::error_code ignored;
         socket_.close(ignored);
         if (thread_.joinable())

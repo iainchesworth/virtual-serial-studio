@@ -399,7 +399,14 @@ responder::responder(std::shared_ptr<state> shared)
 
 responder::~responder()
 {
-    stop();
+    try
+    {
+        stop();
+    }
+    catch (...)
+    {
+        // best effort: a destructor must not throw, and nothing can act on a failed stop
+    }
 }
 
 result<std::shared_ptr<responder>> responder::start(

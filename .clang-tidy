@@ -34,3 +34,5 @@ CheckOptions:
   - { key: readability-identifier-naming.ProtectedMemberSuffix,  value: _ }
   - { key: readability-identifier-naming.ClassMemberSuffix,      value: _ }
   - { key: readability-identifier-naming.TemplateParameterCase,  value: CamelCase }
+  # An empty catch block is allowed when a comment says "best effort" and why.
+  - { key: bugprone-empty-catch.IgnoreCatchWithKeywords,         value: '@TODO;@FIXME;best effort' }

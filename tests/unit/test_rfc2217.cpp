@@ -34,7 +34,7 @@ namespace
 {
 
 constexpr unsigned char iac = 255;
-constexpr unsigned char do_ = 253;
+constexpr unsigned char do_option = 253;
 constexpr unsigned char will = 251;
 constexpr unsigned char sb = 250;
 constexpr unsigned char se = 240;
@@ -59,7 +59,7 @@ rfc2217::session ready_session()
 {
     rfc2217::session session;
     static_cast<void>(session.greeting());
-    static_cast<void>(session.feed(bytes({iac, do_, com_port})));
+    static_cast<void>(session.feed(bytes({iac, do_option, com_port})));
     return session;
 }
 
@@ -73,7 +73,14 @@ struct loop
     ~loop()
     {
         guard.reset();
-        io.stop();
+        try
+        {
+            io.stop();
+        }
+        catch (...)
+        {
+            // best effort: a destructor must not throw, and nothing can act on a failed stop
+        }
         thread.join();
     }
 };
@@ -136,19 +143,19 @@ TEST_CASE("rfc2217: the greeting offers the options and an answer is not echoed"
     rfc2217::session session;
     const std::string greeting = session.greeting();
     REQUIRE_EQ(greeting,
-               bytes({iac, will, com_port, iac, will, 0, iac, do_, 0, iac,
-                      will, 3, iac, do_, 3}));
+               bytes({iac, will, com_port, iac, will, 0, iac, do_option, 0, iac,
+                      will, 3, iac, do_option, 3}));
 
     // The client agrees to what was offered; nothing more is said.
-    const auto agreed = session.feed(bytes({iac, do_, com_port, iac, do_, 0,
-                                            iac, will, 0, iac, do_, 3, iac,
+    const auto agreed = session.feed(bytes({iac, do_option, com_port, iac, do_option, 0,
+                                            iac, will, 0, iac, do_option, 3, iac,
                                             will, 3}));
     REQUIRE(agreed.reply.empty());
     REQUIRE(agreed.data.empty());
     REQUIRE(session.com_port_active());
 
     // An option the server does not know is refused, once.
-    const auto refused = session.feed(bytes({iac, do_, 24}));
+    const auto refused = session.feed(bytes({iac, do_option, 24}));
     REQUIRE_EQ(refused.reply, bytes({iac, 252, 24}));
     const auto offered = session.feed(bytes({iac, will, 31}));
     REQUIRE_EQ(offered.reply, bytes({iac, 254, 31}));
@@ -158,7 +165,7 @@ TEST_CASE("rfc2217: a client that speaks first is answered")
 {
     rfc2217::session session;
     const auto opened = session.feed(bytes({iac, will, com_port}));
-    REQUIRE_EQ(opened.reply, bytes({iac, do_, com_port}));
+    REQUIRE_EQ(opened.reply, bytes({iac, do_option, com_port}));
     REQUIRE(session.com_port_active());
 }
 
@@ -347,7 +354,7 @@ TEST_CASE("rfc2217: a client opens the endpoint like a serial port")
 
     // Agree, set the framing, and send data that holds a 0xFF byte.
     asio::write(client,
-                asio::buffer(bytes({iac, do_, com_port}) +
+                asio::buffer(bytes({iac, do_option, com_port}) +
                              command(1, bytes({0, 0, 0x25, 0x80})) +
                              std::string("a") + bytes({iac, iac}) + "b"));
     const std::string baud_answer = command(101, bytes({0, 0, 0x25, 0x80}));
@@ -481,7 +488,7 @@ TEST_CASE("rfc2217: negotiation can be refused and withdrawn")
     // silent.
     REQUIRE(session.feed(bytes({iac, 254, 0})).reply.empty());
     // Agreeing now is answered with the offer, and withdrawing it is answered.
-    REQUIRE_EQ(session.feed(bytes({iac, do_, 0})).reply,
+    REQUIRE_EQ(session.feed(bytes({iac, do_option, 0})).reply,
                bytes({iac, will, 0}));
     REQUIRE_EQ(session.feed(bytes({iac, 254, 0})).reply,
                bytes({iac, 252, 0}));
@@ -490,7 +497,7 @@ TEST_CASE("rfc2217: negotiation can be refused and withdrawn")
     // The client stops doing something it was not doing, then does and stops.
     REQUIRE(session.feed(bytes({iac, 252, 3})).reply.empty());
     REQUIRE_EQ(session.feed(bytes({iac, will, 3})).reply,
-               bytes({iac, do_, 3}));
+               bytes({iac, do_option, 3}));
     REQUIRE_EQ(session.feed(bytes({iac, 252, 3})).reply,
                bytes({iac, 254, 3}));
 
@@ -499,9 +506,9 @@ TEST_CASE("rfc2217: negotiation can be refused and withdrawn")
     REQUIRE(session.feed(bytes({iac, 254, 99})).reply.empty());
 
     // Asking again for what is already on is silent.
-    REQUIRE(session.feed(bytes({iac, do_, com_port})).reply.empty());
+    REQUIRE(session.feed(bytes({iac, do_option, com_port})).reply.empty());
     REQUIRE_EQ(session.feed(bytes({iac, will, com_port})).reply,
-               bytes({iac, do_, com_port}));
+               bytes({iac, do_option, com_port}));
     REQUIRE(session.feed(bytes({iac, will, com_port})).reply.empty());
 }
 

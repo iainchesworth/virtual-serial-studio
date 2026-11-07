@@ -85,7 +85,14 @@ replay_player::replay_player(std::shared_ptr<state> shared)
 
 replay_player::~replay_player()
 {
-    stop();
+    try
+    {
+        stop();
+    }
+    catch (...)
+    {
+        // best effort: a destructor must not throw, and nothing can act on a failed stop
+    }
 }
 
 result<std::shared_ptr<replay_player>> replay_player::start(

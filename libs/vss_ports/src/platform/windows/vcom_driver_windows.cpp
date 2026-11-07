@@ -526,7 +526,17 @@ public:
         return made;
     }
 
-    ~driver_transport() override { close(); }
+    ~driver_transport() override
+    {
+        try
+        {
+            close();
+        }
+        catch (...)
+        {
+            // best effort: a destructor must not throw, and nothing can act on a failed stop
+        }
+    }
 
     std::string describe() const override
     {
