@@ -229,8 +229,8 @@ void observe_firewall(windows_observation& seen)
     // On when any network the computer is on now has the firewall on.
     const struct
     {
-        long bit;
-        NET_FW_PROFILE_TYPE2 profile;
+        long bit = 0;
+        NET_FW_PROFILE_TYPE2 profile{};
     } profiles[] = {{profile_domain, NET_FW_PROFILE2_DOMAIN},
                     {profile_private, NET_FW_PROFILE2_PRIVATE},
                     {profile_public, NET_FW_PROFILE2_PUBLIC}};

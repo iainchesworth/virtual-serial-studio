@@ -381,7 +381,7 @@ public:
             receive_next();
     }
 
-    void read(asio::mutable_buffer buffer, io_handler handler)
+    void read(const asio::mutable_buffer& buffer, io_handler handler)
     {
         asio::post(strand_,
                    [self = shared_from_this(), buffer,
@@ -412,7 +412,7 @@ public:
                    });
     }
 
-    void write(asio::const_buffer buffer, io_handler handler)
+    void write(const asio::const_buffer& buffer, io_handler handler)
     {
         auto payload = std::make_shared<std::vector<char>>(
             static_cast<const char*>(buffer.data()),

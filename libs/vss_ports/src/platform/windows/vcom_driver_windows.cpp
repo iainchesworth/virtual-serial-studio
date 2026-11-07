@@ -80,7 +80,7 @@ struct hub_interface
 
 std::wstring read_port_name(HDEVINFO set, SP_DEVINFO_DATA& info)
 {
-    const HKEY key = ::SetupDiOpenDevRegKey(set, &info, DICS_FLAG_GLOBAL, 0,
+    const auto key = ::SetupDiOpenDevRegKey(set, &info, DICS_FLAG_GLOBAL, 0,
                                             DIREG_DEV, KEY_QUERY_VALUE);
     if (key == INVALID_HANDLE_VALUE)
         return {};
@@ -193,7 +193,7 @@ using unique_handle = std::unique_ptr<void, handle_closer>;
 /// for. A port made through it lives as long as this handle does.
 HANDLE open_control(const std::wstring& path, DWORD& error)
 {
-    const HANDLE handle = ::CreateFileW(
+    const auto handle = ::CreateFileW(
         path.c_str(), GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
     error = handle == INVALID_HANDLE_VALUE ? ::GetLastError() : 0;
@@ -213,7 +213,7 @@ bool control_request(HANDLE handle, DWORD code, void* input, DWORD input_size,
 /// Opens the hub end. An overlapped handle, so that asio can use it.
 HANDLE open_hub(const std::wstring& path, DWORD& error)
 {
-    const HANDLE handle = ::CreateFileW(
+    const auto handle = ::CreateFileW(
         path.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING,
         FILE_FLAG_OVERLAPPED, nullptr);
     error = handle == INVALID_HANDLE_VALUE ? ::GetLastError() : 0;
@@ -226,11 +226,14 @@ HANDLE open_hub(const std::wstring& path, DWORD& error)
 bool control(HANDLE handle, DWORD code, void* input, DWORD input_size,
              void* output, DWORD output_size, DWORD* returned = nullptr)
 {
-    const HANDLE event = ::CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    const auto event = ::CreateEventW(nullptr, TRUE, FALSE, nullptr);
     if (event == nullptr)
         return false;
 
     OVERLAPPED overlapped{};
+    // Setting the low bit of OVERLAPPED::hEvent keeps the completion off the
+    // I/O completion port, as the Win32 documentation describes.
+    // NOLINTNEXTLINE(performance-no-int-to-ptr)
     overlapped.hEvent = reinterpret_cast<HANDLE>(
         reinterpret_cast<ULONG_PTR>(event) | 1);
 
@@ -275,7 +278,7 @@ HANDLE open_helper(DWORD& error)
     {
         // Identification only: the helper needs to know the user and nothing
         // more, and has no reason to act as the user.
-        const HANDLE handle = ::CreateFileW(
+        const auto handle = ::CreateFileW(
             VssComHelperPipeName, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
             OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION,
             nullptr);
@@ -417,6 +420,8 @@ std::optional<hub_interface> wait_for_hub(const std::wstring& instance,
             if (!expected.empty() &&
                 ::_wcsicmp(hub.port.c_str(), expected.c_str()) != 0)
                 continue;
+            // hub is an element of the temporary list, so it has to be moved out.
+            // cppcheck-suppress returnStdMoveLocal
             return std::move(hub);
         }
         if (clock::now() >= deadline)
@@ -776,7 +781,8 @@ public:
 private:
     // -- Reads and writes -------------------------------------------------
 
-    void start_read(boost::asio::mutable_buffer buffer, io_handler handler)
+    void start_read(const boost::asio::mutable_buffer& buffer,
+                    io_handler handler)
     {
         const std::lock_guard lock(flight_->mutex);
         if (flight_->renaming)
@@ -809,7 +815,8 @@ private:
             });
     }
 
-    void start_write(boost::asio::const_buffer buffer, io_handler handler)
+    void start_write(const boost::asio::const_buffer& buffer,
+                     io_handler handler)
     {
         const std::lock_guard lock(flight_->mutex);
         if (flight_->renaming)
@@ -993,7 +1000,7 @@ private:
             return false;
 
         DWORD error = 0;
-        const HANDLE handle = open_hub(hub->path, error);
+        const auto handle = open_hub(hub->path, error);
         if (handle == INVALID_HANDLE_VALUE)
             return false;
         VSSCOM_VERSION_INFO version{};
@@ -1164,7 +1171,7 @@ open_made_port(const transport::executor_type& executor,
     }
 
     DWORD error = 0;
-    const HANDLE handle = open_hub(hub->path, error);
+    const auto handle = open_hub(hub->path, error);
     if (handle == INVALID_HANDLE_VALUE)
         return make_error_code(errc::io_error);
 
@@ -1338,7 +1345,7 @@ std::string platform_driver_version()
     for (const auto& hub : enumerate_hubs())
     {
         DWORD error = 0;
-        const HANDLE handle = open_hub(hub.path, error);
+        const auto handle = open_hub(hub.path, error);
         if (handle == INVALID_HANDLE_VALUE)
             continue;
 
@@ -1401,7 +1408,7 @@ platform_create_driver_port(const transport::executor_type& executor,
         numbered = true;
 
         DWORD error = 0;
-        const HANDLE handle = open_hub(hub.path, error);
+        const auto handle = open_hub(hub.path, error);
         if (handle == INVALID_HANDLE_VALUE)
         {
             if (error != ERROR_ACCESS_DENIED && error != ERROR_SHARING_VIOLATION)

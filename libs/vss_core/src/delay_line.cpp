@@ -14,10 +14,10 @@
 
 namespace vss {
 
-delay_line::delay_line(boost::asio::any_io_executor executor,
+delay_line::delay_line(const boost::asio::any_io_executor& executor,
                        std::shared_ptr<endpoint> target,
                        std::uint32_t delay_ms, std::uint32_t jitter_ms)
-    : strand_(boost::asio::make_strand(std::move(executor)))
+    : strand_(boost::asio::make_strand(executor))
     , timer_(strand_)
     , target_(std::move(target))
     , delay_ms_(delay_ms)
