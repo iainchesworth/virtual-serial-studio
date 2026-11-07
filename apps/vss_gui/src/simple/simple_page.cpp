@@ -494,8 +494,7 @@ void SimplePage::show_setup(const setup_view& setup)
     Q_EMIT setup_selected(shown_);
 }
 
-void SimplePage::change_programs(const setup_view& setup,
-                                 vss::endpoint_id close)
+void SimplePage::change_programs(setup_view setup, vss::endpoint_id close)
 {
     VSS_PROFILE_ZONE("gui.simple.page.change_programs");
     job_plan plan = plan_from(setup, backend_.ports());

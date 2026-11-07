@@ -75,7 +75,9 @@ private:
     void rebuild_list();
     void show_form(job kind, const std::optional<setup_view>& previous);
     void show_setup(const setup_view& setup);
-    void change_programs(const setup_view& setup, vss::endpoint_id close);
+    /// Takes the setup by value: `refresh()` below rebuilds `setups_`, and a
+    /// reference into it would dangle for the rest of the function.
+    void change_programs(setup_view setup, vss::endpoint_id close);
     const setup_view* find(vss::endpoint_id port) const;
     setup_prefs prefs_of(const setup_view& setup) const;
     void store_prefs(const setup_view& setup, const setup_prefs& prefs);
