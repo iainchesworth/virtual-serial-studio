@@ -13,6 +13,7 @@
 
 #include <mutex>
 #include <string>
+#include <utility>
 
 namespace vss::gui
 {
@@ -55,7 +56,7 @@ void remember_details(const driver_check& check, const vss::error_code& failure)
                     .arg(last.code);
     }
     const std::lock_guard lock(details_mutex);
-    details_text = text;
+    details_text = std::move(text);
 }
 
 bool is_candidate(const vss::error_code& failure)

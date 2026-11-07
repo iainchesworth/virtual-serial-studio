@@ -37,7 +37,7 @@ struct piece
     const char* name;
 };
 
-const piece pieces[] = {
+const piece kPieces[] = {
     {driver_problem::driver_missing, "the driver is not installed"},
     {driver_problem::helper_missing, "the helper service is not installed"},
     {driver_problem::helper_stopped, "the helper service is not running"},
@@ -102,7 +102,7 @@ void read_and_close(QWidget* dialog, driver_problem problem)
 
 TEST_CASE("setup: the first screen names the missing piece and offers the set-up")
 {
-    for (const piece& each : pieces)
+    for (const piece& each : kPieces)
     {
         Session s(std::string("setup: the first screen: ") + each.name);
         s.step(QString::fromLatin1("a PC where %1").arg(each.name));
@@ -133,7 +133,7 @@ TEST_CASE("setup: the first screen names the missing piece and offers the set-up
 
 TEST_CASE("setup: a port that cannot be made says which piece is missing")
 {
-    for (const piece& each : pieces)
+    for (const piece& each : kPieces)
     {
         Session s(std::string("setup: creating a port: ") + each.name);
         tell(s, each.problem);

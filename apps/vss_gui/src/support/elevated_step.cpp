@@ -154,17 +154,17 @@ step_report add_to_serial_group(const perm::group_membership_spec& spec)
 namespace
 {
 
-constexpr int exit_setup_done = 0;
-constexpr int exit_setup_restart = 10;
-constexpr int exit_setup_not_admin = 2;
-constexpr int exit_setup_untrusted = 6;
-constexpr int exit_setup_driver = 7;
-constexpr int exit_setup_helper = 8;
-constexpr int exit_setup_incomplete = 9;
+constexpr int kExitSetupDone = 0;
+constexpr int kExitSetupRestart = 10;
+constexpr int kExitSetupNotAdmin = 2;
+constexpr int kExitSetupUntrusted = 6;
+constexpr int kExitSetupDriver = 7;
+constexpr int kExitSetupHelper = 8;
+constexpr int kExitSetupIncomplete = 9;
 
 /// The wait for the script: a driver install and a service start take a while
 /// on a slow disk, and a hang must still end.
-constexpr int setup_wait_seconds = 300;
+constexpr int kSetupWaitSeconds = 300;
 
 bool package_dir_valid(const QDir& directory)
 {
@@ -233,25 +233,25 @@ driver_setup_report report_for_driver_setup(const perm::step_result& result)
     {
         switch (result.exit_code)
         {
-        case exit_setup_done:
+        case kExitSetupDone:
             report.result = driver_setup_result::done;
             break;
-        case exit_setup_restart:
+        case kExitSetupRestart:
             report.result = driver_setup_result::done_restart;
             break;
-        case exit_setup_not_admin:
+        case kExitSetupNotAdmin:
             report.result = driver_setup_result::not_elevated;
             break;
-        case exit_setup_untrusted:
+        case kExitSetupUntrusted:
             report.result = driver_setup_result::untrusted;
             break;
-        case exit_setup_driver:
+        case kExitSetupDriver:
             report.result = driver_setup_result::driver_failed;
             break;
-        case exit_setup_helper:
+        case kExitSetupHelper:
             report.result = driver_setup_result::helper_failed;
             break;
-        case exit_setup_incomplete:
+        case kExitSetupIncomplete:
             report.result = driver_setup_result::incomplete;
             break;
         default:
@@ -357,7 +357,7 @@ driver_setup_report set_up_driver()
         "-PackageRoot",
         directory.toStdString()};
     return report_for_driver_setup(perm::run_elevated(
-        powershell_path().toStdString(), arguments, setup_wait_seconds));
+        powershell_path().toStdString(), arguments, kSetupWaitSeconds));
 }
 
 } // namespace vss::gui::support

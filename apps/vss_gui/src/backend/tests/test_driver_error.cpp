@@ -32,17 +32,22 @@ void say(FakeStudioBackend& backend, driver_problem problem)
     backend.set_facts(facts);
 }
 
-const std::vector<driver_problem> setup_problems = {
-    driver_problem::driver_missing, driver_problem::helper_missing,
-    driver_problem::helper_stopped, driver_problem::helper_incompatible,
-    driver_problem::helper_denied};
+/// The problems the guided setup fixes. A function, not a global: a vector built
+/// at start-up could throw where nothing can catch it.
+std::vector<driver_problem> setup_problem_list()
+{
+    return {driver_problem::driver_missing, driver_problem::helper_missing,
+            driver_problem::helper_stopped,
+            driver_problem::helper_incompatible,
+            driver_problem::helper_denied};
+}
 
 } // namespace
 
 TEST_CASE("driver error: each set-up problem has its own sentence and next step")
 {
     QStringList bodies;
-    for (const driver_problem problem : setup_problems)
+    for (const driver_problem problem : setup_problem_list())
     {
         const QString body = driver_problem_body(problem);
         // A next step, and the action that does it.
@@ -61,7 +66,7 @@ TEST_CASE("driver error: each set-up problem has its own sentence and next step"
 
 TEST_CASE("driver error: a refused port is explained by what the check finds")
 {
-    for (const driver_problem problem : setup_problems)
+    for (const driver_problem problem : setup_problem_list())
     {
         FakeStudioBackend backend;
         say(backend, problem);
@@ -99,9 +104,11 @@ TEST_CASE("driver error: a refusal with nothing wrong in the set-up is not bare"
     say(backend, driver_problem::none);
     const auto denied = driver_aware_error(
         backend, vss::make_error_code(vss::errc::permission_denied));
-    REQUIRE(driver_problem_of(denied) == driver_problem::unknown);
+    const auto found = driver_problem_of(denied);
+    REQUIRE(found.has_value());
+    REQUIRE(*found == driver_problem::unknown);
     REQUIRE(error_text(denied).contains(QStringLiteral("Setup check")));
-    REQUIRE(!driver_problem_offers_setup(*driver_problem_of(denied)));
+    REQUIRE(!driver_problem_offers_setup(*found));
 
     // The codes that mean what they say are left alone.
     for (const auto code :
