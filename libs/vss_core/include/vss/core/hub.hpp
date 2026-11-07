@@ -13,6 +13,7 @@
 #include <vss/core/error.hpp>
 #include <vss/core/event.hpp>
 #include <vss/core/link.hpp>
+#include <vss/core/profile.hpp>
 #include <vss/core/traffic_log.hpp>
 
 #include <boost/asio/executor_work_guard.hpp>
@@ -229,6 +230,9 @@ private:
     // Shutdowns in flight, from remove_endpoint() and stop(). The io_context is
     // stopped only once stop() has been called and this reaches zero.
     std::atomic<std::size_t> closing_{0};
+    /// Events posted to the dispatcher strand and not yet delivered; feeds the
+    /// `hub.dispatch_queue` plot and costs nothing without instrumentation.
+    profiling::depth_counter pending_events_;
     std::atomic<bool> stopping_{false};
 
     mutable std::shared_mutex mutex_;

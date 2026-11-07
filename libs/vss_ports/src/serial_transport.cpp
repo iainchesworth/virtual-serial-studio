@@ -4,9 +4,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <vss/ports/serial_transport.hpp>
+#include <vss/core/profile.hpp>
 #include <vss/ports/listen_transport.hpp>
 #include <vss/ports/native_lines.hpp>
+#include <vss/ports/serial_transport.hpp>
 
 #include <boost/asio/bind_executor.hpp>
 #include <boost/asio/error.hpp>
@@ -85,6 +86,7 @@ vs::serial_config to_serial_config(const serial_settings& settings)
 
 result<endpoint_kind> classify_uri(std::string_view uri)
 {
+    VSS_PROFILE_ZONE("ports.serial.classify_uri");
     if (is_listen_uri(uri))
     {
         const auto address = parse_listen_uri(uri);
@@ -116,6 +118,9 @@ serial_transport::serial_transport(const executor_type& executor,
     : executor_(executor)
     , uri_(std::move(uri))
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.serial.open");
+    if (zone.active())
+        zone.text(uri_);
     boost::system::error_code parse_ec;
     auto configuration = vs::parse_uri(uri_, parse_ec);
     if (parse_ec)
@@ -151,6 +156,9 @@ serial_transport::serial_transport(const executor_type& executor,
     : executor_(executor)
     , uri_(std::move(uri))
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.serial.open");
+    if (zone.active())
+        zone.text(uri_);
     if (const error_code invalid = validate(settings))
     {
         ec = invalid;
@@ -208,6 +216,7 @@ std::shared_ptr<serial_transport> serial_transport::make_mock(
     const executor_type& executor, const serial_settings& settings,
     const std::string& target, error_code& ec)
 {
+    VSS_PROFILE_ZONE("ports.serial.make_mock");
     if (const error_code invalid = validate(settings))
     {
         ec = invalid;
@@ -268,6 +277,7 @@ bool serial_transport::is_open() const
 void serial_transport::async_read_some(boost::asio::mutable_buffer buffer,
                                        io_handler handler)
 {
+    VSS_PROFILE_ZONE("ports.serial.arm_read");
     if (!port_)
     {
         boost::asio::post(executor_, [handler] {
@@ -283,6 +293,7 @@ void serial_transport::async_read_some(boost::asio::mutable_buffer buffer,
 void serial_transport::async_write_some(boost::asio::const_buffer buffer,
                                         io_handler handler)
 {
+    VSS_PROFILE_ZONE("ports.serial.arm_write");
     if (!port_)
     {
         boost::asio::post(executor_, [handler] {
@@ -297,6 +308,7 @@ void serial_transport::close()
 {
     if (!port_)
         return;
+    VSS_PROFILE_ZONE("ports.serial.close");
     boost::system::error_code ignored;
     port_->close(ignored);
 }
@@ -319,6 +331,7 @@ void serial_transport::set_control_line(control_line line, bool state)
 {
     if (kind_ != endpoint_kind::physical || !port_)
         return;
+    VSS_PROFILE_ZONE("ports.serial.set_line");
     if (const auto written = native::write_line(port_->native_handle(), line, state);
         !written)
         return;
@@ -335,6 +348,7 @@ void serial_transport::refresh_lines()
 {
     if (kind_ != endpoint_kind::physical || !port_)
         return;
+    VSS_PROFILE_ZONE("ports.serial.refresh_lines");
 
     const auto status = native::read_modem_status(port_->native_handle());
     if (!status)

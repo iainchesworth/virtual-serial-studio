@@ -6,6 +6,8 @@
 
 #include "reconnector.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <algorithm>
 
 namespace vss {
@@ -25,7 +27,12 @@ std::chrono::milliseconds backoff_delay(const reconnect_policy& policy,
 reconnector::reconnector(attempt_fn attempt, note_fn note)
     : attempt_(std::move(attempt)), note_(std::move(note))
 {
-    thread_ = std::thread([this] { run(); });
+    thread_ = std::thread(
+        [this]
+        {
+            VSS_PROFILE_THREAD("vss.reconnect");
+            run();
+        });
 }
 
 reconnector::~reconnector()
@@ -80,7 +87,9 @@ void reconnector::lost(endpoint_id id)
             return;
         delay = backoff_delay(policy_, 0);
         waiting_[id] = entry{std::chrono::steady_clock::now() + delay, 0};
+        VSS_PROFILE_PLOT("studio.reconnect_pending", waiting_.size());
     }
+    VSS_PROFILE_MESSAGE("studio.reconnect.lost");
     announce(id, "connection lost; trying again in " +
                      std::to_string(delay.count()) + " ms");
     wake_.notify_all();
@@ -128,7 +137,12 @@ void reconnector::run()
         const endpoint_id id = next->first;
         const unsigned attempt = next->second.attempts;
         lock.unlock();
-        const result<void> outcome = attempt_(id);
+        VSS_PROFILE_MESSAGE("studio.reconnect.attempt");
+        result<void> outcome = make_error_code(errc::internal);
+        {
+            VSS_PROFILE_ZONE("studio.reconnect.attempt");
+            outcome = attempt_(id);
+        }
         lock.lock();
 
         const auto found = waiting_.find(id);
@@ -138,6 +152,8 @@ void reconnector::run()
         if (outcome)
         {
             waiting_.erase(found);
+            VSS_PROFILE_PLOT("studio.reconnect_pending", waiting_.size());
+            VSS_PROFILE_MESSAGE("studio.reconnect.succeeded");
             announce(id, "reconnected after " + std::to_string(attempt + 1) +
                              (attempt == 0 ? " try" : " tries"));
             continue;
@@ -155,6 +171,7 @@ void reconnector::run()
         if (policy_.max_attempts != 0 && made >= policy_.max_attempts)
         {
             waiting_.erase(found);
+            VSS_PROFILE_MESSAGE("studio.reconnect.gave_up");
             announce(id, "giving up after " + std::to_string(made) +
                              " tries: " + error.message());
             continue;

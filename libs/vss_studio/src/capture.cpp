@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/capture.hpp>
 
 #include <boost/json.hpp>
@@ -371,6 +373,7 @@ capture_writer::capture_writer(std::ostream& out, capture_format format,
 
 void capture_writer::write(const capture_record& record)
 {
+    VSS_PROFILE_ZONE("studio.capture.write");
     if (finished_)
         return;
 
@@ -413,6 +416,7 @@ void capture_writer::write(const capture_record& record)
 
 void capture_writer::finish()
 {
+    VSS_PROFILE_ZONE("studio.capture.finish");
     if (finished_)
         return;
     finished_ = true;
@@ -614,6 +618,7 @@ result<capture_file> read_capture(std::istream& in,
 
 result<capture_file> read_capture_file(const std::string& path)
 {
+    VSS_PROFILE_ZONE("studio.capture.read_file");
     std::error_code status_error;
     const auto status = std::filesystem::status(path, status_error);
     if (status_error || status.type() == std::filesystem::file_type::not_found)
@@ -678,6 +683,7 @@ struct capture_session::state
 
     void on_event(const endpoint_event& event)
     {
+        VSS_PROFILE_ZONE("studio.capture.record");
         if (event.kind != event_kind::data || !event.data || event.data->empty())
             return;
         if (event.when < origin)
@@ -705,6 +711,8 @@ capture_session::capture_session(hub& engine, std::shared_ptr<std::ostream> out,
     : hub_(engine)
     , state_(std::make_shared<state>())
 {
+    VSS_PROFILE_ZONE("studio.capture.start");
+    VSS_PROFILE_MESSAGE("studio.capture.started");
     header_.started = sys_clock::now();
 
     state_->out = std::move(out);
@@ -747,6 +755,8 @@ std::unique_ptr<capture_session> capture_session::start(
 
 void capture_session::stop()
 {
+    VSS_PROFILE_ZONE("studio.capture.stop");
+    VSS_PROFILE_MESSAGE("studio.capture.stopped");
     if (subscription_ != 0)
     {
         hub_.unsubscribe(subscription_);

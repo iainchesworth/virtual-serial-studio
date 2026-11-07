@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/native_lines.hpp>
 
 #include "platform/native_lines_platform.hpp"
@@ -20,6 +21,7 @@ result<modem_status> read_modem_status(std::intptr_t handle)
 {
     if (handle == 0)
         return make_error_code(errc::not_open);
+    VSS_PROFILE_ZONE("ports.native.read_modem_status");
 
     auto out = detail::platform_read_modem_status(handle);
     if (!out)
@@ -37,6 +39,7 @@ result<void> write_line(std::intptr_t handle, control_line line, bool state)
     if (handle == 0)
         return make_error_code(errc::not_open);
 
+    VSS_PROFILE_ZONE("ports.native.write_line");
     return detail::platform_write_line(handle, line, state);
 }
 
@@ -45,6 +48,7 @@ result<void> set_break(std::intptr_t handle, bool active)
     if (handle == 0)
         return make_error_code(errc::not_open);
 
+    VSS_PROFILE_ZONE("ports.native.set_break");
     return detail::platform_set_break(handle, active);
 }
 

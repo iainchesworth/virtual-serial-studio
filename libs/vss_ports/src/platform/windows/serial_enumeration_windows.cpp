@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../serial_enumeration_platform.hpp"
 
 #include <windows.h>
@@ -72,6 +74,7 @@ std::string read_instance_id(HDEVINFO info, SP_DEVINFO_DATA& data)
 
 std::vector<serial_device_info> platform_enumerate_serial_devices()
 {
+    VSS_PROFILE_ZONE("ports.enumerate.windows");
     std::vector<serial_device_info> devices;
 
     HDEVINFO info = ::SetupDiGetClassDevsW(&GUID_DEVCLASS_PORTS, nullptr,

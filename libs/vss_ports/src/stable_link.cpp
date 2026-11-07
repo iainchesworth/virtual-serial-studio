@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/stable_link.hpp>
 
 #include "platform/stable_link_platform.hpp"
@@ -60,6 +61,7 @@ bool stable_links_supported() noexcept
 
 result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup)
 {
+    VSS_PROFILE_ZONE("ports.stable_link.resolve_directory");
     if (!stable_links_supported())
         return make_error_code(errc::unsupported);
 
@@ -95,6 +97,7 @@ result<std::filesystem::path> resolve_link_directory(const env_lookup& lookup)
 
 std::vector<stable_link> list_stable_links(const env_lookup& lookup)
 {
+    VSS_PROFILE_ZONE("ports.stable_link.list");
     std::vector<stable_link> links;
     if (!stable_links_supported())
         return links;
@@ -136,6 +139,9 @@ result<stable_link> make_stable_link(const std::filesystem::path& directory,
                                      std::string_view name,
                                      std::string_view target)
 {
+    VSS_PROFILE_ZONE_NAMED(zone, "ports.stable_link.make");
+    if (zone.active())
+        zone.text(name);
     if (!stable_links_supported())
         return make_error_code(errc::unsupported);
     if (!valid_name(name) || target.empty())
@@ -190,6 +196,7 @@ result<stable_link> make_stable_link(const std::filesystem::path& directory,
 
 void remove_stable_link(const stable_link& link) noexcept
 {
+    VSS_PROFILE_ZONE("ports.stable_link.remove");
     std::error_code ec;
     const std::filesystem::path path(link.path);
     const auto status = std::filesystem::symlink_status(path, ec);

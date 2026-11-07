@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
 #include <vss/ports/com0com.hpp>
 
 #include "platform/com0com_platform.hpp"
@@ -47,6 +48,7 @@ group_com0com_pairs(const std::vector<serial_device_info>& devices)
 
 com0com_installation detect_com0com()
 {
+    VSS_PROFILE_ZONE("ports.com0com.detect");
     return detail::platform_detect_com0com();
 }
 
@@ -55,6 +57,7 @@ result<void> create_com0com_pair(const com0com_installation& installation,
                                  std::string_view port_b,
                                  bool request_elevation)
 {
+    VSS_PROFILE_ZONE("ports.com0com.create_pair");
     return detail::platform_create_com0com_pair(installation, port_a, port_b,
                                                 request_elevation);
 }
@@ -62,6 +65,7 @@ result<void> create_com0com_pair(const com0com_installation& installation,
 result<void> remove_com0com_pair(const com0com_installation& installation,
                                  int index, bool request_elevation)
 {
+    VSS_PROFILE_ZONE("ports.com0com.remove_pair");
     return detail::platform_remove_com0com_pair(installation, index,
                                                 request_elevation);
 }

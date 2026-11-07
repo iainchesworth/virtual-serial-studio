@@ -13,6 +13,8 @@
 // is a command the user runs.
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../permissions_platform.hpp"
 #include "../posix/permissions_posix.hpp"
 
@@ -44,6 +46,7 @@ std::string_view platform_host_name() noexcept
 
 permissions::observation platform_observe(const permissions::context& ask)
 {
+    VSS_PROFILE_ZONE("ports.permissions.observe_macos");
     observation seen;
     macos_observation& out = seen.macos_host;
 

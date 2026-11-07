@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../virtual_port_platform.hpp"
 #include "pty_slave_path.hpp"
 
@@ -249,6 +251,7 @@ result<virtual_port_result>
 platform_create_pty(const transport::executor_type& executor,
                     const std::string& name)
 {
+    VSS_PROFILE_ZONE("ports.virtual.create_pty");
     const int master = ::posix_openpt(O_RDWR | O_NOCTTY);
     if (master < 0)
         return make_error_code(errc::io_error);

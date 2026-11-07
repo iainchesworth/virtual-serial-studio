@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/benchmark.hpp>
 
 #include <vss/core/bytes.hpp>
@@ -45,6 +47,7 @@ run_benchmark(endpoint& sender, endpoint& receiver,
               const benchmark_progress_handler& progress,
               const std::atomic<bool>* cancel)
 {
+    VSS_PROFILE_ZONE("studio.benchmark.run");
     if (options.bytes == 0 || options.chunk == 0)
         return make_error_code(errc::invalid_argument);
 

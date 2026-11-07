@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/responder.hpp>
 
 #include "timed_queue.hpp"
@@ -94,6 +96,7 @@ std::optional<std::string> ms_member(const json::object& object, const char* key
 result<responder_script> parse_responder_script(std::string_view text,
                                                 std::string* detail)
 {
+    VSS_PROFILE_ZONE("studio.responder.parse_script");
     boost::system::error_code parse_error;
     const json::value root = json::parse(text, parse_error);
     if (parse_error)
@@ -225,6 +228,7 @@ result<responder_script> parse_responder_script(std::string_view text,
 result<responder_script> load_responder_script(const std::string& path,
                                                std::string* detail)
 {
+    VSS_PROFILE_ZONE("studio.responder.load_script");
     std::error_code status_error;
     const auto status = std::filesystem::status(path, status_error);
     if (status_error || status.type() == std::filesystem::file_type::not_found)
@@ -303,6 +307,7 @@ struct responder::state : std::enable_shared_from_this<state>
 
     void on_event(const endpoint_event& event)
     {
+        VSS_PROFILE_ZONE("studio.responder.match");
         if (stopped.load() || event.kind != event_kind::data || !event.data ||
             event.direction != data_direction::rx ||
             event.endpoint != target->id())
@@ -357,6 +362,7 @@ struct responder::state : std::enable_shared_from_this<state>
     /// cycle queues the next, one interval ahead of its steps.
     void schedule_cycle(std::uint64_t cycle)
     {
+        VSS_PROFILE_ZONE("studio.responder.poll_cycle");
         const auto& poll = *script.poll;
         const time_point begin =
             origin + poll.start +
@@ -403,6 +409,7 @@ responder::~responder()
 result<std::shared_ptr<responder>> responder::start(
     hub& engine, std::shared_ptr<endpoint> target, const responder_script& script)
 {
+    VSS_PROFILE_ZONE("studio.responder.start");
     if (!target || (script.rules.empty() && !script.poll))
         return make_error_code(errc::invalid_argument);
     for (const auto& rule : script.rules)
@@ -446,6 +453,7 @@ result<std::shared_ptr<responder>> responder::start(
 
 void responder::stop()
 {
+    VSS_PROFILE_ZONE("studio.responder.stop");
     state_->stopped.store(true);
     // The hub must outlive the responder, or the responder be stopped first.
     if (const auto id = state_->subscription.exchange(0); id != 0)

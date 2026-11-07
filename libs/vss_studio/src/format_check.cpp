@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include <vss/studio/format_check.hpp>
 
 #include <algorithm>
@@ -25,6 +27,7 @@ std::vector<format_mismatch>
 find_format_mismatches(const std::vector<endpoint_info>& endpoints,
                        const std::vector<link_info>& links)
 {
+    VSS_PROFILE_ZONE("studio.format_check");
     std::unordered_map<endpoint_id, line_format> known;
     for (const auto& info : endpoints)
     {

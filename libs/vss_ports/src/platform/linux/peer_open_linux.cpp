@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <vss/core/profile.hpp>
+
 #include "../peer_open_platform.hpp"
 
 #include <unistd.h>
@@ -24,6 +26,7 @@ bool platform_peer_open_supported() noexcept
 std::vector<peer_open_state>
 platform_peer_open(const std::vector<std::string>& paths)
 {
+    VSS_PROFILE_ZONE("ports.peer_open.linux");
     namespace fs = std::filesystem;
 
     const std::unordered_set<std::string> wanted(paths.begin(), paths.end());
