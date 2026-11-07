@@ -198,7 +198,7 @@ private:
     }
 
 #define VSS_PROFILE_ZONE(name)                                                 \
-    VSS_PROFILE_ZONE_NAMED(VSS_PROFILE_JOIN_(vss_zone_, __COUNTER__), name)
+    VSS_PROFILE_ZONE_NAMED(VSS_PROFILE_JOIN_(vss_zone_, __LINE__), name)
 
 /// Text for a named zone, evaluated only while the zone is recording.
 #define VSS_PROFILE_ZONE_TEXT(var, content)                                    \
