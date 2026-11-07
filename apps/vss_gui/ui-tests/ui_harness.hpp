@@ -259,7 +259,6 @@ private:
     StudioBackend* backend_ = nullptr;
     std::unique_ptr<ShellWindow> window_;
     Pilot pilot_;
-    bool finished_ = false;
 };
 
 /// Marks a step that is known to fail. The body runs; a failure inside it is
