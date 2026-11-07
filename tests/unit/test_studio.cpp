@@ -298,7 +298,7 @@ TEST_CASE("studio: a fixture takes new settings and keeps its links and echo")
     slow.parity = parity_mode::even;
     REQUIRE(app.reconfigure_port(id, slow));
     REQUIRE(app.port_settings(id).has_value());
-    REQUIRE(*app.port_settings(id) == slow);
+    REQUIRE(vss_test::require_value(app.port_settings(id)) == slow);
     REQUIRE(app.fixture_echo(id));
     REQUIRE_EQ(app.engine().links().size(), std::size_t{1});
 

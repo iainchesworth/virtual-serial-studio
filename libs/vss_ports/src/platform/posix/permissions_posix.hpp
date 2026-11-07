@@ -153,6 +153,7 @@ capture_command(const std::vector<std::string>& words,
 
     std::vector<std::string> copy = words;
     std::vector<char*> argv;
+    argv.reserve(copy.size() + 1);
     for (std::string& word : copy)
         argv.push_back(word.data());
     argv.push_back(nullptr);

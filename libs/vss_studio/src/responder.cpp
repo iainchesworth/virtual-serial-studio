@@ -359,6 +359,8 @@ struct responder::state : std::enable_shared_from_this<state>
     /// cycle queues the next, one interval ahead of its steps.
     void schedule_cycle(std::uint64_t cycle)
     {
+        if (!script.poll)
+            return;
         const auto& poll = *script.poll;
         const time_point begin =
             origin + poll.start +

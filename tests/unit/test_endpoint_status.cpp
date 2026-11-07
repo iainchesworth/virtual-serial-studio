@@ -131,7 +131,8 @@ TEST_CASE("endpoint info: the format and client count follow the transport")
     REQUIRE_EQ(*info.clients, std::size_t{0});
 
     transport->set_clients(3);
-    REQUIRE_EQ(*(*added)->info().clients, std::size_t{3});
+    REQUIRE_EQ(vss_test::require_value((*added)->info().clients),
+               std::size_t{3});
 
     transport->set_format(std::nullopt);
     REQUIRE(!(*added)->info().peer_format.has_value());

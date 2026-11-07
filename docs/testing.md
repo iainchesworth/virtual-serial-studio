@@ -168,6 +168,11 @@ left out on purpose:
   allows `#pragma once` and counts every guard against the ratchet in
   `tools/preprocessor-baseline.json`.
 
+CI pins a newer LLVM than most machines have (`.github/toolchain-versions.json`) and
+builds on Linux, so it can report checks and platform code that a local run does
+not see, such as `performance-use-std-move` or the POSIX permission code. The
+nightly run and the pull request job are the reference.
+
 Fix a finding in the code. A suppression (`// NOLINT(check)` or
 `// cppcheck-suppress id`) names the check and carries the reason on the same
 line.
