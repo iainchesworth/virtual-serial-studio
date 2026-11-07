@@ -119,9 +119,12 @@ void reconnector::run()
             waiting_.begin(), waiting_.end(),
             [](const auto& left, const auto& right)
             { return left.second.due < right.second.due; });
-        if (next->second.due > std::chrono::steady_clock::now())
+        // Copy the time: the wait gives up the mutex, so disallow() or forget()
+        // can erase this entry, and the wait reads its time again when it wakes.
+        const auto due = next->second.due;
+        if (due > std::chrono::steady_clock::now())
         {
-            wake_.wait_until(lock, next->second.due);
+            wake_.wait_until(lock, due);
             continue;
         }
 

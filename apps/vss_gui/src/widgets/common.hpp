@@ -52,8 +52,9 @@ inline void announce_name_change(QWidget* widget)
 {
     if (widget == nullptr)
         return;
-    auto* event = new QAccessibleEvent(widget, QAccessible::NameChanged);
-    QAccessible::updateAccessibility(event);
+    // Qt does not take the event: it only reads it during the call.
+    QAccessibleEvent event(widget, QAccessible::NameChanged);
+    QAccessible::updateAccessibility(&event);
 }
 
 } // namespace vss::gui

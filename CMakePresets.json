@@ -207,6 +207,33 @@
       }
     },
     {
+      "name": "linux-asan-ubsan-gui",
+      "displayName": "Linux, AddressSanitizer and UBSan, -O1, with the GUI (fails without Qt)",
+      "inherits": "linux-asan-ubsan",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON"
+      }
+    },
+    {
+      "name": "linux-tsan-gui",
+      "displayName": "Linux, ThreadSanitizer, -O1, with the GUI (fails without Qt)",
+      "inherits": "linux-tsan",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON"
+      }
+    },
+    {
+      "name": "windows-msvc-asan-gui",
+      "displayName": "Windows, MSVC, AddressSanitizer, /O1, with the GUI (fails without Qt)",
+      "inherits": "windows-msvc-asan",
+      "cacheVariables": {
+        "VSS_BUILD_GUI": "ON",
+        "VSS_GUI_REQUIRED": "ON"
+      }
+    },
+    {
       "name": "linux-fuzz",
       "displayName": "Linux, libFuzzer with AddressSanitizer and UBSan, -O1 (Clang)",
       "inherits": "linux-base",
@@ -339,6 +366,18 @@
     {
       "name": "windows-msvc-asan",
       "configurePreset": "windows-msvc-asan"
+    },
+    {
+      "name": "linux-asan-ubsan-gui",
+      "configurePreset": "linux-asan-ubsan-gui"
+    },
+    {
+      "name": "linux-tsan-gui",
+      "configurePreset": "linux-tsan-gui"
+    },
+    {
+      "name": "windows-msvc-asan-gui",
+      "configurePreset": "windows-msvc-asan-gui"
     },
     {
       "name": "linux-fuzz",
@@ -524,6 +563,36 @@
       },
       "execution": {
         "timeout": 600
+      }
+    },
+    {
+      "name": "linux-asan-ubsan-gui",
+      "configurePreset": "linux-asan-ubsan-gui",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 1200
+      }
+    },
+    {
+      "name": "linux-tsan-gui",
+      "configurePreset": "linux-tsan-gui",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 1200
+      }
+    },
+    {
+      "name": "windows-msvc-asan-gui",
+      "configurePreset": "windows-msvc-asan-gui",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "timeout": 1200
       }
     },
     {

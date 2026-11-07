@@ -105,12 +105,16 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: gcc
+          qt: "true"
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-asan-ubsan
+          preset: linux-asan-ubsan-gui
 
       - name: Report the failure
         if: failure() && github.ref == 'refs/heads/develop'
@@ -128,7 +132,7 @@ jobs:
       issues: write
     env:
       BOOST_ROOT: ${{ github.workspace }}/.cache/boost-root
-      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+      TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1:ignore_noninstrumented_modules=1:suppressions=${{ github.workspace }}/tests/tsan.supp
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -137,12 +141,16 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: clang
+          qt: "true"
 
       - uses: ./.github/actions/prepare-deps
 
+      - name: Install GUI system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev
+
       - uses: ./.github/actions/build-and-test
         with:
-          preset: linux-tsan
+          preset: linux-tsan-gui
 
       - name: Report the failure
         if: failure() && github.ref == 'refs/heads/develop'
@@ -168,12 +176,13 @@ jobs:
       - uses: ./.github/actions/setup-toolchain
         with:
           compiler: msvc
+          qt: "true"
 
       - uses: ./.github/actions/prepare-deps
 
       - uses: ./.github/actions/build-and-test
         with:
-          preset: windows-msvc-asan
+          preset: windows-msvc-asan-gui
 
       - name: Report the failure
         if: failure() && github.ref == 'refs/heads/develop'
@@ -202,9 +211,9 @@ jobs:
         include:
           - { lineage: linux-gcc-release,     os: ubuntu-26.04, compiler: gcc,   qt: "false", preset: linux-release }
           - { lineage: linux-clang-release,   os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-release }
-          - { lineage: linux-clang-asan,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-asan-ubsan }
+          - { lineage: linux-clang-asan,      os: ubuntu-26.04, compiler: clang, qt: "true",  preset: linux-asan-ubsan-gui }
           - { lineage: linux-clang-fuzz,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-fuzz }
-          - { lineage: linux-clang-tsan,      os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-tsan }
+          - { lineage: linux-clang-tsan,      os: ubuntu-26.04, compiler: clang, qt: "true",  preset: linux-tsan-gui }
           - { lineage: linux-clang-coverage,  os: ubuntu-26.04, compiler: clang, qt: "false", preset: linux-coverage }
           - { lineage: linux-gcc-gui,         os: ubuntu-26.04, compiler: gcc,   qt: "true",  preset: linux-release-gui }
           - { lineage: windows-msvc-release,  os: windows-2025, compiler: msvc,  qt: "false", preset: windows-msvc-release }
