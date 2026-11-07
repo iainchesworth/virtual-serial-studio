@@ -8,8 +8,11 @@ One 48 high header row (the menus, then the action search and the Simple and Adv
 - Monitor pane bottom: 196 high, minimum 160.
 - Default window 1280 by 800, minimum 960 by 640. Dock sizes persist through `saveState`.
 
-## Launcher (empty state)
-Shown in place of the dock grid while the studio has no ports, and from View, Show launcher. Contents: readiness strip, heading "What do you want to do?", four job cards, a Saved setups row with the most recent file, and an Advanced mode hint. Once any port exists the launcher disappears and the dock grid appears. The header row and status line are always visible.
+## Simple mode body
+In Simple mode the body is not the dock grid. It is the setups list and a page for the chosen job or setup, specified in `screens/08-simple-mode.md`; the job grid there replaces the launcher. View, Show launcher opens the job grid. The dock grid and the canvas are Advanced mode. Menu bar, toolbar and status bar are always visible.
+
+## Launcher (Advanced mode)
+In Advanced mode an empty setup shows the empty canvas with its toolbox (`screens/07-canvas-editor.md`), not the launcher. The launcher is shown in place of the dock grid from View, Show launcher. Contents: readiness strip, heading "What do you want to do?", four job cards, a Saved setups row with the most recent file, and an Advanced mode hint. The header row and status line are always visible.
 
 ## Menu structure (same for both levels)
 Items marked **A** are visible only in Advanced mode and hidden in Simple. **new** means it does not exist in the current GUI. Ctrl is Cmd on macOS.

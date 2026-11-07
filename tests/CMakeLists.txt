@@ -206,6 +206,14 @@ if(TARGET vss_gui_shell_tests)
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
 endif()
 
+# Simple mode: setups, job forms and setup pages.
+if(TARGET vss_gui_simple_tests)
+  add_test(NAME gui_simple COMMAND vss_gui_simple_tests --verbose)
+  set_tests_properties(gui_simple PROPERTIES
+    TIMEOUT 180
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;PATH=${VSS_QT_BIN_DIR};$ENV{PATH}")
+endif()
+
 # Ports, Inspector, Send and Monitor models and panels.
 if(TARGET vss_gui_panes_tests)
   add_test(NAME gui_panes COMMAND vss_gui_panes_tests --verbose)

@@ -24,6 +24,7 @@
 #include "shell/studio_tray.hpp"
 #include "shell/undo_service.hpp"
 #include "shell/undo_steps.hpp"
+#include "simple/simple_page.hpp"
 #include "support/running_setup.hpp"
 #include "support/setup_facts.hpp"
 
@@ -167,6 +168,7 @@ TEST_CASE("shell: launcher, workspace, level and layout")
     window.show();
     QApplication::processEvents();
 
+    auto* simple = window.findChild<vss::gui::simple::SimplePage*>();
     auto* launcher = window.findChild<vss::gui::Launcher*>();
     auto* ports_dock =
         window.findChild<QDockWidget*>(QStringLiteral("portsDock"));
@@ -174,11 +176,14 @@ TEST_CASE("shell: launcher, workspace, level and layout")
         window.findChild<QDockWidget*>(QStringLiteral("inspectorDock"));
     auto* monitor_dock =
         window.findChild<QDockWidget*>(QStringLiteral("monitorDock"));
+    REQUIRE(simple != nullptr);
     REQUIRE(launcher != nullptr);
     REQUIRE(ports_dock != nullptr);
     REQUIRE(inspector_dock != nullptr);
     REQUIRE(monitor_dock != nullptr);
-    REQUIRE(launcher->isVisible());
+    // Simple mode is the setups page, with or without ports.
+    REQUIRE(simple->isVisible());
+    REQUIRE(!launcher->isVisible());
     REQUIRE(!ports_dock->isVisible());
     REQUIRE(!window.windowTitle().isEmpty());
 
@@ -186,10 +191,8 @@ TEST_CASE("shell: launcher, workspace, level and layout")
         QStringLiteral("terminal"), vss::virtual_port_kind::loopback, true);
     REQUIRE(port.has_value());
     QApplication::processEvents();
-    REQUIRE(!launcher->isVisible());
-    REQUIRE(ports_dock->isVisible());
-    REQUIRE(inspector_dock->isVisible());
-    REQUIRE(monitor_dock->isVisible());
+    REQUIRE(simple->isVisible());
+    REQUIRE(!ports_dock->isVisible());
 
     QAction* advanced =
         window.findChild<QAction*>(QStringLiteral("view.advanced"));
@@ -201,6 +204,11 @@ TEST_CASE("shell: launcher, workspace, level and layout")
     QApplication::processEvents();
     REQUIRE(advanced->isChecked());
     REQUIRE(mock->isVisible());
+    // Advanced mode is the dock grid.
+    REQUIRE(!simple->isVisible());
+    REQUIRE(ports_dock->isVisible());
+    REQUIRE(inspector_dock->isVisible());
+    REQUIRE(monitor_dock->isVisible());
 
     const QByteArray state = window.saveState();
     REQUIRE(!state.isEmpty());
@@ -209,10 +217,13 @@ TEST_CASE("shell: launcher, workspace, level and layout")
     QApplication::processEvents();
     // Advanced mode builds on the canvas: an empty setup is the empty canvas.
     REQUIRE(!launcher->isVisible());
-    // Simple mode starts from the launcher.
+    REQUIRE(!simple->isVisible());
+    REQUIRE(window.run_selftest());
+    // Simple mode is the setups page again, never the launcher.
     advanced->trigger();
     QApplication::processEvents();
-    REQUIRE(launcher->isVisible());
+    REQUIRE(simple->isVisible());
+    REQUIRE(!launcher->isVisible());
     REQUIRE(!ports_dock->isVisible());
     REQUIRE(window.run_selftest());
 

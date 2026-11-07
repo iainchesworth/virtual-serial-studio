@@ -896,7 +896,7 @@
     <context>
         <name>Benchmark</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="44" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="45" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
@@ -904,219 +904,219 @@
     <context>
         <name>BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
             <source>Benchmark a connection</source>
             <translation>מבחן ביצועים של חיבור</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="90" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>שולח נתונים מיציאה אחת לאחרת וסופר מה שמגיע.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="100" />
             <source>Send from</source>
             <translation>שליחה מ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="104" />
             <source>Receive on</source>
             <translation>קבלה ב</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="112" />
             <source>Amount of data</source>
             <translation>כמות נתונים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="116" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="121" />
             <source>Chunk size</source>
             <translation>גודל מקטע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>אין לקשר שתי יציאות אלה ב-Studio. הנתונים צריכים לעבור דרך הכבל או זוג מנהלי ההתקן, כדי שהספירה תהיה משמעותית.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="132" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="325" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>שתי יציאות אלה מקושרות ב-Studio. נתקו אותן קודם.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="147" />
             <source>Not run yet</source>
             <translation>עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="149" />
             <source>Benchmark result: not run yet</source>
             <translation>תוצאת מבחן הביצועים: עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="152" />
             <source>Not started</source>
             <translation>לא התחיל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="159" />
             <source>Benchmark progress</source>
             <translation>התקדמות מבחן הביצועים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Received</source>
             <translation>התקבל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Lost</source>
             <translation>אבד</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
             <source>Throughput</source>
             <translation>תפוקה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
             <source>Not run</source>
             <translation>לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="184" />
             <source>%1: not run yet</source>
             <translation>%1: עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="192" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>הרצה נכשלת כשהכמות שהתקבלה חסרה, והתוצאה מציינת בכמה.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="207" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="391" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="214" />
             <source>Copy result</source>
             <translation>העתקת התוצאה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="222" />
             <source>Copied the result.</source>
             <translation>התוצאה הועתקה.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="225" />
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="231" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="411" />
             <source>Run</source>
             <translation>הרצה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>הוסיפו שתי יציאות כדי למדוד ביצועי חיבור.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="323" />
             <source>Choose two different ports.</source>
             <translation>בחרו שתי יציאות שונות.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="403" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="431" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
             <source>Running</source>
             <translation>רץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="528" />
             <source>Benchmark result: %1</source>
             <translation>תוצאת מבחן הביצועים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="512" />
             <source>%1 of %2 received</source>
             <translation>%1 מתוך %2 התקבלו</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="535" />
             <source>Could not finish: %1</source>
             <translation>לא ניתן לסיים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="556" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Cancelled</source>
             <translation>בוטל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Passed</source>
             <translation>עבר</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="566" />
             <source>Finished at %1</source>
             <translation>הסתיים ב-%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="568" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: נשלחו %2, התקבלו %3, אבדו %4, תפוקה %5.</translation>
         </message>
@@ -1901,12 +1901,12 @@
     <context>
         <name>Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="659" />
+            <location filename="../src/widgets/controls.cpp" line="655" />
             <source>%1, expanded</source>
             <translation>%1, מורחב</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="660" />
+            <location filename="../src/widgets/controls.cpp" line="656" />
             <source>%1, collapsed</source>
             <translation>%1, מכווץ</translation>
         </message>
@@ -2193,6 +2193,164 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>FixtureBehaviours</name>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="100" />
+            <source>Only a mock fixture has a byte generator.</source>
+            <translation>רק להתקן דמה יש מחולל בתים.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="112" />
+            <source>The pattern needs pairs of hex digits, such as 55 AA.</source>
+            <translation>התבנית דורשת זוגות של ספרות hex, כגון 55 AA.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="119" />
+            <source>Type the line to send.</source>
+            <translation>הקלידו את השורה לשליחה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="203" />
+            <source>The generator stopped: %1</source>
+            <translation>המחולל נעצר: %1</translation>
+        </message>
+    </context>
+    <context>
+        <name>FixturePanel</name>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="55" />
+            <source>Fixture behaviour</source>
+            <translation>התנהגות ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="60" />
+            <source>What this fixture does</source>
+            <translation>מה התקן הדמה הזה עושה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="62" />
+            <source>Echo received bytes</source>
+            <translation>הדהוד של בתים שהתקבלו</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="71" />
+            <source>Generator</source>
+            <translation>מחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="73" />
+            <source>Generator kind</source>
+            <translation>סוג המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="74" />
+            <source>Text line</source>
+            <translation>שורת טקסט</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="75" />
+            <source>Fixed pattern</source>
+            <translation>תבנית קבועה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="77" />
+            <source>Counter</source>
+            <translation>מונה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="78" />
+            <source>Random bytes</source>
+            <translation>בתים אקראיים</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="82" />
+            <location filename="../src/panes/fixture_panel.cpp" line="190" />
+            <source>Line</source>
+            <translation>שורה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="85" />
+            <source>Generator bytes</source>
+            <translation>בתי המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="89" />
+            <source>Bytes</source>
+            <translation>בתים</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="93" />
+            <source> bytes each time</source>
+            <translation> בתים בכל פעם</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="94" />
+            <source>Bytes each time</source>
+            <translation>בתים בכל פעם</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="97" />
+            <source>Rate</source>
+            <translation>קצב</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="100" />
+            <source> per second</source>
+            <translation> בשנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="101" />
+            <source>Sends per second</source>
+            <translation>שליחות בשנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="105" />
+            <location filename="../src/panes/fixture_panel.cpp" line="228" />
+            <source>Start generator</source>
+            <translation>הפעלת המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="185" />
+            <source>Pattern</source>
+            <translation>תבנית</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="186" />
+            <source>Hex, such as 55 AA</source>
+            <translation>Hex, כגון 55 AA</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="191" />
+            <source>Text, sent with CRLF</source>
+            <translation>טקסט, נשלח עם CRLF</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="227" />
+            <source>Stop generator</source>
+            <translation>עצירת המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="234" />
+            <source>Generating, %1 sent from this fixture.</source>
+            <translation>המחולל פועל, %1 נשלחו מההתקן הזה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="236" />
+            <source>Stopped after %1.</source>
+            <translation>נעצר לאחר %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="237" />
+            <source>Not running.</source>
+            <translation>לא פועל.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="241" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+    </context>
+    <context>
         <name>FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -2298,125 +2456,125 @@ Networks: %5</source>
     <context>
         <name>InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="117" />
+            <location filename="../src/panes/inspector_panel.cpp" line="119" />
             <source>Inspector</source>
             <translation>מפקח</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="138" />
+            <location filename="../src/panes/inspector_panel.cpp" line="140" />
             <source>Select a port to inspect it.</source>
             <translation>בחרו יציאה כדי לבדוק אותה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="169" />
+            <location filename="../src/panes/inspector_panel.cpp" line="172" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="173" />
+            <location filename="../src/panes/inspector_panel.cpp" line="176" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="183" />
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
+            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="416" />
             <source>path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="188" />
+            <location filename="../src/panes/inspector_panel.cpp" line="191" />
             <source>COM number</source>
             <translation>מספר COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="196" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change...</source>
             <translation>שינוי...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="199" />
+            <location filename="../src/panes/inspector_panel.cpp" line="202" />
             <source>Change COM number</source>
             <translation>שינוי מספר COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
+            <location filename="../src/panes/inspector_panel.cpp" line="215" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="224" />
             <source>Serial</source>
             <translation>טורי</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="238" />
-            <location filename="../src/panes/inspector_panel.cpp" line="422" />
+            <location filename="../src/panes/inspector_panel.cpp" line="241" />
+            <location filename="../src/panes/inspector_panel.cpp" line="439" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;למה שום דבר לא מגיע?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
-            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <location filename="../src/panes/inspector_panel.cpp" line="246" />
+            <location filename="../src/panes/inspector_panel.cpp" line="437" />
             <source>Copy name</source>
             <translation>העתקת השם</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="262" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port...</source>
             <translation>שחרור יציאה...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="265" />
+            <location filename="../src/panes/inspector_panel.cpp" line="268" />
             <source>Release port</source>
             <translation>שחרור יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="275" />
+            <location filename="../src/panes/inspector_panel.cpp" line="278" />
             <source>Control lines</source>
             <translation>קווי בקרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="297" />
+            <location filename="../src/panes/inspector_panel.cpp" line="300" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="298" />
+            <location filename="../src/panes/inspector_panel.cpp" line="301" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="299" />
+            <location filename="../src/panes/inspector_panel.cpp" line="302" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="322" />
+            <location filename="../src/panes/inspector_panel.cpp" line="325" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;פתיחת מטריצת הקווים והתקלות&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="413" />
             <source>The engine reported a failure.</source>
             <translation>המנוע דיווח על כשל.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
+            <location filename="../src/panes/inspector_panel.cpp" line="417" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <location filename="../src/panes/inspector_panel.cpp" line="426" />
             <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
             <translation>אף תוכנית לא פתחה עדיין את %1. התוכנית צריכה לפתוח בדיוק את %1; יציאה אחרת לא תקבל דבר.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <location filename="../src/panes/inspector_panel.cpp" line="436" />
             <source>Copy name, %1</source>
             <translation>העתקת השם, %1</translation>
         </message>
@@ -2425,32 +2583,637 @@ Networks: %5</source>
             <translation type="vanished">שום תוכנית עדיין לא פתחה את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="434" />
-            <location filename="../src/panes/inspector_panel.cpp" line="440" />
+            <location filename="../src/panes/inspector_panel.cpp" line="451" />
+            <location filename="../src/panes/inspector_panel.cpp" line="457" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="452" />
+            <location filename="../src/panes/inspector_panel.cpp" line="478" />
             <source>This port does not support control lines.</source>
             <translation>יציאה זו אינה תומכת בקווי בקרה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="480" />
-            <location filename="../src/panes/inspector_panel.cpp" line="494" />
+            <location filename="../src/panes/inspector_panel.cpp" line="506" />
+            <location filename="../src/panes/inspector_panel.cpp" line="520" />
             <source>%1 on</source>
             <translation>%1 פעיל</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="481" />
-            <location filename="../src/panes/inspector_panel.cpp" line="495" />
+            <location filename="../src/panes/inspector_panel.cpp" line="507" />
+            <location filename="../src/panes/inspector_panel.cpp" line="521" />
             <source>%1 off</source>
             <translation>%1 כבוי</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="514" />
+            <location filename="../src/panes/inspector_panel.cpp" line="540" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>JobForm</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="264" />
+            <source>Your program</source>
+            <translation>התוכנית שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>Second program</source>
+            <translation>תוכנית שנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>First program</source>
+            <translation>תוכנית ראשונה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="270" />
+            <source>Program</source>
+            <translation>תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="271" />
+            <location filename="../src/simple/job_form.cpp" line="274" />
+            <location filename="../src/simple/job_form.cpp" line="278" />
+            <location filename="../src/simple/job_form.cpp" line="288" />
+            <location filename="../src/simple/job_form.cpp" line="962" />
+            <source>Device</source>
+            <translation>התקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="273" />
+            <location filename="../src/simple/job_form.cpp" line="289" />
+            <source>Programs</source>
+            <translation>תוכניות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="282" />
+            <source>On the line</source>
+            <translation>על הקו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="285" />
+            <source>Receiver</source>
+            <translation>מקלט</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="286" />
+            <source>Senders</source>
+            <translation>שולחים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="404" />
+            <location filename="../src/simple/job_form.cpp" line="416" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="414" />
+            <source>a new port</source>
+            <translation>יציאה חדשה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="419" />
+            <location filename="../src/simple/job_form.cpp" line="1139" />
+            <source>the device</source>
+            <translation>ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="422" />
+            <source>the network device</source>
+            <translation>התקן הרשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>Back to the setup</source>
+            <translation>חזרה לתצורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>All jobs</source>
+            <translation>כל המשימות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="461" />
+            <location filename="../src/simple/job_form.cpp" line="463" />
+            <source>Change %1</source>
+            <translation>שינוי %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="470" />
+            <source>Cancel</source>
+            <translation>ביטול</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Apply</source>
+            <translation>החלה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Create</source>
+            <translation>יצירה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="508" />
+            <source>On the other end</source>
+            <translation>בצד השני</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="510" />
+            <source>I'll type to it from this window</source>
+            <translation>אקליד אליו מהחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="511" />
+            <source>What your program sends shows here, and what you type goes to your program. Use it to see that your program sends what you expect.</source>
+            <translation>מה שהתוכנית שלכם שולחת מופיע כאן, ומה שאתם מקלידים נשלח לתוכנית. כך תוכלו לראות שהתוכנית שולחת את מה שציפיתם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="516" />
+            <source>Send everything straight back</source>
+            <translation>שליחת הכול בחזרה מיד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="517" />
+            <source>Whatever your program sends comes back to it at once. A quick test that its sending and receiving both work.</source>
+            <translation>כל מה שהתוכנית שלכם שולחת חוזר אליה מיד. בדיקה מהירה לכך שגם השליחה וגם הקבלה עובדות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="528" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="537" />
+            <source>You can connect it to something else later with Change.</source>
+            <translation>אפשר לחבר אותו למשהו אחר מאוחר יותר באמצעות שינוי.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="543" />
+            <source>Other computers connect to</source>
+            <translation>מחשבים אחרים מתחברים אל</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="545" />
+            <location filename="../src/simple/job_form.cpp" line="549" />
+            <location filename="../src/simple/job_form.cpp" line="924" />
+            <source>Network port</source>
+            <translation>יציאת רשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="562" />
+            <source>Other computers connect to this PC's address on this port. 4001 is common for serial over the network.</source>
+            <translation>מחשבים אחרים מתחברים לכתובת של המחשב הזה ביציאה הזו. 4001 נפוץ ליציאה טורית דרך הרשת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="585" />
+            <source>Device speed (baud rate)</source>
+            <translation>מהירות ההתקן (קצב באוד)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="587" />
+            <source>The device's manual gives it. If text looks garbled later, this is usually why.</source>
+            <translation>מדריך ההתקן מציין אותו. אם הטקסט נראה משובש בהמשך, זו בדרך כלל הסיבה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="591" />
+            <source>Other device settings</source>
+            <translation>הגדרות נוספות של ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="600" />
+            <location filename="../src/simple/job_form.cpp" line="613" />
+            <source>None</source>
+            <translation>ללא</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="601" />
+            <source>Odd</source>
+            <translation>אי-זוגית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="602" />
+            <source>Even</source>
+            <translation>זוגית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="614" />
+            <source>Hardware (RTS and CTS)</source>
+            <translation>חומרה (RTS ו-CTS)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="616" />
+            <source>Software (XON and XOFF)</source>
+            <translation>תוכנה (XON ו-XOFF)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="620" />
+            <source>Data bits</source>
+            <translation>סיביות נתונים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="621" />
+            <source>Parity</source>
+            <translation>זוגיות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="622" />
+            <source>Stop bits</source>
+            <translation>סיביות עצירה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="623" />
+            <source>Flow control</source>
+            <translation>בקרת זרימה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="643" />
+            <location filename="../src/simple/job_form.cpp" line="646" />
+            <source>Name (optional)</source>
+            <translation>שם (אופציונלי)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="655" />
+            <source>Also</source>
+            <translation>וגם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="665" />
+            <source>Handy for checking the device works before your own program is ready. What you type goes to the device, and its replies show here and in your programs.</source>
+            <translation>שימושי לבדיקה שההתקן עובד לפני שהתוכנית שלכם מוכנה. מה שאתם מקלידים נשלח להתקן, והתשובות שלו מופיעות כאן ובתוכניות שלכם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="672" />
+            <source>Show me the data going through</source>
+            <translation>הצגת הנתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="680" />
+            <source>A live list of what is sent each way, on the setup's page. It only looks, so it changes nothing. You can turn it on later too.</source>
+            <translation>רשימה חיה של מה שנשלח בכל כיוון, בעמוד התצורה. היא רק צופה, ולכן לא משנה דבר. אפשר להפעיל אותה גם מאוחר יותר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="748" />
+            <source>Add a program</source>
+            <translation>הוספת תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="758" />
+            <source>Add a device</source>
+            <translation>הוספת התקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="768" />
+            <source>Up to %1. You can add more later.</source>
+            <translation>עד %1. אפשר להוסיף עוד מאוחר יותר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="800" />
+            <source>Port name</source>
+            <translation>שם היציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="816" />
+            <source>New port</source>
+            <translation>יציאה חדשה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="823" />
+            <source>Program, e.g. PuTTY (optional)</source>
+            <translation>תוכנית, למשל PuTTY (אופציונלי)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="824" />
+            <source>Which program, optional</source>
+            <translation>איזו תוכנית, אופציונלי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="848" />
+            <location filename="../src/simple/job_form.cpp" line="1010" />
+            <source>Remove %1</source>
+            <translation>הסרת %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="849" />
+            <source>Remove</source>
+            <translation>הסרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="859" />
+            <source>Some older programs only list COM1 to COM9.</source>
+            <translation>חלק מהתוכניות הישנות מציגות רק COM1 עד COM9.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="862" />
+            <source>Studio picks the name, such as /dev/pts/3 or COM7, and shows it when the port is ready.</source>
+            <translation>Studio בוחר את השם, כגון /dev/pts/3 או COM7, ומציג אותו כשהיציאה מוכנה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="882" />
+            <source>Where is the device</source>
+            <translation>היכן ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="883" />
+            <source>Plugged into this PC</source>
+            <translation>מחובר למחשב הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="884" />
+            <source>On the network</source>
+            <translation>ברשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="910" />
+            <source>Address, such as 192.168.1.50</source>
+            <translation>כתובת, כגון 192.168.1.50</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="911" />
+            <source>Device address</source>
+            <translation>כתובת ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="935" />
+            <source>How it talks</source>
+            <translation>אופן התקשורת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="952" />
+            <source>For a serial server box, such as a Moxa or Lantronix. Its manual gives the address and port. Choose RFC 2217 if the box supports it, so programs can change the baud rate.</source>
+            <translation>עבור קופסת שרת טורי, כמו Moxa או Lantronix. המדריך שלה מציין את הכתובת והיציאה. בחרו RFC 2217 אם הקופסה תומכת בו, כדי שתוכניות יוכלו לשנות את קצב הבאוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="973" />
+            <source>%1  %2</source>
+            <translation>%1  %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="978" />
+            <source>No devices found</source>
+            <translation>לא נמצאו התקנים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="991" />
+            <source>Refresh</source>
+            <translation>רענון</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1018" />
+            <source>Not listed? Plug it in, then choose Refresh.</source>
+            <translation>לא ברשימה? חברו אותו ולחצו על רענון.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1138" />
+            <source>Let me type to %1 from this window</source>
+            <translation>אקליד אל %1 מהחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1142" />
+            <source>Studio names it for you</source>
+            <translation>Studio בוחר את השם עבורכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1157" />
+            <source>Sends it straight back</source>
+            <translation>שולח אותו בחזרה מיד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1158" />
+            <location filename="../src/simple/job_form.cpp" line="1161" />
+            <source>You, in this window</source>
+            <translation>אתם, בחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1164" />
+            <source>Other computers, port %1</source>
+            <translation>מחשבים אחרים, יציאה %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1204" />
+            <source> Your program opens &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> התוכנית שלכם פותחת את &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1206" />
+            <source> Your programs open &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> התוכניות שלכם פותחות את &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1209" />
+            <source>, not %1</source>
+            <translation>, ולא %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1222" />
+            <source>Studio makes &lt;b&gt;%1&lt;/b&gt; for your program to open. </source>
+            <translation>Studio יוצר את &lt;b&gt;%1&lt;/b&gt; כדי שהתוכנית שלכם תפתח אותה. </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1224" />
+            <source>Whatever it sends comes straight back to it.</source>
+            <translation>כל מה שהוא שולח חוזר אליו מיד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1225" />
+            <source>What it sends shows in this window, and what you type here goes to it.</source>
+            <translation>מה שהוא שולח מופיע בחלון הזה, ומה שמקלידים כאן נשלח אליו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1228" />
+            <source>What &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Open one in each program.</source>
+            <translation>מה ש-&lt;b&gt;%1&lt;/b&gt; שולח מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. פתחו אחד בכל תוכנית.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1232" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt; and passes its data to and from &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>Studio פותח את &lt;b&gt;%1&lt;/b&gt; ומעביר את הנתונים שלו אל &lt;b&gt;%2&lt;/b&gt; וממנו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1237" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; sends goes to &lt;b&gt;%2&lt;/b&gt;. Whatever any of them sends goes to the device.</source>
+            <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולח מגיע אל &lt;b&gt;%2&lt;/b&gt;. כל מה שכל אחד מהם שולח מגיע אל ההתקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1242" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt;. On the next page, type to it and read its replies.</source>
+            <translation>Studio פותח את &lt;b&gt;%1&lt;/b&gt;. בעמוד הבא תוכלו להקליד אליו ולקרוא את התשובות שלו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1246" />
+            <source>Other computers connect to this PC on network port &lt;b&gt;%1&lt;/b&gt; and talk to &lt;b&gt;%2&lt;/b&gt;. Data goes both ways.</source>
+            <translation>מחשבים אחרים מתחברים למחשב הזה דרך יציאת הרשת &lt;b&gt;%1&lt;/b&gt; ומתקשרים עם &lt;b&gt;%2&lt;/b&gt;. הנתונים עוברים בשני הכיוונים.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1251" />
+            <source>&lt;b&gt;%1&lt;/b&gt; share one line. Each hears what the others send, and none hears itself.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; חולקים קו אחד. כל אחד שומע את מה שהאחרים שולחים, ואף אחד לא שומע את עצמו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1256" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; send arrives at &lt;b&gt;%2&lt;/b&gt;, in the order it arrives. Nothing goes back to them.</source>
+            <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחים מגיע אל &lt;b&gt;%2&lt;/b&gt;, לפי סדר ההגעה. שום דבר לא חוזר אליהם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1261" />
+            <source>&lt;b&gt;%1&lt;/b&gt; can all send to &lt;b&gt;%2&lt;/b&gt;, but only one at a time. You choose which on the next page. What the device sends back does not reach them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; יכולים כולם לשלוח אל &lt;b&gt;%2&lt;/b&gt;, אבל רק אחד בכל פעם. בעמוד הבא בוחרים איזה. מה שההתקן שולח בחזרה לא מגיע אליהם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1299" />
+            <source>%1 stay open. Programs using them are not interrupted.</source>
+            <translation>%1 נשארות פתוחות. תוכניות שמשתמשות בהן לא יופרעו.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/job_form.cpp" line="1302" />
+            <source>%n new port(s) or device(s).</source>
+            <translation>
+                <numerusform>%n יציאה או התקן חדשים.</numerusform>
+                <numerusform>%n יציאות או התקנים חדשים.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1304" />
+            <source>Closes %1. A program using one of them loses it.</source>
+            <translation>סוגר את %1. תוכנית שמשתמשת באחת מהן תאבד אותה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1307" />
+            <source>No ports open or close.</source>
+            <translation>אף יציאה לא נפתחת או נסגרת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1308" />
+            <source>What Apply changes: %1</source>
+            <translation>השינויים שיתבצעו: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1324" />
+            <source>Choose a device. Plug it in, then choose Refresh.</source>
+            <translation>בחרו התקן. חברו אותו ולחצו על רענון.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1327" />
+            <source>%1 is chosen twice. Choose each device once.</source>
+            <translation>%1 נבחר פעמיים. בחרו כל התקן פעם אחת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1335" />
+            <source>Enter the device's network address.</source>
+            <translation>הזינו את כתובת הרשת של ההתקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1340" />
+            <source>COM%1 is chosen twice. Choose another name.</source>
+            <translation>COM%1 נבחר פעמיים. בחרו שם אחר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1348" />
+            <source>Sending everything back is not available in this build.</source>
+            <translation>שליחת הכול בחזרה אינה זמינה בגרסה הזו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1367" />
+            <source>Could not change the setup. %1 What was there before was put back where Studio could.</source>
+            <translation>לא ניתן היה לשנות את התצורה. %1 מה שהיה קודם הוחזר למקומו, ככל ש-Studio הצליח.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1370" />
+            <source>Could not set it up. %1 Nothing was changed.</source>
+            <translation>לא ניתן היה להגדיר זאת. %1 דבר לא השתנה.</translation>
+        </message>
+    </context>
+    <context>
+        <name>JobGrid</name>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="217" />
+            <source>What do you want to do?</source>
+            <translation>מה ברצונכם לעשות?</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="222" />
+            <source>Choose a job. Studio sets it up and tells you which port to open in your program. Everything you set up is listed on the left, where you can change or remove it.</source>
+            <translation>בחרו משימה. Studio מגדיר אותה ואומר לכם איזו יציאה לפתוח בתוכנית. כל מה שהגדרתם מופיע ברשימה שבצד, ושם אפשר לשנות או להסיר אותו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="228" />
+            <location filename="../src/simple/job_grid.cpp" line="341" />
+            <source>Details</source>
+            <translation>פרטים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="268" />
+            <source>My program needs a serial port</source>
+            <translation>התוכנית שלי צריכה יציאה טורית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="270" />
+            <source>I have a serial device</source>
+            <translation>יש לי התקן טורי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="273" />
+            <source>Several programs or devices at once</source>
+            <translation>כמה תוכניות או התקנים בו-זמנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="278" />
+            <source>See the data on a port</source>
+            <translation>צפייה בנתונים ביציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="279" />
+            <source>See what goes in and out of a port you already set up. Read only, so nothing changes for the programs using it.</source>
+            <translation>ראו מה נכנס ויוצא מיציאה שכבר הגדרתם. לקריאה בלבד, כך שדבר לא משתנה עבור התוכניות שמשתמשות בה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="285" />
+            <source>Check this PC is ready</source>
+            <translation>בדיקה שהמחשב הזה מוכן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="286" />
+            <source>Find out whether this PC can make ports that other programs can open, and what to do if not.</source>
+            <translation>בדקו אם המחשב הזה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח, ומה לעשות אם לא.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="291" />
+            <source>Look and check</source>
+            <translation>צפייה ובדיקה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="297" />
+            <location filename="../src/simple/job_grid.cpp" line="303" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="308" />
+            <source>Open a saved setup…</source>
+            <translation>פתיחת תצורה שמורה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="312" />
+            <source>Start from an example…</source>
+            <translation>התחלה מדוגמה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="339" />
+            <source>This PC can make ports that other programs can open.</source>
+            <translation>המחשב הזה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="346" />
+            <source>Other programs cannot see new ports until a driver is installed.</source>
+            <translation>תוכניות אחרות לא יראו יציאות חדשות עד שיותקן מנהל התקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="349" />
+            <source>Open setup check</source>
+            <translation>פתיחת בדיקת הגדרות</translation>
         </message>
     </context>
     <context>
@@ -2985,177 +3748,177 @@ Networks: %5</source>
     <context>
         <name>MonitorPanel</name>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="147" />
+            <location filename="../src/panes/monitor_panel.cpp" line="294" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="154" />
+            <location filename="../src/panes/monitor_panel.cpp" line="155" />
             <source>Monitor tabs</source>
             <translation>לשוניות מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="167" />
-            <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="168" />
+            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Pause</source>
             <translation>השהיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="170" />
-            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="173" />
+            <location filename="../src/panes/monitor_panel.cpp" line="221" />
             <source>Clear</source>
             <translation>ניקוי</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="173" />
-            <location filename="../src/panes/monitor_panel.cpp" line="212" />
+            <location filename="../src/panes/monitor_panel.cpp" line="176" />
+            <location filename="../src/panes/monitor_panel.cpp" line="215" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="174" />
-            <location filename="../src/panes/monitor_panel.cpp" line="219" />
+            <location filename="../src/panes/monitor_panel.cpp" line="177" />
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
             <source>Follow</source>
             <translation>מעקב</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="441" />
-            <location filename="../src/panes/monitor_panel.cpp" line="454" />
+            <location filename="../src/panes/monitor_panel.cpp" line="179" />
+            <location filename="../src/panes/monitor_panel.cpp" line="446" />
+            <location filename="../src/panes/monitor_panel.cpp" line="459" />
             <source>All ports</source>
             <translation>כל היציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="194" />
+            <location filename="../src/panes/monitor_panel.cpp" line="197" />
             <source>Filter by port</source>
             <translation>סינון לפי יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="197" />
+            <location filename="../src/panes/monitor_panel.cpp" line="200" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="198" />
+            <location filename="../src/panes/monitor_panel.cpp" line="201" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="199" />
+            <location filename="../src/panes/monitor_panel.cpp" line="202" />
             <source>Dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="204" />
-            <location filename="../src/panes/monitor_panel.cpp" line="205" />
+            <location filename="../src/panes/monitor_panel.cpp" line="207" />
+            <location filename="../src/panes/monitor_panel.cpp" line="208" />
             <source>Search payload</source>
             <translation>חיפוש במטען</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="210" />
+            <location filename="../src/panes/monitor_panel.cpp" line="213" />
             <source>Preview format</source>
             <translation>תבנית התצוגה המקדימה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="211" />
+            <location filename="../src/panes/monitor_panel.cpp" line="214" />
             <source>ASCII</source>
             <translation>ASCII</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="221" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
             <source>Export</source>
             <translation>ייצוא</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="250" />
+            <location filename="../src/panes/monitor_panel.cpp" line="255" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="281" />
-            <location filename="../src/panes/monitor_panel.cpp" line="531" />
+            <location filename="../src/panes/monitor_panel.cpp" line="286" />
+            <location filename="../src/panes/monitor_panel.cpp" line="544" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>עדיין אין תעבורה. שלחו כמה בתים, או פתחו את היציאה בתוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="293" />
-            <location filename="../src/panes/monitor_panel.cpp" line="296" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="301" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>עורך JSON של הטופולוגיה יגיע עם WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="303" />
+            <location filename="../src/panes/monitor_panel.cpp" line="308" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Resume</source>
             <translation>המשך</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="527" />
+            <location filename="../src/panes/monitor_panel.cpp" line="540" />
             <source>No traffic matches these filters.</source>
             <translation>אין תעבורה התואמת למסננים אלה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="555" />
+            <location filename="../src/panes/monitor_panel.cpp" line="568" />
             <source>link</source>
             <translation>קישור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="591" />
+            <location filename="../src/panes/monitor_panel.cpp" line="604" />
             <source>Export visible traffic</source>
             <translation>ייצוא התעבורה הנראית</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="592" />
+            <location filename="../src/panes/monitor_panel.cpp" line="605" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>קובצי טקסט (*.txt);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="598" />
-            <location filename="../src/panes/monitor_panel.cpp" line="638" />
+            <location filename="../src/panes/monitor_panel.cpp" line="611" />
+            <location filename="../src/panes/monitor_panel.cpp" line="651" />
             <source>Could not save %1.</source>
             <translation>לא ניתן לשמור את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="602" />
-            <location filename="../src/panes/monitor_panel.cpp" line="641" />
+            <location filename="../src/panes/monitor_panel.cpp" line="615" />
+            <location filename="../src/panes/monitor_panel.cpp" line="654" />
             <source>Exported %1.</source>
             <translation>%1 יוצא.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="224" />
-            <location filename="../src/panes/monitor_panel.cpp" line="226" />
-            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <location filename="../src/panes/monitor_panel.cpp" line="229" />
+            <location filename="../src/panes/monitor_panel.cpp" line="231" />
+            <location filename="../src/panes/monitor_panel.cpp" line="625" />
             <source>Export capture</source>
             <translation>ייצוא לכידה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <location filename="../src/panes/monitor_panel.cpp" line="233" />
             <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
             <translation>שומר את התעבורה המוצגת בקובץ לכידה, עם כל בייט והזמן המדויק שלו.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <location filename="../src/panes/monitor_panel.cpp" line="620" />
             <source>Capture text (*.cap)</source>
             <translation>טקסט לכידה (*.cap)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <location filename="../src/panes/monitor_panel.cpp" line="621" />
             <source>Comma separated values (*.csv)</source>
             <translation>ערכים מופרדים בפסיקים (*.csv)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <location filename="../src/panes/monitor_panel.cpp" line="622" />
             <source>JSON Lines (*.jsonl)</source>
             <translation>שורות JSON (*.jsonl)</translation>
         </message>
@@ -4016,7 +4779,7 @@ Networks: %5</source>
     <context>
         <name>PickCard</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="256" />
+            <location filename="../src/widgets/controls.cpp" line="259" />
             <source>%1. %2</source>
             <translation>%1. %2</translation>
         </message>
@@ -4024,98 +4787,98 @@ Networks: %5</source>
     <context>
         <name>PortModel</name>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="365" />
+            <location filename="../src/panes/port_model.cpp" line="364" />
             <source>Program set %1</source>
             <translation>הוגדר על ידי התוכנית: %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="373" />
+            <location filename="../src/panes/port_model.cpp" line="372" />
             <source>Clients connected: %1</source>
             <translation>לקוחות מחוברים: %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="371" />
+            <location filename="../src/panes/port_model.cpp" line="370" />
             <source>No remote connected</source>
             <translation>אין מחשב מרוחק מחובר</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="376" />
+            <location filename="../src/panes/port_model.cpp" line="375" />
             <source>Differs from %1 in baud rate or framing</source>
             <translation>שונה מ-%1 במהירות או במבנה הנתונים</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="182" />
+            <location filename="../src/panes/port_model.cpp" line="188" />
             <source>%1, %2, %3</source>
             <translation>%1, %2, %3</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="218" />
+            <location filename="../src/panes/port_model.cpp" line="232" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="220" />
+            <location filename="../src/panes/port_model.cpp" line="234" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="222" />
+            <location filename="../src/panes/port_model.cpp" line="236" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="224" />
+            <location filename="../src/panes/port_model.cpp" line="238" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="226" />
+            <location filename="../src/panes/port_model.cpp" line="240" />
             <source>Dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="259" />
+            <location filename="../src/panes/port_model.cpp" line="273" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="261" />
+            <location filename="../src/panes/port_model.cpp" line="275" />
             <source>Fixture</source>
             <translation>התקן דמה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="263" />
+            <location filename="../src/panes/port_model.cpp" line="277" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="269" />
+            <location filename="../src/panes/port_model.cpp" line="283" />
             <source>Waiting for program</source>
             <translation>ממתין לתוכנית</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="271" />
+            <location filename="../src/panes/port_model.cpp" line="285" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="275" />
+            <location filename="../src/panes/port_model.cpp" line="289" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="278" />
-            <location filename="../src/panes/port_model.cpp" line="279" />
+            <location filename="../src/panes/port_model.cpp" line="292" />
+            <location filename="../src/panes/port_model.cpp" line="293" />
             <source>Closed</source>
             <translation>סגור</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="309" />
+            <location filename="../src/panes/port_model.cpp" line="323" />
             <source>Fixture (mock)</source>
             <translation>התקן דמה (מדומה)</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/port_model.cpp" line="314" />
+            <location filename="../src/panes/port_model.cpp" line="328" />
             <source>Real device, shared with %n programs</source>
             <translation>
                 <numerusform>התקן אמיתי, משותף עם %n תוכנית</numerusform>
@@ -4123,27 +4886,27 @@ Networks: %5</source>
             </translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="317" />
+            <location filename="../src/panes/port_model.cpp" line="331" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="321" />
+            <location filename="../src/panes/port_model.cpp" line="335" />
             <source>Network port</source>
             <translation>יציאת רשת</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="326" />
+            <location filename="../src/panes/port_model.cpp" line="340" />
             <source>In-process port. Only Studio can open it</source>
             <translation>יציאה בתוך התהליך. רק Studio יכול לפתוח אותה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="328" />
+            <location filename="../src/panes/port_model.cpp" line="342" />
             <source>Virtual port, linked to %1</source>
             <translation>יציאה וירטואלית, מקושרת אל %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="329" />
+            <location filename="../src/panes/port_model.cpp" line="343" />
             <source>Virtual port</source>
             <translation>יציאה וירטואלית</translation>
         </message>
@@ -4151,161 +4914,161 @@ Networks: %5</source>
     <context>
         <name>PortReadyDialog</name>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="86" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="87" />
             <source>%1 is ready inside Studio</source>
             <translation>%1 מוכנה בתוך Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="88" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="89" />
             <source>Your port "%1" now exists inside Studio.</source>
             <translation>היציאה "%1" שלכם קיימת כעת בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="94" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="102" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="95" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="103" />
             <source>Your port "%1" now exists, and other programs can open it.</source>
             <translation>היציאה "%1" שלכם קיימת כעת, ותוכניות אחרות יכולות לפתוח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="100" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="101" />
             <source>%1 is ready</source>
             <translation>%1 מוכנה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="136" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
             <source>This port is Studio only</source>
             <translation>יציאה זו היא ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="138" />
             <source>Open this port in your program</source>
             <translation>פתחו יציאה זו בתוכנית שלכם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="151" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
             <source>This port is Studio only. %1</source>
             <translation>יציאה זו היא ב-Studio בלבד. %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="153" />
             <source>Open this port in your program. %1</source>
             <translation>פתחו יציאה זו בתוכנית שלכם. %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="158" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="161" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="159" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="164" />
             <source>Copy name</source>
             <translation>העתקת השם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="160" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="163" />
             <source>Copy name, %1</source>
             <translation>העתקת השם, %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="168" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="171" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="204" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="208" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="220" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="226" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="236" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="259" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="383" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="274" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="289" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="294" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="317" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="325" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="332" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
             <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
             <translation>אף תוכנית לא פתחה עדיין את %1. בתוכנית שלך, בחר בדיוק את %1. החלונית הזו מתעדכנת כשתוכנית פותחת אותה.</translation>
         </message>
@@ -4314,53 +5077,53 @@ Networks: %5</source>
             <translation type="vanished">שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="365" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="366" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="382" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="397" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="402" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="406" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="407" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -4391,23 +5154,38 @@ Networks: %5</source>
     <context>
         <name>PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="61" />
             <location filename="../src/panes/ports_panel.cpp" line="62" />
+            <location filename="../src/panes/ports_panel.cpp" line="63" />
             <source>Filter ports</source>
             <translation>סינון יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="81" />
+            <location filename="../src/panes/ports_panel.cpp" line="82" />
             <source>Ports</source>
             <translation>יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="104" />
+            <location filename="../src/panes/ports_panel.cpp" line="108" />
             <source>Ports table</source>
             <translation>טבלת יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="301" />
+            <location filename="../src/panes/ports_panel.cpp" line="309" />
+            <source>Port actions</source>
+            <translation>פעולות יציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="310" />
+            <source>Inspect</source>
+            <translation>בדיקה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="319" />
+            <source>Copy path</source>
+            <translation>העתקת נתיב</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="341" />
             <source>Copied %1.</source>
             <translation>%1 הועתק.</translation>
         </message>
@@ -4450,103 +5228,103 @@ Networks: %5</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="341" />
+            <location filename="../src/widgets/controls.cpp" line="344" />
             <source>%1 on</source>
             <translation>%1 פעיל</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="342" />
+            <location filename="../src/widgets/controls.cpp" line="345" />
             <source>%1 off</source>
             <translation>%1 כבוי</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="435" />
+            <location filename="../src/widgets/controls.cpp" line="438" />
             <source>Step %1 of %2, %3</source>
             <translation>שלב %1 מתוך %2, %3</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="57" />
+            <location filename="../src/panes/inspector_panel.cpp" line="59" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="59" />
+            <location filename="../src/panes/inspector_panel.cpp" line="61" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="61" />
+            <location filename="../src/panes/inspector_panel.cpp" line="63" />
             <source>CTS</source>
             <translation>CTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="63" />
+            <location filename="../src/panes/inspector_panel.cpp" line="65" />
             <source>DSR</source>
             <translation>DSR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="65" />
+            <location filename="../src/panes/inspector_panel.cpp" line="67" />
             <source>DCD</source>
             <translation>DCD</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="67" />
+            <location filename="../src/panes/inspector_panel.cpp" line="69" />
             <source>RI</source>
             <translation>RI</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="69" />
+            <location filename="../src/panes/inspector_panel.cpp" line="71" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="102" />
+            <location filename="../src/panes/inspector_panel.cpp" line="104" />
             <location filename="../src/dialogs/common.cpp" line="100" />
             <source>no flow control</source>
             <translation>ללא בקרת זרימה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="104" />
+            <location filename="../src/panes/inspector_panel.cpp" line="106" />
             <source>software flow control</source>
             <translation>בקרת זרימה בתוכנה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="106" />
+            <location filename="../src/panes/inspector_panel.cpp" line="108" />
             <source>hardware flow control</source>
             <translation>בקרת זרימה בחומרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="51" />
+            <location filename="../src/panes/monitor_panel.cpp" line="52" />
             <source>started</source>
             <translation>התחיל</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="53" />
+            <location filename="../src/panes/monitor_panel.cpp" line="54" />
             <source>stopped</source>
             <translation>נעצר</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="55" />
+            <location filename="../src/panes/monitor_panel.cpp" line="56" />
             <source>data</source>
             <translation>נתונים</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="57" />
+            <location filename="../src/panes/monitor_panel.cpp" line="58" />
             <source>lines</source>
             <translation>קווים</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="59" />
+            <location filename="../src/panes/monitor_panel.cpp" line="60" />
             <source>error</source>
             <translation>שגיאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="61" />
+            <location filename="../src/panes/monitor_panel.cpp" line="62" />
             <source>stats</source>
             <translation>סטטיסטיקה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="63" />
+            <location filename="../src/panes/monitor_panel.cpp" line="64" />
             <source>log</source>
             <translation>יומן</translation>
         </message>
@@ -4785,7 +5563,7 @@ Networks: %5</source>
             <translation>ייתכן שתוכנית אחרת משתמשת בהתקן. דבר לא השתנה. סגרו את התוכנית ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="114" />
+            <location filename="../src/shell/shell_window.cpp" line="119" />
             <source>untitled</source>
             <translation>ללא שם</translation>
         </message>
@@ -4977,79 +5755,136 @@ Networks: %5</source>
     <context>
         <name>SendPanel</name>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="70" />
-            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <location filename="../src/panes/send_panel.cpp" line="71" />
+            <location filename="../src/panes/send_panel.cpp" line="98" />
             <source>Send</source>
             <translation>שליחה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="78" />
             <source>Send to port</source>
-            <translation>שליחה ליציאה</translation>
+            <translation type="vanished">שליחה ליציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="90" />
+            <location filename="../src/panes/send_panel.cpp" line="81" />
+            <source>Sending from</source>
+            <translation>שליחה מתוך</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <source>Pin</source>
+            <translation>נעיצה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="84" />
+            <location filename="../src/panes/send_panel.cpp" line="86" />
+            <source>Keep sending from this port when you select another.</source>
+            <translation>המשיכו לשלוח מהיציאה הזו גם כשבוחרים אחרת.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="93" />
+            <source>Send from port</source>
+            <translation>שליחה מיציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="107" />
             <source>Bytes to send</source>
             <translation>בתים לשליחה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="91" />
+            <location filename="../src/panes/send_panel.cpp" line="108" />
             <source>Type text, or hex if Hex is ticked</source>
             <translation>הקלידו טקסט, או hex אם Hex מסומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="107" />
+            <location filename="../src/panes/send_panel.cpp" line="124" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="108" />
+            <location filename="../src/panes/send_panel.cpp" line="125" />
             <source>Add CRLF</source>
             <translation>הוספת CRLF</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="112" />
+            <location filename="../src/panes/send_panel.cpp" line="129" />
             <source>Repeat</source>
             <translation>חזרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="116" />
+            <location filename="../src/panes/send_panel.cpp" line="133" />
             <source> ms</source>
             <translation> ms</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="117" />
+            <location filename="../src/panes/send_panel.cpp" line="134" />
             <source>Repeat interval</source>
             <translation>מרווח חזרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="126" />
-            <location filename="../src/panes/send_panel.cpp" line="131" />
+            <location filename="../src/panes/send_panel.cpp" line="148" />
+            <source>Repeat status</source>
+            <translation>מצב החזרה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="150" />
+            <location filename="../src/panes/send_panel.cpp" line="151" />
+            <source>Stop repeat</source>
+            <translation>עצירת החזרה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="158" />
+            <location filename="../src/panes/send_panel.cpp" line="163" />
             <source>Saved sends</source>
             <translation>שליחות שמורות</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="210" />
+            <location filename="../src/panes/send_panel.cpp" line="240" />
+            <source>The repeat stopped because %1 is gone.</source>
+            <translation>החזרה נעצרה כי %1 אינו קיים עוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="492" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="321" />
             <source>Hex needs pairs of digits, such as 48 65 6C 6C 6F.</source>
             <translation>Hex דורש זוגות ספרות, כגון 48 65 6C 6C 6F.</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="274" />
+            <location filename="../src/panes/send_panel.cpp" line="332" />
             <source>Select a port to send to.</source>
             <translation>בחרו יציאה לשליחה אליה.</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/send_panel.cpp" line="320" />
+            <location filename="../src/panes/send_panel.cpp" line="383" />
             <source>Queued %n bytes to %1.</source>
             <translation>
                 <numerusform>%n בית הועמד בתור אל %1.</numerusform>
                 <numerusform>%n בתים הועמדו בתור אל %1.</numerusform>
             </translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="457" />
+            <source>Type the bytes to repeat, then start the repeat.</source>
+            <translation>הקלידו את הבתים לחזרה, ואז התחילו את החזרה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="510" />
+            <source>Sending from: no port selected</source>
+            <translation>שליחה מתוך: לא נבחרה יציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="511" />
+            <source>Sending from: %1</source>
+            <translation>שליחה מתוך: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="526" />
+            <source>Repeating every %1 ms from %2.</source>
+            <translation>חוזר כל %1 ms מתוך %2.</translation>
         </message>
     </context>
     <context>
@@ -5879,6 +6714,322 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>SetupPage</name>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="84" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="132" />
+            <source>Received text</source>
+            <translation>טקסט שהתקבל</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="138" />
+            <source>Type, then press Enter</source>
+            <translation>הקלידו ולחצו Enter</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="139" />
+            <source>Text to send</source>
+            <translation>טקסט לשליחה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="141" />
+            <source>Send</source>
+            <translation>שליחה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="152" />
+            <source>Enter adds a line ending</source>
+            <translation>Enter מוסיף סוף שורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="161" />
+            <location filename="../src/simple/setup_page.cpp" line="177" />
+            <source>Data going through</source>
+            <translation>נתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="162" />
+            <source>Show me the data going through</source>
+            <translation>הצגת הנתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="170" />
+            <source>Read only. Useful when a program says nothing arrives.</source>
+            <translation>לקריאה בלבד. שימושי כשתוכנית אומרת שדבר לא מגיע.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="181" />
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Pause</source>
+            <translation>השהיה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Resume</source>
+            <translation>המשך</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="189" />
+            <source>Clear</source>
+            <translation>ניקוי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="197" />
+            <source>Show as hex</source>
+            <translation>הצגה כ-hex</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="204" />
+            <source>Hide</source>
+            <translation>הסתרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="216" />
+            <source>See it on the canvas (Advanced mode)</source>
+            <translation>צפייה בקנבס (מצב מתקדם)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="256" />
+            <source>Change in Advanced mode</source>
+            <translation>שינוי במצב מתקדם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="257" />
+            <source>Change…</source>
+            <translation>שינוי…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="269" />
+            <source>Remove setup</source>
+            <translation>הסרת הגדרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="293" />
+            <location filename="../src/simple/setup_page.cpp" line="466" />
+            <source>your program</source>
+            <translation>התוכנית שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="295" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt; at %3 baud.</source>
+            <translation>עבור %1, פתחו את &lt;b&gt;%2&lt;/b&gt; בקצב %3 באוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="300" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>עבור %1, פתחו את &lt;b&gt;%2&lt;/b&gt;.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="305" />
+            <source>Do not open &lt;b&gt;%1&lt;/b&gt; itself in your programs. Studio has it open.</source>
+            <translation>אל תפתחו את &lt;b&gt;%1&lt;/b&gt; עצמו בתוכניות שלכם. Studio כבר פתח אותו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="309" />
+            <source>Choose below which program sends. The others only listen.</source>
+            <translation>בחרו למטה איזו תוכנית שולחת. האחרות רק מאזינות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="311" />
+            <source>What to do now</source>
+            <translation>מה לעשות עכשיו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="325" />
+            <source>Ports</source>
+            <translation>יציאות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="341" />
+            <source>On the other end: everything your program sends comes straight back to it.</source>
+            <translation>בצד השני: כל מה שהתוכנית שלכם שולחת חוזר אליה מיד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="344" />
+            <source>Echo</source>
+            <translation>הד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="348" />
+            <source>Add a program</source>
+            <translation>הוספת תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="370" />
+            <source>Type to %1</source>
+            <translation>הקלדה אל %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="373" />
+            <source>What your program sends on %1 shows here. What you type goes to your program.</source>
+            <translation>מה שהתוכנית שלכם שולחת ב-%1 מופיע כאן. מה שאתם מקלידים נשלח לתוכנית.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="378" />
+            <source>What you type goes to %1. Its replies show here.</source>
+            <translation>מה שאתם מקלידים נשלח אל %1. התשובות שלו מופיעות כאן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="382" />
+            <source>What you type goes to %1. Its replies show here, and your programs get them too.</source>
+            <translation>מה שאתם מקלידים נשלח אל %1. התשובות שלו מופיעות כאן, והתוכניות שלכם מקבלות אותן גם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="398" />
+            <source>Program opens</source>
+            <translation>התוכנית פותחת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="399" />
+            <source>%1 opens</source>
+            <translation>%1 פותח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="412" />
+            <location filename="../src/simple/setup_page.cpp" line="557" />
+            <source>Not open</source>
+            <translation>לא פתוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="417" />
+            <source>Open in a program</source>
+            <translation>פתוח בתוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="422" />
+            <source>No program yet</source>
+            <translation>עדיין אין תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="427" />
+            <source>Open</source>
+            <translation>פתוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="435" />
+            <source>%1 copied.</source>
+            <translation>%1 הועתק.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="449" />
+            <source>Close %1</source>
+            <translation>סגירת %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="450" />
+            <source>Close this port</source>
+            <translation>סגירת היציאה הזו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="457" />
+            <location filename="../src/simple/setup_page.cpp" line="562" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="462" />
+            <source>No program has opened %1 yet. In %2, choose exactly %1. This changes as soon as one does. &lt;a href="help"&gt;Nothing arriving?&lt;/a&gt;</source>
+            <translation>אף תוכנית עדיין לא פתחה את %1. עבור %2, בחרו בדיוק %1. זה ישתנה ברגע שאחת תעשה זאת. &lt;a href="help"&gt;שום דבר לא מגיע?&lt;/a&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="485" />
+            <source>The program</source>
+            <translation>התוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="488" />
+            <source>%1 opened %2 at %3 baud, but the device runs at %4. Text will look garbled. Set %4 in %5.</source>
+            <translation>%1 פתחה את %2 בקצב %3 באוד, אבל ההתקן פועל ב-%4. הטקסט ייראה משובש. הגדירו %4 בהגדרות של %5.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="493" />
+            <source>the program</source>
+            <translation>התוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="505" />
+            <source>Sending now</source>
+            <translation>שולח עכשיו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="511" />
+            <source>Let this one send</source>
+            <translation>לאפשר לזה לשלוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="518" />
+            <source>%1 sends now. The others only listen.</source>
+            <translation>%1 שולח עכשיו. האחרים רק מאזינים.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="538" />
+            <source>Device. Studio has it open, so your programs use their own ports instead.</source>
+            <translation>התקן. Studio פתח אותו, ולכן התוכניות שלכם משתמשות ביציאות משלהן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="540" />
+            <source>Network device. Studio is connected to it.</source>
+            <translation>התקן רשת. Studio מחובר אליו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="551" />
+            <source>Open at %1 baud</source>
+            <translation>פתוח בקצב %1 באוד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="552" />
+            <source>Connected</source>
+            <translation>מחובר</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="575" />
+            <source>Other computers connect to this PC on network port</source>
+            <translation>מחשבים אחרים מתחברים למחשב הזה דרך יציאת הרשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="584" />
+            <source>No computer connected</source>
+            <translation>אין מחשב מחובר</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_page.cpp" line="585" />
+            <source>%n computer(s) connected</source>
+            <translation>
+                <numerusform>%n מחשב מחובר</numerusform>
+                <numerusform>%n מחשבים מחוברים</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="592" />
+            <source>Network port %1: %2</source>
+            <translation>יציאת רשת %1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="640" />
+            <source>%1  %2 sent  %3</source>
+            <translation>%1  %2 נשלחו  %3</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>sent      %1</source>
+            <translation>נשלח     %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>received  %1</source>
+            <translation>התקבל    %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="703" />
+            <source>Could not send to %1. %2</source>
+            <translation>לא ניתן היה לשלוח אל %1. %2</translation>
+        </message>
+    </context>
+    <context>
         <name>ShareWizard</name>
         <message>
             <location filename="../src/dialogs/share_plan.cpp" line="237" />
@@ -5915,13 +7066,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="182" />
             <location filename="../src/dialogs/share_wizard.cpp" line="195" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Share a device with several programs</source>
             <translation>שיתוף התקן עם כמה תוכניות</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="197" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="952" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio פותח את ההתקן פעם אחת, ואז נותן לכל תוכנית יציאה משלה.</translation>
         </message>
@@ -5957,120 +7108,120 @@ Networks: %5</source>
             <translation>רענון</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="260" />
             <source>Refresh the device list</source>
             <translation>רענון רשימת ההתקנים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="271" />
             <source>Devices</source>
             <translation>התקנים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="284" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>אין התקן טורי זמין. חברו אחד ואז בחרו רענון.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="301" />
             <source>Device settings</source>
             <translation>הגדרות ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="311" />
             <source>Change</source>
             <translation>שינוי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="315" />
             <source>Change device settings</source>
             <translation>שינוי הגדרות ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
             <source>None</source>
             <translation>ללא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Odd</source>
             <translation>אי-זוגית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Even</source>
             <translation>זוגית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
             <source>Mark</source>
             <translation>סימן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="342" />
             <source>Space</source>
             <translation>רווח</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Hardware (RTS and CTS)</source>
             <translation>חומרה (RTS ו-CTS)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="358" />
             <source>Software (XON and XOFF)</source>
             <translation>תוכנה (XON ו-XOFF)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="362" />
             <source>Baud rate</source>
             <translation>קצב באוד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="365" />
             <source>Data bits</source>
             <translation>סיביות נתונים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="366" />
             <source>Parity</source>
             <translation>זוגיות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="369" />
             <source>Stop bits</source>
             <translation>סיביות עצירה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="370" />
             <source>Flow control</source>
             <translation>בקרת זרימה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
             <location filename="../src/dialogs/share_wizard.cpp" line="419" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="882" />
             <source>A network device instead</source>
             <translation>התקן רשת במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="423" />
             <source>ADVANCED</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="426" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>כתובת TCP, UDP או RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="452" />
             <source>Device address</source>
             <translation>כתובת ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="453" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>כתובת השרת הטורי, באמצעות TCP, UDP או RFC 2217.</translation>
         </message>
@@ -6079,362 +7230,362 @@ Networks: %5</source>
             <translation type="vanished">התוכניות שלכם יפתחו את היציאות ש-Studio יוצר, לא את %1 עצמו. בשלב הבא תבחרו כמה תוכניות יש.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
             <translation>התוכניות שלך יפתחו את היציאות ש-Studio יוצר, ולא את %1 עצמו. בשלב הבא תבחר כמה תוכניות יש. אפשר להוסיף עוד לאחר מכן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="505" />
             <source>How many programs?</source>
             <translation>כמה תוכניות?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="514" />
             <source>Fewer programs</source>
             <translation>פחות תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="518" />
             <source>More programs</source>
             <translation>יותר תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
             <source>Up to 32</source>
             <translation>עד 32</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="537" />
             <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
             <translation>אפשר להוסיף תוכנית נוספת אחרי השיתוף, ולהסיר את היציאה של כל תוכנית מאוחר יותר באמצעות הסרת יציאה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="551" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>What each program will open</source>
             <translation>מה כל תוכנית תפתח</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Program name</source>
             <translation>שם התוכנית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Port to open</source>
             <translation>יציאה לפתיחה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="557" />
             <source>Can other programs open it?</source>
             <translation>האם תוכניות אחרות יכולות לפתוח אותה?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="609" />
             <source>Create another pair</source>
             <translation>יצירת זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="613" />
             <source>Keep the third as Studio only</source>
             <translation>השארת השלישית ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Shared ports</source>
             <translation>יציאות משותפות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Program</source>
             <translation>תוכנית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Open this port</source>
             <translation>פתחו יציאה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="689" />
             <source>Add another program</source>
             <translation>הוספת תוכנית נוספת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="694" />
             <source>Back</source>
             <translation>חזרה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="699" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="703" />
             <source>Next</source>
             <translation>הבא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="708" />
             <source>Share device</source>
             <translation>שיתוף התקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="714" />
             <source>Open monitor</source>
             <translation>פתיחת מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="723" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>קצה של זוג com0com. זוהי יציאה וירטואלית, לא התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="768" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="775" />
             <source>Virtual</source>
             <translation>וירטואלי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="774" />
             <source>This is a virtual port, not a device.</source>
             <translation>זוהי יציאה וירטואלית, לא התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="781" />
             <source>Serial device. Studio is already using it.</source>
             <translation>התקן טורי. Studio כבר משתמש בו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="782" />
             <source>In use</source>
             <translation>בשימוש</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="788" />
             <source>Serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="789" />
             <source>Available</source>
             <translation>זמין</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="881" />
             <source>Use a device instead</source>
             <translation>שימוש בהתקן במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Share %1 with several programs</source>
             <translation>שיתוף %1 עם כמה תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="961" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>כל תוכנית מקבלת יציאה משלה. Studio מעתיק את נתוני ההתקן לכולן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="968" />
             <source>Open one of these ports in each program.</source>
             <translation>פתחו אחת מהיציאות האלה בכל תוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1111" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1132" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
             <source>Name of program %1</source>
             <translation>שם תוכנית %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>Yes</source>
             <translation>כן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>No, Studio only</source>
             <translation>לא, ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1232" />
             <source>Warning: %1</source>
             <translation>אזהרה: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1242" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows יבקש הרשאת מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1243" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the %1 as Studio only</source>
             <translation>השארת %1 ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1250" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>השארת %1 הנותרות ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1262" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאה אחת. מה שהתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1270" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק לכל %2 היציאות. מה שתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1321" />
             <source>Could not create another pair</source>
             <translation>לא ניתן ליצור זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1322" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows לא יצר את זוג מנהל ההתקן. אשרו הרשאת מנהל ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1371" />
             <source>Sharing is not available in this build</source>
             <translation>שיתוף אינו זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1372" />
             <source>Nothing was changed.</source>
             <translation>דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1389" />
             <source>Could not share %1</source>
             <translation>לא ניתן לשתף את %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>השיתוף הקודם הוסר. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1392" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>התצורה לא השתנתה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1412" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 משותף עם תוכנית אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 משותף עם %2 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1425" />
             <source>The most Studio can share is 32 programs</source>
             <translation>Studio יכול לשתף לכל היותר 32 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1426" />
             <source>Remove a program's port first if you need a different one.</source>
             <translation>הסר תחילה את היציאה של תוכנית אם אתה צריך מספר אחר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1443" />
             <source>Could not add another program</source>
             <translation>לא ניתן להוסיף תוכנית נוספת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1444" />
             <source>The share is as it was. Check the device, then try again.</source>
             <translation>השיתוף נשאר כמו שהיה. בדוק את ההתקן ונסה שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1645" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1546" />
             <source>Not for other programs</source>
             <translation>לא לתוכניות אחרות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1555" />
             <source>Copy</source>
             <translation>העתקה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1560" />
             <source>Copy %1</source>
             <translation>העתקת %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1567" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1615" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת ליציאה אחת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1620" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת לכל %2 היציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1627" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>התווית ממתין לתוכנית משתנה ל-תוכנית מחוברת כשכל תוכנית פותחת את היציאה שלה.</translation>
         </message>
@@ -6442,682 +7593,722 @@ Networks: %5</source>
     <context>
         <name>ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
-            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <location filename="../src/shell/shell_window.cpp" line="730" />
             <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
             <translation>כמה יציאות COM אבדו. שירות העזר או מנהל ההתקן הופעל מחדש והסיר את היציאות שהתוכניות שלכם פתחו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <location filename="../src/shell/shell_window.cpp" line="733" />
             <source>Recreate ports</source>
             <translation>צור יציאות מחדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1274" />
             <source>Ports recreated.</source>
             <translation>היציאות נוצרו מחדש.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <location filename="../src/shell/shell_window.cpp" line="1275" />
             <source>Could not recreate every port: %1</source>
             <translation>לא ניתן היה ליצור מחדש את כל היציאות: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>New</source>
             <translation>חדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>new document setup</source>
             <translation>חדש מסמך תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>open file setup</source>
             <translation>פתיחה קובץ תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>Open recent</source>
             <translation>פתיחת אחרונים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>recent file</source>
             <translation>קובץ אחרון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>Setups and templates</source>
             <translation>תצורות ותבניות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="225" />
+            <location filename="../src/shell/shell_window.cpp" line="235" />
             <source>template setup</source>
             <translation>תבנית תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2482" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="2722" />
             <source>Save</source>
             <translation>שמירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>save file setup</source>
             <translation>שמירה קובץ תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>Save as</source>
             <translation>שמירה בשם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>save as file</source>
             <translation>שמירה בשם קובץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="243" />
             <source>Export as command</source>
             <translation>ייצוא כפקודה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="244" />
             <source>cli command</source>
             <translation>cli שורת פקודה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>Diagnostic bundle</source>
             <translation>חבילת אבחון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="247" />
             <source>support zip</source>
             <translation>תמיכה zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>Quit</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>exit</source>
             <translation>יציאה סגירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
             <source>undo stack restore</source>
             <translation>ביטול שחזור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo</source>
             <translation>ביצוע חוזר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
             <source>redo stack restore</source>
             <translation>ביצוע חוזר שחזור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Remove selected</source>
             <translation>הסרת הנבחר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>delete remove</source>
             <translation>מחיקה הסרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Add port</source>
             <translation>הוספת יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>new virtual create</source>
             <translation>חדש וירטואלית יצירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Virtual port</source>
             <translation>יציאה וירטואלית</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>Linked pair</source>
             <translation>זוג מקושר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>pair two null modem</source>
             <translation>זוג שניים null-modem</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="272" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>Attach real device</source>
             <translation>חיבור התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
             <source>serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="276" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
             <source>Network endpoint</source>
             <translation>נקודת קצה ברשת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="280" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>Mock fixture</source>
             <translation>התקן דמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="291" />
             <source>fixture mock script</source>
             <translation>התקן-דמה מדומה תסריט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="294" />
             <source>Copy port name</source>
             <translation>העתקת שם יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="285" />
+            <location filename="../src/shell/shell_window.cpp" line="295" />
             <source>clipboard path</source>
             <translation>לוח-העתקה נתיב</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2032" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="2272" />
             <source>Rename port</source>
             <translation>שינוי שם היציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>name change relabel</source>
             <translation>שם שינוי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
             <source>Remove port</source>
             <translation>הסרת יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
             <source>Remove setup</source>
             <translation>הסרת הגדרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>מחיקה הסרה פירוק סגירה זוג שיתוף חיבור הכול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1353" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="1498" />
             <source>Connect ports</source>
             <translation>חיבור יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="320" />
             <source>link split join redirect monitor</source>
             <translation>קישור פיצול איחוד הפניה מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>Share a device</source>
             <translation>שיתוף התקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="315" />
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="333" />
             <source>split listeners</source>
             <translation>פיצול מאזינים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>Watch traffic</source>
             <translation>צפייה בתעבורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>monitor copy</source>
             <translation>מוניטור העתקה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Add a program port</source>
             <translation>הוספת יציאה לתוכנית</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="330" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>share attach more listener another</source>
             <translation>שיתוף חיבור עוד נוסף מאזין</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1758" />
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="1959" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="1977" />
             <source>Remove link</source>
             <translation>הסרת קישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>delete disconnect</source>
             <translation>מחיקה ניתוק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="349" />
             <source>Link wiring</source>
             <translation>חיווט קישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="339" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
             <source>line matrix faults</source>
             <translation>מטריצת-קווים תקלות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>Owner</source>
             <translation>בעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>policy arbitration</source>
             <translation>מדיניות בוררות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Fit</source>
             <translation>התאמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>zoom</source>
             <translation>זום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Tidy layout</source>
             <translation>סידור הפריסה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>arrange align overlap</source>
             <translation>סידור יישור חפיפה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
-            <location filename="../src/shell/shell_window.cpp" line="641" />
-            <location filename="../src/shell/shell_window.cpp" line="642" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="651" />
+            <location filename="../src/shell/shell_window.cpp" line="652" />
+            <location filename="../src/shell/shell_window.cpp" line="661" />
             <source>Search actions</source>
             <translation>חיפוש פעולות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>command palette</source>
             <translation>לוח פקודות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="364" />
+            <location filename="../src/shell/shell_window.cpp" line="375" />
             <source>Setup check</source>
             <translation>בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="365" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>driver com0com permissions</source>
             <translation>מנהל-התקן com0com הרשאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="378" />
             <source>Benchmark</source>
             <translation>מבחן ביצועים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="368" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>throughput speed</source>
             <translation>תפוקה מהירות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>Refresh now</source>
             <translation>רענון עכשיו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>reload</source>
             <translation>טעינה-מחדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>Refreshed.</source>
             <translation>רוענן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Settings</source>
             <translation>הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>preferences theme density refresh baud</source>
             <translation>העדפות ערכת-נושא צפיפות רענון באוד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="386" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Advanced mode</source>
             <translation>מצב מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>simple expert level</source>
             <translation>פשוט מומחה רמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="769" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="838" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
             <source>traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>Show links as a list</source>
             <translation>הצגת קישורים כרשימה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="406" />
             <source>links topology list accessible</source>
             <translation>קישורים טופולוגיה רשימה נגישות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
+            <location filename="../src/shell/shell_window.cpp" line="1000" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
             <source>events</source>
             <translation>אירועים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
-            <location filename="../src/shell/shell_window.cpp" line="934" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="1016" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
             <source>editor schema</source>
             <translation>עורך סכמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="415" />
             <source>Follow the system</source>
             <translation>מעקב אחר המערכת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="405" />
+            <location filename="../src/shell/shell_window.cpp" line="416" />
             <source>theme colour scheme</source>
             <translation>ערכת-נושא צבעים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
             <source>Light</source>
             <translation>בהיר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>theme</source>
             <translation>ערכת נושא</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>Dark</source>
             <translation>כהה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Comfortable</source>
             <translation>נוח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>density spacing</source>
             <translation>צפיפות ריווח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>Compact</source>
             <translation>דחוס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="453" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Reset layout</source>
             <translation>איפוס פריסה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>docks window</source>
             <translation>עגינות חלון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="456" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Show launcher</source>
             <translation>הצגת מסך הפתיחה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
             <source>empty start</source>
             <translation>התחלה ריקה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="461" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>Help contents</source>
             <translation>תוכן העזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>manual help topics</source>
             <translation>מדריך נושאי עזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="464" />
+            <location filename="../src/shell/shell_window.cpp" line="475" />
             <source>Why is nothing arriving?</source>
             <translation>למה שום דבר לא מגיע?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="476" />
             <source>troubleshoot no data</source>
             <translation>פתרון בעיות אין נתונים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>Keyboard shortcuts</source>
             <translation>קיצורי מקלדת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>keys</source>
             <translation>מקשים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="469" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
             <source>Copy environment</source>
             <translation>העתקת סביבה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="470" />
+            <location filename="../src/shell/shell_window.cpp" line="481" />
             <source>build bug report</source>
             <translation>גרסה דיווח באג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="472" />
+            <location filename="../src/shell/shell_window.cpp" line="483" />
             <source>About</source>
             <translation>אודות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="473" />
+            <location filename="../src/shell/shell_window.cpp" line="484" />
             <source>version licence copyright</source>
             <translation>גרסה רישיון זכויות יוצרים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="487" />
-            <location filename="../src/shell/shell_window.cpp" line="492" />
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="497" />
+            <location filename="../src/shell/shell_window.cpp" line="502" />
+            <location filename="../src/shell/shell_window.cpp" line="1320" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="699" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
             <source>Change owner</source>
             <translation>שינוי הבעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1787" />
+            <location filename="../src/shell/shell_window.cpp" line="1672" />
+            <source>Generator started.</source>
+            <translation>המחולל הופעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1673" />
+            <source>Generator stopped.</source>
+            <translation>המחולל נעצר.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>1 port</source>
             <translation>יציאה אחת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
             <source>%1 ports</source>
             <translation>%1 יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1793" />
+            <location filename="../src/shell/shell_window.cpp" line="1994" />
             <source>1 link</source>
             <translation>קישור אחד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1794" />
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>%1 links</source>
             <translation>%1 קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1827" />
+            <location filename="../src/shell/shell_window.cpp" line="2028" />
             <source>Remove only %1</source>
             <translation>הסר רק את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1828" />
+            <location filename="../src/shell/shell_window.cpp" line="2029" />
             <source>Remove the whole setup</source>
             <translation>הסר את ההגדרה כולה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 היא אחת מ-%2 תוכניות המשתפות התקן, בהגדרה עם %3: %4. הסר רק את %1 והאחרות ימשיכו לשתף, או סגור את ההגדרה כולה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1839" />
+            <location filename="../src/shell/shell_window.cpp" line="2040" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 היא חלק מהגדרה עם %2: %3. הסר רק את %1 ואת הקישורים שלה, או סגור את ההגדרה כולה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <location filename="../src/shell/shell_window.cpp" line="2112" />
             <source>%1 and %2</source>
             <translation>%1 ו-%2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1927" />
+            <location filename="../src/shell/shell_window.cpp" line="2128" />
             <source>Remove this setup?</source>
             <translation>להסיר את ההגדרה הזו?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1929" />
+            <location filename="../src/shell/shell_window.cpp" line="2130" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>פעולה זו סוגרת %1: %2. תוכנית שפתחה אחת מהיציאות האלה מאבדת אותה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1951" />
+            <location filename="../src/shell/shell_window.cpp" line="2152" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>חלק מההגדרה עדיין פתוח. סגור את מה שמשתמש בה ובחר שוב בהסרת הגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Removed the setup (%1).</source>
             <translation>ההגדרה הוסרה (%1).</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2164" />
             <source>Removed %1 of %2.</source>
             <translation>הוסרו %1 מתוך %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <source>Remove all setups?</source>
+            <translation>להסיר את כל התצורות?</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <source>This closes %n setup(s) and every port in them. Programs using those ports lose them. Nothing is saved until you save.</source>
+            <translation>
+                <numerusform>פעולה זו סוגרת %n תצורה ואת כל היציאות שבה. תוכניות שמשתמשות ביציאות האלה יאבדו אותן. דבר לא נשמר עד שתשמרו.</numerusform>
+                <numerusform>פעולה זו סוגרת %n תצורות ואת כל היציאות שבהן. תוכניות שמשתמשות ביציאות האלה יאבדו אותן. דבר לא נשמר עד שתשמרו.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <source>Remove all</source>
+            <translation>הסרת הכול</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2203" />
+            <source>Removed all setups.</source>
+            <translation>כל התצורות הוסרו.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2204" />
+            <source>%n port(s) could not be removed.</source>
+            <translation>
+                <numerusform>לא ניתן היה להסיר %n יציאה.</numerusform>
+                <numerusform>לא ניתן היה להסיר %n יציאות.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2237" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2004" />
+            <location filename="../src/shell/shell_window.cpp" line="2244" />
             <source>Could not add a program port to %1</source>
             <translation>לא ניתן להוסיף יציאה לתוכנית אל %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2005" />
+            <location filename="../src/shell/shell_window.cpp" line="2245" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>ההגדרה נשארה כמו שהייתה. בדוק את ההתקן ונסה שוב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2014" />
+            <location filename="../src/shell/shell_window.cpp" line="2254" />
             <source>Added %1 to %2.</source>
             <translation>%1 נוספה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2015" />
+            <location filename="../src/shell/shell_window.cpp" line="2255" />
             <source>a port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio?</source>
             <translation>לסגור את Studio?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio</source>
             <translation>סגירת Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2663" />
+            <location filename="../src/shell/shell_window.cpp" line="2903" />
             <source>Keep Studio open</source>
             <translation>להשאיר את Studio פתוח</translation>
         </message>
@@ -7126,52 +8317,52 @@ Networks: %5</source>
             <translation type="vanished">ביטול דורש שחזור מדויק, שגרסה זו אינה יכולה להוכיח.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;File</source>
             <translation>&amp;קובץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="547" />
             <source>&amp;Edit</source>
             <translation>&amp;עריכה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="554" />
             <source>&amp;Ports</source>
             <translation>&amp;יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="559" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;Topology</source>
             <translation>&amp;טופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="582" />
             <source>&amp;Tools</source>
             <translation>&amp;כלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="590" />
             <source>&amp;View</source>
             <translation>&amp;תצוגה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Theme</source>
             <translation>ערכת נושא</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="592" />
+            <location filename="../src/shell/shell_window.cpp" line="602" />
             <source>Density</source>
             <translation>צפיפות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="599" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>&amp;Help</source>
             <translation>&amp;עזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="609" />
+            <location filename="../src/shell/shell_window.cpp" line="619" />
             <source>Main toolbar</source>
             <translation>סרגל כלים ראשי</translation>
         </message>
@@ -7180,100 +8371,100 @@ Networks: %5</source>
             <translation type="vanished">לא זמין בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="764" />
+            <location filename="../src/shell/shell_window.cpp" line="833" />
             <source>Ports</source>
             <translation>יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="766" />
-            <location filename="../src/shell/shell_window.cpp" line="1223" />
+            <location filename="../src/shell/shell_window.cpp" line="835" />
+            <location filename="../src/shell/shell_window.cpp" line="1362" />
             <source>Inspector</source>
             <translation>מפקח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="767" />
+            <location filename="../src/shell/shell_window.cpp" line="836" />
             <source>Send</source>
             <translation>שליחה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="802" />
-            <location filename="../src/shell/shell_window.cpp" line="1276" />
+            <location filename="../src/shell/shell_window.cpp" line="884" />
+            <location filename="../src/shell/shell_window.cpp" line="1415" />
             <source>Copied %1.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="822" />
+            <location filename="../src/shell/shell_window.cpp" line="904" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 בתים הועמדו בתור אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="878" />
+            <location filename="../src/shell/shell_window.cpp" line="960" />
             <source>Links</source>
             <translation>קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="933" />
+            <location filename="../src/shell/shell_window.cpp" line="1015" />
             <source>Applied the topology JSON.</source>
             <translation>ה-JSON של הטופולוגיה הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="1289" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo %1</source>
             <translation>ביטול: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo %1</source>
             <translation>ביצוע חוזר: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1183" />
+            <location filename="../src/shell/shell_window.cpp" line="1322" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>מבטל יצירה או הסרה של קישור, שינוי של בעלים ושינוי שם של יציאה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1324" />
             <source>This build cannot reverse changes.</source>
             <translation>הגרסה הזו לא יכולה לבטל שינויים.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1193" />
+            <location filename="../src/shell/shell_window.cpp" line="1332" />
             <source>Undid %1.</source>
             <translation>בוטל: %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1335" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>לא ניתן לבטל את %1. ההגדרה השתנתה מאז.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1204" />
+            <location filename="../src/shell/shell_window.cpp" line="1343" />
             <source>Redid %1.</source>
             <translation>בוצע שוב: %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>לא ניתן לבצע שוב את %1. ההגדרה השתנתה מאז.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1222" />
+            <location filename="../src/shell/shell_window.cpp" line="1361" />
             <source>Ports %1</source>
             <translation>יציאות %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1227" />
+            <location filename="../src/shell/shell_window.cpp" line="1366" />
             <source>Inspector %1</source>
             <translation>מפקח %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1844" />
-            <location filename="../src/shell/shell_window.cpp" line="1857" />
+            <location filename="../src/shell/shell_window.cpp" line="2045" />
+            <location filename="../src/shell/shell_window.cpp" line="2058" />
             <source>Remove %1?</source>
             <translation>להסיר את %1?</translation>
         </message>
@@ -7282,214 +8473,215 @@ Networks: %5</source>
             <translation type="vanished">היציאה והקישורים שלה יוסרו. לא ניתן לבטל פעולה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1826" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
-            <location filename="../src/shell/shell_window.cpp" line="2352" />
-            <location filename="../src/shell/shell_window.cpp" line="2481" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2592" />
+            <location filename="../src/shell/shell_window.cpp" line="2721" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1879" />
-            <location filename="../src/shell/shell_window.cpp" line="1950" />
+            <location filename="../src/shell/shell_window.cpp" line="2080" />
+            <location filename="../src/shell/shell_window.cpp" line="2151" />
             <source>Could not remove %1</source>
             <translation>לא ניתן להסיר את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <location filename="../src/shell/shell_window.cpp" line="2089" />
             <source>Removed %1.</source>
             <translation>%1 הוסרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1364" />
+            <location filename="../src/shell/shell_window.cpp" line="1509" />
             <source>Sharing is not available in this build.</source>
             <translation>שיתוף אינו זמין בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1391" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
             <source>Networking is not available in this build.</source>
             <translation>הרשת אינה זמינה בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1413" />
+            <location filename="../src/shell/shell_window.cpp" line="1558" />
             <source>Bridge is running on port %1.</source>
             <translation>הגשר פועל ביציאה %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1414" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Open monitor</source>
             <translation>פתיחת מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1435" />
-            <location filename="../src/shell/shell_window.cpp" line="2393" />
-            <location filename="../src/shell/shell_window.cpp" line="2405" />
+            <location filename="../src/shell/shell_window.cpp" line="1580" />
+            <location filename="../src/shell/shell_window.cpp" line="2633" />
+            <location filename="../src/shell/shell_window.cpp" line="2645" />
             <source>Could not open %1</source>
             <translation>לא ניתן לפתוח את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1436" />
+            <location filename="../src/shell/shell_window.cpp" line="1581" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>התצורה זקוקה להתקן או לנקודת קצה ברשת שאינם זמינים במחשב זה. דבר לא השתנה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1459" />
-            <location filename="../src/shell/shell_window.cpp" line="2417" />
-            <location filename="../src/shell/shell_window.cpp" line="2445" />
+            <location filename="../src/shell/shell_window.cpp" line="1604" />
+            <location filename="../src/shell/shell_window.cpp" line="2657" />
+            <location filename="../src/shell/shell_window.cpp" line="2685" />
             <source>%1 ports, %2 links</source>
             <translation>%1 יציאות, %2 קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1551" />
-            <location filename="../src/shell/shell_window.cpp" line="1574" />
+            <location filename="../src/shell/shell_window.cpp" line="1752" />
+            <location filename="../src/shell/shell_window.cpp" line="1775" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>נוצר זוג מקושר. תוכנית A פותחת את %1; תוכנית B פותחת את %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1618" />
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>%1 במעקב. הצופה הוא %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1668" />
+            <location filename="../src/shell/shell_window.cpp" line="1869" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 הוא חלק מחבילת עבודה מאוחרת יותר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1674" />
+            <location filename="../src/shell/shell_window.cpp" line="1875" />
             <source>%1 arrives with %2.</source>
             <translation>%1 יגיע עם %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1759" />
+            <location filename="../src/shell/shell_window.cpp" line="1960" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>להסיר את הקישור הזה? %1. דבר לא נשמר עד ששומרים את התצורה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <location filename="../src/shell/shell_window.cpp" line="1971" />
             <source>Could not remove the link</source>
             <translation>לא ניתן להסיר את הקישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1980" />
             <source>Removed the link.</source>
             <translation>הקישור הוסר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1858" />
+            <location filename="../src/shell/shell_window.cpp" line="2059" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>להסיר את %1 ואת הקישורים שלה? דבר לא נשמר עד ששומרים את התצורה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2035" />
+            <location filename="../src/shell/shell_window.cpp" line="2275" />
             <source>Renamed %1 to %2.</source>
             <translation>השם של %1 שונה ל-%2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2055" />
+            <location filename="../src/shell/shell_window.cpp" line="2295" />
             <source>%1 is now %2.</source>
             <translation>%1 הוא כעת %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2070" />
+            <location filename="../src/shell/shell_window.cpp" line="2310" />
             <source>Released %1.</source>
             <translation>%1 שוחרר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2127" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
             <source>Add a port before opening the line matrix.</source>
             <translation>הוסיפו יציאה לפני פתיחת מטריצת הקווים.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2162" />
+            <location filename="../src/shell/shell_window.cpp" line="2402" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>בחרו את היעד של איחוד עם מדיניות בעלים כדי לשלוט מי כותב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2243" />
+            <location filename="../src/shell/shell_window.cpp" line="2483" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>מצב בדיקה. יציאות חדשות פועלות רק בתוך Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2264" />
+            <location filename="../src/shell/shell_window.cpp" line="2504" />
             <source>Could not restart as administrator</source>
             <translation>לא ניתן להפעיל מחדש כמנהל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2342" />
+            <location filename="../src/shell/shell_window.cpp" line="2582" />
             <source>Environment copied.</source>
             <translation>הסביבה הועתקה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start a new setup?</source>
             <translation>להתחיל הגדרה חדשה?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start new</source>
             <translation>התחלה חדשה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2608" />
             <source>Started a new setup.</source>
             <translation>תצורה חדשה הותחלה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2378" />
+            <location filename="../src/shell/shell_window.cpp" line="2618" />
             <source>Open setup</source>
             <translation>פתיחת תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2379" />
+            <location filename="../src/shell/shell_window.cpp" line="2619" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>תצורות Virtual Serial Studio (*.json);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2420" />
+            <location filename="../src/shell/shell_window.cpp" line="2660" />
             <source>Opened %1.</source>
             <translation>%1 נפתח.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2436" />
+            <location filename="../src/shell/shell_window.cpp" line="2676" />
             <source>Could not save this setup</source>
             <translation>לא ניתן לשמור תצורה זו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2449" />
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2689" />
+            <location filename="../src/shell/shell_window.cpp" line="2690" />
             <source>Saved %1.</source>
             <translation>%1 נשמר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2456" />
+            <location filename="../src/shell/shell_window.cpp" line="2696" />
             <source>Save setup</source>
             <translation>שמירת תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2458" />
+            <location filename="../src/shell/shell_window.cpp" line="2698" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>תצורות Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2476" />
+            <location filename="../src/shell/shell_window.cpp" line="2716" />
             <source>Save changes to %1?</source>
             <translation>לשמור שינויים ב-%1?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2477" />
+            <location filename="../src/shell/shell_window.cpp" line="2717" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>היציאות והקישורים שלכם השתנו מאז השמירה האחרונה. אפשר לכבות הודעה זו בהגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2480" />
+            <location filename="../src/shell/shell_window.cpp" line="2720" />
             <source>Don't save</source>
             <translation>לא לשמור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2545" />
+            <location filename="../src/shell/shell_window.cpp" line="2785" />
             <source>Layout reset.</source>
             <translation>הפריסה אופסה.</translation>
         </message>
@@ -7500,7 +8692,7 @@ Networks: %5</source>
             <location filename="../src/support/shortcuts_dialog.cpp" line="101" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="103" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="123" />
-            <location filename="../src/support/shortcuts_dialog.cpp" line="161" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="163" />
             <source>Keyboard shortcuts</source>
             <translation>קיצורי מקלדת</translation>
         </message>
@@ -7512,36 +8704,37 @@ Networks: %5</source>
         <message>
             <location filename="../src/support/shortcuts_dialog.cpp" line="133" />
             <location filename="../src/support/shortcuts_dialog.cpp" line="135" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="142" />
             <source>Filter shortcuts</source>
             <translation>סינון קיצורים</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="151" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="153" />
             <source>Available today</source>
             <translation>זמינים כעת</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="163" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="165" />
             <source>Action</source>
             <translation>פעולה</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="164" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="166" />
             <source>Windows and Linux</source>
             <translation>Windows ו-Linux</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="165" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="167" />
             <source>macOS</source>
             <translation>macOS</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="187" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="189" />
             <source>Qt maps Ctrl to Cmd on macOS. Shortcuts also appear in menus and tooltips. Open this list with Help, Keyboard shortcuts.</source>
             <translation>Qt ממפה את Ctrl ל-Cmd ב-macOS. קיצורים מופיעים גם בתפריטים ובתיאורי כלים. פתחו רשימה זו דרך עזרה, קיצורי מקלדת.</translation>
         </message>
         <message>
-            <location filename="../src/support/shortcuts_dialog.cpp" line="199" />
+            <location filename="../src/support/shortcuts_dialog.cpp" line="201" />
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
@@ -7556,95 +8749,178 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>SimplePage</name>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="126" />
+            <location filename="../src/simple/simple_page.cpp" line="149" />
+            <source>Your setups</source>
+            <translation>התצורות שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="132" />
+            <source>New</source>
+            <translation>חדש</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="136" />
+            <location filename="../src/simple/simple_page.cpp" line="137" />
+            <source>Set up something new</source>
+            <translation>הגדרת משהו חדש</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="173" />
+            <source>Save…</source>
+            <translation>שמירה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="177" />
+            <source>Open…</source>
+            <translation>פתיחה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="181" />
+            <source>Remove all</source>
+            <translation>הסרת הכול</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="218" />
+            <source>Nothing is set up yet, so there is no port to look at. Set something up first.</source>
+            <translation>עדיין לא הוגדר דבר, ולכן אין יציאה לצפות בה. הגדירו קודם משהו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="226" />
+            <source>Choose a setup on the left to see its data.</source>
+            <translation>בחרו תצורה מהרשימה כדי לראות את הנתונים שלה.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/simple_page.cpp" line="299" />
+            <source>%n setup(s)</source>
+            <translation>
+                <numerusform>%n תצורה</numerusform>
+                <numerusform>%n תצורות</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="304" />
+            <source>Nothing set up yet. Choose what you want to do on the right.</source>
+            <translation>עדיין לא הוגדר דבר. בחרו מה ברצונכם לעשות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="315" />
+            <source>%1 (Advanced)</source>
+            <translation>%1 (מתקדם)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="385" />
+            <source>Done. %1.</source>
+            <translation>בוצע. %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="495" />
+            <source>Closed %1. The other programs were not interrupted.</source>
+            <translation>בוצעה סגירה של %1. התוכניות האחרות לא הופרעו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="519" />
+            <source>Could not change the setup. %1</source>
+            <translation>לא ניתן היה לשנות את התצורה. %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="541" />
+            <source>Added %1. The other programs were not interrupted.</source>
+            <translation>בוצעה הוספה של %1. התוכניות האחרות לא הופרעו.</translation>
+        </message>
+    </context>
+    <context>
         <name>StatusBar</name>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="24" />
+            <location filename="../src/shell/status_bar.cpp" line="29" />
             <source>Status bar</source>
             <translation>שורת מצב</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="39" />
+            <location filename="../src/shell/status_bar.cpp" line="44" />
             <source>0 dropped</source>
             <translation>0 הושמטו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="45" />
-            <location filename="../src/shell/status_bar.cpp" line="154" />
+            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="159" />
             <source>Setup ready</source>
             <translation>ההגדרות מוכנות</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="55" />
             <source>Interface mode</source>
             <translation>מצב ממשק</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="51" />
+            <location filename="../src/shell/status_bar.cpp" line="56" />
             <source>Simple</source>
             <translation>פשוט</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="52" />
+            <location filename="../src/shell/status_bar.cpp" line="57" />
             <source>Advanced</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="109" />
+            <location filename="../src/shell/status_bar.cpp" line="114" />
             <source>No ports yet</source>
             <translation>עדיין אין יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="112" />
+            <location filename="../src/shell/status_bar.cpp" line="117" />
             <source>Ports %1</source>
             <translation>יציאות %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="113" />
+            <location filename="../src/shell/status_bar.cpp" line="118" />
             <source>Links %1</source>
             <translation>קישורים %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="115" />
+            <location filename="../src/shell/status_bar.cpp" line="120" />
             <source>RX %1   TX %2</source>
             <translation>RX %1   TX %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="116" />
+            <location filename="../src/shell/status_bar.cpp" line="121" />
             <source>Hub running</source>
             <translation>הרכזת פועלת</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="117" />
+            <location filename="../src/shell/status_bar.cpp" line="122" />
             <source>Hub stopped</source>
             <translation>הרכזת נעצרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="127" />
+            <location filename="../src/shell/status_bar.cpp" line="132" />
             <source>%1 dropped, not owner</source>
             <translation>%1 הושמטו, לא הבעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="129" />
+            <location filename="../src/shell/status_bar.cpp" line="134" />
             <source>Bytes from a port that is not the owner were not forwarded.</source>
             <translation>בתים מיציאה שאינה הבעלים לא הועברו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="134" />
+            <location filename="../src/shell/status_bar.cpp" line="139" />
             <source>%1 dropped</source>
             <translation>%1 הושמטו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="158" />
+            <location filename="../src/shell/status_bar.cpp" line="163" />
             <source>Setup needs attention</source>
             <translation>ההגדרות דורשות תשומת לב</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="162" />
+            <location filename="../src/shell/status_bar.cpp" line="167" />
             <source>Setup not checked</source>
             <translation>ההגדרות לא נבדקו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="166" />
+            <location filename="../src/shell/status_bar.cpp" line="171" />
             <source>Open Tools, Setup check for the details.</source>
             <translation>לפרטים, פתחו כלים, בדיקת הגדרות.</translation>
         </message>
@@ -8849,70 +10125,70 @@ Networks: %5</source>
             <translation>נבדק לאחר שתוכנית מתחברת.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="99" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="101" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="257" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="100" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="102" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="262" />
             <source>Why is nothing arriving?</source>
             <translation>למה שום דבר לא מגיע?</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="124" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="125" />
             <source>Studio checked each step between the device and your program.</source>
             <translation>Studio בדק כל שלב בין ההתקן לתוכנית שלכם.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="162" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="163" />
             <source>Try this</source>
             <translation>נסו זאת</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="180" />
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="269" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="181" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="274" />
             <source>Copy port path</source>
             <translation>העתקת נתיב היציאה</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="188" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="191" />
             <source>Check again</source>
             <translation>בדיקה חוזרת</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="201" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="206" />
             <source>Still stuck? A diagnostic bundle gathers the setup, the log and the environment for whoever helps you. Traffic contents are left out unless you choose to include them.</source>
             <translation>עדיין תקועים? חבילת אבחון אוספת את התצורה, היומן והסביבה עבור מי שעוזר לכם. תוכן התעבורה אינו נכלל אלא אם תבחרו לכלול אותו.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="219" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="224" />
             <source>Create diagnostic bundle</source>
             <translation>יצירת חבילת אבחון</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="226" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="231" />
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="259" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="264" />
             <source>Why is nothing arriving on %1?</source>
             <translation>למה שום דבר לא מגיע ל-%1?</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="270" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="275" />
             <source>Copy %1</source>
             <translation>העתקת %1</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="282" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="287" />
             <source>1. In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port.&lt;br&gt;2. If the program shows an error, another program may be using %1. Close it, then try again.&lt;br&gt;3. Some programs only list ports when they start. Restart the program after creating the port.</source>
             <translation>1. בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית.&lt;br&gt;2. אם התוכנית מציגה שגיאה, ייתכן שתוכנית אחרת משתמשת ב-%1. סגרו אותה ונסו שוב.&lt;br&gt;3. חלק מהתוכניות מציגות יציאות רק בעת ההפעלה. הפעילו מחדש את התוכנית לאחר יצירת היציאה.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="292" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="297" />
             <source>1. In your program, choose %1 as the serial port. 2. If the program shows an error, another program may be using %1. Close it, then try again. 3. Some programs only list ports when they start. Restart the program after creating the port.</source>
             <translation>1. בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. 2. אם התוכנית מציגה שגיאה, ייתכן שתוכנית אחרת משתמשת ב-%1. סגרו אותה ונסו שוב. 3. חלק מהתוכניות מציגות יציאות רק בעת ההפעלה. הפעילו מחדש את התוכנית לאחר יצירת היציאה.</translation>
         </message>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="364" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="369" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
@@ -8920,7 +10196,7 @@ Networks: %5</source>
     <context>
         <name>TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -9071,6 +10347,19 @@ Networks: %5</source>
             <location filename="../src/flows/watch_dialog.cpp" line="289" />
             <source>Studio could not create the read-only monitor link. Nothing was changed.</source>
             <translation>Studio לא הצליח ליצור את קישור המוניטור לקריאה בלבד. דבר לא השתנה.</translation>
+        </message>
+    </context>
+    <context>
+        <name>WireDiagram</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="88" />
+            <source>Picture of the setup</source>
+            <translation>תמונה של התצורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="100" />
+            <source>%1 to %2</source>
+            <translation>%1 אל %2</translation>
         </message>
     </context>
     <context>
@@ -10277,219 +11566,219 @@ Networks: %5</source>
     <context>
         <name>vss::gui::BenchmarkDialog</name>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="75" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="76" />
             <source>Benchmark a connection</source>
             <translation>מבחן ביצועים של חיבור</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="89" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="90" />
             <source>Sends data from one port to another and counts what arrives.</source>
             <translation>שולח נתונים מיציאה אחת לאחרת וסופר מה שמגיע.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="98" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="99" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="100" />
             <source>Send from</source>
             <translation>שליחה מ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="102" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="103" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="104" />
             <source>Receive on</source>
             <translation>קבלה ב</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="106" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="111" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="107" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="112" />
             <source>Amount of data</source>
             <translation>כמות נתונים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="115" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="120" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="116" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="121" />
             <source>Chunk size</source>
             <translation>גודל מקטע</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="125" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="126" />
             <source>Do not link these two ports in Studio. The data has to travel through the cable or driver pair, so the count means something.</source>
             <translation>אין לקשר שתי יציאות אלה ב-Studio. הנתונים צריכים לעבור דרך הכבל או זוג מנהלי ההתקן, כדי שהספירה תהיה משמעותית.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="131" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="322" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="132" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="325" />
             <source>These two ports are linked in Studio. Disconnect them first.</source>
             <translation>שתי יציאות אלה מקושרות ב-Studio. נתקו אותן קודם.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="146" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="147" />
             <source>Not run yet</source>
             <translation>עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="148" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="149" />
             <source>Benchmark result: not run yet</source>
             <translation>תוצאת מבחן הביצועים: עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="151" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="152" />
             <source>Not started</source>
             <translation>לא התחיל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="158" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="159" />
             <source>Benchmark progress</source>
             <translation>התקדמות מבחן הביצועים</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Sent</source>
             <translation>נשלח</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="167" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Received</source>
             <translation>התקבל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="421" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="424" />
             <source>Lost</source>
             <translation>אבד</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="168" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="422" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="169" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="425" />
             <source>Throughput</source>
             <translation>תפוקה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="181" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="182" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="480" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="536" />
             <source>Not run</source>
             <translation>לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="183" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="184" />
             <source>%1: not run yet</source>
             <translation>%1: עדיין לא הורץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="191" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="192" />
             <source>A run fails when the received count is short, and the result says by how much.</source>
             <translation>הרצה נכשלת כשהכמות שהתקבלה חסרה, והתוצאה מציינת בכמה.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="201" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="202" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="206" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="388" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="207" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="391" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="212" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="213" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="214" />
             <source>Copy result</source>
             <translation>העתקת התוצאה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="221" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="222" />
             <source>Copied the result.</source>
             <translation>התוצאה הועתקה.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="224" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="225" />
             <source>Close</source>
             <translation>סגירה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="227" />
             <location filename="../src/advanced/benchmark_dialog.cpp" line="228" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="408" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="231" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="411" />
             <source>Run</source>
             <translation>הרצה</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="314" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="317" />
             <source>Add two ports to benchmark a connection.</source>
             <translation>הוסיפו שתי יציאות כדי למדוד ביצועי חיבור.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="320" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="323" />
             <source>Choose two different ports.</source>
             <translation>בחרו שתי יציאות שונות.</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="400" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="403" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="428" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="431" />
             <source>%1: %2</source>
             <translation>%1: %2</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="471" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
             <source>Running</source>
             <translation>רץ</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="473" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="525" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="476" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="528" />
             <source>Benchmark result: %1</source>
             <translation>תוצאת מבחן הביצועים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="474" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="509" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="477" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="512" />
             <source>%1 of %2 received</source>
             <translation>%1 מתוך %2 התקבלו</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="530" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="533" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="532" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="535" />
             <source>Could not finish: %1</source>
             <translation>לא ניתן לסיים: %1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="550" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="551" />
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="553" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="555" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="556" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
             <source>Cancelled</source>
             <translation>בוטל</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="558" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
             <source>Passed</source>
             <translation>עבר</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="561" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="566" />
             <source>Finished at %1</source>
             <translation>הסתיים ב-%1</translation>
         </message>
         <message>
-            <location filename="../src/advanced/benchmark_dialog.cpp" line="563" />
+            <location filename="../src/advanced/benchmark_dialog.cpp" line="568" />
             <source>%1: sent %2, received %3, lost %4, throughput %5.</source>
             <translation>%1: נשלחו %2, התקבלו %3, אבדו %4, תפוקה %5.</translation>
         </message>
@@ -11067,12 +12356,12 @@ Networks: %5</source>
     <context>
         <name>vss::gui::Disclosure</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="659" />
+            <location filename="../src/widgets/controls.cpp" line="655" />
             <source>%1, expanded</source>
             <translation>%1, מורחב</translation>
         </message>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="660" />
+            <location filename="../src/widgets/controls.cpp" line="656" />
             <source>%1, collapsed</source>
             <translation>%1, מכווץ</translation>
         </message>
@@ -11208,6 +12497,164 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>vss::gui::FixtureBehaviours</name>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="100" />
+            <source>Only a mock fixture has a byte generator.</source>
+            <translation>רק להתקן דמה יש מחולל בתים.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="112" />
+            <source>The pattern needs pairs of hex digits, such as 55 AA.</source>
+            <translation>התבנית דורשת זוגות של ספרות hex, כגון 55 AA.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="119" />
+            <source>Type the line to send.</source>
+            <translation>הקלידו את השורה לשליחה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_behaviour.cpp" line="203" />
+            <source>The generator stopped: %1</source>
+            <translation>המחולל נעצר: %1</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::FixturePanel</name>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="55" />
+            <source>Fixture behaviour</source>
+            <translation>התנהגות ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="60" />
+            <source>What this fixture does</source>
+            <translation>מה התקן הדמה הזה עושה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="62" />
+            <source>Echo received bytes</source>
+            <translation>הדהוד של בתים שהתקבלו</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="71" />
+            <source>Generator</source>
+            <translation>מחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="73" />
+            <source>Generator kind</source>
+            <translation>סוג המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="74" />
+            <source>Text line</source>
+            <translation>שורת טקסט</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="75" />
+            <source>Fixed pattern</source>
+            <translation>תבנית קבועה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="77" />
+            <source>Counter</source>
+            <translation>מונה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="78" />
+            <source>Random bytes</source>
+            <translation>בתים אקראיים</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="82" />
+            <location filename="../src/panes/fixture_panel.cpp" line="190" />
+            <source>Line</source>
+            <translation>שורה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="85" />
+            <source>Generator bytes</source>
+            <translation>בתי המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="89" />
+            <source>Bytes</source>
+            <translation>בתים</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="93" />
+            <source> bytes each time</source>
+            <translation> בתים בכל פעם</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="94" />
+            <source>Bytes each time</source>
+            <translation>בתים בכל פעם</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="97" />
+            <source>Rate</source>
+            <translation>קצב</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="100" />
+            <source> per second</source>
+            <translation> בשנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="101" />
+            <source>Sends per second</source>
+            <translation>שליחות בשנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="105" />
+            <location filename="../src/panes/fixture_panel.cpp" line="228" />
+            <source>Start generator</source>
+            <translation>הפעלת המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="185" />
+            <source>Pattern</source>
+            <translation>תבנית</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="186" />
+            <source>Hex, such as 55 AA</source>
+            <translation>Hex, כגון 55 AA</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="191" />
+            <source>Text, sent with CRLF</source>
+            <translation>טקסט, נשלח עם CRLF</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="227" />
+            <source>Stop generator</source>
+            <translation>עצירת המחולל</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="234" />
+            <source>Generating, %1 sent from this fixture.</source>
+            <translation>המחולל פועל, %1 נשלחו מההתקן הזה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="236" />
+            <source>Stopped after %1.</source>
+            <translation>נעצר לאחר %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="237" />
+            <source>Not running.</source>
+            <translation>לא פועל.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/fixture_panel.cpp" line="241" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+    </context>
+    <context>
         <name>vss::gui::FlowDialog</name>
         <message>
             <location filename="../src/flows/flow_dialog.cpp" line="64" />
@@ -11239,125 +12686,125 @@ Networks: %5</source>
     <context>
         <name>vss::gui::InspectorPanel</name>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="117" />
+            <location filename="../src/panes/inspector_panel.cpp" line="119" />
             <source>Inspector</source>
             <translation>מפקח</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="138" />
+            <location filename="../src/panes/inspector_panel.cpp" line="140" />
             <source>Select a port to inspect it.</source>
             <translation>בחרו יציאה כדי לבדוק אותה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="169" />
+            <location filename="../src/panes/inspector_panel.cpp" line="172" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="173" />
+            <location filename="../src/panes/inspector_panel.cpp" line="176" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="183" />
-            <location filename="../src/panes/inspector_panel.cpp" line="403" />
+            <location filename="../src/panes/inspector_panel.cpp" line="186" />
+            <location filename="../src/panes/inspector_panel.cpp" line="416" />
             <source>path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="188" />
+            <location filename="../src/panes/inspector_panel.cpp" line="191" />
             <source>COM number</source>
             <translation>מספר COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="196" />
+            <location filename="../src/panes/inspector_panel.cpp" line="199" />
             <source>Change...</source>
             <translation>שינוי...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="199" />
+            <location filename="../src/panes/inspector_panel.cpp" line="202" />
             <source>Change COM number</source>
             <translation>שינוי מספר COM</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="212" />
+            <location filename="../src/panes/inspector_panel.cpp" line="215" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="221" />
+            <location filename="../src/panes/inspector_panel.cpp" line="224" />
             <source>Serial</source>
             <translation>טורי</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="238" />
-            <location filename="../src/panes/inspector_panel.cpp" line="422" />
+            <location filename="../src/panes/inspector_panel.cpp" line="241" />
+            <location filename="../src/panes/inspector_panel.cpp" line="439" />
             <source>&lt;a href="troubleshoot"&gt;Why is nothing arriving?&lt;/a&gt;</source>
             <translation>&lt;a href="troubleshoot"&gt;למה שום דבר לא מגיע?&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="243" />
-            <location filename="../src/panes/inspector_panel.cpp" line="420" />
+            <location filename="../src/panes/inspector_panel.cpp" line="246" />
+            <location filename="../src/panes/inspector_panel.cpp" line="437" />
             <source>Copy name</source>
             <translation>העתקת השם</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="255" />
+            <location filename="../src/panes/inspector_panel.cpp" line="258" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="262" />
+            <location filename="../src/panes/inspector_panel.cpp" line="265" />
             <source>Release port...</source>
             <translation>שחרור יציאה...</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="265" />
+            <location filename="../src/panes/inspector_panel.cpp" line="268" />
             <source>Release port</source>
             <translation>שחרור יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="275" />
+            <location filename="../src/panes/inspector_panel.cpp" line="278" />
             <source>Control lines</source>
             <translation>קווי בקרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="297" />
+            <location filename="../src/panes/inspector_panel.cpp" line="300" />
             <source>DTR</source>
             <translation>DTR</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="298" />
+            <location filename="../src/panes/inspector_panel.cpp" line="301" />
             <source>RTS</source>
             <translation>RTS</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="299" />
+            <location filename="../src/panes/inspector_panel.cpp" line="302" />
             <source>Break</source>
             <translation>Break</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="322" />
+            <location filename="../src/panes/inspector_panel.cpp" line="325" />
             <source>&lt;a href="faults"&gt;Open line matrix and faults&lt;/a&gt;</source>
             <translation>&lt;a href="faults"&gt;פתיחת מטריצת הקווים והתקלות&lt;/a&gt;</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="400" />
+            <location filename="../src/panes/inspector_panel.cpp" line="413" />
             <source>The engine reported a failure.</source>
             <translation>המנוע דיווח על כשל.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="404" />
+            <location filename="../src/panes/inspector_panel.cpp" line="417" />
             <source>RX %1, TX %2</source>
             <translation>RX %1, TX %2</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="414" />
+            <location filename="../src/panes/inspector_panel.cpp" line="426" />
             <source>No program has opened %1 yet. The program has to open exactly %1; a different port will not receive anything.</source>
             <translation>אף תוכנית לא פתחה עדיין את %1. התוכנית צריכה לפתוח בדיוק את %1; יציאה אחרת לא תקבל דבר.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="419" />
+            <location filename="../src/panes/inspector_panel.cpp" line="436" />
             <source>Copy name, %1</source>
             <translation>העתקת השם, %1</translation>
         </message>
@@ -11366,30 +12813,30 @@ Networks: %5</source>
             <translation type="vanished">שום תוכנית עדיין לא פתחה את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="434" />
-            <location filename="../src/panes/inspector_panel.cpp" line="440" />
+            <location filename="../src/panes/inspector_panel.cpp" line="451" />
+            <location filename="../src/panes/inspector_panel.cpp" line="457" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="452" />
+            <location filename="../src/panes/inspector_panel.cpp" line="478" />
             <source>This port does not support control lines.</source>
             <translation>יציאה זו אינה תומכת בקווי בקרה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="480" />
-            <location filename="../src/panes/inspector_panel.cpp" line="494" />
+            <location filename="../src/panes/inspector_panel.cpp" line="506" />
+            <location filename="../src/panes/inspector_panel.cpp" line="520" />
             <source>%1 on</source>
             <translation>%1 פעיל</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="481" />
-            <location filename="../src/panes/inspector_panel.cpp" line="495" />
+            <location filename="../src/panes/inspector_panel.cpp" line="507" />
+            <location filename="../src/panes/inspector_panel.cpp" line="521" />
             <source>%1 off</source>
             <translation>%1 כבוי</translation>
         </message>
         <message>
-            <location filename="../src/panes/inspector_panel.cpp" line="514" />
+            <location filename="../src/panes/inspector_panel.cpp" line="540" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>
@@ -11823,177 +13270,177 @@ Networks: %5</source>
     <context>
         <name>vss::gui::MonitorPanel</name>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="146" />
-            <location filename="../src/panes/monitor_panel.cpp" line="289" />
+            <location filename="../src/panes/monitor_panel.cpp" line="147" />
+            <location filename="../src/panes/monitor_panel.cpp" line="294" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="154" />
+            <location filename="../src/panes/monitor_panel.cpp" line="155" />
             <source>Monitor tabs</source>
             <translation>לשוניות מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="167" />
-            <location filename="../src/panes/monitor_panel.cpp" line="213" />
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="168" />
+            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Pause</source>
             <translation>השהיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="170" />
-            <location filename="../src/panes/monitor_panel.cpp" line="216" />
+            <location filename="../src/panes/monitor_panel.cpp" line="173" />
+            <location filename="../src/panes/monitor_panel.cpp" line="221" />
             <source>Clear</source>
             <translation>ניקוי</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="173" />
-            <location filename="../src/panes/monitor_panel.cpp" line="212" />
+            <location filename="../src/panes/monitor_panel.cpp" line="176" />
+            <location filename="../src/panes/monitor_panel.cpp" line="215" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="174" />
-            <location filename="../src/panes/monitor_panel.cpp" line="219" />
+            <location filename="../src/panes/monitor_panel.cpp" line="177" />
+            <location filename="../src/panes/monitor_panel.cpp" line="224" />
             <source>Follow</source>
             <translation>מעקב</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="176" />
-            <location filename="../src/panes/monitor_panel.cpp" line="441" />
-            <location filename="../src/panes/monitor_panel.cpp" line="454" />
+            <location filename="../src/panes/monitor_panel.cpp" line="179" />
+            <location filename="../src/panes/monitor_panel.cpp" line="446" />
+            <location filename="../src/panes/monitor_panel.cpp" line="459" />
             <source>All ports</source>
             <translation>כל היציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="194" />
+            <location filename="../src/panes/monitor_panel.cpp" line="197" />
             <source>Filter by port</source>
             <translation>סינון לפי יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="197" />
+            <location filename="../src/panes/monitor_panel.cpp" line="200" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="198" />
+            <location filename="../src/panes/monitor_panel.cpp" line="201" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="199" />
+            <location filename="../src/panes/monitor_panel.cpp" line="202" />
             <source>Dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="204" />
-            <location filename="../src/panes/monitor_panel.cpp" line="205" />
+            <location filename="../src/panes/monitor_panel.cpp" line="207" />
+            <location filename="../src/panes/monitor_panel.cpp" line="208" />
             <source>Search payload</source>
             <translation>חיפוש במטען</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="210" />
+            <location filename="../src/panes/monitor_panel.cpp" line="213" />
             <source>Preview format</source>
             <translation>תבנית התצוגה המקדימה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="211" />
+            <location filename="../src/panes/monitor_panel.cpp" line="214" />
             <source>ASCII</source>
             <translation>ASCII</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="221" />
+            <location filename="../src/panes/monitor_panel.cpp" line="226" />
             <source>Export</source>
             <translation>ייצוא</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="250" />
+            <location filename="../src/panes/monitor_panel.cpp" line="255" />
             <source>Traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="281" />
-            <location filename="../src/panes/monitor_panel.cpp" line="531" />
+            <location filename="../src/panes/monitor_panel.cpp" line="286" />
+            <location filename="../src/panes/monitor_panel.cpp" line="544" />
             <source>No traffic yet. Send some bytes, or open the port in a program.</source>
             <translation>עדיין אין תעבורה. שלחו כמה בתים, או פתחו את היציאה בתוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="293" />
-            <location filename="../src/panes/monitor_panel.cpp" line="296" />
+            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="301" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="298" />
+            <location filename="../src/panes/monitor_panel.cpp" line="303" />
             <source>The topology JSON editor arrives with WP7.</source>
             <translation>עורך JSON של הטופולוגיה יגיע עם WP7.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="303" />
+            <location filename="../src/panes/monitor_panel.cpp" line="308" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="496" />
+            <location filename="../src/panes/monitor_panel.cpp" line="501" />
             <source>Resume</source>
             <translation>המשך</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="527" />
+            <location filename="../src/panes/monitor_panel.cpp" line="540" />
             <source>No traffic matches these filters.</source>
             <translation>אין תעבורה התואמת למסננים אלה.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="555" />
+            <location filename="../src/panes/monitor_panel.cpp" line="568" />
             <source>link</source>
             <translation>קישור</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="591" />
+            <location filename="../src/panes/monitor_panel.cpp" line="604" />
             <source>Export visible traffic</source>
             <translation>ייצוא התעבורה הנראית</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="592" />
+            <location filename="../src/panes/monitor_panel.cpp" line="605" />
             <source>Text files (*.txt);;All files (*)</source>
             <translation>קובצי טקסט (*.txt);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="598" />
-            <location filename="../src/panes/monitor_panel.cpp" line="638" />
+            <location filename="../src/panes/monitor_panel.cpp" line="611" />
+            <location filename="../src/panes/monitor_panel.cpp" line="651" />
             <source>Could not save %1.</source>
             <translation>לא ניתן לשמור את %1.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="602" />
-            <location filename="../src/panes/monitor_panel.cpp" line="641" />
+            <location filename="../src/panes/monitor_panel.cpp" line="615" />
+            <location filename="../src/panes/monitor_panel.cpp" line="654" />
             <source>Exported %1.</source>
             <translation>%1 יוצא.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="224" />
-            <location filename="../src/panes/monitor_panel.cpp" line="226" />
-            <location filename="../src/panes/monitor_panel.cpp" line="612" />
+            <location filename="../src/panes/monitor_panel.cpp" line="229" />
+            <location filename="../src/panes/monitor_panel.cpp" line="231" />
+            <location filename="../src/panes/monitor_panel.cpp" line="625" />
             <source>Export capture</source>
             <translation>ייצוא לכידה</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="228" />
+            <location filename="../src/panes/monitor_panel.cpp" line="233" />
             <source>Save the traffic shown with every byte and its exact time to a capture file.</source>
             <translation>שומר את התעבורה המוצגת בקובץ לכידה, עם כל בייט והזמן המדויק שלו.</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="607" />
+            <location filename="../src/panes/monitor_panel.cpp" line="620" />
             <source>Capture text (*.cap)</source>
             <translation>טקסט לכידה (*.cap)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="608" />
+            <location filename="../src/panes/monitor_panel.cpp" line="621" />
             <source>Comma separated values (*.csv)</source>
             <translation>ערכים מופרדים בפסיקים (*.csv)</translation>
         </message>
         <message>
-            <location filename="../src/panes/monitor_panel.cpp" line="609" />
+            <location filename="../src/panes/monitor_panel.cpp" line="622" />
             <source>JSON Lines (*.jsonl)</source>
             <translation>שורות JSON (*.jsonl)</translation>
         </message>
@@ -12514,7 +13961,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PickCard</name>
         <message>
-            <location filename="../src/widgets/controls.cpp" line="256" />
+            <location filename="../src/widgets/controls.cpp" line="259" />
             <source>%1. %2</source>
             <translation>%1. %2</translation>
         </message>
@@ -12542,78 +13989,78 @@ Networks: %5</source>
             <translation>שונה מ-%1 במהירות או במבנה הנתונים</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="182" />
+            <location filename="../src/panes/port_model.cpp" line="188" />
             <source>%1, %2, %3</source>
             <translation>%1, %2, %3</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="218" />
+            <location filename="../src/panes/port_model.cpp" line="232" />
             <source>Port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="220" />
+            <location filename="../src/panes/port_model.cpp" line="234" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="222" />
+            <location filename="../src/panes/port_model.cpp" line="236" />
             <source>RX</source>
             <translation>RX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="224" />
+            <location filename="../src/panes/port_model.cpp" line="238" />
             <source>TX</source>
             <translation>TX</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="226" />
+            <location filename="../src/panes/port_model.cpp" line="240" />
             <source>Dropped</source>
             <translation>הושמט</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="259" />
+            <location filename="../src/panes/port_model.cpp" line="273" />
             <source>Failed</source>
             <translation>נכשל</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="261" />
+            <location filename="../src/panes/port_model.cpp" line="275" />
             <source>Fixture</source>
             <translation>התקן דמה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="263" />
+            <location filename="../src/panes/port_model.cpp" line="277" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="269" />
+            <location filename="../src/panes/port_model.cpp" line="283" />
             <source>Waiting for program</source>
             <translation>ממתין לתוכנית</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="271" />
+            <location filename="../src/panes/port_model.cpp" line="285" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="275" />
+            <location filename="../src/panes/port_model.cpp" line="289" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="278" />
-            <location filename="../src/panes/port_model.cpp" line="279" />
+            <location filename="../src/panes/port_model.cpp" line="292" />
+            <location filename="../src/panes/port_model.cpp" line="293" />
             <source>Closed</source>
             <translation>סגור</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="309" />
+            <location filename="../src/panes/port_model.cpp" line="323" />
             <source>Fixture (mock)</source>
             <translation>התקן דמה (מדומה)</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/port_model.cpp" line="314" />
+            <location filename="../src/panes/port_model.cpp" line="328" />
             <source>Real device, shared with %n programs</source>
             <translation>
                 <numerusform>התקן אמיתי, משותף עם %n תוכנית</numerusform>
@@ -12621,27 +14068,27 @@ Networks: %5</source>
             </translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="317" />
+            <location filename="../src/panes/port_model.cpp" line="331" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="321" />
+            <location filename="../src/panes/port_model.cpp" line="335" />
             <source>Network port</source>
             <translation>יציאת רשת</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="326" />
+            <location filename="../src/panes/port_model.cpp" line="340" />
             <source>In-process port. Only Studio can open it</source>
             <translation>יציאה בתוך התהליך. רק Studio יכול לפתוח אותה</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="328" />
+            <location filename="../src/panes/port_model.cpp" line="342" />
             <source>Virtual port, linked to %1</source>
             <translation>יציאה וירטואלית, מקושרת אל %1</translation>
         </message>
         <message>
-            <location filename="../src/panes/port_model.cpp" line="329" />
+            <location filename="../src/panes/port_model.cpp" line="343" />
             <source>Virtual port</source>
             <translation>יציאה וירטואלית</translation>
         </message>
@@ -12649,161 +14096,161 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortReadyDialog</name>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="86" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="87" />
             <source>%1 is ready inside Studio</source>
             <translation>%1 מוכנה בתוך Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="88" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="89" />
             <source>Your port "%1" now exists inside Studio.</source>
             <translation>היציאה "%1" שלכם קיימת כעת בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="94" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="102" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="95" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="103" />
             <source>Your port "%1" now exists, and other programs can open it.</source>
             <translation>היציאה "%1" שלכם קיימת כעת, ותוכניות אחרות יכולות לפתוח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="100" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="101" />
             <source>%1 is ready</source>
             <translation>%1 מוכנה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="136" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
             <source>This port is Studio only</source>
             <translation>יציאה זו היא ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="137" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="138" />
             <source>Open this port in your program</source>
             <translation>פתחו יציאה זו בתוכנית שלכם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="151" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
             <source>This port is Studio only. %1</source>
             <translation>יציאה זו היא ב-Studio בלבד. %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="152" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="153" />
             <source>Open this port in your program. %1</source>
             <translation>פתחו יציאה זו בתוכנית שלכם. %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="158" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="161" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="159" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="164" />
             <source>Copy name</source>
             <translation>העתקת השם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="160" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="163" />
             <source>Copy name, %1</source>
             <translation>העתקת השם, %1</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="168" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="171" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="199" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="202" />
             <source>Other programs cannot open this port. It exists only inside Studio.</source>
             <translation>תוכנות אחרות לא יכולות לפתוח את היציאה הזו. היא קיימת רק בתוך Studio.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="201" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="204" />
             <source>Other programs cannot open this port. Install a driver to create ports they can open.</source>
             <translation>תוכניות אחרות אינן יכולות לפתוח יציאה זו. התקינו מנהל התקן כדי ליצור יציאות שהן יכולות לפתוח.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="205" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="208" />
             <source>Open setup check</source>
             <translation>פתיחת בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="217" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="220" />
             <source>In your program, choose &lt;b&gt;%1&lt;/b&gt; as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-&lt;b&gt;%1&lt;/b&gt; כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="223" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="226" />
             <source>In your program, choose %1 as the serial port. Settings such as baud rate are chosen by that program. The port stays available while Virtual Serial Studio is running.</source>
             <translation>בתוכנית שלכם, בחרו ב-%1 כיציאה הטורית. הגדרות כגון קצב באוד נבחרות על ידי אותה תוכנית. היציאה נשארת זמינה כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="233" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="236" />
             <source>This path exists while Virtual Serial Studio is running.</source>
             <translation>נתיב זה קיים כל עוד Virtual Serial Studio פועל.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="247" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="370" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="250" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="373" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="256" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="380" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="259" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="383" />
             <source>Show details</source>
             <translation>הצגת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="266" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="269" />
             <source>Name</source>
             <translation>שם</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="268" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
             <source>Kind</source>
             <translation>סוג</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="271" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="274" />
             <source>Path</source>
             <translation>נתיב</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="277" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="280" />
             <source>Entry in a saved setup (JSON)</source>
             <translation>רשומה בתצורה שמורה (JSON)</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="282" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="285" />
             <source>JSON</source>
             <translation>JSON</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="286" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="289" />
             <source>Same thing from the command line</source>
             <translation>אותה פעולה משורת הפקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="291" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="294" />
             <source>Command</source>
             <translation>פקודה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="314" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="317" />
             <source>Connect %1 to something</source>
             <translation>חיבור %1 למשהו</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="322" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="325" />
             <source>Create another</source>
             <translation>יצירת נוספת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="329" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="332" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="351" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="354" />
             <source>Waiting</source>
             <translation>ממתין</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="353" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="356" />
             <source>No program has opened %1 yet. In your program, choose exactly %1. This panel updates when one opens it.</source>
             <translation>אף תוכנית לא פתחה עדיין את %1. בתוכנית שלך, בחר בדיוק את %1. החלונית הזו מתעדכנת כשתוכנית פותחת אותה.</translation>
         </message>
@@ -12812,53 +14259,53 @@ Networks: %5</source>
             <translation type="vanished">שום תוכנית עדיין לא פתחה את %1. חלונית זו מתעדכנת כשתוכנית תפתח אותה.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="362" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="365" />
             <source>Program connected</source>
             <translation>תוכנית מחוברת</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="363" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="366" />
             <source>A program is using %1.</source>
             <translation>תוכנית משתמשת ב-%1.</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="379" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="382" />
             <source>Hide details</source>
             <translation>הסתרת פרטים</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="387" />
-            <location filename="../src/flows/port_ready_dialog.cpp" line="392" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="395" />
             <source>In-process loopback</source>
             <translation>לולאה פנימית בתהליך</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="390" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="393" />
             <source>Pseudo terminal</source>
             <translation>טרמינל מדומה</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="394" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="397" />
             <source>Windows driver</source>
             <translation>מנהל התקן של Windows</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="399" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="402" />
             <source>Auto, resolved to the Studio driver</source>
             <translation>אוטומטי, נפתר למנהל ההתקן של Studio</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="400" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
             <source>Auto, resolved to com0com</source>
             <translation>אוטומטי, נפתר ל-com0com</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="403" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="406" />
             <source>Real device</source>
             <translation>התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/flows/port_ready_dialog.cpp" line="404" />
+            <location filename="../src/flows/port_ready_dialog.cpp" line="407" />
             <source>Auto</source>
             <translation>אוטומטי</translation>
         </message>
@@ -12866,23 +14313,38 @@ Networks: %5</source>
     <context>
         <name>vss::gui::PortsPanel</name>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="61" />
             <location filename="../src/panes/ports_panel.cpp" line="62" />
+            <location filename="../src/panes/ports_panel.cpp" line="63" />
             <source>Filter ports</source>
             <translation>סינון יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="81" />
+            <location filename="../src/panes/ports_panel.cpp" line="82" />
             <source>Ports</source>
             <translation>יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="104" />
+            <location filename="../src/panes/ports_panel.cpp" line="108" />
             <source>Ports table</source>
             <translation>טבלת יציאות</translation>
         </message>
         <message>
-            <location filename="../src/panes/ports_panel.cpp" line="301" />
+            <location filename="../src/panes/ports_panel.cpp" line="309" />
+            <source>Port actions</source>
+            <translation>פעולות יציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="310" />
+            <source>Inspect</source>
+            <translation>בדיקה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="319" />
+            <source>Copy path</source>
+            <translation>העתקת נתיב</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/ports_panel.cpp" line="341" />
             <source>Copied %1.</source>
             <translation>%1 הועתק.</translation>
         </message>
@@ -13074,79 +14536,136 @@ Networks: %5</source>
     <context>
         <name>vss::gui::SendPanel</name>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="70" />
-            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <location filename="../src/panes/send_panel.cpp" line="71" />
+            <location filename="../src/panes/send_panel.cpp" line="98" />
             <source>Send</source>
             <translation>שליחה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="78" />
             <source>Send to port</source>
-            <translation>שליחה ליציאה</translation>
+            <translation type="vanished">שליחה ליציאה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="90" />
+            <location filename="../src/panes/send_panel.cpp" line="81" />
+            <source>Sending from</source>
+            <translation>שליחה מתוך</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="83" />
+            <source>Pin</source>
+            <translation>נעיצה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="84" />
+            <location filename="../src/panes/send_panel.cpp" line="86" />
+            <source>Keep sending from this port when you select another.</source>
+            <translation>המשיכו לשלוח מהיציאה הזו גם כשבוחרים אחרת.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="93" />
+            <source>Send from port</source>
+            <translation>שליחה מיציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="107" />
             <source>Bytes to send</source>
             <translation>בתים לשליחה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="91" />
+            <location filename="../src/panes/send_panel.cpp" line="108" />
             <source>Type text, or hex if Hex is ticked</source>
             <translation>הקלידו טקסט, או hex אם Hex מסומן</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="107" />
+            <location filename="../src/panes/send_panel.cpp" line="124" />
             <source>Hex</source>
             <translation>Hex</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="108" />
+            <location filename="../src/panes/send_panel.cpp" line="125" />
             <source>Add CRLF</source>
             <translation>הוספת CRLF</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="112" />
+            <location filename="../src/panes/send_panel.cpp" line="129" />
             <source>Repeat</source>
             <translation>חזרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="116" />
+            <location filename="../src/panes/send_panel.cpp" line="133" />
             <source> ms</source>
             <translation> ms</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="117" />
+            <location filename="../src/panes/send_panel.cpp" line="134" />
             <source>Repeat interval</source>
             <translation>מרווח חזרה</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="126" />
-            <location filename="../src/panes/send_panel.cpp" line="131" />
+            <location filename="../src/panes/send_panel.cpp" line="148" />
+            <source>Repeat status</source>
+            <translation>מצב החזרה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="150" />
+            <location filename="../src/panes/send_panel.cpp" line="151" />
+            <source>Stop repeat</source>
+            <translation>עצירת החזרה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="158" />
+            <location filename="../src/panes/send_panel.cpp" line="163" />
             <source>Saved sends</source>
             <translation>שליחות שמורות</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="210" />
+            <location filename="../src/panes/send_panel.cpp" line="240" />
+            <source>The repeat stopped because %1 is gone.</source>
+            <translation>החזרה נעצרה כי %1 אינו קיים עוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="492" />
             <source>%1 (%2)</source>
             <translation>%1 (%2)</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="263" />
+            <location filename="../src/panes/send_panel.cpp" line="321" />
             <source>Hex needs pairs of digits, such as 48 65 6C 6C 6F.</source>
             <translation>Hex דורש זוגות ספרות, כגון 48 65 6C 6C 6F.</translation>
         </message>
         <message>
-            <location filename="../src/panes/send_panel.cpp" line="274" />
+            <location filename="../src/panes/send_panel.cpp" line="332" />
             <source>Select a port to send to.</source>
             <translation>בחרו יציאה לשליחה אליה.</translation>
         </message>
         <message numerus="yes">
-            <location filename="../src/panes/send_panel.cpp" line="320" />
+            <location filename="../src/panes/send_panel.cpp" line="383" />
             <source>Queued %n bytes to %1.</source>
             <translation>
                 <numerusform>%n בית הועמד בתור אל %1.</numerusform>
                 <numerusform>%n בתים הועמדו בתור אל %1.</numerusform>
             </translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="457" />
+            <source>Type the bytes to repeat, then start the repeat.</source>
+            <translation>הקלידו את הבתים לחזרה, ואז התחילו את החזרה.</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="510" />
+            <source>Sending from: no port selected</source>
+            <translation>שליחה מתוך: לא נבחרה יציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="511" />
+            <source>Sending from: %1</source>
+            <translation>שליחה מתוך: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/panes/send_panel.cpp" line="526" />
+            <source>Repeating every %1 ms from %2.</source>
+            <translation>חוזר כל %1 ms מתוך %2.</translation>
         </message>
     </context>
     <context>
@@ -13175,13 +14694,13 @@ Networks: %5</source>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="182" />
             <location filename="../src/dialogs/share_wizard.cpp" line="195" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="948" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
             <source>Share a device with several programs</source>
             <translation>שיתוף התקן עם כמה תוכניות</translation>
         </message>
         <message>
             <location filename="../src/dialogs/share_wizard.cpp" line="197" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="950" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="952" />
             <source>Studio opens the device once, then gives each program its own port.</source>
             <translation>Studio פותח את ההתקן פעם אחת, ואז נותן לכל תוכנית יציאה משלה.</translation>
         </message>
@@ -13217,120 +14736,120 @@ Networks: %5</source>
             <translation>רענון</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="260" />
             <source>Refresh the device list</source>
             <translation>רענון רשימת ההתקנים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="269" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="271" />
             <source>Devices</source>
             <translation>התקנים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="282" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="284" />
             <source>No serial device is available. Plug one in, then choose Refresh.</source>
             <translation>אין התקן טורי זמין. חברו אחד ואז בחרו רענון.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="299" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="301" />
             <source>Device settings</source>
             <translation>הגדרות ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="309" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="311" />
             <source>Change</source>
             <translation>שינוי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="313" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="315" />
             <source>Change device settings</source>
             <translation>שינוי הגדרות ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="336" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="353" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="355" />
             <source>None</source>
             <translation>ללא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="337" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
             <source>Odd</source>
             <translation>אי-זוגית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="338" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
             <source>Even</source>
             <translation>זוגית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="339" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="341" />
             <source>Mark</source>
             <translation>סימן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="340" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="342" />
             <source>Space</source>
             <translation>רווח</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="354" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
             <source>Hardware (RTS and CTS)</source>
             <translation>חומרה (RTS ו-CTS)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="356" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="358" />
             <source>Software (XON and XOFF)</source>
             <translation>תוכנה (XON ו-XOFF)</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="360" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="362" />
             <source>Baud rate</source>
             <translation>קצב באוד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="363" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="365" />
             <source>Data bits</source>
             <translation>סיביות נתונים</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="364" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="366" />
             <source>Parity</source>
             <translation>זוגיות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="367" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="369" />
             <source>Stop bits</source>
             <translation>סיביות עצירה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="368" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="370" />
             <source>Flow control</source>
             <translation>בקרת זרימה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="417" />
             <location filename="../src/dialogs/share_wizard.cpp" line="419" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="880" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="882" />
             <source>A network device instead</source>
             <translation>התקן רשת במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="421" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="423" />
             <source>ADVANCED</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="426" />
             <source>TCP, UDP or RFC 2217 address.</source>
             <translation>כתובת TCP, UDP או RFC 2217.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="450" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="452" />
             <source>Device address</source>
             <translation>כתובת ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="451" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="453" />
             <source>The address of the serial server, using TCP, UDP or RFC 2217.</source>
             <translation>כתובת השרת הטורי, באמצעות TCP, UDP או RFC 2217.</translation>
         </message>
@@ -13339,362 +14858,362 @@ Networks: %5</source>
             <translation type="vanished">התוכניות שלכם יפתחו את היציאות ש-Studio יוצר, לא את %1 עצמו. בשלב הבא תבחרו כמה תוכניות יש.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="481" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="486" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="483" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="488" />
             <source>Your programs will open the ports Studio creates, not %1 itself. Next you choose how many programs there are. You can add more afterwards.</source>
             <translation>התוכניות שלך יפתחו את היציאות ש-Studio יוצר, ולא את %1 עצמו. בשלב הבא תבחר כמה תוכניות יש. אפשר להוסיף עוד לאחר מכן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="503" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="505" />
             <source>How many programs?</source>
             <translation>כמה תוכניות?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="512" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="514" />
             <source>Fewer programs</source>
             <translation>פחות תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="516" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="518" />
             <source>More programs</source>
             <translation>יותר תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="528" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="530" />
             <source>Up to 32</source>
             <translation>עד 32</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="535" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="537" />
             <source>You can add another program after sharing, and remove any program's port later with Remove port.</source>
             <translation>אפשר להוסיף תוכנית נוספת אחרי השיתוף, ולהסיר את היציאה של כל תוכנית מאוחר יותר באמצעות הסרת יציאה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="549" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="552" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="551" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
             <source>What each program will open</source>
             <translation>מה כל תוכנית תפתח</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Program name</source>
             <translation>שם התוכנית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="554" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="556" />
             <source>Port to open</source>
             <translation>יציאה לפתיחה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="555" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="557" />
             <source>Can other programs open it?</source>
             <translation>האם תוכניות אחרות יכולות לפתוח אותה?</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="609" />
             <source>Create another pair</source>
             <translation>יצירת זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="613" />
             <source>Keep the third as Studio only</source>
             <translation>השארת השלישית ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="642" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
             <source>Shared ports</source>
             <translation>יציאות משותפות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Program</source>
             <translation>תוכנית</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>Open this port</source>
             <translation>פתחו יציאה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="644" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="646" />
             <source>State</source>
             <translation>מצב</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="687" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="689" />
             <source>Add another program</source>
             <translation>הוספת תוכנית נוספת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="692" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="694" />
             <source>Back</source>
             <translation>חזרה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="697" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="699" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="701" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="703" />
             <source>Next</source>
             <translation>הבא</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="706" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="708" />
             <source>Share device</source>
             <translation>שיתוף התקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="712" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="714" />
             <source>Open monitor</source>
             <translation>פתיחת מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="721" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="723" />
             <source>Done</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="764" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
             <source>com0com pair end. This is a virtual port, not a device.</source>
             <translation>קצה של זוג com0com. זוהי יציאה וירטואלית, לא התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="766" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="773" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="768" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="775" />
             <source>Virtual</source>
             <translation>וירטואלי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="772" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="774" />
             <source>This is a virtual port, not a device.</source>
             <translation>זוהי יציאה וירטואלית, לא התקן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="779" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="781" />
             <source>Serial device. Studio is already using it.</source>
             <translation>התקן טורי. Studio כבר משתמש בו.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="780" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="782" />
             <source>In use</source>
             <translation>בשימוש</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="786" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="788" />
             <source>Serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="787" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="789" />
             <source>Available</source>
             <translation>זמין</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="879" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="881" />
             <source>Use a device instead</source>
             <translation>שימוש בהתקן במקום זאת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="957" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
             <source>Share %1 with several programs</source>
             <translation>שיתוף %1 עם כמה תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="959" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="961" />
             <source>Each program gets its own port. Studio copies the device's data to all of them.</source>
             <translation>כל תוכנית מקבלת יציאה משלה. Studio מעתיק את נתוני ההתקן לכולן.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="966" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="968" />
             <source>Open one of these ports in each program.</source>
             <translation>פתחו אחת מהיציאות האלה בכל תוכנית.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1109" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1111" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1124" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
             <source>terminal</source>
             <translation>terminal</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1126" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
             <source>test-tool</source>
             <translation>test-tool</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1128" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
             <source>logger</source>
             <translation>logger</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1130" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1132" />
             <source>program-%1</source>
             <translation>program-%1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1166" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1174" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1168" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1176" />
             <source>Name of program %1</source>
             <translation>שם תוכנית %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>Yes</source>
             <translation>כן</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1180" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1182" />
             <source>No, Studio only</source>
             <translation>לא, ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1230" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1232" />
             <source>Warning: %1</source>
             <translation>אזהרה: %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1240" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1242" />
             <source>Windows will ask for administrator permission.</source>
             <translation>Windows יבקש הרשאת מנהל.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1241" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1243" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1246" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
             <source>Keep the %1 as Studio only</source>
             <translation>השארת %1 ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1248" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1250" />
             <source>Keep the remaining %1 as Studio only</source>
             <translation>השארת %1 הנותרות ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1256" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1260" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1258" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1262" />
             <source>Everything %1 receives is copied to 1 port. Whatever the program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק ליציאה אחת. מה שהתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1268" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1273" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1270" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1275" />
             <source>Everything %1 receives is copied to all %2 ports. Whatever a program writes goes back to %1.</source>
             <translation>כל מה ש-%1 מקבלת מועתק לכל %2 היציאות. מה שתוכנית כותבת חוזר אל %1.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1319" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1321" />
             <source>Could not create another pair</source>
             <translation>לא ניתן ליצור זוג נוסף</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1320" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1322" />
             <source>Windows did not create the driver pair. Allow administrator permission, then try again.</source>
             <translation>Windows לא יצר את זוג מנהל ההתקן. אשרו הרשאת מנהל ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1369" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1371" />
             <source>Sharing is not available in this build</source>
             <translation>שיתוף אינו זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1370" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1372" />
             <source>Nothing was changed.</source>
             <translation>דבר לא השתנה.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1387" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1389" />
             <source>Could not share %1</source>
             <translation>לא ניתן לשתף את %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1388" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
             <source>The previous share was removed. Check the device, then try again.</source>
             <translation>השיתוף הקודם הוסר. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1390" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1392" />
             <source>The studio is unchanged. Check the device, then try again.</source>
             <translation>התצורה לא השתנתה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1410" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1412" />
             <source>%1 is shared with 1 program</source>
             <translation>%1 משותף עם תוכנית אחת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1411" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1413" />
             <source>%1 is shared with %2 programs</source>
             <translation>%1 משותף עם %2 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1423" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1425" />
             <source>The most Studio can share is 32 programs</source>
             <translation>Studio יכול לשתף לכל היותר 32 תוכניות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1424" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1426" />
             <source>Remove a program's port first if you need a different one.</source>
             <translation>הסר תחילה את היציאה של תוכנית אם אתה צריך מספר אחר.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1441" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1443" />
             <source>Could not add another program</source>
             <translation>לא ניתן להוסיף תוכנית נוספת</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1442" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1444" />
             <source>The share is as it was. Check the device, then try again.</source>
             <translation>השיתוף נשאר כמו שהיה. בדוק את ההתקן ונסה שוב.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1521" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1641" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1523" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1645" />
             <source>Studio only</source>
             <translation>ב-Studio בלבד</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1544" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1546" />
             <source>Not for other programs</source>
             <translation>לא לתוכניות אחרות</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1553" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1555" />
             <source>Copy</source>
             <translation>העתקה</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1556" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1560" />
             <source>Copy %1</source>
             <translation>העתקת %1</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1563" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1567" />
             <source>%1 copied.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1579" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1611" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1615" />
             <source>Everything %1 receives is now copied to 1 port.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת ליציאה אחת.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1583" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1616" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1587" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1620" />
             <source>Everything %1 receives is now copied to all %2 ports.</source>
             <translation>כל מה ש-%1 מקבלת מועתק כעת לכל %2 היציאות.</translation>
         </message>
         <message>
-            <location filename="../src/dialogs/share_wizard.cpp" line="1603" />
-            <location filename="../src/dialogs/share_wizard.cpp" line="1623" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1607" />
+            <location filename="../src/dialogs/share_wizard.cpp" line="1627" />
             <source>The Waiting labels change to Program connected as each program opens their port.</source>
             <translation>התווית ממתין לתוכנית משתנה ל-תוכנית מחוברת כשכל תוכנית פותחת את היציאה שלה.</translation>
         </message>
@@ -13702,682 +15221,722 @@ Networks: %5</source>
     <context>
         <name>vss::gui::ShellWindow</name>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="206" />
-            <location filename="../src/shell/shell_window.cpp" line="655" />
+            <location filename="../src/shell/shell_window.cpp" line="730" />
             <source>Some COM ports were lost. The helper service or the driver was restarted and removed the ports your programs had open.</source>
             <translation>כמה יציאות COM אבדו. שירות העזר או מנהל ההתקן הופעל מחדש והסיר את היציאות שהתוכניות שלכם פתחו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="658" />
+            <location filename="../src/shell/shell_window.cpp" line="733" />
             <source>Recreate ports</source>
             <translation>צור יציאות מחדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1163" />
+            <location filename="../src/shell/shell_window.cpp" line="1274" />
             <source>Ports recreated.</source>
             <translation>היציאות נוצרו מחדש.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1164" />
+            <location filename="../src/shell/shell_window.cpp" line="1275" />
             <source>Could not recreate every port: %1</source>
             <translation>לא ניתן היה ליצור מחדש את כל היציאות: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="203" />
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>New</source>
             <translation>חדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="209" />
+            <location filename="../src/shell/shell_window.cpp" line="219" />
             <source>new document setup</source>
             <translation>חדש מסמך תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>Open</source>
             <translation>פתוח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="212" />
+            <location filename="../src/shell/shell_window.cpp" line="222" />
             <source>open file setup</source>
             <translation>פתיחה קובץ תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>Open recent</source>
             <translation>פתיחת אחרונים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="215" />
+            <location filename="../src/shell/shell_window.cpp" line="225" />
             <source>recent file</source>
             <translation>קובץ אחרון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="224" />
+            <location filename="../src/shell/shell_window.cpp" line="234" />
             <source>Setups and templates</source>
             <translation>תצורות ותבניות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="225" />
+            <location filename="../src/shell/shell_window.cpp" line="235" />
             <source>template setup</source>
             <translation>תבנית תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
-            <location filename="../src/shell/shell_window.cpp" line="2482" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="2722" />
             <source>Save</source>
             <translation>שמירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="227" />
+            <location filename="../src/shell/shell_window.cpp" line="237" />
             <source>save file setup</source>
             <translation>שמירה קובץ תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>Save as</source>
             <translation>שמירה בשם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="230" />
+            <location filename="../src/shell/shell_window.cpp" line="240" />
             <source>save as file</source>
             <translation>שמירה בשם קובץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="233" />
+            <location filename="../src/shell/shell_window.cpp" line="243" />
             <source>Export as command</source>
             <translation>ייצוא כפקודה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="234" />
+            <location filename="../src/shell/shell_window.cpp" line="244" />
             <source>cli command</source>
             <translation>cli שורת פקודה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="236" />
+            <location filename="../src/shell/shell_window.cpp" line="246" />
             <source>Diagnostic bundle</source>
             <translation>חבילת אבחון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="237" />
+            <location filename="../src/shell/shell_window.cpp" line="247" />
             <source>support zip</source>
             <translation>תמיכה zip</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>Quit</source>
             <translation>סיום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="239" />
+            <location filename="../src/shell/shell_window.cpp" line="249" />
             <source>exit</source>
             <translation>יציאה סגירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="248" />
+            <location filename="../src/shell/shell_window.cpp" line="258" />
             <source>undo stack restore</source>
             <translation>ביטול שחזור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo</source>
             <translation>ביצוע חוזר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="252" />
+            <location filename="../src/shell/shell_window.cpp" line="262" />
             <source>redo stack restore</source>
             <translation>ביצוע חוזר שחזור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="256" />
+            <location filename="../src/shell/shell_window.cpp" line="266" />
             <source>Remove selected</source>
             <translation>הסרת הנבחר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="257" />
-            <location filename="../src/shell/shell_window.cpp" line="296" />
+            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
             <source>delete remove</source>
             <translation>מחיקה הסרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
             <source>Add port</source>
             <translation>הוספת יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="263" />
-            <location filename="../src/shell/shell_window.cpp" line="267" />
+            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="277" />
             <source>new virtual create</source>
             <translation>חדש וירטואלית יצירה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="266" />
+            <location filename="../src/shell/shell_window.cpp" line="276" />
             <source>Virtual port</source>
             <translation>יציאה וירטואלית</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="269" />
+            <location filename="../src/shell/shell_window.cpp" line="279" />
             <source>Linked pair</source>
             <translation>זוג מקושר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="270" />
+            <location filename="../src/shell/shell_window.cpp" line="280" />
             <source>pair two null modem</source>
             <translation>זוג שניים null-modem</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="272" />
+            <location filename="../src/shell/shell_window.cpp" line="282" />
             <source>Attach real device</source>
             <translation>חיבור התקן אמיתי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="273" />
+            <location filename="../src/shell/shell_window.cpp" line="283" />
             <source>serial device</source>
             <translation>התקן טורי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="276" />
+            <location filename="../src/shell/shell_window.cpp" line="286" />
             <source>Network endpoint</source>
             <translation>נקודת קצה ברשת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="277" />
+            <location filename="../src/shell/shell_window.cpp" line="287" />
             <source>tcp udp rfc2217</source>
             <translation>tcp udp rfc2217</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="280" />
+            <location filename="../src/shell/shell_window.cpp" line="290" />
             <source>Mock fixture</source>
             <translation>התקן דמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="281" />
+            <location filename="../src/shell/shell_window.cpp" line="291" />
             <source>fixture mock script</source>
             <translation>התקן-דמה מדומה תסריט</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="284" />
+            <location filename="../src/shell/shell_window.cpp" line="294" />
             <source>Copy port name</source>
             <translation>העתקת שם יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="285" />
+            <location filename="../src/shell/shell_window.cpp" line="295" />
             <source>clipboard path</source>
             <translation>לוח-העתקה נתיב</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="289" />
-            <location filename="../src/shell/shell_window.cpp" line="2032" />
+            <location filename="../src/shell/shell_window.cpp" line="300" />
+            <location filename="../src/shell/shell_window.cpp" line="2272" />
             <source>Rename port</source>
             <translation>שינוי שם היציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="290" />
+            <location filename="../src/shell/shell_window.cpp" line="301" />
             <source>name change relabel</source>
             <translation>שם שינוי</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="296" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
+            <location filename="../src/shell/shell_window.cpp" line="306" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
             <source>Remove port</source>
             <translation>הסרת יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="300" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
+            <location filename="../src/shell/shell_window.cpp" line="311" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
             <source>Remove setup</source>
             <translation>הסרת הגדרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="301" />
+            <location filename="../src/shell/shell_window.cpp" line="312" />
             <source>delete remove teardown close pair share attach everything</source>
             <translation>מחיקה הסרה פירוק סגירה זוג שיתוף חיבור הכול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="308" />
-            <location filename="../src/shell/shell_window.cpp" line="1353" />
+            <location filename="../src/shell/shell_window.cpp" line="319" />
+            <location filename="../src/shell/shell_window.cpp" line="1498" />
             <source>Connect ports</source>
             <translation>חיבור יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="309" />
+            <location filename="../src/shell/shell_window.cpp" line="320" />
             <source>link split join redirect monitor</source>
             <translation>קישור פיצול איחוד הפניה מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="314" />
-            <location filename="../src/shell/shell_window.cpp" line="321" />
+            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="332" />
             <source>Share a device</source>
             <translation>שיתוף התקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="315" />
-            <location filename="../src/shell/shell_window.cpp" line="322" />
+            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="333" />
             <source>split listeners</source>
             <translation>פיצול מאזינים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="325" />
+            <location filename="../src/shell/shell_window.cpp" line="336" />
             <source>Watch traffic</source>
             <translation>צפייה בתעבורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="326" />
+            <location filename="../src/shell/shell_window.cpp" line="337" />
             <source>monitor copy</source>
             <translation>מוניטור העתקה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="329" />
+            <location filename="../src/shell/shell_window.cpp" line="340" />
             <source>Add a program port</source>
             <translation>הוספת יציאה לתוכנית</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="330" />
+            <location filename="../src/shell/shell_window.cpp" line="341" />
             <source>share attach more listener another</source>
             <translation>שיתוף חיבור עוד נוסף מאזין</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="334" />
-            <location filename="../src/shell/shell_window.cpp" line="1758" />
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1776" />
+            <location filename="../src/shell/shell_window.cpp" line="345" />
+            <location filename="../src/shell/shell_window.cpp" line="1959" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="1977" />
             <source>Remove link</source>
             <translation>הסרת קישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="335" />
+            <location filename="../src/shell/shell_window.cpp" line="346" />
             <source>delete disconnect</source>
             <translation>מחיקה ניתוק</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="338" />
+            <location filename="../src/shell/shell_window.cpp" line="349" />
             <source>Link wiring</source>
             <translation>חיווט קישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="339" />
+            <location filename="../src/shell/shell_window.cpp" line="350" />
             <source>line matrix faults</source>
             <translation>מטריצת-קווים תקלות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>Owner</source>
             <translation>בעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="341" />
+            <location filename="../src/shell/shell_window.cpp" line="352" />
             <source>policy arbitration</source>
             <translation>מדיניות בוררות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>Fit</source>
             <translation>התאמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="343" />
+            <location filename="../src/shell/shell_window.cpp" line="354" />
             <source>zoom</source>
             <translation>זום</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="351" />
+            <location filename="../src/shell/shell_window.cpp" line="362" />
             <source>Tidy layout</source>
             <translation>סידור הפריסה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="352" />
+            <location filename="../src/shell/shell_window.cpp" line="363" />
             <source>arrange align overlap</source>
             <translation>סידור יישור חפיפה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="360" />
-            <location filename="../src/shell/shell_window.cpp" line="641" />
-            <location filename="../src/shell/shell_window.cpp" line="642" />
+            <location filename="../src/shell/shell_window.cpp" line="371" />
+            <location filename="../src/shell/shell_window.cpp" line="651" />
+            <location filename="../src/shell/shell_window.cpp" line="652" />
+            <location filename="../src/shell/shell_window.cpp" line="661" />
             <source>Search actions</source>
             <translation>חיפוש פעולות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="361" />
+            <location filename="../src/shell/shell_window.cpp" line="372" />
             <source>command palette</source>
             <translation>לוח פקודות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="364" />
+            <location filename="../src/shell/shell_window.cpp" line="375" />
             <source>Setup check</source>
             <translation>בדיקת הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="365" />
+            <location filename="../src/shell/shell_window.cpp" line="376" />
             <source>driver com0com permissions</source>
             <translation>מנהל-התקן com0com הרשאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="367" />
+            <location filename="../src/shell/shell_window.cpp" line="378" />
             <source>Benchmark</source>
             <translation>מבחן ביצועים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="368" />
+            <location filename="../src/shell/shell_window.cpp" line="379" />
             <source>throughput speed</source>
             <translation>תפוקה מהירות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>Refresh now</source>
             <translation>רענון עכשיו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="370" />
+            <location filename="../src/shell/shell_window.cpp" line="381" />
             <source>reload</source>
             <translation>טעינה-מחדש</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="377" />
+            <location filename="../src/shell/shell_window.cpp" line="388" />
             <source>Refreshed.</source>
             <translation>רוענן.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="379" />
+            <location filename="../src/shell/shell_window.cpp" line="390" />
             <source>Settings</source>
             <translation>הגדרות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="380" />
+            <location filename="../src/shell/shell_window.cpp" line="391" />
             <source>preferences theme density refresh baud</source>
             <translation>העדפות ערכת-נושא צפיפות רענון באוד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="386" />
+            <location filename="../src/shell/shell_window.cpp" line="397" />
             <source>Advanced mode</source>
             <translation>מצב מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="387" />
+            <location filename="../src/shell/shell_window.cpp" line="398" />
             <source>simple expert level</source>
             <translation>פשוט מומחה רמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
-            <location filename="../src/shell/shell_window.cpp" line="769" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
+            <location filename="../src/shell/shell_window.cpp" line="838" />
             <source>Monitor</source>
             <translation>מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="391" />
+            <location filename="../src/shell/shell_window.cpp" line="402" />
             <source>traffic</source>
             <translation>תעבורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="394" />
+            <location filename="../src/shell/shell_window.cpp" line="405" />
             <source>Show links as a list</source>
             <translation>הצגת קישורים כרשימה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="395" />
+            <location filename="../src/shell/shell_window.cpp" line="406" />
             <source>links topology list accessible</source>
             <translation>קישורים טופולוגיה רשימה נגישות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
-            <location filename="../src/shell/shell_window.cpp" line="918" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
+            <location filename="../src/shell/shell_window.cpp" line="1000" />
             <source>Log</source>
             <translation>יומן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="398" />
+            <location filename="../src/shell/shell_window.cpp" line="409" />
             <source>events</source>
             <translation>אירועים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
-            <location filename="../src/shell/shell_window.cpp" line="934" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
+            <location filename="../src/shell/shell_window.cpp" line="1016" />
             <source>Topology JSON</source>
             <translation>JSON של הטופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="401" />
+            <location filename="../src/shell/shell_window.cpp" line="412" />
             <source>editor schema</source>
             <translation>עורך סכמה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="404" />
+            <location filename="../src/shell/shell_window.cpp" line="415" />
             <source>Follow the system</source>
             <translation>מעקב אחר המערכת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="405" />
+            <location filename="../src/shell/shell_window.cpp" line="416" />
             <source>theme colour scheme</source>
             <translation>ערכת-נושא צבעים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
             <source>Light</source>
             <translation>בהיר</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="414" />
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="425" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>theme</source>
             <translation>ערכת נושא</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="424" />
+            <location filename="../src/shell/shell_window.cpp" line="435" />
             <source>Dark</source>
             <translation>כהה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="434" />
+            <location filename="../src/shell/shell_window.cpp" line="445" />
             <source>Comfortable</source>
             <translation>נוח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="435" />
-            <location filename="../src/shell/shell_window.cpp" line="445" />
+            <location filename="../src/shell/shell_window.cpp" line="446" />
+            <location filename="../src/shell/shell_window.cpp" line="456" />
             <source>density spacing</source>
             <translation>צפיפות ריווח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="444" />
+            <location filename="../src/shell/shell_window.cpp" line="455" />
             <source>Compact</source>
             <translation>דחוס</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="453" />
+            <location filename="../src/shell/shell_window.cpp" line="464" />
             <source>Reset layout</source>
             <translation>איפוס פריסה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="454" />
+            <location filename="../src/shell/shell_window.cpp" line="465" />
             <source>docks window</source>
             <translation>עגינות חלון</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="456" />
+            <location filename="../src/shell/shell_window.cpp" line="467" />
             <source>Show launcher</source>
             <translation>הצגת מסך הפתיחה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="457" />
+            <location filename="../src/shell/shell_window.cpp" line="468" />
             <source>empty start</source>
             <translation>התחלה ריקה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="461" />
+            <location filename="../src/shell/shell_window.cpp" line="472" />
             <source>Help contents</source>
             <translation>תוכן העזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="462" />
+            <location filename="../src/shell/shell_window.cpp" line="473" />
             <source>manual help topics</source>
             <translation>מדריך נושאי עזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="464" />
+            <location filename="../src/shell/shell_window.cpp" line="475" />
             <source>Why is nothing arriving?</source>
             <translation>למה שום דבר לא מגיע?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="465" />
+            <location filename="../src/shell/shell_window.cpp" line="476" />
             <source>troubleshoot no data</source>
             <translation>פתרון בעיות אין נתונים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>Keyboard shortcuts</source>
             <translation>קיצורי מקלדת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="467" />
+            <location filename="../src/shell/shell_window.cpp" line="478" />
             <source>keys</source>
             <translation>מקשים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="469" />
+            <location filename="../src/shell/shell_window.cpp" line="480" />
             <source>Copy environment</source>
             <translation>העתקת סביבה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="470" />
+            <location filename="../src/shell/shell_window.cpp" line="481" />
             <source>build bug report</source>
             <translation>גרסה דיווח באג</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="472" />
+            <location filename="../src/shell/shell_window.cpp" line="483" />
             <source>About</source>
             <translation>אודות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="473" />
+            <location filename="../src/shell/shell_window.cpp" line="484" />
             <source>version licence copyright</source>
             <translation>גרסה רישיון זכויות יוצרים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="487" />
-            <location filename="../src/shell/shell_window.cpp" line="492" />
-            <location filename="../src/shell/shell_window.cpp" line="1181" />
+            <location filename="../src/shell/shell_window.cpp" line="497" />
+            <location filename="../src/shell/shell_window.cpp" line="502" />
+            <location filename="../src/shell/shell_window.cpp" line="1320" />
             <source>Not available in this build</source>
             <translation>לא זמין בגרסה זו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="699" />
+            <location filename="../src/shell/shell_window.cpp" line="766" />
             <source>Change owner</source>
             <translation>שינוי הבעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1787" />
+            <location filename="../src/shell/shell_window.cpp" line="1672" />
+            <source>Generator started.</source>
+            <translation>המחולל הופעל.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1673" />
+            <source>Generator stopped.</source>
+            <translation>המחולל נעצר.</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="1988" />
             <source>1 port</source>
             <translation>יציאה אחת</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1788" />
+            <location filename="../src/shell/shell_window.cpp" line="1989" />
             <source>%1 ports</source>
             <translation>%1 יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1793" />
+            <location filename="../src/shell/shell_window.cpp" line="1994" />
             <source>1 link</source>
             <translation>קישור אחד</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1794" />
+            <location filename="../src/shell/shell_window.cpp" line="1995" />
             <source>%1 links</source>
             <translation>%1 קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1827" />
+            <location filename="../src/shell/shell_window.cpp" line="2028" />
             <source>Remove only %1</source>
             <translation>הסר רק את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1828" />
+            <location filename="../src/shell/shell_window.cpp" line="2029" />
             <source>Remove the whole setup</source>
             <translation>הסר את ההגדרה כולה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1831" />
+            <location filename="../src/shell/shell_window.cpp" line="2032" />
             <source>%1 is one of %2 programs sharing a device, in a setup with %3: %4. Remove only %1 and the others keep sharing, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 היא אחת מ-%2 תוכניות המשתפות התקן, בהגדרה עם %3: %4. הסר רק את %1 והאחרות ימשיכו לשתף, או סגור את ההגדרה כולה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1839" />
+            <location filename="../src/shell/shell_window.cpp" line="2040" />
             <source>%1 is part of a setup with %2: %3. Remove only %1 and its links, or close the whole setup. Nothing is saved until you save the setup.</source>
             <translation>%1 היא חלק מהגדרה עם %2: %3. הסר רק את %1 ואת הקישורים שלה, או סגור את ההגדרה כולה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1911" />
+            <location filename="../src/shell/shell_window.cpp" line="2112" />
             <source>%1 and %2</source>
             <translation>%1 ו-%2</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1927" />
+            <location filename="../src/shell/shell_window.cpp" line="2128" />
             <source>Remove this setup?</source>
             <translation>להסיר את ההגדרה הזו?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1929" />
+            <location filename="../src/shell/shell_window.cpp" line="2130" />
             <source>This closes %1: %2. A program that has one of these ports open loses it. Nothing is saved until you save the setup.</source>
             <translation>פעולה זו סוגרת %1: %2. תוכנית שפתחה אחת מהיציאות האלה מאבדת אותה. שום דבר לא נשמר עד שתשמור את ההגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1951" />
+            <location filename="../src/shell/shell_window.cpp" line="2152" />
             <source>Part of the setup is still open. Close what is using it, then choose Remove setup again.</source>
             <translation>חלק מההגדרה עדיין פתוח. סגור את מה שמשתמש בה ובחר שוב בהסרת הגדרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1961" />
+            <location filename="../src/shell/shell_window.cpp" line="2162" />
             <source>Removed the setup (%1).</source>
             <translation>ההגדרה הוסרה (%1).</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2164" />
             <source>Removed %1 of %2.</source>
             <translation>הוסרו %1 מתוך %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1997" />
+            <location filename="../src/shell/shell_window.cpp" line="2187" />
+            <source>Remove all setups?</source>
+            <translation>להסיר את כל התצורות?</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2188" />
+            <source>This closes %n setup(s) and every port in them. Programs using those ports lose them. Nothing is saved until you save.</source>
+            <translation>
+                <numerusform>פעולה זו סוגרת %n תצורה ואת כל היציאות שבה. תוכניות שמשתמשות ביציאות האלה יאבדו אותן. דבר לא נשמר עד שתשמרו.</numerusform>
+                <numerusform>פעולה זו סוגרת %n תצורות ואת כל היציאות שבהן. תוכניות שמשתמשות ביציאות האלה יאבדו אותן. דבר לא נשמר עד שתשמרו.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <source>Remove all</source>
+            <translation>הסרת הכול</translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2203" />
+            <source>Removed all setups.</source>
+            <translation>כל התצורות הוסרו.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/shell/shell_window.cpp" line="2204" />
+            <source>%n port(s) could not be removed.</source>
+            <translation>
+                <numerusform>לא ניתן היה להסיר %n יציאה.</numerusform>
+                <numerusform>לא ניתן היה להסיר %n יציאות.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/shell/shell_window.cpp" line="2237" />
             <source>the device</source>
             <translation>ההתקן</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2004" />
+            <location filename="../src/shell/shell_window.cpp" line="2244" />
             <source>Could not add a program port to %1</source>
             <translation>לא ניתן להוסיף יציאה לתוכנית אל %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2005" />
+            <location filename="../src/shell/shell_window.cpp" line="2245" />
             <source>The setup is as it was. Check the device, then try again.</source>
             <translation>ההגדרה נשארה כמו שהייתה. בדוק את ההתקן ונסה שוב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2014" />
+            <location filename="../src/shell/shell_window.cpp" line="2254" />
             <source>Added %1 to %2.</source>
             <translation>%1 נוספה אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2015" />
+            <location filename="../src/shell/shell_window.cpp" line="2255" />
             <source>a port</source>
             <translation>יציאה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio?</source>
             <translation>לסגור את Studio?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2662" />
+            <location filename="../src/shell/shell_window.cpp" line="2902" />
             <source>Close Studio</source>
             <translation>סגירת Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2663" />
+            <location filename="../src/shell/shell_window.cpp" line="2903" />
             <source>Keep Studio open</source>
             <translation>להשאיר את Studio פתוח</translation>
         </message>
@@ -14386,52 +15945,52 @@ Networks: %5</source>
             <translation type="vanished">ביטול דורש שחזור מדויק, שגרסה זו אינה יכולה להוכיח.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="523" />
+            <location filename="../src/shell/shell_window.cpp" line="533" />
             <source>&amp;File</source>
             <translation>&amp;קובץ</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="537" />
+            <location filename="../src/shell/shell_window.cpp" line="547" />
             <source>&amp;Edit</source>
             <translation>&amp;עריכה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="544" />
+            <location filename="../src/shell/shell_window.cpp" line="554" />
             <source>&amp;Ports</source>
             <translation>&amp;יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="559" />
+            <location filename="../src/shell/shell_window.cpp" line="569" />
             <source>&amp;Topology</source>
             <translation>&amp;טופולוגיה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="572" />
+            <location filename="../src/shell/shell_window.cpp" line="582" />
             <source>&amp;Tools</source>
             <translation>&amp;כלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="580" />
+            <location filename="../src/shell/shell_window.cpp" line="590" />
             <source>&amp;View</source>
             <translation>&amp;תצוגה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="588" />
+            <location filename="../src/shell/shell_window.cpp" line="598" />
             <source>Theme</source>
             <translation>ערכת נושא</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="592" />
+            <location filename="../src/shell/shell_window.cpp" line="602" />
             <source>Density</source>
             <translation>צפיפות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="599" />
+            <location filename="../src/shell/shell_window.cpp" line="609" />
             <source>&amp;Help</source>
             <translation>&amp;עזרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="609" />
+            <location filename="../src/shell/shell_window.cpp" line="619" />
             <source>Main toolbar</source>
             <translation>סרגל כלים ראשי</translation>
         </message>
@@ -14440,100 +15999,100 @@ Networks: %5</source>
             <translation type="vanished">לא זמין בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="764" />
+            <location filename="../src/shell/shell_window.cpp" line="833" />
             <source>Ports</source>
             <translation>יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="766" />
-            <location filename="../src/shell/shell_window.cpp" line="1223" />
+            <location filename="../src/shell/shell_window.cpp" line="835" />
+            <location filename="../src/shell/shell_window.cpp" line="1362" />
             <source>Inspector</source>
             <translation>מפקח</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="767" />
+            <location filename="../src/shell/shell_window.cpp" line="836" />
             <source>Send</source>
             <translation>שליחה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="802" />
-            <location filename="../src/shell/shell_window.cpp" line="1276" />
+            <location filename="../src/shell/shell_window.cpp" line="884" />
+            <location filename="../src/shell/shell_window.cpp" line="1415" />
             <source>Copied %1.</source>
             <translation>%1 הועתק.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="822" />
+            <location filename="../src/shell/shell_window.cpp" line="904" />
             <source>Queued %1 bytes to %2.</source>
             <translation>%1 בתים הועמדו בתור אל %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="878" />
+            <location filename="../src/shell/shell_window.cpp" line="960" />
             <source>Links</source>
             <translation>קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="933" />
+            <location filename="../src/shell/shell_window.cpp" line="1015" />
             <source>Applied the topology JSON.</source>
             <translation>ה-JSON של הטופולוגיה הוחל.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1148" />
+            <location filename="../src/shell/shell_window.cpp" line="1289" />
             <source>%1 - Virtual Serial Studio</source>
             <translation>%1 - Virtual Serial Studio</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1170" />
+            <location filename="../src/shell/shell_window.cpp" line="1310" />
             <source>Undo %1</source>
             <translation>ביטול: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1171" />
+            <location filename="../src/shell/shell_window.cpp" line="1311" />
             <source>Redo %1</source>
             <translation>ביצוע חוזר: %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1183" />
+            <location filename="../src/shell/shell_window.cpp" line="1322" />
             <source>Reverses connecting or removing a link, changing an owner and renaming a port.</source>
             <translation>מבטל יצירה או הסרה של קישור, שינוי של בעלים ושינוי שם של יציאה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1185" />
+            <location filename="../src/shell/shell_window.cpp" line="1324" />
             <source>This build cannot reverse changes.</source>
             <translation>הגרסה הזו לא יכולה לבטל שינויים.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1193" />
+            <location filename="../src/shell/shell_window.cpp" line="1332" />
             <source>Undid %1.</source>
             <translation>בוטל: %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1196" />
+            <location filename="../src/shell/shell_window.cpp" line="1335" />
             <source>Could not undo %1. The setup has changed since.</source>
             <translation>לא ניתן לבטל את %1. ההגדרה השתנתה מאז.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1204" />
+            <location filename="../src/shell/shell_window.cpp" line="1343" />
             <source>Redid %1.</source>
             <translation>בוצע שוב: %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1207" />
+            <location filename="../src/shell/shell_window.cpp" line="1346" />
             <source>Could not redo %1. The setup has changed since.</source>
             <translation>לא ניתן לבצע שוב את %1. ההגדרה השתנתה מאז.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1222" />
+            <location filename="../src/shell/shell_window.cpp" line="1361" />
             <source>Ports %1</source>
             <translation>יציאות %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1227" />
+            <location filename="../src/shell/shell_window.cpp" line="1366" />
             <source>Inspector %1</source>
             <translation>מפקח %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1844" />
-            <location filename="../src/shell/shell_window.cpp" line="1857" />
+            <location filename="../src/shell/shell_window.cpp" line="2045" />
+            <location filename="../src/shell/shell_window.cpp" line="2058" />
             <source>Remove %1?</source>
             <translation>להסיר את %1?</translation>
         </message>
@@ -14542,214 +16101,215 @@ Networks: %5</source>
             <translation type="vanished">היציאה והקישורים שלה יוסרו. לא ניתן לבטל פעולה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1762" />
-            <location filename="../src/shell/shell_window.cpp" line="1826" />
-            <location filename="../src/shell/shell_window.cpp" line="1861" />
-            <location filename="../src/shell/shell_window.cpp" line="1932" />
-            <location filename="../src/shell/shell_window.cpp" line="2352" />
-            <location filename="../src/shell/shell_window.cpp" line="2481" />
+            <location filename="../src/shell/shell_window.cpp" line="1963" />
+            <location filename="../src/shell/shell_window.cpp" line="2027" />
+            <location filename="../src/shell/shell_window.cpp" line="2062" />
+            <location filename="../src/shell/shell_window.cpp" line="2133" />
+            <location filename="../src/shell/shell_window.cpp" line="2191" />
+            <location filename="../src/shell/shell_window.cpp" line="2592" />
+            <location filename="../src/shell/shell_window.cpp" line="2721" />
             <source>Cancel</source>
             <translation>ביטול</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1879" />
-            <location filename="../src/shell/shell_window.cpp" line="1950" />
+            <location filename="../src/shell/shell_window.cpp" line="2080" />
+            <location filename="../src/shell/shell_window.cpp" line="2151" />
             <source>Could not remove %1</source>
             <translation>לא ניתן להסיר את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1888" />
+            <location filename="../src/shell/shell_window.cpp" line="2089" />
             <source>Removed %1.</source>
             <translation>%1 הוסרה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1364" />
+            <location filename="../src/shell/shell_window.cpp" line="1509" />
             <source>Sharing is not available in this build.</source>
             <translation>שיתוף אינו זמין בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1391" />
+            <location filename="../src/shell/shell_window.cpp" line="1536" />
             <source>Networking is not available in this build.</source>
             <translation>הרשת אינה זמינה בגרסה זו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1413" />
+            <location filename="../src/shell/shell_window.cpp" line="1558" />
             <source>Bridge is running on port %1.</source>
             <translation>הגשר פועל ביציאה %1.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1414" />
+            <location filename="../src/shell/shell_window.cpp" line="1559" />
             <source>Open monitor</source>
             <translation>פתיחת מוניטור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1435" />
-            <location filename="../src/shell/shell_window.cpp" line="2393" />
-            <location filename="../src/shell/shell_window.cpp" line="2405" />
+            <location filename="../src/shell/shell_window.cpp" line="1580" />
+            <location filename="../src/shell/shell_window.cpp" line="2633" />
+            <location filename="../src/shell/shell_window.cpp" line="2645" />
             <source>Could not open %1</source>
             <translation>לא ניתן לפתוח את %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1436" />
+            <location filename="../src/shell/shell_window.cpp" line="1581" />
             <source>The setup needs a device or network endpoint that is not available on this PC. Nothing was changed. Check the device, then try again.</source>
             <translation>התצורה זקוקה להתקן או לנקודת קצה ברשת שאינם זמינים במחשב זה. דבר לא השתנה. בדקו את ההתקן ונסו שוב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1459" />
-            <location filename="../src/shell/shell_window.cpp" line="2417" />
-            <location filename="../src/shell/shell_window.cpp" line="2445" />
+            <location filename="../src/shell/shell_window.cpp" line="1604" />
+            <location filename="../src/shell/shell_window.cpp" line="2657" />
+            <location filename="../src/shell/shell_window.cpp" line="2685" />
             <source>%1 ports, %2 links</source>
             <translation>%1 יציאות, %2 קישורים</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1551" />
-            <location filename="../src/shell/shell_window.cpp" line="1574" />
+            <location filename="../src/shell/shell_window.cpp" line="1752" />
+            <location filename="../src/shell/shell_window.cpp" line="1775" />
             <source>Linked pair created. Program A opens %1; Program B opens %2.</source>
             <translation>נוצר זוג מקושר. תוכנית A פותחת את %1; תוכנית B פותחת את %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1618" />
+            <location filename="../src/shell/shell_window.cpp" line="1819" />
             <source>Watching %1. The watcher is %2.</source>
             <translation>%1 במעקב. הצופה הוא %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1668" />
+            <location filename="../src/shell/shell_window.cpp" line="1869" />
             <source>%1 is part of a later work package.</source>
             <translation>%1 הוא חלק מחבילת עבודה מאוחרת יותר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1674" />
+            <location filename="../src/shell/shell_window.cpp" line="1875" />
             <source>%1 arrives with %2.</source>
             <translation>%1 יגיע עם %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1759" />
+            <location filename="../src/shell/shell_window.cpp" line="1960" />
             <source>Remove this link? %1. Nothing is saved until you save the setup.</source>
             <translation>להסיר את הקישור הזה? %1. דבר לא נשמר עד ששומרים את התצורה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1770" />
+            <location filename="../src/shell/shell_window.cpp" line="1971" />
             <source>Could not remove the link</source>
             <translation>לא ניתן להסיר את הקישור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1779" />
+            <location filename="../src/shell/shell_window.cpp" line="1980" />
             <source>Removed the link.</source>
             <translation>הקישור הוסר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="1858" />
+            <location filename="../src/shell/shell_window.cpp" line="2059" />
             <source>Remove %1 and its links? Nothing is saved until you save the setup.</source>
             <translation>להסיר את %1 ואת הקישורים שלה? דבר לא נשמר עד ששומרים את התצורה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2035" />
+            <location filename="../src/shell/shell_window.cpp" line="2275" />
             <source>Renamed %1 to %2.</source>
             <translation>השם של %1 שונה ל-%2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2055" />
+            <location filename="../src/shell/shell_window.cpp" line="2295" />
             <source>%1 is now %2.</source>
             <translation>%1 הוא כעת %2.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2070" />
+            <location filename="../src/shell/shell_window.cpp" line="2310" />
             <source>Released %1.</source>
             <translation>%1 שוחרר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2127" />
+            <location filename="../src/shell/shell_window.cpp" line="2367" />
             <source>Add a port before opening the line matrix.</source>
             <translation>הוסיפו יציאה לפני פתיחת מטריצת הקווים.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2162" />
+            <location filename="../src/shell/shell_window.cpp" line="2402" />
             <source>Select the target of a join with the owner policy to control who writes.</source>
             <translation>בחרו את היעד של איחוד עם מדיניות בעלים כדי לשלוט מי כותב.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2243" />
+            <location filename="../src/shell/shell_window.cpp" line="2483" />
             <source>Test mode. New ports only work inside Virtual Serial Studio.</source>
             <translation>מצב בדיקה. יציאות חדשות פועלות רק בתוך Virtual Serial Studio.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2264" />
+            <location filename="../src/shell/shell_window.cpp" line="2504" />
             <source>Could not restart as administrator</source>
             <translation>לא ניתן להפעיל מחדש כמנהל</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2342" />
+            <location filename="../src/shell/shell_window.cpp" line="2582" />
             <source>Environment copied.</source>
             <translation>הסביבה הועתקה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start a new setup?</source>
             <translation>להתחיל הגדרה חדשה?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2351" />
+            <location filename="../src/shell/shell_window.cpp" line="2591" />
             <source>Start new</source>
             <translation>התחלה חדשה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2368" />
+            <location filename="../src/shell/shell_window.cpp" line="2608" />
             <source>Started a new setup.</source>
             <translation>תצורה חדשה הותחלה.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2378" />
+            <location filename="../src/shell/shell_window.cpp" line="2618" />
             <source>Open setup</source>
             <translation>פתיחת תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2379" />
+            <location filename="../src/shell/shell_window.cpp" line="2619" />
             <source>Virtual Serial Studio setups (*.json);;All files (*)</source>
             <translation>תצורות Virtual Serial Studio (*.json);;כל הקבצים (*)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2420" />
+            <location filename="../src/shell/shell_window.cpp" line="2660" />
             <source>Opened %1.</source>
             <translation>%1 נפתח.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2436" />
+            <location filename="../src/shell/shell_window.cpp" line="2676" />
             <source>Could not save this setup</source>
             <translation>לא ניתן לשמור תצורה זו</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2449" />
-            <location filename="../src/shell/shell_window.cpp" line="2450" />
+            <location filename="../src/shell/shell_window.cpp" line="2689" />
+            <location filename="../src/shell/shell_window.cpp" line="2690" />
             <source>Saved %1.</source>
             <translation>%1 נשמר.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2456" />
+            <location filename="../src/shell/shell_window.cpp" line="2696" />
             <source>Save setup</source>
             <translation>שמירת תצורה</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2458" />
+            <location filename="../src/shell/shell_window.cpp" line="2698" />
             <source>Virtual Serial Studio setups (*.json)</source>
             <translation>תצורות Virtual Serial Studio (*.json)</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2476" />
+            <location filename="../src/shell/shell_window.cpp" line="2716" />
             <source>Save changes to %1?</source>
             <translation>לשמור שינויים ב-%1?</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2477" />
+            <location filename="../src/shell/shell_window.cpp" line="2717" />
             <source>Your ports and links have changed since the last save. You can turn this prompt off in Settings.</source>
             <translation>היציאות והקישורים שלכם השתנו מאז השמירה האחרונה. אפשר לכבות הודעה זו בהגדרות.</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2480" />
+            <location filename="../src/shell/shell_window.cpp" line="2720" />
             <source>Don't save</source>
             <translation>לא לשמור</translation>
         </message>
         <message>
-            <location filename="../src/shell/shell_window.cpp" line="2545" />
+            <location filename="../src/shell/shell_window.cpp" line="2785" />
             <source>Layout reset.</source>
             <translation>הפריסה אופסה.</translation>
         </message>
@@ -14757,93 +16317,93 @@ Networks: %5</source>
     <context>
         <name>vss::gui::StatusBar</name>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="24" />
+            <location filename="../src/shell/status_bar.cpp" line="29" />
             <source>Status bar</source>
             <translation>שורת מצב</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="39" />
+            <location filename="../src/shell/status_bar.cpp" line="44" />
             <source>0 dropped</source>
             <translation>0 הושמטו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="45" />
-            <location filename="../src/shell/status_bar.cpp" line="154" />
+            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="159" />
             <source>Setup ready</source>
             <translation>ההגדרות מוכנות</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="50" />
+            <location filename="../src/shell/status_bar.cpp" line="55" />
             <source>Interface mode</source>
             <translation>מצב ממשק</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="51" />
+            <location filename="../src/shell/status_bar.cpp" line="56" />
             <source>Simple</source>
             <translation>פשוט</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="52" />
+            <location filename="../src/shell/status_bar.cpp" line="57" />
             <source>Advanced</source>
             <translation>מתקדם</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="109" />
+            <location filename="../src/shell/status_bar.cpp" line="114" />
             <source>No ports yet</source>
             <translation>עדיין אין יציאות</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="112" />
+            <location filename="../src/shell/status_bar.cpp" line="117" />
             <source>Ports %1</source>
             <translation>יציאות %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="113" />
+            <location filename="../src/shell/status_bar.cpp" line="118" />
             <source>Links %1</source>
             <translation>קישורים %1</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="115" />
+            <location filename="../src/shell/status_bar.cpp" line="120" />
             <source>RX %1   TX %2</source>
             <translation>RX %1   TX %2</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="116" />
+            <location filename="../src/shell/status_bar.cpp" line="121" />
             <source>Hub running</source>
             <translation>הרכזת פועלת</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="117" />
+            <location filename="../src/shell/status_bar.cpp" line="122" />
             <source>Hub stopped</source>
             <translation>הרכזת נעצרה</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="127" />
+            <location filename="../src/shell/status_bar.cpp" line="132" />
             <source>%1 dropped, not owner</source>
             <translation>%1 הושמטו, לא הבעלים</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="129" />
+            <location filename="../src/shell/status_bar.cpp" line="134" />
             <source>Bytes from a port that is not the owner were not forwarded.</source>
             <translation>בתים מיציאה שאינה הבעלים לא הועברו.</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="134" />
+            <location filename="../src/shell/status_bar.cpp" line="139" />
             <source>%1 dropped</source>
             <translation>%1 הושמטו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="158" />
+            <location filename="../src/shell/status_bar.cpp" line="163" />
             <source>Setup needs attention</source>
             <translation>ההגדרות דורשות תשומת לב</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="162" />
+            <location filename="../src/shell/status_bar.cpp" line="167" />
             <source>Setup not checked</source>
             <translation>ההגדרות לא נבדקו</translation>
         </message>
         <message>
-            <location filename="../src/shell/status_bar.cpp" line="166" />
+            <location filename="../src/shell/status_bar.cpp" line="171" />
             <source>Open Tools, Setup check for the details.</source>
             <translation>לפרטים, פתחו כלים, בדיקת הגדרות.</translation>
         </message>
@@ -15418,6 +16978,1097 @@ Networks: %5</source>
         </message>
     </context>
     <context>
+        <name>vss::gui::simple::JobForm</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="70" />
+            <source>%1 and %2</source>
+            <translation>%1 ו-%2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="264" />
+            <source>Your program</source>
+            <translation>התוכנית שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>Second program</source>
+            <translation>תוכנית שנייה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="267" />
+            <source>First program</source>
+            <translation>תוכנית ראשונה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="270" />
+            <source>Program</source>
+            <translation>תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="271" />
+            <location filename="../src/simple/job_form.cpp" line="274" />
+            <location filename="../src/simple/job_form.cpp" line="278" />
+            <location filename="../src/simple/job_form.cpp" line="288" />
+            <location filename="../src/simple/job_form.cpp" line="962" />
+            <source>Device</source>
+            <translation>התקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="273" />
+            <location filename="../src/simple/job_form.cpp" line="289" />
+            <source>Programs</source>
+            <translation>תוכניות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="282" />
+            <source>On the line</source>
+            <translation>על הקו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="285" />
+            <source>Receiver</source>
+            <translation>מקלט</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="286" />
+            <source>Senders</source>
+            <translation>שולחים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="404" />
+            <location filename="../src/simple/job_form.cpp" line="416" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="414" />
+            <source>a new port</source>
+            <translation>יציאה חדשה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="419" />
+            <location filename="../src/simple/job_form.cpp" line="1139" />
+            <source>the device</source>
+            <translation>ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="422" />
+            <source>the network device</source>
+            <translation>התקן הרשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>Back to the setup</source>
+            <translation>חזרה לתצורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="453" />
+            <source>All jobs</source>
+            <translation>כל המשימות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="461" />
+            <location filename="../src/simple/job_form.cpp" line="463" />
+            <source>Change %1</source>
+            <translation>שינוי %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="470" />
+            <source>Cancel</source>
+            <translation>ביטול</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Apply</source>
+            <translation>החלה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="473" />
+            <source>Create</source>
+            <translation>יצירה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="508" />
+            <source>On the other end</source>
+            <translation>בצד השני</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="510" />
+            <source>I'll type to it from this window</source>
+            <translation>אקליד אליו מהחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="511" />
+            <source>What your program sends shows here, and what you type goes to your program. Use it to see that your program sends what you expect.</source>
+            <translation>מה שהתוכנית שלכם שולחת מופיע כאן, ומה שאתם מקלידים נשלח לתוכנית. כך תוכלו לראות שהתוכנית שולחת את מה שציפיתם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="516" />
+            <source>Send everything straight back</source>
+            <translation>שליחת הכול בחזרה מיד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="517" />
+            <source>Whatever your program sends comes back to it at once. A quick test that its sending and receiving both work.</source>
+            <translation>כל מה שהתוכנית שלכם שולחת חוזר אליה מיד. בדיקה מהירה לכך שגם השליחה וגם הקבלה עובדות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="528" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="537" />
+            <source>You can connect it to something else later with Change.</source>
+            <translation>אפשר לחבר אותו למשהו אחר מאוחר יותר באמצעות שינוי.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="543" />
+            <source>Other computers connect to</source>
+            <translation>מחשבים אחרים מתחברים אל</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="545" />
+            <location filename="../src/simple/job_form.cpp" line="549" />
+            <location filename="../src/simple/job_form.cpp" line="924" />
+            <source>Network port</source>
+            <translation>יציאת רשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="562" />
+            <source>Other computers connect to this PC's address on this port. 4001 is common for serial over the network.</source>
+            <translation>מחשבים אחרים מתחברים לכתובת של המחשב הזה ביציאה הזו. 4001 נפוץ ליציאה טורית דרך הרשת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="585" />
+            <source>Device speed (baud rate)</source>
+            <translation>מהירות ההתקן (קצב באוד)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="587" />
+            <source>The device's manual gives it. If text looks garbled later, this is usually why.</source>
+            <translation>מדריך ההתקן מציין אותו. אם הטקסט נראה משובש בהמשך, זו בדרך כלל הסיבה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="591" />
+            <source>Other device settings</source>
+            <translation>הגדרות נוספות של ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="600" />
+            <location filename="../src/simple/job_form.cpp" line="613" />
+            <source>None</source>
+            <translation>ללא</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="601" />
+            <source>Odd</source>
+            <translation>אי-זוגית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="602" />
+            <source>Even</source>
+            <translation>זוגית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="614" />
+            <source>Hardware (RTS and CTS)</source>
+            <translation>חומרה (RTS ו-CTS)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="616" />
+            <source>Software (XON and XOFF)</source>
+            <translation>תוכנה (XON ו-XOFF)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="620" />
+            <source>Data bits</source>
+            <translation>סיביות נתונים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="621" />
+            <source>Parity</source>
+            <translation>זוגיות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="622" />
+            <source>Stop bits</source>
+            <translation>סיביות עצירה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="623" />
+            <source>Flow control</source>
+            <translation>בקרת זרימה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="643" />
+            <location filename="../src/simple/job_form.cpp" line="646" />
+            <source>Name (optional)</source>
+            <translation>שם (אופציונלי)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="655" />
+            <source>Also</source>
+            <translation>וגם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="665" />
+            <source>Handy for checking the device works before your own program is ready. What you type goes to the device, and its replies show here and in your programs.</source>
+            <translation>שימושי לבדיקה שההתקן עובד לפני שהתוכנית שלכם מוכנה. מה שאתם מקלידים נשלח להתקן, והתשובות שלו מופיעות כאן ובתוכניות שלכם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="672" />
+            <source>Show me the data going through</source>
+            <translation>הצגת הנתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="680" />
+            <source>A live list of what is sent each way, on the setup's page. It only looks, so it changes nothing. You can turn it on later too.</source>
+            <translation>רשימה חיה של מה שנשלח בכל כיוון, בעמוד התצורה. היא רק צופה, ולכן לא משנה דבר. אפשר להפעיל אותה גם מאוחר יותר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="748" />
+            <source>Add a program</source>
+            <translation>הוספת תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="758" />
+            <source>Add a device</source>
+            <translation>הוספת התקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="768" />
+            <source>Up to %1. You can add more later.</source>
+            <translation>עד %1. אפשר להוסיף עוד מאוחר יותר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="800" />
+            <source>Port name</source>
+            <translation>שם היציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="816" />
+            <source>New port</source>
+            <translation>יציאה חדשה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="823" />
+            <source>Program, e.g. PuTTY (optional)</source>
+            <translation>תוכנית, למשל PuTTY (אופציונלי)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="824" />
+            <source>Which program, optional</source>
+            <translation>איזו תוכנית, אופציונלי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="848" />
+            <location filename="../src/simple/job_form.cpp" line="1010" />
+            <source>Remove %1</source>
+            <translation>הסרת %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="849" />
+            <source>Remove</source>
+            <translation>הסרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="859" />
+            <source>Some older programs only list COM1 to COM9.</source>
+            <translation>חלק מהתוכניות הישנות מציגות רק COM1 עד COM9.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="862" />
+            <source>Studio picks the name, such as /dev/pts/3 or COM7, and shows it when the port is ready.</source>
+            <translation>Studio בוחר את השם, כגון /dev/pts/3 או COM7, ומציג אותו כשהיציאה מוכנה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="882" />
+            <source>Where is the device</source>
+            <translation>היכן ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="883" />
+            <source>Plugged into this PC</source>
+            <translation>מחובר למחשב הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="884" />
+            <source>On the network</source>
+            <translation>ברשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="910" />
+            <source>Address, such as 192.168.1.50</source>
+            <translation>כתובת, כגון 192.168.1.50</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="911" />
+            <source>Device address</source>
+            <translation>כתובת ההתקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="935" />
+            <source>How it talks</source>
+            <translation>אופן התקשורת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="952" />
+            <source>For a serial server box, such as a Moxa or Lantronix. Its manual gives the address and port. Choose RFC 2217 if the box supports it, so programs can change the baud rate.</source>
+            <translation>עבור קופסת שרת טורי, כמו Moxa או Lantronix. המדריך שלה מציין את הכתובת והיציאה. בחרו RFC 2217 אם הקופסה תומכת בו, כדי שתוכניות יוכלו לשנות את קצב הבאוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="973" />
+            <source>%1  %2</source>
+            <translation>%1  %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="978" />
+            <source>No devices found</source>
+            <translation>לא נמצאו התקנים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="991" />
+            <source>Refresh</source>
+            <translation>רענון</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1018" />
+            <source>Not listed? Plug it in, then choose Refresh.</source>
+            <translation>לא ברשימה? חברו אותו ולחצו על רענון.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1138" />
+            <source>Let me type to %1 from this window</source>
+            <translation>אקליד אל %1 מהחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1142" />
+            <source>Studio names it for you</source>
+            <translation>Studio בוחר את השם עבורכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1157" />
+            <source>Sends it straight back</source>
+            <translation>שולח אותו בחזרה מיד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1158" />
+            <location filename="../src/simple/job_form.cpp" line="1161" />
+            <source>You, in this window</source>
+            <translation>אתם, בחלון הזה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1164" />
+            <source>Other computers, port %1</source>
+            <translation>מחשבים אחרים, יציאה %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1204" />
+            <source> Your program opens &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> התוכנית שלכם פותחת את &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1206" />
+            <source> Your programs open &lt;b&gt;%1&lt;/b&gt;</source>
+            <translation> התוכניות שלכם פותחות את &lt;b&gt;%1&lt;/b&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1209" />
+            <source>, not %1</source>
+            <translation>, ולא %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1222" />
+            <source>Studio makes &lt;b&gt;%1&lt;/b&gt; for your program to open. </source>
+            <translation>Studio יוצר את &lt;b&gt;%1&lt;/b&gt; כדי שהתוכנית שלכם תפתח אותה. </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1224" />
+            <source>Whatever it sends comes straight back to it.</source>
+            <translation>כל מה שהוא שולח חוזר אליו מיד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1225" />
+            <source>What it sends shows in this window, and what you type here goes to it.</source>
+            <translation>מה שהוא שולח מופיע בחלון הזה, ומה שמקלידים כאן נשלח אליו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1228" />
+            <source>What &lt;b&gt;%1&lt;/b&gt; sends arrives at &lt;b&gt;%2&lt;/b&gt;, and the other way round. Open one in each program.</source>
+            <translation>מה ש-&lt;b&gt;%1&lt;/b&gt; שולח מגיע אל &lt;b&gt;%2&lt;/b&gt;, ולהפך. פתחו אחד בכל תוכנית.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1232" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt; and passes its data to and from &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>Studio פותח את &lt;b&gt;%1&lt;/b&gt; ומעביר את הנתונים שלו אל &lt;b&gt;%2&lt;/b&gt; וממנו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1237" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; sends goes to &lt;b&gt;%2&lt;/b&gt;. Whatever any of them sends goes to the device.</source>
+            <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולח מגיע אל &lt;b&gt;%2&lt;/b&gt;. כל מה שכל אחד מהם שולח מגיע אל ההתקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1242" />
+            <source>Studio opens &lt;b&gt;%1&lt;/b&gt;. On the next page, type to it and read its replies.</source>
+            <translation>Studio פותח את &lt;b&gt;%1&lt;/b&gt;. בעמוד הבא תוכלו להקליד אליו ולקרוא את התשובות שלו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1246" />
+            <source>Other computers connect to this PC on network port &lt;b&gt;%1&lt;/b&gt; and talk to &lt;b&gt;%2&lt;/b&gt;. Data goes both ways.</source>
+            <translation>מחשבים אחרים מתחברים למחשב הזה דרך יציאת הרשת &lt;b&gt;%1&lt;/b&gt; ומתקשרים עם &lt;b&gt;%2&lt;/b&gt;. הנתונים עוברים בשני הכיוונים.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1251" />
+            <source>&lt;b&gt;%1&lt;/b&gt; share one line. Each hears what the others send, and none hears itself.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; חולקים קו אחד. כל אחד שומע את מה שהאחרים שולחים, ואף אחד לא שומע את עצמו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1256" />
+            <source>Everything &lt;b&gt;%1&lt;/b&gt; send arrives at &lt;b&gt;%2&lt;/b&gt;, in the order it arrives. Nothing goes back to them.</source>
+            <translation>כל מה ש-&lt;b&gt;%1&lt;/b&gt; שולחים מגיע אל &lt;b&gt;%2&lt;/b&gt;, לפי סדר ההגעה. שום דבר לא חוזר אליהם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1261" />
+            <source>&lt;b&gt;%1&lt;/b&gt; can all send to &lt;b&gt;%2&lt;/b&gt;, but only one at a time. You choose which on the next page. What the device sends back does not reach them.</source>
+            <translation>&lt;b&gt;%1&lt;/b&gt; יכולים כולם לשלוח אל &lt;b&gt;%2&lt;/b&gt;, אבל רק אחד בכל פעם. בעמוד הבא בוחרים איזה. מה שההתקן שולח בחזרה לא מגיע אליהם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1299" />
+            <source>%1 stay open. Programs using them are not interrupted.</source>
+            <translation>%1 נשארות פתוחות. תוכניות שמשתמשות בהן לא יופרעו.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/job_form.cpp" line="1302" />
+            <source>%n new port(s) or device(s).</source>
+            <translation>
+                <numerusform>%n יציאה או התקן חדשים.</numerusform>
+                <numerusform>%n יציאות או התקנים חדשים.</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1304" />
+            <source>Closes %1. A program using one of them loses it.</source>
+            <translation>סוגר את %1. תוכנית שמשתמשת באחת מהן תאבד אותה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1307" />
+            <source>No ports open or close.</source>
+            <translation>אף יציאה לא נפתחת או נסגרת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1308" />
+            <source>What Apply changes: %1</source>
+            <translation>השינויים שיתבצעו: %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1324" />
+            <source>Choose a device. Plug it in, then choose Refresh.</source>
+            <translation>בחרו התקן. חברו אותו ולחצו על רענון.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1327" />
+            <source>%1 is chosen twice. Choose each device once.</source>
+            <translation>%1 נבחר פעמיים. בחרו כל התקן פעם אחת.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1335" />
+            <source>Enter the device's network address.</source>
+            <translation>הזינו את כתובת הרשת של ההתקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1340" />
+            <source>COM%1 is chosen twice. Choose another name.</source>
+            <translation>COM%1 נבחר פעמיים. בחרו שם אחר.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1348" />
+            <source>Sending everything back is not available in this build.</source>
+            <translation>שליחת הכול בחזרה אינה זמינה בגרסה הזו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1367" />
+            <source>Could not change the setup. %1 What was there before was put back where Studio could.</source>
+            <translation>לא ניתן היה לשנות את התצורה. %1 מה שהיה קודם הוחזר למקומו, ככל ש-Studio הצליח.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="1370" />
+            <source>Could not set it up. %1 Nothing was changed.</source>
+            <translation>לא ניתן היה להגדיר זאת. %1 דבר לא השתנה.</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::JobGrid</name>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="217" />
+            <source>What do you want to do?</source>
+            <translation>מה ברצונכם לעשות?</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="222" />
+            <source>Choose a job. Studio sets it up and tells you which port to open in your program. Everything you set up is listed on the left, where you can change or remove it.</source>
+            <translation>בחרו משימה. Studio מגדיר אותה ואומר לכם איזו יציאה לפתוח בתוכנית. כל מה שהגדרתם מופיע ברשימה שבצד, ושם אפשר לשנות או להסיר אותו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="228" />
+            <location filename="../src/simple/job_grid.cpp" line="341" />
+            <source>Details</source>
+            <translation>פרטים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="268" />
+            <source>My program needs a serial port</source>
+            <translation>התוכנית שלי צריכה יציאה טורית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="270" />
+            <source>I have a serial device</source>
+            <translation>יש לי התקן טורי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="273" />
+            <source>Several programs or devices at once</source>
+            <translation>כמה תוכניות או התקנים בו-זמנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="278" />
+            <source>See the data on a port</source>
+            <translation>צפייה בנתונים ביציאה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="279" />
+            <source>See what goes in and out of a port you already set up. Read only, so nothing changes for the programs using it.</source>
+            <translation>ראו מה נכנס ויוצא מיציאה שכבר הגדרתם. לקריאה בלבד, כך שדבר לא משתנה עבור התוכניות שמשתמשות בה.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="285" />
+            <source>Check this PC is ready</source>
+            <translation>בדיקה שהמחשב הזה מוכן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="286" />
+            <source>Find out whether this PC can make ports that other programs can open, and what to do if not.</source>
+            <translation>בדקו אם המחשב הזה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח, ומה לעשות אם לא.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="291" />
+            <source>Look and check</source>
+            <translation>צפייה ובדיקה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="297" />
+            <location filename="../src/simple/job_grid.cpp" line="303" />
+            <source>Not available in this build</source>
+            <translation>לא זמין בגרסה זו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="308" />
+            <source>Open a saved setup…</source>
+            <translation>פתיחת תצורה שמורה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="312" />
+            <source>Start from an example…</source>
+            <translation>התחלה מדוגמה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="339" />
+            <source>This PC can make ports that other programs can open.</source>
+            <translation>המחשב הזה יכול ליצור יציאות שתוכניות אחרות יכולות לפתוח.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="346" />
+            <source>Other programs cannot see new ports until a driver is installed.</source>
+            <translation>תוכניות אחרות לא יראו יציאות חדשות עד שיותקן מנהל התקן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_grid.cpp" line="349" />
+            <source>Open setup check</source>
+            <translation>פתיחת בדיקת הגדרות</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SetupKinds</name>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="405" />
+            <source>%1 shared with %n programs</source>
+            <translation>
+                <numerusform>%1 משותף עם %n תוכנית</numerusform>
+                <numerusform>%1 משותף עם %n תוכניות</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="414" />
+            <source>%n on one line</source>
+            <translation>
+                <numerusform>%n על קו אחד</numerusform>
+                <numerusform>%n על קו אחד</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="419" />
+            <source>%n senders into %1</source>
+            <translation>
+                <numerusform>שולח %n אל %1</numerusform>
+                <numerusform>%n שולחים אל %1</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <source>Line with %n</source>
+            <translation type="vanished">
+                <numerusform>קו עם %n תוכנית</numerusform>
+                <numerusform>קו עם %n תוכניות</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <source>%n into %1</source>
+            <translation type="vanished">
+                <numerusform>%n אל %1</numerusform>
+                <numerusform>%n אל %1</numerusform>
+            </translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_kinds.cpp" line="425" />
+            <source>%n programs take turns sending to %1</source>
+            <translation>
+                <numerusform>%n תוכנית שולחת אל %1 בתורות</numerusform>
+                <numerusform>%n תוכניות שולחות אל %1 בתורות</numerusform>
+            </translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SetupPage</name>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="84" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="132" />
+            <source>Received text</source>
+            <translation>טקסט שהתקבל</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="138" />
+            <source>Type, then press Enter</source>
+            <translation>הקלידו ולחצו Enter</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="139" />
+            <source>Text to send</source>
+            <translation>טקסט לשליחה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="141" />
+            <source>Send</source>
+            <translation>שליחה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="152" />
+            <source>Enter adds a line ending</source>
+            <translation>Enter מוסיף סוף שורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="161" />
+            <location filename="../src/simple/setup_page.cpp" line="177" />
+            <source>Data going through</source>
+            <translation>נתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="162" />
+            <source>Show me the data going through</source>
+            <translation>הצגת הנתונים שעוברים</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="170" />
+            <source>Read only. Useful when a program says nothing arrives.</source>
+            <translation>לקריאה בלבד. שימושי כשתוכנית אומרת שדבר לא מגיע.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="181" />
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Pause</source>
+            <translation>השהיה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="187" />
+            <source>Resume</source>
+            <translation>המשך</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="189" />
+            <source>Clear</source>
+            <translation>ניקוי</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="197" />
+            <source>Show as hex</source>
+            <translation>הצגה כ-hex</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="204" />
+            <source>Hide</source>
+            <translation>הסתרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="216" />
+            <source>See it on the canvas (Advanced mode)</source>
+            <translation>צפייה בקנבס (מצב מתקדם)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="256" />
+            <source>Change in Advanced mode</source>
+            <translation>שינוי במצב מתקדם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="257" />
+            <source>Change…</source>
+            <translation>שינוי…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="269" />
+            <source>Remove setup</source>
+            <translation>הסרת הגדרה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="293" />
+            <location filename="../src/simple/setup_page.cpp" line="466" />
+            <source>your program</source>
+            <translation>התוכנית שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="295" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt; at %3 baud.</source>
+            <translation>עבור %1, פתחו את &lt;b&gt;%2&lt;/b&gt; בקצב %3 באוד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="300" />
+            <source>In %1, open &lt;b&gt;%2&lt;/b&gt;.</source>
+            <translation>עבור %1, פתחו את &lt;b&gt;%2&lt;/b&gt;.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="305" />
+            <source>Do not open &lt;b&gt;%1&lt;/b&gt; itself in your programs. Studio has it open.</source>
+            <translation>אל תפתחו את &lt;b&gt;%1&lt;/b&gt; עצמו בתוכניות שלכם. Studio כבר פתח אותו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="309" />
+            <source>Choose below which program sends. The others only listen.</source>
+            <translation>בחרו למטה איזו תוכנית שולחת. האחרות רק מאזינות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="311" />
+            <source>What to do now</source>
+            <translation>מה לעשות עכשיו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="325" />
+            <source>Ports</source>
+            <translation>יציאות</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="341" />
+            <source>On the other end: everything your program sends comes straight back to it.</source>
+            <translation>בצד השני: כל מה שהתוכנית שלכם שולחת חוזר אליה מיד.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="344" />
+            <source>Echo</source>
+            <translation>הד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="348" />
+            <source>Add a program</source>
+            <translation>הוספת תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="370" />
+            <source>Type to %1</source>
+            <translation>הקלדה אל %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="373" />
+            <source>What your program sends on %1 shows here. What you type goes to your program.</source>
+            <translation>מה שהתוכנית שלכם שולחת ב-%1 מופיע כאן. מה שאתם מקלידים נשלח לתוכנית.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="378" />
+            <source>What you type goes to %1. Its replies show here.</source>
+            <translation>מה שאתם מקלידים נשלח אל %1. התשובות שלו מופיעות כאן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="382" />
+            <source>What you type goes to %1. Its replies show here, and your programs get them too.</source>
+            <translation>מה שאתם מקלידים נשלח אל %1. התשובות שלו מופיעות כאן, והתוכניות שלכם מקבלות אותן גם.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="398" />
+            <source>Program opens</source>
+            <translation>התוכנית פותחת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="399" />
+            <source>%1 opens</source>
+            <translation>%1 פותח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="412" />
+            <location filename="../src/simple/setup_page.cpp" line="557" />
+            <source>Not open</source>
+            <translation>לא פתוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="417" />
+            <source>Open in a program</source>
+            <translation>פתוח בתוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="422" />
+            <source>No program yet</source>
+            <translation>עדיין אין תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="427" />
+            <source>Open</source>
+            <translation>פתוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="435" />
+            <source>%1 copied.</source>
+            <translation>%1 הועתק.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="449" />
+            <source>Close %1</source>
+            <translation>סגירת %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="450" />
+            <source>Close this port</source>
+            <translation>סגירת היציאה הזו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="457" />
+            <location filename="../src/simple/setup_page.cpp" line="562" />
+            <source>%1: %2</source>
+            <translation>%1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="462" />
+            <source>No program has opened %1 yet. In %2, choose exactly %1. This changes as soon as one does. &lt;a href="help"&gt;Nothing arriving?&lt;/a&gt;</source>
+            <translation>אף תוכנית עדיין לא פתחה את %1. עבור %2, בחרו בדיוק %1. זה ישתנה ברגע שאחת תעשה זאת. &lt;a href="help"&gt;שום דבר לא מגיע?&lt;/a&gt;</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="485" />
+            <source>The program</source>
+            <translation>התוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="488" />
+            <source>%1 opened %2 at %3 baud, but the device runs at %4. Text will look garbled. Set %4 in %5.</source>
+            <translation>%1 פתחה את %2 בקצב %3 באוד, אבל ההתקן פועל ב-%4. הטקסט ייראה משובש. הגדירו %4 בהגדרות של %5.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="493" />
+            <source>the program</source>
+            <translation>התוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="505" />
+            <source>Sending now</source>
+            <translation>שולח עכשיו</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="511" />
+            <source>Let this one send</source>
+            <translation>לאפשר לזה לשלוח</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="518" />
+            <source>%1 sends now. The others only listen.</source>
+            <translation>%1 שולח עכשיו. האחרים רק מאזינים.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="538" />
+            <source>Device. Studio has it open, so your programs use their own ports instead.</source>
+            <translation>התקן. Studio פתח אותו, ולכן התוכניות שלכם משתמשות ביציאות משלהן.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="540" />
+            <source>Network device. Studio is connected to it.</source>
+            <translation>התקן רשת. Studio מחובר אליו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="551" />
+            <source>Open at %1 baud</source>
+            <translation>פתוח בקצב %1 באוד</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="552" />
+            <source>Connected</source>
+            <translation>מחובר</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="575" />
+            <source>Other computers connect to this PC on network port</source>
+            <translation>מחשבים אחרים מתחברים למחשב הזה דרך יציאת הרשת</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="584" />
+            <source>No computer connected</source>
+            <translation>אין מחשב מחובר</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/setup_page.cpp" line="585" />
+            <source>%n computer(s) connected</source>
+            <translation>
+                <numerusform>%n מחשב מחובר</numerusform>
+                <numerusform>%n מחשבים מחוברים</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="592" />
+            <source>Network port %1: %2</source>
+            <translation>יציאת רשת %1: %2</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="640" />
+            <source>%1  %2 sent  %3</source>
+            <translation>%1  %2 נשלחו  %3</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>sent      %1</source>
+            <translation>נשלח     %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="653" />
+            <source>received  %1</source>
+            <translation>התקבל    %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/setup_page.cpp" line="703" />
+            <source>Could not send to %1. %2</source>
+            <translation>לא ניתן היה לשלוח אל %1. %2</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::SimplePage</name>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="61" />
+            <source>%1 (%2)</source>
+            <translation>%1 (%2)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="67" />
+            <source>%1, open in a program</source>
+            <translation>%1, פתוח בתוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="71" />
+            <source>%1, no program yet</source>
+            <translation>%1, עדיין אין תוכנית</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="77" />
+            <source>%1, device</source>
+            <translation>%1, התקן</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="126" />
+            <location filename="../src/simple/simple_page.cpp" line="149" />
+            <source>Your setups</source>
+            <translation>התצורות שלכם</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="132" />
+            <source>New</source>
+            <translation>חדש</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="136" />
+            <location filename="../src/simple/simple_page.cpp" line="137" />
+            <source>Set up something new</source>
+            <translation>הגדרת משהו חדש</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="173" />
+            <source>Save…</source>
+            <translation>שמירה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="177" />
+            <source>Open…</source>
+            <translation>פתיחה…</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="181" />
+            <source>Remove all</source>
+            <translation>הסרת הכול</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="218" />
+            <source>Nothing is set up yet, so there is no port to look at. Set something up first.</source>
+            <translation>עדיין לא הוגדר דבר, ולכן אין יציאה לצפות בה. הגדירו קודם משהו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="226" />
+            <source>Choose a setup on the left to see its data.</source>
+            <translation>בחרו תצורה מהרשימה כדי לראות את הנתונים שלה.</translation>
+        </message>
+        <message numerus="yes">
+            <location filename="../src/simple/simple_page.cpp" line="299" />
+            <source>%n setup(s)</source>
+            <translation>
+                <numerusform>%n תצורה</numerusform>
+                <numerusform>%n תצורות</numerusform>
+            </translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="304" />
+            <source>Nothing set up yet. Choose what you want to do on the right.</source>
+            <translation>עדיין לא הוגדר דבר. בחרו מה ברצונכם לעשות.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="315" />
+            <source>%1 (Advanced)</source>
+            <translation>%1 (מתקדם)</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="385" />
+            <source>Done. %1.</source>
+            <translation>בוצע. %1.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="495" />
+            <source>Closed %1. The other programs were not interrupted.</source>
+            <translation>בוצעה סגירה של %1. התוכניות האחרות לא הופרעו.</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="519" />
+            <source>Could not change the setup. %1</source>
+            <translation>לא ניתן היה לשנות את התצורה. %1</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/simple_page.cpp" line="541" />
+            <source>Added %1. The other programs were not interrupted.</source>
+            <translation>בוצעה הוספה של %1. התוכניות האחרות לא הופרעו.</translation>
+        </message>
+    </context>
+    <context>
+        <name>vss::gui::simple::WireDiagram</name>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="88" />
+            <source>Picture of the setup</source>
+            <translation>תמונה של התצורה</translation>
+        </message>
+        <message>
+            <location filename="../src/simple/job_form.cpp" line="100" />
+            <source>%1 to %2</source>
+            <translation>%1 אל %2</translation>
+        </message>
+    </context>
+    <context>
         <name>vss::gui::support::HelpContentsDialog</name>
         <message>
             <location filename="../src/support/help_contents_dialog.cpp" line="120" />
@@ -15445,7 +18096,7 @@ Networks: %5</source>
     <context>
         <name>vss::gui::support::TroubleshootDialog</name>
         <message>
-            <location filename="../src/support/troubleshoot_dialog.cpp" line="334" />
+            <location filename="../src/support/troubleshoot_dialog.cpp" line="339" />
             <source>%1, %2</source>
             <translation>%1, %2</translation>
         </message>

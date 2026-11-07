@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple Mode Goals</title>
+<style>
+/* Layout: one window. Setups list on the left, the chosen goal or setup on the right. Colours are the VSS tokens. */
+:root {
+  --ground:#F2F4F7; --panel:#FFFFFF; --sunken:#F7F8FA; --hover:#ECF0F4; --pressed:#DFE5EC;
+  --line:#D8DDE4; --line2:#BCC4CF; --ink:#18212D; --ink2:#465263; --ink3:#566273;
+  --accent:#0B6E8A; --accentStrong:#085870; --accentSoft:#E2F0F4; --accentLine:#B3D4DD;
+  --amber:#9A4F00; --amberSoft:#FFF1DC; --amberLine:#EBC995;
+  --ok:#1B7447; --okSoft:#E4F3EA; --okLine:#A9D3BA;
+  --bad:#B3261E; --badSoft:#FCEAE8; --badLine:#EBB4AF;
+  --focus:#0A5C75; --onAccent:#FFFFFF;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#11161D; --panel:#1A212B; --sunken:#151B23; --hover:#232C39; --pressed:#2D3949;
+    --line:#2B3543; --line2:#445064; --ink:#E8EDF3; --ink2:#B8C3D1; --ink3:#9EABBB;
+    --accent:#59B9D4; --accentStrong:#86CDE2; --accentSoft:#163640; --accentLine:#2F6171;
+    --amber:#F2B764; --amberSoft:#3A2A10; --amberLine:#6E4E1C;
+    --ok:#6FD29C; --okSoft:#12301F; --okLine:#2C6446;
+    --bad:#FF8D86; --badSoft:#3C1815; --badLine:#7E3029;
+    --focus:#86CDE2; --onAccent:#06222B; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#11161D; --panel:#1A212B; --sunken:#151B23; --hover:#232C39; --pressed:#2D3949;
+  --line:#2B3543; --line2:#445064; --ink:#E8EDF3; --ink2:#B8C3D1; --ink3:#9EABBB;
+  --accent:#59B9D4; --accentStrong:#86CDE2; --accentSoft:#163640; --accentLine:#2F6171;
+  --amber:#F2B764; --amberSoft:#3A2A10; --amberLine:#6E4E1C;
+  --ok:#6FD29C; --okSoft:#12301F; --okLine:#2C6446;
+  --bad:#FF8D86; --badSoft:#3C1815; --badLine:#7E3029;
+  --focus:#86CDE2; --onAccent:#06222B; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--ground); color: var(--ink); font: 13px/1.45 var(--font); display: flex; flex-direction: column; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mono { font-family: var(--mono); }
+
+/* window chrome */
+.menubar { display: flex; align-items: center; gap: 4px; padding: 0 8px; height: 34px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.menubar .m { padding: 4px 8px; color: var(--ink2); }
+.menubar .spacer { flex: 1; }
+.seg { display: inline-flex; border: 1px solid var(--line2); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 3px 12px; min-height: 26px; cursor: pointer; color: var(--ink2); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--onAccent); }
+
+.body { flex: 1; display: grid; grid-template-columns: 290px 1fr; min-height: 0; }
+@media (max-width: 760px) { .body { grid-template-columns: 1fr; } .side { max-height: 40vh; } }
+
+/* setups list */
+.side { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+.side-head { display: flex; align-items: center; gap: 8px; padding: 14px 14px 10px; }
+.side-head h2 { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink3); margin: 0; flex: 1; }
+.list { overflow: auto; padding: 0 8px 12px; flex: 1; }
+.setup { display: block; width: 100%; text-align: left; border: 1px solid transparent; background: transparent; border-radius: 8px; padding: 8px 10px; cursor: pointer; margin-bottom: 4px; }
+.setup:hover { background: var(--hover); }
+.setup[aria-current="true"] { background: var(--accentSoft); border-color: var(--accentLine); }
+.setup .t { font-weight: 600; display: flex; gap: 6px; align-items: center; }
+.setup .tree { margin: 4px 0 0 4px; padding-left: 12px; border-left: 2px solid var(--accentLine); font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+.setup .tree div { display: flex; gap: 6px; align-items: center; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--line2); flex: none; }
+.dot.ok { background: var(--ok); } .dot.wait { background: transparent; border: 2px solid var(--amber); }
+.empty { color: var(--ink3); padding: 24px 12px; text-align: center; }
+.side-foot { border-top: 1px solid var(--line); padding: 10px 14px; display: flex; gap: 8px; }
+
+/* buttons */
+.btn { border: 1px solid var(--line2); background: var(--panel); border-radius: 6px; padding: 5px 14px; min-height: 30px; cursor: pointer; }
+.btn:hover { background: var(--hover); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--onAccent); font-weight: 500; }
+.btn.primary:hover { background: var(--accentStrong); }
+.btn.primary:disabled { opacity: .45; cursor: not-allowed; }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--accent); }
+.btn.quiet:hover { background: var(--accentSoft); }
+.btn.danger { color: var(--bad); border-color: var(--badLine); }
+.btn.danger:hover { background: var(--badSoft); }
+.btn.icon { padding: 0; width: 30px; display: inline-grid; place-items: center; font-size: 16px; }
+
+/* main */
+.main { overflow: auto; min-width: 0; }
+.page { max-width: 880px; margin: 0 auto; padding: 24px 28px 40px; }
+.page-head { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; position: sticky; top: 0; background: var(--ground); padding: 12px 0; z-index: 2; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.page-head .titles { flex: 1; min-width: 240px; }
+h1 { font-size: 20px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--ink2); margin: 4px 0 0; max-width: 65ch; }
+.back { margin-bottom: 4px; }
+
+/* goals */
+.group { margin-top: 22px; }
+.group h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink3); margin: 0 0 8px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.tile { display: grid; grid-template-columns: 40px 1fr; gap: 4px 12px; text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 12px 14px; cursor: pointer; min-height: 76px; }
+.tile:hover { border-color: var(--accentLine); background: var(--accentSoft); }
+.tile svg { grid-row: span 2; width: 40px; height: 40px; color: var(--accent); }
+.tile b { font-weight: 600; font-size: 14px; }
+.tile span { color: var(--ink2); font-size: 12px; }
+
+/* form */
+.diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; grid-template-columns: 1fr 120px 1fr; gap: 0; align-items: stretch; }
+.diagram.single { grid-template-columns: 1fr; }
+@media (max-width: 560px) { .diagram { grid-template-columns: 1fr 60px 1fr; } }
+.col { display: flex; flex-direction: column; gap: 8px; justify-content: center; min-width: 0; }
+.col h4 { margin: 0 0 2px; font-size: 12px; font-weight: 600; color: var(--ink3); }
+.wire { position: relative; }
+.wire svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.slot { border: 1px solid var(--line2); border-radius: 8px; padding: 8px; background: var(--sunken); display: grid; gap: 6px; }
+.slot.device { border-color: var(--accentLine); }
+.slot .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.slot select, .slot input, .field select, .field input { border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); padding: 4px 6px; min-height: 28px; min-width: 0; }
+.slot select.who { flex: 1; }
+.slot .portname { font-family: var(--mono); width: 92px; }
+.slot input.label { flex: 1; }
+.slot .hint { font-size: 12px; color: var(--ink3); }
+.adder { display: flex; gap: 8px; align-items: center; color: var(--ink3); font-size: 12px; flex-wrap: wrap; }
+.adder .btn { flex: none; white-space: nowrap; }
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+.field label { display: block; font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+.field select, .field input { width: 100%; }
+.result { margin-top: 16px; border-left: 3px solid var(--accent); background: var(--accentSoft); padding: 10px 14px; border-radius: 0 8px 8px 0; color: var(--ink); max-width: 75ch; }
+.note { margin-top: 10px; border: 1px solid var(--amberLine); background: var(--amberSoft); padding: 8px 12px; border-radius: 8px; font-size: 12px; }
+
+/* setup page */
+.ends { display: grid; gap: 10px; }
+.end { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.end .what { color: var(--ink2); font-size: 12px; }
+.end .name { font-family: var(--mono); font-size: 26px; font-weight: 500; line-height: 1.2; }
+.end .acts { display: flex; gap: 8px; align-items: center; grid-row: span 2; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: 12px; border: 1px solid var(--line2); white-space: nowrap; }
+.chip.ok { background: var(--okSoft); border-color: var(--okLine); color: var(--ok); }
+.chip.wait { background: transparent; border-color: var(--amberLine); color: var(--amber); }
+.chip.studio { background: var(--accentSoft); border-color: var(--accentLine); color: var(--accent); }
+.term { grid-column: 1 / -1; margin-top: 6px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.term pre { margin: 0; background: var(--sunken); padding: 10px; height: 150px; overflow: auto; font: 12px/1.5 var(--mono); }
+.term pre .tx { color: var(--accent); }
+.term form { display: flex; gap: 6px; padding: 6px; border-top: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
+.term input[type=text] { flex: 1; min-width: 120px; border: 1px solid var(--line2); border-radius: 6px; padding: 4px 8px; font-family: var(--mono); background: var(--panel); }
+.term label { display: inline-flex; gap: 4px; align-items: center; font-size: 12px; color: var(--ink2); }
+.toolbar-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+
+/* dialog */
+.scrim { position: fixed; inset: 0; background: rgb(0 0 0 / .35); display: none; place-items: center; padding: 16px; z-index: 10; }
+.scrim.open { display: grid; }
+.dialog { background: var(--panel); border-radius: 12px; max-width: 520px; width: 100%; box-shadow: 0 12px 40px rgb(0 0 0 / .25); overflow: hidden; }
+.dialog .in { padding: 18px 20px; }
+.dialog h2 { font-size: 16px; margin: 0 0 8px; }
+.dialog .foot { background: var(--sunken); border-top: 1px solid var(--line); padding: 10px 20px; display: flex; justify-content: flex-end; gap: 8px; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #18212D; color: #F2F4F7; padding: 8px 16px; border-radius: 8px; display: none; z-index: 20; }
+
+.advanced { padding: 40px; color: var(--ink2); }
+.advanced .canvas { margin-top: 16px; border: 1px dashed var(--line2); border-radius: 10px; min-height: 260px; display: grid; place-items: center; background: var(--panel); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.toast button { margin-left: 12px; background: transparent; border: 0; color: #9ADBEF; font-weight: 600; cursor: pointer; }
+.strip { display: flex; gap: 10px; align-items: center; border: 1px solid var(--okLine); background: var(--okSoft); border-radius: 8px; padding: 8px 12px; margin: 14px 0 4px; flex-wrap: wrap; }
+.strip .chip { background: var(--panel); }
+.choices { display: grid; gap: 8px; }
+.choice { display: grid; grid-template-columns: 22px 1fr; gap: 2px 8px; border: 1px solid var(--line2); border-radius: 8px; padding: 8px 10px; background: var(--panel); cursor: pointer; }
+.choice:has(input:checked) { border-color: var(--accent); background: var(--accentSoft); }
+.choice input { margin: 3px 0 0; }
+.choice b { font-weight: 600; }
+.choice span { grid-column: 2; font-size: 12px; color: var(--ink2); }
+.segsmall { display: inline-flex; border: 1px solid var(--line2); border-radius: 6px; overflow: hidden; }
+.segsmall button { border: 0; background: var(--panel); padding: 2px 10px; min-height: 26px; cursor: pointer; font-size: 12px; }
+.segsmall button[aria-pressed="true"] { background: var(--accentSoft); color: var(--accentStrong); font-weight: 600; }
+.extras { margin-top: 16px; display: grid; gap: 8px; max-width: 75ch; }
+.extras h3, .section h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink3); margin: 0; }
+.section { margin-top: 20px; display: grid; gap: 10px; }
+.steps { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 12px 34px; margin: 0; display: grid; gap: 6px; }
+.warn { grid-column: 1 / -1; border: 1px solid var(--amberLine); background: var(--amberSoft); border-radius: 8px; padding: 6px 10px; font-size: 12px; margin-top: 4px; }
+.info { grid-column: 1 / -1; font-size: 12px; color: var(--ink2); margin-top: 2px; }
+.link { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-size: inherit; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.panel .term { margin-top: 8px; }
+.change { border: 1px solid var(--accentLine); background: var(--accentSoft); border-radius: 8px; padding: 8px 12px; margin-top: 12px; display: grid; gap: 2px; }
+.more { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+details.notes { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 12px; color: var(--ink2); }
+details.notes summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.notes li { margin: 4px 0; max-width: 80ch; }
+.custom-tag { font-size: 11px; border: 1px solid var(--line2); border-radius: 4px; padding: 0 5px; color: var(--ink3); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="menubar" role="menubar" aria-label="Menu bar (mock)">
+  <span class="m">File</span><span class="m">Edit</span><span class="m">View</span><span class="m">Help</span>
+  <span class="spacer"></span>
+  <div class="seg" role="group" aria-label="Mode">
+    <button id="modeSimple" aria-pressed="true">Simple</button>
+    <button id="modeAdvanced" aria-pressed="false">Advanced</button>
+  </div>
+</div>
+
+<div class="body" id="simpleBody">
+  <aside class="side" aria-label="Your setups">
+    <div class="side-head">
+      <h2>Your setups</h2>
+      <button class="btn icon" id="newBtn" title="Set up something new" aria-label="Set up something new">+</button>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="side-foot">
+      <button class="btn" id="saveBtn">Save…</button>
+      <button class="btn" id="openBtn">Open…</button>
+      <span style="flex:1"></span>
+      <button class="btn danger" id="removeAll">Remove all</button>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<div class="advanced" id="advancedBody" hidden>
+  <h1>Advanced mode</h1>
+  <p class="sub">The canvas, with the Ports, Inspector, Send and Monitor panels, as today. Every setup made in Simple mode is drawn here as boxes and lines. Anything drawn here appears in Simple mode as a setup.</p>
+  <div class="canvas" id="advCanvas">The canvas</div>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="dialog">
+    <div class="in"><h2 id="dlgTitle"></h2><p id="dlgBody" class="sub"></p></div>
+    <div class="foot"><button class="btn" id="dlgCancel">Cancel</button><button class="btn danger" id="dlgOk"></button></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"><span id="toastText"></span><button id="toastAct" hidden></button></div>
+
+<script>
+"use strict";
+// ---- sample machine -------------------------------------------------------
+const DEVICES = [
+  { port: "COM3", desc: "USB Serial Device (FTDI)", free: true },
+  { port: "COM4", desc: "Prolific USB-to-Serial", free: true },
+  { port: "COM1", desc: "Communications Port. Another program is using it.", free: false },
+];
+const usedCom = new Set([1, 2, 3, 4]); // COM1 and COM2 are left for old built-in ports; COM3 and COM4 are devices
+const claimed = new Set();            // devices already in a setup
+function freeComs(n, extra) {
+  const out = []; for (let k = 5; out.length < n; k++) if (!usedCom.has(k) && !(extra && extra.has(k))) out.push("COM" + k);
+  return out;
+}
+let pendingComs = new Set();
+function takeCom() { const p = freeComs(1, pendingComs)[0]; pendingComs.add(+p.slice(3)); return p; }
+
+const ICON = {
+  port: '<rect x="3" y="12" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 18h6M8 22h6" stroke="currentColor" stroke-width="2"/><path d="M19 20h8" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/><circle cx="32" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  pair: '<rect x="2" y="13" width="12" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="26" y="13" width="12" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 17h12M14 23h12" stroke="currentColor" stroke-width="2"/>',
+  attach: '<rect x="2" y="13" width="14" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="26" y="13" width="12" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 20h10" stroke="currentColor" stroke-width="2"/><path d="M6 20h6" stroke="currentColor" stroke-width="2"/>',
+  share: '<rect x="2" y="15" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 20h8M20 8v24M20 8h8M20 20h8M20 32h8" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="32" cy="8" r="3" fill="currentColor"/><circle cx="32" cy="20" r="3" fill="currentColor"/><circle cx="32" cy="32" r="3" fill="currentColor"/>',
+  talk: '<rect x="3" y="7" width="34" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 15l5 4-5 4M17 25h9" stroke="currentColor" stroke-width="2" fill="none"/>',
+  network: '<circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 20h28M20 6c-6 8-6 20 0 28M20 6c6 8 6 20 0 28" stroke="currentColor" stroke-width="2" fill="none"/>',
+  bus: '<path d="M4 20h32" stroke="currentColor" stroke-width="3"/><path d="M10 20v-10M20 20v10M30 20v-10" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="8" r="3" fill="currentColor"/><circle cx="20" cy="32" r="3" fill="currentColor"/><circle cx="30" cy="8" r="3" fill="currentColor"/>',
+  combine: '<circle cx="8" cy="8" r="3" fill="currentColor"/><circle cx="8" cy="20" r="3" fill="currentColor"/><circle cx="8" cy="32" r="3" fill="currentColor"/><path d="M11 8h9v24h-9M11 20h17" stroke="currentColor" stroke-width="2" fill="none"/><rect x="28" y="15" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>',
+  turns: '<circle cx="8" cy="10" r="3" fill="currentColor"/><circle cx="8" cy="30" r="3" fill="currentColor"/><path d="M11 10l12 10M11 30h6" stroke="currentColor" stroke-width="2" fill="none"/><path d="M23 20h5" stroke="currentColor" stroke-width="2"/><rect x="28" y="15" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>',
+  watch: '<path d="M3 20s6-10 17-10 17 10 17 10-6 10-17 10S3 20 3 20z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="currentColor"/>',
+  check: '<circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 20l6 6 10-12" stroke="currentColor" stroke-width="2.5" fill="none"/>',
+};
+
+// role "program": a program on this PC opens a new port.  role "device": a
+// serial device, plugged in or on the network.  role "answer": what is on the
+// other end of a lone program port.  role "existing": a port already set up.
+const GOALS = [
+  { id: "port", group: "My program needs a serial port", title: "Give my program a serial port",
+    blurb: "For a program that needs a COM port when there is no device, or before the device arrives.",
+    left: { label: "Your program", role: "program", min: 1, max: 1 },
+    right: { label: "On the other end", role: "answer", min: 1, max: 1 }, arrows: "both" },
+  { id: "pair", group: "My program needs a serial port", title: "Connect two programs to each other",
+    blurb: "Like a null-modem cable between two programs on this PC. What one sends, the other receives.",
+    left: { label: "First program", role: "program", min: 1, max: 1 },
+    right: { label: "Second program", role: "program", min: 1, max: 1 }, arrows: "both" },
+
+  { id: "attach", group: "I have a serial device", title: "Use my device through a new port",
+    blurb: "Your program opens a new port instead of the device. Then you can watch, share or test without changing the program.",
+    left: { label: "Device", role: "device", min: 1, max: 1 },
+    right: { label: "Program", role: "program", min: 1, max: 1 }, arrows: "both", extras: ["type", "data"] },
+  { id: "share", group: "I have a serial device", title: "Share my device with several programs",
+    blurb: "A device can normally be open in one program at a time. Here each program gets its own port, and all of them talk to the device.",
+    left: { label: "Device", role: "device", min: 1, max: 1 },
+    right: { label: "Programs", role: "program", min: 2, max: 32 }, arrows: "both", adds: true, extras: ["type", "data"] },
+  { id: "talk", group: "I have a serial device", title: "Try my device from this window",
+    blurb: "Type to the device and read its replies here, without another program. Good for a first check that it works.",
+    left: { label: "Device", role: "device", min: 1, max: 1 },
+    right: null, arrows: "none", extras: ["data"] },
+  { id: "network", group: "I have a serial device", title: "Let other computers use my device",
+    blurb: "Other computers connect to this PC over the network and talk to the device.",
+    left: { label: "Device", role: "device", min: 1, max: 1, plugged: true },
+    right: { label: "Other computers connect to", role: "listen", min: 1, max: 1 }, arrows: "both", extras: ["data"] },
+
+  { id: "bus", group: "Several programs or devices at once", title: "Put several on one line",
+    blurb: "Like an RS-485 line. Everyone hears what the others send, and nobody hears themself.",
+    left: { label: "On the line", role: "program", min: 2, max: 64, devices: true },
+    right: null, arrows: "bus", adds: true, extras: ["data"] },
+  { id: "combine", group: "Several programs or devices at once", title: "Send several into one",
+    blurb: "Everything the senders write arrives at one receiver, in the order it arrives. Nothing goes back.",
+    left: { label: "Senders", role: "program", min: 2, max: 32, devices: true },
+    right: { label: "Receiver", role: "program", min: 1, max: 1, devices: true }, arrows: "right", adds: true, extras: ["data"] },
+  { id: "turns", group: "Several programs or devices at once", title: "Let programs take turns sending to a device",
+    blurb: "Several programs send to one device, but only one at a time, so their bytes never mix. You choose which. The device's replies do not go back to the programs.",
+    left: { label: "Programs", role: "program", min: 2, max: 32 },
+    right: { label: "Device", role: "device", min: 1, max: 1 }, arrows: "turns", adds: true, extras: ["type", "data"] },
+
+  { id: "watch", group: "Look and check", title: "See the data on a port",
+    blurb: "See what goes in and out of a port you already set up. Read only, so nothing changes for the programs using it.",
+    left: { label: "Port", role: "existing", min: 1, max: 1 }, right: null, arrows: "none" },
+  { id: "check", group: "Look and check", title: "Check this PC is ready",
+    blurb: "Find out whether this PC can make ports that other programs can open, and what to do if not.", page: "check" },
+];
+
+const ANSWERS = {
+  me: ["I'll type to it from this window", "What your program sends shows here, and what you type goes to your program. Use it to see that your program sends what you expect."],
+  echo: ["Send everything straight back", "Whatever your program sends comes back to it at once. A quick test that its sending and receiving both work."],
+};
+
+// ---- state ----------------------------------------------------------------
+const state = { setups: [], view: { name: "home" }, form: null };
+let uid = 1;
+
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "html") e.innerHTML = v;
+    else if (k === "checked" || k === "disabled" || k === "selected" || k === "value") e[k] = v;
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) if (kid != null && kid !== false) e.append(kid.nodeType ? kid : document.createTextNode(kid));
+  return e;
+}
+function svgIcon(id) { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("viewBox", "0 0 40 40"); s.setAttribute("aria-hidden", "true"); s.innerHTML = ICON[id]; return s; }
+function toast(text, action, fn) {
+  const t = document.getElementById("toast"), a = document.getElementById("toastAct");
+  document.getElementById("toastText").textContent = text;
+  a.hidden = !action; a.textContent = action || ""; a.onclick = () => { t.style.display = "none"; fn && fn(); };
+  t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", action ? 6000 : 2600);
+}
+function goal(id) { return GOALS.find(g => g.id === id); }
+function firstFreeDevice() { return DEVICES.find(d => d.free && !claimed.has(d.port))?.port || "COM3"; }
+
+function newSlot(kind) {
+  const s = { id: uid++, kind, label: "" };
+  if (kind === "program") s.port = takeCom();
+  if (kind === "device") s.port = firstFreeDevice();
+  if (kind === "netdev") { s.addr = "192.168.1.50"; s.tcp = "4001"; s.proto = "TCP"; }
+  if (kind === "listen") s.port = "4001";
+  return s;
+}
+function newGroup(spec) {
+  if (!spec) return null;
+  if (spec.role === "device") return [newSlot("device")];
+  if (spec.role === "answer") return [newSlot("me")];
+  if (spec.role === "listen") return [newSlot("listen")];
+  if (spec.role === "existing") return [{ id: uid++, kind: "existing", port: allPorts()[0] || "" }];
+  return Array.from({ length: spec.min }, () => newSlot("program"));
+}
+function allPorts() { return state.setups.flatMap(s => s.ends.filter(e => e.kind === "program" || e.kind === "device").map(e => e.port)); }
+function ends(f) { return f.left.concat(f.right || []); }
+
+// ---- naming ---------------------------------------------------------------
+function endName(e) {
+  if (e.kind === "program") return e.label ? `${e.port} (${e.label})` : e.port;
+  if (e.kind === "device") return e.port;
+  if (e.kind === "netdev") return `${e.addr}:${e.tcp}`;
+  if (e.kind === "listen") return "network port " + e.port;
+  if (e.kind === "me") return "this window";
+  if (e.kind === "echo") return "an echo";
+  if (e.kind === "later") return "nothing yet";
+  return e.port || "";
+}
+function listText(group) { const n = group.map(endName); return n.length < 2 ? n.join("") : n.slice(0, -1).join(", ") + " and " + n.at(-1); }
+function deviceOf(f) { return ends(f).find(e => e.kind === "device" || e.kind === "netdev"); }
+
+function titleFor(f) {
+  if (f.name) return f.name;
+  const L = f.left, R = f.right || [], d = deviceOf(f);
+  switch (f.goal) {
+    case "port": return `${L[0].label || "Program"} port ${L[0].port}`;
+    case "pair": return `${L[0].port} linked to ${R[0].port}`;
+    case "attach": return `${endName(d)} through ${R[0].port}`;
+    case "share": return `${endName(d)} shared with ${R.length} programs`;
+    case "talk": return `Trying ${endName(d)}`;
+    case "network": return `${endName(d)} on the network`;
+    case "bus": return `Line with ${L.length}`;
+    case "combine": return `${L.length} into ${endName(R[0])}`;
+    case "turns": return `${L.length} programs take turns with ${endName(R[0])}`;
+    case "watch": return `Data on ${L[0].port}`;
+  }
+}
+
+function resultText(f) {
+  const L = f.left, R = f.right || [], d = deviceOf(f);
+  const progs = ends(f).filter(e => e.kind === "program");
+  const open = progs.length ? ` Your program${progs.length > 1 ? "s open" : " opens"} <b>${progs.map(p => p.port).join(", ")}</b>${d && d.kind === "device" ? `, not ${d.port}` : ""}.` : "";
+  switch (f.goal) {
+    case "port": {
+      const a = R[0].kind;
+      return `Studio makes <b>${L[0].port}</b> for your program to open. ` + (a === "me" ? "What it sends shows in this window, and what you type here goes to it." : a === "echo" ? "Whatever it sends comes straight back to it." : "Nothing is on the other end yet.");
+    }
+    case "pair": return `What <b>${L[0].port}</b> sends arrives at <b>${R[0].port}</b>, and the other way round. Open one in each program.`;
+    case "attach": return `Studio opens <b>${endName(d)}</b> and passes its data to and from <b>${R[0].port}</b>.` + open;
+    case "share": return `Everything <b>${endName(d)}</b> sends goes to <b>${listText(R)}</b>. Whatever any of them sends goes to the device.` + open;
+    case "talk": return `Studio opens <b>${endName(d)}</b>. On the next page, type to it and read its replies.`;
+    case "network": return `Other computers connect to this PC on network port <b>${R[0].port}</b> and talk to <b>${endName(d)}</b>. Data goes both ways.`;
+    case "bus": return `<b>${listText(L)}</b> share one line. Each hears what the others send, and none hears itself.` + open;
+    case "combine": return `Everything <b>${listText(L)}</b> send arrives at <b>${endName(R[0])}</b>, in the order it arrives. Nothing goes back to them.` + open;
+    case "turns": return `<b>${listText(L)}</b> can all send to <b>${endName(R[0])}</b>, but only one at a time. You choose which on the next page. What the device sends back does not reach them.` + open;
+    case "watch": return `You see what goes in and out of <b>${L[0].port || "the port"}</b>. Nothing changes for the programs using it.`;
+  }
+  return "";
+}
+
+// ---- rendering ------------------------------------------------------------
+function render() {
+  renderList();
+  const main = document.getElementById("main");
+  const v = state.view;
+  main.replaceChildren(v.name === "form" ? renderForm() : v.name === "setup" ? renderSetup(state.setups.find(s => s.id === v.id)) : v.name === "check" ? renderCheck() : renderHome());
+  document.getElementById("advCanvas").textContent = state.setups.length ? "The canvas, drawing: " + state.setups.map(s => s.title).join("; ") + "." : "The canvas. It is empty until something is set up.";
+}
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.replaceChildren();
+  if (!state.setups.length) list.append(el("p", { class: "empty" }, "Nothing set up yet. Choose what you want to do on the right."));
+  for (const s of state.setups) {
+    const tree = el("div", { class: "tree" }, s.ends.filter(e => !["later"].includes(e.kind)).map(e => el("div", {},
+      el("span", { class: "dot " + (e.kind === "program" ? (e.connected ? "ok" : "wait") : "") }),
+      e.kind === "program" ? endName(e) : e.kind === "me" ? "you, in this window" : e.kind === "device" ? e.port + " device" : endName(e))));
+    list.append(el("button", { class: "setup", "aria-current": state.view.name === "setup" && state.view.id === s.id ? "true" : "false",
+      title: "Delete removes this setup",
+      onclick: () => { state.view = { name: "setup", id: s.id }; render(); },
+      onkeydown: ev => { if (ev.key === "Delete") askRemove(s); } },
+      el("div", { class: "t" }, s.title, s.goal === "custom" ? el("span", { class: "custom-tag" }, "Advanced") : null), tree));
+  }
+  document.getElementById("removeAll").disabled = !state.setups.length;
+}
+
+function renderHome() {
+  const page = el("div", { class: "page" },
+    el("h1", {}, "What do you want to do?"),
+    el("p", { class: "sub" }, "Choose a job. Studio sets it up and tells you which port to open in your program. Everything you set up is listed on the left, where you can change or remove it."),
+    el("div", { class: "strip", role: "status" }, el("span", { class: "chip ok" }, "✓ Ready"),
+      el("span", {}, "This PC can make ports that other programs can open."),
+      el("button", { class: "link", onclick: () => { state.view = { name: "check" }; render(); } }, "Details")));
+  for (const gname of [...new Set(GOALS.map(g => g.group))]) {
+    const tiles = el("div", { class: "tiles" });
+    for (const g of GOALS.filter(x => x.group === gname))
+      tiles.append(el("button", { class: "tile", onclick: () => g.page ? (state.view = { name: g.page }, render()) : openGoal(g.id) }, svgIcon(g.id), el("b", {}, g.title), el("span", {}, g.blurb)));
+    page.append(el("section", { class: "group" }, el("h3", {}, gname), tiles));
+  }
+  page.append(el("div", { class: "more" },
+    el("button", { class: "btn", onclick: () => toast("Opens a saved setup file (.json).") }, "Open a saved setup…"),
+    el("button", { class: "btn", onclick: () => toast("Lists ready-made examples, such as a null-modem cable or a GPS that sends test sentences.") }, "Start from an example…")));
+  page.append(el("details", { class: "notes" }, el("summary", {}, "About this mock-up"),
+    el("ul", {},
+      el("li", {}, "Simple mode asks about real things only: your devices and your programs. Typing to a device and seeing the data are options with a sentence on what they do, not parts to wire up."),
+      el("li", {}, "Every job is one form with a live picture and a sentence saying what will happen. Create is at the top and stays on screen."),
+      el("li", {}, "Each setup then has its own page: which port to open in which program, whether the program has opened it, what to do if nothing arrives, and Change and Remove."),
+      el("li", {}, "Advanced mode is the canvas. Both modes show the same setups. One drawn in Advanced mode that no job describes is listed here as a setup marked Advanced, and is changed there."),
+      el("li", {}, "The program name is a label only. Studio does not start or look for programs."),
+      el("li", {}, "Needs the engine owner's agreement: a setup name stored in the saved file (today only port names are)."))));
+  return page;
+}
+
+function renderCheck() {
+  const row = (ok, t, d) => el("div", { class: "end" }, el("div", {}, el("b", {}, t), el("div", { class: "what" }, d)), el("div", { class: "acts" }, el("span", { class: "chip " + (ok ? "ok" : "wait") }, ok ? "✓ Ready" : "○ Optional")));
+  return el("div", { class: "page" },
+    el("div", { class: "page-head" }, el("div", { class: "titles" },
+      el("button", { class: "btn quiet back", onclick: () => { state.view = { name: "home" }; render(); } }, "← All jobs"),
+      el("h1", {}, "Is this PC ready?"), el("p", { class: "sub" }, "What Studio found on this PC. Nothing here is changed without asking you."))),
+    el("div", { class: "ends" },
+      row(true, "Ports for other programs", "Studio's port driver is installed, so programs such as PuTTY can open the ports it makes."),
+      row(true, "Serial devices", "2 devices found: COM3 and COM4. COM1 is in use by another program."),
+      row(false, "Network", "Only needed to let other computers use a device. Windows may ask to allow Studio through the firewall the first time.")));
+}
+
+function openGoal(id, existing) {
+  const g = goal(id);
+  pendingComs = new Set();
+  if (existing) {
+    const copy = grp => grp ? grp.map(s => ({ ...s })) : null;
+    state.form = { goal: id, editing: existing.id, left: copy(existing.form.left), right: copy(existing.form.right), baud: existing.form.baud, name: existing.form.name || "", type: existing.form.type, data: existing.form.data, before: existing.ends.map(e => ({ ...e })) };
+  } else {
+    state.form = { goal: id, left: newGroup(g.left), right: newGroup(g.right), baud: "115200", name: "", type: false, data: id === "watch" };
+  }
+  state.view = { name: "form" };
+  render();
+}
+
+function deviceEditor(slot, spec, group) {
+  const box = el("div", { class: "slot device" });
+  const switchTo = kind => { const n = newSlot(kind); Object.assign(slot, n, { id: slot.id, label: "" }); delete slot.port; if (kind === "device") slot.port = n.port; render(); };
+  if (!spec.plugged)
+    box.append(el("div", { class: "segsmall", role: "group", "aria-label": "Where is the device" },
+      el("button", { "aria-pressed": String(slot.kind === "device"), onclick: () => switchTo("device") }, "Plugged into this PC"),
+      el("button", { "aria-pressed": String(slot.kind === "netdev"), onclick: () => switchTo("netdev") }, "On the network")));
+  if (slot.kind === "device") {
+    box.append(el("div", { class: "row" },
+      el("select", { "aria-label": "Device", style: "flex:1", onchange: ev => { slot.port = ev.target.value; render(); } },
+        DEVICES.map(d => {
+          const taken = claimed.has(d.port) && !(state.form.before || []).some(b => b.port === d.port);
+          return el("option", { value: d.port, disabled: !d.free || taken, selected: d.port === slot.port }, `${d.port}  ${taken ? "Already in one of your setups" : d.desc}`);
+        })),
+      el("button", { class: "btn", onclick: () => toast("Looked for devices again. Found COM3 and COM4.") }, "Refresh")));
+    box.append(el("div", { class: "hint" }, "Not listed? Plug it in, then choose Refresh."));
+  } else {
+    box.append(el("div", { class: "row" },
+      el("input", { "aria-label": "Device address", value: slot.addr, style: "flex:1", oninput: ev => { slot.addr = ev.target.value; updateResult(); } }),
+      el("span", {}, ":"),
+      el("input", { "aria-label": "Network port", class: "portname", style: "width:64px", value: slot.tcp, oninput: ev => { slot.tcp = ev.target.value; updateResult(); } }),
+      el("select", { "aria-label": "How it talks", onchange: ev => { slot.proto = ev.target.value; } }, ["TCP", "RFC 2217"].map(p => el("option", { selected: p === slot.proto }, p)))));
+    box.append(el("div", { class: "hint" }, "For a serial server box, such as a Moxa or Lantronix. Its manual gives the address and port. Choose RFC 2217 if the box supports it, so programs can change the baud rate."));
+  }
+  if (group.length > (spec.min || 1)) box.append(el("button", { class: "btn", onclick: () => { group.splice(group.indexOf(slot), 1); render(); } }, "Remove"));
+  return box;
+}
+
+function programEditor(slot, spec, group) {
+  if (slot.kind === "device" || slot.kind === "netdev") return deviceEditor(slot, spec, group);
+  const box = el("div", { class: "slot" });
+  const num = +slot.port.slice(3);
+  const choices = [slot.port, ...freeComs(4, new Set([...pendingComs].filter(n => n !== num)))].filter((p, i, a) => a.indexOf(p) === i);
+  box.append(el("div", { class: "row" },
+    el("select", { class: "portname", "aria-label": "Port name", onchange: ev => { pendingComs.delete(num); slot.port = ev.target.value; pendingComs.add(+slot.port.slice(3)); render(); } },
+      choices.map(p => el("option", { selected: p === slot.port }, p))),
+    el("input", { class: "label", placeholder: "Program, e.g. PuTTY (optional)", value: slot.label, "aria-label": "Which program, optional",
+      list: "progs", oninput: ev => { slot.label = ev.target.value; updateResult(); } }),
+    group.length > spec.min ? el("button", { class: "btn icon", "aria-label": "Remove " + slot.port, title: "Remove", onclick: () => { group.splice(group.indexOf(slot), 1); render(); } }, "−") : null));
+  if (num > 9) box.append(el("div", { class: "hint" }, "Some older programs only list COM1 to COM9."));
+  return box;
+}
+
+function answerEditor(slot) {
+  const box = el("div", { class: "choices", role: "radiogroup", "aria-label": "On the other end" });
+  for (const [k, [t, d]] of Object.entries(ANSWERS))
+    box.append(el("label", { class: "choice" },
+      el("input", { type: "radio", name: "answer", checked: slot.kind === k, onchange: () => { slot.kind = k; render(); } }),
+      el("b", {}, t), el("span", {}, d)));
+  return box;
+}
+
+function column(spec, group) {
+  const col = el("div", { class: "col" }, el("h4", {}, spec.label));
+  if (spec.role === "answer") { col.append(answerEditor(group[0])); return col; }
+  if (spec.role === "listen") {
+    col.append(el("div", { class: "slot" }, el("div", { class: "row" }, el("label", { for: "listen" }, "Network port"),
+      el("input", { id: "listen", class: "portname", value: group[0].port, oninput: ev => { group[0].port = ev.target.value; updateResult(); } })),
+      el("div", { class: "hint" }, "Other computers connect to this PC's address on this port. 4001 is common for serial over the network.")));
+    return col;
+  }
+  if (spec.role === "existing") {
+    const ports = allPorts();
+    col.append(el("div", { class: "slot" }, el("select", { "aria-label": "Port", onchange: ev => { group[0].port = ev.target.value; render(); } },
+      ports.length ? ports.map(p => el("option", { value: p, selected: p === group[0].port }, p)) : el("option", {}, "Nothing set up yet"))));
+    return col;
+  }
+  for (const s of group) col.append(spec.role === "device" ? deviceEditor(s, spec, group) : programEditor(s, spec, group));
+  if (spec.max > 1) {
+    col.append(el("div", { class: "adder" },
+      el("button", { class: "btn", disabled: group.length >= spec.max, onclick: () => { group.push(newSlot("program")); render(); } }, "+ Add a program"),
+      spec.devices ? el("button", { class: "btn", disabled: group.length >= spec.max, onclick: () => { group.push(newSlot("device")); render(); } }, "+ Add a device") : null,
+      `Up to ${spec.max}. You can add more later.`));
+  }
+  return col;
+}
+
+function wires(g, nl, nr) {
+  const wrap = el("div", { class: "wire", "aria-hidden": "true" });
+  const W = 120, H = 100, ly = i => (i + .5) / nl * H, ry = i => (i + .5) / nr * H;
+  let p = "";
+  for (let i = 0; i < nl; i++) for (let j = 0; j < nr; j++) {
+    if (nl > 1 && nr > 1) continue;
+    const dash = g.arrows === "turns" && i > 0 ? 'stroke-dasharray="4 4" opacity=".6"' : "";
+    p += `<path d="M4 ${ly(i)} C ${W / 2} ${ly(i)}, ${W / 2} ${ry(j)}, ${W - 4} ${ry(j)}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke" ${dash} marker-end="url(#ah)" ${g.arrows === "both" ? 'marker-start="url(#at)"' : ""}/>`;
+  }
+  wrap.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+    <marker id="at" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M10 0L0 5L10 10z" fill="var(--accent)"/></marker></defs>${p}</svg>`;
+  return wrap;
+}
+function updateResult() { const r = document.getElementById("result"); if (r) r.innerHTML = resultText(state.form); }
+
+function changeSummary(f) {
+  const now = ends(f), before = f.before;
+  const kept = [], added = [], gone = [];
+  for (const e of now) if (e.kind === "program") (before.some(b => b.id === e.id && b.port === e.port) ? kept : added).push(e);
+  for (const b of before) if (b.kind === "program" && !now.some(e => e.id === b.id && e.port === b.port)) gone.push(b);
+  const box = el("div", { class: "change", role: "status" }, el("b", {}, "What Apply changes"));
+  if (kept.length) box.append(el("div", {}, `${listText(kept)} stay${kept.length > 1 ? "" : "s"} open. Programs using ${kept.length > 1 ? "them" : "it"} are not interrupted.`));
+  if (added.length) box.append(el("div", {}, `New: ${listText(added)}.`));
+  if (gone.length) box.append(el("div", {}, `Closes: ${listText(gone)}. A program using ${gone.length > 1 ? "one of them" : "it"} loses it.`));
+  if (!added.length && !gone.length) box.append(el("div", {}, "No ports open or close."));
+  return box;
+}
+
+function renderForm() {
+  const f = state.form, g = goal(f.goal), editing = f.editing != null;
+  const leave = () => { pendingComs = new Set(); state.view = editing ? { name: "setup", id: f.editing } : { name: "home" }; render(); };
+  const createBtn = el("button", { class: "btn primary", onclick: create }, editing ? "Apply" : "Create");
+  if (f.goal === "watch" && !allPorts().length) createBtn.disabled = true;
+  const page = el("div", { class: "page" });
+  page.append(el("div", { class: "page-head" },
+    el("div", { class: "titles" },
+      el("button", { class: "btn quiet back", onclick: leave }, editing ? "← Back to the setup" : "← All jobs"),
+      el("h1", {}, editing ? "Change " + titleFor(f) : g.title), el("p", { class: "sub" }, g.blurb)),
+    el("div", { style: "display:flex;gap:8px;align-self:center" }, el("button", { class: "btn", onclick: leave }, "Cancel"), createBtn)));
+
+  const dia = el("div", { class: "diagram" + (g.right ? "" : " single") });
+  dia.append(column(g.left, f.left));
+  if (g.right) { dia.append(wires(g, f.left.length, f.right.length)); dia.append(column(g.right, f.right)); }
+  page.append(dia);
+
+  const fields = el("div", { class: "fields" });
+  if (ends(f).some(e => e.kind === "device")) {
+    fields.append(el("div", { class: "field" }, el("label", { for: "baud" }, "Device speed (baud rate)"),
+      el("select", { id: "baud", onchange: ev => { f.baud = ev.target.value; } }, ["9600", "19200", "38400", "57600", "115200"].map(b => el("option", { selected: b === f.baud }, b))),
+      el("div", { class: "hint", style: "font-size:12px;color:var(--ink3);margin-top:4px" }, "The device's manual gives it. If text looks garbled later, this is usually why.")));
+    fields.append(el("div", { class: "field" }, el("label", {}, "Other device settings"),
+      el("button", { class: "btn", style: "width:100%;text-align:left" }, "8 data bits, no parity, 1 stop bit. Change…")));
+  }
+  if (f.goal !== "watch")
+    fields.append(el("div", { class: "field" }, el("label", { for: "sname" }, "Name (optional)"),
+      el("input", { id: "sname", value: f.name, placeholder: titleFor({ ...f, name: "" }), oninput: ev => { f.name = ev.target.value; } })));
+  if (fields.children.length) page.append(fields);
+
+  if (g.extras) {
+    const ex = el("div", { class: "extras" }, el("h3", {}, "Also"));
+    const d = deviceOf(f);
+    if (g.extras.includes("type") && d)
+      ex.append(el("label", { class: "choice" }, el("input", { type: "checkbox", checked: f.type, onchange: ev => { f.type = ev.target.checked; } }),
+        el("b", {}, `Let me type to ${endName(d)} from this window`),
+        el("span", {}, "Handy for checking the device works before your own program is ready. What you type goes to the device, and its replies show here and in your programs.")));
+    if (g.extras.includes("data"))
+      ex.append(el("label", { class: "choice" }, el("input", { type: "checkbox", checked: f.data, onchange: ev => { f.data = ev.target.checked; } }),
+        el("b", {}, "Show me the data going through"),
+        el("span", {}, "A live list of what is sent each way, on the setup's page. It only looks, so it changes nothing. You can turn it on later too.")));
+    page.append(ex);
+  }
+
+  page.append(el("div", { class: "result", id: "result", html: resultText(f) }));
+  if (editing) page.append(changeSummary(f));
+  if (f.goal === "watch" && !allPorts().length) page.append(el("div", { class: "note" }, "Nothing is set up yet, so there is no port to look at. Set something up first."));
+  return page;
+}
+
+function create() {
+  const f = state.form;
+  for (const e of ends(f)) { if (e.kind === "program") usedCom.add(+e.port.slice(3)); if (e.kind === "device") claimed.add(e.port); }
+  pendingComs = new Set();
+  const snapshot = ends(f).map(e => ({ ...e }));
+  if (f.editing != null) {
+    const s = state.setups.find(x => x.id === f.editing);
+    for (const b of f.before) if (b.kind === "device" && !snapshot.some(e => e.port === b.port)) claimed.delete(b.port);
+    for (const e of snapshot) { const old = f.before.find(b => b.id === e.id); if (old) e.connected = old.connected; }
+    Object.assign(s, { form: f, ends: snapshot, title: titleFor(f) });
+    delete f.before; delete f.editing;
+    state.view = { name: "setup", id: s.id };
+    toast("Changed. Programs on ports that stayed were not interrupted.");
+  } else {
+    const s = { id: uid++, goal: f.goal, form: f, ends: snapshot, title: titleFor(f), log: [], owner: 0, showData: f.data };
+    state.setups.push(s);
+    state.view = { name: "setup", id: s.id };
+    toast("Done. " + s.title + ".");
+    setTimeout(() => { const e = s.ends.find(x => x.kind === "program"); if (e) { e.connected = true; render(); } }, 3000);
+  }
+  state.form = null;
+  render();
+}
+
+// ---- setup page -----------------------------------------------------------
+function renderSetup(s) {
+  if (!s) { state.view = { name: "home" }; return renderHome(); }
+  const g = goal(s.goal);
+  const progs = s.ends.filter(e => e.kind === "program");
+  const d = s.ends.find(e => e.kind === "device" || e.kind === "netdev");
+  const page = el("div", { class: "page" });
+  page.append(el("div", { class: "page-head" },
+    el("div", { class: "titles" }, el("h1", {}, s.title),
+      el("p", { class: "sub" }, s.goal === "custom" ? "Made in Advanced mode. You can use it here, and change it in Advanced mode." : g.blurb)),
+    el("div", { style: "display:flex;gap:8px;align-self:center;flex-wrap:wrap" },
+      s.goal === "custom" ? el("button", { class: "btn", onclick: () => setMode(true) }, "Change in Advanced mode") : el("button", { class: "btn", onclick: () => openGoal(s.goal, s) }, "Change…"),
+      el("button", { class: "btn danger", onclick: () => askRemove(s) }, "Remove setup"))));
+
+  if (progs.length) {
+    const sec = el("section", { class: "section" }, el("h3", {}, "What to do now"));
+    const ol = el("ol", { class: "steps" });
+    for (const p of progs) ol.append(el("li", {}, `In ${p.label || "your program"}, open `, el("b", { class: "mono" }, p.port), d && d.kind === "device" ? ` at ${s.form.baud} baud.` : "."));
+    if (d && d.kind === "device") ol.append(el("li", {}, "Do not open ", el("b", { class: "mono" }, d.port), " itself in your programs. Studio has it open."));
+    if (s.goal === "turns") ol.append(el("li", {}, "Choose below which program sends. The others only listen."));
+    sec.append(ol);
+    page.append(sec);
+  }
+
+  const portsSec = el("section", { class: "section" }, el("h3", {}, "Ports"));
+  const list = el("div", { class: "ends" });
+  s.ends.forEach((e, i) => { const c = endCard(s, e, i); if (c) list.append(c); });
+  portsSec.append(list);
+  if (g && g.adds) portsSec.append(el("div", {}, el("button", { class: "btn", onclick: () => addProgram(s) }, "+ Add a program")));
+  page.append(portsSec);
+
+  const meEnd = s.ends.find(e => e.kind === "me");
+  if (s.goal === "talk" || meEnd || s.form.type) {
+    const target = meEnd ? s.ends.find(e => e.kind === "program").port : endName(d);
+    const sec = el("section", { class: "section" }, el("h3", {}, `Type to ${target}`));
+    sec.append(el("div", { class: "panel" },
+      el("div", { class: "sub", style: "margin:0" }, meEnd ? `What your program sends on ${target} shows here. What you type goes to your program.` : `What you type goes to ${target}. Its replies show here${progs.length ? ", and your programs get them too" : ""}.`),
+      terminal(s)));
+    page.append(sec);
+  }
+
+  const dataSec = el("section", { class: "section" }, el("h3", {}, "Data going through"));
+  if (s.showData) {
+    const pre = el("pre", { tabindex: "0", "aria-label": "Data going through" });
+    pre.innerHTML = ["10:41:02.118  COM5 → COM3  <span class=\"tx\">AT\\r\\n</span>", "10:41:02.131  COM3 → all   OK\\r\\n", "10:41:05.004  COM3 → all   +TEMP: 21.4\\r\\n"].join("\n");
+    dataSec.append(el("div", { class: "panel" }, el("div", { class: "term" }, pre),
+      el("div", { style: "display:flex;gap:8px;margin-top:8px;flex-wrap:wrap" },
+        el("button", { class: "btn" }, "Pause"), el("button", { class: "btn" }, "Clear"), el("button", { class: "btn" }, "Show as hex"),
+        el("button", { class: "btn quiet", onclick: () => { s.showData = false; render(); } }, "Hide"))));
+  } else {
+    dataSec.append(el("div", {}, el("button", { class: "btn", onclick: () => { s.showData = true; render(); } }, "Show me the data going through"),
+      el("span", { class: "sub", style: "margin-left:8px" }, "Read only. Useful when a program says nothing arrives.")));
+  }
+  page.append(dataSec);
+
+  page.append(el("div", { class: "more" }, el("button", { class: "btn quiet", onclick: () => setMode(true) }, "See it on the canvas (Advanced mode)")));
+  return page;
+}
+
+function terminal(s) {
+  const pre = el("pre", { "aria-label": "Received text", tabindex: "0" });
+  pre.innerHTML = (s.log.length ? s.log : ["<span>Nothing received yet.</span>"]).join("\n");
+  const input = el("input", { type: "text", "aria-label": "Text to send", placeholder: "Type, then press Enter" });
+  return el("div", { class: "term" }, pre, el("form", { onsubmit: ev => {
+    ev.preventDefault(); if (!input.value) return;
+    s.log.push(`<span class="tx">sent      ${escapeHtml(input.value)}</span>`);
+    s.log.push(`received  ${escapeHtml(s.ends.some(x => x.kind === "echo") ? input.value : "OK")}`);
+    render(); document.querySelector(".term input[type=text]")?.focus(); } },
+    input,
+    el("label", {}, el("input", { type: "checkbox", checked: true }), "Press Enter sends a line ending"),
+    el("button", { class: "btn primary" }, "Send")));
+}
+
+function addProgram(s) {
+  const grp = s.goal === "share" ? s.form.right : s.form.left;
+  pendingComs = new Set();
+  const n = newSlot("program"); grp.push(n); usedCom.add(+n.port.slice(3)); pendingComs = new Set();
+  s.ends.push({ ...n }); s.title = titleFor(s.form);
+  toast(`Added ${n.port}. The other programs were not interrupted.`); render();
+}
+
+function endCard(s, e, i) {
+  const card = el("div", { class: "end" });
+  if (e.kind === "program") {
+    const canRemove = goal(s.goal)?.adds && s.ends.filter(x => x.kind === "program").length > (goal(s.goal).left.min || 1);
+    card.append(el("div", { class: "what" }, `${e.label || "Program"} opens`),
+      el("div", { class: "acts" },
+        e.connected ? el("span", { class: "chip ok" }, "● Open in a program") : el("span", { class: "chip wait" }, "○ No program yet"),
+        el("button", { class: "btn", onclick: () => { navigator.clipboard?.writeText(e.port).catch(() => {}); toast(e.port + " copied."); } }, "Copy name"),
+        canRemove ? el("button", { class: "btn icon", title: "Close this port", "aria-label": "Close " + e.port, onclick: () => {
+          for (const grp of [s.form.left, s.form.right]) if (grp) { const k = grp.findIndex(x => x.id === e.id); if (k >= 0) grp.splice(k, 1); }
+          s.ends = s.ends.filter(x => x.id !== e.id); s.title = titleFor(s.form);
+          toast(`Closed ${e.port}. The other programs were not interrupted.`); render(); } }, "−") : null),
+      el("div", { class: "name" }, e.port));
+    if (!e.connected)
+      card.append(el("div", { class: "info" }, `No program has opened ${e.port} yet. In ${e.label || "your program"}, choose exactly ${e.port}. This changes as soon as one does. `,
+        el("button", { class: "link", onclick: () => toast("Opens the step-by-step help for a port that gets no data.") }, "Nothing arriving?")));
+    if (e.peerBaud && s.form.baud && e.peerBaud !== s.form.baud)
+      card.append(el("div", { class: "warn" }, `${e.label || "The program"} opened ${e.port} at ${e.peerBaud} baud, but the device runs at ${s.form.baud}. Text will look garbled. Set ${s.form.baud} in ${e.label || "the program"}.`));
+    if (s.goal === "turns")
+      card.append(el("div", { style: "grid-column:1/-1;margin-top:4px" }, s.owner === i ? el("span", { class: "chip ok" }, "Sending now") :
+        el("button", { class: "btn", onclick: () => { s.owner = i; toast(`${e.port} sends now. The others only listen.`); render(); } }, "Let this one send")));
+  } else if (e.kind === "device" || e.kind === "netdev") {
+    card.append(el("div", { class: "what" }, e.kind === "device" ? "Device. Studio has it open, so your programs use their own ports instead." : "Network device. Studio is connected to it."),
+      el("div", { class: "acts" }, el("span", { class: "chip ok" }, e.kind === "device" ? `● Open at ${s.form.baud} baud` : "● Connected")),
+      el("div", { class: "name" }, endName(e)));
+  } else if (e.kind === "listen") {
+    card.append(el("div", { class: "what" }, "Other computers connect to this PC on network port"),
+      el("div", { class: "acts" }, el("span", { class: "chip wait" }, "○ No computer connected")),
+      el("div", { class: "name" }, e.port),
+      el("div", { class: "info" }, "This PC's address is 192.168.1.20. Windows may ask to let Studio through the firewall."));
+  } else if (e.kind === "echo") {
+    card.append(el("div", { class: "what" }, "On the other end"), el("div", { class: "acts" }), el("div", {}, "Everything your program sends comes straight back to it."));
+  } else if (e.kind === "later") {
+    card.append(el("div", { class: "what" }, "On the other end"), el("div", { class: "acts" }, el("button", { class: "btn", onclick: () => openGoal(s.goal, s) }, "Connect it…")), el("div", {}, "Nothing yet."));
+  } else return null;
+  return card;
+}
+function escapeHtml(t) { return t.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+
+// ---- removal --------------------------------------------------------------
+let pending = null;
+function askRemove(s) {
+  const ports = s.ends.filter(e => e.kind === "program" || e.kind === "device").map(e => e.port);
+  openDialog("Remove this setup?",
+    ports.length ? `This closes ${ports.join(", ")}. A program that has one of these ports open loses it.` : "This closes the setup.",
+    "Remove setup", () => {
+      const at = state.setups.indexOf(s);
+      state.setups.splice(at, 1);
+      for (const e of s.ends) if (e.kind === "device") claimed.delete(e.port);
+      state.view = { name: "home" }; render();
+      toast("Removed " + s.title + ".", "Undo", () => { state.setups.splice(at, 0, s); for (const e of s.ends) if (e.kind === "device") claimed.add(e.port); state.view = { name: "setup", id: s.id }; render(); });
+    });
+}
+function openDialog(title, body, ok, fn) {
+  document.getElementById("dlgTitle").textContent = title;
+  document.getElementById("dlgBody").textContent = body;
+  document.getElementById("dlgOk").textContent = ok;
+  pending = fn;
+  document.getElementById("scrim").classList.add("open");
+  document.getElementById("dlgCancel").focus();
+}
+function closeDialog() { document.getElementById("scrim").classList.remove("open"); pending = null; }
+document.getElementById("dlgCancel").onclick = closeDialog;
+document.getElementById("dlgOk").onclick = () => { const f = pending; closeDialog(); f && f(); };
+document.addEventListener("keydown", ev => { if (ev.key === "Escape") closeDialog(); });
+document.getElementById("removeAll").onclick = () => openDialog("Remove all setups?",
+  `This closes ${state.setups.length} setups and every port in them. Programs using those ports lose them.`, "Remove all", () => {
+    const old = state.setups; state.setups = []; claimed.clear(); state.view = { name: "home" }; render();
+    toast("Removed all setups.", "Undo", () => { state.setups = old; for (const s of old) for (const e of s.ends) if (e.kind === "device") claimed.add(e.port); render(); });
+  });
+document.getElementById("newBtn").onclick = () => { state.view = { name: "home" }; render(); };
+document.getElementById("saveBtn").onclick = () => toast("Saves every setup to one file, so you can open it again later or on another PC.");
+document.getElementById("openBtn").onclick = () => toast("Opens a saved setup file.");
+
+// ---- modes ----------------------------------------------------------------
+function setMode(adv) {
+  document.getElementById("modeSimple").setAttribute("aria-pressed", String(!adv));
+  document.getElementById("modeAdvanced").setAttribute("aria-pressed", String(adv));
+  document.getElementById("simpleBody").style.display = adv ? "none" : "";
+  document.getElementById("advancedBody").hidden = !adv;
+}
+document.getElementById("modeSimple").onclick = () => setMode(false);
+document.getElementById("modeAdvanced").onclick = () => setMode(true);
+
+document.body.append(el("datalist", { id: "progs" }, ["PuTTY", "Tera Term", "Arduino IDE", "RealTerm", "HyperTerminal"].map(p => el("option", { value: p }))));
+
+// ---- sample setups, so the list and a setup page show at once --------------
+(function seed() {
+  openGoal("share");
+  state.form.right[0].label = "PuTTY"; state.form.right[1].label = "Data logger"; state.form.type = true;
+  create();
+  const s = state.setups[0];
+  s.ends[1].connected = true; s.ends[1].peerBaud = "9600";
+  s.log = ['<span class="tx">sent      AT</span>', "received  OK", "received  +TEMP: 21.4"];
+  state.setups.push({ id: uid++, goal: "custom", form: { left: [], right: null, baud: "115200" }, title: "Test rig", log: [], showData: false,
+    ends: [{ id: uid++, kind: "program", port: "COM9", label: "", connected: true }, { id: uid++, kind: "program", port: "COM10", label: "", connected: false }] });
+  usedCom.add(9); usedCom.add(10);
+  state.view = { name: "setup", id: s.id };
+  document.getElementById("toast").style.display = "none";
+  render();
+})();
+</script>
+</body>
+</html>

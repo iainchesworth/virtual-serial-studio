@@ -55,6 +55,11 @@ class TopologyView;
 class Toolbox;
 } // namespace topology
 
+namespace simple
+{
+class SimplePage;
+} // namespace simple
+
 /// The redesigned frame: menu, toolbar, launcher, docks and status bar.
 ///
 /// The panes are placeholders until WP3 to WP8.  Every action is registered
@@ -157,6 +162,7 @@ private:
     void remove_port(vss::endpoint_id id);
     void remove_selected_setup();
     void remove_setup(const setup_group& group, bool confirm = true);
+    void remove_all_setups();
     void add_program_port();
     vss::link_id share_link_of_selection() const;
     void show_rename(vss::endpoint_id id);
@@ -230,6 +236,8 @@ private:
 
     QStackedWidget* central_ = nullptr;
     Launcher* launcher_ = nullptr;
+    /// The Simple-mode body: setups, jobs and setup pages.
+    simple::SimplePage* simple_page_ = nullptr;
     QWidget* workspace_ = nullptr;
     topology::TopologyView* topology_ = nullptr;
     topology::Toolbox* toolbox_ = nullptr;

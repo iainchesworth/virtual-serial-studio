@@ -3,7 +3,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
-// Journey tests: each one is a task from docs/gui-design/docs/screens/01, done
+// Journey tests: each one is a task from docs/gui-design/docs/screens/08
+// (Simple mode) or screens/01 (Advanced mode), done
 // the way a person does it, with key presses and mouse clicks sent to the real
 // main window and its dialogs through QTest. The backend is the in-memory
 // fake, so the results are the same on every platform.
@@ -22,6 +23,9 @@
 #include "shell/command_palette.hpp"
 #include "shell/launcher.hpp"
 #include "shell/shell_window.hpp"
+#include "simple/job_grid.hpp"
+#include "simple/setup_page.hpp"
+#include "simple/simple_page.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -29,6 +33,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListView>
+#include <QListWidget>
 #include <QPushButton>
 #include <QSettings>
 #include <QStatusBar>
@@ -157,14 +162,16 @@ vss::gui::LauncherCard* launcher_card(ShellWindow& window, const QString& title)
     return nullptr;
 }
 
-/// A shown window with the launcher up, as a first start looks.
+/// A shown window as a first start looks: Simple mode with the jobs up, or
+/// Advanced mode with the launcher.
 struct Session
 {
-    Session()
+    explicit Session(bool advanced = false)
     {
         clear_settings();
         // Closing the window must not stop on the unsaved-changes prompt.
         QSettings().setValue(QStringLiteral("ui/askOnDiscard"), false);
+        QSettings().setValue(QStringLiteral("ui/advanced"), advanced);
         window = std::make_unique<ShellWindow>(backend);
         window->resize(1280, 800);
         window->show();
@@ -177,9 +184,24 @@ struct Session
         QApplication::processEvents();
     }
 
+    vss::gui::simple::SimplePage* simple() const
+    {
+        return window->findChild<vss::gui::simple::SimplePage*>();
+    }
+
     FakeStudioBackend backend;
     std::unique_ptr<ShellWindow> window;
 };
+
+vss::gui::simple::JobTile* job_tile(ShellWindow& window, const QString& title)
+{
+    for (auto* tile : window.findChildren<vss::gui::simple::JobTile*>())
+    {
+        if (tile->accessibleName() == title && tile->isVisible())
+            return tile;
+    }
+    return nullptr;
+}
 
 } // namespace
 
@@ -188,53 +210,29 @@ TEST_CASE("journey: give my program a serial port, with the keyboard")
     Session session;
     auto& window = *session.window;
 
-    auto* card = launcher_card(window, QStringLiteral("Give my program a "
-                                                      "serial port"));
-    REQUIRE(card != nullptr);
-    REQUIRE(card->isVisible());
-
-    Waiting finish([](QWidget* widget)
-                   { return is_a<vss::gui::PortReadyDialog>(widget); },
-                   [](QWidget* dialog)
-                   {
-                       auto* path = dialog->findChild<QLabel*>(
-                           QStringLiteral("portReadyPathValue"));
-                       REQUIRE(path != nullptr);
-                       REQUIRE(!path->text().isEmpty());
-                       auto* done = button(dialog, QStringLiteral("Done"));
-                       REQUIRE(done != nullptr);
-                       QTest::keyClick(done, Qt::Key_Space);
-                   });
-    Waiting create(
-        [](QWidget* widget) { return is_a<vss::gui::AddPortDialog>(widget); },
-        [](QWidget* dialog)
-        {
-            auto* name =
-                dialog->findChild<QLineEdit*>(QStringLiteral("addPortName"));
-            REQUIRE(name != nullptr);
-            name->selectAll();
-            QTest::keyClicks(name, QStringLiteral("terminal"));
-            QTest::keyClick(name, Qt::Key_Return);
-        });
-
-    card->setFocus();
-    QTest::keyClick(card, Qt::Key_Return);
+    auto* tile =
+        job_tile(window, QStringLiteral("Give my program a serial port"));
+    REQUIRE(tile != nullptr);
+    tile->setFocus();
+    QTest::keyClick(tile, Qt::Key_Return);
     QApplication::processEvents();
 
-    REQUIRE(create.ran());
-    REQUIRE(finish.ran());
-    REQUIRE_EQ(session.backend.ports().size(), 1);
-    REQUIRE_EQ(session.backend.ports().front().name,
-               QStringLiteral("terminal"));
-    REQUIRE(!card->isVisible());
+    auto* form = session.simple()->form();
+    REQUIRE(form != nullptr);
+    auto* label = form->findChild<QLineEdit*>(QStringLiteral("jobFormLabel"));
+    REQUIRE(label != nullptr);
+    label->setFocus();
+    QTest::keyClicks(label, QStringLiteral("PuTTY"));
+    QTest::mouseClick(form->create_button(), Qt::LeftButton);
+    QApplication::processEvents();
 
-    auto* ports_dock =
-        window.findChild<QDockWidget*>(QStringLiteral("portsDock"));
-    REQUIRE(ports_dock != nullptr);
-    REQUIRE(ports_dock->isVisible());
-    auto* list = ports_dock->findChild<QListView*>();
-    REQUIRE(list != nullptr);
-    REQUIRE_EQ(list->model()->rowCount(), 1);
+    REQUIRE_EQ(session.backend.ports().size(), 1);
+    REQUIRE_EQ(session.backend.ports().front().name, QStringLiteral("PuTTY"));
+    auto* page = session.simple()->setup_page();
+    REQUIRE(page != nullptr);
+    REQUIRE(page->isVisible());
+    REQUIRE(page->steps_text().contains(QStringLiteral("In PuTTY, open")));
+    REQUIRE_EQ(session.simple()->list()->count(), 1);
 }
 
 TEST_CASE("journey: connect two programs")
@@ -242,56 +240,50 @@ TEST_CASE("journey: connect two programs")
     Session session;
     auto& window = *session.window;
 
-    auto* card = launcher_card(window, QStringLiteral("Connect two programs"));
-    REQUIRE(card != nullptr);
-
-    // Windows makes a linked pair out of a com0com pair or the Studio driver.
-    // Where neither is installed, as on a hosted runner, the dialog must keep
-    // the button off and say why; everywhere else the pair is created.
-    const bool windows = QSysInfo::kernelType() == QLatin1String("winnt");
-    bool offered = false;
-
-    Waiting create(
-        [](QWidget* widget) { return is_a<vss::gui::AddPortDialog>(widget); },
-        [&offered, windows](QWidget* dialog)
-        {
-            auto* primary = button(dialog, QStringLiteral("Create pair"));
-            REQUIRE(primary != nullptr);
-            offered = primary->isEnabled();
-            if (offered)
-            {
-                QTest::mouseClick(primary, Qt::LeftButton);
-                return;
-            }
-            REQUIRE(windows);
-            auto* note = dialog->findChild<QWidget*>(
-                QStringLiteral("pairDriverNote"));
-            REQUIRE(note != nullptr);
-            REQUIRE(note->isVisibleTo(dialog));
-            dialog->close();
-        });
-
-    QTest::mouseClick(card, Qt::LeftButton);
+    auto* tile =
+        job_tile(window, QStringLiteral("Connect two programs to each other"));
+    REQUIRE(tile != nullptr);
+    QTest::mouseClick(tile, Qt::LeftButton);
     QApplication::processEvents();
 
-    REQUIRE(create.ran());
-    if (!offered)
-    {
-        REQUIRE_EQ(session.backend.ports().size(), 0);
-        REQUIRE_EQ(session.backend.links().size(), 0);
-        return;
-    }
+    auto* form = session.simple()->form();
+    REQUIRE(form != nullptr);
+    REQUIRE(form->create_button()->isEnabled());
+    QTest::mouseClick(form->create_button(), Qt::LeftButton);
+    QApplication::processEvents();
+
     REQUIRE_EQ(session.backend.ports().size(), 2);
     REQUIRE_EQ(session.backend.links().size(), 1);
     auto* status = window.findChild<QStatusBar*>();
     REQUIRE(status != nullptr);
-    REQUIRE(status->currentMessage().startsWith(
-        QStringLiteral("Linked pair created.")));
+    REQUIRE(status->currentMessage().startsWith(QStringLiteral("Done.")));
 }
 
-TEST_CASE("journey: watch traffic on a port")
+TEST_CASE("journey: see the data on a port")
 {
     Session session;
+    auto& window = *session.window;
+    const auto port =
+        session.backend.create_auto_port(QStringLiteral("program"), true);
+    REQUIRE(port.has_value());
+    QApplication::processEvents();
+
+    auto* tile = job_tile(window, QStringLiteral("See the data on a port"));
+    REQUIRE(tile != nullptr);
+    QTest::mouseClick(tile, Qt::LeftButton);
+    QApplication::processEvents();
+
+    auto* page = session.simple()->setup_page();
+    REQUIRE(page != nullptr);
+    REQUIRE(page->prefs().show_data);
+    auto* data = page->findChild<QWidget*>(QStringLiteral("setupData"));
+    REQUIRE(data != nullptr);
+    REQUIRE(data->isVisible());
+}
+
+TEST_CASE("journey: watch traffic on a port, in Advanced mode")
+{
+    Session session(true);
     auto& window = *session.window;
 
     const auto port = session.backend.create_virtual_port(
@@ -355,9 +347,46 @@ TEST_CASE("journey: run an action from the command palette")
     REQUIRE(advanced->isChecked());
 }
 
-TEST_CASE("journey: remove a port with the Delete key")
+TEST_CASE("journey: remove a setup with the Delete key")
 {
     Session session;
+
+    const auto port =
+        session.backend.create_auto_port(QStringLiteral("program"), true);
+    REQUIRE(port.has_value());
+    QApplication::processEvents();
+
+    auto* list = session.simple()->list();
+    REQUIRE_EQ(list->count(), 1);
+    list->setFocus();
+    QTest::mouseClick(list->viewport(), Qt::LeftButton, {},
+                      list->visualItemRect(list->item(0)).center());
+    QApplication::processEvents();
+    REQUIRE(session.simple()->setup_page() != nullptr);
+
+    Waiting confirm(
+        [](QWidget* widget)
+        { return button(widget, QStringLiteral("Remove setup")) != nullptr; },
+        [](QWidget* dialog)
+        {
+            QTest::mouseClick(button(dialog, QStringLiteral("Remove setup")),
+                              Qt::LeftButton);
+        });
+
+    QTest::keyClick(list, Qt::Key_Delete);
+    QApplication::processEvents();
+    QApplication::processEvents();
+
+    REQUIRE(confirm.ran());
+    REQUIRE(session.backend.ports().empty());
+    REQUIRE(job_tile(*session.window,
+                     QStringLiteral("Give my program a serial port")) !=
+            nullptr);
+}
+
+TEST_CASE("journey: remove a port with the Delete key, in Advanced mode")
+{
+    Session session(true);
     auto& window = *session.window;
 
     const auto port = session.backend.create_virtual_port(
@@ -388,8 +417,9 @@ TEST_CASE("journey: remove a port with the Delete key")
 
     REQUIRE(confirm.ran());
     REQUIRE(session.backend.ports().empty());
+    // Advanced mode builds on the canvas: the empty setup stays on it.
+    REQUIRE(ports_dock->isVisible());
     auto* card = launcher_card(window, QStringLiteral("Give my program a "
                                                       "serial port"));
-    REQUIRE(card != nullptr);
-    REQUIRE(card->isVisible());
+    REQUIRE(card == nullptr || !card->isVisible());
 }

@@ -880,6 +880,8 @@ TEST_CASE("topology: names and 24px targets on every interactive item")
 TEST_CASE("shell: the topology replaces the placeholder and shares selection")
 {
     clear_settings();
+    // The canvas is Advanced mode; Simple mode shows the setups page.
+    QSettings().setValue(QStringLiteral("ui/advanced"), true);
     graph_fixture fixture;
     vss::gui::ShellWindow window(fixture.backend);
     window.resize(1280, 800);
