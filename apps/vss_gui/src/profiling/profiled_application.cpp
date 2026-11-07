@@ -32,7 +32,7 @@ const std::string& event_name(int type)
     if (found == names.end())
     {
         const QMetaEnum meta = QMetaEnum::fromType<QEvent::Type>();
-        const char* key = meta.valueToKey(type);
+        const char* key = meta.valueToKey(static_cast<quint64>(type));
         found =
             names
                 .emplace(type, key != nullptr ? std::string(key)
