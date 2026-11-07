@@ -952,6 +952,25 @@ bool TopologyView::focusNextPrevChild(bool next)
     return true;
 }
 
+bool TopologyView::event(QEvent* event)
+{
+    // The window's Remove shortcut (Delete) removes one port at a time and
+    // knows nothing of the canvas selection or its Undo step. On the editing
+    // canvas, claim Delete first so the canvas deletes what is selected.
+    if (event->type() == QEvent::ShortcutOverride && editing_)
+    {
+        const auto* key = static_cast<QKeyEvent*>(event);
+        if (key->key() == Qt::Key_Delete &&
+            (!selected_ports().isEmpty() || !selected_links().isEmpty() ||
+             focused_port_ != 0 || focused_link_ != 0))
+        {
+            event->accept();
+            return true;
+        }
+    }
+    return QGraphicsView::event(event);
+}
+
 void TopologyView::keyPressEvent(QKeyEvent* event)
 {
     const bool control = event->modifiers().testFlag(Qt::ControlModifier);

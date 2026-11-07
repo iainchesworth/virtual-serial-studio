@@ -223,6 +223,7 @@ Q_SIGNALS:
     void selection_changed(int count);
 
 protected:
+    bool event(QEvent* event) override;
     bool focusNextPrevChild(bool next) override;
     void keyPressEvent(QKeyEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
