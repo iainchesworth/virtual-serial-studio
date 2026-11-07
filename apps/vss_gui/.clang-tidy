@@ -15,9 +15,10 @@ CheckOptions:
   - { key: readability-identifier-naming.TypedefCase,              value: aNy_CasE }
   - { key: readability-identifier-naming.EnumCase,                 value: aNy_CasE }
   - { key: readability-identifier-naming.EnumConstantCase,         value: aNy_CasE }
-  # VSS_PROFILE_ZONE_NAMED declares a constexpr named <zone>_location. The macro
-  # builds the name, so it cannot take the k prefix.
-  - { key: readability-identifier-naming.ConstexprVariableIgnoredRegexp, value: '.*_location' }
+  # VSS_PROFILE_ZONE_NAMED declares a constexpr when profiling is compiled out
+  # (the zone object) and a constexpr <zone>_location when it is compiled in. The
+  # macro builds or takes the name, so neither can carry the k prefix.
+  - { key: readability-identifier-naming.ConstexprVariableIgnoredRegexp, value: '(.*_location|profile_zone|zone)' }
   - { key: readability-identifier-naming.ConstexprVariablePrefix,  value: k }
   - { key: readability-identifier-naming.ConstexprVariableCase,    value: CamelCase }
   - { key: readability-identifier-naming.GlobalConstantPrefix,     value: k }
