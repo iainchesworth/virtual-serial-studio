@@ -27,7 +27,7 @@ namespace vss::gui::simple
 namespace
 {
 
-constexpr int max_lines = 500;
+constexpr int kMaxLines = 500;
 
 QFont semibold(QFont font)
 {
@@ -60,7 +60,7 @@ QPlainTextEdit* text_view(const QString& name, QWidget* parent)
     view->setAccessibleName(name);
     view->setFont(Theme::instance().font(text_style::data));
     view->setMinimumHeight(140);
-    view->setMaximumBlockCount(max_lines);
+    view->setMaximumBlockCount(kMaxLines);
     return view;
 }
 
@@ -364,11 +364,10 @@ void SetupPage::rebuild_top()
 
     // Where typing goes.
     type_target_ = 0;
-    if (setup_.kind == job::talk)
-        type_target_ = setup_.device;
-    else if (setup_.kind == job::port && setup_.echo == 0)
+    if (setup_.kind == job::port && setup_.echo == 0)
         type_target_ = setup_.programs.value(0);
-    else if (prefs_.type_here && setup_.device != 0)
+    else if (setup_.kind == job::talk ||
+             (prefs_.type_here && setup_.device != 0))
         type_target_ = setup_.device;
     type_box_->setVisible(type_target_ != 0);
     if (type_target_ != 0)
@@ -675,16 +674,16 @@ void SetupPage::add_events(const event_batch& events)
         {
             lines_.push_back({QDateTime::currentDateTime(),
                               shown(event.endpoint), event.data, false});
-            if (lines_.size() > max_lines)
-                lines_.remove(0, lines_.size() - max_lines);
+            if (lines_.size() > kMaxLines)
+                lines_.remove(0, lines_.size() - kMaxLines);
             data_changed = true;
         }
         if (event.endpoint == type_target_)
         {
             conversation_.push_back(
                 {QDateTime::currentDateTime(), {}, event.data, false});
-            if (conversation_.size() > max_lines)
-                conversation_.remove(0, conversation_.size() - max_lines);
+            if (conversation_.size() > kMaxLines)
+                conversation_.remove(0, conversation_.size() - kMaxLines);
             conversation_changed = true;
         }
     }

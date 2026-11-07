@@ -11,6 +11,8 @@
 
 #include <QSet>
 
+#include <utility>
+
 namespace vss::gui
 {
 
@@ -60,7 +62,7 @@ QAction* ActionRegistry::add(action_spec spec)
                        level_ == action_level::advanced);
 
     by_id_.insert(spec.id, action);
-    specs_.insert(action, spec);
+    specs_.insert(action, std::move(spec));
     order_.push_back(action);
     refresh();
     Q_EMIT changed();

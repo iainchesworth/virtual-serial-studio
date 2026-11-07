@@ -456,7 +456,7 @@ setup_report build_setup_report(const setup_facts& facts,
         else if (row.state == setup_state::not_checked)
             ++not_checked;
     }
-    if (!checks_available)
+    if (!checks_available || (attention == 0 && not_checked > 0))
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "Not checked yet");
     else if (attention > 0)
@@ -467,9 +467,6 @@ setup_report build_setup_report(const setup_facts& facts,
                 : plural(QT_TRANSLATE_NOOP("SetupCheck", "%n things to fix"),
                          attention);
     }
-    else if (not_checked > 0)
-        report.header_chip =
-            QCoreApplication::translate("SetupCheck", "Not checked yet");
     else
         report.header_chip =
             QCoreApplication::translate("SetupCheck", "All set");

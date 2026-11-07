@@ -668,13 +668,11 @@ QString AttachDialog::current_device_path() const
 {
     if (address_row_ != nullptr && !address_row_->isHidden())
     {
-        const QString address = address_edit_->text().trimmed();
+        QString address = address_edit_->text().trimmed();
         if (address.isEmpty())
             return {};
         if (address.startsWith(QStringLiteral("serial://")))
             return address.mid(9).section(QLatin1Char('?'), 0, 0);
-        if (address.contains(QStringLiteral("://")))
-            return address;
         return address;
     }
     QString path =

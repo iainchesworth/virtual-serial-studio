@@ -9,7 +9,10 @@
 #include <QFile>
 #include <QStringList>
 
-// Q_INIT_RESOURCE must run at global scope so the generated symbol is found.
+// Q_INIT_RESOURCE declares the generated symbol in the scope it is used in, so
+// this wrapper has to sit at global scope with external linkage; an unnamed
+// namespace or a static function would look for another symbol.
+// NOLINTNEXTLINE(misc-use-internal-linkage)
 void vss_init_template_resources()
 {
     Q_INIT_RESOURCE(templates);

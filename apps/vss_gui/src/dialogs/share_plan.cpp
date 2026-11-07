@@ -237,17 +237,15 @@ QStringList planned_share_paths(const share_plan& plan,
             paths << QCoreApplication::translate("ShareWizard", "PTY");
             continue;
         }
-        if (plan.studio_driver && index < plan.openable)
-        {
-            // The driver picks the COM number when it makes the port.
-            paths << QCoreApplication::translate("ShareWizard", "A free port");
-        }
-        else if (index < plan.openable && index < free_pair_paths.size())
+        if (index < plan.openable && !plan.studio_driver &&
+            index < free_pair_paths.size())
         {
             paths << free_pair_paths.at(index);
         }
         else if (index < plan.openable)
         {
+            // The driver picks the COM number when it makes the port, and a
+            // pair with no path to show yet is also "a free port".
             paths << QCoreApplication::translate("ShareWizard", "A free port");
         }
         else

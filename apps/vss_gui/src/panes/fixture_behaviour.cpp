@@ -16,8 +16,8 @@ namespace vss::gui
 namespace
 {
 
-constexpr int max_per_second = 50;
-constexpr int max_chunk = 256;
+constexpr int kMaxPerSecond = 50;
+constexpr int kMaxChunk = 256;
 
 } // namespace
 
@@ -42,7 +42,7 @@ generator_config FixtureBehaviours::config(vss::endpoint_id id) const
 
 int FixtureBehaviours::interval_ms(const generator_config& config) const
 {
-    const int rate = std::clamp(config.per_second, 1, max_per_second);
+    const int rate = std::clamp(config.per_second, 1, kMaxPerSecond);
     return std::max(1, 1000 / rate);
 }
 
@@ -50,8 +50,8 @@ void FixtureBehaviours::set_config(vss::endpoint_id id,
                                    const generator_config& config)
 {
     generator_config clean = config;
-    clean.per_second = std::clamp(clean.per_second, 1, max_per_second);
-    clean.chunk = std::clamp(clean.chunk, 1, max_chunk);
+    clean.per_second = std::clamp(clean.per_second, 1, kMaxPerSecond);
+    clean.chunk = std::clamp(clean.chunk, 1, kMaxChunk);
     state& entry = states_[id];
     if (entry.config == clean)
         return;

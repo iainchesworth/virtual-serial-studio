@@ -1502,7 +1502,7 @@ void ShellWindow::update_undo_actions()
     const bool supported = backend_.caps().undo;
     const struct
     {
-        const char* id;
+        const char* id = nullptr;
         QString plain;
         QString with_step;
         QString step;
@@ -1971,13 +1971,16 @@ void ShellWindow::show_pair()
             });
     connect(&dialog, &PairDialog::setup_check_requested, this,
             [this] { open_setup_check(); });
-    if (dialog.exec() != QDialog::Accepted || !dialog.outcome())
+    if (dialog.exec() != QDialog::Accepted)
         return;
-    selection_.select_port(dialog.outcome()->first);
+    const auto outcome = dialog.outcome();
+    if (!outcome)
+        return;
+    selection_.select_port(outcome->first);
     update_actions();
     status_->showMessage(
         tr("Linked pair created. Program A opens %1; Program B opens %2.")
-            .arg(dialog.outcome()->first_path, dialog.outcome()->second_path),
+            .arg(outcome->first_path, outcome->second_path),
         8000);
 }
 

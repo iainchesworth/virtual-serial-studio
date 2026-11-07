@@ -85,7 +85,7 @@ bool valid_remote_host(const QString& text)
 
 QString listen_host(QComboBox* combo, QLineEdit* custom)
 {
-    const QString data = combo->currentData().toString();
+    QString data = combo->currentData().toString();
     if (!data.isEmpty())
         return data;
     return custom == nullptr ? QString() : custom->text().trimmed();

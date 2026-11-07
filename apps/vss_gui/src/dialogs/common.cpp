@@ -126,26 +126,25 @@ QString serial_uri(const QString& path, const vss::serial_settings& settings)
         uri += QStringLiteral("&data=%1").arg(settings.data_bits);
     if (settings.parity != vss::parity_mode::none)
     {
-        const char* parity = "none";
-        switch (settings.parity)
+        const auto parity = [](vss::parity_mode mode) -> const char*
         {
-        case vss::parity_mode::none:
-            parity = "none";
-            break;
-        case vss::parity_mode::odd:
-            parity = "odd";
-            break;
-        case vss::parity_mode::even:
-            parity = "even";
-            break;
-        case vss::parity_mode::mark:
-            parity = "mark";
-            break;
-        case vss::parity_mode::space:
-            parity = "space";
-            break;
-        }
-        uri += QStringLiteral("&parity=%1").arg(QString::fromLatin1(parity));
+            switch (mode)
+            {
+            case vss::parity_mode::odd:
+                return "odd";
+            case vss::parity_mode::even:
+                return "even";
+            case vss::parity_mode::mark:
+                return "mark";
+            case vss::parity_mode::space:
+                return "space";
+            case vss::parity_mode::none:
+                break;
+            }
+            return "none";
+        };
+        uri += QStringLiteral("&parity=%1")
+                   .arg(QString::fromLatin1(parity(settings.parity)));
     }
     if (settings.stop_bits != vss::stop_bits_mode::one)
         uri += QStringLiteral("&stop=%1").arg(stop_label(settings.stop_bits));

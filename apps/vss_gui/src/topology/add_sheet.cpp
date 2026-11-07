@@ -39,10 +39,10 @@ constexpr int kKindExisting = 3;
 
 struct framing
 {
-    unsigned data_bits;
-    vss::parity_mode parity;
-    vss::stop_bits_mode stop_bits;
-    const char* label;
+    unsigned data_bits = 8;
+    vss::parity_mode parity{};
+    vss::stop_bits_mode stop_bits{};
+    const char* label = nullptr;
 };
 
 constexpr framing kFramings[] = {

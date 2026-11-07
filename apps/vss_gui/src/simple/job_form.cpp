@@ -399,7 +399,7 @@ QString JobForm::end_name(const end_plan& end) const
     {
         if (const auto port = backend_.port(end.existing))
         {
-            const QString shown = port_shown_name(*port);
+            QString shown = port_shown_name(*port);
             if (end.what == end_plan::kind::program && !end.label.isEmpty())
                 return tr("%1 (%2)").arg(shown, end.label);
             return shown;

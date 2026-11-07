@@ -85,7 +85,7 @@ void flatten_layout(const QString& prefix, const QJsonObject& object,
 /// The design's body size in logical pixels.  The system font on Windows is
 /// 9 pt, which is 12 px and below the 12 px floor once the smaller styles are
 /// derived from it, so the body never goes under the design size.
-constexpr double design_body_px = 13.0;
+constexpr double kDesignBodyPx = 13.0;
 
 double logical_dpi()
 {
@@ -290,7 +290,7 @@ QFont Theme::font(text_style style) const
         const double points = font.pointSizeF() > 0 ? font.pointSizeF() : 9.0;
         system_px = points * logical_dpi() / 72.0;
     }
-    const double base_px = std::max(design_body_px, std::round(system_px));
+    const double base_px = std::max(kDesignBodyPx, std::round(system_px));
     const double ratio = ratios_.value(key, 1.0);
     const double px = std::max(1.0, std::round(base_px * ratio));
     font.setPointSizeF(px * 72.0 / logical_dpi());

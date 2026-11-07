@@ -134,7 +134,7 @@ public:
     }
 
 private:
-    static constexpr int max_depth = 256;
+    static constexpr int kMaxDepth = 256;
 
     bool at_end() const { return pos_ >= text_.size(); }
 
@@ -197,7 +197,7 @@ private:
         skip_space();
         if (!path.isEmpty())
             lines_.insert(path, line_);
-        if (at_end() || depth > max_depth)
+        if (at_end() || depth > kMaxDepth)
             return;
 
         const QChar first = text_.at(pos_);
@@ -914,7 +914,7 @@ json_validation validate_json_document(const QString& text, bool shared_bus)
             bool members_ok = link.value(QStringLiteral("members")).isArray();
             if (members_ok)
             {
-                for (const QJsonValue& entry :
+                for (const auto& entry :
                      link.value(QStringLiteral("members")).toArray())
                 {
                     if (!entry.isString())
@@ -1005,7 +1005,7 @@ json_validation validate_json_document(const QString& text, bool shared_bus)
             if (!array_value.isArray())
                 return false;
             const QJsonArray array = array_value.toArray();
-            for (const QJsonValue& entry : array)
+            for (const auto& entry : array)
             {
                 if (!entry.isString())
                     return false;

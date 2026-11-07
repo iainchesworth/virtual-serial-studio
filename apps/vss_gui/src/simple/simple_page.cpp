@@ -68,7 +68,7 @@ QString end_line(const port_view& port)
 {
     const QString name = port_shown_name(port);
     const QString label = program_label(port);
-    const QString shown = label.isEmpty()
+    QString shown = label.isEmpty()
                               ? name
                               : QCoreApplication::translate(
                                     "vss::gui::simple::SimplePage", "%1 (%2)")

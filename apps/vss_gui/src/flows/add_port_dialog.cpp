@@ -38,7 +38,7 @@ namespace
 
 QString unique_name(const QString& base, QSet<QString>& taken)
 {
-    const QString stem =
+    QString stem =
         base.trimmed().isEmpty() ? QStringLiteral("port") : base.trimmed();
     if (!taken.contains(stem))
     {

@@ -114,7 +114,7 @@ bool inside_scroll_area(QWidget* widget)
 
 QString screenshot_directory()
 {
-    const QString configured = qEnvironmentVariable("VSS_QA_SHOTS");
+    QString configured = qEnvironmentVariable("VSS_QA_SHOTS");
     if (!configured.isEmpty() && configured != QLatin1String("1"))
         return configured;
     return QDir(QCoreApplication::applicationDirPath())
