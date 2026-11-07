@@ -504,9 +504,9 @@ TEST_CASE("undo: link steps use exact inverse operations")
                                       QStringLiteral("Change owner")));
     REQUIRE(backend.set_owner(again->id, *first).has_value());
     REQUIRE(history.undo());
-    REQUIRE_EQ(vss::gui::find_link(backend, *again)->owner, *second);
+    REQUIRE_EQ(vss_test::require_value(vss::gui::find_link(backend, *again)).owner, *second);
     REQUIRE(history.redo());
-    REQUIRE_EQ(vss::gui::find_link(backend, *again)->owner, *first);
+    REQUIRE_EQ(vss_test::require_value(vss::gui::find_link(backend, *again)).owner, *first);
 
     // A rename is reversed by naming the port as it was.
     history.clear();
@@ -515,9 +515,10 @@ TEST_CASE("undo: link steps use exact inverse operations")
                                        QStringLiteral("renamed"),
                                        QStringLiteral("Rename port")));
     REQUIRE(history.undo());
-    REQUIRE_EQ(backend.port(*first)->name, QStringLiteral("a"));
+    REQUIRE_EQ(vss_test::require_value(backend.port(*first)).name, QStringLiteral("a"));
     REQUIRE(history.redo());
-    REQUIRE_EQ(backend.port(*first)->name, QStringLiteral("renamed"));
+    REQUIRE_EQ(vss_test::require_value(backend.port(*first)).name,
+               QStringLiteral("renamed"));
     REQUIRE(history.undo());
     history.clear();
     history.push(vss::gui::owner_step(backend, *again, *second, *first,
@@ -525,7 +526,8 @@ TEST_CASE("undo: link steps use exact inverse operations")
     REQUIRE(backend.set_owner(again->id, *first).has_value());
 
     // When the link has gone, the step says so instead of guessing.
-    REQUIRE(backend.disconnect(vss::gui::find_link(backend, *again)->id)
+    REQUIRE(backend.disconnect(
+                       vss_test::require_value(vss::gui::find_link(backend, *again)).id)
                 .has_value());
     REQUIRE(!history.undo());
     REQUIRE(!history.can_undo());
@@ -1249,7 +1251,8 @@ TEST_CASE("shell: removing one program of a share keeps the others sharing")
 
     auto* remove = window.findChild<QAction*>(QStringLiteral("edit.remove"));
     REQUIRE(remove != nullptr);
-    const QString name = backend.port(shared->listeners.at(1))->name;
+    const QString name =
+        vss_test::require_value(backend.port(shared->listeners.at(1))).name;
     remove_probe probe;
     answer_next_remove_confirm(&probe,
                                QStringLiteral("Remove only %1").arg(name));

@@ -20,6 +20,7 @@
 #include <exception>
 #include <functional>
 #include <iostream>
+#include <source_location>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -132,6 +133,22 @@ inline std::string to_text(const std::exception& value)
     std::ostringstream out;
     out << file << ':' << line << ": requirement failed: " << expression;
     throw failure(out.str());
+}
+
+/// The value of an optional, or a failed requirement when it is empty. A
+/// temporary is returned by value and a named optional by reference.
+template <class Optional>
+decltype(auto) require_value(
+    Optional&& optional,
+    std::source_location where = std::source_location::current())
+{
+    if (!optional)
+        raise("the optional holds a value", where.file_name(),
+              static_cast<int>(where.line()));
+    if constexpr (std::is_lvalue_reference_v<Optional>)
+        return (*optional);
+    else
+        return std::remove_cvref_t<decltype(*optional)>(std::move(*optional));
 }
 
 /// True for the integer types std::cmp_equal accepts: not bool, not a

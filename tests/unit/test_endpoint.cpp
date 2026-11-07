@@ -259,7 +259,7 @@ TEST_CASE("endpoint: a link wiring decides which lines the peer sees")
                    !second->lines().dcd();
         },
         2000ms));
-    REQUIRE(hub->find_link(*linked)->options.wiring == wiring);
+    REQUIRE(vss_test::require_value(hub->find_link(*linked)).options.wiring == wiring);
 
     // The same wiring applies in the other direction of a duplex link.
     REQUIRE(!second->set_line(control_line::dtr, true));

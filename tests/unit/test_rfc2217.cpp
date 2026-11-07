@@ -411,8 +411,8 @@ TEST_CASE("rfc2217: every parity, stop size and flow control value is mapped")
 
     const struct
     {
-        unsigned code;
-        parity_mode parity;
+        unsigned code = 0;
+        parity_mode parity{};
     } parities[] = {{1, parity_mode::none}, {2, parity_mode::odd},
                     {3, parity_mode::even}, {4, parity_mode::mark},
                     {5, parity_mode::space}};

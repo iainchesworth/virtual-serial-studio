@@ -535,7 +535,7 @@ TEST_CASE("inspector: waiting sentence and control line chips")
     REQUIRE(copy_name->accessibleName().startsWith(QStringLiteral("Copy name")));
     copy_name->click();
     REQUIRE_EQ(QGuiApplication::clipboard()->text(),
-               backend.port(*id)->path);
+               vss_test::require_value(backend.port(*id)).path);
 
     bool has_dtr = false;
     for (QLabel* label : panel.findChildren<QLabel*>())

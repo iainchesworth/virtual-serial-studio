@@ -332,13 +332,13 @@ TEST_CASE(
     serial_settings settings;
     settings.baud_rate = 19200;
     REQUIRE(app.reconfigure_port(id, settings));
-    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+    REQUIRE_EQ(vss_test::require_value(app.port_settings(id)).baud_rate, 19200u);
 
     serial_settings bad;
     bad.data_bits = 3;
     REQUIRE_EQ(app.reconfigure_port(id, bad),
                make_error_code(errc::invalid_argument));
-    REQUIRE_EQ(app.port_settings(id)->baud_rate, 19200u);
+    REQUIRE_EQ(vss_test::require_value(app.port_settings(id)).baud_rate, 19200u);
     REQUIRE_EQ(app.reconfigure_port(endpoint_id{4242}, settings),
                make_error_code(errc::not_found));
     REQUIRE(!app.port_settings(endpoint_id{4242}).has_value());

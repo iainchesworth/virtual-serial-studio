@@ -136,7 +136,8 @@ TEST_CASE("templates: search filters cards and the Recent list")
     REQUIRE_EQ(dialog.current_template(), 3);
     REQUIRE(dialog.primary_button()->isEnabled());
     REQUIRE(dialog.use_current());
-    REQUIRE_EQ(dialog.result_document()->name, "two-programs-owner");
+    REQUIRE_EQ(vss_test::require_value(dialog.result_document()).name,
+               "two-programs-owner");
 }
 
 TEST_CASE("templates: open and save use the vss_config document")

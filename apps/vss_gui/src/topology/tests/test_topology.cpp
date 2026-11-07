@@ -541,9 +541,8 @@ TEST_CASE("topology: double-click and the context menu")
     REQUIRE_EQ(inspected, focused);
     for (QAction* action : menu->actions())
     {
-        if (action->text() == QStringLiteral("Copy name"))
-            action->trigger();
-        else if (action->text() == QStringLiteral("Connect from here"))
+        if (action->text() == QStringLiteral("Copy name") ||
+            action->text() == QStringLiteral("Connect from here"))
             action->trigger();
     }
     REQUIRE_EQ(copied, focused);

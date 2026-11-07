@@ -508,7 +508,7 @@ TEST_CASE("flows: port ready peer states respect the capability")
     REQUIRE_EQ(dialog.peer_chip()->text(), QStringLiteral("Program connected"));
     REQUIRE_EQ(dialog.peer_text()->text(),
                QStringLiteral("A program is using %1.")
-                   .arg(backend.port(*created)->path));
+                   .arg(vss_test::require_value(backend.port(*created)).path));
 }
 
 TEST_CASE("flows: pair creates two ports and a null-modem link")
@@ -551,8 +551,10 @@ TEST_CASE("flows: pair creates two ports and a null-modem link")
     REQUIRE_EQ(backend.links().size(), 1);
     REQUIRE_EQ(backend.links().front().shape, vss::gui::link_shape::two_way);
     REQUIRE(backend.links().front().options.emulate_modem_lines);
-    REQUIRE_EQ(dialog.outcome()->first_path,
-               backend.port(dialog.outcome()->first)->path);
+    const auto outcome = dialog.outcome();
+    REQUIRE(outcome);
+    REQUIRE_EQ(outcome->first_path,
+               vss_test::require_value(backend.port(outcome->first)).path);
 }
 
 TEST_CASE("flows: pair needs no free pairs with the Studio driver")
@@ -819,7 +821,7 @@ TEST_CASE("flows: watch creates a loopback watcher and monitor link")
     REQUIRE_EQ(backend.links().size(), 1);
     REQUIRE_EQ(backend.links().front().shape, vss::gui::link_shape::monitor);
     REQUIRE(!backend.links().front().options.emulate_modem_lines);
-    REQUIRE(backend.port(dialog.watcher_id())->studio_only);
+    REQUIRE(vss_test::require_value(backend.port(dialog.watcher_id())).studio_only);
 }
 
 TEST_CASE("flows: watch with no ports says why and offers a next step")
@@ -1010,7 +1012,8 @@ TEST_CASE("flows: rename reports an engine failure and needs the capability")
     REQUIRE(title.startsWith(QStringLiteral("Could not rename")));
     REQUIRE(probe.error_dialog);
     REQUIRE(dialog.result() != QDialog::Accepted);
-    REQUIRE_EQ(backend.port(*device)->name, QStringLiteral("device"));
+    REQUIRE_EQ(vss_test::require_value(backend.port(*device)).name,
+               QStringLiteral("device"));
     dialog.close();
 
     // A build without the capability cannot apply a rename.
@@ -1309,7 +1312,7 @@ TEST_CASE("flows: release port names the program and states a fact")
     REQUIRE_EQ(fixture.backend.releases().size(), std::size_t{1});
     REQUIRE_EQ(fixture.backend.releases().front().second,
                vss::gui::release_method::take_back);
-    REQUIRE(fixture.backend.port(fixture.port)->peer ==
+    REQUIRE(vss_test::require_value(fixture.backend.port(fixture.port)).peer ==
             vss::gui::peer_state::not_open);
 }
 
@@ -1368,7 +1371,7 @@ TEST_CASE("flows: release port reports a refusal and changes nothing")
     REQUIRE(probe.error_dialog);
     REQUIRE(!dialog.released());
     REQUIRE(fixture.backend.releases().empty());
-    REQUIRE(fixture.backend.port(fixture.port)->peer ==
+    REQUIRE(vss_test::require_value(fixture.backend.port(fixture.port)).peer ==
             vss::gui::peer_state::open);
     dialog.close();
 

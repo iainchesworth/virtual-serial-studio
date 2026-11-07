@@ -37,7 +37,7 @@ link_options latency(std::uint32_t delay_ms, std::uint32_t jitter_ms = 0)
 /// does), and is not held against the engine.  Every look is judged by when it
 /// ended, not when it began, and the loop stops looking once the delay is up.
 /// The lower bound it protects stays exact: no early delivery passes.
-void require_nothing_before_due(std::vector<const mock_endpoint*> targets,
+void require_nothing_before_due(const std::vector<const mock_endpoint*>& targets,
                                 std::chrono::steady_clock::time_point sent,
                                 std::chrono::milliseconds delay)
 {

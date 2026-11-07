@@ -166,8 +166,10 @@ TEST_CASE("simple: build a share, add and close a program without touching the "
     REQUIRE(found[0].kind == job::share);
     const auto first_program = found[0].programs[0];
     const auto second_program = found[0].programs[1];
-    REQUIRE_EQ(backend.port(first_program)->name, QStringLiteral("PuTTY"));
-    REQUIRE_EQ(backend.port(first_program)->path, QStringLiteral("COM5"));
+    REQUIRE_EQ(vss_test::require_value(backend.port(first_program)).name,
+               QStringLiteral("PuTTY"));
+    REQUIRE_EQ(vss_test::require_value(backend.port(first_program)).path,
+               QStringLiteral("COM5"));
     REQUIRE_EQ(program_label(*backend.port(second_program)), QString());
 
     // Add one: the two ports that were there keep their identities.
