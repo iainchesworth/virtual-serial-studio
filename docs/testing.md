@@ -126,7 +126,7 @@ the whole of CTest. The GUI runs on `QT_QPA_PLATFORM=offscreen`.
 cmake --preset linux-asan-ubsan-gui        # or linux-tsan-gui, windows-msvc-asan-gui
 cmake --build --preset linux-asan-ubsan-gui
 ASAN_OPTIONS=detect_leaks=1:strict_string_checks=1 ctest --preset linux-asan-ubsan-gui
-TSAN_OPTIONS=halt_on_error=1:second_deadlock_stack=1:ignore_noninstrumented_modules=1 \
+TSAN_OPTIONS=halt_on_error=1:second_deadlock_stack=1:ignore_noninstrumented_modules=1:suppressions=$PWD/tests/tsan.supp \
   ctest --preset linux-tsan-gui
 ```
 
@@ -140,18 +140,26 @@ you pass `-DQt6_DIR=<kit>/lib/cmake/Qt6`.
   about ten minutes under MSVC AddressSanitizer. `VSS_SANITIZER_TIMEOUT_FACTOR` (default 5)
   multiplies every test timeout in a sanitizer build. The timing tests (`system: a polled
   bus ...`) measure real replies, so run them on an idle machine.
-* **Suppressions: none.** The code is not excused from any check. The one setting that
-  narrows what ThreadSanitizer looks at is `ignore_noninstrumented_modules=1`. Qt comes
-  as a prebuilt kit that is not instrumented, and its locks and queues use futexes and
-  atomics that ThreadSanitizer cannot see. Without the setting it reports races between
-  Qt's own allocations in its thread pool, and in events that a worker posts to the GUI
-  thread through a queued connection, though Qt orders them correctly. With it, accesses
-  made inside Qt are not tracked, and every access made by this project's code still is,
-  so a race between the hub or endpoint threads and the GUI thread in our own code is
-  reported. A deliberate race in a small program still fails under the same setting.
+* **Qt and ThreadSanitizer.** Qt comes as a prebuilt kit that is not instrumented, and its
+  locks and queues use futexes and atomics that ThreadSanitizer cannot see. Without help it
+  reports races between Qt's own allocations in its thread pool, and in events that a
+  worker posts to the GUI thread through a queued connection, though Qt orders them
+  correctly. `ignore_noninstrumented_modules=1` stops it tracking accesses made inside Qt
+  and keeps checking every access made by this project's code, so a race between the hub
+  or endpoint threads and the GUI thread in our own code is reported. A deliberate race in
+  a small program still fails under the same setting.
+* **Suppressions.** `tests/tsan.supp` (passed as `suppressions=` in the CI jobs) has one
+  entry, for the construction of Qt's `QCallableObject` slot object, which a worker builds
+  for a queued call and the GUI thread runs. The header template is compiled into our code
+  and so is instrumented, but the queue lock that orders the two is inside Qt. The entry
+  matches only that constructor, not the lambda bodies, so a race on the data a queued
+  lambda touches is still reported. Add an entry only with a reason that holds for every
+  report it can match.
 * **Found and fixed by this work.** `announce_name_change` leaked a `QAccessibleEvent` on
-  every name change, thousands per GUI test run (LeakSanitizer), and `ToastManager`
-  downcast a toast that was being destroyed (UBSan).
+  every name change, thousands per GUI test run (LeakSanitizer); `ToastManager` downcast a
+  toast that was being destroyed (UBSan); and `reconnector::run` waited on a time point
+  that lives in a map entry another thread could erase, a heap-use-after-free
+  (AddressSanitizer).
 
 ## Fuzzing and the GUI journeys
 

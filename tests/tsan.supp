@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# ThreadSanitizer suppressions. Use with
+#   TSAN_OPTIONS=suppressions=<repository>/tests/tsan.supp:...
+# See "Sanitizers" in docs/testing.md. An entry needs a reason that holds for every
+# report it can match, and nothing here may hide a race in this project's code.
+
+# A worker thread posts work to the GUI thread with
+#   QMetaObject::invokeMethod(context, [..]{ .. }, Qt::QueuedConnection)
+# Qt builds the slot object (a QtPrivate::QCallableObject, a header template that is
+# compiled into our code and so is instrumented) on the worker, queues it, and the
+# GUI thread runs it. The queue is locked inside libQt6Core, which is not
+# instrumented, so ThreadSanitizer never sees the lock that orders the worker's
+# construction before the GUI thread's call and reports the slot object's own fields.
+# The entry matches only reports where the earlier access is that constructor, that
+# is, the object's own initialisation. A lambda body is not matched: its frames never
+# include the constructor, so a race on data the lambda touches is still reported.
+race:QtPrivate::QCallableObject<*>::QCallableObject(
