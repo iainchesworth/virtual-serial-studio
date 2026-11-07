@@ -129,6 +129,16 @@ Generic coverage, so slow work shows up without a hand-placed zone:
 - **`gui.paint.*`** zones for the custom painting: port rows, topology nodes and
   links, the canvas background. Every other widget's paint is a `gui.event` zone
   with the class name.
+- **`gui.bridge.*`, `gui.backend.*`, `gui.shell.*`, `gui.status.refresh`,
+  `gui.setup.*`, `gui.topology.*`, `gui.monitor.*`, `gui.fixture.tick`**: the
+  event bridge draining the engine's events into slices for the window, the
+  look at the engine (`gui.backend.rebuild`) and the time spent in each signal
+  it raises, what the main window does for a change of ports or a batch of
+  events, the operating-system probes behind the readiness chip, the canvas
+  layout and link routing, and the Monitor's traffic list.
+- **`gui.stall_ms`** and **`gui.busy_ms`** (plots, from `support::StallProbe`,
+  which runs while the profiler is recording): how late the window's event loop
+  ran and how much CPU the window used between two ticks.
 - Panes, dialogs, flows, layout and link routing, the theme and icon rendering,
   the bundle and zip writers, the event bridge and the backend rebuild each have
   `gui.<area>.<thing>` zones; startup and shutdown are marked with `gui.startup`,
@@ -155,6 +165,27 @@ must not fall below it; one with `"max"` is a cost that must not rise above it
 (`tcp://127.0.0.1`, one connection) and, when `VSS_LOOPBACK_A` and
 `VSS_LOOPBACK_B` name a pair of pseudo terminals, a write on one side read on the
 other. Each phase emits a frame per chunk.
+
+## Finding a frozen window
+
+The GUI thread must never be called from, or wait for, the engine's threads, so
+a "Not responding" window is always work on that thread: a slot that does too
+much, or too many small ones. To find it:
+
+1. Run `vss_gui` with profiling on (a Debug build with the vcpkg toolchain has
+   it on by default; a Release build with Tracy compiled in needs `--profile` or
+   the switch in Settings, Performance, Profiling) and attach a profiler or
+   `tracy-capture`.
+2. Look at the `gui.stall_ms` plot for the spikes. The zones under a spike are
+   the cause; `gui.bridge.emit` contains everything that runs for a batch of
+   events and `gui.backend.emit_ports_changed` / `emit_links_changed` /
+   `emit_stats_changed` contain the pane refreshes.
+3. Reproduce it in a test where you can. `apps/vss_gui/src/shell/tests/
+   test_responsiveness.cpp` drives the real engine and the real window with a
+   busy loopback and fixture and fails if the GUI thread uses more than the
+   budget of CPU time between two ticks of the probe. Set
+   `VSS_GUI_STALL_BUDGET_MS=100` to hold it to the strict figure on a quiet
+   computer; the default leaves room for a loaded build machine.
 
 ## Building it
 

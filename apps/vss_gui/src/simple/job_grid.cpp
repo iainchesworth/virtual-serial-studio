@@ -334,7 +334,7 @@ JobTile* JobGrid::tile(job kind) const
 
 void JobGrid::refresh()
 {
-    const support::setup_report report = support::query_setup_report(backend_);
+    const support::setup_report& report = setup_cache_.get(backend_);
     if (report.state != support::setup_report::readiness::not_checked &&
         report.ports_ready)
     {

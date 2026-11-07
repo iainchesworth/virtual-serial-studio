@@ -8,6 +8,7 @@
 #define VSS_GUI_SHELL_STATUS_BAR_HPP
 
 #include "backend/studio_backend.hpp"
+#include "support/setup_facts.hpp"
 #include "widgets/chips.hpp"
 #include "widgets/controls.hpp"
 
@@ -44,6 +45,7 @@ private:
     void update_profiling();
 
     StudioBackend& backend_;
+    support::setup_report_cache setup_cache_;
     QLabel* ports_ = nullptr;
     QLabel* links_ = nullptr;
     QLabel* rates_ = nullptr;

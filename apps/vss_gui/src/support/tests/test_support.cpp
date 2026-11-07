@@ -496,6 +496,35 @@ TEST_CASE("support: setup report degrades and never fakes a check")
                QStringLiteral("Not checked yet"));
 }
 
+TEST_CASE("support: the setup report cache asks the backend only when stale")
+{
+    // The report asks the operating system about the driver, the devices and
+    // the firewall, which takes tens of milliseconds. The status bar redraws
+    // with every batch of traffic, so it reuses the report while it is young.
+    FakeStudioBackend backend;
+    backend.set_facts(windows_facts());
+    support::setup_report_cache cache;
+
+    // A backend that answers zero is asked every time: a test, or any
+    // backend with nothing slow behind it, sees a change at once.
+    REQUIRE_EQ(cache.get(backend).header_chip,
+               QStringLiteral("1 thing to fix"));
+    vss::gui::setup_facts present = windows_facts();
+    present.com0com_found = true;
+    backend.set_facts(present);
+    REQUIRE_EQ(cache.get(backend).header_chip, QStringLiteral("All set"));
+
+    // A backend with something slow behind it is asked once in a while.
+    backend.set_probe_cache_age(std::chrono::hours(1));
+    cache.invalidate();
+    REQUIRE_EQ(cache.get(backend).header_chip, QStringLiteral("All set"));
+    backend.set_facts(windows_facts());
+    REQUIRE_EQ(cache.get(backend).header_chip, QStringLiteral("All set"));
+    cache.invalidate();
+    REQUIRE_EQ(cache.get(backend).header_chip,
+               QStringLiteral("1 thing to fix"));
+}
+
 TEST_CASE("support: setup check dialog reads engine facts")
 {
     FakeStudioBackend backend;

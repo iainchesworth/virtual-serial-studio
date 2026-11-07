@@ -42,6 +42,8 @@ add_library(vss_gui_support STATIC
   shortcuts_dialog.cpp
   sign_in_start.cpp
   sign_in_start.hpp
+  stall_probe.cpp
+  stall_probe.hpp
   shortcuts_dialog.hpp
   troubleshoot.cpp
   troubleshoot.hpp

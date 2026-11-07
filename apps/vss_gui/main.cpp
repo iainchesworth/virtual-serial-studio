@@ -12,6 +12,7 @@
 #include "shell/single_instance.hpp"
 #include "shell/studio_tray.hpp"
 #include "support/running_setup.hpp"
+#include "support/stall_probe.hpp"
 #include "theme/theme.hpp"
 #include "widgets/gallery.hpp"
 
@@ -211,6 +212,30 @@ int main(int argc, char* argv[])
                 qEnvironmentVariableIsSet("VSS_SCREENSHOT_ADVANCED"));
         }
         vss::gui::ShellWindow window(backend);
+
+        // The probe plots every stretch in which the GUI thread did not return
+        // to its event loop (see docs/profiling.md). It follows the profiler:
+        // it runs while Tracy is recording and stops when it is paused, so a
+        // dormant program carries no extra timer.
+        vss::gui::support::StallProbe stall_probe;
+        bool stall_probe_running = false;
+        const auto follow_profiler = [&stall_probe, &stall_probe_running]
+        {
+            const bool recording =
+                vss::gui::ProfilingController::instance().status().current ==
+                vss::profiling::state::recording;
+            if (recording == stall_probe_running)
+                return;
+            stall_probe_running = recording;
+            if (recording)
+                stall_probe.start();
+            else
+                stall_probe.stop();
+        };
+        QObject::connect(&vss::gui::ProfilingController::instance(),
+                         &vss::gui::ProfilingController::changed, &stall_probe,
+                         follow_profiler);
+        follow_profiler();
 
         if (parser.isSet(selftest_option))
         {

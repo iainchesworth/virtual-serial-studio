@@ -8,6 +8,7 @@
 
 #include "backend/studio_backend.hpp"
 #include "simple/setup_kinds.hpp"
+#include "support/setup_facts.hpp"
 
 #include <QFrame>
 #include <QHash>
@@ -81,6 +82,7 @@ Q_SIGNALS:
 
 private:
     StudioBackend& backend_;
+    support::setup_report_cache setup_cache_;
     NoteBanner* readiness_ = nullptr;
     QHash<int, JobTile*> tiles_;
 };

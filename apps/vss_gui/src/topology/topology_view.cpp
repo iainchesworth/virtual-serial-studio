@@ -176,6 +176,7 @@ void TopologyView::set_capabilities(const capabilities& caps)
 void TopologyView::set_topology(const std::vector<port_view>& ports,
                                 const std::vector<link_view>& links)
 {
+    VSS_PROFILE_ZONE("gui.topology.set_topology");
     if (same_graph(ports_, ports, links_, links))
         return;
 
@@ -241,6 +242,7 @@ void TopologyView::set_topology(const std::vector<port_view>& ports,
 
 void TopologyView::rebuild_items()
 {
+    VSS_PROFILE_ZONE("gui.topology.rebuild_items");
     // The scene owns the wire and the ghost; clearing it deletes them.
     wire_item_ = nullptr;
     ghost_ = nullptr;
@@ -321,7 +323,10 @@ void TopologyView::rebuild_items()
         inputs.append({port.id, size});
     }
 
-    layout_ = compute_topology_layout(inputs, link_inputs_);
+    {
+        VSS_PROFILE_ZONE("gui.topology.compute_layout");
+        layout_ = compute_topology_layout(inputs, link_inputs_);
+    }
     place_nodes();
 
     for (const auto& placement : layout_.nodes)
@@ -626,8 +631,11 @@ void TopologyView::apply_positions(bool refresh_scene_rect)
         rects.insert(placement.id, rect);
     }
 
-    const QVector<topo_link_placement> geometry =
-        compute_link_geometry(link_inputs_, rects);
+    QVector<topo_link_placement> geometry;
+    {
+        VSS_PROFILE_ZONE("gui.topology.compute_link_geometry");
+        geometry = compute_link_geometry(link_inputs_, rects);
+    }
     for (const auto& placement : geometry)
     {
         if (LinkItem* item = link_items_.value(placement.id))
@@ -805,6 +813,7 @@ qsizetype TopologyView::focus_index_of_link(vss::link_id id) const
 
 void TopologyView::focus_at(qsizetype index, bool select)
 {
+    VSS_PROFILE_ZONE("gui.topology.focus_at");
     const qsizetype node_total = node_order_.size();
     if (index < 0 || index >= node_total + link_order_.size())
     {
@@ -1560,6 +1569,7 @@ void TopologyView::open_focused_menu()
 
 void TopologyView::open_context_menu(const QPoint& viewport_position)
 {
+    VSS_PROFILE_ZONE("gui.topology.open_context_menu");
     QGraphicsItem* item = itemAt(viewport_position);
     if (item == nullptr)
     {
@@ -2423,6 +2433,7 @@ void TopologyView::open_wire_new_menu(const QPoint& viewport_position)
 
 void TopologyView::populate_node_menu(QMenu* menu, vss::endpoint_id id)
 {
+    VSS_PROFILE_ZONE("gui.topology.populate_node_menu");
     const auto port =
         std::find_if(ports_.begin(), ports_.end(),
                      [id](const port_view& view) { return view.id == id; });

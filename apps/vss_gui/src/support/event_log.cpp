@@ -25,17 +25,25 @@ EventLog::EventLog(QObject* parent) : QObject(parent) {}
 
 void EventLog::append(const event_batch& events)
 {
+    const QString stamp =
+        QTime::currentTime().toString(QStringLiteral("HH:mm:ss.zzz"));
     for (const gui_event& event : events)
-        append(event);
+        append(event, stamp);
 }
 
 void EventLog::append(const gui_event& event)
+{
+    append(event,
+           QTime::currentTime().toString(QStringLiteral("HH:mm:ss.zzz")));
+}
+
+void EventLog::append(const gui_event& event, const QString& stamp)
 {
     // `stats` fires for every counter change; the log keeps the meaningful
     // state changes instead of a counter stream.
     if (event.kind == vss::event_kind::stats)
         return;
-    const QString line = format(event);
+    const QString line = format(event, stamp);
     if (line.isEmpty())
         return;
     lines_.append(line);
@@ -55,8 +63,12 @@ void EventLog::clear()
 
 QString EventLog::format(const gui_event& event)
 {
-    const QString stamp =
-        QTime::currentTime().toString(QStringLiteral("HH:mm:ss.zzz"));
+    return format(
+        event, QTime::currentTime().toString(QStringLiteral("HH:mm:ss.zzz")));
+}
+
+QString EventLog::format(const gui_event& event, const QString& stamp)
+{
     const QString name = event.name.isEmpty()
                              ? QStringLiteral("port %1").arg(event.endpoint)
                              : event.name;

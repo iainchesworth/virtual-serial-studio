@@ -8,6 +8,8 @@
 
 #include "theme/theme.hpp"
 
+#include <vss/core/profile.hpp>
+
 #include <QLocale>
 #include <QStringList>
 #include <QTime>
@@ -22,10 +24,11 @@ MonitorModel::MonitorModel(QObject* parent) : QAbstractTableModel(parent) {}
 
 void MonitorModel::append_events(const event_batch& events)
 {
+    VSS_PROFILE_ZONE("gui.monitor.append_events");
     if (paused_)
         return;
 
-    bool changed = false;
+    const std::size_t before = rows_.size();
     for (const gui_event& event : events)
     {
         if (event.kind != vss::event_kind::data || event.data.isEmpty())
@@ -43,15 +46,49 @@ void MonitorModel::append_events(const event_batch& events)
         row.when = event.when;
         retained_bytes_ += row.data.size();
         rows_.push_back(std::move(row));
-        changed = true;
     }
-    if (!changed)
+    if (rows_.size() == before)
         return;
 
-    beginResetModel();
-    trim();
-    rebuild_visible();
-    endResetModel();
+    VSS_PROFILE_PLOT("gui.monitor.rows", rows_.size());
+    commit_appended(before);
+}
+
+void MonitorModel::commit_appended(std::size_t before)
+{
+    const std::size_t removed = trim();
+
+    // Rows trimmed from the front take their visible entries with them; the
+    // entries are indexes into `rows_`, in ascending order.
+    qsizetype leaving = 0;
+    while (leaving < visible_.size() &&
+           static_cast<std::size_t>(visible_[leaving]) < removed)
+        ++leaving;
+    if (leaving > 0)
+    {
+        beginRemoveRows({}, 0, static_cast<int>(leaving) - 1);
+        visible_.remove(0, leaving);
+        endRemoveRows();
+    }
+    if (removed > 0)
+    {
+        for (int& entry : visible_)
+            entry -= static_cast<int>(removed);
+    }
+
+    QVector<int> arriving;
+    const std::size_t first_new = before >= removed ? before - removed : 0;
+    for (std::size_t index = first_new; index < rows_.size(); ++index)
+    {
+        if (matches(rows_[index]))
+            arriving.push_back(static_cast<int>(index));
+    }
+    if (arriving.isEmpty())
+        return;
+    const int first = static_cast<int>(visible_.size());
+    beginInsertRows({}, first, first + static_cast<int>(arriving.size()) - 1);
+    visible_ += arriving;
+    endInsertRows();
 }
 
 void MonitorModel::append_drop(const QString& port, std::uint64_t bytes)
@@ -64,11 +101,9 @@ void MonitorModel::append_drop(const QString& port, std::uint64_t bytes)
     row.direction = traffic_direction::drop;
     row.bytes = bytes;
     row.dropped = true;
-    beginResetModel();
+    const std::size_t before = rows_.size();
     rows_.push_back(std::move(row));
-    trim();
-    rebuild_visible();
-    endResetModel();
+    commit_appended(before);
 }
 
 void MonitorModel::clear()
@@ -125,12 +160,12 @@ void MonitorModel::set_selected_port(vss::endpoint_id id)
     }
 }
 
-void MonitorModel::trim()
+std::size_t MonitorModel::trim()
 {
     // The newest row always stays, however big it is.
     std::size_t excess = rows_.size() > static_cast<std::size_t>(kMaxRows)
-        ? rows_.size() - static_cast<std::size_t>(kMaxRows)
-        : 0;
+                             ? rows_.size() - static_cast<std::size_t>(kMaxRows)
+                             : 0;
     qint64 dropped_bytes = 0;
     for (std::size_t index = 0; index < excess; ++index)
         dropped_bytes += rows_[index].data.size();
@@ -141,10 +176,11 @@ void MonitorModel::trim()
         ++excess;
     }
     if (excess == 0)
-        return;
+        return 0;
     rows_.erase(rows_.begin(),
                 rows_.begin() + static_cast<std::ptrdiff_t>(excess));
     retained_bytes_ -= dropped_bytes;
+    return excess;
 }
 
 void MonitorModel::rebuild_visible()
@@ -393,9 +429,10 @@ capture_export MonitorModel::export_capture() const
 
     // The wall clock at offset zero: how long ago the first row happened,
     // counted back from now on both clocks.
-    out.started = std::chrono::system_clock::now() -
-                  std::chrono::duration_cast<std::chrono::system_clock::duration>(
-                      vss::clock_type::now() - origin);
+    out.started =
+        std::chrono::system_clock::now() -
+        std::chrono::duration_cast<std::chrono::system_clock::duration>(
+            vss::clock_type::now() - origin);
 
     for (const traffic_row& row : rows_)
     {
@@ -403,9 +440,10 @@ capture_export MonitorModel::export_capture() const
             row.when == vss::time_point{})
             continue;
         vss::capture_record record;
-        record.offset_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                               row.when - origin)
-                               .count();
+        record.offset_ms =
+            std::chrono::duration_cast<std::chrono::milliseconds>(row.when -
+                                                                  origin)
+                .count();
         record.port = row.port.toStdString();
         record.direction = row.direction == traffic_direction::tx
                                ? vss::data_direction::tx
@@ -416,10 +454,10 @@ capture_export MonitorModel::export_capture() const
                 row.data.size());
         out.records.push_back(std::move(record));
     }
-    std::stable_sort(out.records.begin(), out.records.end(),
-                     [](const vss::capture_record& a,
-                        const vss::capture_record& b)
-                     { return a.offset_ms < b.offset_ms; });
+    std::stable_sort(
+        out.records.begin(), out.records.end(),
+        [](const vss::capture_record& a, const vss::capture_record& b)
+        { return a.offset_ms < b.offset_ms; });
     return out;
 }
 
