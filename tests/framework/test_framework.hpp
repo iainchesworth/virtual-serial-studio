@@ -44,9 +44,19 @@ inline std::vector<test_info>& registry()
 
 struct registrar
 {
-    registrar(const char* name, const char* file, int line, void (*function)())
+    // A failure to register a case at start-up ends the program: no test can run without the
+    // registry, and a static initialiser has nowhere to report it.
+    registrar(const char* name, const char* file, int line,
+              void (*function)()) noexcept
     {
-        registry().push_back(test_info{name, file, line, function});
+        try
+        {
+            registry().push_back(test_info{name, file, line, function});
+        }
+        catch (...)
+        {
+            std::terminate();
+        }
     }
 };
 
@@ -196,13 +206,9 @@ void check_near(const First& first, const Second& second, double tolerance,
 #define VSS_DETAIL_CONCAT_INNER(a, b) a##b
 #define VSS_DETAIL_CONCAT(a, b) VSS_DETAIL_CONCAT_INNER(a, b)
 
-#define TEST_CASE(name)                                                     \
-    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)();          \
-    static ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,     \
-                                                   __LINE__)(               \
-        name, __FILE__, __LINE__,                                           \
-        &VSS_DETAIL_CONCAT(vss_test_function_, __LINE__));                  \
-    static void VSS_DETAIL_CONCAT(vss_test_function_, __LINE__)()
+// The case is a static member of a class in an unnamed namespace, so it has internal linkage
+// without `static`, which clang-tidy's misc-use-anonymous-namespace asks for.
+#define TEST_CASE(name)                                                         namespace                                                                   {                                                                           struct VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)                          {                                                                               static void run();                                                      };                                                                          const ::vss_test::registrar VSS_DETAIL_CONCAT(vss_test_registrar_,                                                        __LINE__)(                        name, __FILE__, __LINE__,                                                   &VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)::run);                     }                                                                           void VSS_DETAIL_CONCAT(vss_test_case_, __LINE__)::run()
 
 #define REQUIRE(expression)                                                 \
     do                                                                      \
