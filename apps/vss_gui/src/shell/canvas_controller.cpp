@@ -44,15 +44,12 @@ CanvasController::CanvasController(StudioBackend& backend, UndoService& undo,
     : QObject(dialog_parent), backend_(backend), undo_(undo), view_(view),
       toolbox_(toolbox), parent_(dialog_parent)
 {
-    sheet_ = [this](canvas_item item,
-                    const QString& error) -> std::optional<bundle_request>
+    sheet_ = [this](canvas_item item, const attempt_function& attempt)
     {
         topology::AddSheet sheet(item, backend_.ports(), parent_);
-        sheet.show_error(error);
+        sheet.set_attempt(attempt);
         sheet.move(QCursor::pos() - QPoint(sheet.sizeHint().width() / 2, 24));
-        if (sheet.exec() != QDialog::Accepted)
-            return std::nullopt;
-        return sheet.request();
+        return sheet.exec() == QDialog::Accepted;
     };
     confirm_ = [this](const QString& title, const QString& body)
     {
@@ -165,36 +162,36 @@ bool CanvasController::add_item(canvas_item item, std::optional<QPointF> at)
             open_flow_(item);
         return false;
     }
-    QString error;
-    for (;;)
-    {
-        const auto request = sheet_(item, error);
-        if (!request)
-            return false;
-        const QString failure = [&]
+    // One sheet for the whole add.  Add builds the bundle; when that fails the
+    // sheet stays open with the reason and what was typed, and nothing was
+    // made (`build_bundle` undoes a half-made bundle).  A sheet that closed and
+    // opened again on every failure looked like Add did nothing.
+    return sheet_(
+        item,
+        [this, item, at](const bundle_request& request) -> QString
         {
             const auto made = batch(
                 [&]
                 {
-                    auto result = build_bundle(backend_, *request);
+                    auto result = build_bundle(backend_, request);
                     if (result && at && view_ != nullptr)
                         view_->place_next_at(*at);
                     return result;
                 });
             if (!made)
-                return error_text(made.error());
+            {
+                const QString error =
+                    tr("Nothing was added: %1").arg(error_text(made.error()));
+                Q_EMIT message(error);
+                return error;
+            }
             push_created(tr("Add %1").arg(topology::item_label(item).toLower()),
                          made->created);
             select_names(made->created);
             Q_EMIT message(
                 tr("Added %1.").arg(made->created.join(QStringLiteral(", "))));
-            return QString();
-        }();
-        if (failure.isEmpty())
-            return true;
-        error = tr("Nothing was added: %1").arg(failure);
-        Q_EMIT message(error);
-    }
+            return {};
+        });
 }
 
 bool CanvasController::add_request(const bundle_request& request,
