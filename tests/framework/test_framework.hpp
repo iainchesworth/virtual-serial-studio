@@ -77,18 +77,28 @@ struct registrar
 class profiling_session
 {
 public:
-    profiling_session()
+    // An inline variable is initialised before main, so nothing may escape:
+    // a failure to describe or start profiling is reported and the run goes on.
+    profiling_session() noexcept
     {
-        const auto request = vss::profiling::request_from_environment(false);
-        if (!request.enable)
-            return;
-        const auto started = vss::profiling::start(request);
-        if (started)
-            std::fprintf(stderr, "%s\n",
-                         vss::profiling::describe(*started).c_str());
-        else
-            std::fprintf(stderr, "cannot start profiling: %s\n",
-                         started.error().message().c_str());
+        try
+        {
+            const auto request =
+                vss::profiling::request_from_environment(false);
+            if (!request.enable)
+                return;
+            const auto started = vss::profiling::start(request);
+            if (started)
+                std::fprintf(stderr, "%s\n",
+                             vss::profiling::describe(*started).c_str());
+            else
+                std::fprintf(stderr, "cannot start profiling: %s\n",
+                             started.error().message().c_str());
+        }
+        catch (...)
+        {
+            std::fputs("cannot start profiling\n", stderr);
+        }
     }
 
     ~profiling_session() { vss::profiling::shutdown(); }
